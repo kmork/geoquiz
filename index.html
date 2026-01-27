@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>UN Capitals Quiz</title>
+
+  <style>
+    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    body{margin:0;background:#0b1020;color:#e8ecff}
+    .wrap{max-width:980px;margin:0 auto;padding:24px}
+    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
+    h1{margin:0 0 6px;font-size:22px}
+    .muted{color:rgba(232,236,255,.72);font-size:14px}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+    .pill{display:inline-flex;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:14px}
+    .hr{height:1px;background:rgba(255,255,255,.12);margin:14px 0}
+    .country{font-size:30px;font-weight:750;margin:10px 0}
+    input{width:min(560px,100%);padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.22);color:#e8ecff;font-size:16px}
+    button{padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.1);color:#e8ecff;font-weight:650;cursor:pointer}
+    button:hover{background:rgba(255,255,255,.14)}
+    button:disabled{opacity:.55;cursor:not-allowed}
+    .status{margin-top:10px;font-size:14px}
+    .good{color:#6ee7b7}
+    .bad{color:#fda4af}
+    .choices{margin-top:12px;display:grid;gap:10px}
+    .footer{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
+    .mapwrap{margin:10px 0}
+    #map{border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12)}
+    .kbd{font-family:ui-monospace,monospace;font-size:12px;background:rgba(255,255,255,.08);padding:2px 6px;border-radius:6px}
+  </style>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="card">
+
+    <div class="row" style="justify-content:space-between">
+      <div>
+        <h1>🌍 UN Capitals Quiz</h1>
+        <div class="muted">
+          Type the capital. If wrong, you get a multiple-choice second chance.<br>
+        </div>
+      </div>
+      <div class="row">
+        <div class="pill">Score: <b id="score">0</b></div>
+        <div class="pill">Rounds: <b id="rounds">0</b></div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="muted">Country:</div>
+    <div class="country" id="countryName">—</div>
+
+    <div class="mapwrap">
+      <svg id="map" viewBox="0 0 600 320" width="100%" height="260"></svg>
+    </div>
+
+    <div class="row">
+      <input id="answer" placeholder="Type the capital…"/>
+      <button id="submit">Submit</button>
+      <button id="skip">Skip</button>
+    </div>
+
+    <div id="status" class="status"></div>
+    <div id="choices" class="choices" style="display:none"></div>
+
+    <div class="footer">
+      <button id="next" style="display:none">Next</button>
+      <button id="restart">Restart</button>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  /* ---------------- DATA ---------------- */
+
+  const DATA = [
+    {"country":"Afghanistan","capitals":["Kabul"]},{"country":"Albania","capitals":["Tirana"]},{"country":"Algeria","capitals":["Algiers"]},{"country":"Andorra","capitals":["Andorra la Vella"]},{"country":"Angola","capitals":["Luanda"]},{"country":"Antigua and Barbuda","capitals":["Saint John's"]},{"country":"Argentina","capitals":["Buenos Aires"]},{"country":"Armenia","capitals":["Yerevan"]},{"country":"Australia","capitals":["Canberra"]},{"country":"Austria","capitals":["Vienna"]},{"country":"Azerbaijan","capitals":["Baku"]},{"country":"Bahamas","capitals":["Nassau"]},{"country":"Bahrain","capitals":["Manama"]},{"country":"Bangladesh","capitals":["Dhaka"]},{"country":"Barbados","capitals":["Bridgetown"]},{"country":"Belarus","capitals":["Minsk"]},{"country":"Belgium","capitals":["Brussels"]},{"country":"Belize","capitals":["Belmopan"]},{"country":"Benin","capitals":["Porto-Novo"]},{"country":"Bhutan","capitals":["Thimphu"]},{"country":"Bolivia","capitals":["Sucre"]},{"country":"Bosnia and Herzegovina","capitals":["Sarajevo"]},{"country":"Botswana","capitals":["Gaborone"]},{"country":"Brazil","capitals":["Brasília"]},{"country":"Brunei","capitals":["Bandar Seri Begawan"]},{"country":"Bulgaria","capitals":["Sofia"]},{"country":"Burkina Faso","capitals":["Ouagadougou"]},{"country":"Burundi","capitals":["Gitega"]},{"country":"Cambodia","capitals":["Phnom Penh"]},{"country":"Cameroon","capitals":["Yaoundé"]},{"country":"Canada","capitals":["Ottawa"]},{"country":"Central African Republic","capitals":["Bangui"]},{"country":"Chad","capitals":["N'Djamena"]},{"country":"Chile","capitals":["Santiago"]},{"country":"China","capitals":["Beijing"]},{"country":"Colombia","capitals":["Bogotá"]},{"country":"Comoros","capitals":["Moroni"]},{"country":"Congo","capitals":["Brazzaville"]},{"country":"Costa Rica","capitals":["San José"]},{"country":"Croatia","capitals":["Zagreb"]},{"country":"Cuba","capitals":["Havana"]},{"country":"Cyprus","capitals":["Nicosia"]},{"country":"Czechia","capitals":["Prague"]},{"country":"Denmark","capitals":["Copenhagen"]},{"country":"Dominican Republic","capitals":["Santo Domingo"]},{"country":"Egypt","capitals":["Cairo"]},{"country":"Estonia","capitals":["Tallinn"]},{"country":"Finland","capitals":["Helsinki"]},{"country":"France","capitals":["Paris"]},{"country":"Germany","capitals":["Berlin"]},{"country":"Greece","capitals":["Athens"]},{"country":"Hungary","capitals":["Budapest"]},{"country":"Iceland","capitals":["Reykjavík"]},{"country":"India","capitals":["New Delhi"]},{"country":"Indonesia","capitals":["Jakarta"]},{"country":"Iran","capitals":["Tehran"]},{"country":"Iraq","capitals":["Baghdad"]},{"country":"Ireland","capitals":["Dublin"]},{"country":"Israel","capitals":["Jerusalem"]},{"country":"Italy","capitals":["Rome"]},{"country":"Japan","capitals":["Tokyo"]},{"country":"Kenya","capitals":["Nairobi"]},{"country":"Luxembourg","capitals":["Luxembourg"]},{"country":"Mexico","capitals":["Mexico City"]},{"country":"Netherlands","capitals":["Amsterdam"]},{"country":"New Zealand","capitals":["Wellington"]},{"country":"Nigeria","capitals":["Abuja"]},{"country":"Norway","capitals":["Oslo"]},{"country":"Pakistan","capitals":["Islamabad"]},{"country":"Peru","capitals":["Lima"]},{"country":"Philippines","capitals":["Manila"]},{"country":"Poland","capitals":["Warsaw"]},{"country":"Portugal","capitals":["Lisbon"]},{"country":"Qatar","capitals":["Doha"]},{"country":"Romania","capitals":["Bucharest"]},{"country":"Russia","capitals":["Moscow"]},{"country":"Saudi Arabia","capitals":["Riyadh"]},{"country":"South Africa","capitals":["Pretoria"]},{"country":"South Korea","capitals":["Seoul"]},{"country":"Spain","capitals":["Madrid"]},{"country":"Sweden","capitals":["Stockholm"]},{"country":"Switzerland","capitals":["Bern"]},{"country":"Thailand","capitals":["Bangkok"]},{"country":"Turkey","capitals":["Ankara"]},{"country":"Ukraine","capitals":["Kyiv"]},{"country":"United Kingdom","capitals":["London"]},{"country":"United States","capitals":["Washington, D.C."]},{"country":"Vietnam","capitals":["Hanoi"]},{"country":"Zimbabwe","capitals":["Harare"]}
+  ];
+
+  /* ---------------- NORMALIZATION ---------------- */
+
+  const strip = s => s.normalize("NFD").replace(/[\u0300-\u036f]/g,"");
+  const norm = s => strip(String(s).toLowerCase()).replace(/[^a-z ]/g," ").replace(/\s+/g," ").trim();
+
+  /* ---------------- MAP ---------------- */
+
+  const MAP_W=600, MAP_H=320;
+  let WORLD=null, CAPITALS=null, WORLD_PATHS=null;
+
+  function proj([lon,lat]) {
+    return [((lon+180)/360)*MAP_W, ((90-lat)/180)*MAP_H];
+  }
+
+  async function loadMap(){
+    const w = await (await fetch("countries.geojson")).json();
+    WORLD = w.features;
+
+    const p = await (await fetch("places.geojson")).json();
+    CAPITALS = new Map();
+    for(const f of p.features){
+      if(!(f.properties.FEATURECLA||"").includes("capital")) continue;
+      const c = norm(f.properties.ADM0NAME||"");
+      if(!CAPITALS.has(c)) CAPITALS.set(c,[]);
+      CAPITALS.get(c).push({name:f.properties.NAME,lon:+f.properties.LONGITUDE,lat:+f.properties.LATITUDE});
+    }
+
+    WORLD_PATHS = WORLD.map(f => pathFromFeature(f)).filter(Boolean);
+  }
+
+  function bboxOfFeature(f){
+    let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;
+    const rings = f.geometry.type==="Polygon"
+      ? [f.geometry.coordinates]
+      : f.geometry.coordinates;
+
+    for(const poly of rings){
+      for(const ring of poly){
+        for(const [lon,lat] of ring){
+          if(lon<minX) minX=lon;
+          if(lat<minY) minY=lat;
+          if(lon>maxX) maxX=lon;
+          if(lat>maxY) maxY=lat;
+        }
+      }
+    }
+    return {minX,minY,maxX,maxY};
+  }
+
+  function padBBox(bb, padRatio=0.18){
+    const dx = bb.maxX - bb.minX;
+    const dy = bb.maxY - bb.minY;
+    return {
+      minX: bb.minX - dx*padRatio,
+      maxX: bb.maxX + dx*padRatio,
+      minY: bb.minY - dy*padRatio,
+      maxY: bb.maxY + dy*padRatio
+    };
+  }
+
+  function pathFromFeature(f){
+    if(!f.geometry) return "";
+    const rings = f.geometry.type==="Polygon"? [f.geometry.coordinates] : f.geometry.coordinates;
+    let d="";
+    for(const poly of rings){
+      for(const ring of poly){
+        ring.forEach((pt,i)=>{
+          const [x,y]=proj(pt);
+          d += (i?"L":"M")+x.toFixed(2)+" "+y.toFixed(2)+" ";
+        });
+        d+="Z ";
+      }
+    }
+    return d.trim();
+  }
+
+  function svgUnitsPerPx(svg){
+    const vb = svg.viewBox.baseVal;
+    const pxW = svg.clientWidth || 600;
+    return vb.width / pxW;
+  }
+
+  function drawMap(country, showDot){
+    const svg=document.getElementById("map");
+    svg.innerHTML="";
+
+    const hits = WORLD.filter(f => norm(f.properties.ADMIN||"") === norm(country));
+    if(!hits.length){
+      svg.innerHTML = `<text x="20" y="30" fill="rgba(232,236,255,.7)">No outline found</text>`;
+      svg.setAttribute("viewBox","0 0 600 320");
+      return;
+    }
+
+    // combined bbox
+    let bb = bboxOfFeature(hits[0]);
+    for(let i=1;i<hits.length;i++){
+      const b = bboxOfFeature(hits[i]);
+      bb = {
+        minX: Math.min(bb.minX,b.minX),
+        minY: Math.min(bb.minY,b.minY),
+        maxX: Math.max(bb.maxX,b.maxX),
+        maxY: Math.max(bb.maxY,b.maxY),
+      };
+    }
+    bb = padBBox(bb);
+
+    // projected viewBox
+    const [x1,y1] = proj([bb.minX, bb.maxY]);
+    const [x2,y2] = proj([bb.maxX, bb.minY]);
+    svg.setAttribute("viewBox",`${x1} ${y1} ${x2-x1} ${y2-y1}`);
+
+    // world backdrop
+    for(const d of WORLD_PATHS){
+      const p=document.createElementNS("http://www.w3.org/2000/svg","path");
+      p.setAttribute("d",d);
+      p.setAttribute("stroke","rgba(232,236,255,.12)");
+      p.setAttribute("stroke-width","0.4");
+      p.setAttribute("fill","none");
+      p.setAttribute("vector-effect","non-scaling-stroke");
+      svg.appendChild(p);
+    }
+
+    // highlighted country (thin)
+    for(const f of hits){
+      const p=document.createElementNS("http://www.w3.org/2000/svg","path");
+      p.setAttribute("d",pathFromFeature(f));
+      p.setAttribute("stroke","rgba(232,236,255,.95)");
+      p.setAttribute("stroke-width","0.8");
+      p.setAttribute("fill","rgba(165,180,252,.18)");
+      p.setAttribute("vector-effect","non-scaling-stroke");
+      svg.appendChild(p);
+    }
+
+    // capital dot (px-sized)
+    if(showDot && CAPITALS){
+      const list = CAPITALS.get(norm(country));
+      if(list && list[0]){
+        const [x,y] = proj([list[0].lon,list[0].lat]);
+        const upp = svgUnitsPerPx(svg);
+        const r = 4.5 * upp; // ~4.5px radius on screen
+
+        const c = document.createElementNS("http://www.w3.org/2000/svg","circle");
+        c.setAttribute("cx", x);
+        c.setAttribute("cy", y);
+        c.setAttribute("r", r);
+        c.setAttribute("fill", "#6ee7b7");
+        c.setAttribute("stroke", "rgba(232,236,255,.9)");
+        c.setAttribute("stroke-width", "0.9");
+        c.setAttribute("vector-effect","non-scaling-stroke");
+        svg.appendChild(c);
+      }
+    }
+  }
+
+  /* ---------------- GAME ---------------- */
+
+  let current=null, score=0, rounds=0;
+
+  const elCountry = document.getElementById("countryName");
+  const elStatus  = document.getElementById("status");
+  const elChoices = document.getElementById("choices");
+
+  const answer  = document.getElementById("answer");
+  const submit  = document.getElementById("submit");
+  const skip    = document.getElementById("skip");
+  const next    = document.getElementById("next");
+  const restart = document.getElementById("restart");
+
+  const scoreEl  = document.getElementById("score");
+  const roundsEl = document.getElementById("rounds");
+
+  let enterLock = false;
+
+  function doPrimaryAction(){
+    if (next.style.display !== "none") next.click();
+    else submit.click();
+  }
+
+  // ONE enter handler (prevents double-advance)
+  answer.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (enterLock || e.repeat) return;
+    enterLock = true;
+    doPrimaryAction();
+  });
+  answer.addEventListener("keyup", (e) => {
+    if (e.key === "Enter") enterLock = false;
+  });
+
+  // Enter works outside input too (but not when input is focused)
+  document.addEventListener("keydown", (e) => {
+    if (e.key !== "Enter") return;
+    if (document.activeElement === answer) return;
+    e.preventDefault();
+    e.stopPropagation();
+    if (enterLock || e.repeat) return;
+    enterLock = true;
+    doPrimaryAction();
+  });
+  document.addEventListener("keyup", (e) => {
+    if (e.key === "Enter") enterLock = false;
+  });
+
+  function nextQ(){
+    current = DATA[Math.floor(Math.random()*DATA.length)];
+    elCountry.textContent = current.country;
+
+    answer.value = "";
+    submit.disabled = false;
+    skip.disabled = false;
+
+    next.style.display = "none";
+    elChoices.style.display = "none";
+    elChoices.innerHTML = "";
+
+    elStatus.className = "status";
+    elStatus.textContent = "";
+
+    drawMap(current.country,false);
+    answer.focus();
+  }
+
+  function reveal(ok){
+    rounds++;
+    roundsEl.textContent = rounds;
+
+    if(ok){
+      score++;
+      scoreEl.textContent = score;
+    }
+
+    elStatus.className = "status " + (ok ? "good" : "bad");
+    elStatus.innerHTML = (ok ? "✅ Correct! " : "❌ Wrong. ") + "Capital: <b>" + current.capitals.join(", ") + "</b>";
+
+    submit.disabled = true;
+    skip.disabled = true;
+
+    next.style.display = "inline-block";
+    next.focus();
+
+    drawMap(current.country,true);
+  }
+
+  submit.onclick = () => {
+    if(norm(answer.value) === norm(current.capitals[0])) reveal(true);
+    else showMC();
+  };
+
+  // Skip should not be "wrong"
+  skip.onclick = () => {
+    rounds++;
+    roundsEl.textContent = rounds;
+
+    elStatus.className = "status";
+    elStatus.innerHTML = "⏭️ Skipped. Capital: <b>" + current.capitals.join(", ") + "</b>";
+
+    submit.disabled = true;
+    skip.disabled = true;
+
+    next.style.display = "inline-block";
+    next.focus();
+
+    drawMap(current.country,true);
+  };
+
+  function showMC(){
+    elStatus.className = "status bad";
+    elStatus.textContent = "❌ Not quite. Second chance: choose the correct capital.";
+
+    elChoices.style.display = "grid";
+    elChoices.innerHTML = "";
+
+    let opts = [current.capitals[0]];
+    while(opts.length < 4){
+      let c = DATA[Math.floor(Math.random()*DATA.length)].capitals[0];
+      if(!opts.includes(c)) opts.push(c);
+    }
+    opts.sort(()=>Math.random()-.5);
+
+    opts.forEach(o=>{
+      let b = document.createElement("button");
+      b.textContent = o;
+      b.onclick = () => reveal(o === current.capitals[0]);
+      elChoices.appendChild(b);
+    });
+  }
+
+  next.onclick = nextQ;
+  restart.onclick = () => {
+    score = 0; rounds = 0;
+    scoreEl.textContent = 0;
+    roundsEl.textContent = 0;
+    nextQ();
+  };
+
+  loadMap().then(nextQ).catch(err => {
+    console.error(err);
+    elStatus.className = "status bad";
+    elStatus.textContent = "❌ Couldn’t load map files (countries.geojson / places.geojson). Quiz still works, but map may be blank.";
+    nextQ();
+  });
+</script>
+</body>
+</html>
