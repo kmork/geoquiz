@@ -14,7 +14,6 @@ const norm = s =>
 
 /* ---------------- ELEMENTS ---------------- */
 const elCountry = document.getElementById("countryName");
-const elStatus  = document.getElementById("status");
 const elChoices = document.getElementById("choices");
 
 const answer = document.getElementById("answer");
@@ -35,6 +34,114 @@ const finalCorrect   = document.getElementById("finalCorrect");
 const finalFirstTry  = document.getElementById("finalFirstTry");
 const playAgainBtn   = document.getElementById("playAgain");
 const closeFinalBtn  = document.getElementById("closeFinal");
+
+/* ---------------- CONFETTI ---------------- */
+const confettiCanvas = document.getElementById("confetti");
+const cctx = confettiCanvas.getContext("2d");
+let confettiPieces = [];
+let confettiRAF = null;
+
+
+function resizeConfetti(){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  confettiCanvas.width = Math.floor(window.innerWidth * dpr);
+  confettiCanvas.height = Math.floor(window.innerHeight * dpr);
+  confettiCanvas.style.width = window.innerWidth + "px";
+  confettiCanvas.style.height = window.innerHeight + "px";
+  cctx.setTransform(dpr,0,0,dpr,0,0);
+}
+window.addEventListener("resize", resizeConfetti, {passive:true});
+resizeConfetti();
+
+
+function confettiBurst({
+                         x = window.innerWidth * 0.5,
+                         y = window.innerHeight * 0.5,
+                         count = 120,
+                         spread = Math.PI * 0.9,
+                         startAngle = -Math.PI / 2,
+                         gravity = 1200,
+                         duration = 1100
+                       } = {}){
+  const now = performance.now();
+  const end = now + duration;
+
+
+// colors similar vibe to your UI
+  const colors = ["#6ee7b7","#a5b4fc","#e8ecff","#fda4af","#fde68a"];
+
+
+  for(let i=0;i<count;i++){
+    const a = startAngle + (Math.random() - 0.5) * spread;
+    const v = 550 + Math.random()*650;
+    const size = 4 + Math.random()*5;
+
+
+    confettiPieces.push({
+      x, y,
+      vx: Math.cos(a) * v,
+      vy: Math.sin(a) * v,
+      g: gravity * (0.75 + Math.random()*0.6),
+      size,
+      rot: Math.random()*Math.PI,
+      vr: (Math.random()-0.5)*14,
+      lifeEnd: end,
+      color: colors[(Math.random()*colors.length)|0],
+      shape: Math.random() < 0.15 ? "circle" : "rect"
+    });
+  }
+
+
+  if(!confettiRAF) confettiRAF = requestAnimationFrame(tickConfetti);
+}
+
+
+function tickConfetti(t){
+  cctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+
+  const dt = 1/60;
+
+  // update + draw
+  const alive = [];
+  for(const p of confettiPieces){
+    if(t > p.lifeEnd) continue;
+
+    p.vy += p.g * dt;
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.rot += p.vr * dt;
+
+  // simple fade near end
+    const fade = Math.max(0, Math.min(1, (p.lifeEnd - t) / 250));
+    cctx.globalAlpha = fade;
+
+    cctx.save();
+    cctx.translate(p.x, p.y);
+    cctx.rotate(p.rot);
+    cctx.fillStyle = p.color;
+
+    if(p.shape === "circle"){
+      cctx.beginPath();
+      cctx.arc(0,0,p.size*0.55,0,Math.PI*2);
+      cctx.fill();
+    }else{
+      cctx.fillRect(-p.size/2, -p.size/2, p.size, p.size*0.6);
+    }
+    cctx.restore();
+
+    alive.push(p);
+  }
+  cctx.globalAlpha = 1;
+
+  confettiPieces = alive;
+
+  if(confettiPieces.length){
+    confettiRAF = requestAnimationFrame(tickConfetti);
+  }else{
+    confettiRAF = null;
+    cctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+  }
+}
 
 elCountry.addEventListener("click", () => {
   if (!current) return;
@@ -404,6 +511,37 @@ let correctFirstTry = 0;
 
 let enterLock = false;
 
+let roundEnded = false;
+
+function endRound({ ok, pointsAwarded }) {
+  // prevent any further interaction
+  roundEnded = true;
+
+  answer.disabled = true;
+  submit.disabled = true;
+
+  // disable all remaining choice buttons
+  elChoices.querySelectorAll("button").forEach(b => b.disabled = true);
+
+  if (ok) {
+    correctAny++;
+    if (pointsAwarded === 2) correctFirstTry++;
+    score += pointsAwarded;
+    scoreEl.textContent = String(score);
+
+
+    // confetti from center of screen
+    confettiBurst({ x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 });
+  }
+
+  // show capital location
+  drawMap(current.country, true);
+
+  // show Next
+  next.style.display = "inline-block";
+  next.focus();
+}
+
 function doPrimaryAction() {
   // If multiple-choice is visible, Enter should NOT jump ahead
   if (elChoices.style.display !== "none") return;
@@ -450,16 +588,13 @@ function reveal(ok, pointsAwarded) {
   lockChoices();
 
   if (ok) {
+    confettiBurst();
+
     correctAny++;
     if (pointsAwarded === 2) correctFirstTry++;
     score += pointsAwarded;
     scoreEl.textContent = String(score);
   }
-
-  elStatus.className = "status " + (ok ? "good" : "bad");
-  elStatus.innerHTML =
-    (ok ? `✅ Correct! (+${pointsAwarded}) ` : "❌ Wrong. ") +
-    "Capital: <b>" + current.capitals.join(", ") + "</b>";
 
   submit.disabled = true;
 
@@ -471,36 +606,49 @@ function reveal(ok, pointsAwarded) {
   updateProgress();
 }
 
-function showMC() {
+function showMC(){
+  if (roundEnded) return;
+
   // lock typing + submit while choices are visible
   answer.disabled = true;
   submit.disabled = true;
 
-  elStatus.className = "status bad";
-  elStatus.textContent = "❌ Not quite. Choose the correct capital.";
-
   elChoices.style.display = "grid";
   elChoices.innerHTML = "";
 
-  let opts = [current.capitals[0]];
+  const correct = current.capitals[0];
+
+  let opts = [correct];
   while (opts.length < 4) {
-    let c = DATA[Math.floor(Math.random() * DATA.length)].capitals[0];
+    const c = DATA[Math.floor(Math.random() * DATA.length)].capitals[0];
     if (!opts.includes(c)) opts.push(c);
   }
   opts.sort(() => Math.random() - 0.5);
 
-  opts.forEach(o => {
+  opts.forEach(option => {
     const b = document.createElement("button");
-    b.type = "button";
-    b.textContent = o;
-    b.onclick = () => {
-      // after reveal, ignore any clicks
-      if (next.style.display !== "none") return;
+    b.className = "choiceBtn";
+    b.textContent = option;
 
-      const ok = o === current.capitals[0];
-      reveal(ok, ok ? 1 : 0);
-      lockChoices();
+    b.onclick = () => {
+      if (roundEnded) return;
+
+      const isCorrect = option === correct;
+
+    // disable all immediately so you can't click twice
+      elChoices.querySelectorAll("button").forEach(btn => btn.disabled = true);
+
+    // mark correct answer green
+      elChoices.querySelectorAll("button").forEach(btn => {
+        if (btn.textContent === correct) btn.classList.add("correct");
+      });
+
+    // if wrong pick, mark the selected one red
+      if (!isCorrect) b.classList.add("wrong");
+
+      endRound({ ok: isCorrect, pointsAwarded: isCorrect ? 1 : 0 });
     };
+
     elChoices.appendChild(b);
   });
 }
@@ -516,6 +664,8 @@ function nextQ() {
 
   elCountry.textContent = current.country;
 
+  roundEnded = false;
+
   answer.value = "";
   answer.disabled = false;
 
@@ -526,9 +676,6 @@ function nextQ() {
   elChoices.style.display = "none";
   elChoices.innerHTML = "";
 
-  elStatus.className = "status";
-  elStatus.textContent = "";
-
   drawMap(current.country, false);
   answer.focus();
 
@@ -536,9 +683,24 @@ function nextQ() {
 }
 
 submit.onclick = () => {
-  const ok = norm(answer.value) === norm(current.capitals[0]);
-  if (ok) reveal(true, 2); // first try = 2 points
-  else showMC();
+  if (roundEnded) return;
+
+  const user = norm(answer.value);
+
+  // Blank submit = treat as wrong -> show alternatives
+  if (!user) {
+    showMC();
+    return;
+  }
+
+  const ok = user === norm(current.capitals[0]);
+
+  if (ok) {
+  // first try correct = 2 points
+    endRound({ ok: true, pointsAwarded: 2 });
+  } else {
+    showMC();
+  }
 };
 
 next.onclick = nextQ;
@@ -546,8 +708,6 @@ next.onclick = nextQ;
 /* ---------------- FINAL OVERLAY ---------------- */
 function showFinal() {
   elCountry.textContent = "Done!";
-  elStatus.className = "status good";
-  elStatus.textContent = "🎉 You’ve completed all countries.";
 
   answer.disabled = true;
   submit.disabled = true;
@@ -582,8 +742,5 @@ loadMap()
   .then(() => nextQ())
   .catch(err => {
     console.error(err);
-    elStatus.className = "status bad";
-    elStatus.textContent =
-      "❌ Couldn’t load map files (countries.geojson / places.geojson). Quiz still works, but map may be blank.";
     nextQ();
   });

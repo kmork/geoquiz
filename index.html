@@ -50,6 +50,27 @@
     .choices{margin-top:12px;display:grid;gap:10px}
     .footer{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
 
+    /* Make choice feedback clear */
+    .choices button{
+      text-align:left;
+    }
+
+    /* Keep disabled buttons fully visible so colors show */
+    .choices button:disabled{
+      opacity: 1;
+      cursor: default;
+    }
+
+    .choices button.correct{
+      border-color: rgba(110,231,183,.65);
+      background: rgba(110,231,183,.14);
+    }
+
+    .choices button.wrong{
+      border-color: rgba(253,164,175,.65);
+      background: rgba(253,164,175,.14);
+    }
+
     .mapwrap{margin:10px 0}
     #map{border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);touch-action:none;}
 
@@ -88,6 +109,15 @@
     .overlay h2{margin:0 0 8px}
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     @media (max-width:520px){ .grid2{grid-template-columns:1fr} }
+
+    #confetti{
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 9999;
+    }
   </style>
 </head>
 
@@ -124,7 +154,6 @@
       <button id="next" style="display:none">Next</button>
     </div>
 
-    <div id="status" class="status"></div>
     <div id="choices" class="choices" style="display:none"></div>
 
   </div>
@@ -152,8 +181,11 @@
   </div>
 </div>
 
+<canvas id="confetti"></canvas>
+
 <!-- IMPORTANT: data first, then app -->
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>
+
 </body>
 </html>
