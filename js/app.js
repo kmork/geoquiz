@@ -212,10 +212,10 @@ function proj([lon, lat]) {
 }
 
 async function loadMap() {
-  const w = await (await fetch("countries.geojson")).json();
+  const w = await (await fetch("data/ne_10m_admin_0_countries.geojson")).json();
   WORLD = w.features;
 
-  const p = await (await fetch("places.geojson")).json();
+  const p = await (await fetch("data/places.geojson")).json();
   CAPITALS = new Map();
   for (const f of p.features) {
     if (!(f.properties.FEATURECLA || "").includes("capital")) continue;
