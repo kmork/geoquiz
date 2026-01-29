@@ -118,12 +118,35 @@
       pointer-events: none;
       z-index: 9999;
     }
+
+    #init-overlay {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(ellipse at center, #0f1220 0%, #070816 70%);
+      color: rgba(232,236,255,.9);
+      font-size: 1.4rem;
+      letter-spacing: 0.04em;
+      z-index: 9999;
+      transition: opacity .35s ease;
+    }
+
+    #init-overlay.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
   </style>
 </head>
 
 <body>
 <div class="wrap">
   <div class="card">
+
+    <div id="init-overlay">
+      Initializing game…
+    </div>
 
     <div class="row" style="justify-content:space-between">
       <div>
