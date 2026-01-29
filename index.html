@@ -53,6 +53,21 @@
     .mapwrap{margin:10px 0}
     #map{border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);touch-action:none;}
 
+    .country{
+      cursor: pointer;
+      text-decoration: none;
+      transition: color .15s ease, text-shadow .15s ease, transform .05s ease;
+    }
+
+    .country:hover{
+      color: #ffffff;
+      text-shadow: 0 0 12px rgba(165,180,252,.35);
+    }
+
+    .country:active{
+      transform: scale(0.99);
+    }
+
     /* Final screen overlay */
     .overlay{
       position:fixed; inset:0;

@@ -36,6 +36,26 @@ const finalFirstTry  = document.getElementById("finalFirstTry");
 const playAgainBtn   = document.getElementById("playAgain");
 const closeFinalBtn  = document.getElementById("closeFinal");
 
+elCountry.addEventListener("click", () => {
+  if (!current) return;
+
+  // Build Wikipedia URL (encode safely)
+  const name = current.country;
+  const url = "https://en.wikipedia.org/wiki/" + encodeURIComponent(name.replace(/ /g, "_"));
+
+  // Open centered popup window
+  const w = Math.min(900, window.innerWidth * 0.9);
+  const h = Math.min(700, window.innerHeight * 0.9);
+  const left = window.screenX + (window.outerWidth - w) / 2;
+  const top = window.screenY + (window.outerHeight - h) / 2;
+
+  window.open(
+    url,
+    "_blank",
+    `noopener,noreferrer,width=${w},height=${h},left=${left},top=${top}`
+  );
+});
+
 /* ---------------- MAP DATA ---------------- */
 const MAP_W = 600, MAP_H = 320;
 let WORLD = null, CAPITALS = null, WORLD_PATHS = null;
@@ -527,7 +547,7 @@ next.onclick = nextQ;
 function showFinal() {
   elCountry.textContent = "Done!";
   elStatus.className = "status good";
-  elStatus.textContent = "🎉 You’ve completed all countries with no repeats.";
+  elStatus.textContent = "🎉 You’ve completed all countries.";
 
   answer.disabled = true;
   submit.disabled = true;
