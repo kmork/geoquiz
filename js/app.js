@@ -19,11 +19,9 @@ const elChoices = document.getElementById("choices");
 
 const answer = document.getElementById("answer");
 const submit = document.getElementById("submit");
-const skip   = document.getElementById("skip");
 const next   = document.getElementById("next");
 
 const scoreEl    = document.getElementById("score");
-const roundsEl   = document.getElementById("rounds");
 const progressEl = document.getElementById("progress");
 
 const map = document.getElementById("map");
@@ -362,13 +360,11 @@ function shuffleInPlace(arr) {
 function resetDeck() {
   remaining = shuffleInPlace([...DATA]);
   totalCountries = DATA.length;
-  rounds = 0;
   score = 0;
   correctAny = 0;
   correctFirstTry = 0;
 
   scoreEl.textContent = "0";
-  roundsEl.textContent = "0";
   updateProgress();
 
   hideFinal();
@@ -382,7 +378,6 @@ function updateProgress() {
 
 /* ---------------- GAME STATE ---------------- */
 let current = null;
-let rounds = 0;
 let score = 0;
 let correctAny = 0;
 let correctFirstTry = 0;
@@ -428,9 +423,6 @@ function lockChoices() {
 }
 
 function reveal(ok, pointsAwarded) {
-  rounds++;
-  roundsEl.textContent = String(rounds);
-
   // lock input after round ends
   answer.disabled = true;
 
@@ -450,7 +442,6 @@ function reveal(ok, pointsAwarded) {
     "Capital: <b>" + current.capitals.join(", ") + "</b>";
 
   submit.disabled = true;
-  skip.disabled = true;
 
   next.style.display = "inline-block";
   next.focus();
@@ -466,7 +457,7 @@ function showMC() {
   submit.disabled = true;
 
   elStatus.className = "status bad";
-  elStatus.textContent = "❌ Not quite. Second chance: choose the correct capital.";
+  elStatus.textContent = "❌ Not quite. Choose the correct capital.";
 
   elChoices.style.display = "grid";
   elChoices.innerHTML = "";
@@ -509,7 +500,6 @@ function nextQ() {
   answer.disabled = false;
 
   submit.disabled = false;
-  skip.disabled = false;
 
   next.style.display = "none";
 
@@ -531,27 +521,6 @@ submit.onclick = () => {
   else showMC();
 };
 
-skip.onclick = () => {
-  rounds++;
-  roundsEl.textContent = String(rounds);
-
-  answer.disabled = true;
-  submit.disabled = true;
-  skip.disabled = true;
-
-  lockChoices();
-
-  elStatus.className = "status";
-  elStatus.innerHTML = "⏭️ Skipped. Capital: <b>" + current.capitals.join(", ") + "</b>";
-
-  next.style.display = "inline-block";
-  next.focus();
-
-  drawMap(current.country, true);
-
-  updateProgress();
-};
-
 next.onclick = nextQ;
 
 /* ---------------- FINAL OVERLAY ---------------- */
@@ -562,7 +531,6 @@ function showFinal() {
 
   answer.disabled = true;
   submit.disabled = true;
-  skip.disabled = true;
   next.style.display = "none";
   elChoices.style.display = "none";
   elChoices.innerHTML = "";
