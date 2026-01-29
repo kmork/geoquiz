@@ -513,6 +513,62 @@ let enterLock = false;
 
 let roundEnded = false;
 
+let continueTimer = null;
+let continueArmed = false;
+
+
+function disarmContinue() {
+  if (!continueArmed) return;
+  continueArmed = false;
+
+  document.removeEventListener("pointerdown", handleContinuePointer, true);
+  document.removeEventListener("keydown", handleContinueKeydown, true);
+
+  if (continueTimer) {
+    clearTimeout(continueTimer);
+    continueTimer = null;
+  }
+}
+
+function armContinue({ autoMs = 1000 } = {}) {
+  disarmContinue(); // safety
+  continueArmed = true;
+
+  // Capture phase so we can react even if something else stops propagation
+  document.addEventListener("pointerdown", handleContinuePointer, true);
+  document.addEventListener("keydown", handleContinueKeydown, true);
+
+  if (autoMs && autoMs > 0) {
+    continueTimer = setTimeout(() => {
+      if (roundEnded) nextQ();
+    }, autoMs);
+  }
+}
+
+function handleContinuePointer(e) {
+  // Only allow continuing *after* round ends
+  if (!roundEnded) return;
+
+  // Don’t instantly continue if user is still choosing alternatives
+  if (elChoices.style.display !== "none") return;
+
+  // If they tap Submit while round ended, allow continue anyway
+  e.preventDefault();
+  disarmContinue();
+  nextQ();
+}
+
+function handleContinueKeydown(e) {
+  if (!roundEnded) return;
+  if (elChoices.style.display !== "none") return;
+
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    disarmContinue();
+    nextQ();
+  }
+}
+
 function endRound({ ok, pointsAwarded }) {
   // prevent any further interaction
   roundEnded = true;
@@ -529,7 +585,6 @@ function endRound({ ok, pointsAwarded }) {
     score += pointsAwarded;
     scoreEl.textContent = String(score);
 
-
     // confetti from center of screen
     confettiBurst({ x: window.innerWidth * 0.5, y: window.innerHeight * 0.5 });
   }
@@ -537,17 +592,22 @@ function endRound({ ok, pointsAwarded }) {
   // show capital location
   drawMap(current.country, true);
 
-  // show Next
-  next.style.display = "inline-block";
-  next.focus();
+  // Allow: tap anywhere or Enter/Space to continue (+ auto-advance)
+  armContinue({ autoMs: ok ? 900 : 1800 });
 }
 
 function doPrimaryAction() {
-  // If multiple-choice is visible, Enter should NOT jump ahead
+  // If multiple-choice is visible, Enter should NOT do anything
   if (elChoices.style.display !== "none") return;
 
-  if (next.style.display !== "none") next.click();
-  else submit.click();
+  // If round has ended, Enter continues
+  if (roundEnded) {
+    disarmContinue();
+    nextQ();
+    return;
+  }
+
+  submit.click();
 }
 
 // Enter handling (one action per press)
@@ -597,9 +657,6 @@ function reveal(ok, pointsAwarded) {
   }
 
   submit.disabled = true;
-
-  next.style.display = "inline-block";
-  next.focus();
 
   drawMap(current.country, true);
 
@@ -654,6 +711,9 @@ function showMC(){
 }
 
 function nextQ() {
+  disarmContinue();
+  roundEnded = false;
+
   // Done?
   if (!remaining || remaining.length === 0) {
     showFinal();
@@ -670,8 +730,6 @@ function nextQ() {
   answer.disabled = false;
 
   submit.disabled = false;
-
-  next.style.display = "none";
 
   elChoices.style.display = "none";
   elChoices.innerHTML = "";
@@ -703,7 +761,6 @@ submit.onclick = () => {
   }
 };
 
-next.onclick = nextQ;
 
 /* ---------------- FINAL OVERLAY ---------------- */
 function showFinal() {
@@ -711,7 +768,6 @@ function showFinal() {
 
   answer.disabled = true;
   submit.disabled = true;
-  next.style.display = "none";
   elChoices.style.display = "none";
   elChoices.innerHTML = "";
 
