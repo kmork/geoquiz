@@ -17,28 +17,62 @@
     .hr{height:1px;background:rgba(255,255,255,.12);margin:14px 0}
     .country{font-size:30px;font-weight:750;margin:10px 0}
 
-    /* keep input + Submit side-by-side even on mobile */
-    .answerRow{display:flex;gap:12px;align-items:center;flex-wrap:nowrap}
-    .answerRow input{flex:1;min-width:0}
-    .answerRow button{flex:0 0 auto;white-space:nowrap}
+    /* Keep input + Submit always on same row (mobile too) */
+    .answerRow{
+      display:flex;
+      gap:12px;
+      align-items:stretch;
+      flex-wrap:nowrap;
+      width:100%;
+    }
+    .answerRow input{
+      flex:1 1 auto;
+      min-width:0; /* important for small screens */
+    }
+    .answerRow button{
+      flex:0 0 auto;
+      white-space:nowrap;
+    }
 
-    input{width:min(560px,100%);padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.18);background:rgba(0,0,0,.22);color:#e8ecff;font-size:16px}
+    input{
+      width:min(560px,100%);
+      padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.18);
+      background:rgba(0,0,0,.22);color:#e8ecff;font-size:16px
+    }
     button{padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.1);color:#e8ecff;font-weight:650;cursor:pointer}
     button:hover{background:rgba(255,255,255,.14)}
     button:disabled{opacity:.55;cursor:not-allowed}
+
     .status{margin-top:10px;font-size:14px}
     .good{color:#6ee7b7}
     .bad{color:#fda4af}
+
     .choices{margin-top:12px;display:grid;gap:10px}
     .footer{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-    .mapwrap{margin:10px 0}
 
-    #map{
-      border-radius:14px;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.12);
-      touch-action:none; /* mobile pinch/pan handled in JS */
+    .mapwrap{margin:10px 0}
+    #map{border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);touch-action:none;}
+
+    /* Final screen overlay */
+    .overlay{
+      position:fixed; inset:0;
+      background:rgba(0,0,0,.6);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
     }
+    .overlay .panel{
+      width:min(720px, 100%);
+      background:rgba(15,20,40,.96);
+      border:1px solid rgba(255,255,255,.14);
+      border-radius:16px;
+      padding:18px;
+      box-shadow:0 18px 60px rgba(0,0,0,.45);
+    }
+    .overlay h2{margin:0 0 8px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    @media (max-width:520px){ .grid2{grid-template-columns:1fr} }
   </style>
 </head>
 
@@ -54,6 +88,7 @@
       <div class="row">
         <div class="pill">Score: <b id="score">0</b></div>
         <div class="pill">Rounds: <b id="rounds">0</b></div>
+        <div class="pill">Progress: <b id="progress">0 / 193</b></div>
       </div>
     </div>
 
@@ -67,21 +102,45 @@
     </div>
 
     <div class="answerRow">
-      <input id="answer" placeholder="Type the capital…"/>
+      <input id="answer" placeholder="Type the capital…" autocomplete="off"/>
       <button id="submit">Submit</button>
+    </div>
+
+    <div class="row" style="margin-top:12px">
       <button id="skip">Skip</button>
+      <button id="next" style="display:none">Next</button>
     </div>
 
     <div id="status" class="status"></div>
     <div id="choices" class="choices" style="display:none"></div>
 
-    <div class="footer">
-      <button id="next" style="display:none">Next</button>
-    </div>
-
   </div>
 </div>
 
+<!-- Final score screen -->
+<div class="overlay" id="finalOverlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <h2>🎉 Finished!</h2>
+    <div class="muted" id="finalSubtitle"></div>
+    <div class="hr"></div>
+
+    <div class="grid2">
+      <div class="pill">Final score: <b id="finalScore">0</b></div>
+      <div class="pill">Countries: <b id="finalCountries">193</b></div>
+      <div class="pill">Correct (any): <b id="finalCorrect">0</b></div>
+      <div class="pill">First-try correct: <b id="finalFirstTry">0</b></div>
+    </div>
+
+    <div class="hr"></div>
+    <div class="row">
+      <button id="playAgain">Play again</button>
+      <button id="closeFinal">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- IMPORTANT: data first, then app -->
+<script src="js/data.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>
