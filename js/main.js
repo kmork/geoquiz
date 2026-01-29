@@ -13,11 +13,25 @@ const mapApi = createMap({
   placesUrl: "data/places.geojson",
 });
 
-await mapApi.load();
+try {
+  await mapApi.load();
+} catch (err) {
+  console.error("Map load failed:", err);
+  // Start game anyway (map will just show “Loading/No outline…”)
+}
 mapApi.attachInteractions();
 
 const game = createGame({ ui, mapApi, confetti });
 attachWikipediaPopup(ui.elCountry, ()=>game.getCurrent());
 
+ui.playAgainBtn?.addEventListener("click", () => {
+  ui.finalOverlay.style.display = "none";
+  game.reset();
+  game.nextQ();
+});
+
+ui.closeFinalBtn?.addEventListener("click", () => {
+  ui.finalOverlay.style.display = "none";
+});
 game.reset();
 game.nextQ();

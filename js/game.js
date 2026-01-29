@@ -14,6 +14,8 @@ export function createGame({ ui, mapApi, confetti }) {
   let roundEnded = false;
   let continueTimer = null;
 
+  let enterLock = false;
+
   const AUTO_MS_CORRECT_FIRST = 900;
   const AUTO_MS_CORRECT_SECOND = 1100;
   const AUTO_MS_WRONG_SECOND = 1700;
@@ -194,6 +196,9 @@ export function createGame({ ui, mapApi, confetti }) {
     (e) => {
       if (e.key !== "Enter" && e.key !== " ") return;
 
+      if (enterLock) return;
+      enterLock = true;
+
       // If choices visible, Enter does nothing (don’t skip the choice phase)
       if (ui.elChoices.style.display !== "none") return;
 
@@ -208,6 +213,12 @@ export function createGame({ ui, mapApi, confetti }) {
     },
     true
   );
+
+  document.addEventListener("keyup", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      enterLock = false;
+    }
+  });
 
   return {
     reset,
