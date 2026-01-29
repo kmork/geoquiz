@@ -593,7 +593,7 @@ function endRound({ ok, pointsAwarded }) {
   drawMap(current.country, true);
 
   // Allow: tap anywhere or Enter/Space to continue (+ auto-advance)
-  armContinue({ autoMs: ok ? 900 : 1800 });
+  armContinue({ autoMs: ok ? 1100 : 2200 });
 }
 
 function doPrimaryAction() {
