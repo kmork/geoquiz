@@ -14,6 +14,8 @@
     .muted{color:rgba(232,236,255,.72);font-size:14px}
     .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
     .pill{display:inline-flex;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:14px}
+    .star{font-size:16px;line-height:1}
+    .starArms{margin-left:6px;opacity:.9;font-size:12px;letter-spacing:1px}
     .hr{height:1px;background:rgba(255,255,255,.12);margin:14px 0}
     .country{font-size:30px;font-weight:750;margin:10px 0}
 
@@ -110,6 +112,26 @@
     .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     @media (max-width:520px){ .grid2{grid-template-columns:1fr} }
 
+    .starStack{
+      display:inline-block;
+      position:relative;
+      margin-left:10px;
+      height:18px;
+      vertical-align:middle;
+    }
+
+    .starStack .starIcon{
+      position:absolute;
+      left:0;
+      top:0;
+      font-size:16px;
+      line-height:18px;
+      color:#ffd54a; /* yellow */
+      text-shadow: 0 0 6px rgba(255,213,74,.25);
+      user-select:none;
+      pointer-events:none;
+    }
+
     #confetti{
       position: fixed;
       inset: 0;
@@ -137,7 +159,10 @@
       opacity: 0;
       pointer-events: none;
     }
-  </style>
+
+.star { color: #ffd54a; text-shadow: 0 0 10px rgba(255,213,74,.25); }
+.bonusLabel { flex: 1; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,.06); color: rgba(232,236,255,.9); }
+</style>
 </head>
 
 <body>
@@ -154,7 +179,10 @@
         <div class="muted">Type the capital. If wrong, you get a multiple-choice second chance.</div>
       </div>
       <div class="row">
-        <div class="pill">Score: <b id="score">0</b></div>
+        <div class="pill">
+          Score: <b id="score">0</b>
+          <span id="starStack" class="starStack" aria-label="bonus stars"></span>
+        </div>
         <div class="pill">Progress: <b id="progress">0 / 193</b></div>
       </div>
     </div>
@@ -169,8 +197,9 @@
     </div>
 
     <div class="answerRow">
+      <div id="bonusLabel" class="bonusLabel" style="display:none">🎯 Bonus: Click/tap the map to place your guess, then press Guess.</div>
       <input id="answer" placeholder="Type the capital…" autocomplete="off"/>
-      <button id="submit">Submit</button>
+      <button id="submit">Guess</button>
     </div>
 
     <div id="choices" class="choices" style="display:none"></div>

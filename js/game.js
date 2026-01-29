@@ -11,10 +11,12 @@ export function createGame({ ui, mapApi, confetti }) {
   let correctFirstTry = 0;
   let correctAny = 0;
 
+  let stars = 0;
+  let bonusMode = false;
+  let bonusCommit = null;
+
   let roundEnded = false;
   let continueTimer = null;
-
-  let enterLock = false;
 
   const AUTO_MS_CORRECT_FIRST = 900;
   const AUTO_MS_CORRECT_SECOND = 1100;
@@ -26,6 +28,155 @@ export function createGame({ ui, mapApi, confetti }) {
       [arr[i], arr[j]] = [arr[j], arr[i]];
     }
     return arr;
+  }
+
+  function updateStarsUI() {
+    const el = ui.starsEl;
+    if (!el) return;
+
+    el.innerHTML = "";
+    if (stars <= 0) return;
+
+    // Stack stars with slight offset
+    const dx = 7;  // horizontal offset in px
+    const dy = -1; // vertical offset in px
+
+    // Make container wide enough for N stacked stars
+    el.style.width = `${16 + (stars - 1) * dx}px`;
+
+    const frag = document.createDocumentFragment();
+
+    for (let i = 0; i < stars; i++) {
+      const s = document.createElement("span");
+      s.className = "starIcon";
+      s.textContent = "★";
+      s.style.transform = `translate(${i * dx}px, ${i * dy}px)`;
+      s.style.zIndex = String(i + 1);
+      frag.appendChild(s);
+    }
+
+    el.appendChild(frag);
+  }
+
+  function awardStarsFromAccuracy(accPct) {
+    // ≥90% -> 4★, ≥80% -> 3★, ≥70% -> 2★, ≥60% -> 1★, else 0
+    if (accPct >= 90) return 4;
+    if (accPct >= 80) return 3;
+    if (accPct >= 70) return 2;
+    if (accPct >= 60) return 1;
+    return 0;
+  }
+
+  function clamp01(x) {
+    return x < 0 ? 0 : x > 1 ? 1 : x;
+  }
+
+  function startBonusRound() {
+    // If we can't determine the capital location, skip bonus gracefully.
+    const cap = mapApi?.getCapitalXY?.(current.country);
+    const vb = mapApi?.getBaseViewBox?.();
+    if (!cap || !vb) {
+      confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
+      endRound({ ok: true, pointsAwarded: 2, autoMs: AUTO_MS_CORRECT_FIRST });
+      return;
+    }
+
+    bonusMode = true;
+    bonusCommit = null;
+    disarmAutoAdvance();
+
+    // Replace the input field with a bonus label
+    if (ui.answer) {
+      ui.answer.value = "";
+      ui.answer.style.display = "none";
+      ui.answer.disabled = true;
+    }
+    if (ui.bonusLabelEl) ui.bonusLabelEl.style.display = "block";
+
+    // Keep the button enabled (user must press Guess to commit)
+    if (ui.submit) ui.submit.disabled = false;
+
+    let candidate = null;
+
+    const markerId = "bonusMarker";
+
+    const drawMarker = (p) => {
+      const svg = ui.map;
+      if (!svg) return;
+      svg.querySelector(`#${markerId}`)?.remove();
+
+      const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+      c.setAttribute("id", markerId);
+      c.setAttribute("cx", p.x);
+      c.setAttribute("cy", p.y);
+
+      // small marker ~3.5px regardless of zoom
+      const vbNow = svg.viewBox.baseVal;
+      const pxW = svg.clientWidth || 1;
+      const upp = vbNow.width / pxW;
+      c.setAttribute("r", String(7 * upp));
+
+      c.setAttribute("fill", "#ffd54a");
+      c.setAttribute("stroke", "rgba(232,236,255,.9)");
+      c.setAttribute("stroke-width", "1");
+      c.setAttribute("vector-effect", "non-scaling-stroke");
+      svg.appendChild(c);
+    };
+
+    const accuracyAtSvgPoint = (p) => {
+      const dx = p.x - cap.x;
+      const dy = p.y - cap.y;
+      const d = Math.hypot(dx, dy);
+      const maxD = Math.hypot(vb.w, vb.h) * 0.6;
+      return clamp01(1 - d / maxD) * 100;
+    };
+
+    const onPlace = (e) => {
+      if (!bonusMode) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      const p = mapApi.clientToSvg(e.clientX, e.clientY);
+      candidate = p;
+      drawMarker(p);
+      // (Removed: any accuracy text updates)
+    };
+
+    const cleanup = () => {
+      ui.map?.removeEventListener("pointerdown", onPlace);
+      ui.map?.querySelector(`#${markerId}`)?.remove();
+    };
+
+    bonusCommit = () => {
+      if (!bonusMode) return;
+
+      // Require a placed marker; no extra text needed
+      if (!candidate) return;
+
+      bonusMode = false;
+      cleanup();
+
+      const acc = accuracyAtSvgPoint(candidate);
+      const gained = awardStarsFromAccuracy(acc);
+      if (gained > 0) {
+        stars += gained;
+        updateStarsUI();
+      }
+
+      // Show the correct dot now
+      mapApi?.draw?.(current.country, true);
+
+      // Restore input for the next question
+      if (ui.bonusLabelEl) ui.bonusLabelEl.style.display = "none";
+      if (ui.answer) {
+        ui.answer.style.display = "";
+        ui.answer.disabled = false;
+      }
+
+      endRound({ ok: true, pointsAwarded: 2, autoMs: AUTO_MS_CORRECT_FIRST });
+    };
+
+    ui.map?.addEventListener("pointerdown", onPlace, { passive: false });
   }
 
   function disarmAutoAdvance() {
@@ -51,6 +202,10 @@ export function createGame({ ui, mapApi, confetti }) {
     correctAny = 0;
 
     ui.scoreEl.textContent = "0";
+    stars = 0;
+    updateStarsUI();
+
+    // (Removed usage of bonusHintEl entirely)
     updateProgress(ui.progressEl, 0, deck.length);
   }
 
@@ -62,9 +217,9 @@ export function createGame({ ui, mapApi, confetti }) {
     ui.submit.disabled = false;
     ui.answer.value = "";
     roundEnded = false;
+    bonusMode = false;
 
     if (!deck.length) {
-      // Finished -> show your final overlay (if you have this logic elsewhere, keep it)
       ui.finalOverlay.style.display = "flex";
       ui.finalScore.textContent = String(score);
       ui.finalCountries.textContent = String(DATA.length);
@@ -112,7 +267,6 @@ export function createGame({ ui, mapApi, confetti }) {
 
     const correct = current.capitals[0];
 
-    // build 4 options (1 correct + 3 random)
     let opts = [correct];
     while (opts.length < 4) {
       const c = DATA[(Math.random() * DATA.length) | 0].capitals[0];
@@ -131,15 +285,12 @@ export function createGame({ ui, mapApi, confetti }) {
 
         const isCorrect = option === correct;
 
-        // disable all buttons immediately (no double clicks)
         ui.elChoices.querySelectorAll("button").forEach((btn) => (btn.disabled = true));
 
-        // mark correct in green
         ui.elChoices.querySelectorAll("button").forEach((btn) => {
           if (btn.textContent === correct) btn.classList.add("correct");
         });
 
-        // if wrong, mark selected in red
         if (!isCorrect) b.classList.add("wrong");
 
         if (isCorrect) {
@@ -155,13 +306,16 @@ export function createGame({ ui, mapApi, confetti }) {
     });
   }
 
-  // Submit handler: correct => confetti => fast advance; wrong => show alternatives
+  // Guess handler: correct on first try => bonus round; wrong/blank => MC alternatives
   ui.submit.onclick = () => {
+    if (bonusMode) {
+      bonusCommit?.();
+      return;
+    }
     if (roundEnded) return;
 
     const user = norm(ui.answer.value);
 
-    // blank submit = treat as wrong -> show alternatives
     if (!user) {
       showMC();
       return;
@@ -173,34 +327,45 @@ export function createGame({ ui, mapApi, confetti }) {
       correctAny++;
       correctFirstTry++;
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
-      endRound({ ok: true, pointsAwarded: 2, autoMs: AUTO_MS_CORRECT_FIRST });
+      startBonusRound();
     } else {
       showMC();
     }
   };
 
-  // Tap anywhere / Enter to continue (optional, without a Next button)
+  // Tap anywhere / Enter to continue
   document.addEventListener(
     "pointerdown",
     () => {
       if (!roundEnded) return;
-      if (ui.elChoices.style.display !== "none") return; // don’t skip while choices visible
+      if (bonusMode) return;
+      if (ui.elChoices.style.display !== "none") return;
       disarmAutoAdvance();
       nextQ();
     },
     true
   );
 
+  function isTextEditingTarget(t) {
+    if (!t) return false;
+    const tag = (t.tagName || "").toLowerCase();
+    if (tag === "input" || tag === "textarea" || tag === "select") return true;
+    if (t.isContentEditable) return true;
+    return false;
+  }
+
   document.addEventListener(
     "keydown",
     (e) => {
-      if (e.key !== "Enter" && e.key !== " ") return;
-
-      if (enterLock) return;
-      enterLock = true;
+      // Enter is the only submit key.
+      if (e.key !== "Enter") return;
 
       // If choices visible, Enter does nothing (don’t skip the choice phase)
       if (ui.elChoices.style.display !== "none") return;
+
+      if (bonusMode) return;
+
+      const editing = isTextEditingTarget(e.target) || document.activeElement === ui.answer;
 
       if (roundEnded) {
         e.preventDefault();
@@ -213,12 +378,6 @@ export function createGame({ ui, mapApi, confetti }) {
     },
     true
   );
-
-  document.addEventListener("keyup", (e) => {
-    if (e.key === "Enter" || e.key === " ") {
-      enterLock = false;
-    }
-  });
 
   return {
     reset,

@@ -8,6 +8,9 @@ export function getUI() {
     progressEl: document.getElementById("progress"),
     map: document.getElementById("map"),
 
+    starsEl: document.getElementById("starStack"),
+    bonusLabelEl: document.getElementById("bonusLabel"),
+
     finalOverlay: document.getElementById("finalOverlay"),
     finalSubtitle: document.getElementById("finalSubtitle"),
     finalScore: document.getElementById("finalScore"),
