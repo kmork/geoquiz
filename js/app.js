@@ -35,12 +35,21 @@ const finalFirstTry  = document.getElementById("finalFirstTry");
 const playAgainBtn   = document.getElementById("playAgain");
 const closeFinalBtn  = document.getElementById("closeFinal");
 
+// Country name in your quiz -> country name used in countries.geojson (properties.ADMIN)
+const COUNTRY_ALIASES = {
+  "Bahamas": "The Bahamas",
+  "Congo": "Republic of the Congo",
+  "Côte d'Ivoire": "Ivory Coast",
+  "Serbia": "Republic of Serbia",
+  "Tanzania": "United Republic of Tanzania",
+  "United States": "United States of America",
+};
+
 /* ---------------- CONFETTI ---------------- */
 const confettiCanvas = document.getElementById("confetti");
 const cctx = confettiCanvas.getContext("2d");
 let confettiPieces = [];
 let confettiRAF = null;
-
 
 function resizeConfetti(){
   const dpr = Math.max(1, window.devicePixelRatio || 1);
@@ -52,7 +61,6 @@ function resizeConfetti(){
 }
 window.addEventListener("resize", resizeConfetti, {passive:true});
 resizeConfetti();
-
 
 function confettiBurst({
                          x = window.innerWidth * 0.5,
@@ -70,12 +78,10 @@ function confettiBurst({
 // colors similar vibe to your UI
   const colors = ["#6ee7b7","#a5b4fc","#e8ecff","#fda4af","#fde68a"];
 
-
   for(let i=0;i<count;i++){
     const a = startAngle + (Math.random() - 0.5) * spread;
     const v = 550 + Math.random()*650;
     const size = 4 + Math.random()*5;
-
 
     confettiPieces.push({
       x, y,
@@ -91,10 +97,8 @@ function confettiBurst({
     });
   }
 
-
   if(!confettiRAF) confettiRAF = requestAnimationFrame(tickConfetti);
 }
-
 
 function tickConfetti(t){
   cctx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
@@ -286,7 +290,9 @@ function drawMap(country, showDot) {
     return;
   }
 
-  const hits = WORLD.filter(f => norm(f.properties.ADMIN || "") === norm(country));
+  const mapName = COUNTRY_ALIASES[country] || country;
+
+  const hits = WORLD.filter(f => norm(f.properties.ADMIN || "") === norm(mapName));
   if (!hits.length) {
     map.innerHTML = `<text x="20" y="30" fill="rgba(232,236,255,.7)">No outline found</text>`;
     setViewBox(0, 0, 600, 320);
