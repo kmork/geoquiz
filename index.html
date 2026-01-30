@@ -4,165 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Capitals of the World Quiz</title>
-
-  <style>
-    :root{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-    body{margin:0;background:#0b1020;color:#e8ecff}
-    .wrap{max-width:980px;margin:0 auto;padding:24px}
-    .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:18px;box-shadow:0 12px 40px rgba(0,0,0,.25)}
-    h1{margin:0 0 6px;font-size:22px}
-    .muted{color:rgba(232,236,255,.72);font-size:14px}
-    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-    .pill{display:inline-flex;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);font-size:14px}
-    .star{font-size:16px;line-height:1}
-    .starArms{margin-left:6px;opacity:.9;font-size:12px;letter-spacing:1px}
-    .hr{height:1px;background:rgba(255,255,255,.12);margin:14px 0}
-    .country{font-size:30px;font-weight:750;margin:10px 0}
-
-    /* Keep input + Submit always on same row (mobile too) */
-    .answerRow{
-      display:flex;
-      gap:12px;
-      align-items:stretch;
-      flex-wrap:nowrap;
-      width:100%;
-    }
-    .answerRow input{
-      flex:1 1 auto;
-      min-width:0; /* important for small screens */
-    }
-    .answerRow button{
-      flex:0 0 auto;
-      white-space:nowrap;
-    }
-
-    input{
-      width:min(560px,100%);
-      padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.18);
-      background:rgba(0,0,0,.22);color:#e8ecff;font-size:16px
-    }
-    button{padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.16);background:rgba(255,255,255,.1);color:#e8ecff;font-weight:650;cursor:pointer}
-    button:hover{background:rgba(255,255,255,.14)}
-    button:disabled{opacity:.55;cursor:not-allowed}
-
-    .status{margin-top:10px;font-size:14px}
-    .good{color:#6ee7b7}
-    .bad{color:#fda4af}
-
-    .choices{margin-top:12px;display:grid;gap:10px}
-    .footer{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
-
-    /* Make choice feedback clear */
-    .choices button{
-      text-align:left;
-    }
-
-    /* Keep disabled buttons fully visible so colors show */
-    .choices button:disabled{
-      opacity: 1;
-      cursor: default;
-    }
-
-    .choices button.correct{
-      border-color: rgba(110,231,183,.65);
-      background: rgba(110,231,183,.14);
-    }
-
-    .choices button.wrong{
-      border-color: rgba(253,164,175,.65);
-      background: rgba(253,164,175,.14);
-    }
-
-    .mapwrap{margin:10px 0}
-    #map{border-radius:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.12);touch-action:none;}
-
-    .country{
-      cursor: pointer;
-      text-decoration: none;
-      transition: color .15s ease, text-shadow .15s ease, transform .05s ease;
-    }
-
-    .country:hover{
-      color: #ffffff;
-      text-shadow: 0 0 12px rgba(165,180,252,.35);
-    }
-
-    .country:active{
-      transform: scale(0.99);
-    }
-
-    /* Final screen overlay */
-    .overlay{
-      position:fixed; inset:0;
-      background:rgba(0,0,0,.6);
-      display:none;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-    }
-    .overlay .panel{
-      width:min(720px, 100%);
-      background:rgba(15,20,40,.96);
-      border:1px solid rgba(255,255,255,.14);
-      border-radius:16px;
-      padding:18px;
-      box-shadow:0 18px 60px rgba(0,0,0,.45);
-    }
-    .overlay h2{margin:0 0 8px}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    @media (max-width:520px){ .grid2{grid-template-columns:1fr} }
-
-    .starStack{
-      display:inline-block;
-      position:relative;
-      margin-left:10px;
-      height:18px;
-      vertical-align:middle;
-    }
-
-    .starStack .starIcon{
-      position:absolute;
-      left:0;
-      top:0;
-      font-size:16px;
-      line-height:18px;
-      color:#ffd54a; /* yellow */
-      text-shadow: 0 0 6px rgba(255,213,74,.25);
-      user-select:none;
-      pointer-events:none;
-    }
-
-    #confetti{
-      position: fixed;
-      inset: 0;
-      width: 100vw;
-      height: 100vh;
-      pointer-events: none;
-      z-index: 9999;
-    }
-
-    #init-overlay {
-      position: fixed;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: radial-gradient(ellipse at center, #0f1220 0%, #070816 70%);
-      color: rgba(232,236,255,.9);
-      font-size: 1.4rem;
-      letter-spacing: 0.04em;
-      z-index: 9999;
-      transition: opacity .35s ease;
-    }
-
-    #init-overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-
-.star { color: #ffd54a; text-shadow: 0 0 10px rgba(255,213,74,.25); }
-.bonusLabel { flex: 1; padding: 10px 12px; border-radius: 12px; background: rgba(255,255,255,.06); color: rgba(232,236,255,.9); }
-</style>
+  <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
@@ -173,7 +15,7 @@
       Initializing game…
     </div>
 
-    <div class="row" style="justify-content:space-between">
+    <div class="row row-space-between">
       <div>
         <h1>🌍 Capitals of the World Quiz</h1>
         <div class="muted">Type the capital. If wrong, you get a multiple-choice second chance.</div>
@@ -197,7 +39,7 @@
     </div>
 
     <div class="answerRow">
-      <div id="bonusLabel" class="bonusLabel" style="display:none">🎯 Bonus: Click/tap the map to place your guess, then press Guess.</div>
+      <div id="bonusLabel" class="bonusLabel hidden">🎯 Bonus: Click/tap the map to place your guess, then press Guess.</div>
       <input id="answer" placeholder="Type the capital…" autocomplete="off"/>
       <button id="submit">Guess</button>
     </div>
