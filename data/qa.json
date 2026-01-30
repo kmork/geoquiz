@@ -1,0 +1,609 @@
+[
+  {
+    "question": "Which country has the most time zones when overseas territories are included?",
+    "options": ["Russia", "France", "United States", "United Kingdom"],
+    "answer": 1,
+    "explanation": "France has 12 time zones because its overseas territories are spread across the globe."
+  },
+  {
+    "question": "What is unusual about the Sargasso Sea compared to other seas?",
+    "options": ["It is freshwater", "It has no coastline", "It is frozen year-round", "It is man-made"],
+    "answer": 1,
+    "explanation": "The Sargasso Sea has no coastline and is defined by ocean currents instead of land."
+  },
+  {
+    "question": "Which river passes through or borders the greatest number of countries?",
+    "options": ["Nile", "Amazon", "Danube", "Rhine"],
+    "answer": 2,
+    "explanation": "The Danube flows through or along the borders of 10 European countries."
+  },
+  {
+    "question": "Which desert is the largest hot desert on Earth?",
+    "options": ["Gobi", "Arabian", "Sahara", "Kalahari"],
+    "answer": 2,
+    "explanation": "The Sahara is the largest hot desert, covering much of North Africa."
+  },
+  {
+    "question": "Which capital city sits at the highest elevation above sea level?",
+    "options": ["Quito", "Bogotá", "Kathmandu", "La Paz"],
+    "answer": 3,
+    "explanation": "La Paz sits at over 3,600 meters above sea level."
+  },
+  {
+    "question": "Which country technically owns the most islands?",
+    "options": ["Indonesia", "Philippines", "Sweden", "Japan"],
+    "answer": 2,
+    "explanation": "Sweden has over 260,000 islands, more than any other country."
+  },
+  {
+    "question": "Which lake contains about 20% of the world’s unfrozen freshwater?",
+    "options": ["Lake Superior", "Lake Victoria", "Lake Tanganyika", "Lake Baikal"],
+    "answer": 3,
+    "explanation": "Lake Baikal is the deepest lake in the world and holds immense freshwater volume."
+  },
+  {
+    "question": "Which mountain range is traditionally considered the boundary between Europe and Asia?",
+    "options": ["Alps", "Ural Mountains", "Caucasus", "Carpathians"],
+    "answer": 1,
+    "explanation": "The Ural Mountains are commonly used as the dividing line between Europe and Asia."
+  },
+  {
+    "question": "Which country has land borders with the most other countries?",
+    "options": ["China", "Russia", "Brazil", "Germany"],
+    "answer": 0,
+    "explanation": "China shares borders with 14 countries, more than any other nation."
+  },
+  {
+    "question": "Which city lies closest to the Equator?",
+    "options": ["Singapore", "Quito", "Nairobi", "Jakarta"],
+    "answer": 1,
+    "explanation": "Quito lies almost exactly on the Equator in Ecuador."
+  },
+
+  {
+    "question": "Which ocean is shrinking due to tectonic plate movement?",
+    "options": ["Atlantic", "Pacific", "Indian", "Arctic"],
+    "answer": 1,
+    "explanation": "The Pacific Ocean is shrinking as surrounding plates move inward."
+  },
+  {
+    "question": "Which country has no permanent rivers?",
+    "options": ["Saudi Arabia", "Libya", "Oman", "Kuwait"],
+    "answer": 0,
+    "explanation": "Saudi Arabia is extremely arid and has no permanent rivers."
+  },
+  {
+    "question": "Which continent contains the driest place on Earth?",
+    "options": ["Africa", "Antarctica", "Asia", "South America"],
+    "answer": 1,
+    "explanation": "Antarctica’s McMurdo Dry Valleys receive almost no precipitation."
+  },
+  {
+    "question": "Which European capital is divided into Buda and Pest?",
+    "options": ["Vienna", "Prague", "Budapest", "Bratislava"],
+    "answer": 2,
+    "explanation": "Budapest is split by the Danube River into Buda and Pest."
+  },
+  {
+    "question": "Which country spans both Europe and Asia?",
+    "options": ["Greece", "Turkey", "Georgia", "Armenia"],
+    "answer": 1,
+    "explanation": "Turkey lies on both continents, separated by the Bosporus Strait."
+  },
+  {
+    "question": "Which is the largest island in the world (not a continent)?",
+    "options": ["Greenland", "New Guinea", "Borneo", "Madagascar"],
+    "answer": 0,
+    "explanation": "Greenland is the largest island but is not considered a continent."
+  },
+  {
+    "question": "Which country has the longest coastline?",
+    "options": ["Australia", "Canada", "Indonesia", "Russia"],
+    "answer": 1,
+    "explanation": "Canada’s deeply indented coastline makes it the longest in the world."
+  },
+  {
+    "question": "Which capital city lies on two continents?",
+    "options": ["Moscow", "Cairo", "Istanbul", "Athens"],
+    "answer": 2,
+    "explanation": "Istanbul spans Europe and Asia across the Bosporus Strait."
+  },
+  {
+    "question": "Which African country has more pyramids than Egypt?",
+    "options": ["Egypt", "Sudan", "Ethiopia", "Libya"],
+    "answer": 1,
+    "explanation": "Sudan has over 200 pyramids, more than Egypt."
+  },
+  {
+    "question": "Which mountain is tallest from base to peak?",
+    "options": ["Everest", "K2", "Mauna Kea", "Denali"],
+    "answer": 2,
+    "explanation": "Mauna Kea rises over 10,000 meters from the ocean floor."
+  },
+
+  {
+    "question": "Which continent has the most countries?",
+    "options": ["Africa", "Asia", "Europe", "South America"],
+    "answer": 0,
+    "explanation": "Africa has 54 internationally recognized countries."
+  },
+  {
+    "question": "Which country is completely surrounded by another?",
+    "options": ["Portugal", "Italy", "Lesotho", "Nepal"],
+    "answer": 2,
+    "explanation": "Lesotho is entirely surrounded by South Africa."
+  },
+  {
+    "question": "Which river flows through Paris?",
+    "options": ["Thames", "Rhine", "Seine", "Loire"],
+    "answer": 2,
+    "explanation": "The Seine River runs directly through Paris."
+  },
+  {
+    "question": "Which sea is the saltiest major body of water?",
+    "options": ["Red Sea", "Caspian Sea", "Dead Sea", "Mediterranean Sea"],
+    "answer": 2,
+    "explanation": "The Dead Sea’s high salinity allows people to float easily."
+  },
+  {
+    "question": "Which country has the most volcanoes?",
+    "options": ["Japan", "Indonesia", "United States", "Chile"],
+    "answer": 1,
+    "explanation": "Indonesia sits on the Pacific Ring of Fire and has the most volcanoes."
+  },
+  {
+    "question": "Which US state has the longest coastline?",
+    "options": ["Florida", "California", "Alaska", "Hawaii"],
+    "answer": 2,
+    "explanation": "Alaska’s coastline is longer than all other US states combined."
+  },
+  {
+    "question": "Which river runs through Baghdad?",
+    "options": ["Euphrates", "Jordan", "Tigris", "Indus"],
+    "answer": 2,
+    "explanation": "The Tigris River flows directly through Baghdad."
+  },
+  {
+    "question": "Which country is the smallest by land area?",
+    "options": ["Monaco", "Nauru", "Vatican City", "San Marino"],
+    "answer": 2,
+    "explanation": "Vatican City is the smallest independent state in the world."
+  },
+  {
+    "question": "Which strait separates Europe and Africa?",
+    "options": ["Bosporus", "Bering Strait", "Strait of Gibraltar", "Drake Passage"],
+    "answer": 2,
+    "explanation": "The Strait of Gibraltar separates Spain from Morocco."
+  },
+  {
+    "question": "Which continent has no permanent human population?",
+    "options": ["Arctic", "Antarctica", "Australia", "Greenland"],
+    "answer": 1,
+    "explanation": "Antarctica has no permanent residents, only temporary researchers."
+  },
+
+  {
+    "question": "Which country has the highest average elevation?",
+    "options": ["Nepal", "Bhutan", "Switzerland", "Bolivia"],
+    "answer": 1,
+    "explanation": "Bhutan’s mountainous terrain gives it the highest average elevation."
+  },
+  {
+    "question": "Which river is sacred to Hindus?",
+    "options": ["Indus", "Brahmaputra", "Ganges", "Yamuna"],
+    "answer": 2,
+    "explanation": "The Ganges is considered holy and central to Hindu culture."
+  },
+  {
+    "question": "Which desert can bloom after rainfall?",
+    "options": ["Sahara", "Atacama", "Mojave", "Sonoran"],
+    "answer": 1,
+    "explanation": "The Atacama Desert can bloom with flowers after rare rain."
+  },
+  {
+    "question": "Which river is the longest in South America?",
+    "options": ["Amazon", "Paraná", "Orinoco", "Madeira"],
+    "answer": 0,
+    "explanation": "The Amazon is the longest river in South America."
+  },
+  {
+    "question": "Which continent is warming the fastest?",
+    "options": ["Africa", "Asia", "Europe", "Antarctica"],
+    "answer": 3,
+    "explanation": "Europe is the fastest-warming continent, according to the World Mereological Organization"
+  },
+  {
+    "question": "Which country has the most lakes?",
+    "options": ["Finland", "Canada", "Russia", "Sweden"],
+    "answer": 1,
+    "explanation": "Canada contains more lakes than the rest of the world combined."
+  },
+  {
+    "question": "Which city is the southernmost capital in the world?",
+    "options": ["Ushuaia", "Punta Arenas", "Wellington", "Buenos Aires"],
+    "answer": 2,
+    "explanation": "Wellington is the southernmost national capital city."
+  },
+  {
+    "question": "Which sea separates Arabia from Africa?",
+    "options": ["Red Sea", "Arabian Sea", "Mediterranean Sea", "Black Sea"],
+    "answer": 0,
+    "explanation": "The Red Sea lies between Africa and the Arabian Peninsula."
+  },
+  {
+    "question": "Which continent has the fewest countries?",
+    "options": ["Europe", "Australia", "South America", "Antarctica"],
+    "answer": 1,
+    "explanation": "Antarctica has 0 countries."
+  },
+  {
+    "question": "Which country has the largest population living above 1,000 meters elevation?",
+    "options": ["Peru", "Ethiopia", "Bolivia", "Nepal"],
+    "answer": 1,
+    "explanation": "Ethiopia’s highlands are home to tens of millions of people living above 1,000 meters."
+  },
+  {
+    "question": "Which river has the greatest average water discharge?",
+    "options": ["Nile", "Amazon", "Yangtze", "Congo"],
+    "answer": 1,
+    "explanation": "The Amazon carries more water than the next several largest rivers combined."
+  },
+  {
+    "question": "Which country lies entirely in the Southern Hemisphere?",
+    "options": ["Indonesia", "Brazil", "Madagascar", "Sri Lanka"],
+    "answer": 2,
+    "explanation": "Madagascar lies completely south of the Equator."
+  },
+  {
+    "question": "Which country has the most neighboring seas?",
+    "options": ["Italy", "Turkey", "Greece", "Croatia"],
+    "answer": 1,
+    "explanation": "Turkey borders the Black Sea, Aegean Sea, Mediterranean Sea, and Sea of Marmara."
+  },
+  {
+    "question": "Which continent has the largest average elevation?",
+    "options": ["Asia", "Africa", "Antarctica", "South America"],
+    "answer": 2,
+    "explanation": "Antarctica’s thick ice sheet gives it the highest average elevation."
+  },
+  {
+    "question": "Which country has the most dams?",
+    "options": ["United States", "China", "India", "Brazil"],
+    "answer": 1,
+    "explanation": "China has built tens of thousands of dams, more than any other country."
+  },
+  {
+    "question": "Which river forms part of the border between the US and Mexico?",
+    "options": ["Colorado", "Rio Grande", "Mississippi", "Arkansas"],
+    "answer": 1,
+    "explanation": "The Rio Grande forms a large section of the US–Mexico border."
+  },
+  {
+    "question": "Which country contains the geographic center of Europe (one common definition)?",
+    "options": ["Austria", "Slovakia", "Lithuania", "Poland"],
+    "answer": 2,
+    "explanation": "One widely cited calculation places Europe’s geographic center in Lithuania."
+  },
+  {
+    "question": "Which desert is considered the coldest desert on Earth?",
+    "options": ["Gobi", "Antarctic Desert", "Patagonian Desert", "Taklamakan"],
+    "answer": 1,
+    "explanation": "Antarctica is classified as a desert due to its extremely low precipitation."
+  },
+  {
+    "question": "Which country has the longest continuous mountain range within its borders?",
+    "options": ["Chile", "Nepal", "Canada", "Argentina"],
+    "answer": 0,
+    "explanation": "Chile stretches along the Andes Mountains for thousands of kilometers."
+  },
+
+  {
+    "question": "Which capital city is closest to the North Pole?",
+    "options": ["Helsinki", "Reykjavík", "Oslo", "Stockholm"],
+    "answer": 1,
+    "explanation": "Reykjavík is the world’s northernmost capital of a sovereign state."
+  },
+  {
+    "question": "Which country has territory on every inhabited continent?",
+    "options": ["France", "United Kingdom", "United States", "Netherlands"],
+    "answer": 0,
+    "explanation": "France has overseas territories in Europe, South America, Africa, Asia, and Oceania."
+  },
+  {
+    "question": "Which river flows into the Black Sea?",
+    "options": ["Volga", "Danube", "Don", "Dnieper"],
+    "answer": 1,
+    "explanation": "The Danube empties into the Black Sea via a large delta in Romania and Ukraine."
+  },
+  {
+    "question": "Which country has the most official languages?",
+    "options": ["India", "South Africa", "Bolivia", "Switzerland"],
+    "answer": 2,
+    "explanation": "Bolivia recognizes more than 30 official languages."
+  },
+  {
+    "question": "Which continent contains the most freshwater?",
+    "options": ["North America", "Asia", "Antarctica", "Europe"],
+    "answer": 2,
+    "explanation": "Antarctica holds about 70% of the world’s freshwater locked in ice."
+  },
+  {
+    "question": "Which country has the flattest terrain on average?",
+    "options": ["Netherlands", "Maldives", "Denmark", "Bangladesh"],
+    "answer": 1,
+    "explanation": "The Maldives has the lowest average elevation of any country."
+  },
+  {
+    "question": "Which river flows through Vienna, Bratislava, Budapest, and Belgrade?",
+    "options": ["Rhine", "Danube", "Elbe", "Po"],
+    "answer": 1,
+    "explanation": "The Danube connects more capital cities than any other river."
+  },
+  {
+    "question": "Which country contains the world’s largest salt flat?",
+    "options": ["Argentina", "Chile", "Bolivia", "Peru"],
+    "answer": 2,
+    "explanation": "Bolivia is home to Salar de Uyuni, the world’s largest salt flat."
+  },
+  {
+    "question": "Which sea is shrinking rapidly due to irrigation projects?",
+    "options": ["Caspian Sea", "Dead Sea", "Aral Sea", "Red Sea"],
+    "answer": 2,
+    "explanation": "The Aral Sea has dramatically shrunk due to river diversion for agriculture."
+  },
+  {
+    "question": "Which country has the most border crossings with Switzerland?",
+    "options": ["France", "Italy", "Germany", "Austria"],
+    "answer": 2,
+    "explanation": "Germany shares the longest and most connected border with Switzerland."
+  },
+
+  {
+    "question": "Which city is considered the highest permanent human settlement?",
+    "options": ["La Rinconada", "Lhasa", "Potosí", "Cusco"],
+    "answer": 0,
+    "explanation": "La Rinconada in Peru sits at over 5,000 meters above sea level."
+  },
+  {
+    "question": "Which country is home to the most glaciers outside polar regions?",
+    "options": ["Canada", "Iceland", "Norway", "Pakistan"],
+    "answer": 3,
+    "explanation": "Pakistan has more glaciers than any other non-polar country."
+  },
+  {
+    "question": "Which river flows through Rome?",
+    "options": ["Po", "Arno", "Tiber", "Adige"],
+    "answer": 2,
+    "explanation": "The Tiber River runs through the city of Rome."
+  },
+  {
+    "question": "Which continent has the most deserts?",
+    "options": ["Africa", "Asia", "Australia", "Antarctica"],
+    "answer": 3,
+    "explanation": "Australia has the most number of deserts than any other continent."
+  },
+  {
+    "question": "Which country has land in both the Eastern and Western Hemispheres?",
+    "options": ["Russia", "United States", "United Kingdom", "France"],
+    "answer": 0,
+    "explanation": "Russia spans both hemispheres across the 180th meridian."
+  },
+  {
+    "question": "Which lake lies at the lowest elevation on Earth?",
+    "options": ["Lake Assal", "Dead Sea", "Caspian Sea", "Lake Turkana"],
+    "answer": 1,
+    "explanation": "The Dead Sea’s surface lies more than 400 meters below sea level."
+  },
+  {
+    "question": "Which country has the most border checkpoints with another single country?",
+    "options": ["US–Canada", "China–Mongolia", "Russia–Kazakhstan", "India–Bangladesh"],
+    "answer": 0,
+    "explanation": "The United States and Canada share the world’s longest international border."
+  },
+  {
+    "question": "Which country has the greatest north–south length?",
+    "options": ["Chile", "Russia", "Argentina", "Norway"],
+    "answer": 0,
+    "explanation": "Chile stretches over 4,000 km from north to south."
+  },
+  {
+    "question": "Which continent has the youngest average geological surface?",
+    "options": ["Africa", "Asia", "Europe", "Antarctica"],
+    "answer": 3,
+    "explanation": "Much of Antarctica’s surface is geologically young due to ice coverage."
+  },
+  {
+    "question": "Which country has the highest waterfall in the world?",
+    "options": ["Brazil", "Canada", "Venezuela", "Norway"],
+    "answer": 2,
+    "explanation": "Angel Falls in Venezuela is the world’s highest uninterrupted waterfall at 979 meters."
+  },
+  {
+    "question": "Which river flows through the most capital cities?",
+    "options": ["Rhine", "Danube", "Nile", "Volga"],
+    "answer": 1,
+    "explanation": "The Danube flows through four capital cities: Vienna, Bratislava, Budapest, and Belgrade."
+  },
+  {
+    "question": "Which country has the largest tropical rainforest area?",
+    "options": ["Indonesia", "Democratic Republic of the Congo", "Brazil", "Peru"],
+    "answer": 2,
+    "explanation": "Brazil contains the largest portion of the Amazon rainforest."
+  },
+  {
+    "question": "Which country has the most active geysers?",
+    "options": ["Iceland", "United States", "New Zealand", "Japan"],
+    "answer": 1,
+    "explanation": "The United States, mainly Yellowstone National Park, has more active geysers than anywhere else."
+  },
+  {
+    "question": "Which continent has the longest continuous coastline?",
+    "options": ["Asia", "Africa", "North America", "Antarctica"],
+    "answer": 1,
+    "explanation": "According to National Geographic, it is Asia."
+  },
+  {
+    "question": "Which country is home to the most fjords?",
+    "options": ["Iceland", "Canada", "Norway", "Chile"],
+    "answer": 2,
+    "explanation": "Norway’s coastline is famous for its extensive and dramatic fjords."
+  },
+  {
+    "question": "Which capital city is closest to sea level?",
+    "options": ["Amsterdam", "Malé", "Copenhagen", "Stockholm"],
+    "answer": 1,
+    "explanation": "Malé, the capital of the Maldives, sits just about one meter above sea level."
+  },
+  {
+    "question": "Which country has the largest area of reclaimed land?",
+    "options": ["China", "Japan", "Netherlands", "South Korea"],
+    "answer": 2,
+    "explanation": "The Netherlands has reclaimed large areas of land from the sea using polders."
+  },
+  {
+    "question": "Which river is the main source of Egypt’s freshwater?",
+    "options": ["Jordan", "Euphrates", "Tigris", "Nile"],
+    "answer": 3,
+    "explanation": "The Nile provides the vast majority of Egypt’s freshwater and supports its population."
+  },
+  {
+    "question": "Which country has the largest coral reef system?",
+    "options": ["Australia", "Indonesia", "Philippines", "Fiji"],
+    "answer": 0,
+    "explanation": "Australia is home to the Great Barrier Reef, the largest coral reef system on Earth."
+  },
+
+  {
+    "question": "Which continent has the highest average temperature?",
+    "options": ["Africa", "Asia", "South America", "Australia"],
+    "answer": 0,
+    "explanation": "Africa is the hottest continent on average due to its latitude and climate."
+  },
+  {
+    "question": "Which country has the most landlocked neighbors?",
+    "options": ["Austria", "Switzerland", "Kazakhstan", "Germany"],
+    "answer": 0,
+    "explanation": "Austria borders eight countries, all of which are landlocked or nearly landlocked."
+  },
+  {
+    "question": "Which city is known as the lowest capital city in the world?",
+    "options": ["Jerusalem", "Baku", "Amsterdam", "Cairo"],
+    "answer": 1,
+    "explanation": "Baku lies about 28 meters below sea level along the Caspian Sea."
+  },
+  {
+    "question": "Which country contains the most UNESCO-listed natural sites?",
+    "options": ["China", "United States", "Australia", "Canada"],
+    "answer": 1,
+    "explanation": "The United States has more UNESCO-listed natural World Heritage sites than any other country."
+  },
+  {
+    "question": "Which river delta is the largest in the world?",
+    "options": ["Mississippi", "Nile", "Ganges-Brahmaputra", "Mekong"],
+    "answer": 2,
+    "explanation": "The Ganges-Brahmaputra Delta is the largest delta on Earth."
+  },
+  {
+    "question": "Which country has the greatest variety of climates?",
+    "options": ["China", "United States", "Russia", "Chile"],
+    "answer": 0,
+    "explanation": "China spans tropical, temperate, arid, and alpine climate zones."
+  },
+  {
+    "question": "Which island nation has the most volcanoes?",
+    "options": ["Japan", "Indonesia", "Philippines", "Iceland"],
+    "answer": 1,
+    "explanation": "Indonesia sits on the Ring of Fire and contains more volcanoes than any other island nation."
+  },
+  {
+    "question": "Which continent has the highest average wind speeds?",
+    "options": ["Antarctica", "Europe", "Asia", "South America"],
+    "answer": 0,
+    "explanation": "Antarctica experiences extremely strong katabatic winds."
+  },
+  {
+    "question": "Which country has the largest desert area within its borders?",
+    "options": ["Australia", "China", "Saudi Arabia", "Algeria"],
+    "answer": 0,
+    "explanation": "Much of Australia is covered by desert or semi-arid land."
+  },
+  {
+    "question": "Which river flows into the Caspian Sea?",
+    "options": ["Danube", "Volga", "Ural", "Don"],
+    "answer": 1,
+    "explanation": "The Volga River is the largest river flowing into the Caspian Sea."
+  },
+
+  {
+    "question": "Which country has the most border rivers?",
+    "options": ["Germany", "France", "Russia", "Brazil"],
+    "answer": 3,
+    "explanation": "Brazil’s borders are defined by numerous major rivers, especially in the Amazon Basin."
+  },
+  {
+    "question": "Which capital city is located closest to the Equator?",
+    "options": ["Singapore", "Quito", "Libreville", "Nairobi"],
+    "answer": 1,
+    "explanation": "Quito lies less than one kilometer from the Equator."
+  },
+  {
+    "question": "Which sea connects the Black Sea to the Mediterranean?",
+    "options": ["Aegean Sea", "Sea of Marmara", "Adriatic Sea", "Ionian Sea"],
+    "answer": 1,
+    "explanation": "The Sea of Marmara connects the Black Sea to the Aegean via the Bosporus and Dardanelles."
+  },
+  {
+    "question": "Which country has the largest delta plain used for agriculture?",
+    "options": ["Vietnam", "Egypt", "India", "Bangladesh"],
+    "answer": 3,
+    "explanation": "Bangladesh relies heavily on the fertile Ganges-Brahmaputra Delta for agriculture."
+  },
+  {
+    "question": "Which continent contains the most tectonic plate boundaries?",
+    "options": ["Asia", "North America", "Africa", "Europe"],
+    "answer": 0,
+    "explanation": "Asia lies at the intersection of several major tectonic plates."
+  },
+  {
+    "question": "Which country has the most land below sea level?",
+    "options": ["Netherlands", "Bangladesh", "Maldives", "Denmark"],
+    "answer": 0,
+    "explanation": "Large parts of the Netherlands lie below sea level and are protected by dikes."
+  },
+  {
+    "question": "Which country has the longest river entirely within its borders?",
+    "options": ["China", "United States", "Russia", "Brazil"],
+    "answer": 0,
+    "explanation": "China’s Yangtze River is the longest river that flows entirely within one country."
+  },
+  {
+    "question": "Which continent has the largest ice-free land area?",
+    "options": ["Asia", "Africa", "North America", "Europe"],
+    "answer": 1,
+    "explanation": "Africa has no permanent ice sheets, giving it the largest ice-free land area."
+  },
+  {
+    "question": "Which country has the most extreme tidal range?",
+    "options": ["United Kingdom", "Canada", "France", "Australia"],
+    "answer": 1,
+    "explanation": "Canada’s Bay of Fundy experiences the highest tidal range in the world."
+  },
+  {
+    "question": "Which country has the largest population living in cities above 2,500 meters elevation?",
+    "options": ["Peru", "Bolivia", "Nepal", "Ethiopia"],
+    "answer": 3,
+    "explanation": "Ethiopia has tens of millions of people living in highland cities above 2,500 meters, especially in the Ethiopian Highlands, more than any other country."
+  },
+  {
+    "question": "Which river drains the largest area of land on Earth?",
+    "options": ["Amazon", "Nile", "Congo", "Mississippi"],
+    "answer": 0,
+    "explanation": "The Amazon River has the largest drainage basin in the world, covering about 7 million square kilometers across South America."
+  },
+  {
+    "question": "Which continent has the highest average elevation of ice-free land?",
+    "options": ["Asia", "Africa", "South America", "Europe"],
+    "answer": 0,
+    "explanation": "Asia has the highest average elevation of ice-free land due to extensive high plateaus and mountain ranges such as the Himalayas and the Tibetan Plateau."
+  }
+]

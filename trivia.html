@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Geography Trivia Quiz</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+<div class="wrap">
+  <div class="card">
+
+    <div class="row row-space-between">
+      <div>
+        <h1><a href="index.html" style="text-decoration: none; color: inherit;">🌎 Geography Trivia Quiz</a></h1>
+        <div class="muted">Test your geography knowledge with multiple-choice questions!</div>
+      </div>
+      <div class="row">
+        <div class="pill">Score: <b id="score">0</b></div>
+        <div class="pill">Progress: <b id="progress">0 / 20</b></div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div id="questionText" class="country">—</div>
+
+    <div id="choices" class="choices"></div>
+
+    <div id="explanation" class="status" style="display:none"></div>
+
+  </div>
+</div>
+
+<!-- Final score screen -->
+<div class="overlay" id="finalOverlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <h2>🎉 Quiz Complete!</h2>
+    <div class="muted" id="finalSubtitle">Great job!</div>
+    <div class="hr"></div>
+
+    <div class="grid2">
+      <div class="pill">Final score: <b id="finalScore">0</b></div>
+      <div class="pill">Questions: <b id="finalTotal">20</b></div>
+      <div class="pill">Correct: <b id="finalCorrect">0</b></div>
+      <div class="pill">Accuracy: <b id="finalAccuracy">0%</b></div>
+    </div>
+
+    <div class="hr"></div>
+    <div class="row">
+      <button id="playAgain">Play again</button>
+      <button id="closeFinal">Close</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script type="module" src="js/trivia-main.js"></script>
+
+</body>
+</html>

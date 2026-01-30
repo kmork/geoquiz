@@ -42,7 +42,8 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .good{color:#6ee7b7}
 .bad{color:#fda4af}
 
-.choices{margin-top:12px;display:grid;gap:10px}
+.choices{margin-top:24px;display:grid;gap:10px}
+@media (min-width:640px){ .choices{grid-template-columns:1fr 1fr} }
 .footer{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap}
 
 /* Make choice feedback clear */
