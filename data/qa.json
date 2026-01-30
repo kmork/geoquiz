@@ -233,7 +233,7 @@
   {
     "question": "Which continent has the fewest countries?",
     "options": ["Europe", "Australia", "South America", "Antarctica"],
-    "answer": 1,
+    "answer": 4,
     "explanation": "Antarctica has 0 countries."
   },
   {

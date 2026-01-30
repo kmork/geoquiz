@@ -38,7 +38,7 @@ button{padding:12px 14px;border-radius:12px;border:1px solid rgba(255,255,255,.1
 button:hover{background:rgba(255,255,255,.14)}
 button:disabled{opacity:.55;cursor:not-allowed}
 
-.status{margin-top:10px;font-size:14px}
+.status{margin-top:20px;font-size:14px}
 .good{color:#6ee7b7}
 .bad{color:#fda4af}
 
