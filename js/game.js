@@ -138,9 +138,9 @@ export function createGame({ ui, mapApi, confetti }) {
 
   function awardStarsFromAccuracy(accPct) {
     // ≥90% -> 4★, ≥80% -> 3★, ≥70% -> 2★, ≥60% -> 1★, else 0
-    if (accPct >= 90) return 3;
-    if (accPct >= 80) return 2;
-    if (accPct >= 70) return 1;
+    if (accPct >= 95) return 3;
+    if (accPct >= 85) return 2;
+    if (accPct >= 75) return 1;
     return 0;
   }
 
