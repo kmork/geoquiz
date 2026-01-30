@@ -108,7 +108,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .starStack{
   display:inline-block;
   position:relative;
-  margin-left:10px;
+  margin-left:4px;
   height:18px;
   vertical-align:middle;
 }

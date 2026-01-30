@@ -83,9 +83,9 @@ export function createGame({ ui, mapApi, confetti }) {
       return;
     }
 
-    // Get target position
+    // Get target position - aim closer to the score number (left side of starStack)
     const targetRect = targetEl.getBoundingClientRect();
-    const targetX = targetRect.left + targetRect.width / 2;
+    const targetX = targetRect.left + 8; // closer to score number
     const targetY = targetRect.top + targetRect.height / 2;
 
     // Create container for animated stars
