@@ -37,22 +37,35 @@ export function createGame({ ui, mapApi, confetti }) {
     el.innerHTML = "";
     if (stars <= 0) return;
 
-    // Stack stars with slight offset
+    // Display stars horizontally only, max 5 stars
     const dx = 7;  // horizontal offset in px
-    const dy = -1; // vertical offset in px
+    const maxStarsToShow = Math.min(stars, 5);
 
-    // Make container wide enough for N stacked stars
-    el.style.width = `${16 + (stars - 1) * dx}px`;
+    // Make container wide enough for displayed stars + count text
+    const baseWidth = 16 + (maxStarsToShow - 1) * dx;
+    const countWidth = stars > 5 ? 30 : 0; // extra space for " (n)"
+    el.style.width = `${baseWidth + countWidth}px`;
 
     const frag = document.createDocumentFragment();
 
-    for (let i = 0; i < stars; i++) {
+    for (let i = 0; i < maxStarsToShow; i++) {
       const s = document.createElement("span");
       s.className = "starIcon";
       s.textContent = "★";
-      s.style.transform = `translate(${i * dx}px, ${i * dy}px)`;
+      s.style.transform = `translateX(${i * dx}px)`;
       s.style.zIndex = String(i + 1);
       frag.appendChild(s);
+    }
+
+    // Add count if more than 5 stars
+    if (stars > 5) {
+      const count = document.createElement("span");
+      count.textContent = ` (${stars})`;
+      count.style.position = "absolute";
+      count.style.left = `${16 + (maxStarsToShow - 1) * dx + 4}px`;
+      count.style.fontWeight = "bold";
+      count.style.whiteSpace = "nowrap";
+      frag.appendChild(count);
     }
 
     el.appendChild(frag);
