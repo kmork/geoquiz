@@ -71,6 +71,71 @@ export function createGame({ ui, mapApi, confetti }) {
     el.appendChild(frag);
   }
 
+  function animateStarsToScore(count, callback) {
+    if (count <= 0) {
+      callback?.();
+      return;
+    }
+
+    const targetEl = ui.starsEl;
+    if (!targetEl) {
+      callback?.();
+      return;
+    }
+
+    // Get target position
+    const targetRect = targetEl.getBoundingClientRect();
+    const targetX = targetRect.left + targetRect.width / 2;
+    const targetY = targetRect.top + targetRect.height / 2;
+
+    // Create container for animated stars
+    const container = document.createElement("div");
+    container.style.position = "fixed";
+    container.style.inset = "0";
+    container.style.pointerEvents = "none";
+    container.style.zIndex = "10000";
+    document.body.appendChild(container);
+
+    const stars = [];
+    const spacing = 40; // horizontal spacing between stars
+
+    for (let i = 0; i < count; i++) {
+      const star = document.createElement("div");
+      star.textContent = "★";
+      star.style.position = "absolute";
+      star.style.fontSize = "64px";
+      star.style.color = "#ffd54a";
+      star.style.textShadow = "0 0 12px rgba(255,213,74,.5)";
+      star.style.left = `${window.innerWidth / 2 + (i - (count - 1) / 2) * spacing}px`;
+      star.style.top = `${window.innerHeight / 2}px`;
+      star.style.transform = "translate(-50%, -50%) scale(1)";
+      star.style.transition = "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)";
+      star.style.opacity = "1";
+      container.appendChild(star);
+      stars.push(star);
+    }
+
+    // Trigger animation after a brief delay
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        stars.forEach((star) => {
+          const startLeft = parseFloat(star.style.left);
+          const startTop = parseFloat(star.style.top);
+          star.style.left = `${targetX}px`;
+          star.style.top = `${targetY}px`;
+          star.style.transform = "translate(-50%, -50%) scale(0.3)";
+          star.style.opacity = "0.8";
+        });
+      });
+    });
+
+    // Clean up and callback
+    setTimeout(() => {
+      container.remove();
+      callback?.();
+    }, 850);
+  }
+
   function awardStarsFromAccuracy(accPct) {
     // ≥90% -> 4★, ≥80% -> 3★, ≥70% -> 2★, ≥60% -> 1★, else 0
     if (accPct >= 90) return 3;
@@ -171,8 +236,10 @@ export function createGame({ ui, mapApi, confetti }) {
       const acc = accuracyAtSvgPoint(candidate);
       const gained = awardStarsFromAccuracy(acc);
       if (gained > 0) {
-        stars += gained;
-        updateStarsUI();
+        animateStarsToScore(gained, () => {
+          stars += gained;
+          updateStarsUI();
+        });
       }
 
       // Show the correct dot now
