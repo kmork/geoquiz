@@ -1,10 +1,10 @@
 import { norm } from "./utils.js";
 
-export function createRouteGame({ ui, neighbors, confetti, drawCountries }) {
+export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCountryFeature }) {
   const DATA = window.DATA;
 
   let deck = [];
-  let currentRound = null; // { start, end, optimalPath, currentPath, wrongGuesses }
+  let currentRound = null; // { start, end, optimalPath, currentPath, wrongGuesses, hintsUsed }
 
   let score = 0;
   let correctFirstTry = 0;
@@ -13,7 +13,6 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries }) {
 
   let roundEnded = false;
   let continueTimer = null;
-  let hintShown = false;
   let roundStartTime = 0;
 
   const AUTO_MS_CORRECT = 1200;
@@ -119,6 +118,7 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries }) {
           validPairs.push({
             start,
             end,
+            path: pathInfo.path,
             difficulty: pathInfo.length
           });
         }
@@ -145,56 +145,51 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries }) {
     correctAny = 0;
     totalRounds = 0;
     roundEnded = false;
-    hintShown = false;
 
     updateUI();
     ui.answerInput.value = "";
     ui.statusEl.style.display = "none";
     ui.hintEl.style.display = "none";
-    ui.finalOverlay.style.display = "none";
 
     nextRound();
   }
 
   function nextRound() {
-    if (deck.length === 0) {
-      endGame();
-      return;
-    }
-
-    const pair = deck.shift();
-    totalRounds++;
-
-    const pathInfo = findShortestPath(pair.start, pair.end, neighbors);
-
-    currentRound = {
-      start: pair.start,
-      end: pair.end,
-      optimalPath: pathInfo.path,
-      currentPath: [pair.start],
-      wrongGuesses: 0
-    };
-
+    if (continueTimer) clearTimeout(continueTimer);
+    
     roundEnded = false;
-    hintShown = false;
-    roundStartTime = Date.now();
-
-    updateUI();
     ui.answerInput.value = "";
     ui.answerInput.disabled = false;
+    ui.submitBtn.disabled = false;
+    ui.showHintBtn.disabled = false;
     ui.statusEl.style.display = "none";
     ui.hintEl.style.display = "none";
 
-    // Update route display
-    ui.routeEl.innerHTML = `
-      <span class="route-country start">${currentRound.start}</span>
-      <span class="route-arrow">→</span>
-      <span class="route-placeholder">?</span>
-      <span class="route-arrow">→</span>
-      <span class="route-country end">${currentRound.end}</span>
-    `;
+    if (deck.length === 0) {
+      deck = createDeck();
+    }
 
-    // Highlight start and end countries on map
+    const routeInfo = deck.pop();
+    totalRounds++;
+    roundStartTime = Date.now();
+
+    currentRound = {
+      start: routeInfo.start,
+      end: routeInfo.end,
+      optimalPath: routeInfo.path,
+      currentPath: [routeInfo.start],
+      wrongGuesses: 0,
+      hintsUsed: 0
+    };
+
+    // Show optimal path length in header from the start
+    const optimalLength = currentRound.optimalPath.length - 2;
+    ui.optimalHintEl.textContent = optimalLength;
+
+    updateRouteDisplay();
+    updateUI();
+
+    // Draw start and end countries
     drawCountries([
       { country: currentRound.start, color: "start" },
       { country: currentRound.end, color: "end" }
@@ -238,11 +233,11 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries }) {
       // Check if this country borders the destination
       const guessedNeighbors = neighbors[guessedCountry] || [];
       if (guessedNeighbors.includes(currentRound.end)) {
-        // Update route display to show the last country
-        updateRouteDisplay();
-        
         // Auto-complete the route!
         currentRound.currentPath.push(currentRound.end);
+        
+        // Update route display to show complete path (including destination)
+        updateRouteDisplay();
         
         // Update map with complete route including the last guessed country
         const pathCountries = currentRound.currentPath.slice(1, -1).map(c => ({ country: c, color: "path" }));
@@ -275,7 +270,6 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries }) {
     } else {
       currentRound.wrongGuesses++;
       showStatus(`❌ ${guessedCountry} doesn't border ${currentRound.currentPath[currentRound.currentPath.length - 1]}`, "wrong");
-      showHintIfNeeded();
     }
   }
 
@@ -286,8 +280,12 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries }) {
       parts.push(currentRound.currentPath[i]);
     }
     
-    parts.push("?");
-    parts.push(currentRound.end);
+    // Only add placeholder and destination if route is not complete
+    const isComplete = currentRound.currentPath[currentRound.currentPath.length - 1] === currentRound.end;
+    if (!isComplete) {
+      parts.push("?");
+      parts.push(currentRound.end);
+    }
 
     ui.routeEl.innerHTML = parts.map((p, idx) => {
       if (p === "?") {
@@ -302,18 +300,39 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries }) {
     }).join('<span class="route-arrow">→</span>');
   }
 
-  function showHintIfNeeded() {
-    if (!hintShown && currentRound.wrongGuesses >= 1) {
-      hintShown = true;
-      const optimalLength = currentRound.optimalPath.length - 2;
-      ui.hintEl.innerHTML = `💡 The optimal route needs <b>${optimalLength}</b> ${optimalLength === 1 ? 'country' : 'countries'} in between`;
-      ui.hintEl.style.display = "block";
+  function showVisualHint() {
+    if (roundEnded) return;
+    
+    currentRound.hintsUsed++;
+    
+    // Find the next country in the optimal path that hasn't been added yet
+    const nextOptimalCountry = currentRound.optimalPath.find(
+      country => !currentRound.currentPath.includes(country) && country !== currentRound.end
+    );
+    
+    if (nextOptimalCountry) {
+      // Draw the hint country in a dashed/faded style
+      const feature = getCountryFeature(nextOptimalCountry);
+      if (feature) {
+        drawCountries([
+          { country: currentRound.start, color: "start" },
+          { country: currentRound.end, color: "end" },
+          ...currentRound.currentPath.slice(1).map(c => ({ country: c, color: "path" })),
+          { country: nextOptimalCountry, color: "hint" }
+        ]);
+        
+        showStatus(`💡 Hint shown! (-1 point)`, "hint");
+      }
+    } else {
+      showStatus(`💡 No more hints available`, "hint");
     }
   }
 
   function endRound(success) {
     roundEnded = true;
     ui.answerInput.disabled = true;
+    ui.submitBtn.disabled = true;
+    ui.showHintBtn.disabled = true;
 
     const pathLength = currentRound.currentPath.length - 2; // Countries in between
     const optimalLength = currentRound.optimalPath.length - 2;
@@ -326,12 +345,13 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries }) {
     let message = "";
 
     if (success) {
+      // New scoring system: More points for optimal
       if (isOptimal) {
-        points = 3;
+        points = 5; // Base points for optimal
         message = "🎯 Perfect! Optimal route!";
         if (isFirstTry) {
-          points += 1;
-          message += " +1 First try bonus!";
+          points += 2; // Bigger bonus for first try
+          message += " +2 First try bonus!";
         }
         if (isFast) {
           points += 1;
@@ -339,8 +359,17 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries }) {
         }
         confetti.burst();
       } else {
-        points = 1;
-        message = `✅ Correct route! (Optimal: ${optimalLength}, Yours: ${pathLength})`;
+        // Points decrease with each extra country
+        const extraCountries = pathLength - optimalLength;
+        points = Math.max(1, 5 - extraCountries); // 4pts for +1, 3pts for +2, etc., min 1pt
+        message = `✅ Route complete! (Optimal: ${optimalLength}, Yours: ${pathLength}) +${points}pts`;
+      }
+
+      // Deduct points for using visual hints
+      if (currentRound.hintsUsed > 0) {
+        const hintPenalty = currentRound.hintsUsed;
+        points = Math.max(0, points - hintPenalty);
+        message += ` | -${hintPenalty}pt${hintPenalty > 1 ? 's' : ''} for hint${hintPenalty > 1 ? 's' : ''}`;
       }
 
       score += points;
@@ -353,10 +382,6 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries }) {
     }
 
     updateUI();
-
-    continueTimer = setTimeout(() => {
-      nextRound();
-    }, success ? AUTO_MS_CORRECT : AUTO_MS_WRONG);
   }
 
   function showStatus(msg, type) {
@@ -370,21 +395,10 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries }) {
     endRound(false);
   }
 
-  function endGame() {
-    ui.finalOverlay.style.display = "flex";
-
-    const firstTryPct = totalRounds > 0 && correctFirstTry > 0 ? 100 : 0;
-
-    ui.finalScoreEl.textContent = score;
-    ui.finalCorrectEl.textContent = correctAny > 0 ? "Yes" : "No";
-    ui.finalFirstTryEl.textContent = firstTryPct > 0 ? "Yes" : "No";
-
-    confetti.burst();
-  }
-
   return {
-    start: reset,
+    start: nextRound,
     processGuess,
-    giveUp
+    giveUp,
+    showHint: showVisualHint
   };
 }

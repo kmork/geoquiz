@@ -8,17 +8,13 @@ const ui = {
   map: document.getElementById("map"),
   answerInput: document.getElementById("answer"),
   submitBtn: document.getElementById("submit"),
+  showHintBtn: document.getElementById("showHint"),
   giveUpBtn: document.getElementById("giveUp"),
   scoreEl: document.getElementById("score"),
+  optimalHintEl: document.getElementById("optimalHint"),
   routeEl: document.getElementById("route"),
   statusEl: document.getElementById("status"),
   hintEl: document.getElementById("hint"),
-  finalOverlay: document.getElementById("finalOverlay"),
-  finalScoreEl: document.getElementById("finalScore"),
-  finalCorrectEl: document.getElementById("finalCorrect"),
-  finalFirstTryEl: document.getElementById("finalFirstTry"),
-  playAgainBtn: document.getElementById("playAgain"),
-  closeFinalBtn: document.getElementById("closeFinal"),
 };
 
 const confetti = initConfetti("confetti");
@@ -106,6 +102,11 @@ function drawCountries(countryList) {
       fill: getCSSVar('--color-blue') || 'rgba(59, 130, 246, 0.3)',
       stroke: getCSSVar('--color-blue') || 'rgba(59, 130, 246, 0.8)',
     },
+    hint: {
+      fill: 'rgba(251, 191, 36, 0.2)',
+      stroke: 'rgba(251, 191, 36, 0.6)',
+      strokeDasharray: '5,5',
+    },
   };
 
   // Collect all highlighted country features and calculate bounding box
@@ -153,6 +154,9 @@ function drawCountries(countryList) {
     p.setAttribute("stroke-width", "1.2");
     p.setAttribute("fill", colors.fill);
     p.setAttribute("vector-effect", "non-scaling-stroke");
+    if (colors.strokeDasharray) {
+      p.setAttribute("stroke-dasharray", colors.strokeDasharray);
+    }
     ui.map.appendChild(p);
   }
 }
@@ -364,6 +368,9 @@ const game = createRouteGame({
   neighbors: NEIGHBORS,
   confetti,
   drawCountries: drawCountriesWithZoom,
+  getCountryFeature: (countryName) => {
+    return WORLD.find(f => norm(f.properties.ADMIN) === norm(countryName));
+  }
 });
 
 // Event listeners
@@ -387,13 +394,8 @@ ui.giveUpBtn?.addEventListener("click", () => {
   game.giveUp();
 });
 
-ui.playAgainBtn?.addEventListener("click", () => {
-  ui.finalOverlay.style.display = "none";
-  game.start();
-});
-
-ui.closeFinalBtn?.addEventListener("click", () => {
-  ui.finalOverlay.style.display = "none";
+ui.showHintBtn?.addEventListener("click", () => {
+  game.showHint();
 });
 
 // Attach zoom/pan interactions

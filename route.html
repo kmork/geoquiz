@@ -55,6 +55,7 @@
       </div>
       <div class="row">
         <div class="pill">Score: <b id="score">0</b></div>
+        <div class="pill">Optimal: <b id="optimalHint">?</b> countries</div>
       </div>
     </div>
 
@@ -77,32 +78,12 @@
     <div class="answerRow">
       <input id="answer" placeholder="Type the next country…" autocomplete="off"/>
       <button id="submit">Add to Route</button>
+      <button id="showHint" class="btn-secondary">Show Hint</button>
       <button id="giveUp" class="btn-secondary">Give Up</button>
     </div>
 
     <div id="status" class="status" style="display:none"></div>
 
-  </div>
-</div>
-
-<!-- Final score screen -->
-<div class="overlay" id="finalOverlay" role="dialog" aria-modal="true">
-  <div class="panel">
-    <h2>🎉 Round Complete!</h2>
-    <div class="muted">Great job finding the route!</div>
-    <div class="hr"></div>
-
-    <div class="grid2">
-      <div class="pill">Final score: <b id="finalScore">0</b></div>
-      <div class="pill">Route completed: <b id="finalCorrect">0</b></div>
-      <div class="pill" style="grid-column: span 2;">First-try: <b id="finalFirstTry">0%</b></div>
-    </div>
-
-    <div class="hr"></div>
-    <div class="row">
-      <button id="playAgain">Play again</button>
-      <button id="closeFinal">Close</button>
-    </div>
   </div>
 </div>
 
