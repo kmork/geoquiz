@@ -356,3 +356,43 @@ button:disabled{opacity:.55;cursor:not-allowed}
     font-size: 20px;
   }
 }
+
+/* Find the Country game - expanded layout */
+.find-country-page {
+  max-width: 1600px;
+}
+
+.find-country-page .mapwrap {
+  margin: 10px 0;
+}
+
+.find-country-page #map {
+  height: 600px;
+}
+
+/* Tablet/laptop breakpoint */
+@media (max-width: 1400px) {
+  .find-country-page {
+    max-width: 1200px;
+  }
+  .find-country-page #map {
+    height: 500px;
+  }
+}
+
+/* Tablet breakpoint */
+@media (max-width: 1024px) {
+  .find-country-page {
+    max-width: 980px;
+  }
+  .find-country-page #map {
+    height: 450px;
+  }
+}
+
+/* Mobile breakpoint */
+@media (max-width: 640px) {
+  .find-country-page #map {
+    height: 400px;
+  }
+}
