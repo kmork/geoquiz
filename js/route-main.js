@@ -100,17 +100,51 @@ function bboxOfFeatureLonLat(f) {
   let minLon = Infinity, minLat = Infinity, maxLon = -Infinity, maxLat = -Infinity;
 
   const rings = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
+  
+  // First pass: collect all coordinates
+  const coords = [];
   for (const poly of rings) {
     for (const ring of poly) {
       for (const [lon, lat] of ring) {
-        const normalizedLon = normalizeLon(lon);
-        if (normalizedLon < minLon) minLon = normalizedLon;
-        if (lat < minLat) minLat = lat;
-        if (normalizedLon > maxLon) maxLon = normalizedLon;
-        if (lat > maxLat) maxLat = lat;
+        coords.push([lon, lat]);
       }
     }
   }
+  
+  // Check if this feature crosses the antimeridian by looking for large longitude jumps
+  let crossesAntimeridian = false;
+  for (let i = 1; i < coords.length; i++) {
+    if (Math.abs(coords[i][0] - coords[i-1][0]) > 180) {
+      crossesAntimeridian = true;
+      break;
+    }
+  }
+  
+  // Calculate bbox based on whether feature crosses antimeridian
+  if (crossesAntimeridian) {
+    // For antimeridian-crossing features, shift all negative longitudes by 360
+    // This makes them all positive (e.g., -170 becomes 190)
+    for (const [lon, lat] of coords) {
+      const adjustedLon = lon < 0 ? lon + 360 : lon;
+      if (adjustedLon < minLon) minLon = adjustedLon;
+      if (lat < minLat) minLat = lat;
+      if (adjustedLon > maxLon) maxLon = adjustedLon;
+      if (lat > maxLat) maxLat = lat;
+    }
+    // Convert back to -180 to 180 range
+    if (minLon > 180) minLon -= 360;
+    if (maxLon > 180) maxLon -= 360;
+  } else {
+    // Normal case: just use normalized coordinates
+    for (const [lon, lat] of coords) {
+      const normalizedLon = normalizeLon(lon);
+      if (normalizedLon < minLon) minLon = normalizedLon;
+      if (lat < minLat) minLat = lat;
+      if (normalizedLon > maxLon) maxLon = normalizedLon;
+      if (lat > maxLat) maxLat = lat;
+    }
+  }
+  
   return { minLon, minLat, maxLon, maxLat };
 }
 
@@ -187,7 +221,14 @@ function drawCountries(countryList) {
     bbox = padBBox(bbox, 0.18);
     const [x1, y1] = proj([bbox.minLon, bbox.maxLat]);
     const [x2, y2] = proj([bbox.maxLon, bbox.minLat]);
-    ui.map.setAttribute("viewBox", `${x1} ${y1} ${x2 - x1} ${y2 - y1}`);
+    
+    // Ensure width and height are always positive (handle edge cases)
+    const width = Math.abs(x2 - x1);
+    const height = Math.abs(y2 - y1);
+    const x = Math.min(x1, x2);
+    const y = Math.min(y1, y2);
+    
+    ui.map.setAttribute("viewBox", `${x} ${y} ${width} ${height}`);
   } else {
     ui.map.setAttribute("viewBox", `0 0 ${MAP_W} ${MAP_H}`);
   }
