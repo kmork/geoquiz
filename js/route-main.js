@@ -2,6 +2,7 @@ import { createRouteGame } from "./route-game.js";
 import { initConfetti } from "./confetti.js";
 import { norm } from "./utils.js";
 import { COUNTRY_ALIASES } from "./aliases.js";
+import { loadGeoJSON } from "./geojson-loader.js";
 
 // Make aliases globally available for route-game.js
 window.COUNTRY_ALIASES = COUNTRY_ALIASES;
@@ -210,7 +211,7 @@ function drawCountries(countryList) {
 // Initialize data and game
 async function loadData() {
   const [worldData, neighborsData] = await Promise.all([
-    fetch("data/ne_10m_admin_0_countries_route.geojson").then(r => r.json()),
+    loadGeoJSON("data/ne_10m_admin_0_countries_route.geojson.gz"),
     fetch("data/countries-neighbors.json").then(r => r.json()),
   ]);
   

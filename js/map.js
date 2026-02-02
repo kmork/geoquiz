@@ -1,5 +1,6 @@
 import { norm } from "./utils.js";
 import { COUNTRY_ALIASES } from "./aliases.js";
+import { loadGeoJSON } from "./geojson-loader.js";
 
 // Helper to get CSS variable values
 function getCSSVar(name) {
@@ -87,7 +88,7 @@ export function createMap({ svgEl, worldUrl, placesUrl }) {
 
   // --- data loading ---
   async function load() {
-    const w = await (await fetch(worldUrl)).json();
+    const w = await loadGeoJSON(worldUrl);
     WORLD = w.features;
     PATHS = WORLD.map(pathFromFeature).filter(Boolean);
 

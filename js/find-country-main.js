@@ -3,6 +3,7 @@ import { initConfetti } from "./confetti.js";
 import { norm } from "./utils.js";
 import { COUNTRY_ALIASES } from "./aliases.js";
 import { attachWikipediaPopup } from "./wiki.js";
+import { loadGeoJSON } from "./geojson-loader.js";
 
 // Helper to get CSS variable values
 function getCSSVar(name) {
@@ -290,7 +291,7 @@ function resetMapView() {
 
 // Load all data
 async function loadData() {
-  const worldData = await fetch("data/ne_10m_admin_0_countries.geojson").then(r => r.json());
+  const worldData = await loadGeoJSON("data/ne_10m_admin_0_countries.geojson.gz");
   WORLD = worldData.features;
 }
 
