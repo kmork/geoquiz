@@ -1,0 +1,410 @@
+import { createRouteGame } from "./route-game.js";
+import { initConfetti } from "./confetti.js";
+import { norm } from "./utils.js";
+import { COUNTRY_ALIASES } from "./aliases.js";
+
+// UI references
+const ui = {
+  map: document.getElementById("map"),
+  answerInput: document.getElementById("answer"),
+  submitBtn: document.getElementById("submit"),
+  giveUpBtn: document.getElementById("giveUp"),
+  scoreEl: document.getElementById("score"),
+  routeEl: document.getElementById("route"),
+  statusEl: document.getElementById("status"),
+  hintEl: document.getElementById("hint"),
+  finalOverlay: document.getElementById("finalOverlay"),
+  finalScoreEl: document.getElementById("finalScore"),
+  finalCorrectEl: document.getElementById("finalCorrect"),
+  finalFirstTryEl: document.getElementById("finalFirstTry"),
+  playAgainBtn: document.getElementById("playAgain"),
+  closeFinalBtn: document.getElementById("closeFinal"),
+};
+
+const confetti = initConfetti("confetti");
+const initOverlay = document.getElementById("init-overlay");
+
+// Helper to get CSS variable values
+function getCSSVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
+if (initOverlay) {
+  initOverlay.classList.remove("hidden");
+  initOverlay.style.display = "flex";
+}
+
+// Load data
+let WORLD = null;
+let NEIGHBORS = null;
+
+const MAP_W = 600;
+const MAP_H = 320;
+
+const proj = ([lon, lat]) => [((lon + 180) / 360) * MAP_W, ((90 - lat) / 180) * MAP_H];
+
+function pathFromFeature(f) {
+  if (!f.geometry) return "";
+  const polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
+  let d = "";
+  for (const poly of polys) {
+    for (const ring of poly) {
+      ring.forEach(([lon, lat], i) => {
+        const [x, y] = proj([lon, lat]);
+        d += (i ? "L" : "M") + x + " " + y + " ";
+      });
+      d += "Z ";
+    }
+  }
+  return d;
+}
+
+function bboxOfFeatureLonLat(f) {
+  let minLon = Infinity, minLat = Infinity, maxLon = -Infinity, maxLat = -Infinity;
+
+  const rings = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
+  for (const poly of rings) {
+    for (const ring of poly) {
+      for (const [lon, lat] of ring) {
+        if (lon < minLon) minLon = lon;
+        if (lat < minLat) minLat = lat;
+        if (lon > maxLon) maxLon = lon;
+        if (lat > maxLat) maxLat = lat;
+      }
+    }
+  }
+  return { minLon, minLat, maxLon, maxLat };
+}
+
+function padBBox(bb, padRatio = 0.18) {
+  const dLon = bb.maxLon - bb.minLon;
+  const dLat = bb.maxLat - bb.minLat;
+  return {
+    minLon: bb.minLon - dLon * padRatio,
+    maxLon: bb.maxLon + dLon * padRatio,
+    minLat: bb.minLat - dLat * padRatio,
+    maxLat: bb.maxLat + dLat * padRatio,
+  };
+}
+
+// Draw countries with different colors for start/end/path
+function drawCountries(countryList) {
+  ui.map.innerHTML = "";
+
+  if (!WORLD) return;
+
+  const colorMap = {
+    start: {
+      fill: getCSSVar('--color-green') || 'rgba(34, 197, 94, 0.3)',
+      stroke: getCSSVar('--color-green') || 'rgba(34, 197, 94, 0.8)',
+    },
+    end: {
+      fill: getCSSVar('--color-orange') || 'rgba(249, 115, 22, 0.3)',
+      stroke: getCSSVar('--color-orange') || 'rgba(249, 115, 22, 0.8)',
+    },
+    path: {
+      fill: getCSSVar('--color-blue') || 'rgba(59, 130, 246, 0.3)',
+      stroke: getCSSVar('--color-blue') || 'rgba(59, 130, 246, 0.8)',
+    },
+  };
+
+  // Collect all highlighted country features and calculate bounding box
+  const highlightedFeatures = [];
+  let bbox = null;
+
+  for (const item of countryList) {
+    const mapName = COUNTRY_ALIASES[item.country] || item.country;
+    const features = WORLD.filter((f) => norm(f.properties.ADMIN || "") === norm(mapName));
+    
+    for (const feature of features) {
+      highlightedFeatures.push({ feature, color: item.color });
+      
+      // Calculate combined bounding box
+      const bb = bboxOfFeatureLonLat(feature);
+      if (!bbox) {
+        bbox = bb;
+      } else {
+        bbox = {
+          minLon: Math.min(bbox.minLon, bb.minLon),
+          minLat: Math.min(bbox.minLat, bb.minLat),
+          maxLon: Math.max(bbox.maxLon, bb.maxLon),
+          maxLat: Math.max(bbox.maxLat, bb.maxLat),
+        };
+      }
+    }
+  }
+
+  // Set viewBox to fit highlighted countries
+  if (bbox) {
+    bbox = padBBox(bbox, 0.18);
+    const [x1, y1] = proj([bbox.minLon, bbox.maxLat]);
+    const [x2, y2] = proj([bbox.maxLon, bbox.minLat]);
+    ui.map.setAttribute("viewBox", `${x1} ${y1} ${x2 - x1} ${y2 - y1}`);
+  } else {
+    ui.map.setAttribute("viewBox", `0 0 ${MAP_W} ${MAP_H}`);
+  }
+
+  // Only draw highlighted countries (no background map)
+  for (const item of highlightedFeatures) {
+    const colors = colorMap[item.color] || colorMap.path;
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    p.setAttribute("d", pathFromFeature(item.feature));
+    p.setAttribute("stroke", colors.stroke);
+    p.setAttribute("stroke-width", "1.2");
+    p.setAttribute("fill", colors.fill);
+    p.setAttribute("vector-effect", "non-scaling-stroke");
+    ui.map.appendChild(p);
+  }
+}
+
+// Initialize data and game
+async function loadData() {
+  const [worldData, neighborsData] = await Promise.all([
+    fetch("data/ne_10m_admin_0_countries.geojson").then(r => r.json()),
+    fetch("data/countries-neighbors.json").then(r => r.json()),
+  ]);
+  
+  WORLD = worldData.features;
+  NEIGHBORS = neighborsData;
+}
+
+// Add zoom and pan interactions
+let baseViewBox = { x: 0, y: 0, w: MAP_W, h: MAP_H };
+
+// Wrapper to track baseViewBox when drawing
+const originalDrawCountries = drawCountries;
+function drawCountriesWithZoom(countryList) {
+  originalDrawCountries(countryList);
+  // Capture the viewBox after drawing as the new base
+  const vb = ui.map.viewBox.baseVal;
+  baseViewBox = { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
+}
+
+function attachZoomPan() {
+  const svgEl = ui.map;
+
+  // Helper to convert client coordinates to SVG coordinates
+  const clientToSvg = (clientX, clientY) => {
+    const pt = svgEl.createSVGPoint();
+    pt.x = clientX;
+    pt.y = clientY;
+    const ctm = svgEl.getScreenCTM();
+    if (!ctm) return { x: 0, y: 0 };
+    const p = pt.matrixTransform(ctm.inverse());
+    return { x: p.x, y: p.y };
+  };
+
+  const setViewBox = (vb) => {
+    svgEl.setAttribute("viewBox", `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
+  };
+
+  // Prevent iOS Safari gesture zoom/rotate
+  ["gesturestart", "gesturechange", "gestureend"].forEach((t) => {
+    svgEl.addEventListener(t, (e) => e.preventDefault(), { passive: false });
+  });
+
+  // Zoom limits
+  const ZOOM_MIN_FACTOR = 0.35;
+  const ZOOM_MAX_FACTOR = 7.0;
+
+  const getVB = () => {
+    const vb = svgEl.viewBox.baseVal;
+    return { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
+  };
+
+  const clampToLimits = (candidate) => {
+    const aspect = candidate.h / candidate.w;
+    const minW = baseViewBox.w * ZOOM_MIN_FACTOR;
+    const maxW = baseViewBox.w * ZOOM_MAX_FACTOR;
+
+    let w = candidate.w;
+    if (w < minW) w = minW;
+    if (w > maxW) w = maxW;
+
+    const h = w * aspect;
+    const cx = candidate.x + candidate.w / 2;
+    const cy = candidate.y + candidate.h / 2;
+
+    return { x: cx - w / 2, y: cy - h / 2, w, h };
+  };
+
+  const zoomAt = (factor, clientX, clientY) => {
+    const vb = getVB();
+    const p = clientToSvg(clientX, clientY);
+
+    const rx = (p.x - vb.x) / vb.w;
+    const ry = (p.y - vb.y) / vb.h;
+
+    const nw = vb.w * factor;
+    const nh = vb.h * factor;
+
+    const cand = { x: p.x - rx * nw, y: p.y - ry * nh, w: nw, h: nh };
+    setViewBox(clampToLimits(cand));
+  };
+
+  // Wheel zoom (desktop)
+  svgEl.addEventListener(
+    "wheel",
+    (e) => {
+      e.preventDefault();
+      const factor = e.deltaY > 0 ? 1.15 : 0.87;
+      zoomAt(factor, e.clientX, e.clientY);
+    },
+    { passive: false }
+  );
+
+  // Pointer pan + pinch zoom (mobile + desktop)
+  const pointers = new Map();
+  let startVB = null;
+  let panStart = null;
+  let startDist = 0;
+
+  const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+  const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+
+  svgEl.style.touchAction = "none";
+
+  svgEl.addEventListener(
+    "pointerdown",
+    (e) => {
+      svgEl.setPointerCapture(e.pointerId);
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      startVB = getVB();
+
+      if (pointers.size === 1) {
+        panStart = { x: e.clientX, y: e.clientY };
+        startDist = 0;
+      } else if (pointers.size === 2) {
+        const pts = [...pointers.values()];
+        startDist = dist(pts[0], pts[1]);
+        panStart = null;
+      }
+    },
+    { passive: false }
+  );
+
+  svgEl.addEventListener(
+    "pointermove",
+    (e) => {
+      if (!pointers.has(e.pointerId) || !startVB) return;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      // One pointer => pan
+      if (pointers.size === 1 && panStart) {
+        const p = [...pointers.values()][0];
+
+        const a = clientToSvg(panStart.x, panStart.y);
+        const b = clientToSvg(p.x, p.y);
+
+        const dx = a.x - b.x;
+        const dy = a.y - b.y;
+
+        setViewBox({ x: startVB.x + dx, y: startVB.y + dy, w: startVB.w, h: startVB.h });
+        return;
+      }
+
+      // Two pointers => pinch zoom
+      if (pointers.size === 2) {
+        const pts = [...pointers.values()];
+        const dNow = dist(pts[0], pts[1]);
+        if (!startDist) return;
+
+        const scale = dNow / startDist;
+        const factor = 1 / scale;
+
+        const m = mid(pts[0], pts[1]);
+        const pMid = clientToSvg(m.x, m.y);
+        const rx = (pMid.x - startVB.x) / startVB.w;
+        const ry = (pMid.y - startVB.y) / startVB.h;
+
+        const nw = startVB.w * factor;
+        const nh = startVB.h * factor;
+
+        const cand = { x: pMid.x - rx * nw, y: pMid.y - ry * nh, w: nw, h: nh };
+        setViewBox(clampToLimits(cand));
+      }
+    },
+    { passive: false }
+  );
+
+  const endPointer = (e) => {
+    pointers.delete(e.pointerId);
+
+    if (pointers.size === 1) {
+      const p = [...pointers.values()][0];
+      startVB = getVB();
+      panStart = { x: p.x, y: p.y };
+      startDist = 0;
+    } else if (pointers.size === 0) {
+      startVB = null;
+      panStart = null;
+      startDist = 0;
+    }
+  };
+
+  svgEl.addEventListener("pointerup", endPointer);
+  svgEl.addEventListener("pointercancel", () => {
+    pointers.clear();
+    startVB = null;
+    panStart = null;
+    startDist = 0;
+  });
+}
+
+// Initialize game
+try {
+  await loadData();
+} catch (err) {
+  console.error("Data load failed:", err);
+}
+
+const game = createRouteGame({ 
+  ui, 
+  neighbors: NEIGHBORS,
+  confetti,
+  drawCountries: drawCountriesWithZoom,
+});
+
+// Event listeners
+ui.submitBtn?.addEventListener("click", () => {
+  const guess = ui.answerInput.value.trim();
+  if (guess) {
+    game.processGuess(guess);
+  }
+});
+
+ui.answerInput?.addEventListener("keypress", (e) => {
+  if (e.key === "Enter") {
+    const guess = ui.answerInput.value.trim();
+    if (guess) {
+      game.processGuess(guess);
+    }
+  }
+});
+
+ui.giveUpBtn?.addEventListener("click", () => {
+  game.giveUp();
+});
+
+ui.playAgainBtn?.addEventListener("click", () => {
+  ui.finalOverlay.style.display = "none";
+  game.start();
+});
+
+ui.closeFinalBtn?.addEventListener("click", () => {
+  ui.finalOverlay.style.display = "none";
+});
+
+// Attach zoom/pan interactions
+attachZoomPan();
+
+// Start the game
+game.start();
+
+// Hide init overlay
+if (initOverlay) {
+  setTimeout(() => {
+    initOverlay.style.display = "none";
+  }, 100);
+}

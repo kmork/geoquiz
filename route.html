@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Connect the Countries - Land Route Game</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    // Prevent FOUC - apply theme immediately
+    (function() {
+      const saved = localStorage.getItem('geoquiz-theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const theme = saved || system;
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+    })();
+  </script>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="card">
+
+    <div id="init-overlay">
+      Initializing map…
+    </div>
+
+    <div class="row row-space-between">
+      <div>
+        <h1>
+          <a href="index.html" style="text-decoration: none; color: inherit;">
+            <svg class="game-icon game-header-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="grad-route-header" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#f97316;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#9333ea;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <!-- Starting pin -->
+              <circle cx="30" cy="40" r="8" fill="url(#grad-route-header)"/>
+              <path d="M30 32 L30 20" stroke="url(#grad-route-header)" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="30" cy="18" r="4" fill="url(#grad-route-header)"/>
+              <!-- Ending pin -->
+              <circle cx="70" cy="60" r="8" fill="url(#grad-route-header)"/>
+              <path d="M70 52 L70 40" stroke="url(#grad-route-header)" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="70" cy="38" r="4" fill="url(#grad-route-header)"/>
+              <!-- Connecting path -->
+              <path d="M30 40 Q40 35 50 45 Q60 55 70 60" fill="none" stroke="url(#grad-route-header)" stroke-width="3" stroke-linecap="round" stroke-dasharray="5,5" opacity="0.6"/>
+            </svg>
+            Connect the Countries
+          </a>
+        </h1>
+        <div class="muted">Find the shortest land route between two countries.</div>
+      </div>
+      <div class="row">
+        <div class="pill">Score: <b id="score">0</b></div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div id="route" class="route-display">
+      <span class="route-country start">France</span>
+      <span class="route-arrow">→</span>
+      <span class="route-placeholder">?</span>
+      <span class="route-arrow">→</span>
+      <span class="route-country end">Poland</span>
+    </div>
+
+    <div class="mapwrap">
+      <svg id="map" viewBox="0 0 600 320" width="100%" height="320"></svg>
+    </div>
+
+    <div id="hint" class="hint-message" style="display:none"></div>
+
+    <div class="answerRow">
+      <input id="answer" placeholder="Type the next country…" autocomplete="off"/>
+      <button id="submit">Add to Route</button>
+      <button id="giveUp" class="btn-secondary">Give Up</button>
+    </div>
+
+    <div id="status" class="status" style="display:none"></div>
+
+  </div>
+</div>
+
+<!-- Final score screen -->
+<div class="overlay" id="finalOverlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <h2>🎉 Round Complete!</h2>
+    <div class="muted">Great job finding the route!</div>
+    <div class="hr"></div>
+
+    <div class="grid2">
+      <div class="pill">Final score: <b id="finalScore">0</b></div>
+      <div class="pill">Route completed: <b id="finalCorrect">0</b></div>
+      <div class="pill" style="grid-column: span 2;">First-try: <b id="finalFirstTry">0%</b></div>
+    </div>
+
+    <div class="hr"></div>
+    <div class="row">
+      <button id="playAgain">Play again</button>
+      <button id="closeFinal">Close</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script src="js/theme.js"></script>
+<script src="js/data.js"></script>
+<script type="module" src="js/route-main.js"></script>
+
+</body>
+</html>
