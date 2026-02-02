@@ -207,8 +207,17 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
 
     const normalizedGuess = norm(guess);
 
+    // Check if the guess is an alias first
+    let searchName = guess;
+    for (const [alias, official] of Object.entries(window.COUNTRY_ALIASES || {})) {
+      if (norm(alias) === normalizedGuess) {
+        searchName = official;
+        break;
+      }
+    }
+
     // Find matching country
-    const match = DATA.find(c => norm(c.country) === normalizedGuess);
+    const match = DATA.find(c => norm(c.country) === norm(searchName));
 
     if (!match) {
       showStatus("❌ Country not found. Check spelling.", "wrong");

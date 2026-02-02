@@ -137,7 +137,16 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries }) {
     const normAnswer = norm(userAnswer);
     const normCountry = norm(current.country);
 
-    const isCorrect = normAnswer === normCountry;
+    // Check if the answer is an alias first
+    let searchName = userAnswer;
+    for (const [alias, official] of Object.entries(window.COUNTRY_ALIASES || {})) {
+      if (norm(alias) === normAnswer) {
+        searchName = official;
+        break;
+      }
+    }
+
+    const isCorrect = norm(searchName) === normCountry;
 
     if (isCorrect) {
       // Correct answer

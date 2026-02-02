@@ -3,6 +3,9 @@ import { initConfetti } from "./confetti.js";
 import { norm } from "./utils.js";
 import { COUNTRY_ALIASES } from "./aliases.js";
 
+// Make aliases globally available for route-game.js
+window.COUNTRY_ALIASES = COUNTRY_ALIASES;
+
 // UI references
 const ui = {
   map: document.getElementById("map"),
