@@ -4,7 +4,7 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
   const DATA = window.DATA;
 
   let deck = [];
-  let currentRound = null; // { start, end, optimalPath, currentPath, wrongGuesses, hintsUsed }
+  let currentRound = null; // { start, end, optimalPath, currentPath, wrongGuesses, hintsUsed, pathHistory }
 
   let score = 0;
   let correctFirstTry = 0;
@@ -98,13 +98,17 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
 
   function updateUI() {
     ui.scoreEl.textContent = score;
+    
+    // Enable/disable undo button based on path history
+    const canUndo = currentRound && currentRound.pathHistory.length > 0 && !roundEnded;
+    ui.undoBtn.disabled = !canUndo;
   }
 
   function createDeck() {
     const validPairs = [];
     const countryNames = Object.keys(neighbors);
 
-    // Generate pairs with varying difficulty
+    // Generate pairs with random difficulty (1-8 countries in between)
     for (let i = 0; i < countryNames.length; i++) {
       for (let j = i + 1; j < countryNames.length; j++) {
         const start = countryNames[i];
@@ -112,8 +116,7 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
         
         const pathInfo = findShortestPath(start, end, neighbors);
         
-        // Only include pairs with at least 1 country in between (no direct neighbors)
-        // Length is 1-8 countries in between
+        // Only include pairs with 1-8 countries in between
         if (pathInfo && pathInfo.length >= 1 && pathInfo.length <= 8) {
           validPairs.push({
             start,
@@ -179,7 +182,8 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
       optimalPath: routeInfo.path,
       currentPath: [routeInfo.start],
       wrongGuesses: 0,
-      hintsUsed: 0
+      hintsUsed: 0,
+      pathHistory: [] // Track history for undo: [{path: [...], wrongGuesses: N}]
     };
 
     // Show optimal path length in header from the start
@@ -227,6 +231,12 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
 
     // Check if valid next step
     if (isValidNextStep(guessedCountry, currentRound.currentPath, neighbors)) {
+      // Save state to history before making changes
+      currentRound.pathHistory.push({
+        path: [...currentRound.currentPath],
+        wrongGuesses: currentRound.wrongGuesses
+      });
+      
       currentRound.currentPath.push(guessedCountry);
       ui.answerInput.value = "";
 
@@ -267,6 +277,8 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
 
         showStatus(`✅ Correct! ${guessedCountry} added to route`, "correct");
       }
+      
+      updateUI(); // Update undo button state
     } else {
       currentRound.wrongGuesses++;
       showStatus(`❌ ${guessedCountry} doesn't border ${currentRound.currentPath[currentRound.currentPath.length - 1]}`, "wrong");
@@ -357,7 +369,11 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
           points += 1;
           message += " +1 Speed bonus!";
         }
-        confetti.burst();
+        
+        // Show confetti AFTER everything is displayed
+        setTimeout(() => {
+          confetti.burst();
+        }, 100);
       } else {
         // Points decrease with each extra country
         const extraCountries = pathLength - optimalLength;
@@ -377,17 +393,67 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
       if (isFirstTry) correctFirstTry++;
 
       showStatus(message, "correct");
+      
+      // Show optimal path if user's path wasn't optimal
+      if (!isOptimal) {
+        showOptimalPath();
+      }
     } else {
-      showStatus(`Path: ${currentRound.optimalPath.join(" → ")}`, "wrong");
+      // Give up - show optimal path in route display AND on map
+      showOptimalPathInRouteDisplay();
+      showOptimalPath();
+      // No status message - the route display shows everything
     }
 
     updateUI();
+  }
+
+  function showOptimalPathInRouteDisplay() {
+    // Show the complete optimal path in the route display above the map
+    const optimalPath = currentRound.optimalPath;
+    
+    ui.routeEl.innerHTML = optimalPath.map((country, idx) => {
+      if (idx === 0) {
+        return `<span class="route-country start">${country}</span>`;
+      } else if (idx === optimalPath.length - 1) {
+        return `<span class="route-country end">${country}</span>`;
+      } else {
+        return `<span class="route-country optimal-display">${country}</span>`;
+      }
+    }).join('<span class="route-arrow">→</span>');
+  }
+
+  function showOptimalPath() {
+    // Highlight optimal path in gold/yellow on map
+    const optimalCountries = currentRound.optimalPath.slice(1, -1).map(c => ({ country: c, color: "optimal" }));
+    const userPath = currentRound.currentPath.slice(1);
+    
+    // Draw user's path in blue, optimal path in gold (if different)
+    const pathCountries = userPath
+      .filter(c => c !== currentRound.end) // Exclude end
+      .map(c => ({ country: c, color: "path" }));
+    
+    drawCountries([
+      { country: currentRound.start, color: "start" },
+      { country: currentRound.end, color: "end" },
+      ...pathCountries,
+      ...optimalCountries
+    ]);
   }
 
   function showStatus(msg, type) {
     ui.statusEl.textContent = msg;
     ui.statusEl.className = `status ${type}`;
     ui.statusEl.style.display = "block";
+    
+    // Add input animation based on type
+    if (type === "correct") {
+      ui.answerInput.classList.add("correct-flash");
+      setTimeout(() => ui.answerInput.classList.remove("correct-flash"), 600);
+    } else if (type === "wrong") {
+      ui.answerInput.classList.add("shake");
+      setTimeout(() => ui.answerInput.classList.remove("shake"), 500);
+    }
   }
 
   function giveUp() {
@@ -395,10 +461,35 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
     endRound(false);
   }
 
+  function undo() {
+    if (roundEnded || !currentRound || currentRound.pathHistory.length === 0) return;
+    
+    // Restore previous state
+    const previousState = currentRound.pathHistory.pop();
+    currentRound.currentPath = previousState.path;
+    currentRound.wrongGuesses = previousState.wrongGuesses;
+    
+    // Update display
+    updateRouteDisplay();
+    updateUI();
+    
+    // Update map - show countries in the restored path
+    const pathCountries = currentRound.currentPath.slice(1).map(c => ({ country: c, color: "path" }));
+    drawCountries([
+      { country: currentRound.start, color: "start" },
+      { country: currentRound.end, color: "end" },
+      ...pathCountries
+    ]);
+    
+    showStatus(`↩️ Undone! Last country removed`, "hint");
+    ui.answerInput.focus();
+  }
+
   return {
     start: nextRound,
     processGuess,
     giveUp,
-    showHint: showVisualHint
+    showHint: showVisualHint,
+    undo
   };
 }

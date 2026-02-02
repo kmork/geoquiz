@@ -8,6 +8,7 @@ const ui = {
   map: document.getElementById("map"),
   answerInput: document.getElementById("answer"),
   submitBtn: document.getElementById("submit"),
+  undoBtn: document.getElementById("undo"),
   showHintBtn: document.getElementById("showHint"),
   giveUpBtn: document.getElementById("giveUp"),
   scoreEl: document.getElementById("score"),
@@ -107,6 +108,11 @@ function drawCountries(countryList) {
       stroke: 'rgba(251, 191, 36, 0.6)',
       strokeDasharray: '5,5',
     },
+    optimal: {
+      fill: 'rgba(250, 204, 21, 0.25)',
+      stroke: 'rgba(250, 204, 21, 0.9)',
+      strokeWidth: '2',
+    },
   };
 
   // Collect all highlighted country features and calculate bounding box
@@ -151,7 +157,7 @@ function drawCountries(countryList) {
     const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
     p.setAttribute("d", pathFromFeature(item.feature));
     p.setAttribute("stroke", colors.stroke);
-    p.setAttribute("stroke-width", "1.2");
+    p.setAttribute("stroke-width", colors.strokeWidth || "1.2");
     p.setAttribute("fill", colors.fill);
     p.setAttribute("vector-effect", "non-scaling-stroke");
     if (colors.strokeDasharray) {
@@ -392,6 +398,10 @@ ui.answerInput?.addEventListener("keypress", (e) => {
 
 ui.giveUpBtn?.addEventListener("click", () => {
   game.giveUp();
+});
+
+ui.undoBtn?.addEventListener("click", () => {
+  game.undo();
 });
 
 ui.showHintBtn?.addEventListener("click", () => {
