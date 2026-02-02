@@ -391,31 +391,51 @@
         border-radius: 16px;
       }
       
+      .card-content {
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 12px 16px;
+        grid-template-areas:
+          "icon title"
+          "desc desc"
+          "button button";
+      }
+      
       .game-icon {
+        grid-area: icon;
         width: 60px;
         height: 60px;
-        margin-bottom: 10px;
+        margin: 0;
+        align-self: center;
+      }
+      
+      .card-title {
+        grid-area: title;
+        font-size: 20px;
+        margin: 0;
+        align-self: center;
+      }
+      
+      .card-description {
+        grid-area: desc;
+        font-size: 13px;
+        line-height: 1.5;
+        margin: 0;
+      }
+      
+      .play-button {
+        grid-area: button;
+        margin: 0;
+        padding: 8px 16px;
+        font-size: 13px;
+        justify-self: start;
+        width: auto;
       }
       
       .pin-marker {
         font-size: 36px;
         margin-bottom: 10px;
-      }
-      
-      .card-title {
-        font-size: 20px;
-        margin-bottom: 8px;
-      }
-      
-      .card-description {
-        font-size: 13px;
-        line-height: 1.5;
-      }
-      
-      .play-button {
-        margin-top: 12px;
-        padding: 8px 16px;
-        font-size: 13px;
       }
       
       .theme-toggle {
