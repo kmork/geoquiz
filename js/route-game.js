@@ -1,5 +1,11 @@
 import { norm } from "./utils.js";
 
+// Helper to detect mobile devices
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+    || (window.innerWidth <= 640);
+}
+
 export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCountryFeature }) {
   const DATA = window.DATA;
 
@@ -274,6 +280,11 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
         
         showStatus(`✅ Perfect! ${guessedCountry} borders ${currentRound.end}!`, "correct");
         
+        // Mobile UX: Dismiss keyboard to show victory
+        if (isMobileDevice()) {
+          ui.answerInput.blur();
+        }
+        
         // Auto-complete after a brief delay
         setTimeout(() => {
           endRound(true);
@@ -291,6 +302,14 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
         ]);
 
         showStatus(`✅ Correct! ${guessedCountry} added to route`, "correct");
+        
+        // Mobile UX: Dismiss keyboard to show map, then refocus for next input
+        if (isMobileDevice()) {
+          ui.answerInput.blur();
+          setTimeout(() => {
+            ui.answerInput.focus();
+          }, 800);
+        }
       }
       
       updateUI(); // Update undo button state

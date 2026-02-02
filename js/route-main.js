@@ -258,6 +258,39 @@ async function loadData() {
   
   WORLD = worldData.features;
   NEIGHBORS = neighborsData;
+  
+  // Populate autocomplete datalist with country names
+  populateCountryAutocomplete();
+  
+  document.getElementById("init-overlay").style.display = "none";
+}
+
+// Populate datalist for autocomplete
+function populateCountryAutocomplete() {
+  const datalist = document.getElementById("country-suggestions");
+  if (!datalist) return;
+  
+  // Get unique country names from WORLD data
+  const countryNames = new Set();
+  WORLD.forEach(feature => {
+    const name = feature.properties.ADMIN;
+    if (name) {
+      countryNames.add(name);
+    }
+  });
+  
+  // Add aliases to autocomplete as well
+  Object.keys(COUNTRY_ALIASES).forEach(alias => {
+    countryNames.add(alias);
+  });
+  
+  // Sort alphabetically and add to datalist
+  const sortedNames = Array.from(countryNames).sort();
+  sortedNames.forEach(name => {
+    const option = document.createElement("option");
+    option.value = name;
+    datalist.appendChild(option);
+  });
 }
 
 // Add zoom and pan interactions

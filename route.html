@@ -76,7 +76,10 @@
     <div id="hint" class="hint-message" style="display:none"></div>
 
     <div class="answerRow">
-      <input id="answer" placeholder="Type the next country…" autocomplete="off"/>
+      <input id="answer" list="country-suggestions" placeholder="Type the next country…" autocomplete="off"/>
+      <datalist id="country-suggestions">
+        <!-- Populated dynamically by JavaScript -->
+      </datalist>
       <button id="submit">Add to Route</button>
       <button id="undo" class="btn-secondary" disabled>Undo</button>
       <button id="showHint" class="btn-secondary">Show Hint</button>
