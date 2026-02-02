@@ -66,8 +66,8 @@
       --button-border-hover: rgba(37, 99, 235, 0.5);
       --button-text: #2563eb;
       --button-text-hover: #1e40af;
-      --globe-gradient-1: #1e40af;
-      --globe-gradient-2: #6b21a8;
+      --globe-gradient-1: #1e3a8a;
+      --globe-gradient-2: #581c87;
       --ring-color: rgba(59, 130, 246, 0.2);
     }
     
@@ -309,29 +309,44 @@
       
       .header {
         margin-bottom: 30px;
+        position: relative;
       }
       
       .globe-container {
-        margin-bottom: 12px;
+        margin-bottom: 0;
+        position: relative;
+        height: 100px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
       
       .globe-emoji {
-        font-size: 60px;
+        font-size: 100px;
+        opacity: 0.15;
       }
       
       .globe-ring {
-        width: 100px;
-        height: 100px;
+        width: 120px;
+        height: 120px;
+        border-width: 1px;
       }
       
       h1 {
         font-size: 32px;
-        margin: 12px 0 8px;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        z-index: 10;
       }
       
       .subtitle {
         font-size: 15px;
         margin-bottom: 20px;
+        margin-top: 12px;
       }
       
       .games-grid {
