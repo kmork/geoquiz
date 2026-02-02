@@ -309,13 +309,12 @@
       
       .header {
         margin-bottom: 30px;
-        position: relative;
       }
       
       .globe-container {
         margin-bottom: 0;
         position: relative;
-        height: 100px;
+        height: 120px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -324,23 +323,42 @@
       .globe-emoji {
         font-size: 100px;
         opacity: 0.15;
+        line-height: 1;
       }
       
       .globe-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         width: 120px;
         height: 120px;
         border-width: 1px;
       }
       
-      h1 {
+      .globe-container + h1 {
         font-size: 32px;
         margin: 0;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 100%;
+        width: 90%;
         z-index: 10;
+        line-height: 1.2;
+      }
+      
+      /* Target h1 when inside globe-container on mobile */
+      .globe-container h1 {
+        font-size: 32px;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 90%;
+        z-index: 10;
+        line-height: 1.2;
       }
       
       .subtitle {
@@ -404,8 +422,8 @@
       <div class="globe-container">
         <div class="globe-ring"></div>
         <div class="globe-emoji">🌍</div>
+        <h1>Geo Quiz</h1>
       </div>
-      <h1>Geo Quiz</h1>
       <div class="subtitle">Explore the world through interactive geography games</div>
     </div>
     
