@@ -314,6 +314,10 @@ button:disabled{opacity:.55;cursor:not-allowed}
   transition: background 0.15s ease, transform 0.15s ease;
   padding: 0;
   flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .theme-toggle-inline:hover {
@@ -328,6 +332,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .theme-icon {
   display: block;
   line-height: 1;
+  pointer-events: none;
 }
 
 @media (max-width: 640px) {
@@ -339,8 +344,8 @@ button:disabled{opacity:.55;cursor:not-allowed}
     font-size: 18px;
   }
   .theme-toggle-inline {
-    width: 32px;
-    height: 32px;
-    font-size: 16px;
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
   }
 }

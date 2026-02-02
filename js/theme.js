@@ -71,7 +71,12 @@ function initTheme() {
   // Attach toggle handler
   const toggleBtn = document.getElementById('theme-toggle');
   if (toggleBtn) {
+    // Add both click and touch events for better mobile support
     toggleBtn.addEventListener('click', toggleTheme);
+    toggleBtn.addEventListener('touchend', function(e) {
+      e.preventDefault(); // Prevent double-firing on mobile
+      toggleTheme();
+    });
   }
 }
 
