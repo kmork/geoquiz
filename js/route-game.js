@@ -60,9 +60,15 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
 
   // Check if a guess is valid (neighbor of last country in current path)
   function isValidNextStep(guess, currentPath, neighborsData) {
-    const lastCountry = currentPath[currentPath.length - 1];
-    const lastNeighbors = neighborsData[lastCountry] || [];
-    return lastNeighbors.includes(guess);
+    // Allow guessing any country that neighbors ANY country in the current path
+    // This enables branching - you can explore different routes from any point
+    for (const pathCountry of currentPath) {
+      const pathNeighbors = neighborsData[pathCountry] || [];
+      if (pathNeighbors.includes(guess)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // Generate a helpful hint
@@ -290,7 +296,7 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
       updateUI(); // Update undo button state
     } else {
       currentRound.wrongGuesses++;
-      showStatus(`❌ ${guessedCountry} doesn't border ${currentRound.currentPath[currentRound.currentPath.length - 1]}`, "wrong");
+      showStatus(`❌ ${guessedCountry} doesn't border any country in your path`, "wrong");
     }
   }
 
