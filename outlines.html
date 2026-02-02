@@ -28,7 +28,25 @@
 
     <div class="row row-space-between">
       <div>
-        <h1><a href="index.html" style="text-decoration: none; color: inherit;">🗾 Guess the Country</a></h1>
+        <h1>
+          <a href="index.html" style="text-decoration: none; color: inherit;">
+            <svg class="game-icon game-header-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="grad-outline-header" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <path d="M25 45 Q30 30 45 35 L55 32 Q70 30 75 40 L78 55 Q75 70 60 72 L40 70 Q28 65 25 55 Z" 
+                    fill="url(#grad-outline-header)" opacity="0.3" stroke="url(#grad-outline-header)" stroke-width="3"/>
+              <circle cx="40" cy="35" r="4" fill="none" stroke="url(#grad-outline-header)" stroke-width="2.5"/>
+              <circle cx="65" cy="50" r="4" fill="none" stroke="url(#grad-outline-header)" stroke-width="2.5"/>
+              <path d="M48 55 Q48 48 52 45 Q56 42 56 48 L56 52" fill="none" stroke="url(#grad-outline-header)" stroke-width="3.5" stroke-linecap="round"/>
+              <circle cx="56" cy="58" r="2" fill="url(#grad-outline-header)"/>
+            </svg>
+            Guess the Country
+          </a>
+        </h1>
         <div class="muted">Identify the country from its outline.</div>
       </div>
       <div class="row">

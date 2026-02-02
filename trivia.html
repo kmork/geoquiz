@@ -24,7 +24,27 @@
 
     <div class="row row-space-between">
       <div>
-        <h1><a href="index.html" style="text-decoration: none; color: inherit;">🌎 Geography Trivia Quiz</a></h1>
+        <h1>
+          <a href="index.html" style="text-decoration: none; color: inherit;">
+            <svg class="game-icon game-header-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="grad-trivia-header" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <rect x="25" y="35" width="50" height="40" rx="3" fill="url(#grad-trivia-header)" opacity="0.3"/>
+              <line x1="50" y1="35" x2="50" y2="75" stroke="url(#grad-trivia-header)" stroke-width="2" opacity="0.5"/>
+              <circle cx="50" cy="50" r="18" fill="none" stroke="url(#grad-trivia-header)" stroke-width="3"/>
+              <ellipse cx="50" cy="50" rx="18" ry="8" fill="none" stroke="url(#grad-trivia-header)" stroke-width="2.5"/>
+              <ellipse cx="50" cy="50" rx="8" ry="18" fill="none" stroke="url(#grad-trivia-header)" stroke-width="2.5"/>
+              <text x="20" y="30" font-size="14" fill="url(#grad-trivia-header)" font-family="Arial, sans-serif" font-weight="bold">?</text>
+              <text x="75" y="30" font-size="14" fill="url(#grad-trivia-header)" font-family="Arial, sans-serif" font-weight="bold">?</text>
+              <text x="20" y="80" font-size="14" fill="url(#grad-trivia-header)" font-family="Arial, sans-serif" font-weight="bold">?</text>
+            </svg>
+            Geography Trivia
+          </a>
+        </h1>
         <div class="muted">Test your geography knowledge with multiple-choice questions!</div>
       </div>
       <div class="row">

@@ -233,6 +233,19 @@
       animation: pin-bounce 2s ease-in-out infinite;
     }
     
+    .game-icon {
+      width: 80px;
+      height: 80px;
+      display: block;
+      margin: 0 auto 15px;
+      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+      transition: transform 0.3s ease;
+    }
+    
+    .glass-card:hover .game-icon {
+      transform: scale(1.1);
+    }
+    
     @keyframes pin-bounce {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
@@ -378,6 +391,12 @@
         border-radius: 16px;
       }
       
+      .game-icon {
+        width: 60px;
+        height: 60px;
+        margin-bottom: 10px;
+      }
+      
       .pin-marker {
         font-size: 36px;
         margin-bottom: 10px;
@@ -430,7 +449,25 @@
     <div class="games-grid">
       <a href="find-country.html" class="glass-card">
         <div class="card-content">
-          <span class="pin-marker">🎯</span>
+          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="grad-find" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <!-- Map/World outline -->
+            <path d="M15 30 Q20 25 30 25 L70 25 Q80 25 85 30 L85 70 Q80 75 70 75 L30 75 Q20 75 15 70 Z" 
+                  fill="none" stroke="url(#grad-find)" stroke-width="3" opacity="0.4"/>
+            <circle cx="40" cy="45" r="3" fill="url(#grad-find)" opacity="0.6"/>
+            <circle cx="55" cy="38" r="2.5" fill="url(#grad-find)" opacity="0.6"/>
+            <circle cx="65" cy="55" r="3" fill="url(#grad-find)" opacity="0.6"/>
+            <!-- Magnifying glass -->
+            <circle cx="60" cy="55" r="18" fill="none" stroke="url(#grad-find)" stroke-width="4"/>
+            <line x1="72" y1="67" x2="85" y2="80" stroke="url(#grad-find)" stroke-width="5" stroke-linecap="round"/>
+            <!-- Target pin -->
+            <circle cx="60" cy="55" r="5" fill="url(#grad-find)"/>
+          </svg>
           <div class="card-title">Find the Country</div>
           <div class="card-description">Locate and click on the correct country on the interactive world map.</div>
           <div class="play-button">Play Now →</div>
@@ -439,7 +476,23 @@
       
       <a href="outlines.html" class="glass-card">
         <div class="card-content">
-          <span class="pin-marker">🗾</span>
+          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="grad-outline" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <!-- Country outline shape (abstract) -->
+            <path d="M25 45 Q30 30 45 35 L55 32 Q70 30 75 40 L78 55 Q75 70 60 72 L40 70 Q28 65 25 55 Z" 
+                  fill="url(#grad-outline)" opacity="0.3" stroke="url(#grad-outline)" stroke-width="3"/>
+            <!-- Puzzle piece notches -->
+            <circle cx="40" cy="35" r="4" fill="none" stroke="url(#grad-outline)" stroke-width="2.5"/>
+            <circle cx="65" cy="50" r="4" fill="none" stroke="url(#grad-outline)" stroke-width="2.5"/>
+            <!-- Question mark -->
+            <path d="M48 55 Q48 48 52 45 Q56 42 56 48 L56 52" fill="none" stroke="url(#grad-outline)" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="56" cy="58" r="2" fill="url(#grad-outline)"/>
+          </svg>
           <div class="card-title">Guess the Country</div>
           <div class="card-description">Identify countries from their unique outlines and geographical shapes.</div>
           <div class="play-button">Play Now →</div>
@@ -448,7 +501,24 @@
       
       <a href="capitals.html" class="glass-card">
         <div class="card-content">
-          <span class="pin-marker">🗺️</span>
+          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="grad-capital" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <!-- Globe circle -->
+            <circle cx="50" cy="50" r="35" fill="none" stroke="url(#grad-capital)" stroke-width="3" opacity="0.4"/>
+            <ellipse cx="50" cy="50" rx="35" ry="15" fill="none" stroke="url(#grad-capital)" stroke-width="2.5" opacity="0.4"/>
+            <ellipse cx="50" cy="50" rx="15" ry="35" fill="none" stroke="url(#grad-capital)" stroke-width="2.5" opacity="0.4"/>
+            <!-- Capitol building/landmark -->
+            <path d="M50 25 L55 35 L60 35 L60 45 L40 45 L40 35 L45 35 Z" fill="url(#grad-capital)"/>
+            <circle cx="50" cy="22" r="4" fill="url(#grad-capital)"/>
+            <rect x="42" y="45" width="16" height="3" fill="url(#grad-capital)"/>
+            <!-- Star markers for capitals -->
+            <path d="M70 30 L72 36 L78 36 L73 40 L75 46 L70 42 L65 46 L67 40 L62 36 L68 36 Z" fill="url(#grad-capital)" opacity="0.8"/>
+          </svg>
           <div class="card-title">Capitals of the World</div>
           <div class="card-description">Guess the countries capital and their locations on an interactive world map.</div>
           <div class="play-button">Play Now →</div>
@@ -457,7 +527,25 @@
       
       <a href="trivia.html" class="glass-card">
         <div class="card-content">
-          <span class="pin-marker">🌎</span>
+          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="grad-trivia" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <!-- Book pages -->
+            <rect x="25" y="35" width="50" height="40" rx="3" fill="url(#grad-trivia)" opacity="0.3"/>
+            <line x1="50" y1="35" x2="50" y2="75" stroke="url(#grad-trivia)" stroke-width="2" opacity="0.5"/>
+            <!-- Globe on book -->
+            <circle cx="50" cy="50" r="18" fill="none" stroke="url(#grad-trivia)" stroke-width="3"/>
+            <ellipse cx="50" cy="50" rx="18" ry="8" fill="none" stroke="url(#grad-trivia)" stroke-width="2.5"/>
+            <ellipse cx="50" cy="50" rx="8" ry="18" fill="none" stroke="url(#grad-trivia)" stroke-width="2.5"/>
+            <!-- Question marks around -->
+            <text x="20" y="30" font-size="14" fill="url(#grad-trivia)" font-family="Arial, sans-serif" font-weight="bold">?</text>
+            <text x="75" y="30" font-size="14" fill="url(#grad-trivia)" font-family="Arial, sans-serif" font-weight="bold">?</text>
+            <text x="20" y="80" font-size="14" fill="url(#grad-trivia)" font-family="Arial, sans-serif" font-weight="bold">?</text>
+          </svg>
           <div class="card-title">Geography Trivia</div>
           <div class="card-description">Answer multiple-choice questions about world geography and culture.</div>
           <div class="play-button">Play Now →</div>

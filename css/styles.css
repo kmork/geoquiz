@@ -112,7 +112,19 @@ html.light-mode {
 body{margin:0;background:var(--bg-primary);color:var(--text-primary)}
 .wrap{max-width:980px;margin:0 auto;padding:24px}
 .card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:18px;box-shadow:0 12px 40px var(--card-shadow)}
+
+/* Game page header with icon */
+.game-header-icon {
+  width: 60px;
+  height: 60px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 12px;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
 h1{margin:0 0 6px;font-size:22px}
+h1 a {display: inline-flex; align-items: center;}
 .muted{color:var(--text-muted);font-size:14px}
 .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
 .row-space-between{justify-content:space-between}
