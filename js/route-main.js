@@ -273,18 +273,23 @@ function populateCountryAutocomplete() {
   const datalist = document.getElementById("country-suggestions");
   if (!datalist) return;
   
-  // Get unique country names from WORLD data
+  // Use window.DATA which contains only valid playable countries
   const countryNames = new Set();
-  WORLD.forEach(feature => {
-    const name = feature.properties.ADMIN;
-    if (name) {
-      countryNames.add(name);
+  
+  // Add all valid country names from DATA
+  window.DATA.forEach(item => {
+    if (item.country) {
+      countryNames.add(item.country);
     }
   });
   
-  // Add aliases to autocomplete as well
-  Object.keys(COUNTRY_ALIASES).forEach(alias => {
-    countryNames.add(alias);
+  // Add aliases to autocomplete as well (but only for valid countries)
+  Object.entries(COUNTRY_ALIASES).forEach(([alias, officialName]) => {
+    // Only add alias if it points to a country in our DATA
+    const isValid = window.DATA.some(item => norm(item.country) === norm(officialName));
+    if (isValid) {
+      countryNames.add(alias);
+    }
   });
   
   // Sort alphabetically and add to datalist
@@ -301,20 +306,23 @@ function initMobileAutocompleteForRoute() {
   const input = document.getElementById("answer");
   if (!input || typeof initMobileAutocomplete !== 'function') return;
   
-  // Build suggestions array (countries + aliases)
+  // Build suggestions array using window.DATA (only valid countries)
   const suggestions = [];
   
-  // Add all country names
-  WORLD.forEach(feature => {
-    const name = feature.properties.ADMIN;
-    if (name) {
-      suggestions.push(name);
+  // Add all valid country names from DATA
+  window.DATA.forEach(item => {
+    if (item.country) {
+      suggestions.push(item.country);
     }
   });
   
-  // Add all aliases
-  Object.keys(COUNTRY_ALIASES).forEach(alias => {
-    suggestions.push(alias);
+  // Add all aliases (but only for valid countries)
+  Object.entries(COUNTRY_ALIASES).forEach(([alias, officialName]) => {
+    // Only add alias if it points to a country in our DATA
+    const isValid = window.DATA.some(item => norm(item.country) === norm(officialName));
+    if (isValid) {
+      suggestions.push(alias);
+    }
   });
   
   // Remove duplicates and sort

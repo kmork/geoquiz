@@ -845,6 +845,140 @@ select option {
   }
 }
 
+/* Desktop Layout Improvements (641px and up) */
+@media (min-width: 641px) {
+  /* Route game - consistent button heights and compact icon layout */
+  
+  /* Fix input and button heights on desktop */
+  .answerRow input {
+    height: 44px;
+    padding: 10px 14px;
+    box-sizing: border-box;
+    line-height: 1.5;
+  }
+  
+  .answerRow button {
+    height: 44px;
+    padding: 10px 16px;
+    box-sizing: border-box;
+  }
+  
+  /* Layout: input, Add button, then icon buttons inline */
+  .answerRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+  }
+  
+  .answerRow input {
+    flex: 1 1 300px; /* Grow but maintain min-width */
+    min-width: 200px;
+  }
+  
+  #submit {
+    flex: 0 0 auto;
+    min-width: 120px; /* Room for "Add to Route" */
+  }
+  
+  .secondary-buttons {
+    display: flex;
+    gap: 10px;
+    flex: 0 0 auto;
+  }
+  
+  /* Convert secondary buttons to icons on desktop too */
+  #undo,
+  #showHint,
+  #giveUp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    min-width: 44px;
+    width: 44px; /* Fixed square buttons */
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 0; /* Hide text */
+    border: 2px solid;
+    transition: all 0.2s ease;
+  }
+  
+  /* Same color scheme as mobile */
+  #undo {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: rgba(59, 130, 246, 0.4);
+  }
+  
+  #undo:hover:not(:disabled) {
+    background: rgba(59, 130, 246, 0.25);
+    border-color: rgba(59, 130, 246, 0.6);
+    transform: scale(1.05);
+  }
+  
+  #showHint {
+    background: rgba(251, 191, 36, 0.15);
+    border-color: rgba(251, 191, 36, 0.4);
+  }
+  
+  #showHint:hover {
+    background: rgba(251, 191, 36, 0.25);
+    border-color: rgba(251, 191, 36, 0.6);
+    transform: scale(1.05);
+  }
+  
+  #giveUp {
+    background: rgba(239, 68, 68, 0.15);
+    border-color: rgba(239, 68, 68, 0.4);
+  }
+  
+  #giveUp:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: rgba(239, 68, 68, 0.6);
+    transform: scale(1.05);
+  }
+  
+  /* Add icons using ::before */
+  #undo::before {
+    content: "↶";
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1;
+    color: rgb(59, 130, 246);
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+  
+  #showHint::before {
+    content: "💡";
+    font-size: 22px;
+    line-height: 1;
+    filter: brightness(1.2) contrast(1.1);
+  }
+  
+  #giveUp::before {
+    content: "🏳";
+    font-size: 22px;
+    line-height: 1;
+    filter: brightness(1.3) contrast(1.2) drop-shadow(0 0 1px rgba(0,0,0,0.8));
+    -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.3);
+  }
+  
+  /* Disabled state */
+  #undo:disabled,
+  #showHint:disabled,
+  #giveUp:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    transform: none;
+  }
+  
+  #undo:disabled:hover,
+  #showHint:disabled:hover,
+  #giveUp:disabled:hover {
+    transform: none;
+  }
+}
+
 /* Find the Country game - expanded layout */
 .find-country-page {
   max-width: 1600px;
