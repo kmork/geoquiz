@@ -436,9 +436,25 @@ function attachZoomPan() {
   let startVB = null;
   let panStart = null;
   let startDist = 0;
+  let rafId = null;
+  let pendingViewBox = null;
 
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
+
+  // Throttle viewBox updates using requestAnimationFrame
+  const scheduleViewBoxUpdate = (vb) => {
+    pendingViewBox = vb;
+    if (!rafId) {
+      rafId = requestAnimationFrame(() => {
+        if (pendingViewBox) {
+          setViewBox(pendingViewBox);
+          pendingViewBox = null;
+        }
+        rafId = null;
+      });
+    }
+  };
 
   svgEl.style.touchAction = "none";
 
@@ -478,7 +494,7 @@ function attachZoomPan() {
         const dx = a.x - b.x;
         const dy = a.y - b.y;
 
-        setViewBox({ x: startVB.x + dx, y: startVB.y + dy, w: startVB.w, h: startVB.h });
+        scheduleViewBoxUpdate({ x: startVB.x + dx, y: startVB.y + dy, w: startVB.w, h: startVB.h });
         return;
       }
 
@@ -500,7 +516,7 @@ function attachZoomPan() {
         const nh = startVB.h * factor;
 
         const cand = { x: pMid.x - rx * nw, y: pMid.y - ry * nh, w: nw, h: nh };
-        setViewBox(clampToLimits(cand));
+        scheduleViewBoxUpdate(clampToLimits(cand));
       }
     },
     { passive: false }

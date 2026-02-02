@@ -178,7 +178,14 @@ button:disabled{opacity:.55;cursor:not-allowed}
 }
 
 .mapwrap{margin:10px 0}
-#map{border-radius:14px;background:var(--map-bg);border:1px solid var(--map-border);touch-action:none;}
+#map{
+  border-radius:14px;
+  background:var(--map-bg);
+  border:1px solid var(--map-border);
+  touch-action:none;
+  will-change:transform;
+  transform:translateZ(0);
+}
 
 .country{
   cursor: pointer;
