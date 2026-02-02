@@ -73,7 +73,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .country{
   cursor: pointer;
   text-decoration: none;
-  transition: color .15s ease, text-shadow .15s ease, transform .05s ease;
+  transition: color .15s ease, text-shadow .15s ease;
 }
 
 .country:hover{
@@ -82,7 +82,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
 }
 
 .country:active{
-  transform: scale(0.99);
+  opacity: 0.85;
 }
 
 /* Final screen overlay */
