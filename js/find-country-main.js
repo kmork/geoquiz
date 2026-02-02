@@ -319,23 +319,6 @@ game = createFindCountryGame({
 // Attach Wikipedia popup to country name
 attachWikipediaPopup(ui.countryNameEl, () => game.getCurrent());
 
-// Handle map clicks
-ui.map.addEventListener("click", (e) => {
-  const pt = ui.map.createSVGPoint();
-  pt.x = e.clientX;
-  pt.y = e.clientY;
-  
-  const ctm = ui.map.getScreenCTM();
-  if (!ctm) return;
-  
-  const svgPt = pt.matrixTransform(ctm.inverse());
-  const clickedCountry = checkClickedCountry(svgPt.x, svgPt.y);
-  
-  if (clickedCountry) {
-    game.handleMapClick(clickedCountry);
-  }
-});
-
 // Add zoom and pan functionality
 function attachZoomPan() {
   const svgEl = ui.map;
@@ -438,6 +421,11 @@ function attachZoomPan() {
   let startDist = 0;
   let rafId = null;
   let pendingViewBox = null;
+  
+  // Track drag vs click
+  let isDragging = false;
+  let pointerDownPos = null;
+  const DRAG_THRESHOLD = 5; // pixels - movement threshold to distinguish drag from click
 
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
   const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
@@ -465,6 +453,12 @@ function attachZoomPan() {
       pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
       startVB = getVB();
+      
+      // Track initial position for drag detection
+      if (pointers.size === 1) {
+        pointerDownPos = { x: e.clientX, y: e.clientY };
+        isDragging = false;
+      }
 
       if (pointers.size === 1) {
         panStart = { x: e.clientX, y: e.clientY };
@@ -473,6 +467,7 @@ function attachZoomPan() {
         const pts = [...pointers.values()];
         startDist = dist(pts[0], pts[1]);
         panStart = null;
+        pointerDownPos = null; // Multi-touch, no click detection
       }
     },
     { passive: false }
@@ -483,6 +478,16 @@ function attachZoomPan() {
     (e) => {
       if (!pointers.has(e.pointerId) || !startVB) return;
       pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      
+      // Check if pointer has moved enough to be considered a drag
+      if (pointerDownPos && !isDragging) {
+        const dx = e.clientX - pointerDownPos.x;
+        const dy = e.clientY - pointerDownPos.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        if (distance > DRAG_THRESHOLD) {
+          isDragging = true;
+        }
+      }
 
       // One pointer => pan
       if (pointers.size === 1 && panStart) {
@@ -523,6 +528,23 @@ function attachZoomPan() {
   );
 
   const endPointer = (e) => {
+    // Handle country selection on pointer release (if not dragging)
+    if (pointers.size === 1 && pointerDownPos && !isDragging) {
+      const pt = ui.map.createSVGPoint();
+      pt.x = e.clientX;
+      pt.y = e.clientY;
+      
+      const ctm = ui.map.getScreenCTM();
+      if (ctm) {
+        const svgPt = pt.matrixTransform(ctm.inverse());
+        const clickedCountry = checkClickedCountry(svgPt.x, svgPt.y);
+        
+        if (clickedCountry) {
+          game.handleMapClick(clickedCountry);
+        }
+      }
+    }
+    
     pointers.delete(e.pointerId);
 
     if (pointers.size === 1) {
@@ -530,10 +552,14 @@ function attachZoomPan() {
       startVB = getVB();
       panStart = { x: p.x, y: p.y };
       startDist = 0;
+      pointerDownPos = { x: p.x, y: p.y };
+      isDragging = false;
     } else if (pointers.size === 0) {
       startVB = null;
       panStart = null;
       startDist = 0;
+      pointerDownPos = null;
+      isDragging = false;
     }
   };
 
@@ -543,6 +569,8 @@ function attachZoomPan() {
     startVB = null;
     panStart = null;
     startDist = 0;
+    pointerDownPos = null;
+    isDragging = false;
   });
 }
 
