@@ -391,6 +391,9 @@ attachZoomPan();
 game.reset();
 game.nextQ();
 
+// Populate autocomplete datalist for desktop
+populateCountryAutocomplete();
+
 // Initialize mobile autocomplete
 initMobileAutocompleteForOutlines();
 
@@ -399,6 +402,34 @@ if (initOverlay) {
   setTimeout(() => {
     initOverlay.style.display = "none";
   }, 100);
+}
+
+// Populate datalist for autocomplete (desktop browsers)
+function populateCountryAutocomplete() {
+  const datalist = document.getElementById("country-suggestions");
+  if (!datalist) return;
+  
+  // Get unique country names from WORLD data
+  const countryNames = new Set();
+  WORLD.forEach(feature => {
+    const name = feature.properties.ADMIN;
+    if (name) {
+      countryNames.add(name);
+    }
+  });
+  
+  // Add aliases to autocomplete as well
+  Object.keys(COUNTRY_ALIASES).forEach(alias => {
+    countryNames.add(alias);
+  });
+  
+  // Sort alphabetically and add to datalist
+  const sortedNames = Array.from(countryNames).sort();
+  sortedNames.forEach(name => {
+    const option = document.createElement("option");
+    option.value = name;
+    datalist.appendChild(option);
+  });
 }
 
 // Function to initialize mobile autocomplete

@@ -578,13 +578,14 @@ select option {
   /* Mobile fixes for Connect the Countries game */
   
   /* Responsive map height - shorter on mobile to fit controls on screen */
-  .mapwrap {
+  /* Only apply to route/outlines games, not find-country */
+  .wrap:not(.find-country-page) .mapwrap {
     height: 35vh; /* Reduced from 50vh to fit everything on screen */
     min-height: 200px; /* Reduced from 250px */
     max-height: 300px; /* Reduced from 400px */
   }
   
-  #map {
+  .wrap:not(.find-country-page) #map {
     height: 100%;
     width: 100%;
   }
@@ -813,7 +814,7 @@ select option {
 }
 
 .find-country-page .mapwrap {
-  margin: 10px 0;
+  margin: 10px 0 0 0; /* Remove bottom margin to keep map within card */
 }
 
 .find-country-page #map {

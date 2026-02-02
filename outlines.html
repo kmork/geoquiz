@@ -62,7 +62,10 @@
     </div>
 
     <div class="answerRow">
-      <input id="answer" placeholder="Type the country name…" autocomplete="off"/>
+      <input id="answer" list="country-suggestions" placeholder="Type the country name…" autocomplete="off"/>
+      <datalist id="country-suggestions">
+        <!-- Populated dynamically by JavaScript -->
+      </datalist>
       <button id="submit">Guess</button>
     </div>
 
