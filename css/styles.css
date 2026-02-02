@@ -589,39 +589,105 @@ select option {
     width: 100%;
   }
   
-  /* Improve button touch targets - minimum 44px for iOS */
+  /* Compact mobile layout for input and buttons */
   .answerRow {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr auto;
+    grid-template-areas:
+      "input submit"
+      "buttons buttons";
     gap: 8px;
     width: 100%;
   }
   
   .answerRow input {
-    grid-column: 1 / -1; /* Full width */
+    grid-area: input;
     font-size: 16px; /* Prevent iOS auto-zoom */
     min-height: 44px;
-    padding: 12px 14px;
+    height: 44px; /* Fixed height, not too tall */
+    padding: 10px 12px; /* Reduced padding */
   }
   
-  .answerRow button {
-    min-height: 44px;
-    min-width: 44px;
-    padding: 12px 16px;
-    font-size: 15px;
-  }
-  
-  /* Stack primary and secondary buttons */
   #submit {
-    grid-column: 1 / -1; /* Full width for primary button */
+    grid-area: submit;
+    min-height: 44px;
+    height: 44px;
+    min-width: 60px; /* Enough for "Add" */
+    padding: 10px 16px;
+    font-size: 15px;
+    white-space: nowrap;
   }
   
-  /* Secondary buttons in pairs */
+  /* Change "Add to Route" to just "Add" on mobile */
+  #submit::before {
+    content: "Add";
+  }
+  
+  #submit {
+    font-size: 0; /* Hide original text */
+  }
+  
+  #submit::before {
+    font-size: 15px; /* Show replacement text */
+    font-weight: 650;
+  }
+  
+  /* Secondary buttons container */
+  .answerRow .btn-secondary {
+    grid-area: buttons;
+  }
+  
+  /* Group secondary buttons on one row with icons */
   #undo,
   #showHint,
   #giveUp {
-    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    height: 44px;
+    min-width: 44px;
+    flex: 1;
+    padding: 10px;
+    font-size: 0; /* Hide text */
+    margin-right: 8px;
   }
+  
+  #giveUp {
+    margin-right: 0; /* Last button, no margin */
+  }
+  
+  /* Add icons to secondary buttons using ::before */
+  #undo::before {
+    content: "↶";
+    font-size: 20px;
+    font-weight: 400;
+  }
+  
+  #showHint::before {
+    content: "💡";
+    font-size: 18px;
+  }
+  
+  #giveUp::before {
+    content: "🏳";
+    font-size: 18px;
+  }
+  
+  /* Alternative: use unicode symbols if emojis don't work well */
+  /* Uncomment these if you prefer symbols over emojis
+  #showHint::before {
+    content: "?";
+    font-size: 20px;
+    font-weight: 700;
+  }
+  
+  #giveUp::before {
+    content: "✕";
+    font-size: 20px;
+    font-weight: 400;
+  }
+  */
   
   /* Optimize route display for mobile */
   .route-display {
