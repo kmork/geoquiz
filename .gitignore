@@ -5,3 +5,11 @@ node_modules
 dist
 .cache
 /.idea/
+
+# Large uncompressed GeoJSON files (keep compressed .gz versions only)
+# Original files kept locally for development but not committed to Git
+data/ne_10m_admin_0_countries.geojson
+data/ne_10m_admin_0_countries_route.geojson
+
+# Keep backup files local only
+data/*.bak
