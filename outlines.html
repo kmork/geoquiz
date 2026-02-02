@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Guess the Country Quiz</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+<div class="wrap">
+  <div class="card">
+
+    <div id="init-overlay">
+      Initializing map…
+    </div>
+
+    <div class="row row-space-between">
+      <div>
+        <h1><a href="index.html" style="text-decoration: none; color: inherit;">🗾 Guess the Country</a></h1>
+        <div class="muted">Identify the country from its outline.</div>
+      </div>
+      <div class="row">
+        <div class="pill">Score: <b id="score">0</b></div>
+        <div class="pill">Progress: <b id="progress">0 / 193</b></div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="mapwrap">
+      <svg id="map" viewBox="0 0 600 320" width="100%" height="320"></svg>
+    </div>
+
+    <div class="answerRow">
+      <input id="answer" placeholder="Type the country name…" autocomplete="off"/>
+      <button id="submit">Guess</button>
+    </div>
+
+    <div id="status" class="status" style="display:none"></div>
+
+  </div>
+</div>
+
+<!-- Final score screen -->
+<div class="overlay" id="finalOverlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <h2>🎉 Finished!</h2>
+    <div class="muted" id="finalSubtitle"></div>
+    <div class="hr"></div>
+
+    <div class="grid2">
+      <div class="pill">Final score: <b id="finalScore">0</b></div>
+      <div class="pill">Countries: <b id="finalCountries">193</b></div>
+      <div class="pill">Correct (any): <b id="finalCorrect">0</b></div>
+      <div class="pill">First-try correct: <b id="finalFirstTry">0</b></div>
+    </div>
+
+    <div class="hr"></div>
+    <div class="row">
+      <button id="playAgain">Play again</button>
+      <button id="closeFinal">Close</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script src="js/data.js"></script>
+<script type="module" src="js/outlines-main.js"></script>
+
+</body>
+</html>
