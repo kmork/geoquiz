@@ -4,7 +4,6 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Geo Quiz - Geography Games</title>
-  <link rel="stylesheet" href="css/styles.css">
   <script>
     // Prevent FOUC - apply theme immediately
     (function() {
@@ -16,80 +15,424 @@
       }
     })();
   </script>
+  <style>
+    * { box-sizing: border-box; }
+    
+    /* Dark mode (default) */
+    :root {
+      --bg-primary: #0f172a;
+      --bg-gradient-1: rgba(59, 130, 246, 0.1);
+      --bg-gradient-2: rgba(139, 92, 246, 0.1);
+      --text-primary: #ffffff;
+      --text-secondary: #94a3b8;
+      --accent-color: #3b82f6;
+      --accent-color-rgb: 59, 130, 246;
+      --dot-color: rgba(59, 130, 246, 0.3);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-bg-hover: rgba(255, 255, 255, 0.1);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --card-border-hover: rgba(59, 130, 246, 0.5);
+      --card-shadow: rgba(59, 130, 246, 0.3);
+      --button-bg: rgba(59, 130, 246, 0.2);
+      --button-bg-hover: rgba(59, 130, 246, 0.4);
+      --button-border: rgba(59, 130, 246, 0.4);
+      --button-border-hover: rgba(59, 130, 246, 0.6);
+      --button-text: #60a5fa;
+      --button-text-hover: #ffffff;
+      --globe-gradient-1: #3b82f6;
+      --globe-gradient-2: #8b5cf6;
+      --ring-color: rgba(59, 130, 246, 0.3);
+    }
+    
+    /* Light mode */
+    html.light-mode,
+    body.light-mode {
+      --bg-primary: linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%);
+      --bg-gradient-1: rgba(59, 130, 246, 0.05);
+      --bg-gradient-2: rgba(139, 92, 246, 0.05);
+      --text-primary: #0f172a;
+      --text-secondary: #64748b;
+      --accent-color: #2563eb;
+      --accent-color-rgb: 37, 99, 235;
+      --dot-color: rgba(100, 116, 139, 0.15);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-bg-hover: rgba(255, 255, 255, 1);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --card-border-hover: rgba(37, 99, 235, 0.4);
+      --card-shadow: rgba(0, 0, 0, 0.1);
+      --button-bg: rgba(37, 99, 235, 0.1);
+      --button-bg-hover: rgba(37, 99, 235, 0.2);
+      --button-border: rgba(37, 99, 235, 0.3);
+      --button-border-hover: rgba(37, 99, 235, 0.5);
+      --button-text: #2563eb;
+      --button-text-hover: #1e40af;
+      --globe-gradient-1: #1e40af;
+      --globe-gradient-2: #6b21a8;
+      --ring-color: rgba(59, 130, 246, 0.2);
+    }
+    
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    /* Animated world map background */
+    .map-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        radial-gradient(circle at 20% 50%, var(--bg-gradient-1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, var(--bg-gradient-2) 0%, transparent 50%);
+      z-index: 0;
+    }
+    
+    .map-dots {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.3;
+      animation: map-float 20s ease-in-out infinite;
+    }
+    
+    @keyframes map-float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-20px, -20px); }
+    }
+    
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .globe-container {
+      display: inline-block;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    
+    .globe-emoji {
+      font-size: 100px;
+      display: inline-block;
+      animation: rotate-globe 10s linear infinite;
+    }
+    
+    @keyframes rotate-globe {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    .globe-ring {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150px;
+      height: 150px;
+      border: 2px solid var(--ring-color);
+      border-radius: 50%;
+      animation: pulse-ring 2s ease-in-out infinite;
+    }
+    
+    @keyframes pulse-ring {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+      50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.2; }
+    }
+    
+    h1 {
+      font-size: 52px;
+      font-weight: 800;
+      margin: 20px 0 10px;
+      background: linear-gradient(135deg, var(--globe-gradient-1) 0%, var(--globe-gradient-2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    .subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 30px;
+    }
+    
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+    
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      text-decoration: none;
+      color: var(--text-primary);
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, 
+        rgba(var(--accent-color-rgb), 0.15) 0%, 
+        rgba(var(--accent-color-rgb), 0.05) 100%);
+      opacity: 0;
+      transition: opacity 0.4s;
+    }
+    
+    .glass-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      background: var(--card-bg-hover);
+      border-color: var(--card-border-hover);
+      box-shadow: 0 20px 60px var(--card-shadow);
+    }
+    
+    .glass-card:hover::before {
+      opacity: 1;
+    }
+    
+    .card-content {
+      position: relative;
+      z-index: 1;
+    }
+    
+    .pin-marker {
+      font-size: 50px;
+      display: block;
+      margin-bottom: 15px;
+      animation: pin-bounce 2s ease-in-out infinite;
+    }
+    
+    @keyframes pin-bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .card-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+    
+    .card-description {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+    }
+    
+    .play-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 16px;
+      padding: 10px 20px;
+      background: var(--button-bg);
+      border: 1px solid var(--button-border);
+      border-radius: 12px;
+      color: var(--button-text);
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s;
+    }
+    
+    .glass-card:hover .play-button {
+      background: var(--button-bg-hover);
+      border-color: var(--button-border-hover);
+      color: var(--button-text-hover);
+    }
+    
+    .theme-toggle {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      cursor: pointer;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px var(--card-shadow);
+    }
+    
+    .theme-toggle:hover {
+      transform: scale(1.1);
+      background: var(--card-bg-hover);
+    }
+    
+    .theme-icon {
+      pointer-events: none;
+    }
+    
+    @media (max-width: 640px) {
+      .content {
+        padding: 30px 16px;
+      }
+      
+      .header {
+        margin-bottom: 30px;
+      }
+      
+      .globe-container {
+        margin-bottom: 12px;
+      }
+      
+      .globe-emoji {
+        font-size: 60px;
+      }
+      
+      .globe-ring {
+        width: 100px;
+        height: 100px;
+      }
+      
+      h1 {
+        font-size: 32px;
+        margin: 12px 0 8px;
+      }
+      
+      .subtitle {
+        font-size: 15px;
+        margin-bottom: 20px;
+      }
+      
+      .games-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-top: 20px;
+      }
+      
+      .glass-card {
+        padding: 20px;
+        border-radius: 16px;
+      }
+      
+      .pin-marker {
+        font-size: 36px;
+        margin-bottom: 10px;
+      }
+      
+      .card-title {
+        font-size: 20px;
+        margin-bottom: 8px;
+      }
+      
+      .card-description {
+        font-size: 13px;
+        line-height: 1.5;
+      }
+      
+      .play-button {
+        margin-top: 12px;
+        padding: 8px 16px;
+        font-size: 13px;
+      }
+      
+      .theme-toggle {
+        top: 16px;
+        right: 16px;
+        width: 44px;
+        height: 44px;
+        font-size: 20px;
+      }
+    }
+  </style>
 </head>
-
 <body>
-<div class="wrap">
-  <div class="card">
-
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
-      <div style="flex: 1; text-align: center;">
-        <h1 style="font-size: 28px; margin: 0;">🌍 Geo Quiz</h1>
+  <div class="map-background"></div>
+  <div class="map-dots"></div>
+  
+  <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+    <span class="theme-icon">☀️</span>
+  </button>
+  
+  <div class="content">
+    <div class="header">
+      <div class="globe-container">
+        <div class="globe-ring"></div>
+        <div class="globe-emoji">🌍</div>
       </div>
-      <button id="theme-toggle" class="theme-toggle-inline" aria-label="Toggle dark/light mode" title="Toggle theme">
-        <span class="theme-icon">☀️</span>
-      </button>
+      <h1>Geo Quiz</h1>
+      <div class="subtitle">Explore the world through interactive geography games</div>
     </div>
-
-    <div style="text-align: center; margin-bottom: 8px;">
-      <div class="muted">Choose a geography game to play</div>
-    </div>
-
-    <div class="hr"></div>
-
-    <div class="choices">
-      <a href="capitals.html" style="text-decoration: none;">
-        <button style="width: 100%; padding: 24px; text-align: left;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
-            <div style="font-size: 32px;">🗺️</div>
-            <div style="font-size: 18px; font-weight: 700;">Capitals of the World</div>
-          </div>
-          <div style="font-size: 13px; opacity: 0.8; font-weight: 400; padding-left: 44px;">
-            Guess the countries capital and their locations
-          </div>
-        </button>
+    
+    <div class="games-grid">
+      <a href="find-country.html" class="glass-card">
+        <div class="card-content">
+          <span class="pin-marker">🎯</span>
+          <div class="card-title">Find the Country</div>
+          <div class="card-description">Locate and click on the correct country on the interactive world map.</div>
+          <div class="play-button">Play Now →</div>
+        </div>
       </a>
-
-      <a href="outlines.html" style="text-decoration: none;">
-        <button style="width: 100%; padding: 24px; text-align: left;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
-            <div style="font-size: 32px;">🗾</div>
-            <div style="font-size: 18px; font-weight: 700;">Guess the Country</div>
-          </div>
-          <div style="font-size: 13px; opacity: 0.8; font-weight: 400; padding-left: 44px;">
-            Identify countries from their outlines
-          </div>
-        </button>
+      
+      <a href="outlines.html" class="glass-card">
+        <div class="card-content">
+          <span class="pin-marker">🗾</span>
+          <div class="card-title">Guess the Country</div>
+          <div class="card-description">Identify countries from their unique outlines and geographical shapes.</div>
+          <div class="play-button">Play Now →</div>
+        </div>
       </a>
-
-      <a href="find-country.html" style="text-decoration: none;">
-        <button style="width: 100%; padding: 24px; text-align: left;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
-            <div style="font-size: 32px;">🎯</div>
-            <div style="font-size: 18px; font-weight: 700;">Find the Country</div>
-          </div>
-          <div style="font-size: 13px; opacity: 0.8; font-weight: 400; padding-left: 44px;">
-            Locate the country on the map
-          </div>
-        </button>
+      
+      <a href="capitals.html" class="glass-card">
+        <div class="card-content">
+          <span class="pin-marker">🗺️</span>
+          <div class="card-title">Capitals of the World</div>
+          <div class="card-description">Guess the countries capital and their locations on an interactive world map.</div>
+          <div class="play-button">Play Now →</div>
+        </div>
       </a>
-
-      <a href="trivia.html" style="text-decoration: none;">
-        <button style="width: 100%; padding: 24px; text-align: left;">
-          <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 6px;">
-            <div style="font-size: 32px;">🌎</div>
-            <div style="font-size: 18px; font-weight: 700;">Geography Trivia</div>
-          </div>
-          <div style="font-size: 13px; opacity: 0.8; font-weight: 400; padding-left: 44px;">
-            Answer multiple-choice questions
-          </div>
-        </button>
+      
+      <a href="trivia.html" class="glass-card">
+        <div class="card-content">
+          <span class="pin-marker">🌎</span>
+          <div class="card-title">Geography Trivia</div>
+          <div class="card-description">Answer multiple-choice questions about world geography and culture.</div>
+          <div class="play-button">Play Now →</div>
+        </div>
       </a>
     </div>
-
   </div>
-</div>
 
-<script src="js/theme.js"></script>
+  <script src="js/theme.js"></script>
 </body>
 </html>
