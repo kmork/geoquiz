@@ -87,13 +87,13 @@ function drawWorldMap() {
     // Hover effect
     p.addEventListener("mouseenter", () => {
       if (!game || game.getCurrent() === "") return;
-      p.setAttribute("fill", "rgba(165,180,252,.18)");
+      p.setAttribute("fill", getCSSVar('--map-country-fill-highlight') || "rgba(165,180,252,.25)");
     });
     p.addEventListener("mouseleave", () => {
       if (!game || game.getCurrent() === "") return;
       // Only reset if not highlighted
       if (!p.hasAttribute("data-highlighted")) {
-        p.setAttribute("fill", "rgba(165,180,252,.08)");
+        p.setAttribute("fill", getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)");
       }
     });
     
