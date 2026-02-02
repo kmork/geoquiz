@@ -19,6 +19,7 @@ export function getUI() {
     finalFirstTry: document.getElementById("finalFirstTry"),
     playAgainBtn: document.getElementById("playAgain"),
     closeFinalBtn: document.getElementById("closeFinal"),
+    shareScoreBtn: document.getElementById("shareScore"),
   };
 }
 

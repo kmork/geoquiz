@@ -23,10 +23,39 @@ const ui = {
   finalSubtitleEl: document.getElementById("finalSubtitle"),
   playAgainBtn: document.getElementById("playAgain"),
   closeFinalBtn: document.getElementById("closeFinal"),
+  shareScoreBtn: document.getElementById("shareScore"),
 };
 
 const confetti = initConfetti("confetti");
 const initOverlay = document.getElementById("init-overlay");
+
+// Share score function
+async function shareScore(score, total, gameName) {
+  const text = `I scored ${score}/${total} in ${gameName}! 🌍 Can you beat my score?`;
+  const url = window.location.href;
+  
+  if (navigator.share) {
+    // Use native share API on mobile
+    try {
+      await navigator.share({ text, url });
+    } catch (err) {
+      // User cancelled or error - do nothing
+      if (err.name !== 'AbortError') {
+        console.log('Share failed:', err);
+      }
+    }
+  } else {
+    // Fallback to clipboard on desktop
+    try {
+      await navigator.clipboard.writeText(`${text}\n${url}`);
+      alert('Score copied to clipboard! 📋');
+    } catch (err) {
+      // Show share text in prompt as last resort
+      prompt('Copy this to share:', `${text}\n${url}`);
+    }
+  }
+}
+
 
 // Helper to get CSS variable values
 function getCSSVar(name) {
@@ -382,6 +411,21 @@ ui.playAgainBtn?.addEventListener("click", () => {
 
 ui.closeFinalBtn?.addEventListener("click", () => {
   ui.finalOverlay.style.display = "none";
+});
+
+ui.shareScoreBtn?.addEventListener("click", () => {
+  const score = parseInt(ui.finalScoreEl.textContent) || 0;
+  const total = parseInt(ui.finalCountriesEl.textContent) || 0;
+  shareScore(score, total, "Guess the Country (GeoQuiz)");
+});
+
+// Keyboard navigation: Escape to close modals
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    if (ui.finalOverlay && ui.finalOverlay.style.display !== "none") {
+      ui.finalOverlay.style.display = "none";
+    }
+  }
 });
 
 // Attach zoom/pan interactions

@@ -1,5 +1,40 @@
 import { norm } from "./utils.js";
 
+// Helper to detect mobile devices
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+    || (window.innerWidth <= 640);
+}
+
+// Haptic feedback helper
+function hapticFeedback(pattern) {
+  if (!navigator.vibrate) return;
+  if (!isMobileDevice()) return;
+  
+  if (pattern === 'correct') {
+    navigator.vibrate(50);
+  } else if (pattern === 'wrong') {
+    navigator.vibrate([100, 50, 100]);
+  }
+}
+
+// Visual feedback helpers
+function flashCorrect(element) {
+  if (!element) return;
+  element.classList.remove('flash-correct');
+  void element.offsetWidth;
+  element.classList.add('flash-correct');
+  setTimeout(() => element.classList.remove('flash-correct'), 600);
+}
+
+function shakeWrong(element) {
+  if (!element) return;
+  element.classList.remove('shake-wrong');
+  void element.offsetWidth;
+  element.classList.add('shake-wrong');
+  setTimeout(() => element.classList.remove('shake-wrong'), 500);
+}
+
 export function createOutlinesGame({ ui, neighbors, confetti, drawCountries }) {
   const DATA = window.DATA;
 
@@ -114,6 +149,8 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries }) {
     // Empty answer is treated as wrong (allows skipping to see neighbors)
     if (!userAnswer) {
       // Wrong answer (empty = skip)
+      shakeWrong(ui.answerInput);
+      hapticFeedback('wrong');
       if (attempt === 1) {
         // First attempt - show neighbors
         showStatus(`❌ Try again with neighbor hints!`, false);
@@ -150,6 +187,8 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries }) {
 
     if (isCorrect) {
       // Correct answer
+      flashCorrect(document.querySelector('.card'));
+      hapticFeedback('correct');
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
       if (attempt === 1) {
         score += 2;
@@ -172,6 +211,8 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries }) {
       updateUI();
     } else {
       // Wrong answer
+      shakeWrong(ui.answerInput);
+      hapticFeedback('wrong');
       if (attempt === 1) {
         // First wrong attempt - show neighbors
         showStatus(`❌ Not quite. Try again with neighbor hints!`, false);

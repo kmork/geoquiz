@@ -557,6 +557,16 @@ ui.showHintBtn?.addEventListener("click", () => {
   game.showHint();
 });
 
+// Keyboard navigation: Escape to close modals
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    const finalOverlay = document.getElementById("finalOverlay");
+    if (finalOverlay && finalOverlay.style.display !== "none") {
+      finalOverlay.style.display = "none";
+    }
+  }
+});
+
 // Attach zoom/pan interactions
 attachZoomPan();
 

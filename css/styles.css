@@ -274,8 +274,10 @@ button:disabled{opacity:.55;cursor:not-allowed}
   position: fixed;
   inset: 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1.2rem;
   background: var(--init-overlay-bg);
   color: var(--init-overlay-color);
   font-size: 1.4rem;
@@ -287,6 +289,41 @@ button:disabled{opacity:.55;cursor:not-allowed}
 #init-overlay.hidden {
   opacity: 0;
   pointer-events: none;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 255, 255, 0.2);
+  border-top-color: var(--init-overlay-color);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Success/Failure Feedback Animations */
+@keyframes flash-correct {
+  0%, 100% { background-color: transparent; }
+  50% { background-color: rgba(110, 231, 183, 0.3); }
+}
+
+@keyframes shake-wrong {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-8px); }
+  20%, 40%, 60%, 80% { transform: translateX(8px); }
+}
+
+.flash-correct {
+  animation: flash-correct 600ms ease-out;
+  border-radius: 12px;
+}
+
+.shake-wrong {
+  animation: shake-wrong 500ms ease-in-out;
 }
 
 .star { color: var(--star-color); text-shadow: 0 0 10px var(--star-shadow); }

@@ -6,6 +6,36 @@ function isMobileDevice() {
     || (window.innerWidth <= 640);
 }
 
+// Haptic feedback helper
+function hapticFeedback(pattern) {
+  if (!navigator.vibrate) return;
+  if (!isMobileDevice()) return;
+  
+  if (pattern === 'correct') {
+    navigator.vibrate(50); // Short pulse
+  } else if (pattern === 'wrong') {
+    navigator.vibrate([100, 50, 100]); // Double pulse
+  }
+}
+
+// Visual feedback helpers
+function flashCorrect(element) {
+  if (!element) return;
+  element.classList.remove('flash-correct');
+  // Force reflow to restart animation
+  void element.offsetWidth;
+  element.classList.add('flash-correct');
+  setTimeout(() => element.classList.remove('flash-correct'), 600);
+}
+
+function shakeWrong(element) {
+  if (!element) return;
+  element.classList.remove('shake-wrong');
+  void element.offsetWidth;
+  element.classList.add('shake-wrong');
+  setTimeout(() => element.classList.remove('shake-wrong'), 500);
+}
+
 export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCountryFeature }) {
   const DATA = window.DATA;
 
@@ -233,6 +263,8 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
 
     if (!match) {
       showStatus("❌ Country not found. Check spelling.", "wrong");
+      shakeWrong(ui.answerInput);
+      hapticFeedback('wrong');
       return;
     }
 
@@ -241,12 +273,16 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
     // Check if already in path
     if (currentRound.currentPath.includes(guessedCountry)) {
       showStatus("⚠️ Already used this country", "wrong");
+      shakeWrong(ui.answerInput);
+      hapticFeedback('wrong');
       return;
     }
 
     // Don't allow guessing the end country directly
     if (guessedCountry === currentRound.end) {
       showStatus(`⚠️ Don't type the destination! Type a country that borders ${currentRound.end}`, "wrong");
+      shakeWrong(ui.answerInput);
+      hapticFeedback('wrong');
       return;
     }
 
@@ -279,6 +315,8 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
         ]);
         
         showStatus(`✅ Perfect! ${guessedCountry} borders ${currentRound.end}!`, "correct");
+        flashCorrect(ui.card || document.querySelector('.card'));
+        hapticFeedback('correct');
         
         // Mobile UX: Dismiss keyboard to show victory
         if (isMobileDevice()) {
@@ -302,6 +340,8 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
         ]);
 
         showStatus(`✅ Correct! ${guessedCountry} added to route`, "correct");
+        flashCorrect(ui.card || document.querySelector('.card'));
+        hapticFeedback('correct');
         
         // Mobile UX: Dismiss keyboard to show map, then refocus for next input
         if (isMobileDevice()) {
@@ -316,6 +356,8 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
     } else {
       currentRound.wrongGuesses++;
       showStatus(`❌ ${guessedCountry} doesn't border any country in your path`, "wrong");
+      shakeWrong(ui.answerInput);
+      hapticFeedback('wrong');
     }
   }
 

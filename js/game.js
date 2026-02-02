@@ -1,6 +1,41 @@
 import { norm } from "./utils.js";
 import { updateProgress } from "./ui.js";
 
+// Helper to detect mobile devices
+function isMobileDevice() {
+  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
+    || (window.innerWidth <= 640);
+}
+
+// Haptic feedback helper
+function hapticFeedback(pattern) {
+  if (!navigator.vibrate) return;
+  if (!isMobileDevice()) return;
+  
+  if (pattern === 'correct') {
+    navigator.vibrate(50);
+  } else if (pattern === 'wrong') {
+    navigator.vibrate([100, 50, 100]);
+  }
+}
+
+// Visual feedback helpers
+function flashCorrect(element) {
+  if (!element) return;
+  element.classList.remove('flash-correct');
+  void element.offsetWidth;
+  element.classList.add('flash-correct');
+  setTimeout(() => element.classList.remove('flash-correct'), 600);
+}
+
+function shakeWrong(element) {
+  if (!element) return;
+  element.classList.remove('shake-wrong');
+  void element.offsetWidth;
+  element.classList.add('shake-wrong');
+  setTimeout(() => element.classList.remove('shake-wrong'), 500);
+}
+
 // Helper to get CSS variable values
 function getCSSVar(name) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -379,9 +414,13 @@ export function createGame({ ui, mapApi, confetti }) {
 
         if (isCorrect) {
           correctAny++;
+          flashCorrect(document.querySelector('.card'));
+          hapticFeedback('correct');
           confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
           endRound({ ok: true, pointsAwarded: 1, autoMs: AUTO_MS_CORRECT_SECOND });
         } else {
+          shakeWrong(b);
+          hapticFeedback('wrong');
           endRound({ ok: false, pointsAwarded: 0, autoMs: AUTO_MS_WRONG_SECOND });
         }
       };
@@ -401,6 +440,8 @@ export function createGame({ ui, mapApi, confetti }) {
     const user = norm(ui.answer.value);
 
     if (!user) {
+      shakeWrong(ui.answer);
+      hapticFeedback('wrong');
       showMC();
       return;
     }
@@ -410,9 +451,13 @@ export function createGame({ ui, mapApi, confetti }) {
     if (ok) {
       correctAny++;
       correctFirstTry++;
+      flashCorrect(document.querySelector('.card'));
+      hapticFeedback('correct');
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
       startBonusRound();
     } else {
+      shakeWrong(ui.answer);
+      hapticFeedback('wrong');
       showMC();
     }
   };
