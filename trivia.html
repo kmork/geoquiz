@@ -5,6 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Geography Trivia Quiz</title>
   <link rel="stylesheet" href="css/styles.css">
+  <script>
+    // Prevent FOUC - apply theme immediately
+    (function() {
+      const saved = localStorage.getItem('geoquiz-theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const theme = saved || system;
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+    })();
+  </script>
 </head>
 
 <body>
@@ -57,6 +68,7 @@
 
 <canvas id="confetti"></canvas>
 
+<script src="js/theme.js"></script>
 <script type="module" src="js/trivia-main.js"></script>
 
 </body>

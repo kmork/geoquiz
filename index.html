@@ -5,14 +5,33 @@
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>GeoQuiz - Geography Games</title>
   <link rel="stylesheet" href="css/styles.css">
+  <script>
+    // Prevent FOUC - apply theme immediately
+    (function() {
+      const saved = localStorage.getItem('geoquiz-theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const theme = saved || system;
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+    })();
+  </script>
 </head>
 
 <body>
 <div class="wrap">
   <div class="card">
 
-    <div style="text-align: center;">
-      <h1 style="font-size: 28px; margin: 0 0 8px 0;">🌍 GeoQuiz</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      <div style="flex: 1; text-align: center;">
+        <h1 style="font-size: 28px; margin: 0;">🌍 GeoQuiz</h1>
+      </div>
+      <button id="theme-toggle" class="theme-toggle-inline" aria-label="Toggle dark/light mode" title="Toggle theme">
+        <span class="theme-icon">☀️</span>
+      </button>
+    </div>
+    
+    <div style="text-align: center; margin-bottom: 8px;">
       <div class="muted">Choose a geography game to play</div>
     </div>
 
@@ -63,5 +82,6 @@
   </div>
 </div>
 
+<script src="js/theme.js"></script>
 </body>
 </html>

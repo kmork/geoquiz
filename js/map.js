@@ -1,6 +1,11 @@
 import { norm } from "./utils.js";
 import { COUNTRY_ALIASES } from "./aliases.js";
 
+// Helper to get CSS variable values
+function getCSSVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
 export function createMap({ svgEl, worldUrl, placesUrl }) {
   let WORLD = null,
     PATHS = null,
@@ -124,7 +129,7 @@ export function createMap({ svgEl, worldUrl, placesUrl }) {
     for (const d of PATHS) {
       const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
       p.setAttribute("d", d);
-      p.setAttribute("stroke", "rgba(232,236,255,.12)");
+      p.setAttribute("stroke", getCSSVar('--map-country-stroke') || "rgba(232,236,255,.12)");
       p.setAttribute("stroke-width", "0.4");
       p.setAttribute("fill", "none");
       p.setAttribute("vector-effect", "non-scaling-stroke");
@@ -164,9 +169,9 @@ export function createMap({ svgEl, worldUrl, placesUrl }) {
     for (const f of hits) {
       const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
       p.setAttribute("d", pathFromFeature(f));
-      p.setAttribute("stroke", "rgba(232,236,255,.95)");
+      p.setAttribute("stroke", getCSSVar('--map-country-stroke-highlight') || "rgba(232,236,255,.95)");
       p.setAttribute("stroke-width", "0.8");
-      p.setAttribute("fill", "rgba(165,180,252,.18)");
+      p.setAttribute("fill", getCSSVar('--map-country-fill-highlight') || "rgba(165,180,252,.18)");
       p.setAttribute("vector-effect", "non-scaling-stroke");
       svgEl.appendChild(p);
     }
@@ -185,8 +190,8 @@ export function createMap({ svgEl, worldUrl, placesUrl }) {
         dot.setAttribute("cx", x);
         dot.setAttribute("cy", y);
         dot.setAttribute("r", String(8 * upp));
-        dot.setAttribute("fill", "#6ee7b7");
-        dot.setAttribute("stroke", "rgba(232,236,255,.9)");
+        dot.setAttribute("fill", getCSSVar('--map-dot-fill') || "#6ee7b7");
+        dot.setAttribute("stroke", getCSSVar('--map-dot-stroke') || "rgba(232,236,255,.9)");
         dot.setAttribute("stroke-width", "0.9");
         dot.setAttribute("vector-effect", "non-scaling-stroke");
         svgEl.appendChild(dot);

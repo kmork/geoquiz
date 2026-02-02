@@ -24,6 +24,11 @@ const ui = {
 const confetti = initConfetti("confetti");
 const initOverlay = document.getElementById("init-overlay");
 
+// Helper to get CSS variable values
+function getCSSVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
 if (initOverlay) {
   initOverlay.classList.remove("hidden");
   initOverlay.style.display = "flex";
@@ -137,9 +142,9 @@ function drawCountries(targetCountry, neighborCountries) {
   for (const f of neighborFeatures) {
     const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
     p.setAttribute("d", pathFromFeature(f));
-    p.setAttribute("stroke", "rgba(232,236,255,.5)");
+    p.setAttribute("stroke", getCSSVar('--map-country-stroke-neighbor') || "rgba(232,236,255,.5)");
     p.setAttribute("stroke-width", "0.6");
-    p.setAttribute("fill", "rgba(165,180,252,.08)");
+    p.setAttribute("fill", getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)");
     p.setAttribute("vector-effect", "non-scaling-stroke");
     ui.map.appendChild(p);
   }
@@ -148,9 +153,9 @@ function drawCountries(targetCountry, neighborCountries) {
   for (const f of targetFeatures) {
     const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
     p.setAttribute("d", pathFromFeature(f));
-    p.setAttribute("stroke", "rgba(232,236,255,.95)");
+    p.setAttribute("stroke", getCSSVar('--map-country-stroke-highlight') || "rgba(232,236,255,.95)");
     p.setAttribute("stroke-width", "0.8");
-    p.setAttribute("fill", "rgba(165,180,252,.25)");
+    p.setAttribute("fill", getCSSVar('--map-country-fill-highlight') || "rgba(165,180,252,.25)");
     p.setAttribute("vector-effect", "non-scaling-stroke");
     ui.map.appendChild(p);
   }

@@ -1,6 +1,11 @@
 import { norm } from "./utils.js";
 import { updateProgress } from "./ui.js";
 
+// Helper to get CSS variable values
+function getCSSVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
 export function createGame({ ui, mapApi, confetti }) {
   const DATA = window.DATA; // IMPORTANT: data.js sets window.DATA
 
@@ -193,8 +198,8 @@ export function createGame({ ui, mapApi, confetti }) {
       const upp = vbNow.width / pxW;
       c.setAttribute("r", String(7 * upp));
 
-      c.setAttribute("fill", "#ffd54a");
-      c.setAttribute("stroke", "rgba(232,236,255,.9)");
+      c.setAttribute("fill", getCSSVar('--star-color') || "#ffd54a");
+      c.setAttribute("stroke", getCSSVar('--map-dot-stroke') || "rgba(232,236,255,.9)");
       c.setAttribute("stroke-width", "1");
       c.setAttribute("vector-effect", "non-scaling-stroke");
       svg.appendChild(c);

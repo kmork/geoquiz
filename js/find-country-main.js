@@ -4,6 +4,11 @@ import { norm } from "./utils.js";
 import { COUNTRY_ALIASES } from "./aliases.js";
 import { attachWikipediaPopup } from "./wiki.js";
 
+// Helper to get CSS variable values
+function getCSSVar(name) {
+  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+}
+
 // UI references
 const ui = {
   map: document.getElementById("map"),
@@ -68,9 +73,9 @@ function drawWorldMap() {
     
     const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
     p.setAttribute("d", d);
-    p.setAttribute("stroke", "rgba(232,236,255,.3)");
+    p.setAttribute("stroke", getCSSVar('--map-country-stroke') || "rgba(232,236,255,.3)");
     p.setAttribute("stroke-width", "0.5");
-    p.setAttribute("fill", "rgba(165,180,252,.08)");
+    p.setAttribute("fill", getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)");
     p.setAttribute("vector-effect", "non-scaling-stroke");
     p.setAttribute("class", "country-path");
     p.style.cursor = "pointer";
@@ -182,8 +187,8 @@ function highlightCountry(countryName, type) {
   // Clear previous highlights
   paths.forEach(p => {
     p.removeAttribute("data-highlighted");
-    p.setAttribute("fill", "rgba(165,180,252,.08)");
-    p.setAttribute("stroke", "rgba(232,236,255,.3)");
+    p.setAttribute("fill", getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)");
+    p.setAttribute("stroke", getCSSVar('--map-country-stroke') || "rgba(232,236,255,.3)");
   });
   
   const mapName = COUNTRY_ALIASES[countryName] || countryName;
@@ -196,16 +201,16 @@ function highlightCountry(countryName, type) {
       
       if (type === "selected") {
         // Blue highlight for first click (selection)
-        path.setAttribute("fill", "rgba(165, 180, 252, 0.35)"); // blue
-        path.setAttribute("stroke", "rgba(165, 180, 252, 0.95)");
+        path.setAttribute("fill", getCSSVar('--map-selected-fill') || "rgba(165, 180, 252, 0.35)");
+        path.setAttribute("stroke", getCSSVar('--map-selected-stroke') || "rgba(165, 180, 252, 0.95)");
         path.setAttribute("stroke-width", "1.5");
       } else if (type === "correct") {
-        path.setAttribute("fill", "rgba(110, 231, 183, 0.5)"); // green
-        path.setAttribute("stroke", "rgba(110, 231, 183, 0.95)");
+        path.setAttribute("fill", getCSSVar('--map-correct-fill') || "rgba(110, 231, 183, 0.5)");
+        path.setAttribute("stroke", getCSSVar('--map-correct-stroke') || "rgba(110, 231, 183, 0.95)");
         path.setAttribute("stroke-width", "1.2");
       } else if (type === "wrong") {
-        path.setAttribute("fill", "rgba(252, 165, 161, 0.5)"); // red
-        path.setAttribute("stroke", "rgba(252, 165, 161, 0.95)");
+        path.setAttribute("fill", getCSSVar('--map-wrong-fill') || "rgba(252, 165, 161, 0.5)");
+        path.setAttribute("stroke", getCSSVar('--map-wrong-stroke') || "rgba(252, 165, 161, 0.95)");
         path.setAttribute("stroke-width", "1.2");
       }
     }
@@ -277,8 +282,8 @@ function resetMapView() {
   const paths = ui.map.querySelectorAll(".country-path");
   paths.forEach(p => {
     p.removeAttribute("data-highlighted");
-    p.setAttribute("fill", "rgba(165,180,252,.08)");
-    p.setAttribute("stroke", "rgba(232,236,255,.3)");
+    p.setAttribute("fill", getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)");
+    p.setAttribute("stroke", getCSSVar('--map-country-stroke') || "rgba(232,236,255,.3)");
     p.setAttribute("stroke-width", "0.5");
   });
 }
