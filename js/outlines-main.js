@@ -391,9 +391,43 @@ attachZoomPan();
 game.reset();
 game.nextQ();
 
+// Initialize mobile autocomplete
+initMobileAutocompleteForOutlines();
+
 // Hide init overlay
 if (initOverlay) {
   setTimeout(() => {
     initOverlay.style.display = "none";
   }, 100);
+}
+
+// Function to initialize mobile autocomplete
+function initMobileAutocompleteForOutlines() {
+  const input = document.getElementById("answer");
+  if (!input || typeof initMobileAutocomplete !== 'function') return;
+  
+  // Build suggestions array (countries + aliases)
+  const suggestions = [];
+  
+  // Add all country names
+  WORLD.forEach(feature => {
+    const name = feature.properties.ADMIN;
+    if (name) {
+      suggestions.push(name);
+    }
+  });
+  
+  // Add all aliases
+  Object.keys(COUNTRY_ALIASES).forEach(alias => {
+    suggestions.push(alias);
+  });
+  
+  // Remove duplicates and sort
+  const uniqueSuggestions = Array.from(new Set(suggestions)).sort();
+  
+  // Initialize mobile autocomplete
+  initMobileAutocomplete(input, uniqueSuggestions, {
+    maxSuggestions: 8,
+    minChars: 1
+  });
 }

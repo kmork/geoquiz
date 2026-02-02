@@ -7,11 +7,11 @@
 
 export const COUNTRY_ALIASES = {
   // === Abbreviations ===
-  "US": "United States",
-  "USA": "United States",
-  "U.S.": "United States",
-  "U.S.A.": "United States",
-  "United States of America": "United States",
+  "US": "United States of America",
+  "USA": "United States of America",
+  "U.S.": "United States of America",
+  "U.S.A.": "United States of America",
+  "United States": "United States of America",
   "UK": "United Kingdom",
   "U.K.": "United Kingdom",
   "Britain": "United Kingdom",
@@ -26,16 +26,16 @@ export const COUNTRY_ALIASES = {
   "NZ": "New Zealand",
   
   // === The/No The variants ===
-  "The Bahamas": "Bahamas",
+  "The Bahamas": "The Bahamas",
   "The Gambia": "Gambia",
   "The Netherlands": "Netherlands",
   "The Philippines": "Philippines",
   
   // === Congo variants ===
-  "Republic of the Congo": "Congo",
-  "Congo-Brazzaville": "Congo",
-  "Congo Brazzaville": "Congo",
-  "Congo Republic": "Congo",
+  "Congo": "Republic of the Congo",
+  "Congo-Brazzaville": "Republic of the Congo",
+  "Congo Brazzaville": "Republic of the Congo",
+  "Congo Republic": "Republic of the Congo",
   "Democratic Republic of Congo": "Democratic Republic of the Congo",
   "Congo-Kinshasa": "Democratic Republic of the Congo",
   "Congo Kinshasa": "Democratic Republic of the Congo",
@@ -48,19 +48,20 @@ export const COUNTRY_ALIASES = {
   
   // === Historical/Former names ===
   "Burma": "Myanmar",
-  "Swaziland": "Eswatini",
+  "Swaziland": "eSwatini",
+  "Eswatini": "eSwatini",
   "Czech Republic": "Czechia",
   "Macedonia": "North Macedonia",
   "FYROM": "North Macedonia",
-  "Ivory Coast": "Côte d'Ivoire",
+  "Côte d'Ivoire": "Ivory Coast",
   "Cape Verde": "Cabo Verde",
   
   // === Common variations ===
-  "Timor-Leste": "Timor-Leste",
-  "Timor Leste": "Timor-Leste",
-  "East Timor": "Timor-Leste",
-  "Vatican": "Vatican City",
-  "The Vatican": "Vatican City",
+  "Timor-Leste": "East Timor",
+  "Timor Leste": "East Timor",
+  "Timor": "East Timor",
+  "Vatican City": "Vatican",
+  "The Vatican": "Vatican",
   "Brunei Darussalam": "Brunei",
   "Bosnia": "Bosnia and Herzegovina",
   "Bosnia-Herzegovina": "Bosnia and Herzegovina",
@@ -73,14 +74,15 @@ export const COUNTRY_ALIASES = {
   "St Vincent": "Saint Vincent and the Grenadines",
   "St. Vincent": "Saint Vincent and the Grenadines",
   "St Vincent and the Grenadines": "Saint Vincent and the Grenadines",
-  "São Tomé and Príncipe": "Sao Tome and Principe",
-  "Sao Tome": "Sao Tome and Principe",
-  "São Tomé": "Sao Tome and Principe",
+  "Sao Tome and Principe": "São Tomé and Principe",
+  "Sao Tome": "São Tomé and Principe",
+  "São Tomé": "São Tomé and Principe",
   
   // === Short forms accepted ===
-  "United Republic of Tanzania": "Tanzania",
-  "Republic of Serbia": "Serbia",
-  "FSM": "Micronesia",
+  "Tanzania": "United Republic of Tanzania",
+  "Serbia": "Republic of Serbia",
+  "FSM": "Federated States of Micronesia",
+  "Micronesia": "Federated States of Micronesia",
   
   // === Common misspellings/variations ===
   "Lao": "Laos",

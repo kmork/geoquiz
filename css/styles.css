@@ -760,6 +760,51 @@ select option {
     padding-left: max(20px, env(safe-area-inset-left));
     padding-right: max(20px, env(safe-area-inset-right));
   }
+  
+  /* Mobile autocomplete dropdown */
+  .mobile-autocomplete-dropdown {
+    position: absolute;
+    left: 0;
+    right: 0;
+    background: var(--input-bg);
+    border: 2px solid var(--input-border);
+    border-radius: 12px;
+    margin-top: 4px;
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 1000;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .autocomplete-item {
+    padding: 12px 14px;
+    color: var(--input-color);
+    font-size: 16px;
+    border-bottom: 1px solid var(--input-border);
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  
+  .autocomplete-item:last-child {
+    border-bottom: none;
+  }
+  
+  .autocomplete-item:active {
+    background: var(--button-hover);
+  }
+  
+  .autocomplete-item mark {
+    background: rgba(251, 191, 36, 0.3);
+    color: var(--input-color);
+    font-weight: 650;
+    padding: 2px 0;
+  }
+  
+  /* Ensure parent container has position: relative */
+  .answerRow {
+    position: relative;
+  }
 }
 
 /* Find the Country game - expanded layout */

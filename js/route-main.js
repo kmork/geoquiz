@@ -262,10 +262,13 @@ async function loadData() {
   // Populate autocomplete datalist with country names
   populateCountryAutocomplete();
   
+  // Initialize mobile autocomplete (custom dropdown for mobile devices)
+  initMobileAutocompleteForRoute();
+  
   document.getElementById("init-overlay").style.display = "none";
 }
 
-// Populate datalist for autocomplete
+// Populate datalist for autocomplete (desktop)
 function populateCountryAutocomplete() {
   const datalist = document.getElementById("country-suggestions");
   if (!datalist) return;
@@ -290,6 +293,37 @@ function populateCountryAutocomplete() {
     const option = document.createElement("option");
     option.value = name;
     datalist.appendChild(option);
+  });
+}
+
+// Initialize mobile autocomplete (custom dropdown)
+function initMobileAutocompleteForRoute() {
+  const input = document.getElementById("answer");
+  if (!input || typeof initMobileAutocomplete !== 'function') return;
+  
+  // Build suggestions array (countries + aliases)
+  const suggestions = [];
+  
+  // Add all country names
+  WORLD.forEach(feature => {
+    const name = feature.properties.ADMIN;
+    if (name) {
+      suggestions.push(name);
+    }
+  });
+  
+  // Add all aliases
+  Object.keys(COUNTRY_ALIASES).forEach(alias => {
+    suggestions.push(alias);
+  });
+  
+  // Remove duplicates and sort
+  const uniqueSuggestions = Array.from(new Set(suggestions)).sort();
+  
+  // Initialize mobile autocomplete
+  initMobileAutocomplete(input, uniqueSuggestions, {
+    maxSuggestions: 8,
+    minChars: 1
   });
 }
 
