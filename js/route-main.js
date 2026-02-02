@@ -38,7 +38,17 @@ let NEIGHBORS = null;
 const MAP_W = 600;
 const MAP_H = 320;
 
-const proj = ([lon, lat]) => [((lon + 180) / 360) * MAP_W, ((90 - lat) / 180) * MAP_H];
+// Normalize longitude to -180 to +180 range
+const normalizeLon = (lon) => {
+  while (lon > 180) lon -= 360;
+  while (lon < -180) lon += 360;
+  return lon;
+};
+
+const proj = ([lon, lat]) => {
+  const normalizedLon = normalizeLon(lon);
+  return [((normalizedLon + 180) / 360) * MAP_W, ((90 - lat) / 180) * MAP_H];
+};
 
 function pathFromFeature(f) {
   if (!f.geometry) return "";
@@ -46,11 +56,37 @@ function pathFromFeature(f) {
   let d = "";
   for (const poly of polys) {
     for (const ring of poly) {
-      ring.forEach(([lon, lat], i) => {
+      // Check if ring crosses antimeridian (large lon jumps)
+      let prevLon = null;
+      let currentPath = [];
+      
+      for (let i = 0; i < ring.length; i++) {
+        const [lon, lat] = ring[i];
+        const normalizedLon = normalizeLon(lon);
+        
+        // Detect wraparound (jump > 180 degrees)
+        if (prevLon !== null && Math.abs(normalizedLon - prevLon) > 180) {
+          // Finish current path
+          if (currentPath.length > 0) {
+            currentPath.forEach(([x, y], j) => {
+              d += (j ? "L" : "M") + x + " " + y + " ";
+            });
+            currentPath = [];
+          }
+        }
+        
         const [x, y] = proj([lon, lat]);
-        d += (i ? "L" : "M") + x + " " + y + " ";
-      });
-      d += "Z ";
+        currentPath.push([x, y]);
+        prevLon = normalizedLon;
+      }
+      
+      // Finish remaining path
+      if (currentPath.length > 0) {
+        currentPath.forEach(([x, y], i) => {
+          d += (i ? "L" : "M") + x + " " + y + " ";
+        });
+        d += "Z ";
+      }
     }
   }
   return d;
@@ -63,9 +99,10 @@ function bboxOfFeatureLonLat(f) {
   for (const poly of rings) {
     for (const ring of poly) {
       for (const [lon, lat] of ring) {
-        if (lon < minLon) minLon = lon;
+        const normalizedLon = normalizeLon(lon);
+        if (normalizedLon < minLon) minLon = normalizedLon;
         if (lat < minLat) minLat = lat;
-        if (lon > maxLon) maxLon = lon;
+        if (normalizedLon > maxLon) maxLon = normalizedLon;
         if (lat > maxLat) maxLat = lat;
       }
     }
@@ -170,7 +207,7 @@ function drawCountries(countryList) {
 // Initialize data and game
 async function loadData() {
   const [worldData, neighborsData] = await Promise.all([
-    fetch("data/ne_10m_admin_0_countries.geojson").then(r => r.json()),
+    fetch("data/ne_10m_admin_0_countries_route.geojson").then(r => r.json()),
     fetch("data/countries-neighbors.json").then(r => r.json()),
   ]);
   
