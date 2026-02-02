@@ -577,11 +577,11 @@ select option {
   
   /* Mobile fixes for Connect the Countries game */
   
-  /* Responsive map height - use viewport height on mobile */
+  /* Responsive map height - shorter on mobile to fit controls on screen */
   .mapwrap {
-    height: 50vh;
-    min-height: 250px;
-    max-height: 400px;
+    height: 35vh; /* Reduced from 50vh to fit everything on screen */
+    min-height: 200px; /* Reduced from 250px */
+    max-height: 300px; /* Reduced from 400px */
   }
   
   #map {
@@ -598,22 +598,24 @@ select option {
       "buttons buttons";
     gap: 8px;
     width: 100%;
+    align-items: center; /* Vertically align input and button */
   }
   
   .answerRow input {
     grid-area: input;
     font-size: 16px; /* Prevent iOS auto-zoom */
-    min-height: 44px;
-    height: 44px; /* Fixed height, not too tall */
-    padding: 10px 12px; /* Reduced padding */
+    height: 44px; /* Fixed height */
+    padding: 10px 12px;
+    box-sizing: border-box; /* Include padding in height calculation */
+    line-height: 1.5; /* Explicit line height for consistency */
   }
   
   #submit {
     grid-area: submit;
-    min-height: 44px;
-    height: 44px;
+    height: 44px; /* Match input exactly */
     min-width: 60px; /* Enough for "Add" */
     padding: 10px 16px;
+    box-sizing: border-box; /* Include padding in height calculation */
     font-size: 15px;
     white-space: nowrap;
   }
@@ -632,46 +634,87 @@ select option {
     font-weight: 650;
   }
   
-  /* Secondary buttons container */
-  .answerRow .btn-secondary {
+  /* Secondary buttons container - create flex wrapper */
+  .secondary-buttons {
     grid-area: buttons;
+    display: flex;
+    gap: 12px; /* Use flex gap instead of margins */
+    width: 100%;
   }
   
   /* Group secondary buttons on one row with icons */
   #undo,
   #showHint,
   #giveUp {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 44px;
-    height: 44px;
+    height: 44px; /* Fixed height */
     min-width: 44px;
-    flex: 1;
+    flex: 1 1 0; /* Equal width distribution */
     padding: 10px;
+    box-sizing: border-box; /* Include padding in height */
     font-size: 0; /* Hide text */
-    margin-right: 8px;
+    border: 2px solid; /* Thicker border for emphasis */
+    transition: all 0.2s ease; /* Smooth hover effect */
+  }
+  
+  /* Individual button colors and styling */
+  #undo {
+    background: rgba(59, 130, 246, 0.15); /* Blue background */
+    border-color: rgba(59, 130, 246, 0.4);
+  }
+  
+  #undo:hover:not(:disabled) {
+    background: rgba(59, 130, 246, 0.25);
+    border-color: rgba(59, 130, 246, 0.6);
+  }
+  
+  #showHint {
+    background: rgba(251, 191, 36, 0.15); /* Gold/yellow background */
+    border-color: rgba(251, 191, 36, 0.4);
+  }
+  
+  #showHint:hover {
+    background: rgba(251, 191, 36, 0.25);
+    border-color: rgba(251, 191, 36, 0.6);
   }
   
   #giveUp {
-    margin-right: 0; /* Last button, no margin */
+    background: rgba(239, 68, 68, 0.15); /* Red background */
+    border-color: rgba(239, 68, 68, 0.4);
   }
+  
+  #giveUp:hover {
+    background: rgba(239, 68, 68, 0.25);
+    border-color: rgba(239, 68, 68, 0.6);
+  }
+  
+  /* No margin needed - using flex gap on parent */
   
   /* Add icons to secondary buttons using ::before */
   #undo::before {
     content: "↶";
-    font-size: 20px;
-    font-weight: 400;
+    font-size: 24px; /* Larger icon */
+    font-weight: 700; /* Bolder */
+    line-height: 1;
+    color: rgb(59, 130, 246); /* Blue color */
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
   }
   
   #showHint::before {
     content: "💡";
-    font-size: 18px;
+    font-size: 22px; /* Larger icon */
+    line-height: 1;
+    filter: brightness(1.2) contrast(1.1); /* Enhance emoji brightness */
   }
   
   #giveUp::before {
     content: "🏳";
-    font-size: 18px;
+    font-size: 22px; /* Larger icon */
+    line-height: 1;
+    filter: brightness(1.3) contrast(1.2) drop-shadow(0 0 1px rgba(0,0,0,0.8)); /* Enhanced with dark outline */
+    -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.3); /* Dark outline for white flag */
   }
   
   /* Alternative: use unicode symbols if emojis don't work well */
