@@ -101,6 +101,7 @@ function pointInPolygon(x, y, polygon) {
 function drawCountry(paths, offsetX, fillStyle, strokeStyle, strokeWidth) {
   ctx.save();
   
+  // Draw each path separately for better performance
   for (const coords of paths) {
     ctx.beginPath();
     coords.forEach(([x, y], i) => {
@@ -114,7 +115,6 @@ function drawCountry(paths, offsetX, fillStyle, strokeStyle, strokeWidth) {
     ctx.fillStyle = fillStyle;
     ctx.fill();
     ctx.strokeStyle = strokeStyle;
-    // Keep stroke width constant regardless of zoom level
     ctx.lineWidth = strokeWidth;
     ctx.stroke();
   }
@@ -128,54 +128,59 @@ function drawWorldMap() {
   
   ctx.clearRect(0, 0, canvasDisplayWidth, canvasDisplayHeight);
   
-  // Calculate how many map copies we need to draw to fill the canvas
-  // Based on current scroll position and zoom level
+  // Calculate visible viewport in map coordinates
   const viewWidthInMapUnits = canvasDisplayWidth / zoom;
-  const startMapX = scrollX - viewWidthInMapUnits / 2;
-  const endMapX = scrollX + viewWidthInMapUnits / 2;
-  
-  // Determine which map copies to draw (normalize to MAP_W intervals)
-  const firstCopy = Math.floor(startMapX / MAP_W);
-  const lastCopy = Math.ceil(endMapX / MAP_W);
-  
-  // Generate offsets for all needed copies
-  const offsets = [];
-  for (let i = firstCopy; i <= lastCopy; i++) {
-    offsets.push(i * MAP_W);
-  }
+  const viewHeightInMapUnits = canvasDisplayHeight / zoom;
+  const viewLeft = scrollX - viewWidthInMapUnits / 2;
+  const viewRight = scrollX + viewWidthInMapUnits / 2;
+  const viewTop = scrollY - viewHeightInMapUnits / 2;
+  const viewBottom = scrollY + viewHeightInMapUnits / 2;
   
   // Default colors
   const defaultFill = getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)";
   const defaultStroke = getCSSVar('--map-country-stroke') || "rgba(232,236,255,.3)";
   const hoverFill = getCSSVar('--map-country-fill-highlight') || "rgba(165,180,252,.25)";
   
-  // Draw all countries
-  for (const offset of offsets) {
-    for (const country of countryPaths) {
-      let fillStyle = defaultFill;
-      let strokeStyle = defaultStroke;
-      let strokeWidth = 0.5;
-      
-      // Check if this country should be highlighted
-      if (highlightedCountry && norm(country.name) === norm(highlightedCountry)) {
-        if (highlightType === "selected") {
-          fillStyle = getCSSVar('--map-selected-fill') || "rgba(165, 180, 252, 0.35)";
-          strokeStyle = getCSSVar('--map-selected-stroke') || "rgba(165, 180, 252, 0.95)";
-          strokeWidth = 1.5;
-        } else if (highlightType === "correct") {
-          fillStyle = getCSSVar('--map-correct-fill') || "rgba(110, 231, 183, 0.5)";
-          strokeStyle = getCSSVar('--map-correct-stroke') || "rgba(110, 231, 183, 0.95)";
-          strokeWidth = 1.2;
-        } else if (highlightType === "wrong") {
-          fillStyle = getCSSVar('--map-wrong-fill') || "rgba(252, 165, 161, 0.5)";
-          strokeStyle = getCSSVar('--map-wrong-stroke') || "rgba(252, 165, 161, 0.95)";
-          strokeWidth = 1.2;
-        }
-      } else if (hoverCountry && norm(country.name) === norm(hoverCountry)) {
-        fillStyle = hoverFill;
+  // Draw each country at the offset(s) where it's visible
+  for (const country of countryPaths) {
+    let fillStyle = defaultFill;
+    let strokeStyle = defaultStroke;
+    let strokeWidth = 0.5;
+    
+    // Check if this country should be highlighted
+    if (highlightedCountry && norm(country.name) === norm(highlightedCountry)) {
+      if (highlightType === "selected") {
+        fillStyle = getCSSVar('--map-selected-fill') || "rgba(165, 180, 252, 0.35)";
+        strokeStyle = getCSSVar('--map-selected-stroke') || "rgba(165, 180, 252, 0.95)";
+        strokeWidth = 1.5;
+      } else if (highlightType === "correct") {
+        fillStyle = getCSSVar('--map-correct-fill') || "rgba(110, 231, 183, 0.5)";
+        strokeStyle = getCSSVar('--map-correct-stroke') || "rgba(110, 231, 183, 0.95)";
+        strokeWidth = 1.2;
+      } else if (highlightType === "wrong") {
+        fillStyle = getCSSVar('--map-wrong-fill') || "rgba(252, 165, 161, 0.5)";
+        strokeStyle = getCSSVar('--map-wrong-stroke') || "rgba(252, 165, 161, 0.95)";
+        strokeWidth = 1.2;
       }
-      
-      drawCountry(country.paths, offset, fillStyle, strokeStyle, strokeWidth);
+    } else if (hoverCountry && norm(country.name) === norm(hoverCountry)) {
+      fillStyle = hoverFill;
+    }
+    
+    // Calculate which offset to use based on scrollX (for wrapping)
+    // Normalize scrollX to find the nearest copy
+    const normalizedScrollX = ((scrollX % MAP_W) + MAP_W) % MAP_W;
+    const baseOffset = scrollX - normalizedScrollX;
+    
+    // Draw the country at up to 3 positions (left, center, right of viewport)
+    // This handles cases where country is split across viewport edge
+    for (let i = -1; i <= 1; i++) {
+      const offset = baseOffset + (i * MAP_W);
+      // Quick check: is this offset's map region visible?
+      const mapLeft = offset;
+      const mapRight = offset + MAP_W;
+      if (mapRight >= viewLeft && mapLeft <= viewRight) {
+        drawCountry(country.paths, offset, fillStyle, strokeStyle, strokeWidth);
+      }
     }
   }
 }
@@ -352,10 +357,42 @@ async function loadData() {
   WORLD = worldData.features;
   
   // Pre-process country paths for canvas rendering
-  countryPaths = WORLD.map(f => ({
-    name: f.properties.ADMIN || "",
-    paths: coordsFromFeature(f)
-  })).filter(c => c.paths.length > 0);
+  // Use a Map to deduplicate countries and merge multiple features
+  const countryMap = new Map();
+  
+  for (const feature of WORLD) {
+    const name = feature.properties.ADMIN || "";
+    if (!name) continue;
+    
+    const paths = coordsFromFeature(feature);
+    if (paths.length === 0) continue;
+    
+    if (countryMap.has(name)) {
+      // Merge paths from multiple features of the same country
+      countryMap.get(name).paths.push(...paths);
+    } else {
+      countryMap.set(name, { name, paths });
+    }
+  }
+  
+  countryPaths = Array.from(countryMap.values());
+  
+  // Debug: Log countries with multiple features
+  const featureCounts = new Map();
+  for (const feature of WORLD) {
+    const name = feature.properties.ADMIN || "";
+    if (name) {
+      featureCounts.set(name, (featureCounts.get(name) || 0) + 1);
+    }
+  }
+  
+  console.log("Countries with multiple GeoJSON features:");
+  for (const [name, count] of featureCounts) {
+    if (count > 1) {
+      console.log(`  ${name}: ${count} features`);
+    }
+  }
+  console.log(`Total unique countries: ${countryPaths.length}`);
 }
 
 // Initialize data and game
