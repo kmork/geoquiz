@@ -649,23 +649,18 @@
     "explanation": "In Svalbard, Norway, the sun doesn't set for about 4 months (mid-April to mid-August). Great for insomniacs, terrible for vampires."
   },
   {
-    "question": "Which country has a volcano that has been erupting continuously since 1983?",
-    "options": ["Iceland", "United States", "Japan", "Indonesia"],
+    "question": "Which volcano erupted almost continuously for 35 years?",
+    "options": ["Eyjafjallajökull", "Kīlauea", "Mount Etna", "Krakatoa"],
     "answer": 1,
-    "explanation": "Kīlauea in Hawaii has been erupting almost continuously from 1983 to 2018 (with brief pauses). That's one dedicated volcano."
+    "explanation": "Kīlauea in Hawaii erupted almost continuously from 1983 to 2018—35 years! That's one dedicated volcano."
   },
   {
-    "question": "Which country is the only one to fall entirely within the tropics and have no territory outside them?",
-    "options": ["Singapore", "Malaysia", "Brunei", "Maldives"],
+    "question": "Which city-state lies entirely within the tropics?",
+    "options": ["Singapore", "Monaco", "Vatican City", "San Marino"],
     "answer": 0,
-    "explanation": "Singapore lies entirely between the Tropic of Cancer and Tropic of Capricorn, making it perpetually tropical. No winter coat needed, ever."
+    "explanation": "Singapore is the only modern city-state entirely within the tropics, making it perpetually hot and humid. No winter coat needed, ever."
   },
-  {
-    "question": "Which country has the most official languages?",
-    "options": ["India", "South Africa", "Bolivia", "Zimbabwe"],
-    "answer": 3,
-    "explanation": "Zimbabwe recognizes 16 official languages. Good luck designing government forms there!"
-  },
+
   {
     "question": "Which country experiences the most thunderstorms annually?",
     "options": ["Brazil", "Democratic Republic of the Congo", "United States", "Indonesia"],
@@ -745,10 +740,10 @@
     "explanation": "Norway knighted a penguin named Nils Olav, making him a brigadier in the Norwegian King's Guard. He lives in Edinburgh Zoo. Best. Job. Ever."
   },
   {
-    "question": "Which country has no mosquitoes?",
+    "question": "Which country was mosquito-free until recently?",
     "options": ["Singapore", "Iceland", "New Zealand", "Bahamas"],
     "answer": 1,
-    "explanation": "Iceland's climate is too cold for mosquitoes to survive. Finally, a good reason to enjoy freezing weather."
+    "explanation": "Iceland had no mosquitoes for centuries due to harsh freeze-thaw cycles. Climate change ended that in 2025, though they're still extremely rare."
   },
   {
     "question": "Which country has a desert that gets snow?",
