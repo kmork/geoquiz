@@ -299,6 +299,12 @@ function zoomToCountries(country1, country2) {
   
   if (!bbox1 || !bbox2) return;
   
+  // Check if either country is tiny (island or micro-state)
+  const size1 = Math.max(bbox1.maxLon - bbox1.minLon, bbox1.maxLat - bbox1.minLat);
+  const size2 = Math.max(bbox2.maxLon - bbox2.minLon, bbox2.maxLat - bbox2.minLat);
+  const isTiny1 = size1 < 2; // Less than ~2 degrees
+  const isTiny2 = size2 < 2;
+  
   // Combine bounding boxes
   const combinedBBox = {
     minLon: Math.min(bbox1.minLon, bbox2.minLon),
@@ -307,15 +313,34 @@ function zoomToCountries(country1, country2) {
     maxLat: Math.max(bbox1.maxLat, bbox2.maxLat),
   };
   
-  // Add padding (20%)
+  // Add padding (20% base, more for tiny countries)
   const dLon = combinedBBox.maxLon - combinedBBox.minLon;
   const dLat = combinedBBox.maxLat - combinedBBox.minLat;
-  const padRatio = 0.2;
+  const padRatio = (isTiny1 || isTiny2) ? 0.4 : 0.2;
   
   combinedBBox.minLon -= dLon * padRatio;
   combinedBBox.maxLon += dLon * padRatio;
   combinedBBox.minLat -= dLat * padRatio;
   combinedBBox.maxLat += dLat * padRatio;
+  
+  // For tiny countries, ensure minimum visible area
+  if (isTiny1 || isTiny2) {
+    const MIN_AREA_DEGREES = 10; // Ensure at least 10 degrees visible
+    const currentLonSpan = combinedBBox.maxLon - combinedBBox.minLon;
+    const currentLatSpan = combinedBBox.maxLat - combinedBBox.minLat;
+    
+    if (currentLonSpan < MIN_AREA_DEGREES) {
+      const centerLon = (combinedBBox.minLon + combinedBBox.maxLon) / 2;
+      combinedBBox.minLon = centerLon - MIN_AREA_DEGREES / 2;
+      combinedBBox.maxLon = centerLon + MIN_AREA_DEGREES / 2;
+    }
+    
+    if (currentLatSpan < MIN_AREA_DEGREES) {
+      const centerLat = (combinedBBox.minLat + combinedBBox.maxLat) / 2;
+      combinedBBox.minLat = centerLat - MIN_AREA_DEGREES / 2;
+      combinedBBox.maxLat = centerLat + MIN_AREA_DEGREES / 2;
+    }
+  }
   
   // Convert to map coordinates
   const [x1, y1] = proj([combinedBBox.minLon, combinedBBox.maxLat]);
@@ -327,7 +352,8 @@ function zoomToCountries(country1, country2) {
   
   const zoomX = canvasDisplayWidth / width;
   const zoomY = canvasDisplayHeight / height;
-  zoom = Math.min(zoomX, zoomY, 100); // Cap zoom at 100x
+  // Respect minimum zoom level and cap at 100x
+  zoom = Math.max(minZoom, Math.min(zoomX, zoomY, 100));
   
   scrollX = x1 + width / 2 - canvasDisplayWidth / 2 / zoom;
   scrollY = y1 + height / 2 - canvasDisplayHeight / 2 / zoom;
