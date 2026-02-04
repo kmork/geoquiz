@@ -34,146 +34,218 @@ if (initOverlay) {
   initOverlay.style.display = "flex";
 }
 
+// Canvas setup
+const canvas = ui.map;
+const ctx = canvas.getContext("2d");
+const dpr = window.devicePixelRatio || 1;
+
+// Canvas dimensions will be set by resizeCanvas()
+let canvasDisplayWidth = 600;
+let canvasDisplayHeight = 320;
+
 // Load data
 let WORLD = null;
+let countryPaths = []; // Store pre-processed country paths
 
 const MAP_W = 600;
 const MAP_H = 320;
 
 const proj = ([lon, lat]) => [((lon + 180) / 360) * MAP_W, ((90 - lat) / 180) * MAP_H];
 
-function pathFromFeature(f) {
-  if (!f.geometry) return "";
+// Convert GeoJSON feature to path coordinates
+function coordsFromFeature(f) {
+  if (!f.geometry) return [];
   const polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
-  let d = "";
+  const paths = [];
+  
   for (const poly of polys) {
     for (const ring of poly) {
-      ring.forEach(([lon, lat], i) => {
-        const [x, y] = proj([lon, lat]);
-        d += (i ? "L" : "M") + x + " " + y + " ";
-      });
-      d += "Z ";
+      const coords = ring.map(([lon, lat]) => proj([lon, lat]));
+      paths.push(coords);
     }
   }
-  return d;
+  return paths;
+}
+
+// Viewport state
+let scrollX = 0;
+let scrollY = 0;
+let zoom = 1;
+let minZoom = 1; // Dynamically calculated minimum zoom
+let velocityX = 0;
+let velocityY = 0;
+
+// Highlighted country state
+let highlightedCountry = null;
+let highlightType = null;
+let hoverCountry = null;
+
+// Animation loop
+let animationFrameId = null;
+
+// Point-in-polygon test (ray casting algorithm)
+function pointInPolygon(x, y, polygon) {
+  let inside = false;
+  for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+    const xi = polygon[i][0], yi = polygon[i][1];
+    const xj = polygon[j][0], yj = polygon[j][1];
+    
+    const intersect = ((yi > y) !== (yj > y)) &&
+      (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+
+// Draw a country on canvas
+function drawCountry(paths, offsetX, fillStyle, strokeStyle, strokeWidth) {
+  ctx.save();
+  
+  for (const coords of paths) {
+    ctx.beginPath();
+    coords.forEach(([x, y], i) => {
+      const px = (x + offsetX - scrollX) * zoom;
+      const py = (y - scrollY) * zoom;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    });
+    ctx.closePath();
+    
+    ctx.fillStyle = fillStyle;
+    ctx.fill();
+    ctx.strokeStyle = strokeStyle;
+    // Keep stroke width constant regardless of zoom level
+    ctx.lineWidth = strokeWidth;
+    ctx.stroke();
+  }
+  
+  ctx.restore();
 }
 
 // Draw entire world map
 function drawWorldMap() {
-  ui.map.innerHTML = "";
-
-  if (!WORLD) return;
-
-  // Set viewBox to full world
-  ui.map.setAttribute("viewBox", `0 0 ${MAP_W} ${MAP_H}`);
-
+  if (!countryPaths.length) return;
+  
+  ctx.clearRect(0, 0, canvasDisplayWidth, canvasDisplayHeight);
+  
+  // Calculate how many map copies we need to draw to fill the canvas
+  // Based on current scroll position and zoom level
+  const viewWidthInMapUnits = canvasDisplayWidth / zoom;
+  const startMapX = scrollX - viewWidthInMapUnits / 2;
+  const endMapX = scrollX + viewWidthInMapUnits / 2;
+  
+  // Determine which map copies to draw (normalize to MAP_W intervals)
+  const firstCopy = Math.floor(startMapX / MAP_W);
+  const lastCopy = Math.ceil(endMapX / MAP_W);
+  
+  // Generate offsets for all needed copies
+  const offsets = [];
+  for (let i = firstCopy; i <= lastCopy; i++) {
+    offsets.push(i * MAP_W);
+  }
+  
+  // Default colors
+  const defaultFill = getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)";
+  const defaultStroke = getCSSVar('--map-country-stroke') || "rgba(232,236,255,.3)";
+  const hoverFill = getCSSVar('--map-country-fill-highlight') || "rgba(165,180,252,.25)";
+  
   // Draw all countries
-  for (const f of WORLD) {
-    const d = pathFromFeature(f);
-    if (!d) continue;
-    
-    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    p.setAttribute("d", d);
-    p.setAttribute("stroke", getCSSVar('--map-country-stroke') || "rgba(232,236,255,.3)");
-    p.setAttribute("stroke-width", "0.5");
-    p.setAttribute("fill", getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)");
-    p.setAttribute("vector-effect", "non-scaling-stroke");
-    p.setAttribute("class", "country-path");
-    p.style.cursor = "pointer";
-    
-    // Store country name for click detection
-    const countryName = f.properties.ADMIN || "";
-    p.setAttribute("data-country", countryName);
-    
-    // Hover effect
-    p.addEventListener("mouseenter", () => {
-      if (!game || game.getCurrent() === "") return;
-      p.setAttribute("fill", getCSSVar('--map-country-fill-highlight') || "rgba(165,180,252,.25)");
-    });
-    p.addEventListener("mouseleave", () => {
-      if (!game || game.getCurrent() === "") return;
-      // Only reset if not highlighted
-      if (!p.hasAttribute("data-highlighted")) {
-        p.setAttribute("fill", getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)");
+  for (const offset of offsets) {
+    for (const country of countryPaths) {
+      let fillStyle = defaultFill;
+      let strokeStyle = defaultStroke;
+      let strokeWidth = 0.5;
+      
+      // Check if this country should be highlighted
+      if (highlightedCountry && norm(country.name) === norm(highlightedCountry)) {
+        if (highlightType === "selected") {
+          fillStyle = getCSSVar('--map-selected-fill') || "rgba(165, 180, 252, 0.35)";
+          strokeStyle = getCSSVar('--map-selected-stroke') || "rgba(165, 180, 252, 0.95)";
+          strokeWidth = 1.5;
+        } else if (highlightType === "correct") {
+          fillStyle = getCSSVar('--map-correct-fill') || "rgba(110, 231, 183, 0.5)";
+          strokeStyle = getCSSVar('--map-correct-stroke') || "rgba(110, 231, 183, 0.95)";
+          strokeWidth = 1.2;
+        } else if (highlightType === "wrong") {
+          fillStyle = getCSSVar('--map-wrong-fill') || "rgba(252, 165, 161, 0.5)";
+          strokeStyle = getCSSVar('--map-wrong-stroke') || "rgba(252, 165, 161, 0.95)";
+          strokeWidth = 1.2;
+        }
+      } else if (hoverCountry && norm(country.name) === norm(hoverCountry)) {
+        fillStyle = hoverFill;
       }
-    });
-    
-    ui.map.appendChild(p);
+      
+      drawCountry(country.paths, offset, fillStyle, strokeStyle, strokeWidth);
+    }
   }
 }
 
-// Check which country was clicked
-function checkClickedCountry(svgX, svgY) {
-  // Find which country polygon contains this point
-  const paths = ui.map.querySelectorAll(".country-path");
+// Check which country was clicked (canvas coordinates)
+function checkClickedCountry(canvasX, canvasY) {
+  // Transform canvas pixel to map coords
+  // Canvas coordinates are in display pixels, need to account for zoom and scroll
+  const mapX = (canvasX / zoom) + scrollX;
+  const mapY = (canvasY / zoom) + scrollY;
   
-  // First try exact point-in-polygon detection
-  for (const path of paths) {
-    const bbox = path.getBBox();
-    // Quick bounding box check first
-    if (svgX < bbox.x || svgX > bbox.x + bbox.width ||
-        svgY < bbox.y || svgY > bbox.y + bbox.height) {
-      continue;
-    }
-    
-    // More precise point-in-polygon check using SVG isPointInFill
-    const pt = ui.map.createSVGPoint();
-    pt.x = svgX;
-    pt.y = svgY;
-    
-    if (path.isPointInFill(pt)) {
-      const countryName = path.getAttribute("data-country");
-      
-      // Find matching country in DATA using aliases
-      const dataCountries = window.DATA.map(d => d.country);
-      for (const dc of dataCountries) {
-        const alias = COUNTRY_ALIASES[dc] || dc;
-        if (norm(alias) === norm(countryName)) {
-          return dc;
+  // Check all country paths (need to check with wrapping)
+  const normalizedMapX = ((mapX % MAP_W) + MAP_W) % MAP_W;
+  
+  // Try exact point-in-polygon detection
+  for (const country of countryPaths) {
+    for (const polygon of country.paths) {
+      if (pointInPolygon(normalizedMapX, mapY, polygon)) {
+        // Find matching country in DATA using aliases
+        const dataCountries = window.DATA.map(d => d.country);
+        for (const dc of dataCountries) {
+          const alias = COUNTRY_ALIASES[dc] || dc;
+          if (norm(alias) === norm(country.name)) {
+            return dc;
+          }
         }
+        return country.name;
       }
-      
-      return countryName;
     }
   }
   
   // If no exact hit, check for nearby small countries
-  // This helps with microstates and small islands
-  const SMALL_COUNTRY_THRESHOLD = 50; // SVG units - countries with bbox < this are "small"
-  const PROXIMITY_THRESHOLD = 30; // SVG units - how close the click needs to be
-  
+  const PROXIMITY_THRESHOLD = 30;
   let nearestSmallCountry = null;
   let nearestDistance = Infinity;
   
-  for (const path of paths) {
-    const bbox = path.getBBox();
-    const size = Math.max(bbox.width, bbox.height);
+  for (const country of countryPaths) {
+    // Calculate bounding box
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const polygon of country.paths) {
+      for (const [x, y] of polygon) {
+        if (x < minX) minX = x;
+        if (y < minY) minY = y;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      }
+    }
     
-    // Only check small countries
-    if (size > SMALL_COUNTRY_THRESHOLD) continue;
+    const size = Math.max(maxX - minX, maxY - minY);
+    if (size > 50) continue;
     
-    // Calculate distance from click to center of country bbox
-    const centerX = bbox.x + bbox.width / 2;
-    const centerY = bbox.y + bbox.height / 2;
-    const distance = Math.sqrt(Math.pow(svgX - centerX, 2) + Math.pow(svgY - centerY, 2));
+    const centerX = (minX + maxX) / 2;
+    const centerY = (minY + maxY) / 2;
+    const distance = Math.sqrt(Math.pow(normalizedMapX - centerX, 2) + Math.pow(mapY - centerY, 2));
     
     if (distance < nearestDistance && distance < PROXIMITY_THRESHOLD) {
       nearestDistance = distance;
-      
-      const countryName = path.getAttribute("data-country");
       
       // Find matching country in DATA using aliases
       const dataCountries = window.DATA.map(d => d.country);
       for (const dc of dataCountries) {
         const alias = COUNTRY_ALIASES[dc] || dc;
-        if (norm(alias) === norm(countryName)) {
+        if (norm(alias) === norm(country.name)) {
           nearestSmallCountry = dc;
           break;
         }
       }
       
       if (!nearestSmallCountry) {
-        nearestSmallCountry = countryName;
+        nearestSmallCountry = country.name;
       }
     }
   }
@@ -183,39 +255,10 @@ function checkClickedCountry(svgX, svgY) {
 
 // Highlight a country (selected/correct/wrong)
 function highlightCountry(countryName, type) {
-  const paths = ui.map.querySelectorAll(".country-path");
-  
-  // Clear previous highlights
-  paths.forEach(p => {
-    p.removeAttribute("data-highlighted");
-    p.setAttribute("fill", getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)");
-    p.setAttribute("stroke", getCSSVar('--map-country-stroke') || "rgba(232,236,255,.3)");
-  });
-  
   const mapName = COUNTRY_ALIASES[countryName] || countryName;
-  
-  // Find and highlight the target country
-  for (const path of paths) {
-    const pathCountry = path.getAttribute("data-country");
-    if (norm(pathCountry) === norm(mapName)) {
-      path.setAttribute("data-highlighted", "true");
-      
-      if (type === "selected") {
-        // Blue highlight for first click (selection)
-        path.setAttribute("fill", getCSSVar('--map-selected-fill') || "rgba(165, 180, 252, 0.35)");
-        path.setAttribute("stroke", getCSSVar('--map-selected-stroke') || "rgba(165, 180, 252, 0.95)");
-        path.setAttribute("stroke-width", "1.5");
-      } else if (type === "correct") {
-        path.setAttribute("fill", getCSSVar('--map-correct-fill') || "rgba(110, 231, 183, 0.5)");
-        path.setAttribute("stroke", getCSSVar('--map-correct-stroke') || "rgba(110, 231, 183, 0.95)");
-        path.setAttribute("stroke-width", "1.2");
-      } else if (type === "wrong") {
-        path.setAttribute("fill", getCSSVar('--map-wrong-fill') || "rgba(252, 165, 161, 0.5)");
-        path.setAttribute("stroke", getCSSVar('--map-wrong-stroke') || "rgba(252, 165, 161, 0.95)");
-        path.setAttribute("stroke-width", "1.2");
-      }
-    }
-  }
+  highlightedCountry = mapName;
+  highlightType = type;
+  drawWorldMap();
 }
 
 // Get bounding box for a country
@@ -269,30 +312,50 @@ function zoomToCountries(country1, country2) {
   combinedBBox.minLat -= dLat * padRatio;
   combinedBBox.maxLat += dLat * padRatio;
   
-  // Convert to SVG coordinates
+  // Convert to map coordinates
   const [x1, y1] = proj([combinedBBox.minLon, combinedBBox.maxLat]);
   const [x2, y2] = proj([combinedBBox.maxLon, combinedBBox.minLat]);
   
-  // Set viewBox
-  ui.map.setAttribute("viewBox", `${x1} ${y1} ${x2 - x1} ${y2 - y1}`);
+  // Calculate zoom and center
+  const width = x2 - x1;
+  const height = y2 - y1;
+  
+  const zoomX = canvasDisplayWidth / width;
+  const zoomY = canvasDisplayHeight / height;
+  zoom = Math.min(zoomX, zoomY, 100); // Cap zoom at 100x
+  
+  scrollX = x1 + width / 2 - canvasDisplayWidth / 2 / zoom;
+  scrollY = y1 + height / 2 - canvasDisplayHeight / 2 / zoom;
+  
+  drawWorldMap();
 }
 
 // Clear highlights but keep current zoom/pan
 function resetMapView() {
-  // Clear all highlights (but keep current zoom level)
-  const paths = ui.map.querySelectorAll(".country-path");
-  paths.forEach(p => {
-    p.removeAttribute("data-highlighted");
-    p.setAttribute("fill", getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)");
-    p.setAttribute("stroke", getCSSVar('--map-country-stroke') || "rgba(232,236,255,.3)");
-    p.setAttribute("stroke-width", "0.5");
-  });
+  // Only reset highlights and velocity, preserve zoom AND pan position
+  highlightedCountry = null;
+  highlightType = null;
+  hoverCountry = null;
+  // Don't reset pan position - preserve location between rounds
+  // scrollX = 0;
+  // scrollY = 0;
+  // Don't reset zoom - preserve zoom level between rounds
+  // zoom = minZoom;
+  velocityX = 0;
+  velocityY = 0;
+  drawWorldMap();
 }
 
 // Load all data
 async function loadData() {
   const worldData = await loadGeoJSON("data/ne_10m_admin_0_countries.geojson.gz");
   WORLD = worldData.features;
+  
+  // Pre-process country paths for canvas rendering
+  countryPaths = WORLD.map(f => ({
+    name: f.properties.ADMIN || "",
+    paths: coordsFromFeature(f)
+  })).filter(c => c.paths.length > 0);
 }
 
 // Initialize data and game
@@ -320,264 +383,279 @@ game = createFindCountryGame({
 // Attach Wikipedia popup to country name
 attachWikipediaPopup(ui.countryNameEl, () => game.getCurrent());
 
-// Add zoom and pan functionality
-function attachZoomPan() {
-  const svgEl = ui.map;
-  const baseViewBox = { x: 0, y: 0, w: MAP_W, h: MAP_H };
-
-  // Helper to convert client coordinates to SVG coordinates
-  const clientToSvg = (clientX, clientY) => {
-    const pt = svgEl.createSVGPoint();
-    pt.x = clientX;
-    pt.y = clientY;
-    const ctm = svgEl.getScreenCTM();
-    if (!ctm) return { x: 0, y: 0 };
-    const p = pt.matrixTransform(ctm.inverse());
-    return { x: p.x, y: p.y };
-  };
-
-  const setViewBox = (vb) => {
-    svgEl.setAttribute("viewBox", `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
-  };
-
-  // Prevent iOS Safari gesture zoom/rotate
-  ["gesturestart", "gesturechange", "gestureend"].forEach((t) => {
-    svgEl.addEventListener(t, (e) => e.preventDefault(), { passive: false });
-  });
-
-  // Zoom limits (lower ZOOM_MIN_FACTOR = more zoom in possible)
-  const ZOOM_MIN_FACTOR = 0.01;  // Allow zooming in 100x for tiny countries
-  const ZOOM_MAX_FACTOR = 1.0;   // Don't zoom out beyond full world view
-
-  const getVB = () => {
-    const vb = svgEl.viewBox.baseVal;
-    return { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
-  };
-
-  const clampToLimits = (candidate) => {
-    const aspect = candidate.h / candidate.w;
-    const minW = baseViewBox.w * ZOOM_MIN_FACTOR;
-    const maxW = baseViewBox.w * ZOOM_MAX_FACTOR;
-
-    let w = candidate.w;
-    if (w < minW) w = minW;
-    if (w > maxW) w = maxW;
-
-    const h = w * aspect;
-    
-    // When at full world view (maxW), lock the center - no panning allowed
-    if (w >= maxW) {
-      // Lock to center of world
-      const cx = baseViewBox.x + baseViewBox.w / 2;
-      const cy = baseViewBox.y + baseViewBox.h / 2;
-      return { x: cx - w / 2, y: cy - h / 2, w, h };
-    }
-    
-    // When zoomed in, allow panning but keep world partially visible
-    let cx = candidate.x + candidate.w / 2;
-    let cy = candidate.y + candidate.h / 2;
-    
-    const minCX = baseViewBox.x + w / 2;
-    const maxCX = baseViewBox.x + baseViewBox.w - w / 2;
-    const minCY = baseViewBox.y + h / 2;
-    const maxCY = baseViewBox.y + baseViewBox.h - h / 2;
-    
-    if (cx < minCX) cx = minCX;
-    if (cx > maxCX) cx = maxCX;
-    if (cy < minCY) cy = minCY;
-    if (cy > maxCY) cy = maxCY;
-
-    return { x: cx - w / 2, y: cy - h / 2, w, h };
-  };
-
-  const zoomAt = (factor, clientX, clientY) => {
-    const vb = getVB();
-    const p = clientToSvg(clientX, clientY);
-
-    const rx = (p.x - vb.x) / vb.w;
-    const ry = (p.y - vb.y) / vb.h;
-
-    const nw = vb.w * factor;
-    const nh = vb.h * factor;
-
-    const cand = { x: p.x - rx * nw, y: p.y - ry * nh, w: nw, h: nh };
-    setViewBox(clampToLimits(cand));
-  };
-
-  // Wheel zoom (desktop)
-  svgEl.addEventListener(
-    "wheel",
-    (e) => {
-      e.preventDefault();
-      const factor = e.deltaY > 0 ? 1.15 : 0.87;
-      zoomAt(factor, e.clientX, e.clientY);
-    },
-    { passive: false }
-  );
-
-  // Pointer pan + pinch zoom (mobile + desktop)
-  const pointers = new Map();
-  let startVB = null;
-  let panStart = null;
-  let startDist = 0;
-  let rafId = null;
-  let pendingViewBox = null;
+// Momentum scrolling and zoom functionality
+function attachCanvasInteraction() {
+  const canvasEl = ui.map;
   
-  // Track drag vs click
-  let isDragging = false;
-  let pointerDownPos = null;
-  const DRAG_THRESHOLD = 5; // pixels - movement threshold to distinguish drag from click
-
-  const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
-  const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
-
-  // Throttle viewBox updates using requestAnimationFrame
-  const scheduleViewBoxUpdate = (vb) => {
-    pendingViewBox = vb;
-    if (!rafId) {
-      rafId = requestAnimationFrame(() => {
-        if (pendingViewBox) {
-          setViewBox(pendingViewBox);
-          pendingViewBox = null;
-        }
-        rafId = null;
-      });
-    }
-  };
-
-  svgEl.style.touchAction = "none";
-
-  svgEl.addEventListener(
-    "pointerdown",
-    (e) => {
-      svgEl.setPointerCapture(e.pointerId);
-      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-
-      startVB = getVB();
+  // Momentum animation
+  const FRICTION = 0.92;
+  const MIN_VELOCITY = 0.1;
+  
+  function animate() {
+    if (Math.abs(velocityX) > MIN_VELOCITY || Math.abs(velocityY) > MIN_VELOCITY) {
+      scrollX += velocityX;
+      scrollY += velocityY;
       
-      // Track initial position for drag detection
-      if (pointers.size === 1) {
-        pointerDownPos = { x: e.clientX, y: e.clientY };
+      // Clamp vertical scroll
+      const minScrollY = 0;
+      const maxScrollY = Math.max(0, MAP_H - canvasDisplayHeight / zoom);
+      if (scrollY < minScrollY) {
+        scrollY = minScrollY;
+        velocityY = 0;
+      }
+      if (scrollY > maxScrollY) {
+        scrollY = maxScrollY;
+        velocityY = 0;
+      }
+      
+      velocityX *= FRICTION;
+      velocityY *= FRICTION;
+      
+      drawWorldMap();
+      animationFrameId = requestAnimationFrame(animate);
+    } else {
+      velocityX = 0;
+      velocityY = 0;
+      animationFrameId = null;
+    }
+  }
+  
+  function startAnimation() {
+    if (!animationFrameId) {
+      animationFrameId = requestAnimationFrame(animate);
+    }
+  }
+  
+  // Mouse wheel zoom
+  canvasEl.addEventListener('wheel', (e) => {
+    e.preventDefault();
+    
+    const rect = canvasEl.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    
+    const factor = e.deltaY > 0 ? 0.9 : 1.1;
+    const newZoom = Math.max(minZoom, Math.min(100, zoom * factor));
+    
+    // Zoom toward mouse position
+    const mapXBefore = mouseX / zoom + scrollX;
+    const mapYBefore = mouseY / zoom + scrollY;
+    
+    zoom = newZoom;
+    
+    scrollX = mapXBefore - mouseX / zoom;
+    scrollY = mapYBefore - mouseY / zoom;
+    
+    // Clamp vertical scroll
+    scrollY = Math.max(0, Math.min(Math.max(0, MAP_H - canvasDisplayHeight / zoom), scrollY));
+    
+    drawWorldMap();
+  }, { passive: false });
+  
+  // Touch and mouse interaction
+  let isPointerDown = false;
+  let startX = 0, startY = 0;
+  let lastX = 0, lastY = 0;
+  let lastTime = 0;
+  let isDragging = false;
+  
+  // Pinch zoom
+  let touches = [];
+  let initialPinchDistance = 0;
+  let initialZoom = 1;
+  
+  function getDistance(t1, t2) {
+    const dx = t1.clientX - t2.clientX;
+    const dy = t1.clientY - t2.clientY;
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+  
+  canvasEl.addEventListener('pointerdown', (e) => {
+    e.preventDefault();
+    
+    if (e.pointerType === 'touch') {
+      touches.push(e);
+      
+      if (touches.length === 2) {
+        initialPinchDistance = getDistance(touches[0], touches[1]);
+        initialZoom = zoom;
+        isDragging = false;
+      } else if (touches.length === 1) {
+        isPointerDown = true;
+        const rect = canvasEl.getBoundingClientRect();
+        startX = lastX = e.clientX - rect.left;
+        startY = lastY = e.clientY - rect.top;
+        lastTime = Date.now();
+        velocityX = 0;
+        velocityY = 0;
         isDragging = false;
       }
-
-      if (pointers.size === 1) {
-        panStart = { x: e.clientX, y: e.clientY };
-        startDist = 0;
-      } else if (pointers.size === 2) {
-        const pts = [...pointers.values()];
-        startDist = dist(pts[0], pts[1]);
-        panStart = null;
-        pointerDownPos = null; // Multi-touch, no click detection
-      }
-    },
-    { passive: false }
-  );
-
-  svgEl.addEventListener(
-    "pointermove",
-    (e) => {
-      if (!pointers.has(e.pointerId) || !startVB) return;
-      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
-      
-      // Check if pointer has moved enough to be considered a drag
-      if (pointerDownPos && !isDragging) {
-        const dx = e.clientX - pointerDownPos.x;
-        const dy = e.clientY - pointerDownPos.y;
-        const distance = Math.sqrt(dx * dx + dy * dy);
-        if (distance > DRAG_THRESHOLD) {
-          isDragging = true;
-        }
-      }
-
-      // One pointer => pan
-      if (pointers.size === 1 && panStart) {
-        const p = [...pointers.values()][0];
-
-        const a = clientToSvg(panStart.x, panStart.y);
-        const b = clientToSvg(p.x, p.y);
-
-        const dx = a.x - b.x;
-        const dy = a.y - b.y;
-
-        scheduleViewBoxUpdate({ x: startVB.x + dx, y: startVB.y + dy, w: startVB.w, h: startVB.h });
-        return;
-      }
-
-      // Two pointers => pinch zoom
-      if (pointers.size === 2) {
-        const pts = [...pointers.values()];
-        const dNow = dist(pts[0], pts[1]);
-        if (!startDist) return;
-
-        const scale = dNow / startDist;
-        const factor = 1 / scale;
-
-        const m = mid(pts[0], pts[1]);
-        const pMid = clientToSvg(m.x, m.y);
-        const rx = (pMid.x - startVB.x) / startVB.w;
-        const ry = (pMid.y - startVB.y) / startVB.h;
-
-        const nw = startVB.w * factor;
-        const nh = startVB.h * factor;
-
-        const cand = { x: pMid.x - rx * nw, y: pMid.y - ry * nh, w: nw, h: nh };
-        scheduleViewBoxUpdate(clampToLimits(cand));
-      }
-    },
-    { passive: false }
-  );
-
-  const endPointer = (e) => {
-    // Handle country selection on pointer release (if not dragging)
-    if (pointers.size === 1 && pointerDownPos && !isDragging) {
-      const pt = ui.map.createSVGPoint();
-      pt.x = e.clientX;
-      pt.y = e.clientY;
-      
-      const ctm = ui.map.getScreenCTM();
-      if (ctm) {
-        const svgPt = pt.matrixTransform(ctm.inverse());
-        const clickedCountry = checkClickedCountry(svgPt.x, svgPt.y);
-        
-        if (clickedCountry) {
-          game.handleMapClick(clickedCountry);
-        }
+    } else {
+      isPointerDown = true;
+      const rect = canvasEl.getBoundingClientRect();
+      startX = lastX = e.clientX - rect.left;
+      startY = lastY = e.clientY - rect.top;
+      lastTime = Date.now();
+      velocityX = 0;
+      velocityY = 0;
+      isDragging = false;
+    }
+  });
+  
+  canvasEl.addEventListener('pointermove', (e) => {
+    e.preventDefault();
+    
+    const rect = canvasEl.getBoundingClientRect();
+    const currentX = e.clientX - rect.left;
+    const currentY = e.clientY - rect.top;
+    
+    // Update hover
+    if (game && game.getCurrent() !== "" && !isPointerDown) {
+      const clickedCountry = checkClickedCountry(currentX, currentY);
+      if (clickedCountry !== hoverCountry) {
+        hoverCountry = clickedCountry;
+        drawWorldMap();
       }
     }
     
-    pointers.delete(e.pointerId);
-
-    if (pointers.size === 1) {
-      const p = [...pointers.values()][0];
-      startVB = getVB();
-      panStart = { x: p.x, y: p.y };
-      startDist = 0;
-      pointerDownPos = { x: p.x, y: p.y };
-      isDragging = false;
-    } else if (pointers.size === 0) {
-      startVB = null;
-      panStart = null;
-      startDist = 0;
-      pointerDownPos = null;
-      isDragging = false;
+    if (e.pointerType === 'touch') {
+      const touchIndex = touches.findIndex(t => t.pointerId === e.pointerId);
+      if (touchIndex >= 0) {
+        touches[touchIndex] = e;
+      }
+      
+      if (touches.length === 2) {
+        const newDistance = getDistance(touches[0], touches[1]);
+        const scale = newDistance / initialPinchDistance;
+        zoom = Math.max(minZoom, Math.min(100, initialZoom * scale));
+        drawWorldMap();
+        return;
+      }
     }
-  };
-
-  svgEl.addEventListener("pointerup", endPointer);
-  svgEl.addEventListener("pointercancel", () => {
-    pointers.clear();
-    startVB = null;
-    panStart = null;
-    startDist = 0;
-    pointerDownPos = null;
-    isDragging = false;
+    
+    if (isPointerDown) {
+      const dx = currentX - lastX;
+      const dy = currentY - lastY;
+      const dt = Date.now() - lastTime;
+      
+      if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+        isDragging = true;
+      }
+      
+      scrollX -= dx / zoom;
+      scrollY -= dy / zoom;
+      
+      // Clamp vertical scroll
+      scrollY = Math.max(0, Math.min(Math.max(0, MAP_H - canvasDisplayHeight / zoom), scrollY));
+      
+      if (dt > 0) {
+        velocityX = -dx / zoom * 0.5;
+        velocityY = -dy / zoom * 0.5;
+      }
+      
+      lastX = currentX;
+      lastY = currentY;
+      lastTime = Date.now();
+      
+      drawWorldMap();
+    }
   });
+  
+  canvasEl.addEventListener('pointerup', (e) => {
+    if (e.pointerType === 'touch') {
+      touches = touches.filter(t => t.pointerId !== e.pointerId);
+      
+      if (touches.length === 0) {
+        isPointerDown = false;
+        
+        if (!isDragging) {
+          // Handle click
+          const rect = canvasEl.getBoundingClientRect();
+          const clickX = e.clientX - rect.left;
+          const clickY = e.clientY - rect.top;
+          const clickedCountry = checkClickedCountry(clickX, clickY);
+          
+          if (clickedCountry && game) {
+            game.handleMapClick(clickedCountry);
+          }
+        } else {
+          startAnimation();
+        }
+      }
+    } else {
+      if (!isDragging) {
+        // Handle click
+        const rect = canvasEl.getBoundingClientRect();
+        const clickX = e.clientX - rect.left;
+        const clickY = e.clientY - rect.top;
+        const clickedCountry = checkClickedCountry(clickX, clickY);
+        
+        if (clickedCountry && game) {
+          game.handleMapClick(clickedCountry);
+        }
+      } else {
+        startAnimation();
+      }
+      
+      isPointerDown = false;
+    }
+  });
+  
+  canvasEl.addEventListener('pointercancel', () => {
+    isPointerDown = false;
+    touches = [];
+  });
+  
+  canvasEl.addEventListener('pointerleave', () => {
+    hoverCountry = null;
+    drawWorldMap();
+  });
+  
+  canvasEl.style.touchAction = 'none';
+  canvasEl.style.cursor = 'pointer';
+}
+
+// Resize canvas to fit container while maintaining aspect ratio
+function resizeCanvas() {
+  const container = ui.map.parentElement;
+  const rect = container.getBoundingClientRect();
+  
+  // Use full container dimensions
+  const containerWidth = rect.width;
+  const containerHeight = rect.height;
+  
+  // Store display dimensions
+  canvasDisplayWidth = containerWidth;
+  canvasDisplayHeight = containerHeight;
+  
+  // Calculate minimum zoom to fill container (no letterboxing)
+  // minZoom ensures map always fills the available space
+  minZoom = Math.max(containerHeight / MAP_H, containerWidth / MAP_W);
+  
+  // Set initial zoom to minimum if not already set higher
+  if (zoom < minZoom) {
+    zoom = minZoom;
+  }
+  
+  // Set canvas display size to fill container
+  canvas.style.width = `${containerWidth}px`;
+  canvas.style.height = `${containerHeight}px`;
+  
+  // Set canvas internal resolution (accounting for DPI)
+  canvas.width = containerWidth * dpr;
+  canvas.height = containerHeight * dpr;
+  
+  // Scale context for DPI
+  ctx.setTransform(1, 0, 0, 1, 0, 0); // Reset transform
+  ctx.scale(dpr, dpr);
+  
+  // Redraw the map
+  drawWorldMap();
 }
 
 ui.playAgainBtn?.addEventListener("click", () => {
   ui.finalOverlay.style.display = "none";
-  drawWorldMap();
+  resetMapView();
   game.reset();
   game.nextQ();
 });
@@ -586,8 +664,12 @@ ui.closeFinalBtn?.addEventListener("click", () => {
   ui.finalOverlay.style.display = "none";
 });
 
-// Attach zoom/pan interactions
-attachZoomPan();
+// Attach canvas interactions
+attachCanvasInteraction();
+
+// Setup resize handler
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
 // Start the game
 game.reset();

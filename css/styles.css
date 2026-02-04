@@ -1050,12 +1050,14 @@ select option {
   min-height: 0; /* Important for flexbox overflow */
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .find-country-page #map {
   flex: 1;
-  min-height: 320px;
-  height: auto !important; /* Override inline height */
+  max-width: 100%;
+  max-height: 100%;
 }
 
 /* Tablet/laptop breakpoint */
@@ -1070,14 +1072,9 @@ select option {
   .find-country-page {
     max-width: 980px;
   }
-  .find-country-page #map {
-    min-height: 300px;
-  }
 }
 
 /* Mobile breakpoint */
 @media (max-width: 640px) {
-  .find-country-page #map {
-    min-height: 280px;
-  }
+  /* No min-height override needed - aspect ratio is preserved by JS */
 }
