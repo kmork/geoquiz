@@ -162,12 +162,31 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
   });
   
   // Touch handling for better mobile experience
+  let touchStartY = 0;
+  let touchStartTime = 0;
+  
   dropdown.addEventListener('touchstart', (e) => {
     if (e.target.matches('.autocomplete-item')) {
-      e.preventDefault(); // Prevent blur
-      const value = e.target.getAttribute('data-value');
-      selectSuggestion(value);
-      inputElement.focus();
+      touchStartY = e.touches[0].clientY;
+      touchStartTime = Date.now();
+    }
+  }, { passive: true });
+  
+  dropdown.addEventListener('touchend', (e) => {
+    if (e.target.matches('.autocomplete-item')) {
+      const touchEndY = e.changedTouches[0].clientY;
+      const touchEndTime = Date.now();
+      const deltaY = Math.abs(touchEndY - touchStartY);
+      const deltaTime = touchEndTime - touchStartTime;
+      
+      // Only select if it's a tap (not a scroll)
+      // Tap: small movement (<10px) and quick (<300ms)
+      if (deltaY < 10 && deltaTime < 300) {
+        e.preventDefault();
+        const value = e.target.getAttribute('data-value');
+        selectSuggestion(value);
+        inputElement.focus();
+      }
     }
   });
   
