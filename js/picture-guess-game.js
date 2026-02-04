@@ -92,7 +92,12 @@ export function createPictureGuessGame({ ui, confetti }) {
     ui.countryInput.value = '';
     ui.countryInput.disabled = false;
     ui.submitGuess.disabled = false;
-    ui.countryInput.focus();
+    
+    // Only auto-focus on desktop (not mobile to avoid unwanted keyboard)
+    const isMobile = window.innerWidth <= 640 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+    if (!isMobile) {
+      ui.countryInput.focus();
+    }
 
     updateUI();
   }

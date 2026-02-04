@@ -128,7 +128,10 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries }) {
     drawCountries(current.country, []);
 
     updateUI();
-    ui.answerInput.focus();
+    // Only auto-focus on desktop (not mobile to avoid unwanted keyboard)
+    if (!isMobileDevice()) {
+      ui.answerInput.focus();
+    }
   }
 
   function checkAnswer() {
@@ -155,7 +158,9 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries }) {
         // First attempt - show neighbors
         showStatus(`❌ Try again with neighbor hints!`, false);
         ui.answerInput.value = "";
-        ui.answerInput.focus();
+        if (!isMobileDevice()) {
+          ui.answerInput.focus();
+        }
         
         // Draw country WITH neighbors
         const countryNeighbors = neighbors[current.country] || [];
@@ -217,7 +222,9 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries }) {
         // First wrong attempt - show neighbors
         showStatus(`❌ Not quite. Try again with neighbor hints!`, false);
         ui.answerInput.value = "";
-        ui.answerInput.focus();
+        if (!isMobileDevice()) {
+          ui.answerInput.focus();
+        }
         
         // Draw country WITH neighbors
         const countryNeighbors = neighbors[current.country] || [];

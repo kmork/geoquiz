@@ -354,7 +354,10 @@ export function createGame({ ui, mapApi, confetti }) {
     updateProgress(ui.progressEl, DATA.length - deck.length, DATA.length);
     mapApi?.draw?.(current.country, false);
 
-    ui.answer.focus();
+    // Only auto-focus on desktop (not mobile to avoid unwanted keyboard)
+    if (!isMobileDevice()) {
+      ui.answer.focus();
+    }
   }
 
   function endRound({ ok, pointsAwarded, autoMs }) {

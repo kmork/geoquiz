@@ -241,7 +241,10 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
       { country: currentRound.end, color: "end" }
     ]);
 
-    ui.answerInput.focus();
+    // Only auto-focus on desktop (not mobile to avoid unwanted keyboard)
+    if (!isMobileDevice()) {
+      ui.answerInput.focus();
+    }
   }
 
   function processGuess(guess) {
@@ -343,12 +346,9 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
         flashCorrect(ui.card || document.querySelector('.card'));
         hapticFeedback('correct');
         
-        // Mobile UX: Dismiss keyboard to show map, then refocus for next input
+        // Mobile UX: Dismiss keyboard to show map (do NOT refocus)
         if (isMobileDevice()) {
           ui.answerInput.blur();
-          setTimeout(() => {
-            ui.answerInput.focus();
-          }, 800);
         }
       }
       
@@ -558,7 +558,10 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
     ]);
     
     showStatus(`↩️ Undone! Last country removed`, "hint");
-    ui.answerInput.focus();
+    // Only auto-focus on desktop (not mobile to avoid unwanted keyboard)
+    if (!isMobileDevice()) {
+      ui.answerInput.focus();
+    }
   }
 
   return {

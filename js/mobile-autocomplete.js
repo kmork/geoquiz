@@ -97,10 +97,15 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     inputElement.value = value;
     dropdown.style.display = 'none';
     
-    // Callback if provided
+    // Callback if provided (call BEFORE blur to let it process)
     if (onSelect) {
       onSelect(value);
     }
+    
+    // Blur input to dismiss keyboard on mobile (delayed to ensure it happens last)
+    setTimeout(() => {
+      inputElement.blur();
+    }, 100);
   }
   
   // Event listeners
@@ -157,7 +162,7 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     if (e.target.matches('.autocomplete-item')) {
       const value = e.target.getAttribute('data-value');
       selectSuggestion(value);
-      inputElement.focus();
+      // Don't refocus - selectSuggestion already blurs to dismiss keyboard
     }
   });
   
