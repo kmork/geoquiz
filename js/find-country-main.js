@@ -451,7 +451,7 @@ function attachCanvasInteraction() {
   const canvasEl = ui.map;
   
   // Momentum animation
-  const FRICTION = 0.92;
+  const FRICTION = 0.95;
   const MIN_VELOCITY = 0.1;
   
   function animate() {
@@ -526,6 +526,9 @@ function attachCanvasInteraction() {
   let touches = [];
   let initialPinchDistance = 0;
   let initialZoom = 1;
+  let wasRecentlyPinching = false;
+  let pinchCooldownTimer = null;
+  let previousTouchCount = 0;
   
   function getDistance(t1, t2) {
     const dx = t1.clientX - t2.clientX;
@@ -588,6 +591,10 @@ function attachCanvasInteraction() {
       }
       
       if (touches.length === 2) {
+        // Pinch zoom mode - disable panning
+        isDragging = false;
+        isPointerDown = false;
+        
         // Calculate midpoint of the two touches
         const midX = (touches[0].clientX + touches[1].clientX) / 2;
         const midY = (touches[0].clientY + touches[1].clientY) / 2;
@@ -595,9 +602,9 @@ function attachCanvasInteraction() {
         const canvasMidX = midX - rect.left;
         const canvasMidY = midY - rect.top;
         
-        // Map coordinates before zoom
-        const mapXBefore = canvasMidX / initialZoom + scrollX;
-        const mapYBefore = canvasMidY / initialZoom + scrollY;
+        // Map coordinates before zoom (use CURRENT zoom, not initialZoom)
+        const mapXBefore = canvasMidX / zoom + scrollX;
+        const mapYBefore = canvasMidY / zoom + scrollY;
         
         const newDistance = getDistance(touches[0], touches[1]);
         const scale = newDistance / initialPinchDistance;
@@ -613,7 +620,17 @@ function attachCanvasInteraction() {
         zoom = newZoom;
         drawWorldMap();
         return;
+      } else if (previousTouchCount === 2 && touches.length === 1) {
+        // Just transitioned from 2 fingers to 1 - set cooldown to prevent selection
+        wasRecentlyPinching = true;
+        if (pinchCooldownTimer) clearTimeout(pinchCooldownTimer);
+        pinchCooldownTimer = setTimeout(() => {
+          wasRecentlyPinching = false;
+        }, 300);
       }
+      
+      // Update previous count for next iteration
+      previousTouchCount = touches.length;
     }
     
     if (isPointerDown) {
@@ -632,8 +649,8 @@ function attachCanvasInteraction() {
       scrollY = Math.max(0, Math.min(Math.max(0, MAP_H - canvasDisplayHeight / zoom), scrollY));
       
       if (dt > 0) {
-        velocityX = -dx / zoom * 0.5;
-        velocityY = -dy / zoom * 0.5;
+        velocityX = -dx / zoom * 1.0;
+        velocityY = -dy / zoom * 1.0;
       }
       
       lastX = currentX;
@@ -648,11 +665,23 @@ function attachCanvasInteraction() {
     if (e.pointerType === 'touch') {
       touches = touches.filter(t => t.pointerId !== e.pointerId);
       
+      // Check if we just finished a pinch zoom (2 fingers -> 0 fingers directly)
+      if (previousTouchCount === 2 && touches.length === 0) {
+        wasRecentlyPinching = true;
+        if (pinchCooldownTimer) clearTimeout(pinchCooldownTimer);
+        pinchCooldownTimer = setTimeout(() => {
+          wasRecentlyPinching = false;
+        }, 300);
+      }
+      
+      // Update previous count when touch ends
+      previousTouchCount = touches.length;
+      
       if (touches.length === 0) {
         isPointerDown = false;
         
-        if (!isDragging) {
-          // Handle click
+        if (!isDragging && !wasRecentlyPinching) {
+          // Handle click - only if not recently pinching
           const rect = canvasEl.getBoundingClientRect();
           const clickX = e.clientX - rect.left;
           const clickY = e.clientY - rect.top;
