@@ -233,7 +233,7 @@
   {
     "question": "Which continent has the fewest countries?",
     "options": ["Europe", "Australia", "South America", "Antarctica"],
-    "answer": 4,
+    "answer": 3,
     "explanation": "Antarctica has 0 countries."
   },
   {
@@ -379,7 +379,7 @@
   {
     "question": "Which continent has the most deserts?",
     "options": ["Africa", "Asia", "Australia", "Antarctica"],
-    "answer": 3,
+    "answer": 2,
     "explanation": "Australia has the most number of deserts than any other continent."
   },
   {
@@ -439,7 +439,7 @@
   {
     "question": "Which continent has the longest continuous coastline?",
     "options": ["Asia", "Africa", "North America", "Antarctica"],
-    "answer": 1,
+    "answer": 0,
     "explanation": "According to National Geographic, it is Asia."
   },
   {
@@ -605,5 +605,155 @@
     "options": ["Asia", "Africa", "South America", "Europe"],
     "answer": 0,
     "explanation": "Asia has the highest average elevation of ice-free land due to extensive high plateaus and mountain ranges such as the Himalayas and the Tibetan Plateau."
+  },
+  {
+    "question": "Which country has three official capital cities?",
+    "options": ["Switzerland", "South Africa", "Bolivia", "Netherlands"],
+    "answer": 1,
+    "explanation": "South Africa has three capitals: Pretoria (executive), Bloemfontein (judicial), and Cape Town (legislative). Talk about commitment issues!"
+  },
+  {
+    "question": "Which country is named after a precious metal?",
+    "options": ["Argentina", "Ivory Coast", "Sierra Leone", "Montenegro"],
+    "answer": 0,
+    "explanation": "Argentina comes from 'argentum,' the Latin word for silver. Spanish explorers hoped to find vast silver deposits there."
+  },
+  {
+    "question": "Which country has more sheep than people by the greatest ratio?",
+    "options": ["Australia", "New Zealand", "Iceland", "Mongolia"],
+    "answer": 1,
+    "explanation": "New Zealand has about 5 million people and 26 million sheep—over 5 sheep per person. Democracy has never looked so fluffy."
+  },
+  {
+    "question": "Which country straddles the International Date Line?",
+    "options": ["Russia", "United States", "Kiribati", "New Zealand"],
+    "answer": 2,
+    "explanation": "Kiribati spans both sides of the Date Line, meaning it's technically always two different days somewhere in the country."
+  },
+  {
+    "question": "Which European country has a national park that moves?",
+    "options": ["Poland", "Netherlands", "Germany", "Denmark"],
+    "answer": 1,
+    "explanation": "The Netherlands' Oostvaardersplassen changes shape and location as sand dunes shift. Nature's way of saying 'I don't like being confined.'"
+  },
+  {
+    "question": "Which country has the world's oldest continuous border?",
+    "options": ["France–Spain", "Portugal–Spain", "England–Scotland", "Poland–Germany"],
+    "answer": 1,
+    "explanation": "Portugal and Spain's border has remained largely unchanged since 1297, making it nearly 730 years old. That's commitment!"
+  },
+  {
+    "question": "Which country experiences the midnight sun for the longest period?",
+    "options": ["Norway", "Iceland", "Sweden", "Finland"],
+    "answer": 0,
+    "explanation": "In Svalbard, Norway, the sun doesn't set for about 4 months (mid-April to mid-August). Great for insomniacs, terrible for vampires."
+  },
+  {
+    "question": "Which country has a volcano that has been erupting continuously since 1983?",
+    "options": ["Iceland", "United States", "Japan", "Indonesia"],
+    "answer": 1,
+    "explanation": "Kīlauea in Hawaii has been erupting almost continuously from 1983 to 2018 (with brief pauses). That's one dedicated volcano."
+  },
+  {
+    "question": "Which country is the only one to fall entirely within the tropics and have no territory outside them?",
+    "options": ["Singapore", "Malaysia", "Brunei", "Maldives"],
+    "answer": 0,
+    "explanation": "Singapore lies entirely between the Tropic of Cancer and Tropic of Capricorn, making it perpetually tropical. No winter coat needed, ever."
+  },
+  {
+    "question": "Which country has the most official languages?",
+    "options": ["India", "South Africa", "Bolivia", "Zimbabwe"],
+    "answer": 3,
+    "explanation": "Zimbabwe recognizes 16 official languages. Good luck designing government forms there!"
+  },
+  {
+    "question": "Which country experiences the most thunderstorms annually?",
+    "options": ["Brazil", "Democratic Republic of the Congo", "United States", "Indonesia"],
+    "answer": 1,
+    "explanation": "The DRC, particularly near Lake Kivu, averages about 158 thunderstorm days per year. Mother Nature's drum solo."
+  },
+  {
+    "question": "Which country has a town that is completely underground?",
+    "options": ["United States", "Australia", "Canada", "Russia"],
+    "answer": 1,
+    "explanation": "Coober Pedy, Australia is built underground to escape extreme heat. Residents live in 'dugouts'—homes carved into rock. Mole people: 1, Surface dwellers: 0."
+  },
+  {
+    "question": "Which country has the shortest coastline relative to its size?",
+    "options": ["Monaco", "Togo", "Jordan", "Democratic Republic of the Congo"],
+    "answer": 3,
+    "explanation": "The DRC is massive (2.3 million km²) but has only 37 km of coastline. That's like owning a mansion with a one-foot driveway."
+  },
+  {
+    "question": "Which country has the only non-rectangular national flag?",
+    "options": ["Switzerland", "Vatican City", "Nepal", "Qatar"],
+    "answer": 2,
+    "explanation": "Nepal's flag is two stacked triangular pennants. Because rectangles are for conformists."
+  },
+  {
+    "question": "Which country has the most languages spoken within its borders?",
+    "options": ["India", "Indonesia", "Papua New Guinea", "Nigeria"],
+    "answer": 2,
+    "explanation": "Papua New Guinea has over 840 languages—about 12% of the world's total. Good luck finding a common tongue at parties."
+  },
+  {
+    "question": "Which country has a lake that is naturally pink?",
+    "options": ["Australia", "Senegal", "Bolivia", "All of these"],
+    "answer": 3,
+    "explanation": "Australia's Lake Hillier, Senegal's Lake Retba, and Bolivia's Laguna Colorada are all naturally pink due to algae and bacteria. Nature's Instagram filter."
+  },
+  {
+    "question": "Which country's national animal is a unicorn?",
+    "options": ["Ireland", "Scotland", "Wales", "Iceland"],
+    "answer": 1,
+    "explanation": "Scotland's national animal is the unicorn, chosen in the 12th century. Nothing says 'fierce independence' like a mythical horse."
+  },
+  {
+    "question": "Which country has the most pyramids in the world?",
+    "options": ["Egypt", "Mexico", "Sudan", "Peru"],
+    "answer": 2,
+    "explanation": "Sudan has over 255 pyramids, nearly double Egypt's 138. They're smaller and less famous, but quantity counts!"
+  },
+  {
+    "question": "Which country has a town with the longest name?",
+    "options": ["Wales", "New Zealand", "Thailand", "Madagascar"],
+    "answer": 0,
+    "explanation": "Llanfairpwllgwyngyllgogerychwyrndrobwllllantysiliogogogoch in Wales has 58 letters. It means 'St Mary's Church in the hollow of white hazel...' and so on. Show-offs."
+  },
+  {
+    "question": "Which country has the world's largest concentration of hot springs?",
+    "options": ["Iceland", "Japan", "New Zealand", "United States"],
+    "answer": 1,
+    "explanation": "Japan has over 27,000 hot springs (onsen). That's roughly one hot tub for every 4,600 people. Very relaxing democracy."
+  },
+  {
+    "question": "Which country's land area is expanding due to volcanic activity?",
+    "options": ["Iceland", "Japan", "Indonesia", "Philippines"],
+    "answer": 0,
+    "explanation": "Iceland grows by about 5 cm per year as the Eurasian and North American tectonic plates drift apart. Free real estate, literally."
+  },
+  {
+    "question": "Which country has the most castles per square mile?",
+    "options": ["Germany", "France", "Wales", "Scotland"],
+    "answer": 2,
+    "explanation": "Wales has over 600 castles—more per square mile than anywhere else. Medieval estate agents had a field day."
+  },
+  {
+    "question": "Which country has a penguin as its official mascot?",
+    "options": ["Antarctica", "Argentina", "Chile", "Norway"],
+    "answer": 3,
+    "explanation": "Norway knighted a penguin named Nils Olav, making him a brigadier in the Norwegian King's Guard. He lives in Edinburgh Zoo. Best. Job. Ever."
+  },
+  {
+    "question": "Which country has no mosquitoes?",
+    "options": ["Singapore", "Iceland", "New Zealand", "Bahamas"],
+    "answer": 1,
+    "explanation": "Iceland's climate is too cold for mosquitoes to survive. Finally, a good reason to enjoy freezing weather."
+  },
+  {
+    "question": "Which country has a desert that gets snow?",
+    "options": ["Mongolia", "Chile", "Namibia", "Kazakhstan"],
+    "answer": 1,
+    "explanation": "Chile's Atacama Desert, the driest place on Earth, occasionally gets snow in its higher elevations. Confused cacti everywhere."
   }
 ]
