@@ -588,9 +588,29 @@ function attachCanvasInteraction() {
       }
       
       if (touches.length === 2) {
+        // Calculate midpoint of the two touches
+        const midX = (touches[0].clientX + touches[1].clientX) / 2;
+        const midY = (touches[0].clientY + touches[1].clientY) / 2;
+        const rect = canvasEl.getBoundingClientRect();
+        const canvasMidX = midX - rect.left;
+        const canvasMidY = midY - rect.top;
+        
+        // Map coordinates before zoom
+        const mapXBefore = canvasMidX / initialZoom + scrollX;
+        const mapYBefore = canvasMidY / initialZoom + scrollY;
+        
         const newDistance = getDistance(touches[0], touches[1]);
         const scale = newDistance / initialPinchDistance;
-        zoom = Math.max(minZoom, Math.min(100, initialZoom * scale));
+        const newZoom = Math.max(minZoom, Math.min(100, initialZoom * scale));
+        
+        // Adjust scroll to keep the midpoint in the same place
+        scrollX = mapXBefore - canvasMidX / newZoom;
+        scrollY = mapYBefore - canvasMidY / newZoom;
+        
+        // Clamp vertical scroll
+        scrollY = Math.max(0, Math.min(Math.max(0, MAP_H - canvasDisplayHeight / newZoom), scrollY));
+        
+        zoom = newZoom;
         drawWorldMap();
         return;
       }

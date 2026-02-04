@@ -1073,6 +1073,7 @@ select option {
   flex: 1;
   max-width: 100%;
   max-height: 100%;
+  -webkit-tap-highlight-color: transparent; /* Remove flash on mobile tap */
 }
 
 /* Tablet/laptop breakpoint */
