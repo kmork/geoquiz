@@ -5,7 +5,7 @@ A collection of engaging geography quiz games to test and improve your knowledge
 **[Play Now at geoquiz.info](https://geoquiz.info)** 🎮
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![Games: 5](https://img.shields.io/badge/Games-5-green.svg)
+![Games: 6](https://img.shields.io/badge/Games-6-green.svg)
 ![Countries: 195+](https://img.shields.io/badge/Countries-195%2B-orange.svg)
 
 ---
@@ -20,7 +20,7 @@ Navigate from one country to another by typing neighboring countries. Can you fi
 - 🎯 Find shortest routes between any two countries
 - 🔀 Branch from any country in your path (explore freely!)
 - 📱 Fully optimized for mobile devices
-- ⌨️ Autocomplete suggestions for country names
+- ⌨️ Autocomplete suggestions with keyboard navigation
 - 🚀 Cleaned map data (no distant overseas territories)
 
 [**Play Connect the Countries →**](route.html)
@@ -36,8 +36,24 @@ Race against the clock to find countries on the map. How fast can you find all 1
 - 🗺️ Full world map with all territories
 - 🎨 Beautiful color-coded feedback
 - 📊 Track your best times
+- 📱 Optimized pinch zoom and pan for mobile
 
 [**Play Find the Country →**](find-country.html)
+
+---
+
+### 🏛️ Where is this?
+**Identify countries from UNESCO World Heritage Sites**
+
+Can you recognize countries from their iconic UNESCO World Heritage Sites? Test your cultural geography knowledge!
+
+- 🖼️ 47 stunning UNESCO World Heritage Sites
+- 🎯 Two-attempt scoring: text input (2 pts) or multiple choice (1 pt)
+- 🌍 Mix of natural wonders and cultural landmarks
+- ⌨️ Smart autocomplete with all country names
+- 📱 Optimized images for fast mobile loading (90% smaller!)
+
+[**Play Where is this? →**](picture-guess.html)
 
 ---
 
@@ -50,6 +66,7 @@ Can you recognize countries just by their shape? Test your geographical intuitio
 - ⌨️ Type country names (76+ aliases supported!)
 - 💡 Hint system available
 - ✅ Instant feedback
+- ⌨️ Keyboard navigation for autocomplete
 
 [**Play Guess the Country →**](outlines.html)
 
@@ -74,6 +91,11 @@ Test your knowledge of world capitals. From Kabul to Zagreb, how many can you ge
 
 Broader geography questions covering continents, regions, landmarks, and more.
 
+- 📚 120+ questions with interesting facts
+- 🎭 Mix of serious geography and quirky trivia
+- 💡 Detailed explanations for each answer
+- 📊 Score tracking
+
 [**Play Geography Trivia →**](trivia.html)
 
 ---
@@ -88,25 +110,32 @@ Broader geography questions covering continents, regions, landmarks, and more.
 
 ### 🚀 Performance Optimized
 - **82% Smaller Downloads** - GeoJSON files compressed with gzip (77 MB → 14 MB)
+- **90% Image Optimization** - Heritage site images optimized for web (424 MB → 42 MB)
 - **Client-side Decompression** - Fast loading using pako.js
 - **Lazy Loading** - Games load only the data they need
-- **Efficient Rendering** - Optimized SVG map rendering
+- **Efficient Rendering** - Optimized SVG and Canvas map rendering
 
 ### 📱 Mobile-First Design
-- **44px Touch Targets** - iOS Human Interface Guidelines compliant
+- **Touch-Optimized** - 44px touch targets, iOS Human Interface Guidelines compliant
+- **Gesture Detection** - Smart tap vs scroll recognition for autocomplete
 - **Auto-dismiss Keyboard** - Seamless input flow on mobile
 - **Responsive Map Height** - Adapts to screen size (50vh with constraints)
 - **Safe Area Support** - Works perfectly on notched phones (iPhone X+)
+- **No Tap Highlight Flash** - Smooth interactions without visual artifacts
 - **Grid Button Layout** - Easy to tap, no accidental presses
 
 ### ⌨️ Smart Input
 - **Autocomplete** - Dropdown suggestions for all 195+ countries
+- **Keyboard Navigation** - Use arrow keys (⬆️⬇️) to navigate autocomplete, Enter to select
+- **Mobile Scrolling** - Touch-friendly autocomplete with gesture detection
 - **76 Country Aliases** - Type "US" instead of "United States", "UK" instead of "United Kingdom"
 - **Flexible Naming** - Accepts common variations and historical names
 
 ### 🗺️ Advanced Mapping
 - **Antimeridian Handling** - Correctly displays Russia, Fiji, and other ±180° spanning countries
-- **Pinch Zoom & Pan** - Smooth touch interactions on mobile
+- **Pinch Zoom & Pan** - Smooth touch interactions on mobile with proper centering
+- **Smart Zoom Limits** - Prevents over-zooming, handles tiny islands gracefully
+- **No Accidental Taps** - Cooldown after pinch zoom prevents unintended country selection
 - **Cleaned Route Data** - Removed distant overseas territories for better zoom behavior
 - **Full Territory Display** - Complete maps with all territories for Find the Country game
 
@@ -184,6 +213,7 @@ GeoQuiz/
 ├── index.html              # Landing page with game selection
 ├── route.html              # Connect the Countries game
 ├── find-country.html       # Find the Country game
+├── picture-guess.html      # Where is this? UNESCO heritage game
 ├── outlines.html           # Guess the Country game
 ├── capitals.html           # Capitals quiz
 ├── trivia.html            # Geography trivia
@@ -194,9 +224,12 @@ GeoQuiz/
 ├── js/
 │   ├── route-main.js      # Route game initialization
 │   ├── route-game.js      # Route game logic
-│   ├── find-country-main.js
+│   ├── find-country-main.js  # Find country game with canvas
+│   ├── picture-guess-main.js # Picture guess initialization
+│   ├── picture-guess-game.js # Picture guess logic
 │   ├── outlines-main.js
 │   ├── main.js            # Capitals game
+│   ├── mobile-autocomplete.js # Shared autocomplete module
 │   ├── aliases.js         # 76 country name aliases
 │   ├── geojson-loader.js  # Compressed file loader
 │   ├── pako.min.js        # Gzip decompression
@@ -207,9 +240,14 @@ GeoQuiz/
 ├── data/
 │   ├── ne_10m_admin_0_countries.geojson.gz        # 6.7 MB
 │   ├── ne_10m_admin_0_countries_route.geojson.gz  # 7.8 MB
+│   ├── heritage-sites.json                         # 47 UNESCO sites
 │   ├── countries-neighbors.json
 │   ├── places.geojson
+│   ├── qa.json            # 120+ trivia questions
 │   └── countries.geojson
+│
+├── img/
+│   └── heritage/          # 47 optimized UNESCO images (42 MB)
 │
 └── process-countries.js   # Data processing script
 ```
@@ -243,6 +281,18 @@ gzip -9 -k ne_10m_admin_0_countries_route.geojson
 
 The `-9` flag maximizes compression, `-k` keeps the original files.
 
+### Optimizing Images
+
+To optimize large images for web:
+
+```bash
+cd img/heritage/
+# Resize to max 1920px width, 85% JPEG quality
+sips --resampleWidth 1920 --setProperty formatOptions 85 *.jpg
+```
+
+This reduces file sizes by ~90% while maintaining visual quality for web display.
+
 ### Mobile Testing
 
 Test mobile layouts using browser DevTools:
@@ -256,7 +306,39 @@ Or test on real devices for best results.
 
 ## 📊 Recent Improvements
 
-### v2.0 - Major Enhancements (February 2026)
+### v3.0 - New Game & Mobile Enhancements (February 2026)
+
+#### 🏛️ New Game: Where is this?
+- **47 UNESCO World Heritage Sites** - Stunning images from around the world
+- **Two-Attempt Scoring** - Text input (2 pts) or multiple choice (1 pt)
+- **Optimized Images** - 90% size reduction (424 MB → 42 MB)
+- **Smart Alternatives** - Region-based multiple choice options
+- **Full Autocomplete** - All 195+ countries with keyboard navigation
+
+#### ⌨️ Enhanced Autocomplete (All Games)
+- **Keyboard Navigation** - Arrow keys (⬆️⬇️), Enter to select, Escape to close
+- **Dark Mode Visibility** - Opaque background with backdrop blur
+- **Unlimited Suggestions** - Shows all matching countries, scrollable
+- **Mobile Scrolling** - Smart tap vs scroll gesture detection
+- **Compact Design** - Space-efficient rows matching input height
+
+#### 📱 Mobile Touch Improvements
+- **Pinch Zoom Centering** - Properly centers on finger midpoint
+- **No Accidental Selection** - 300ms cooldown after pinch zoom
+- **No Tap Flash** - Removed webkit tap highlight artifact
+- **Gesture Detection** - Distinguishes taps from scrolls (10px/300ms threshold)
+
+#### 🗺️ Map Enhancements
+- **Smart Zoom Limits** - Respects minimum zoom, handles tiny islands
+- **Tiny Island Detection** - Minimum 10° visible area for small countries
+- **Increased Padding** - 40% padding for better country visibility
+
+#### 🧠 Trivia Updates
+- **120+ Questions** - Added 25 new quirky geography facts
+- **Error Corrections** - Fixed 3 wrong answers in existing questions
+- **Humor & Facts** - Mix of serious geography and entertaining trivia
+
+### v2.0 - Major Enhancements (2025)
 
 #### 📱 Mobile Usability
 - **44px Touch Targets** - iOS compliant button sizes
@@ -331,11 +413,16 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🎯 Fun Facts
 
 - 🌍 **195 Countries** - All UN-recognized countries included
+- 🎮 **6 Games** - Different ways to test your geography knowledge
+- 🏛️ **47 UNESCO Sites** - From Great Wall to Machu Picchu
+- 📚 **120+ Trivia Questions** - Mix of facts and fun
 - 🗺️ **2.2M Lines** - Of GeoJSON coordinate data
 - 💾 **14 MB** - Total compressed map data size
-- ⚡ **82%** - Size reduction from compression
+- 🖼️ **42 MB** - Optimized heritage images (was 424 MB!)
+- ⚡ **90%** - Image size reduction from optimization
 - 📱 **44px** - Minimum touch target size (iOS standard)
 - 🔀 **76** - Country name aliases supported
+- ⌨️ **4 Keys** - Arrow keys + Enter for autocomplete navigation
 
 ---
 
