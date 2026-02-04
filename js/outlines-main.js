@@ -479,7 +479,12 @@ function populateCountryAutocomplete() {
 // Function to initialize mobile autocomplete
 function initMobileAutocompleteForOutlines() {
   const input = document.getElementById("answer");
-  if (!input || typeof initMobileAutocomplete !== 'function') return;
+  if (!input) return;
+  
+  // Always remove datalist - use custom autocomplete for all devices
+  input.removeAttribute('list');
+  
+  if (typeof initMobileAutocomplete !== 'function') return;
   
   // Build suggestions array (countries + aliases)
   const suggestions = [];

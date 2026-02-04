@@ -658,16 +658,16 @@ select option {
     white-space: nowrap;
   }
   
-  /* Change "Add to Route" to just "Add" on mobile */
-  #submit::before {
+  /* Change "Add to Route" to just "Add" on mobile - ONLY for route game */
+  .route-display ~ .answerRow #submit::before {
     content: "Add";
   }
   
-  #submit {
+  .route-display ~ .answerRow #submit {
     font-size: 0; /* Hide original text */
   }
   
-  #submit::before {
+  .route-display ~ .answerRow #submit::before {
     font-size: 15px; /* Show replacement text */
     font-weight: 650;
   }
@@ -808,7 +808,7 @@ select option {
     border: 2px solid var(--input-border);
     border-radius: 12px;
     margin-top: 4px;
-    max-height: 280px;
+    max-height: 160px;
     overflow-y: auto;
     z-index: 1000;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
@@ -842,6 +842,54 @@ select option {
   /* Ensure parent container has position: relative */
   .answerRow {
     position: relative;
+  }
+}
+
+/* Custom autocomplete dropdown - available on all devices */
+.mobile-autocomplete-dropdown {
+  position: absolute;
+  left: 0;
+  right: 0;
+  background: var(--input-bg);
+  border: 2px solid var(--input-border);
+  border-radius: 12px;
+  margin-top: 4px;
+  max-height: 200px;
+  overflow-y: auto;
+  z-index: 1000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  -webkit-overflow-scrolling: touch;
+}
+
+.autocomplete-item {
+  padding: 12px 14px;
+  color: var(--input-color);
+  font-size: 16px;
+  border-bottom: 1px solid var(--input-border);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.autocomplete-item:last-child {
+  border-bottom: none;
+}
+
+.autocomplete-item:hover,
+.autocomplete-item:active {
+  background: var(--button-hover);
+}
+
+.autocomplete-item mark {
+  background: rgba(251, 191, 36, 0.3);
+  color: var(--input-color);
+  font-weight: 650;
+  padding: 2px 0;
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 640px) {
+  .mobile-autocomplete-dropdown {
+    max-height: 160px;
   }
 }
 

@@ -304,7 +304,12 @@ function populateCountryAutocomplete() {
 // Initialize mobile autocomplete (custom dropdown)
 function initMobileAutocompleteForRoute() {
   const input = document.getElementById("answer");
-  if (!input || typeof initMobileAutocomplete !== 'function') return;
+  if (!input) return;
+  
+  // Always remove datalist - use custom autocomplete for all devices
+  input.removeAttribute('list');
+  
+  if (typeof initMobileAutocomplete !== 'function') return;
   
   // Build suggestions array using window.DATA (only valid countries)
   const suggestions = [];

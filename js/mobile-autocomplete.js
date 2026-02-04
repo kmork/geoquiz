@@ -11,18 +11,18 @@ function isMobileForAutocomplete() {
 }
 
 /**
- * Initialize mobile autocomplete for an input field
+ * Initialize autocomplete for an input field
  * @param {HTMLInputElement} inputElement - The input field to attach autocomplete to
  * @param {Array<string>} suggestions - Array of suggestion strings
  * @param {Object} options - Configuration options
  */
 function initMobileAutocomplete(inputElement, suggestions, options = {}) {
-  if (!inputElement || !suggestions || !isMobileForAutocomplete()) {
-    return; // Don't init on desktop or if missing required params
+  if (!inputElement || !suggestions) {
+    return; // Don't init if missing required params
   }
   
   const {
-    maxSuggestions = 8,
+    maxSuggestions = 5,
     minChars = 1,
     onSelect = null,
     placeholder = 'Type to search...'
@@ -45,9 +45,9 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
       return;
     }
     
-    // Filter suggestions (case-insensitive)
+    // Filter suggestions (case-insensitive, starts with)
     const matches = suggestions.filter(item => 
-      item.toLowerCase().includes(value.toLowerCase())
+      item.toLowerCase().startsWith(value.toLowerCase())
     );
     
     if (matches.length === 0) {
