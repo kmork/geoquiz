@@ -131,6 +131,7 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
       case 'Enter':
         if (highlightedIndex >= 0 && items[highlightedIndex]) {
           e.preventDefault();
+          e.stopImmediatePropagation(); // Prevent other handlers on same element
           const value = items[highlightedIndex].getAttribute('data-value');
           selectSuggestion(value);
         }
@@ -142,7 +143,7 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
         highlightedIndex = -1;
         break;
     }
-  });
+  }, true); // Use capture phase to run before game's handler
   
   inputElement.addEventListener('blur', () => {
     // Delay to allow click on dropdown
