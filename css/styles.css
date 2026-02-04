@@ -802,16 +802,19 @@ select option {
   /* Mobile autocomplete dropdown */
   .mobile-autocomplete-dropdown {
     position: absolute;
+    top: 100%; /* Position below the input field */
     left: 0;
     right: 0;
-    background: var(--input-bg);
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     border: 2px solid var(--input-border);
     border-radius: 12px;
     margin-top: 4px;
-    max-height: 160px;
+    max-height: 200px; /* Smaller on mobile to avoid covering too much */
     overflow-y: auto;
     z-index: 1000;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
     -webkit-overflow-scrolling: touch;
   }
   
@@ -848,23 +851,29 @@ select option {
 /* Custom autocomplete dropdown - available on all devices */
 .mobile-autocomplete-dropdown {
   position: absolute;
+  top: 100%; /* Position below the input field */
   left: 0;
   right: 0;
-  background: var(--input-bg);
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 2px solid var(--input-border);
   border-radius: 12px;
   margin-top: 4px;
-  max-height: 200px;
+  max-height: 250px; /* Increased height for better scrolling */
   overflow-y: auto;
   z-index: 1000;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
   -webkit-overflow-scrolling: touch;
 }
 
 .autocomplete-item {
-  padding: 12px 14px;
+  padding: 8px 12px;
   color: var(--input-color);
-  font-size: 16px;
+  font-size: 15px;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
   border-bottom: 1px solid var(--input-border);
   cursor: pointer;
   transition: background 0.15s ease;
@@ -875,7 +884,8 @@ select option {
 }
 
 .autocomplete-item:hover,
-.autocomplete-item:active {
+.autocomplete-item:active,
+.autocomplete-item.highlighted {
   background: var(--button-hover);
 }
 
@@ -889,7 +899,12 @@ select option {
 /* Mobile specific adjustments */
 @media (max-width: 640px) {
   .mobile-autocomplete-dropdown {
-    max-height: 160px;
+    max-height: 200px;
+  }
+  
+  .autocomplete-item {
+    padding: 8px 12px;
+    font-size: 16px; /* Prevent iOS zoom */
   }
 }
 
@@ -1077,4 +1092,178 @@ select option {
 /* Mobile breakpoint */
 @media (max-width: 640px) {
   /* No min-height override needed - aspect ratio is preserved by JS */
+}
+
+/* ===============================================
+   Picture Guess Game Styles
+   =============================================== */
+
+.picture-guess-page .picture-container {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 24px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--map-bg);
+  border: 1px solid var(--map-border);
+  box-shadow: 0 4px 16px var(--card-shadow);
+}
+
+.picture-guess-page .picture-container img {
+  width: 100%;
+  height: auto;
+  min-height: 400px;
+  max-height: 500px;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.picture-guess-page .image-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--map-bg);
+  z-index: 10;
+}
+
+
+.picture-guess-page .multiple-choice-section {
+  margin: 24px 0;
+}
+
+.picture-guess-page .hint-text {
+  font-size: 15px;
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 12px;
+  background: var(--bonus-bg);
+  border-radius: 8px;
+}
+
+.picture-guess-page .status {
+  margin: 20px 0;
+  padding: 16px 20px;
+  border-radius: 12px;
+  font-size: 16px;
+  text-align: center;
+  font-weight: 500;
+}
+
+.picture-guess-page .status.good {
+  background: var(--correct-bg);
+  border: 1px solid var(--correct-border);
+  color: var(--good-color);
+}
+
+.picture-guess-page .status.bad {
+  background: var(--wrong-bg);
+  border: 1px solid var(--wrong-border);
+  color: var(--bad-color);
+}
+
+/* Mobile responsiveness */
+@media (max-width: 640px) {
+  .picture-guess-page .picture-container img {
+    min-height: 250px;
+    max-height: 350px;
+  }
+
+  .picture-guess-page .input-label {
+    font-size: 16px;
+  }
+
+  .picture-guess-page .country-input {
+    font-size: 15px;
+    padding: 12px 16px;
+  }
+
+  .picture-guess-page .btn-primary {
+    font-size: 15px;
+    padding: 10px 24px;
+  }
+
+  .picture-guess-page .hint-text {
+    font-size: 14px;
+  }
+
+  .picture-guess-page .status {
+    font-size: 14px;
+    padding: 12px 16px;
+  }
+}
+
+/* Update Picture Guess input styling to match other games */
+.picture-guess-page .answerRow {
+  position: relative; /* For autocomplete dropdown positioning */
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: center;
+  margin: 24px auto;
+  max-width: 600px;
+}
+
+.picture-guess-page .answerRow input {
+  flex: 1;
+  padding: 12px 16px;
+  font-size: 16px;
+  background: var(--input-bg);
+  border: 1px solid var(--input-border);
+  border-radius: 8px;
+  color: var(--input-color);
+  transition: all 0.3s;
+}
+
+.picture-guess-page .answerRow input:focus {
+  outline: none;
+  border-color: rgba(165, 180, 252, 0.6);
+  background: rgba(165, 180, 252, 0.08);
+}
+
+.picture-guess-page .answerRow button {
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  background: var(--button-bg);
+  border: 1px solid var(--button-border);
+  border-radius: 8px;
+  color: var(--button-color);
+  cursor: pointer;
+  transition: all 0.3s;
+  white-space: nowrap;
+}
+
+.picture-guess-page .answerRow button:hover:not(:disabled) {
+  background: var(--button-hover);
+  transform: translateY(-1px);
+}
+
+.picture-guess-page .answerRow button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .picture-guess-page .answerRow {
+    gap: 8px;
+  }
+  
+  .picture-guess-page .answerRow input {
+    font-size: 16px; /* Prevent iOS zoom */
+    min-width: 0; /* Allow shrinking */
+  }
+  
+  .picture-guess-page .answerRow button {
+    padding: 12px 16px; /* Slightly smaller padding on mobile */
+    flex-shrink: 0; /* Don't shrink button */
+  }
 }

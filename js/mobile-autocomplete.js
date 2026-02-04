@@ -36,12 +36,16 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
   // Insert dropdown after input
   inputElement.parentNode.insertBefore(dropdown, inputElement.nextSibling);
   
+  // Track currently highlighted index for keyboard navigation
+  let highlightedIndex = -1;
+  
   // Filter and show suggestions
   function updateSuggestions() {
     const value = inputElement.value.trim();
     
     if (value.length < minChars) {
       dropdown.style.display = 'none';
+      highlightedIndex = -1;
       return;
     }
     
@@ -52,21 +56,40 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     
     if (matches.length === 0) {
       dropdown.style.display = 'none';
+      highlightedIndex = -1;
       return;
     }
     
-    // Show top N matches
-    const topMatches = matches.slice(0, maxSuggestions);
+    // Show all matches (no limit - scrollable dropdown will handle overflow)
+    const displayMatches = maxSuggestions ? matches.slice(0, maxSuggestions) : matches;
     
     // Build dropdown HTML
-    dropdown.innerHTML = topMatches.map(match => {
+    dropdown.innerHTML = displayMatches.map((match, index) => {
       // Highlight matching text
       const regex = new RegExp(`(${value})`, 'gi');
       const highlighted = match.replace(regex, '<mark>$1</mark>');
-      return `<div class="autocomplete-item" data-value="${match}">${highlighted}</div>`;
+      return `<div class="autocomplete-item" data-value="${match}" data-index="${index}">${highlighted}</div>`;
     }).join('');
     
     dropdown.style.display = 'block';
+    highlightedIndex = -1; // Reset highlight when updating suggestions
+  }
+  
+  // Highlight item by index
+  function highlightItem(index) {
+    const items = dropdown.querySelectorAll('.autocomplete-item');
+    if (index < 0 || index >= items.length) return;
+    
+    // Remove previous highlight
+    items.forEach(item => item.classList.remove('highlighted'));
+    
+    // Add highlight to current item
+    if (items[index]) {
+      items[index].classList.add('highlighted');
+      // Scroll item into view if needed
+      items[index].scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    }
+    highlightedIndex = index;
   }
   
   // Select suggestion
@@ -89,10 +112,43 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     }
   });
   
+  // Keyboard navigation
+  inputElement.addEventListener('keydown', (e) => {
+    const items = dropdown.querySelectorAll('.autocomplete-item');
+    if (items.length === 0 || dropdown.style.display === 'none') return;
+    
+    switch(e.key) {
+      case 'ArrowDown':
+        e.preventDefault();
+        highlightItem(Math.min(highlightedIndex + 1, items.length - 1));
+        break;
+        
+      case 'ArrowUp':
+        e.preventDefault();
+        highlightItem(Math.max(highlightedIndex - 1, 0));
+        break;
+        
+      case 'Enter':
+        if (highlightedIndex >= 0 && items[highlightedIndex]) {
+          e.preventDefault();
+          const value = items[highlightedIndex].getAttribute('data-value');
+          selectSuggestion(value);
+        }
+        break;
+        
+      case 'Escape':
+        e.preventDefault();
+        dropdown.style.display = 'none';
+        highlightedIndex = -1;
+        break;
+    }
+  });
+  
   inputElement.addEventListener('blur', () => {
     // Delay to allow click on dropdown
     setTimeout(() => {
       dropdown.style.display = 'none';
+      highlightedIndex = -1;
     }, 200);
   });
   

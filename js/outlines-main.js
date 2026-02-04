@@ -507,7 +507,7 @@ function initMobileAutocompleteForOutlines() {
   
   // Initialize mobile autocomplete
   initMobileAutocomplete(input, uniqueSuggestions, {
-    maxSuggestions: 8,
+    maxSuggestions: null, // Show all matches (scrollable)
     minChars: 1
   });
 }

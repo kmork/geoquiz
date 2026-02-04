@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Heritage Images</title>
+    <style>
+        body { font-family: Arial; padding: 20px; background: #1a1a1a; color: #fff; }
+        .test { margin: 20px 0; padding: 10px; border: 1px solid #444; }
+        img { max-width: 400px; display: block; margin: 10px 0; }
+        .error { color: #ff6b6b; }
+        .success { color: #51cf66; }
+    </style>
+</head>
+<body>
+    <h1>Heritage Image Test</h1>
+    <div id="results"></div>
+    
+    <script>
+        async function testImages() {
+            const response = await fetch('data/heritage-sites.json');
+            const sites = await response.json();
+            const results = document.getElementById('results');
+            
+            console.log(`Testing ${sites.length} images...`);
+            
+            sites.slice(0, 10).forEach((site, index) => {
+                const div = document.createElement('div');
+                div.className = 'test';
+                
+                const title = document.createElement('h3');
+                title.textContent = `${index + 1}. ${site.siteName} (${site.country})`;
+                div.appendChild(title);
+                
+                const path = document.createElement('div');
+                path.textContent = `Path: ${site.imageUrl}`;
+                path.style.fontSize = '12px';
+                path.style.color = '#888';
+                div.appendChild(path);
+                
+                const img = document.createElement('img');
+                const status = document.createElement('div');
+                
+                img.onload = () => {
+                    status.textContent = '✓ Image loaded successfully';
+                    status.className = 'success';
+                    console.log(`✓ ${site.siteName}`);
+                };
+                
+                img.onerror = () => {
+                    status.textContent = `✗ Failed to load: ${site.imageUrl}`;
+                    status.className = 'error';
+                    console.error(`✗ ${site.siteName}: ${site.imageUrl}`);
+                };
+                
+                img.src = site.imageUrl;
+                img.alt = site.siteName;
+                
+                div.appendChild(img);
+                div.appendChild(status);
+                results.appendChild(div);
+            });
+        }
+        
+        testImages();
+    </script>
+</body>
+</html>

@@ -1,0 +1,425 @@
+[
+  {
+    "siteName": "Great Wall of China",
+    "country": "China",
+    "imageUrl": "img/heritage/great-wall-of-china.jpg",
+    "type": "cultural",
+    "hint": "An ancient defensive fortification stretching thousands of kilometers",
+    "year": 1987,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Taj Mahal",
+    "country": "India",
+    "imageUrl": "img/heritage/taj-mahal.jpg",
+    "type": "cultural",
+    "hint": "A white marble mausoleum built by an emperor for his wife",
+    "year": 1983,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Machu Picchu",
+    "country": "Peru",
+    "imageUrl": "img/heritage/machu-picchu.jpg",
+    "type": "cultural",
+    "hint": "Ancient Incan citadel high in the Andes Mountains",
+    "year": 1983,
+    "region": "South America"
+  },
+  {
+    "siteName": "Pyramids of Giza",
+    "country": "Egypt",
+    "imageUrl": "img/heritage/pyramids-of-giza.jpg",
+    "type": "cultural",
+    "hint": "Ancient pyramids including one of the Seven Wonders of the Ancient World",
+    "year": 1979,
+    "region": "Africa"
+  },
+  {
+    "siteName": "Colosseum",
+    "country": "Italy",
+    "imageUrl": "img/heritage/colosseum.jpg",
+    "type": "cultural",
+    "hint": "Ancient Roman amphitheater where gladiators once fought",
+    "year": 1980,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Petra",
+    "country": "Jordan",
+    "imageUrl": "img/heritage/petra.jpg",
+    "type": "cultural",
+    "hint": "Ancient city carved into rose-red rock faces",
+    "year": 1985,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Grand Canyon",
+    "country": "United States",
+    "imageUrl": "img/heritage/grand-canyon.jpg",
+    "type": "natural",
+    "hint": "Massive canyon carved by the Colorado River over millions of years",
+    "year": 1979,
+    "region": "North America"
+  },
+  {
+    "siteName": "Great Barrier Reef",
+    "country": "Australia",
+    "imageUrl": "img/heritage/great-barrier-reef.jpg",
+    "type": "natural",
+    "hint": "The world's largest coral reef system, visible from space",
+    "year": 1981,
+    "region": "Oceania"
+  },
+  {
+    "siteName": "Galápagos Islands",
+    "country": "Ecuador",
+    "imageUrl": "img/heritage/galapagos-islands.jpg",
+    "type": "natural",
+    "hint": "Volcanic islands famous for unique wildlife and Darwin's evolution studies",
+    "year": 1978,
+    "region": "South America"
+  },
+  {
+    "siteName": "Victoria Falls",
+    "country": "Zimbabwe",
+    "imageUrl": "img/heritage/victoria-falls.jpg",
+    "type": "natural",
+    "hint": "One of the world's largest waterfalls, known locally as 'The Smoke That Thunders'",
+    "year": 1989,
+    "region": "Africa"
+  },
+  {
+    "siteName": "Stonehenge",
+    "country": "United Kingdom",
+    "imageUrl": "img/heritage/stonehenge.jpg",
+    "type": "cultural",
+    "hint": "Prehistoric stone circle monument dating back thousands of years",
+    "year": 1986,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Angkor Wat",
+    "country": "Cambodia",
+    "imageUrl": "img/heritage/angkor-wat.jpg",
+    "type": "cultural",
+    "hint": "Massive temple complex and largest religious monument in the world",
+    "year": 1992,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Acropolis of Athens",
+    "country": "Greece",
+    "imageUrl": "img/heritage/acropolis-of-athens.jpg",
+    "type": "cultural",
+    "hint": "Ancient citadel containing the Parthenon and other classical Greek temples",
+    "year": 1987,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Iguazu Falls",
+    "country": "Argentina",
+    "imageUrl": "img/heritage/iguazu-falls.jpg",
+    "type": "natural",
+    "hint": "Spectacular waterfalls system on the border between two countries",
+    "year": 1984,
+    "region": "South America"
+  },
+  {
+    "siteName": "Ha Long Bay",
+    "country": "Vietnam",
+    "imageUrl": "img/heritage/ha-long-bay.jpg",
+    "type": "natural",
+    "hint": "Bay featuring thousands of limestone islands topped with rainforests",
+    "year": 1994,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Yellowstone National Park",
+    "country": "United States",
+    "imageUrl": "img/heritage/yellowstone-national-park.jpg",
+    "type": "natural",
+    "hint": "World's first national park, famous for geysers and hot springs",
+    "year": 1978,
+    "region": "North America"
+  },
+  {
+    "siteName": "Sagrada Família",
+    "country": "Spain",
+    "imageUrl": "img/heritage/sagrada-familia.jpg",
+    "type": "cultural",
+    "hint": "Iconic unfinished basilica designed by Antoni Gaudí",
+    "year": 2005,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Serengeti National Park",
+    "country": "Tanzania",
+    "imageUrl": "img/heritage/serengeti-national-park.jpg",
+    "type": "natural",
+    "hint": "Vast savanna famous for the annual migration of millions of wildebeest",
+    "year": 1981,
+    "region": "Africa"
+  },
+  {
+    "siteName": "Easter Island",
+    "country": "Chile",
+    "imageUrl": "img/heritage/easter-island.jpg",
+    "type": "cultural",
+    "hint": "Remote island famous for hundreds of massive stone statues called moai",
+    "year": 1995,
+    "region": "South America"
+  },
+  {
+    "siteName": "Venice and its Lagoon",
+    "country": "Italy",
+    "imageUrl": "img/heritage/venice-and-its-lagoon.jpg",
+    "type": "cultural",
+    "hint": "City built on water with canals instead of streets",
+    "year": 1987,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Mount Fuji",
+    "country": "Japan",
+    "imageUrl": "img/heritage/mount-fuji.jpg",
+    "type": "cultural",
+    "hint": "Iconic symmetrical volcano and sacred mountain",
+    "year": 2013,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Versailles Palace",
+    "country": "France",
+    "imageUrl": "img/heritage/versailles-palace.jpg",
+    "type": "cultural",
+    "hint": "Opulent royal palace with famous Hall of Mirrors",
+    "year": 1979,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Göreme National Park",
+    "country": "Turkey",
+    "imageUrl": "img/heritage/goreme-national-park.jpg",
+    "type": "natural",
+    "hint": "Surreal landscape of fairy chimneys and rock-cut churches",
+    "year": 1985,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Chichen Itza",
+    "country": "Mexico",
+    "imageUrl": "img/heritage/chichen-itza.jpg",
+    "type": "cultural",
+    "hint": "Ancient Mayan city with famous stepped pyramid",
+    "year": 1988,
+    "region": "North America"
+  },
+  {
+    "siteName": "Plitvice Lakes",
+    "country": "Croatia",
+    "imageUrl": "img/heritage/plitvice-lakes.jpg",
+    "type": "natural",
+    "hint": "Cascading turquoise lakes connected by waterfalls",
+    "year": 1979,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Borobudur Temple",
+    "country": "Indonesia",
+    "imageUrl": "img/heritage/borobudur-temple.jpg",
+    "type": "cultural",
+    "hint": "Massive Buddhist temple with intricate stone carvings and stupas",
+    "year": 1991,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Uluru (Ayers Rock)",
+    "country": "Australia",
+    "imageUrl": "img/heritage/uluru-ayers-rock.jpg",
+    "type": "natural",
+    "hint": "Massive red sandstone monolith sacred to Aboriginal people",
+    "year": 1987,
+    "region": "Oceania"
+  },
+  {
+    "siteName": "Forbidden City",
+    "country": "China",
+    "imageUrl": "img/heritage/forbidden-city.jpg",
+    "type": "cultural",
+    "hint": "Vast imperial palace complex with nearly 1,000 buildings",
+    "year": 1987,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Yosemite National Park",
+    "country": "United States",
+    "imageUrl": "img/heritage/yosemite-national-park.jpg",
+    "type": "natural",
+    "hint": "Dramatic granite cliffs, waterfalls, and giant sequoia trees",
+    "year": 1984,
+    "region": "North America"
+  },
+  {
+    "siteName": "Alhambra",
+    "country": "Spain",
+    "imageUrl": "img/heritage/alhambra.jpg",
+    "type": "cultural",
+    "hint": "Moorish palace and fortress complex with stunning Islamic architecture",
+    "year": 1984,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Bagan",
+    "country": "Myanmar",
+    "imageUrl": "img/heritage/bagan.jpg",
+    "type": "cultural",
+    "hint": "Ancient city with over 2,000 Buddhist temples and pagodas",
+    "year": 2019,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Pantanal",
+    "country": "Brazil",
+    "imageUrl": "img/heritage/pantanal.jpg",
+    "type": "natural",
+    "hint": "World's largest tropical wetland area with incredible biodiversity",
+    "year": 2000,
+    "region": "South America"
+  },
+  {
+    "siteName": "Meteora",
+    "country": "Greece",
+    "imageUrl": "img/heritage/meteora.jpg",
+    "type": "cultural",
+    "hint": "Monasteries perched atop towering rock pillars",
+    "year": 1988,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Banff National Park",
+    "country": "Canada",
+    "imageUrl": "img/heritage/banff-national-park.jpg",
+    "type": "natural",
+    "hint": "Stunning Rocky Mountain park with turquoise glacial lakes",
+    "year": 1984,
+    "region": "North America"
+  },
+  {
+    "siteName": "Dubrovnik Old City",
+    "country": "Croatia",
+    "imageUrl": "img/heritage/dubrovnik-old-city.jpg",
+    "type": "cultural",
+    "hint": "Medieval walled city on the Adriatic coast",
+    "year": 1979,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Komodo National Park",
+    "country": "Indonesia",
+    "imageUrl": "img/heritage/komodo-national-park.jpg",
+    "type": "natural",
+    "hint": "Islands home to the world's largest living lizards",
+    "year": 1991,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Statue of Liberty",
+    "country": "United States",
+    "imageUrl": "img/heritage/statue-of-liberty.jpg",
+    "type": "cultural",
+    "hint": "Iconic copper statue symbolizing freedom and democracy",
+    "year": 1984,
+    "region": "North America"
+  },
+  {
+    "siteName": "Jiuzhaigou Valley",
+    "country": "China",
+    "imageUrl": "img/heritage/jiuzhaigou-valley.jpg",
+    "type": "natural",
+    "hint": "Valley with colorful lakes, waterfalls, and snow-capped peaks",
+    "year": 1992,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Mont-Saint-Michel",
+    "country": "France",
+    "imageUrl": "img/heritage/mont-saint-michel.jpg",
+    "type": "cultural",
+    "hint": "Medieval abbey on a tidal island connected by a causeway",
+    "year": 1979,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Kilimanjaro National Park",
+    "country": "Tanzania",
+    "imageUrl": "img/heritage/kilimanjaro-national-park.jpg",
+    "type": "natural",
+    "hint": "Africa's highest mountain with iconic snow-capped peak",
+    "year": 1987,
+    "region": "Africa"
+  },
+  {
+    "siteName": "Neuschwanstein Castle",
+    "country": "Germany",
+    "imageUrl": "img/heritage/neuschwanstein-castle.jpg",
+    "type": "cultural",
+    "hint": "Fairy-tale castle that inspired Disney's Sleeping Beauty Castle",
+    "year": 1987,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Tikal National Park",
+    "country": "Guatemala",
+    "imageUrl": "img/heritage/tikal-national-park.jpg",
+    "type": "cultural",
+    "hint": "Ancient Mayan ruins with towering temple pyramids in the jungle",
+    "year": 1979,
+    "region": "North America"
+  },
+  {
+    "siteName": "Cinque Terre",
+    "country": "Italy",
+    "imageUrl": "img/heritage/cinque-terre.jpg",
+    "type": "cultural",
+    "hint": "Five colorful coastal villages perched on cliffs",
+    "year": 1997,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Fiordland National Park",
+    "country": "New Zealand",
+    "imageUrl": "img/heritage/fiordland-national-park.jpg",
+    "type": "natural",
+    "hint": "Dramatic fjords, mountains, and rainforests in the South Island",
+    "year": 1990,
+    "region": "Oceania"
+  },
+  {
+    "siteName": "Palmyra",
+    "country": "Syria",
+    "imageUrl": "img/heritage/palmyra.jpg",
+    "type": "cultural",
+    "hint": "Ancient desert city with monumental Roman-era ruins",
+    "year": 1980,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Los Glaciares National Park",
+    "country": "Argentina",
+    "imageUrl": "img/heritage/los-glaciares-national-park.jpg",
+    "type": "natural",
+    "hint": "Massive glaciers including the famous Perito Moreno",
+    "year": 1981,
+    "region": "South America"
+  },
+  {
+    "siteName": "Hadrian's Wall",
+    "country": "United Kingdom",
+    "imageUrl": "img/heritage/hadrians-wall.jpg",
+    "type": "cultural",
+    "hint": "Ancient Roman defensive wall stretching across northern England",
+    "year": 1987,
+    "region": "Europe"
+  }
+]
