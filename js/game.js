@@ -43,6 +43,7 @@ function getCSSVar(name) {
 
 export function createGame({ ui, mapApi, confetti }) {
   const DATA = window.DATA; // IMPORTANT: data.js sets window.DATA
+  const MAX_ROUNDS = 10;
 
   let deck = [];
   let current = null;
@@ -313,7 +314,8 @@ export function createGame({ ui, mapApi, confetti }) {
   }
 
   function reset() {
-    deck = shuffleInPlace([...(DATA || [])]);
+    // Shuffle all countries and take only first 10
+    deck = shuffleInPlace([...(DATA || [])]).slice(0, MAX_ROUNDS);
     current = null;
 
     score = 0;
@@ -325,7 +327,7 @@ export function createGame({ ui, mapApi, confetti }) {
     updateStarsUI();
 
     // (Removed usage of bonusHintEl entirely)
-    updateProgress(ui.progressEl, 0, deck.length);
+    updateProgress(ui.progressEl, 0, MAX_ROUNDS);
   }
 
   function nextQ() {
@@ -341,7 +343,7 @@ export function createGame({ ui, mapApi, confetti }) {
     if (!deck.length) {
       ui.finalOverlay.style.display = "flex";
       ui.finalScore.textContent = String(score);
-      ui.finalCountries.textContent = String(DATA.length);
+      ui.finalCountries.textContent = String(MAX_ROUNDS);
       ui.finalCorrect.textContent = String(correctAny);
       ui.finalFirstTry.textContent = String(correctFirstTry);
       ui.finalSubtitle.textContent = "Nice work!";
@@ -351,7 +353,7 @@ export function createGame({ ui, mapApi, confetti }) {
     current = deck.pop();
     ui.elCountry.textContent = current.country;
 
-    updateProgress(ui.progressEl, DATA.length - deck.length, DATA.length);
+    updateProgress(ui.progressEl, MAX_ROUNDS - deck.length, MAX_ROUNDS);
     mapApi?.draw?.(current.country, false);
 
     // Only auto-focus on desktop (not mobile to avoid unwanted keyboard)

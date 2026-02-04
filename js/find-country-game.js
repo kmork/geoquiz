@@ -1,5 +1,6 @@
 export function createFindCountryGame({ ui, confetti, checkClickedCountry, highlightCountry, zoomToCountries, resetMapView }) {
   const DATA = window.DATA;
+  const MAX_ROUNDS = 10;
 
   let deck = [];
   let current = null;
@@ -24,7 +25,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
 
   function updateUI() {
     ui.scoreEl.textContent = score;
-    ui.progressEl.textContent = `${DATA.length - deck.length} / ${DATA.length}`;
+    ui.progressEl.textContent = `${MAX_ROUNDS - deck.length} / ${MAX_ROUNDS}`;
   }
 
   function reset() {
@@ -34,7 +35,8 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
       continueTimer = null;
     }
 
-    deck = shuffleInPlace([...DATA]);
+    // Shuffle all countries and take only first 10
+    deck = shuffleInPlace([...DATA]).slice(0, MAX_ROUNDS);
     current = null;
     score = 0;
     correctCount = 0;
@@ -135,10 +137,10 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
   }
 
   function showFinal() {
-    const accuracy = DATA.length > 0 ? Math.round((correctCount / DATA.length) * 100) : 0;
+    const accuracy = MAX_ROUNDS > 0 ? Math.round((correctCount / MAX_ROUNDS) * 100) : 0;
     
     ui.finalScoreEl.textContent = score;
-    ui.finalCountriesEl.textContent = DATA.length;
+    ui.finalCountriesEl.textContent = MAX_ROUNDS;
     ui.finalCorrectEl.textContent = correctCount;
     ui.finalAccuracyEl.textContent = `${accuracy}%`;
 

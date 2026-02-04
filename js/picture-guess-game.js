@@ -25,8 +25,10 @@ export function createPictureGuessGame({ ui, confetti }) {
     try {
       const response = await fetch("data/heritage-sites.json");
       const data = await response.json();
-      sites = shuffleArray(data);
-      console.log(`Loaded ${sites.length} heritage sites from JSON`);
+      // Shuffle all sites and take only first 10
+      const shuffled = shuffleArray(data);
+      sites = shuffled.slice(0, 10);
+      console.log(`Loaded ${sites.length} heritage sites from JSON (limited to 10)`);
       return sites; // Return the loaded sites array
     } catch (err) {
       console.error("Failed to load heritage sites:", err);

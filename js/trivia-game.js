@@ -21,7 +21,9 @@ export function createTriviaGame({ ui, confetti }) {
     try {
       const response = await fetch("data/qa.json");
       const data = await response.json();
-      questions = shuffleArray(data);
+      // Shuffle all questions and take only first 10
+      const shuffled = shuffleArray(data);
+      questions = shuffled.slice(0, 10);
       return true;
     } catch (err) {
       console.error("Failed to load questions:", err);
