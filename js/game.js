@@ -1,40 +1,6 @@
 import { norm } from "./utils.js";
 import { updateProgress } from "./ui.js";
-
-// Helper to detect mobile devices
-function isMobileDevice() {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
-    || (window.innerWidth <= 640);
-}
-
-// Haptic feedback helper
-function hapticFeedback(pattern) {
-  if (!navigator.vibrate) return;
-  if (!isMobileDevice()) return;
-  
-  if (pattern === 'correct') {
-    navigator.vibrate(50);
-  } else if (pattern === 'wrong') {
-    navigator.vibrate([100, 50, 100]);
-  }
-}
-
-// Visual feedback helpers
-function flashCorrect(element) {
-  if (!element) return;
-  element.classList.remove('flash-correct');
-  void element.offsetWidth;
-  element.classList.add('flash-correct');
-  setTimeout(() => element.classList.remove('flash-correct'), 600);
-}
-
-function shakeWrong(element) {
-  if (!element) return;
-  element.classList.remove('shake-wrong');
-  void element.offsetWidth;
-  element.classList.add('shake-wrong');
-  setTimeout(() => element.classList.remove('shake-wrong'), 500);
-}
+import { isMobileDevice, hapticFeedback, flashCorrect, shakeWrong, shuffleInPlace } from "./game-utils.js";
 
 // Helper to get CSS variable values
 function getCSSVar(name) {
@@ -62,14 +28,6 @@ export function createGame({ ui, mapApi, confetti }) {
   const AUTO_MS_CORRECT_FIRST = 900;
   const AUTO_MS_CORRECT_SECOND = 1100;
   const AUTO_MS_WRONG_SECOND = 1700;
-
-  function shuffleInPlace(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = (Math.random() * (i + 1)) | 0;
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
 
   function updateStarsUI() {
     const el = ui.starsEl;
