@@ -1,40 +1,5 @@
 import { norm } from "./utils.js";
-
-// Helper to detect mobile devices
-function isMobileDevice() {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) 
-    || (window.innerWidth <= 640);
-}
-
-// Haptic feedback helper
-function hapticFeedback(pattern) {
-  if (!navigator.vibrate) return;
-  if (!isMobileDevice()) return;
-  
-  if (pattern === 'correct') {
-    navigator.vibrate(50); // Short pulse
-  } else if (pattern === 'wrong') {
-    navigator.vibrate([100, 50, 100]); // Double pulse
-  }
-}
-
-// Visual feedback helpers
-function flashCorrect(element) {
-  if (!element) return;
-  element.classList.remove('flash-correct');
-  // Force reflow to restart animation
-  void element.offsetWidth;
-  element.classList.add('flash-correct');
-  setTimeout(() => element.classList.remove('flash-correct'), 600);
-}
-
-function shakeWrong(element) {
-  if (!element) return;
-  element.classList.remove('shake-wrong');
-  void element.offsetWidth;
-  element.classList.add('shake-wrong');
-  setTimeout(() => element.classList.remove('shake-wrong'), 500);
-}
+import { isMobileDevice, hapticFeedback, flashCorrect, shakeWrong, shuffleInPlace } from "./game-utils.js";
 
 export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCountryFeature }) {
   const DATA = window.DATA;
@@ -128,14 +93,6 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
     }
 
     return "💡 Hint: Think about neighboring countries";
-  }
-
-  function shuffleInPlace(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = (Math.random() * (i + 1)) | 0;
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
   }
 
   function updateUI() {

@@ -1,3 +1,5 @@
+import { shuffleArray } from "./game-utils.js";
+
 export function createTriviaGame({ ui, confetti }) {
   let questions = [];
   let currentIndex = 0;
@@ -7,15 +9,6 @@ export function createTriviaGame({ ui, confetti }) {
   let autoAdvanceTimer = null;
 
   const AUTO_MS = 4000; // Time to show explanation before next question
-
-  function shuffleArray(arr) {
-    const result = [...arr];
-    for (let i = result.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [result[i], result[j]] = [result[j], result[i]];
-    }
-    return result;
-  }
 
   async function loadQuestions() {
     try {

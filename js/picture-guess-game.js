@@ -1,3 +1,5 @@
+import { shuffleArray } from "./game-utils.js";
+
 export function createPictureGuessGame({ ui, confetti }) {
   let sites = [];
   let currentIndex = 0;
@@ -11,15 +13,6 @@ export function createPictureGuessGame({ ui, confetti }) {
 
   const AUTO_MS_CORRECT = 2500;
   const AUTO_MS_WRONG = 3500;
-
-  function shuffleArray(arr) {
-    const result = [...arr];
-    for (let i = result.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [result[i], result[j]] = [result[j], result[i]];
-    }
-    return result;
-  }
 
   async function loadSites() {
     try {

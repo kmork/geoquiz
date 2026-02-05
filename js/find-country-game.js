@@ -1,3 +1,5 @@
+import { shuffleInPlace } from "./game-utils.js";
+
 export function createFindCountryGame({ ui, confetti, checkClickedCountry, highlightCountry, zoomToCountries, resetMapView }) {
   const DATA = window.DATA;
   const MAX_ROUNDS = 10;
@@ -14,14 +16,6 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
 
   const AUTO_MS_CORRECT = 1500;
   const AUTO_MS_WRONG = 2000;
-
-  function shuffleInPlace(arr) {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = (Math.random() * (i + 1)) | 0;
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
-  }
 
   function updateUI() {
     ui.scoreEl.textContent = score;
