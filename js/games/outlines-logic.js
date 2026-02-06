@@ -58,7 +58,8 @@ export class OutlinesGameLogic {
           correctFirstTry: this.correctFirstTry,
           correctAny: this.correctAny,
           accuracy: this.getAccuracy(),
-          time: totalTime
+          time: totalTime,
+          usedHint: this.usedHint
         });
       }
       return null;

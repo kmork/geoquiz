@@ -59,7 +59,8 @@ export class PictureGuessGameLogic {
           perfectGuesses: this.perfectGuesses,
           totalCorrect: this.totalCorrect,
           accuracy: this.getAccuracy(),
-          time: totalTime
+          time: totalTime,
+          usedHint: this.usedHint
         });
       }
       return null;

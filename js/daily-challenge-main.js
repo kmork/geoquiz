@@ -770,7 +770,8 @@ class DailyChallenge {
           resolve({
             correct: finalResult.correctFirstTry > 0 || finalResult.correctAny > 0,
             time: finalResult.time || 0,
-            timeLimit: challenge.timeLimit
+            timeLimit: challenge.timeLimit,
+            usedHint: finalResult.usedHint || false
           });
         }
       });
@@ -817,7 +818,8 @@ class DailyChallenge {
           resolve({
             correct: finalResult.correct || finalResult.correctCount > 0,
             time: finalResult.time || 0,
-            timeLimit: challenge.timeLimit
+            timeLimit: challenge.timeLimit,
+            usedHint: finalResult.usedHint || false
           });
         }
       });
