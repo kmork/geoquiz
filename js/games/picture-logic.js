@@ -69,6 +69,7 @@ export class PictureGuessGameLogic {
     this.currentSite = this.sites[this.currentIndex];
     this.currentIndex++;
     this.roundEnded = false;
+    this.usedHint = false; // Reset hint flag for new round
     this.startTime = Date.now();
     
     // Track game start time on first round

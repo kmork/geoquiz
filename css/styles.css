@@ -197,6 +197,17 @@ button:disabled{opacity:.55;cursor:not-allowed}
 }
 
 .mapwrap{margin:10px 0}
+
+/* Canvas for Find the Country game */
+canvas {
+  display: block;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
 #map{
   border-radius:14px;
   background:var(--map-bg);

@@ -26,13 +26,17 @@ window.normalizeCountryName = function(name) {
  * @param {Object} [config.confetti] - Confetti instance
  * @param {boolean} [config.singleRound=false] - Single round mode
  * @param {Function} [config.onComplete] - Callback when complete
+ * @param {boolean} [config.allowMultipleChoice=true] - Allow multiple choice after wrong answer
+ * @param {boolean} [config.showHint=true] - Show hint button
  * @returns {Promise<Object>} Game instance
  */
 export async function createCompletePictureGame({
   container,
   confetti: confettiInstance,
   singleRound = false,
-  onComplete
+  onComplete,
+  allowMultipleChoice = true,
+  showHint = true
 }) {
   
   const confetti = confettiInstance || (singleRound ? null : initConfetti("confetti"));
@@ -43,7 +47,9 @@ export async function createCompletePictureGame({
     confetti,
     config: {
       singleRound,
-      onComplete
+      onComplete,
+      allowMultipleChoice,
+      showHint
     }
   });
   

@@ -17,6 +17,8 @@ export function createPictureGuessGame({ container, confetti, config = {} }) {
   const AUTO_MS_WRONG = config.autoMsWrong ?? 3500;
   const hideScoreUI = config.hideScoreUI ?? false;
   const singleRound = config.singleRound ?? false;
+  const allowMultipleChoice = config.allowMultipleChoice ?? true;
+  const showHint = config.showHint ?? true;
   const customOnAnswer = config.onAnswer;
   const customOnComplete = config.onComplete;
   
@@ -91,8 +93,8 @@ export function createPictureGuessGame({ container, confetti, config = {} }) {
     // Render UI using shared component
     currentUI = renderPictureUI(container, site, {
       showProgress: false, // Using external progress display
-      allowMultipleChoice: true,
-      showHint: true,
+      allowMultipleChoice,
+      showHint,
       onAnswer: handleTextGuess,
       onHintUsed: () => console.log('Hint used')
     });

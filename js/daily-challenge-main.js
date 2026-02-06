@@ -812,6 +812,8 @@ class DailyChallenge {
         container,
         confetti: this.confetti,
         singleRound: true,
+        allowMultipleChoice: true,
+        showHint: true,
         onComplete: (finalResult) => {
           if (hasResolved) return;
           hasResolved = true;
