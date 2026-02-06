@@ -76,7 +76,7 @@ export function generateShareText(date, totalStars, totalTime, breakdown, stats)
 
   text += `\n🔥 Streak: ${stats.currentStreak} day${stats.currentStreak !== 1 ? 's' : ''}\n`;
   text += `🎯 Rating: ${rating}\n\n`;
-  text += `Play at: geoquiz.app/daily`;
+  text += `Play at: https://geoquiz.info/daily.html`;
 
   return text;
 }
