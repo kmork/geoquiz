@@ -63,7 +63,7 @@ export function calculateStars(result, gameId) {
   }
 
   // Time bonus
-  if (result.timeLimit && result.time) {
+  if (result.timeLimit && result.time !== undefined && result.time !== null) {
     if (gameId === 'find') {
       // Find the Country: +2 or +1 stars
       if (result.time < 5) {
