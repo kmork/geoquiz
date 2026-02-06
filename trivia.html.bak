@@ -4,7 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Geography Trivia Quiz</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%233b82f6'/><stop offset='100%' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='url(%23g)'/><circle cx='50' cy='50' r='35' fill='none' stroke='white' stroke-width='2.5' opacity='0.9'/><ellipse cx='50' cy='50' rx='35' ry='15' fill='none' stroke='white' stroke-width='2' opacity='0.8'/><ellipse cx='50' cy='50' rx='15' ry='35' fill='none' stroke='white' stroke-width='2' opacity='0.8'/><path d='M30 35Q35 32 40 35L45 33Q50 31 52 35L50 40Q48 42 45 40L40 42Q35 40 30 38Z' fill='white' opacity='0.7'/><path d='M55 50Q60 48 65 52L68 55Q70 58 67 62L62 60Q58 58 55 60Z' fill='white' opacity='0.7'/><path d='M35 58Q38 55 42 57L45 60Q43 65 40 64L37 62Z' fill='white' opacity='0.6'/></svg>"
   <link rel="stylesheet" href="css/styles.css">
   <script>
     // Prevent FOUC - apply theme immediately

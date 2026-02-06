@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Daily Challenge - GeoQuiz</title>
+  <meta name="description" content="Take the daily geography challenge! Test your knowledge with 6 mini-games and share your score.">
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%233b82f6'/><stop offset='100%' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='url(%23g)'/><circle cx='50' cy='50' r='35' fill='none' stroke='white' stroke-width='2.5' opacity='0.9'/><ellipse cx='50' cy='50' rx='35' ry='15' fill='none' stroke='white' stroke-width='2' opacity='0.8'/><ellipse cx='50' cy='50' rx='15' ry='35' fill='none' stroke='white' stroke-width='2' opacity='0.8'/><path d='M30 35Q35 32 40 35L45 33Q50 31 52 35L50 40Q48 42 45 40L40 42Q35 40 30 38Z' fill='white' opacity='0.7'/><path d='M55 50Q60 48 65 52L68 55Q70 58 67 62L62 60Q58 58 55 60Z' fill='white' opacity='0.7'/><path d='M35 58Q38 55 42 57L45 60Q43 65 40 64L37 62Z' fill='white' opacity='0.6'/></svg>">
+  
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/daily-challenge.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo">🌍 GeoQuiz</a>
+      <div class="nav-right">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="daily-landing">
+    <div class="daily-hero">
+      <div class="daily-icon">📅</div>
+      <h1>Daily Challenge</h1>
+      <p class="daily-subtitle">6 games • One chance • Share your score!</p>
+    </div>
+
+    <div class="daily-challenge-card" id="challenge-card">
+      <!-- Will be populated by JavaScript -->
+    </div>
+
+    <div class="daily-stats-card" id="stats-card">
+      <h2>📊 Your Statistics</h2>
+      <div class="stats-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="current-streak">0</div>
+          <div class="stat-label">🔥 Current Streak</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="max-streak">0</div>
+          <div class="stat-label">🏆 Best Streak</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="total-completed">0</div>
+          <div class="stat-label">✅ Completed</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="average-stars">0.0</div>
+          <div class="stat-label">⭐ Avg Stars</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="daily-info">
+      <h3>How It Works</h3>
+      <ul>
+        <li>🎯 Play 6 geography mini-games</li>
+        <li>⏱️ Complete in under 30 seconds each (except Connect)</li>
+        <li>⭐ Earn up to 5 stars per game (30 total)</li>
+        <li>🔥 Build your daily streak!</li>
+        <li>📱 Share your score on social media</li>
+      </ul>
+    </div>
+  </main>
+
+  <script src="js/theme.js"></script>
+  <script type="module">
+    import { getTodayDate, getChallengeNumber } from './js/seeded-random.js';
+    import { hasCompletedToday, getResultForDate, getStats, getTimeUntilNext } from './js/daily-challenge-scoring.js';
+
+    const today = getTodayDate();
+    const challengeNum = getChallengeNumber(today);
+    const hasPlayed = hasCompletedToday(today);
+    const result = getResultForDate(today);
+    const stats = getStats();
+
+    // Populate challenge card
+    const challengeCard = document.getElementById('challenge-card');
+    
+    if (hasPlayed && result) {
+      // Already completed today - show results
+      const { hours, minutes } = getTimeUntilNext();
+      challengeCard.innerHTML = `
+        <div class="challenge-completed">
+          <div class="completed-icon">✅</div>
+          <h2>Challenge #${challengeNum} Complete!</h2>
+          <div class="completed-score">
+            <div class="score-stars">⭐ ${result.stars}/30 stars</div>
+            <div class="score-time">⏱️ ${Math.floor(result.totalTime / 60)}:${(result.totalTime % 60).toString().padStart(2, '0')}</div>
+          </div>
+          <p class="next-challenge">Next challenge in ${hours}h ${minutes}m</p>
+          <a href="daily-challenge.html?review=${today}" class="btn btn-secondary">
+            📊 Review Results
+          </a>
+        </div>
+      `;
+    } else {
+      // Not played yet - show start button
+      const dateFormatted = new Date(today + 'T00:00:00').toLocaleDateString('en-US', { 
+        month: 'long', 
+        day: 'numeric', 
+        year: 'numeric' 
+      });
+      
+      challengeCard.innerHTML = `
+        <div class="challenge-available">
+          <h2>Challenge #${challengeNum}</h2>
+          <p class="challenge-date">${dateFormatted}</p>
+          <div class="challenge-games">
+            <div class="game-badge">🗺️ Find</div>
+            <div class="game-badge">📚 Trivia</div>
+            <div class="game-badge">🌍 Outlines</div>
+            <div class="game-badge">🖼️ Picture</div>
+            <div class="game-badge">🏛️ Capitals</div>
+            <div class="game-badge">🔗 Connect</div>
+          </div>
+          <a href="daily-challenge.html" class="btn btn-primary btn-large">
+            🎮 Start Today's Challenge
+          </a>
+        </div>
+      `;
+    }
+
+    // Populate stats
+    document.getElementById('current-streak').textContent = stats.currentStreak || 0;
+    document.getElementById('max-streak').textContent = stats.maxStreak || 0;
+    document.getElementById('total-completed').textContent = stats.totalCompleted || 0;
+    document.getElementById('average-stars').textContent = stats.averageStars || '0.0';
+  </script>
+</body>
+</html>

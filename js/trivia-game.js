@@ -1,114 +1,130 @@
-import { shuffleArray } from "./game-utils.js";
+import { TriviaGameLogic } from "./games/trivia-logic.js";
 
-export function createTriviaGame({ ui, confetti }) {
-  let questions = [];
-  let currentIndex = 0;
-  let score = 0;
-  let correctCount = 0;
-  let answeredThisRound = false;
+export function createTriviaGame({ ui, confetti, config = {} }) {
   let autoAdvanceTimer = null;
+  let currentShuffledOptions = [];
 
-  const AUTO_MS = 4000; // Time to show explanation before next question
+  const AUTO_MS = config.autoMs ?? 4000; // Time to show explanation before next question
+  const hideScoreUI = config.hideScoreUI ?? false;
+  const singleRound = config.singleRound ?? false;
+  const customOnAnswer = config.onAnswer;
+  const customOnComplete = config.onComplete;
+
+  // Create game logic instance
+  const gameLogic = new TriviaGameLogic({
+    singleRound,
+    onAnswer: (result) => {
+      // Update UI with answer feedback
+      showAnswerFeedback(result);
+      // Call custom callback if provided
+      if (customOnAnswer) customOnAnswer(result);
+    },
+    onComplete: (finalResult) => {
+      if (customOnComplete) {
+        customOnComplete(finalResult);
+      } else {
+        showFinalScreen(finalResult);
+      }
+    }
+  });
 
   async function loadQuestions() {
-    try {
-      const response = await fetch("data/qa.json");
-      const data = await response.json();
-      // Shuffle all questions and take only first 10
-      const shuffled = shuffleArray(data);
-      questions = shuffled.slice(0, 10);
-      return true;
-    } catch (err) {
-      console.error("Failed to load questions:", err);
-      return false;
-    }
+    return await gameLogic.loadQuestions();
   }
 
   function updateUI() {
-    ui.scoreEl.textContent = score;
-    ui.progressEl.textContent = `${currentIndex} / ${questions.length}`;
+    if (hideScoreUI) return;
+    const progress = gameLogic.getProgress();
+    if (ui.scoreEl) ui.scoreEl.textContent = progress.score;
+    if (ui.progressEl) ui.progressEl.textContent = `${progress.current} / ${progress.total}`;
   }
 
   function showQuestion() {
-    if (currentIndex >= questions.length) {
-      showFinalScreen();
+    if (!gameLogic.hasMoreQuestions()) {
       return;
     }
 
-    answeredThisRound = false;
     clearTimeout(autoAdvanceTimer);
 
-    const q = questions[currentIndex];
+    const q = gameLogic.getCurrentQuestion();
+    currentShuffledOptions = gameLogic.getShuffledOptions();
+    
     ui.questionText.textContent = q.question;
     ui.explanation.style.display = "none";
     ui.choices.innerHTML = "";
 
     // Create choice buttons
-    q.options.forEach((option, idx) => {
+    currentShuffledOptions.forEach((option, idx) => {
       const btn = document.createElement("button");
       btn.textContent = option;
-      btn.addEventListener("click", () => handleAnswer(idx));
+      btn.addEventListener("click", () => handleAnswer(option));
       ui.choices.appendChild(btn);
     });
 
+    gameLogic.startQuestion();
     updateUI();
   }
 
-  function handleAnswer(selectedIdx) {
-    if (answeredThisRound) return;
-    answeredThisRound = true;
-
-    const q = questions[currentIndex];
-    const isCorrect = selectedIdx === q.answer;
-
-    // Update score
-    if (isCorrect) {
-      score++;
-      correctCount++;
+  function handleAnswer(selectedOption) {
+    const result = gameLogic.submitAnswer(selectedOption);
+    
+    if (result.correct) {
       confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
     }
 
+    showAnswerFeedback(result);
+
+    // Auto-advance to next question
+    if (!result.isLastQuestion) {
+      autoAdvanceTimer = setTimeout(() => {
+        gameLogic.advance();
+        showQuestion();
+      }, AUTO_MS);
+    }
+  }
+
+  function showAnswerFeedback(result) {
     // Show correct/wrong on buttons
     const buttons = ui.choices.querySelectorAll("button");
-    buttons.forEach((btn, idx) => {
+    buttons.forEach((btn) => {
       btn.disabled = true;
-      if (idx === q.answer) {
+      if (btn.textContent === result.correctAnswer) {
         btn.classList.add("correct");
-      } else if (idx === selectedIdx && !isCorrect) {
-        btn.classList.add("wrong");
+      } else if (btn.textContent !== result.correctAnswer && result.correct === false) {
+        // Highlight wrong answer if user was incorrect
+        const selectedWasThis = !result.correct && currentShuffledOptions.includes(btn.textContent);
+        if (selectedWasThis) {
+          btn.classList.add("wrong");
+        }
       }
     });
 
     // Show explanation
-    ui.explanation.textContent = q.explanation;
+    ui.explanation.textContent = result.explanation;
     ui.explanation.style.display = "block";
-    ui.explanation.className = isCorrect ? "status good" : "status bad";
+    ui.explanation.className = result.correct ? "status good" : "status bad";
 
     updateUI();
-
-    // Auto-advance to next question
-    autoAdvanceTimer = setTimeout(() => {
-      currentIndex++;
-      showQuestion();
-    }, AUTO_MS);
   }
 
-  function showFinalScreen() {
-    const accuracy = questions.length > 0 ? Math.round((correctCount / questions.length) * 100) : 0;
+  function showFinalScreen(finalResult) {
+    if (hideScoreUI || !ui.finalOverlay) return;
     
-    ui.finalScore.textContent = score;
-    ui.finalTotal.textContent = questions.length;
-    ui.finalCorrect.textContent = correctCount;
-    ui.finalAccuracy.textContent = `${accuracy}%`;
+    if (ui.finalScore) ui.finalScore.textContent = finalResult.score;
+    if (ui.finalTotal) ui.finalTotal.textContent = finalResult.total;
+    if (ui.finalCorrect) ui.finalCorrect.textContent = finalResult.correctCount;
+    if (ui.finalAccuracy) ui.finalAccuracy.textContent = `${finalResult.accuracy}%`;
     
-    if (accuracy === 100) {
-      ui.finalSubtitle.textContent = "Perfect score! Amazing! 🎊";
-    } else if (accuracy >= 80) {
-      ui.finalSubtitle.textContent = "Excellent work! 🌟";
-    } else if (accuracy >= 60) {
-      ui.finalSubtitle.textContent = "Good job! 👍";
-    } else {
-      ui.finalSubtitle.textContent = "Keep practicing! 💪";
+    if (ui.finalSubtitle) {
+      if (finalResult.accuracy === 100) {
+        ui.finalSubtitle.textContent = "Perfect score! Amazing! 🎊";
+      } else if (finalResult.accuracy >= 80) {
+        ui.finalSubtitle.textContent = "Excellent work! 🌟";
+      } else if (finalResult.accuracy >= 60) {
+        ui.finalSubtitle.textContent = "Good job! 👍";
+      } else {
+        ui.finalSubtitle.textContent = "Keep practicing! 💪";
+      }
     }
 
     ui.finalOverlay.style.display = "flex";
@@ -116,17 +132,19 @@ export function createTriviaGame({ ui, confetti }) {
   }
 
   function reset() {
-    currentIndex = 0;
-    score = 0;
-    correctCount = 0;
-    answeredThisRound = false;
     clearTimeout(autoAdvanceTimer);
-    questions = shuffleArray(questions);
+    gameLogic.reset();
+  }
+
+  function cleanup() {
+    clearTimeout(autoAdvanceTimer);
   }
 
   return {
     loadQuestions,
     showQuestion,
     reset,
+    cleanup,
+    setQuestion: (question) => gameLogic.setQuestions([question]),
   };
 }

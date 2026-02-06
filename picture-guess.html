@@ -4,6 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Where is this? - UNESCO World Heritage</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="stylesheet" href="css/styles.css">
   <script>
     // Prevent FOUC - apply theme immediately
@@ -31,7 +32,7 @@
       <div>
         <h1>
           <a href="index.html" style="text-decoration: none; color: inherit;">
-            <svg class="game-icon game-header-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <svg class="game-icon game-header-icon" width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="grad-picture-header" x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
@@ -62,41 +63,14 @@
 
     <div class="hr"></div>
 
-    <!-- Image Container -->
-    <div class="picture-container">
-      <img id="heritageImage" src="" alt="UNESCO World Heritage Site" />
-      <div id="imageLoading" class="image-loading">
-        <div class="spinner"></div>
-      </div>
-    </div>
-
-    <!-- First Attempt: Text Input -->
-    <div id="textInputSection" class="input-section">
-      <div class="answerRow">
-        <input 
-          id="countryInput"
-          class="country-input" 
-          placeholder="Type the country name..."
-          spellcheck="false"
-        />
-        <button id="submitGuess" class="btn btn-primary">Guess</button>
-      </div>
-    </div>
-
-    <!-- Second Attempt: Multiple Choice (hidden initially) -->
-    <div id="multipleChoiceSection" class="multiple-choice-section" style="display:none">
-      <div class="hint-text" id="hintText"></div>
-      <div class="choices" id="choices"></div>
-    </div>
-
-    <!-- Status/Result Display -->
-    <div id="status" class="status" style="display:none"></div>
+    <!-- Image Container (will be replaced by UI component) -->
+    <div id="game-container" class="picture-game-container"></div>
 
   </div>
 </div>
 
 <!-- Final score screen -->
-<div class="overlay" id="finalOverlay" role="dialog" aria-modal="true">
+<div class="overlay" id="finalOverlay" role="dialog" aria-modal="true" style="display: none;">
   <div class="panel">
     <h2>🌍 Adventure Complete!</h2>
     <div class="muted" id="finalSubtitle"></div>

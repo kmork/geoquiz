@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>CSS Test</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { padding: 2rem; font-family: system-ui; }
+    .test { background: red; color: white; padding: 1rem; }
+  </style>
+</head>
+<body>
+  <div class="test">
+    <h1>CSS Test Page</h1>
+    <p>If styles.css loads, you should see styled elements below:</p>
+    <div class="card">This should be a card</div>
+    <button class="btn-primary">This should be a primary button</button>
+  </div>
+  <script>
+    console.log('Checking CSS...');
+    const sheets = document.styleSheets;
+    console.log('Total stylesheets loaded:', sheets.length);
+    for (let i = 0; i < sheets.length; i++) {
+      console.log(`Sheet ${i}:`, sheets[i].href || 'inline');
+    }
+  </script>
+</body>
+</html>

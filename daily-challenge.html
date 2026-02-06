@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Daily Challenge - GeoQuiz</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <meta name="description" content="Play today's daily geography challenge!">
+  
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/daily-challenge.css">
+  
+  <style>
+    /* Inline critical styles to ensure page renders */
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, sans-serif; }
+  </style>
+  
+  <script>
+    // Prevent FOUC - apply theme immediately
+    (function() {
+      const saved = localStorage.getItem('geoquiz-theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const theme = saved || system;
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+    })();
+    
+    // Debug: Log CSS loading
+    window.addEventListener('DOMContentLoaded', () => {
+      console.log('DOMContentLoaded - Checking stylesheets...');
+      console.log('Total stylesheets:', document.styleSheets.length);
+      Array.from(document.styleSheets).forEach((sheet, i) => {
+        console.log(`Sheet ${i}:`, sheet.href || 'inline');
+      });
+    });
+  </script>
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo">🌍 GeoQuiz</a>
+      <div class="nav-right">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="daily-game-container">
+    <!-- Header with progress and timer -->
+    <div class="daily-header">
+      <div class="daily-progress">
+        <div class="progress-info">
+          <span id="challenge-title">Daily Challenge #<span id="challenge-num">-</span></span>
+          <span id="game-progress">Game 1/6</span>
+        </div>
+        <div class="progress-dots" id="progress-dots">
+          <div class="progress-dot current"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+      <div class="daily-timer" id="timer">30</div>
+    </div>
+
+    <!-- Game Area (dynamically populated) -->
+    <div class="game-area" id="game-area">
+      <h2 class="game-title" id="game-title">Loading...</h2>
+      <div id="game-content">
+        <!-- Game-specific content will be inserted here -->
+      </div>
+    </div>
+
+    <!-- Transition Screen (between games) -->
+    <div class="transition-screen hidden" id="transition-screen">
+      <div class="transition-content">
+        <div class="transition-result" id="transition-result"></div>
+        <div class="transition-stars" id="transition-stars"></div>
+        <div class="transition-next" id="transition-next"></div>
+      </div>
+    </div>
+
+    <!-- Results Screen (after all games) -->
+    <div class="results-container hidden" id="results-container">
+      <!-- Will be populated by JavaScript -->
+    </div>
+  </main>
+
+  <canvas id="confetti"></canvas>
+
+  <script src="js/pako.min.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/mobile-autocomplete.js"></script>
+  <script type="module" src="js/daily-challenge-main.js"></script>
+</body>
+</html>

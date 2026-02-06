@@ -4,6 +4,7 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
   <title>Geo Quiz - Geography Games</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <script>
     // Prevent FOUC - apply theme immediately
     (function() {
@@ -467,6 +468,32 @@
     </div>
     
     <div class="games-grid">
+      <!-- Daily Challenge -->
+      <a href="daily.html" class="glass-card">
+        <div class="card-content">
+          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="grad-daily" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
+              </linearGradient>
+            </defs>
+            <!-- Calendar -->
+            <rect x="20" y="25" width="60" height="55" rx="5" fill="none" stroke="url(#grad-daily)" stroke-width="3"/>
+            <line x1="30" y1="20" x2="30" y2="30" stroke="url(#grad-daily)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="50" y1="20" x2="50" y2="30" stroke="url(#grad-daily)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="70" y1="20" x2="70" y2="30" stroke="url(#grad-daily)" stroke-width="3" stroke-linecap="round"/>
+            <line x1="20" y1="38" x2="80" y2="38" stroke="url(#grad-daily)" stroke-width="2"/>
+            <!-- Stars -->
+            <path d="M35 55 L37 61 L43 61 L38 65 L40 71 L35 67 L30 71 L32 65 L27 61 L33 61 Z" fill="url(#grad-daily)"/>
+            <path d="M58 55 L60 61 L66 61 L61 65 L63 71 L58 67 L53 71 L55 65 L50 61 L56 61 Z" fill="url(#grad-daily)"/>
+          </svg>
+          <div class="card-title">Daily Challenge</div>
+          <div class="card-description">6 mini-games, one daily challenge. Share your score and build your streak!</div>
+          <div class="play-button">Play Today →</div>
+        </div>
+      </a>
+      
       <a href="find-country.html" class="glass-card">
         <div class="card-content">
           <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">

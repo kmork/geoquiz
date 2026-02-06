@@ -1,52 +1,66 @@
-import { norm } from "./utils.js";
-import { isMobileDevice, hapticFeedback, shakeWrong, shuffleInPlace } from "./game-utils.js";
+import { OutlinesGameLogic } from "./games/outlines-logic.js";
+import { isMobileDevice, hapticFeedback, shakeWrong } from "./game-utils.js";
 
-export function createOutlinesGame({ ui, neighbors, confetti, drawCountries }) {
-  const DATA = window.DATA;
-  const MAX_ROUNDS = 10;
-
-  let deck = [];
-  let current = null;
-
-  let score = 0;
-  let correctFirstTry = 0;
-  let correctAny = 0;
-
-  let attempt = 0; // 0 = not started, 1 = first attempt, 2 = second attempt
-  let roundEnded = false;
+export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, config = {} }) {
   let continueTimer = null;
+  let isProcessing = false; // Flag to prevent duplicate submissions
 
-  const AUTO_MS_CORRECT_FIRST = 900;
-  const AUTO_MS_CORRECT_SECOND = 1100;
-  const AUTO_MS_WRONG_SECOND = 1700;
+  const AUTO_MS_CORRECT_FIRST = config.autoMsCorrectFirst ?? 900;
+  const AUTO_MS_CORRECT_SECOND = config.autoMsCorrectSecond ?? 1100;
+  const AUTO_MS_WRONG_SECOND = config.autoMsWrongSecond ?? 1700;
+  const hideScoreUI = config.hideScoreUI ?? false;
+  const singleRound = config.singleRound ?? false;
+  const customOnAnswer = config.onAnswer;
+  const customOnComplete = config.onComplete;
+  const customOnHintUsed = config.onHintUsed;
+
+  // Create game logic instance
+  const gameLogic = new OutlinesGameLogic({
+    singleRound,
+    onAnswer: (result) => {
+      // Logic has processed the answer, handle UI feedback
+      handleAnswerFeedback(result);
+      // Call custom callback if provided
+      if (customOnAnswer) customOnAnswer(result);
+    },
+    onComplete: (finalResult) => {
+      if (customOnComplete) {
+        customOnComplete(finalResult);
+      } else {
+        showFinal(finalResult);
+      }
+    },
+    onHintUsed: () => {
+      // Hint was used - neighbors will be shown
+      const current = gameLogic.getCurrentCountry();
+      const countryNeighbors = neighbors[current.country] || [];
+      drawCountries(current.country, countryNeighbors);
+      // Call custom callback if provided
+      if (customOnHintUsed) customOnHintUsed();
+    }
+  });
 
   function updateUI() {
-    ui.scoreEl.textContent = score;
-    ui.progressEl.textContent = `${MAX_ROUNDS - deck.length} / ${MAX_ROUNDS}`;
+    if (hideScoreUI) return;
+    const progress = gameLogic.getProgress();
+    if (ui.scoreEl) ui.scoreEl.textContent = progress.score;
+    if (ui.progressEl) ui.progressEl.textContent = `${progress.current} / ${progress.total}`;
   }
 
   function reset() {
-    // Clear any pending timer
     if (continueTimer) {
       clearTimeout(continueTimer);
       continueTimer = null;
     }
 
-    // Shuffle all countries and take only first 10
-    deck = shuffleInPlace([...DATA]).slice(0, MAX_ROUNDS);
-    current = null;
-    score = 0;
-    correctFirstTry = 0;
-    correctAny = 0;
-    attempt = 0;
-    roundEnded = false;
+    gameLogic.reset();
     updateUI();
     ui.answerInput.value = "";
     ui.statusEl.style.display = "none";
   }
 
   function getCurrent() {
-    return current?.country || "";
+    return gameLogic.getCurrentCountry()?.country || "";
   }
 
   function showStatus(msg, isCorrect) {
@@ -60,163 +74,124 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries }) {
   }
 
   function nextQ() {
-    console.log("nextQ() called, roundEnded:", roundEnded, "attempt:", attempt);
-    
-    if (deck.length === 0) {
-      showFinal();
-      return;
-    }
-
-    // Clear any pending auto-continue timer
     if (continueTimer) {
       clearTimeout(continueTimer);
       continueTimer = null;
     }
 
-    current = deck.pop();
-    attempt = 0;
-    roundEnded = false;
+    const country = gameLogic.nextRound();
+    if (!country) {
+      return; // Game complete, onComplete callback will handle it
+    }
+
     ui.answerInput.value = "";
     ui.answerInput.disabled = false;
     ui.submitBtn.disabled = false;
     hideStatus();
 
-    console.log("Starting new question:", current.country, "input disabled:", ui.answerInput.disabled, "button disabled:", ui.submitBtn.disabled);
-
     // Draw only the target country (no neighbors yet)
-    const countryNeighbors = neighbors[current.country] || [];
-    drawCountries(current.country, []);
+    drawCountries(country.country, []);
 
     updateUI();
-    // Only auto-focus on desktop (not mobile to avoid unwanted keyboard)
+    
+    // Only auto-focus on desktop
     if (!isMobileDevice()) {
       ui.answerInput.focus();
     }
   }
 
   function checkAnswer() {
-    if (roundEnded) {
-      console.log("Round already ended, ignoring input");
+    if (isProcessing) {
       return;
     }
-    if (attempt >= 2) {
-      console.log("Already made 2 attempts, ignoring input");
-      return;
-    }
-
+    
     const userAnswer = ui.answerInput.value.trim();
+    isProcessing = true;
+    const result = gameLogic.checkAnswer(userAnswer);
 
-    console.log(`Attempt ${attempt + 1}: "${userAnswer}" vs "${current.country}"`);
-    attempt++;
+    if (result.action === 'ignore') {
+      isProcessing = false;
+      return;
+    }
 
-    // Empty answer is treated as wrong (allows skipping to see neighbors)
-    if (!userAnswer) {
-      // Wrong answer (empty = skip)
+    // Handle UI feedback based on result
+    if (result.action === 'empty' || result.action === 'wrong_first') {
+      // First attempt wrong or empty - show neighbors and allow retry
       shakeWrong(ui.answerInput);
       hapticFeedback('wrong');
-      if (attempt === 1) {
-        // First attempt - show neighbors
-        showStatus(`❌ Try again with neighbor hints!`, false);
-        ui.answerInput.value = "";
-        if (!isMobileDevice()) {
-          ui.answerInput.focus();
-        }
-        
-        // Draw country WITH neighbors
-        const countryNeighbors = neighbors[current.country] || [];
-        drawCountries(current.country, countryNeighbors);
-      } else {
-        // Second attempt - move on
-        showStatus(`❌ Skipped. The answer was: ${current.country}`, false);
-        roundEnded = true;
-        ui.answerInput.disabled = true;
-        ui.submitBtn.disabled = true;
-        continueTimer = setTimeout(() => nextQ(), AUTO_MS_WRONG_SECOND);
+      showStatus(result.message, false);
+      ui.answerInput.value = "";
+      updateUI(); // Update UI to show current progress
+      
+      // Reset processing flag after a brief delay to prevent immediate re-submission
+      setTimeout(() => {
+        isProcessing = false;
+      }, 100);
+      
+      if (!isMobileDevice()) {
+        ui.answerInput.focus();
       }
+      
+      // Neighbors are drawn by onHintUsed callback
       return;
     }
 
-    const normAnswer = norm(userAnswer);
-    const normCountry = norm(current.country);
-
-    // Check if the answer is an alias first
-    let searchName = userAnswer;
-    for (const [alias, official] of Object.entries(window.COUNTRY_ALIASES || {})) {
-      if (norm(alias) === normAnswer) {
-        searchName = official;
-        break;
-      }
-    }
-
-    const isCorrect = norm(searchName) === normCountry;
-
-    if (isCorrect) {
+    if (result.isCorrect) {
       // Correct answer
-      flashCorrect(document.querySelector('.card'));
+      const card = document.querySelector('.card');
+      if (card) {
+        card.style.animation = 'flashCorrect 0.5s';
+        setTimeout(() => card.style.animation = '', 500);
+      }
       hapticFeedback('correct');
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
-      if (attempt === 1) {
-        score += 2;
-        correctFirstTry++;
-        showStatus(`✅ Correct! +2 points`, true);
-        correctAny++;
-        roundEnded = true;
-        ui.answerInput.disabled = true;
-        ui.submitBtn.disabled = true;
-        continueTimer = setTimeout(() => nextQ(), AUTO_MS_CORRECT_FIRST);
-      } else {
-        score += 1;
-        showStatus(`✅ Correct! +1 point`, true);
-        correctAny++;
-        roundEnded = true;
-        ui.answerInput.disabled = true;
-        ui.submitBtn.disabled = true;
-        continueTimer = setTimeout(() => nextQ(), AUTO_MS_CORRECT_SECOND);
-      }
+      showStatus(result.message, true);
+      ui.answerInput.disabled = true;
+      ui.submitBtn.disabled = true;
       updateUI();
+      
+      const delay = result.action === 'correct_first' ? AUTO_MS_CORRECT_FIRST : AUTO_MS_CORRECT_SECOND;
+      continueTimer = setTimeout(() => {
+        isProcessing = false;
+        nextQ();
+      }, delay);
     } else {
-      // Wrong answer
+      // Wrong second attempt
       shakeWrong(ui.answerInput);
       hapticFeedback('wrong');
-      if (attempt === 1) {
-        // First wrong attempt - show neighbors
-        showStatus(`❌ Not quite. Try again with neighbor hints!`, false);
-        ui.answerInput.value = "";
-        if (!isMobileDevice()) {
-          ui.answerInput.focus();
-        }
-        
-        // Draw country WITH neighbors
-        const countryNeighbors = neighbors[current.country] || [];
-        drawCountries(current.country, countryNeighbors);
-      } else {
-        // Second wrong attempt - move on
-        showStatus(`❌ Wrong. The answer was: ${current.country}`, false);
-        roundEnded = true;
-        ui.answerInput.disabled = true;
-        ui.submitBtn.disabled = true;
-        continueTimer = setTimeout(() => nextQ(), AUTO_MS_WRONG_SECOND);
-      }
+      showStatus(result.message, false);
+      ui.answerInput.disabled = true;
+      ui.submitBtn.disabled = true;
+      continueTimer = setTimeout(() => {
+        isProcessing = false;
+        nextQ();
+      }, AUTO_MS_WRONG_SECOND);
     }
   }
 
-  function showFinal() {
-    const accuracy = MAX_ROUNDS > 0 ? Math.round((correctAny / MAX_ROUNDS) * 100) : 0;
+  function handleAnswerFeedback(result) {
+    // This is called by the logic module's onAnswer callback
+    // Most feedback is already handled in checkAnswer()
+    // This is here for consistency with other game modules
+  }
+
+  function showFinal(finalResult) {
+    if (hideScoreUI || !ui.finalOverlay) return;
     
-    ui.finalScoreEl.textContent = score;
-    ui.finalCountriesEl.textContent = MAX_ROUNDS;
-    ui.finalCorrectEl.textContent = correctAny;
-    ui.finalFirstTryEl.textContent = correctFirstTry;
+    if (ui.finalScoreEl) ui.finalScoreEl.textContent = finalResult.score;
+    if (ui.finalCountriesEl) ui.finalCountriesEl.textContent = finalResult.total;
+    if (ui.finalCorrectEl) ui.finalCorrectEl.textContent = finalResult.correctAny;
+    if (ui.finalFirstTryEl) ui.finalFirstTryEl.textContent = finalResult.correctFirstTry;
 
     let subtitle = "Great job!";
-    if (accuracy === 100) subtitle = "Perfect score! 🌟";
-    else if (accuracy >= 80) subtitle = "Excellent work! 🎯";
-    else if (accuracy >= 60) subtitle = "Well done! 👏";
+    if (finalResult.accuracy === 100) subtitle = "Perfect score! 🌟";
+    else if (finalResult.accuracy >= 80) subtitle = "Excellent work! 🎯";
+    else if (finalResult.accuracy >= 60) subtitle = "Well done! 👏";
     
-    ui.finalSubtitleEl.textContent = subtitle;
+    if (ui.finalSubtitleEl) ui.finalSubtitleEl.textContent = subtitle;
     ui.finalOverlay.style.display = "flex";
 
-    if (accuracy >= 80) {
+    if (finalResult.accuracy >= 80) {
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
     }
   }
@@ -233,5 +208,7 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries }) {
     reset,
     nextQ,
     getCurrent,
+    handleSubmit: () => checkAnswer(),
+    setCountry: (country) => gameLogic.setCountry(country),
   };
 }

@@ -1,6 +1,7 @@
 import { shuffleArray } from "./game-utils.js";
+import { renderPictureUI, setupPictureAutocomplete } from "./ui-components/picture-ui.js";
 
-export function createPictureGuessGame({ ui, confetti }) {
+export function createPictureGuessGame({ container, confetti, config = {} }) {
   let sites = [];
   let currentIndex = 0;
   let score = 0;
@@ -10,9 +11,24 @@ export function createPictureGuessGame({ ui, confetti }) {
   let currentAttempt = 1; // 1 = text input, 2 = multiple choice
   let answeredThisRound = false;
   let autoAdvanceTimer = null;
+  let currentUI = null;
 
-  const AUTO_MS_CORRECT = 2500;
-  const AUTO_MS_WRONG = 3500;
+  const AUTO_MS_CORRECT = config.autoMsCorrect ?? 2500;
+  const AUTO_MS_WRONG = config.autoMsWrong ?? 3500;
+  const hideScoreUI = config.hideScoreUI ?? false;
+  const singleRound = config.singleRound ?? false;
+  const customOnAnswer = config.onAnswer;
+  const customOnComplete = config.onComplete;
+  
+  // UI element refs (for progress/final screen)
+  const scoreEl = hideScoreUI ? null : document.getElementById("score");
+  const progressEl = hideScoreUI ? null : document.getElementById("progress");
+  const finalOverlay = hideScoreUI ? null : document.getElementById("finalOverlay");
+  const finalScoreEl = hideScoreUI ? null : document.getElementById("finalScore");
+  const finalSitesEl = hideScoreUI ? null : document.getElementById("finalSites");
+  const finalPerfectEl = hideScoreUI ? null : document.getElementById("finalPerfect");
+  const finalAccuracyEl = hideScoreUI ? null : document.getElementById("finalAccuracy");
+  const finalSubtitleEl = hideScoreUI ? null : document.getElementById("finalSubtitle");
 
   async function loadSites() {
     try {
@@ -30,8 +46,11 @@ export function createPictureGuessGame({ ui, confetti }) {
   }
 
   function updateUI() {
-    ui.scoreEl.textContent = score;
-    ui.progressEl.textContent = `${currentIndex} / ${sites.length}`;
+    if (scoreEl) scoreEl.textContent = score;
+    if (progressEl) progressEl.textContent = `${currentIndex} / ${sites.length}`;
+    if (currentUI) {
+      currentUI.updateProgress(score, currentIndex, sites.length);
+    }
   }
 
   function reset() {
@@ -48,7 +67,17 @@ export function createPictureGuessGame({ ui, confetti }) {
 
   function showSite() {
     if (currentIndex >= sites.length) {
-      showFinalScreen();
+      if (customOnComplete) {
+        customOnComplete({
+          score,
+          total: sites.length,
+          correctCount: totalCorrect,
+          perfectCount: perfectGuesses,
+          accuracy: sites.length > 0 ? Math.round((totalCorrect / sites.length) * 100) : 0
+        });
+      } else {
+        showFinalScreen();
+      }
       return;
     }
 
@@ -58,50 +87,52 @@ export function createPictureGuessGame({ ui, confetti }) {
 
     const site = sites[currentIndex];
     console.log(`[${currentIndex + 1}/${sites.length}] Showing: ${site.siteName} (${site.country})`);
-    console.log(`Image path: ${site.imageUrl}`);
 
-    // Show image with loading state
-    ui.imageLoading.style.display = 'flex';
-    ui.heritageImage.style.opacity = '0';
+    // Render UI using shared component
+    currentUI = renderPictureUI(container, site, {
+      showProgress: false, // Using external progress display
+      allowMultipleChoice: true,
+      showHint: true,
+      onAnswer: handleTextGuess,
+      onHintUsed: () => console.log('Hint used')
+    });
     
-    const img = new Image();
-    img.onload = () => {
-      console.log(`✓ Image loaded: ${site.imageUrl}`);
-      ui.heritageImage.src = site.imageUrl;
-      ui.heritageImage.alt = site.siteName;
-      ui.imageLoading.style.display = 'none';
-      ui.heritageImage.style.opacity = '1';
-    };
-    img.onerror = () => {
-      console.error(`✗ Failed to load: ${site.imageUrl}`);
-      ui.imageLoading.style.display = 'none';
-      ui.heritageImage.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300"><rect fill="%23333" width="400" height="300"/><text x="50%" y="50%" fill="%23fff" text-anchor="middle">Image not available</text></svg>';
-      ui.heritageImage.style.opacity = '1';
-    };
-    img.src = site.imageUrl;
-
-    // Show text input section, hide others
-    ui.textInputSection.style.display = 'block';
-    ui.multipleChoiceSection.style.display = 'none';
-    ui.status.style.display = 'none';
-    ui.countryInput.value = '';
-    ui.countryInput.disabled = false;
-    ui.submitGuess.disabled = false;
+    // Setup autocomplete with all country names
+    const countryList = [];
+    sites.forEach(s => {
+      if (s.country && !countryList.includes(s.country)) {
+        countryList.push(s.country);
+      }
+    });
     
-    // Only auto-focus on desktop (not mobile to avoid unwanted keyboard)
-    const isMobile = window.innerWidth <= 640 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    if (!isMobile) {
-      ui.countryInput.focus();
+    // Add countries from global DATA if available
+    if (window.DATA && Array.isArray(window.DATA)) {
+      window.DATA.forEach(item => {
+        if (item.country && !countryList.includes(item.country)) {
+          countryList.push(item.country);
+        }
+      });
     }
+    
+    // Add aliases if available
+    if (window.COUNTRY_ALIASES) {
+      Object.keys(window.COUNTRY_ALIASES).forEach(alias => {
+        if (!countryList.includes(alias)) {
+          countryList.push(alias);
+        }
+      });
+    }
+    
+    setupPictureAutocomplete(currentUI.elements.input, countryList.sort());
 
     updateUI();
   }
 
-  function handleTextGuess(guess) {
+  function handleTextGuess({ answer, hintUsed }) {
     if (answeredThisRound || currentAttempt !== 1) return;
 
     const site = sites[currentIndex];
-    const normalizedGuess = window.normalizeCountryName(guess);
+    const normalizedGuess = window.normalizeCountryName(answer);
     const normalizedAnswer = window.normalizeCountryName(site.country);
 
     const isCorrect = normalizedGuess === normalizedAnswer;
@@ -113,25 +144,33 @@ export function createPictureGuessGame({ ui, confetti }) {
       totalCorrect++;
       answeredThisRound = true;
 
-      ui.status.textContent = `✅ Correct! This is ${site.siteName} in ${site.country}. +2 points!`;
-      ui.status.className = 'status good';
-      ui.status.style.display = 'block';
-
-      ui.countryInput.disabled = true;
-      ui.submitGuess.disabled = true;
+      currentUI.showFeedback(`✅ Correct! This is ${site.siteName} in ${site.country}. +2 points!`, true);
 
       confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
 
       updateUI();
+      
+      // Call custom callback if provided
+      if (customOnAnswer) customOnAnswer({ isCorrect: true, points: 2 });
 
-      autoAdvanceTimer = setTimeout(() => {
-        currentIndex++;
-        showSite();
-      }, AUTO_MS_CORRECT);
+      if (singleRound) {
+        // For single round mode, immediately resolve with result
+        if (customOnComplete) {
+          customOnComplete({
+            correct: true,
+            score: 2,
+            time: 0 // TODO: track time if needed
+          });
+        }
+      } else {
+        autoAdvanceTimer = setTimeout(() => {
+          currentIndex++;
+          showSite();
+        }, AUTO_MS_CORRECT);
+      }
     } else {
       // Wrong - show multiple choice
       currentAttempt = 2;
-      ui.textInputSection.style.display = 'none';
       showMultipleChoice();
     }
   }
@@ -139,25 +178,14 @@ export function createPictureGuessGame({ ui, confetti }) {
   function showMultipleChoice() {
     const site = sites[currentIndex];
     
-    // Show hint
-    ui.hintText.textContent = `Hint: ${site.hint}`;
-    
     // Generate 3 wrong alternatives
     const alternatives = generateAlternatives(site);
     
     // Shuffle options
     const options = shuffleArray([...alternatives, site.country]);
     
-    // Create buttons
-    ui.choices.innerHTML = '';
-    options.forEach((country, idx) => {
-      const btn = document.createElement('button');
-      btn.textContent = country;
-      btn.addEventListener('click', () => handleMultipleChoiceGuess(country));
-      ui.choices.appendChild(btn);
-    });
-
-    ui.multipleChoiceSection.style.display = 'block';
+    // Show multiple choice UI
+    currentUI.showMultipleChoice(options, handleMultipleChoiceGuess);
   }
 
   function handleMultipleChoiceGuess(selectedCountry) {
@@ -167,41 +195,57 @@ export function createPictureGuessGame({ ui, confetti }) {
     const site = sites[currentIndex];
     const isCorrect = selectedCountry === site.country;
 
-    // Disable all buttons and mark correct/wrong
-    const buttons = ui.choices.querySelectorAll('button');
-    buttons.forEach(btn => {
-      btn.disabled = true;
-      if (btn.textContent === site.country) {
-        btn.classList.add('correct');
-      } else if (btn.textContent === selectedCountry && !isCorrect) {
-        btn.classList.add('wrong');
-      }
-    });
+    // Highlight correct/wrong
+    currentUI.highlightChoices(site.country, selectedCountry);
 
     if (isCorrect) {
       score += 1;
       totalCorrect++;
-      ui.status.textContent = `✅ Correct! This is ${site.siteName} in ${site.country}. +1 point`;
-      ui.status.className = 'status good';
-      confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-
-      autoAdvanceTimer = setTimeout(() => {
-        currentIndex++;
-        showSite();
-      }, AUTO_MS_CORRECT);
+      currentUI.showFeedback(`✅ Correct! This is ${site.siteName} in ${site.country}. +1 point`, true);
+      
+      // Call custom callback if provided
+      if (customOnAnswer) customOnAnswer({ isCorrect: true, points: 1 });
+      
+      if (singleRound) {
+        // For single round mode, immediately resolve with result
+        if (customOnComplete) {
+          customOnComplete({
+            correct: true,
+            score: 1,
+            time: 0 // TODO: track time if needed
+          });
+        }
+      } else {
+        updateUI();
+        autoAdvanceTimer = setTimeout(() => {
+          currentIndex++;
+          showSite();
+        }, AUTO_MS_CORRECT);
+      }
     } else {
-      ui.status.textContent = `❌ Wrong. This is ${site.siteName} in ${site.country}.`;
-      ui.status.className = 'status bad';
-
-      autoAdvanceTimer = setTimeout(() => {
-        currentIndex++;
-        showSite();
-      }, AUTO_MS_WRONG);
+      currentUI.showFeedback(`❌ Wrong. This is ${site.siteName} in ${site.country}.`, false);
+      
+      // Call custom callback if provided
+      if (customOnAnswer) customOnAnswer({ isCorrect: false, points: 0 });
+      
+      if (singleRound) {
+        // For single round mode, immediately resolve with result
+        if (customOnComplete) {
+          customOnComplete({
+            correct: false,
+            score: 0,
+            time: 0 // TODO: track time if needed
+          });
+        }
+      } else {
+        autoAdvanceTimer = setTimeout(() => {
+          currentIndex++;
+          showSite();
+        }, AUTO_MS_WRONG);
+      }
     }
-
-    ui.status.style.display = 'block';
-    updateUI();
   }
+
 
   function generateAlternatives(correctSite) {
     // Get countries from same region first, then others
@@ -238,13 +282,15 @@ export function createPictureGuessGame({ ui, confetti }) {
   }
 
   function showFinalScreen() {
+    if (hideScoreUI || !finalOverlay) return;
+    
     const accuracy = sites.length > 0 ? Math.round((totalCorrect / sites.length) * 100) : 0;
     const perfectRate = sites.length > 0 ? Math.round((perfectGuesses / sites.length) * 100) : 0;
 
-    ui.finalScoreEl.textContent = score;
-    ui.finalSitesEl.textContent = sites.length;
-    ui.finalPerfectEl.textContent = perfectGuesses;
-    ui.finalAccuracyEl.textContent = `${accuracy}%`;
+    if (finalScoreEl) finalScoreEl.textContent = score;
+    if (finalSitesEl) finalSitesEl.textContent = sites.length;
+    if (finalPerfectEl) finalPerfectEl.textContent = perfectGuesses;
+    if (finalAccuracyEl) finalAccuracyEl.textContent = `${accuracy}%`;
 
     let subtitle = 'Good effort!';
     if (perfectRate >= 80) subtitle = 'Amazing! You know your world heritage! 🌟';
@@ -252,18 +298,40 @@ export function createPictureGuessGame({ ui, confetti }) {
     else if (perfectRate >= 40) subtitle = 'Well done! 👏';
     else if (accuracy >= 60) subtitle = 'Not bad! Keep exploring! 🗺️';
 
-    ui.finalSubtitleEl.textContent = subtitle;
-    ui.finalOverlay.style.display = 'flex';
+    if (finalSubtitleEl) finalSubtitleEl.textContent = subtitle;
+    if (finalOverlay) finalOverlay.style.display = 'flex';
 
     if (perfectRate >= 60) {
       confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    }
+  }
+  
+  function setSites(sitesList) {
+    // In single round mode, we need to keep all loaded sites for generating alternatives
+    // but only show the specified site(s)
+    if (Array.isArray(sitesList) && sitesList.length === 1 && sites.length > 1) {
+      // Single site specified, but we have all sites loaded - find the index
+      const targetSite = sitesList[0];
+      const index = sites.findIndex(s => s.country === targetSite.country && s.siteName === targetSite.siteName);
+      if (index >= 0) {
+        currentIndex = index;
+      } else {
+        // Site not found in loaded sites, add it at the beginning
+        sites.unshift(targetSite);
+        currentIndex = 0;
+      }
+    } else {
+      // Normal mode - replace all sites
+      sites = Array.isArray(sitesList) ? sitesList : [sitesList];
+      currentIndex = 0;
     }
   }
 
   return {
     loadSites,
     reset,
-    showSite,
-    handleTextGuess,
+    showQuestion: () => showSite(),
+    setSite: (site) => setSites([site]),
+    setSites
   };
 }

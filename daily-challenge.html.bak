@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Daily Challenge - GeoQuiz</title>
+  <meta name="description" content="Play today's daily geography challenge!">
+  
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%233b82f6'/><stop offset='100%' style='stop-color:%238b5cf6'/></linearGradient></defs><circle cx='50' cy='50' r='48' fill='url(%23g)'/><circle cx='50' cy='50' r='35' fill='none' stroke='white' stroke-width='2.5' opacity='0.9'/><ellipse cx='50' cy='50' rx='35' ry='15' fill='none' stroke='white' stroke-width='2' opacity='0.8'/><ellipse cx='50' cy='50' rx='15' ry='35' fill='none' stroke='white' stroke-width='2' opacity='0.8'/><path d='M30 35Q35 32 40 35L45 33Q50 31 52 35L50 40Q48 42 45 40L40 42Q35 40 30 38Z' fill='white' opacity='0.7'/><path d='M55 50Q60 48 65 52L68 55Q70 58 67 62L62 60Q58 58 55 60Z' fill='white' opacity='0.7'/><path d='M35 58Q38 55 42 57L45 60Q43 65 40 64L37 62Z' fill='white' opacity='0.6'/></svg>">
+  
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/daily-challenge.css">
+</head>
+<body>
+  <header>
+    <nav>
+      <a href="index.html" class="logo">🌍 GeoQuiz</a>
+      <div class="nav-right">
+        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="daily-game-container">
+    <!-- Header with progress and timer -->
+    <div class="daily-header">
+      <div class="daily-progress">
+        <div class="progress-info">
+          <span id="challenge-title">Daily Challenge #<span id="challenge-num">-</span></span>
+          <span id="game-progress">Game 1/6</span>
+        </div>
+        <div class="progress-dots" id="progress-dots">
+          <div class="progress-dot current"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+          <div class="progress-dot"></div>
+        </div>
+      </div>
+      <div class="daily-timer" id="timer">30</div>
+    </div>
+
+    <!-- Game Area (dynamically populated) -->
+    <div class="game-area" id="game-area">
+      <h2 class="game-title" id="game-title">Loading...</h2>
+      <div id="game-content">
+        <!-- Game-specific content will be inserted here -->
+      </div>
+    </div>
+
+    <!-- Transition Screen (between games) -->
+    <div class="transition-screen hidden" id="transition-screen">
+      <div class="transition-content">
+        <div class="transition-result" id="transition-result"></div>
+        <div class="transition-stars" id="transition-stars"></div>
+        <div class="transition-next" id="transition-next"></div>
+      </div>
+    </div>
+
+    <!-- Results Screen (after all games) -->
+    <div class="results-container hidden" id="results-container">
+      <!-- Will be populated by JavaScript -->
+    </div>
+  </main>
+
+  <script src="js/pako.min.js"></script>
+  <script src="js/theme.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/mobile-autocomplete.js"></script>
+  <script type="module" src="js/daily-challenge-main.js"></script>
+</body>
+</html>

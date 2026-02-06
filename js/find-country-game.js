@@ -1,45 +1,52 @@
-import { shuffleInPlace } from "./game-utils.js";
+import { FindCountryGameLogic } from "./games/find-logic.js";
 
-export function createFindCountryGame({ ui, confetti, checkClickedCountry, highlightCountry, zoomToCountries, resetMapView }) {
-  const DATA = window.DATA;
-  const MAX_ROUNDS = 10;
-
-  let deck = [];
-  let current = null;
-
-  let score = 0;
-  let correctCount = 0;
-
-  let roundEnded = false;
+export function createFindCountryGame({ ui, confetti, checkClickedCountry, highlightCountry, zoomToCountries, resetMapView, config = {} }) {
   let continueTimer = null;
-  let selectedCountry = null; // Track first click selection
 
-  const AUTO_MS_CORRECT = 1500;
-  const AUTO_MS_WRONG = 2000;
+  const AUTO_MS_CORRECT = config.autoMsCorrect ?? 1500;
+  const AUTO_MS_WRONG = config.autoMsWrong ?? 2000;
+  const hideScoreUI = config.hideScoreUI ?? false;
+  const singleRound = config.singleRound ?? false;
+  const customOnAnswer = config.onAnswer;
+  const customOnComplete = config.onComplete;
+
+  // Create game logic instance
+  const gameLogic = new FindCountryGameLogic({
+    singleRound,
+    onAnswer: (result) => {
+      // Logic has processed the answer, handle UI feedback
+      handleAnswerFeedback(result);
+      // Call custom callback if provided
+      if (customOnAnswer) customOnAnswer(result);
+    },
+    onComplete: (finalResult) => {
+      if (customOnComplete) {
+        customOnComplete(finalResult);
+      } else {
+        showFinal(finalResult);
+      }
+    }
+  });
 
   function updateUI() {
-    ui.scoreEl.textContent = score;
-    ui.progressEl.textContent = `${MAX_ROUNDS - deck.length} / ${MAX_ROUNDS}`;
+    if (hideScoreUI) return;
+    const progress = gameLogic.getProgress();
+    if (ui.scoreEl) ui.scoreEl.textContent = progress.score;
+    if (ui.progressEl) ui.progressEl.textContent = `${progress.current} / ${progress.total}`;
   }
 
   function reset() {
-    // Clear any pending timer
     if (continueTimer) {
       clearTimeout(continueTimer);
       continueTimer = null;
     }
 
-    // Shuffle all countries and take only first 10
-    deck = shuffleInPlace([...DATA]).slice(0, MAX_ROUNDS);
-    current = null;
-    score = 0;
-    correctCount = 0;
-    roundEnded = false;
+    gameLogic.reset();
     updateUI();
   }
 
   function getCurrent() {
-    return current || { country: "" };
+    return gameLogic.getCurrentCountry() || { country: "" };
   }
 
   function showStatus(msg, isCorrect) {
@@ -51,102 +58,82 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
   }
 
   function nextQ() {
-    console.log("nextQ() called, roundEnded:", roundEnded);
-    
-    if (deck.length === 0) {
-      showFinal();
-      return;
-    }
-
-    // Clear any pending auto-continue timer
     if (continueTimer) {
       clearTimeout(continueTimer);
       continueTimer = null;
     }
 
-    current = deck.pop();
-    roundEnded = false;
-    selectedCountry = null; // Clear selection for new question
+    const country = gameLogic.nextRound();
+    if (!country) {
+      return; // Game complete, onComplete callback will handle it
+    }
+
     hideStatus();
-
-    // Reset map to full world view and clear highlights
     resetMapView();
-
-    // Update country name display
-    ui.countryNameEl.textContent = current.country;
-
+    ui.countryNameEl.textContent = country.country;
     updateUI();
   }
 
   function handleMapClick(clickedCountryName) {
-    if (roundEnded) {
-      console.log("Round already ended, ignoring click");
+    const result = gameLogic.handleClick(clickedCountryName);
+    
+    if (result.action === 'ignore') {
       return;
     }
-    if (!current) return;
 
-    console.log(`Clicked: "${clickedCountryName}"`);
-
-    // First click or different country: Just select/highlight
-    if (selectedCountry !== clickedCountryName) {
-      selectedCountry = clickedCountryName;
+    if (result.action === 'select') {
       highlightCountry(clickedCountryName, "selected");
       console.log(`Selected: "${clickedCountryName}" - click again to confirm`);
       return;
     }
 
-    // Second click on same country: Submit answer
-    console.log(`Confirming guess: "${clickedCountryName}" vs target: "${current.country}"`);
-    const isCorrect = clickedCountryName === current.country;
+    // Handle correct or wrong answer
+    handleAnswerFeedback(result);
+  }
 
-    if (isCorrect) {
-      // Correct!
-      score += 1;
-      correctCount++;
+  function handleAnswerFeedback(result) {
+    if (result.isCorrect) {
       showStatus(`✅ Correct! +1 point`, true);
-      roundEnded = true;
-      
-      // Highlight correct country in green
-      highlightCountry(current.country, "correct");
+      highlightCountry(result.correctCountry, "correct");
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
-      
       updateUI();
       continueTimer = setTimeout(() => nextQ(), AUTO_MS_CORRECT);
     } else {
-      // Wrong - show both wrong (red) and correct (green)
-      showStatus(`❌ Wrong. The answer was: ${current.country}`, false);
-      roundEnded = true;
+      showStatus(`❌ Wrong. The answer was: ${result.correctCountry}`, false);
       
-      // Zoom to show both countries
-      zoomToCountries(clickedCountryName, current.country);
-      
-      // Highlight wrong country in red, then correct in green
-      highlightCountry(clickedCountryName, "wrong");
-      setTimeout(() => {
-        highlightCountry(current.country, "correct");
-      }, 300);
+      // Zoom to show both countries if wrong guess was made
+      if (result.clickedCountry) {
+        zoomToCountries(result.clickedCountry, result.correctCountry);
+        highlightCountry(result.clickedCountry, "wrong");
+        setTimeout(() => {
+          highlightCountry(result.correctCountry, "correct");
+        }, 300);
+      } else {
+        // Timeout - just show correct country
+        highlightCountry(result.correctCountry, "correct");
+      }
       
       continueTimer = setTimeout(() => nextQ(), AUTO_MS_WRONG);
     }
   }
 
-  function showFinal() {
-    const accuracy = MAX_ROUNDS > 0 ? Math.round((correctCount / MAX_ROUNDS) * 100) : 0;
+  function showFinal(finalResult) {
+    if (hideScoreUI || !ui.finalOverlay) return;
     
-    ui.finalScoreEl.textContent = score;
-    ui.finalCountriesEl.textContent = MAX_ROUNDS;
-    ui.finalCorrectEl.textContent = correctCount;
-    ui.finalAccuracyEl.textContent = `${accuracy}%`;
+    if (ui.finalScoreEl) ui.finalScoreEl.textContent = finalResult.score;
+    if (ui.finalCountriesEl) ui.finalCountriesEl.textContent = finalResult.total;
+    if (ui.finalCorrectEl) ui.finalCorrectEl.textContent = finalResult.correctCount;
+    if (ui.finalAccuracyEl) ui.finalAccuracyEl.textContent = `${finalResult.accuracy}%`;
 
     let subtitle = "Great job!";
-    if (accuracy === 100) subtitle = "Perfect score! 🌟";
-    else if (accuracy >= 80) subtitle = "Excellent work! 🎯";
-    else if (accuracy >= 60) subtitle = "Well done! 👏";
+    if (finalResult.accuracy === 100) subtitle = "Perfect score! 🌟";
+    else if (finalResult.accuracy >= 80) subtitle = "Excellent work! 🎯";
+    else if (finalResult.accuracy >= 60) subtitle = "Well done! 👏";
     
-    ui.finalSubtitleEl.textContent = subtitle;
+    if (ui.finalSubtitleEl) ui.finalSubtitleEl.textContent = subtitle;
     ui.finalOverlay.style.display = "flex";
 
-    if (accuracy >= 80) {
+    if (finalResult.accuracy >= 80) {
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
     }
   }
@@ -156,5 +143,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
     nextQ,
     getCurrent,
     handleMapClick,
+    setCountry: (country) => gameLogic.setCountry(country),
+    _gameLogic: gameLogic, // For Daily Challenge direct access
   };
 }
