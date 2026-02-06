@@ -24,6 +24,7 @@ export class PictureGuessGameLogic {
     this.usedHint = false;
     this.roundEnded = false;
     this.startTime = null;
+    this.gameStartTime = null; // Track overall game start time
   }
 
   async loadSites() {
@@ -51,12 +52,14 @@ export class PictureGuessGameLogic {
   nextRound() {
     if (this.currentIndex >= this.sites.length) {
       if (this.onComplete) {
+        const totalTime = this.gameStartTime ? (Date.now() - this.gameStartTime) / 1000 : 0;
         this.onComplete({
           score: this.score,
           total: this.sites.length,
           perfectGuesses: this.perfectGuesses,
           totalCorrect: this.totalCorrect,
-          accuracy: this.getAccuracy()
+          accuracy: this.getAccuracy(),
+          time: totalTime
         });
       }
       return null;
@@ -66,6 +69,12 @@ export class PictureGuessGameLogic {
     this.currentIndex++;
     this.roundEnded = false;
     this.startTime = Date.now();
+    
+    // Track game start time on first round
+    if (!this.gameStartTime) {
+      this.gameStartTime = Date.now();
+    }
+    
     return this.currentSite;
   }
 

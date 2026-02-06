@@ -491,7 +491,7 @@ class DailyChallenge {
       </div>
       
       <div class="results-summary">
-        <div class="summary-stars">${'⭐'.repeat(totalStars > 15 ? 15 : totalStars)}${totalStars > 15 ? `+${totalStars - 15}` : ''}</div>
+        <div class="summary-stars">${'⭐'.repeat(totalStars)}</div>
         <div class="summary-score">${totalStars}/23 stars</div>
         <div class="summary-time">⏱️ ${formatTime(totalTime)}</div>
       </div>
@@ -501,7 +501,9 @@ class DailyChallenge {
           const game = this.challenges[index];
           const maxStars = getMaxStars(game.id);
           const starStr = '⭐'.repeat(result.stars) + '☆'.repeat(maxStars - result.stars);
-          const timeStr = result.time ? `${result.time}s` : '';
+          
+          // Show time for all games (including 0s for very fast answers)
+          const timeStr = result.timeLimit !== null && result.time !== undefined ? `${result.time.toFixed(1)}s` : '';
           const extras = result.usedHint ? ' 💡' : '';
           const parInfo = result.parDiff !== undefined ? 
             (result.parDiff === 999 ? ' gave up' : ` par${result.parDiff > 0 ? '+' : ''}${result.parDiff}`) : '';
@@ -587,7 +589,7 @@ class DailyChallenge {
       </div>
       
       <div class="results-summary">
-        <div class="summary-stars">${'⭐'.repeat(result.stars > 15 ? 15 : result.stars)}${result.stars > 15 ? `+${result.stars - 15}` : ''}</div>
+        <div class="summary-stars">${'⭐'.repeat(result.stars)}</div>
         <div class="summary-score">${result.stars}/23 stars</div>
         <div class="summary-time">⏱️ ${formatTime(result.totalTime)}</div>
       </div>
@@ -597,7 +599,9 @@ class DailyChallenge {
           const game = GAMES[index];
           const maxStars = getMaxStars(game.id);
           const starStr = '⭐'.repeat(gameResult.stars) + '☆'.repeat(maxStars - gameResult.stars);
-          const timeStr = gameResult.time ? `${gameResult.time}s` : '';
+          
+          // Show time for all games with time limits (not Connect)
+          const timeStr = gameResult.timeLimit !== null && gameResult.time !== undefined ? `${gameResult.time.toFixed(1)}s` : '';
           const extras = gameResult.usedHint ? ' 💡' : '';
           const parInfo = gameResult.parDiff !== undefined ? 
             (gameResult.parDiff === 999 ? ' gave up' : ` par${gameResult.parDiff > 0 ? '+' : ''}${gameResult.parDiff}`) : '';

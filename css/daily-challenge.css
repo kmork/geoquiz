@@ -396,6 +396,9 @@
 .summary-stars {
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  line-height: 1.2;
 }
 
 .summary-time {
@@ -607,6 +610,8 @@
 
   .summary-stars {
     font-size: 2rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .breakdown-game {

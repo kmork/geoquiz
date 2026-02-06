@@ -51,12 +51,14 @@ export class OutlinesGameLogic {
   nextRound() {
     if (this.deck.length === 0) {
       if (this.onComplete) {
+        const totalTime = this.gameStartTime ? (Date.now() - this.gameStartTime) / 1000 : 0;
         this.onComplete({
           score: this.score,
           total: this.maxRounds,
           correctFirstTry: this.correctFirstTry,
           correctAny: this.correctAny,
-          accuracy: this.getAccuracy()
+          accuracy: this.getAccuracy(),
+          time: totalTime
         });
       }
       return null;
@@ -66,6 +68,12 @@ export class OutlinesGameLogic {
     this.attempt = 0;
     this.roundEnded = false;
     this.startTime = Date.now();
+    
+    // Track game start time on first round
+    if (!this.gameStartTime) {
+      this.gameStartTime = Date.now();
+    }
+    
     return this.current;
   }
 
