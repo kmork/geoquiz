@@ -6,8 +6,8 @@
   <title>Daily Challenge - GeoQuiz</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta name="description" content="Take the daily geography challenge! Test your knowledge with 6 mini-games and share your score.">
-  
-  
+
+
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/daily-challenge.css">
 </head>
@@ -15,11 +15,6 @@
   <header>
     <nav>
       <a href="index.html" class="logo">🌍 GeoQuiz</a>
-      <div class="nav-right">
-        <button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
-          <span class="theme-icon">🌙</span>
-        </button>
-      </div>
     </nav>
   </header>
 
@@ -60,10 +55,10 @@
       <h3>How It Works</h3>
       <ul>
         <li>🎯 Play 6 geography mini-games</li>
-        <li>⏱️ Complete in under 30 seconds each (except Connect)</li>
-        <li>⭐ Earn up to 5 stars per game (30 total)</li>
+        <li>⚡ The faster you answer, the more stars you earn</li>
+        <li>⭐ Earn up to 23 stars total</li>
         <li>🔥 Build your daily streak!</li>
-        <li>📱 Share your score on social media</li>
+        <li>📱 Share your score and compete with friends</li>
       </ul>
     </div>
   </main>
@@ -81,7 +76,7 @@
 
     // Populate challenge card
     const challengeCard = document.getElementById('challenge-card');
-    
+
     if (hasPlayed && result) {
       // Already completed today - show results
       const { hours, minutes } = getTimeUntilNext();
@@ -90,7 +85,7 @@
           <div class="completed-icon">✅</div>
           <h2>Challenge #${challengeNum} Complete!</h2>
           <div class="completed-score">
-            <div class="score-stars">⭐ ${result.stars}/30 stars</div>
+            <div class="score-stars">⭐ ${result.stars}/23 stars</div>
             <div class="score-time">⏱️ ${Math.floor(result.totalTime / 60)}:${(result.totalTime % 60).toString().padStart(2, '0')}</div>
           </div>
           <p class="next-challenge">Next challenge in ${hours}h ${minutes}m</p>
@@ -101,25 +96,17 @@
       `;
     } else {
       // Not played yet - show start button
-      const dateFormatted = new Date(today + 'T00:00:00').toLocaleDateString('en-US', { 
-        month: 'long', 
-        day: 'numeric', 
-        year: 'numeric' 
+      const dateFormatted = new Date(today + 'T00:00:00').toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
       });
-      
+
       challengeCard.innerHTML = `
         <div class="challenge-available">
           <h2>Challenge #${challengeNum}</h2>
           <p class="challenge-date">${dateFormatted}</p>
-          <div class="challenge-games">
-            <div class="game-badge">🗺️ Find</div>
-            <div class="game-badge">📚 Trivia</div>
-            <div class="game-badge">🌍 Outlines</div>
-            <div class="game-badge">🖼️ Picture</div>
-            <div class="game-badge">🏛️ Capitals</div>
-            <div class="game-badge">🔗 Connect</div>
-          </div>
-          <a href="daily-challenge.html" class="btn btn-primary btn-large">
+          <a href="daily-challenge.html" class="btn-start-challenge">
             🎮 Start Today's Challenge
           </a>
         </div>

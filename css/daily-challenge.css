@@ -5,27 +5,27 @@
 .daily-landing {
   max-width: 600px;
   margin: 0 auto;
-  padding: 2rem 1rem;
+  padding: 1rem;
 }
 
 .daily-hero {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 1.5rem;
 }
 
 .daily-icon {
-  font-size: 4rem;
-  margin-bottom: 1rem;
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
 }
 
 .daily-hero h1 {
-  font-size: 2.5rem;
+  font-size: 2rem;
   margin: 0 0 0.5rem 0;
   color: var(--text-primary);
 }
 
 .daily-subtitle {
-  font-size: 1.1rem;
+  font-size: 1rem;
   color: var(--text-secondary);
   margin: 0;
 }
@@ -35,46 +35,82 @@
 .daily-challenge-card {
   background: var(--card-bg);
   border-radius: 16px;
-  padding: 2rem;
-  margin-bottom: 2rem;
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   text-align: center;
+  border: 2px solid rgba(0, 150, 255, 0.1);
 }
 
 .challenge-available h2,
 .challenge-completed h2 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   margin: 0 0 0.5rem 0;
   color: var(--text-primary);
 }
 
 .challenge-date {
-  font-size: 1.1rem;
+  font-size: 0.95rem;
   color: var(--text-secondary);
-  margin: 0 0 1.5rem 0;
+  margin: 0 0 1rem 0;
 }
 
 .challenge-games {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  justify-content: center;
+  gap: 0.4rem;
   margin: 1.5rem 0;
+  overflow-x: auto;
+  padding: 0.25rem;
 }
 
 .game-badge {
   background: var(--primary-color);
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 20px;
-  font-size: 0.9rem;
+  padding: 0.6rem 0.4rem;
+  border-radius: 10px;
+  font-size: 0.75rem;
   font-weight: 600;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
 }
 
 .btn-large {
   padding: 1rem 2rem;
   font-size: 1.2rem;
   margin-top: 1rem;
+}
+
+/* Fancy Start Challenge Button */
+.btn-start-challenge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 1.25rem 3rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+  border-radius: 16px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  margin-top: 2rem;
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.btn-start-challenge:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(102, 126, 234, 0.5);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.btn-start-challenge:active {
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.3);
 }
 
 /* Completed State */
@@ -218,6 +254,10 @@
   background: var(--success-color, #22c55e);
 }
 
+.progress-dot.completed.wrong {
+  background: var(--error-color, #ef4444);
+}
+
 .progress-dot.current {
   background: var(--primary-color);
   transform: scale(1.3);
@@ -304,9 +344,8 @@
 .game-area {
   background: var(--card-bg);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 1.5rem;
   margin-bottom: 1.5rem;
-  min-height: 400px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
@@ -587,23 +626,36 @@
 .game-area .card {
   display: flex;
   flex-direction: column;
-  height: 100%;
-  min-height: 400px;
 }
 
-.game-area .mapwrap {
-  flex: 1;
-  width: 100%;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+/* Find Country map wrapper - dynamic height */
+.game-area .mapwrap:has(canvas) {
+  margin: 10px 0;
+  height: calc(100vh - 350px);
+  min-height: 250px;
+  max-height: 600px;
+}
+
+@media (max-height: 800px) {
+  .game-area .mapwrap:has(canvas) {
+    height: calc(100vh - 320px);
+  }
+}
+
+@media (max-height: 600px) {
+  .game-area .mapwrap:has(canvas) {
+    height: calc(100vh - 280px);
+    min-height: 200px;
+  }
+}
+
+/* Capitals map wrapper - auto height based on content */
+.game-area .mapwrap:has(svg) {
+  margin: 10px 0;
 }
 
 .game-area .mapwrap canvas {
   width: 100%;
-  height: 100%;
   border-radius: 14px;
   background: var(--map-bg);
   border: 1px solid var(--map-border);

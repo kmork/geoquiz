@@ -22,6 +22,7 @@ export class FindCountryGameLogic {
     this.selectedCountry = null; // Track first click selection
     this.roundEnded = false;
     this.startTime = null;
+    this.lastAnswerTime = 0; // Track time from last answer
   }
 
   reset() {
@@ -48,7 +49,8 @@ export class FindCountryGameLogic {
           score: this.score,
           total: this.maxRounds,
           correctCount: this.correctCount,
-          accuracy: this.getAccuracy()
+          accuracy: this.getAccuracy(),
+          time: this.lastAnswerTime // Include time from last answer
         });
       }
       return null;
@@ -93,6 +95,7 @@ export class FindCountryGameLogic {
     const isCorrect = clickedCountryName === this.current.country;
     const timeTaken = (Date.now() - this.startTime) / 1000;
     this.roundEnded = true;
+    this.lastAnswerTime = timeTaken; // Save time for final result
 
     if (isCorrect) {
       this.score += 1;
@@ -122,6 +125,7 @@ export class FindCountryGameLogic {
 
     this.roundEnded = true;
     const timeTaken = (Date.now() - this.startTime) / 1000;
+    this.lastAnswerTime = timeTaken; // Save time for final result
 
     const result = {
       action: 'timeout',

@@ -127,14 +127,19 @@
     }
     
     .globe-container {
-      display: inline-block;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
       position: relative;
       margin-bottom: 20px;
     }
     
     .globe-emoji {
       font-size: 100px;
-      display: inline-block;
+      line-height: 1;
+      display: block;
+      position: relative;
       animation: rotate-globe 10s linear infinite;
     }
     
@@ -145,14 +150,15 @@
     
     .globe-ring {
       position: absolute;
-      top: 50%;
+      top: 50px;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 150px;
-      height: 150px;
+      width: 120px;
+      height: 120px;
       border: 2px solid var(--ring-color);
       border-radius: 50%;
       animation: pulse-ring 2s ease-in-out infinite;
+      pointer-events: none;
     }
     
     @keyframes pulse-ring {
@@ -625,7 +631,7 @@
         </div>
       </a>
       
-      <a href="picture-guess.html" class="glass-card">
+      <a href="heritage.html" class="glass-card">
         <div class="card-content">
           <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -645,7 +651,7 @@
             <path d="M75 27 L75 20" stroke="url(#grad-picture)" stroke-width="3" stroke-linecap="round"/>
             <circle cx="75" cy="18" r="3" fill="url(#grad-picture)"/>
           </svg>
-          <div class="card-title">Where is this?</div>
+          <div class="card-title">UNESCO Heritage</div>
           <div class="card-description">Identify countries from stunning UNESCO World Heritage Sites.</div>
           <div class="play-button">Play Now →</div>
         </div>

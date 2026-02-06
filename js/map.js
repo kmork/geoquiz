@@ -233,10 +233,29 @@ export function createMap({ svgEl, worldUrl, placesUrl }) {
 
       const h = w * aspect;
 
-      const cx = candidate.x + candidate.w / 2;
-      const cy = candidate.y + candidate.h / 2;
+      let x = candidate.x + (candidate.w - w) / 2;
+      let y = candidate.y + (candidate.h - h) / 2;
+      
+      // Constrain position to keep content visible
+      const minVisibleMargin = Math.min(w, h) * 0.2;
+      
+      // Left boundary
+      const maxPanRight = baseViewBox.x + baseViewBox.w - minVisibleMargin;
+      if (x > maxPanRight) x = maxPanRight;
+      
+      // Right boundary
+      const minPanLeft = baseViewBox.x - w + minVisibleMargin;
+      if (x < minPanLeft) x = minPanLeft;
+      
+      // Top boundary
+      const maxPanDown = baseViewBox.y + baseViewBox.h - minVisibleMargin;
+      if (y > maxPanDown) y = maxPanDown;
+      
+      // Bottom boundary
+      const minPanUp = baseViewBox.y - h + minVisibleMargin;
+      if (y < minPanUp) y = minPanUp;
 
-      return { x: cx - w / 2, y: cy - h / 2, w, h };
+      return { x, y, w, h };
     };
 
     const zoomAt = (factor, clientX, clientY) => {
@@ -310,8 +329,30 @@ export function createMap({ svgEl, worldUrl, placesUrl }) {
 
           const dx = a.x - b.x;
           const dy = a.y - b.y;
+          
+          let newX = startVB.x + dx;
+          let newY = startVB.y + dy;
+          
+          // Constrain panning so country remains visible
+          const minVisibleMargin = Math.min(startVB.w, startVB.h) * 0.2;
+          
+          // Left boundary
+          const maxPanRight = baseViewBox.x + baseViewBox.w - minVisibleMargin;
+          if (newX > maxPanRight) newX = maxPanRight;
+          
+          // Right boundary
+          const minPanLeft = baseViewBox.x - startVB.w + minVisibleMargin;
+          if (newX < minPanLeft) newX = minPanLeft;
+          
+          // Top boundary
+          const maxPanDown = baseViewBox.y + baseViewBox.h - minVisibleMargin;
+          if (newY > maxPanDown) newY = maxPanDown;
+          
+          // Bottom boundary
+          const minPanUp = baseViewBox.y - startVB.h + minVisibleMargin;
+          if (newY < minPanUp) newY = minPanUp;
 
-          setVB({ x: startVB.x + dx, y: startVB.y + dy, w: startVB.w, h: startVB.h });
+          setVB({ x: newX, y: newY, w: startVB.w, h: startVB.h });
           return;
         }
 

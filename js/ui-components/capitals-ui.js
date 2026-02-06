@@ -23,12 +23,11 @@ export function renderCapitalsUI(container, country, options = {}) {
   // Build HTML - exactly like standalone capitals.html
   const html = `
     <div style="max-width: 600px; margin: 0 auto;">
-      <div class="muted" style="margin-bottom: 0.5rem;">Country:</div>
       <div class="country" style="font-size: 1.5rem; font-weight: bold; margin-bottom: 1rem;">${country.country}</div>
       
       ${showMap ? `
         <div class="mapwrap" style="margin-bottom: 1rem;">
-          <svg id="capitals-map" viewBox="0 0 600 320" width="100%" height="260" style="border: 1px solid var(--border-color); border-radius: 8px; background: var(--map-bg);"></svg>
+          <svg id="capitals-map" viewBox="0 0 600 320" width="100%" style="height: auto; max-height: 260px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--map-bg);"></svg>
         </div>
       ` : ''}
       

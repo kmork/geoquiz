@@ -10,21 +10,38 @@ const STORAGE_KEY_STATS = 'geoquiz-daily-stats';
 
 /**
  * Calculate stars earned for a single mini-game
+ * Difficulty-based scoring:
+ * - Trivia: 2★ max (easy - multiple choice)
+ * - Heritage: 3★ max (medium - visual + autocomplete)
+ * - Outlines: 4★ max (hard - shape recognition)
+ * - Capitals: 4★ max (hard - knowledge test)
+ * - Find: 5★ max (very hard - speed + precision)
+ * - Connect: 5★ max (very hard - path optimization)
+ * Total: 23★
+ * 
  * @param {object} result - Game result
  * @param {boolean} result.correct - Whether answer was correct
  * @param {number} result.time - Time taken in seconds
  * @param {number} result.timeLimit - Time limit in seconds
  * @param {boolean} result.usedHint - Whether hint was used
  * @param {number} result.parDiff - For Connect game: difference from par (optional)
+ * @param {string} gameId - Game identifier
  * @returns {number} Stars earned (0-5)
  */
-export function calculateStars(result) {
+export function calculateStars(result, gameId) {
   // Wrong answer = 0 stars
   if (!result.correct) return 0;
 
-  let stars = 3; // Base stars for correct answer
+  // Trivia (2★ max): 1★ base + 1★ speed bonus if < 5 seconds
+  if (gameId === 'trivia') {
+    let stars = 1; // Base for correct
+    if (result.time && result.time < 5) {
+      stars += 1; // Speed bonus
+    }
+    return stars;
+  }
 
-  // Special scoring for Connect the Countries (no time limit)
+  // Connect the Countries (5★ max): Par-based scoring
   if (result.parDiff !== undefined) {
     if (result.parDiff === 0) return 5; // Optimal route
     if (result.parDiff === 1) return 4;
@@ -33,13 +50,33 @@ export function calculateStars(result) {
     return 1; // Par + 4 or worse
   }
 
-  // Time bonus for timed games
+  // Base stars by difficulty
+  let stars;
+  if (gameId === 'picture') {
+    stars = 2; // Heritage: 3★ max (2 base + 1 time)
+  } else if (gameId === 'outlines' || gameId === 'capitals') {
+    stars = 3; // Outlines/Capitals: 4★ max (3 base + 1 time)
+  } else if (gameId === 'find') {
+    stars = 3; // Find: 5★ max (3 base + 2 time)
+  } else {
+    stars = 3; // Default
+  }
+
+  // Time bonus
   if (result.timeLimit && result.time) {
-    const timeRatio = result.time / result.timeLimit;
-    if (timeRatio < 0.5) {
-      stars += 2; // Very fast (< 50% of time)
-    } else if (timeRatio < 0.75) {
-      stars += 1; // Fast (< 75% of time)
+    if (gameId === 'find') {
+      // Find the Country: +2 or +1 stars
+      if (result.time < 5) {
+        stars += 2; // Very fast (< 5 seconds)
+      } else if (result.time < 10) {
+        stars += 1; // Fast (< 10 seconds)
+      }
+    } else {
+      // Other games: +1 star only
+      const timeRatio = result.time / result.timeLimit;
+      if (timeRatio < 0.5) {
+        stars += 1; // Fast (< 50% of time)
+      }
     }
   }
 
@@ -48,13 +85,13 @@ export function calculateStars(result) {
     stars -= 1;
   }
 
-  return Math.max(0, Math.min(5, stars));
+  return Math.max(0, stars);
 }
 
 /**
  * Save today's challenge result to localStorage
  * @param {string} date - Date in YYYY-MM-DD format
- * @param {number} totalStars - Total stars earned (0-30)
+ * @param {number} totalStars - Total stars earned (0-23)
  * @param {number} totalTime - Total time in seconds
  * @param {Array} breakdown - Array of per-game results
  */
@@ -192,30 +229,47 @@ function calculateStreak(history, currentDate) {
 
 /**
  * Get rating based on total stars
- * @param {number} stars - Total stars (0-30)
+ * @param {number} stars - Total stars (0-23)
  * @returns {string} Rating text
  */
 export function getRating(stars) {
-  if (stars >= 27) return 'Geography Master';
-  if (stars >= 23) return 'World Expert';
-  if (stars >= 18) return 'Globe Trotter';
-  if (stars >= 12) return 'Explorer';
+  if (stars >= 21) return 'Geography Master';
+  if (stars >= 18) return 'World Expert';
+  if (stars >= 14) return 'Globe Trotter';
+  if (stars >= 10) return 'Explorer';
   if (stars >= 6) return 'Traveler';
   return 'Tourist';
 }
 
 /**
  * Get rating emoji based on total stars
- * @param {number} stars - Total stars (0-30)
+ * @param {number} stars - Total stars (0-23)
  * @returns {string} Rating emoji
  */
 export function getRatingEmoji(stars) {
-  if (stars >= 27) return '🏆';
-  if (stars >= 23) return '⭐';
-  if (stars >= 18) return '🌟';
-  if (stars >= 12) return '✨';
+  if (stars >= 21) return '🏆';
+  if (stars >= 18) return '⭐';
+  if (stars >= 14) return '🌟';
+  if (stars >= 10) return '✨';
   if (stars >= 6) return '🎯';
   return '🗺️';
+}
+
+/**
+ * Get maximum possible stars for a game
+ * @param {string} gameId - Game identifier
+ * @returns {number} Maximum stars (1-5)
+ */
+export function getMaxStars(gameId) {
+  const maxStars = {
+    'trivia': 2,      // Easy: multiple choice
+    'picture': 3,     // Medium: visual + autocomplete
+    'outlines': 4,    // Hard: shape recognition
+    'capitals': 4,    // Hard: knowledge test
+    'find': 5,        // Very hard: speed + precision
+    'connect': 5      // Very hard: path optimization
+  };
+  return maxStars[gameId] || 5;
 }
 
 /**

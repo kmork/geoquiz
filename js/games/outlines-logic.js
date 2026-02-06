@@ -152,14 +152,14 @@ export class OutlinesGameLogic {
       if (this.attempt === 1) {
         points = 2;
         action = 'correct_first';
-        message = '✅ Correct! +2 points';
+        message = this.singleRound ? '✅ Correct!' : '✅ Correct! +2 points';
         this.score += 2;
         this.correctFirstTry++;
         this.correctAny++;
       } else {
         points = 1;
         action = 'correct_second';
-        message = '✅ Correct! +1 point';
+        message = this.singleRound ? '✅ Correct!' : '✅ Correct! +1 point';
         this.score += 1;
         this.correctAny++;
       }

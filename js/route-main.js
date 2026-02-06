@@ -195,10 +195,29 @@ function attachZoomPan() {
     if (w > maxW) w = maxW;
 
     const h = w * aspect;
-    const cx = candidate.x + candidate.w / 2;
-    const cy = candidate.y + candidate.h / 2;
+    let x = candidate.x + (candidate.w - w) / 2;
+    let y = candidate.y + (candidate.h - h) / 2;
+    
+    // Constrain position to keep content visible
+    const minVisibleMargin = Math.min(w, h) * 0.2;
+    
+    // Left boundary
+    const maxPanRight = baseViewBox.x + baseViewBox.w - minVisibleMargin;
+    if (x > maxPanRight) x = maxPanRight;
+    
+    // Right boundary
+    const minPanLeft = baseViewBox.x - w + minVisibleMargin;
+    if (x < minPanLeft) x = minPanLeft;
+    
+    // Top boundary
+    const maxPanDown = baseViewBox.y + baseViewBox.h - minVisibleMargin;
+    if (y > maxPanDown) y = maxPanDown;
+    
+    // Bottom boundary
+    const minPanUp = baseViewBox.y - h + minVisibleMargin;
+    if (y < minPanUp) y = minPanUp;
 
-    return { x: cx - w / 2, y: cy - h / 2, w, h };
+    return { x, y, w, h };
   };
 
   const zoomAt = (factor, clientX, clientY) => {
@@ -272,8 +291,31 @@ function attachZoomPan() {
 
         const dx = a.x - b.x;
         const dy = a.y - b.y;
+        
+        let newX = startVB.x + dx;
+        let newY = startVB.y + dy;
+        
+        // Constrain panning so route countries remain visible
+        // Ensure the viewBox always overlaps with the content area (baseViewBox)
+        const minVisibleMargin = Math.min(startVB.w, startVB.h) * 0.2;
+        
+        // Left boundary: can't pan so far right that content disappears off left edge
+        const maxPanRight = baseViewBox.x + baseViewBox.w - minVisibleMargin;
+        if (newX > maxPanRight) newX = maxPanRight;
+        
+        // Right boundary: can't pan so far left that content disappears off right edge
+        const minPanLeft = baseViewBox.x - startVB.w + minVisibleMargin;
+        if (newX < minPanLeft) newX = minPanLeft;
+        
+        // Top boundary: can't pan so far down that content disappears off top edge
+        const maxPanDown = baseViewBox.y + baseViewBox.h - minVisibleMargin;
+        if (newY > maxPanDown) newY = maxPanDown;
+        
+        // Bottom boundary: can't pan so far up that content disappears off bottom edge
+        const minPanUp = baseViewBox.y - startVB.h + minVisibleMargin;
+        if (newY < minPanUp) newY = minPanUp;
 
-        setViewBox({ x: startVB.x + dx, y: startVB.y + dy, w: startVB.w, h: startVB.h });
+        setViewBox({ x: newX, y: newY, w: startVB.w, h: startVB.h });
         return;
       }
 

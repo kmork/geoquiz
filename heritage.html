@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>UNESCO Heritage - GeoQuiz</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    // Prevent FOUC - apply theme immediately
+    (function() {
+      const saved = localStorage.getItem('geoquiz-theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const theme = saved || system;
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+    })();
+  </script>
+</head>
+
+<body>
+<div class="wrap heritage-page">
+  <div class="card">
+
+    <div id="init-overlay">
+      <div class="spinner"></div>
+      <div>Loading Heritage Sites...</div>
+    </div>
+
+    <div class="row row-space-between">
+      <div>
+        <h1>
+          <a href="index.html" style="text-decoration: none; color: inherit;">
+            <svg class="game-icon game-header-icon" width="60" height="60" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="grad-heritage-header" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#f97316;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <!-- Camera body -->
+              <rect x="20" y="35" width="60" height="40" rx="8" fill="url(#grad-heritage-header)" opacity="0.3"/>
+              <circle cx="55" cy="55" r="15" fill="none" stroke="url(#grad-heritage-header)" stroke-width="4"/>
+              <circle cx="55" cy="55" r="10" fill="url(#grad-heritage-header)" opacity="0.6"/>
+              <!-- Flash -->
+              <rect x="25" y="30" width="8" height="6" rx="2" fill="url(#grad-heritage-header)"/>
+              <!-- Location pin overlay -->
+              <circle cx="75" cy="35" r="8" fill="url(#grad-heritage-header)"/>
+              <path d="M75 27 L75 20" stroke="url(#grad-heritage-header)" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="75" cy="18" r="3" fill="url(#grad-heritage-header)"/>
+            </svg>
+            UNESCO Heritage
+          </a>
+        </h1>
+        <div class="muted">Identify countries from UNESCO World Heritage Sites.</div>
+      </div>
+      <div class="row">
+        <div class="pill">Score: <b id="score">0</b></div>
+        <div class="pill">Progress: <b id="progress">0 / 46</b></div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <!-- Image Container (will be replaced by UI component) -->
+    <div id="game-container" class="heritage-game-container"></div>
+
+  </div>
+</div>
+
+<!-- Final score screen -->
+<div class="overlay" id="finalOverlay" role="dialog" aria-modal="true" style="display: none;">
+  <div class="panel">
+    <h2>🌍 Adventure Complete!</h2>
+    <div class="muted" id="finalSubtitle"></div>
+    <div class="hr"></div>
+
+    <div class="grid2">
+      <div class="pill">Final score: <b id="finalScore">0</b></div>
+      <div class="pill">Sites: <b id="finalSites">46</b></div>
+      <div class="pill">Perfect Guesses: <b id="finalPerfect">0</b></div>
+      <div class="pill">Accuracy: <b id="finalAccuracy">0%</b></div>
+    </div>
+
+    <div class="hr"></div>
+    <div class="row">
+      <button id="playAgain">Play Again</button>
+      <button id="closeFinal">Close</button>
+    </div>
+  </div>
+</div>
+
+<canvas id="confetti"></canvas>
+
+<script src="js/pako.min.js"></script>
+<script src="js/mobile-autocomplete.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/data.js"></script>
+<script type="module" src="js/heritage-main.js"></script>
+
+</body>
+</html>

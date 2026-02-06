@@ -98,12 +98,59 @@ export async function createCompleteOutlinesGame({
       if (w < minW) w = minW;
       if (w > maxW) w = maxW;
       
-      return { x: candidate.x, y: candidate.y, w, h: w * aspect };
+      let h = w * aspect;
+      let x = candidate.x;
+      let y = candidate.y;
+      
+      // Also constrain position to keep content visible
+      const minVisibleMargin = Math.min(w, h) * 0.2;
+      
+      // Left boundary
+      const maxPanRight = baseViewBox.x + baseViewBox.w - minVisibleMargin;
+      if (x > maxPanRight) x = maxPanRight;
+      
+      // Right boundary
+      const minPanLeft = baseViewBox.x - w + minVisibleMargin;
+      if (x < minPanLeft) x = minPanLeft;
+      
+      // Top boundary
+      const maxPanDown = baseViewBox.y + baseViewBox.h - minVisibleMargin;
+      if (y > maxPanDown) y = maxPanDown;
+      
+      // Bottom boundary
+      const minPanUp = baseViewBox.y - h + minVisibleMargin;
+      if (y < minPanUp) y = minPanUp;
+      
+      return { x, y, w, h };
     };
     
     const panBy = (dx, dy) => {
       const current = getVB();
-      setViewBox({ x: current.x + dx, y: current.y + dy, w: current.w, h: current.h });
+      let newX = current.x + dx;
+      let newY = current.y + dy;
+      
+      // Constrain panning so countries remain visible
+      // Ensure the viewBox always overlaps with the content area (baseViewBox)
+      // Allow panning until only a small margin of content remains visible
+      const minVisibleMargin = Math.min(current.w, current.h) * 0.2; // At least 20% of viewport must show content
+      
+      // Left boundary: can't pan so far right that content disappears off left edge
+      const maxPanRight = baseViewBox.x + baseViewBox.w - minVisibleMargin;
+      if (newX > maxPanRight) newX = maxPanRight;
+      
+      // Right boundary: can't pan so far left that content disappears off right edge  
+      const minPanLeft = baseViewBox.x - current.w + minVisibleMargin;
+      if (newX < minPanLeft) newX = minPanLeft;
+      
+      // Top boundary: can't pan so far down that content disappears off top edge
+      const maxPanDown = baseViewBox.y + baseViewBox.h - minVisibleMargin;
+      if (newY > maxPanDown) newY = maxPanDown;
+      
+      // Bottom boundary: can't pan so far up that content disappears off bottom edge
+      const minPanUp = baseViewBox.y - current.h + minVisibleMargin;
+      if (newY < minPanUp) newY = minPanUp;
+      
+      setViewBox({ x: newX, y: newY, w: current.w, h: current.h });
     };
     
     const zoomAt = (factor, focusX, focusY) => {

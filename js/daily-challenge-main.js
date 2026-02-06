@@ -5,7 +5,7 @@
  */
 
 import { SeededRandom, dateToSeed, getTodayDate, getChallengeNumber } from './seeded-random.js';
-import { calculateStars, saveResult, hasCompletedToday, getStats, getRating, getRatingEmoji, formatTime } from './daily-challenge-scoring.js';
+import { calculateStars, saveResult, hasCompletedToday, getResultForDate, getStats, getRating, getRatingEmoji, formatTime, getMaxStars } from './daily-challenge-scoring.js';
 import { handleShare } from './daily-challenge-share.js';
 import { initConfetti } from './confetti.js';
 import { norm } from './utils.js';
@@ -85,7 +85,7 @@ const GAMES = [
   },
   {
     id: 'picture',
-    name: 'Picture Guess',
+    name: 'UNESCO Heritage',
     emoji: '🖼️',
     timeLimit: 30
   },
@@ -127,6 +127,16 @@ class DailyChallenge {
    * Initialize and start the daily challenge
    */
   async init() {
+    // Check for review mode
+    const urlParams = new URLSearchParams(window.location.search);
+    const reviewDate = urlParams.get('review');
+    
+    if (reviewDate) {
+      // Review mode - show past results
+      this.showReviewResults(reviewDate);
+      return;
+    }
+    
     // Check if already completed today
     if (hasCompletedToday(this.today)) {
       // Redirect to results page or show completed message
@@ -300,7 +310,7 @@ class DailyChallenge {
     this.stopTimer();
     
     // Calculate stars
-    const stars = calculateStars(result);
+    const stars = calculateStars(result, challenge.id);
     
     // Store result
     this.results.push({
@@ -390,9 +400,13 @@ class DailyChallenge {
   updateProgress() {
     const dots = document.querySelectorAll('.progress-dot');
     dots.forEach((dot, index) => {
-      dot.classList.remove('current', 'completed');
+      dot.classList.remove('current', 'completed', 'wrong');
       if (index < this.currentGameIndex) {
         dot.classList.add('completed');
+        // Add 'wrong' class if game was not solved correctly
+        if (this.results[index] && !this.results[index].correct) {
+          dot.classList.add('wrong');
+        }
       } else if (index === this.currentGameIndex) {
         dot.classList.add('current');
       }
@@ -421,9 +435,10 @@ class DailyChallenge {
       document.getElementById('transition-result').innerHTML = 
         `<span class="${resultClass}">${resultText}</span>`;
       
-      const starStr = '⭐'.repeat(stars) + '☆'.repeat(5 - stars);
+      const maxStars = getMaxStars(challenge.id);
+      const starStr = '⭐'.repeat(stars) + '☆'.repeat(maxStars - stars);
       document.getElementById('transition-stars').textContent = 
-        `${starStr} ${stars} star${stars !== 1 ? 's' : ''}`;
+        `${starStr} ${stars}/${maxStars} star${stars !== 1 ? 's' : ''}`;
       
       const nextGameIndex = this.currentGameIndex + 1;
       if (nextGameIndex < GAMES.length) {
@@ -477,17 +492,19 @@ class DailyChallenge {
       
       <div class="results-summary">
         <div class="summary-stars">${'⭐'.repeat(totalStars > 15 ? 15 : totalStars)}${totalStars > 15 ? `+${totalStars - 15}` : ''}</div>
-        <div class="summary-score">${totalStars}/30 stars</div>
+        <div class="summary-score">${totalStars}/23 stars</div>
         <div class="summary-time">⏱️ ${formatTime(totalTime)}</div>
       </div>
       
       <div class="results-breakdown">
         ${this.results.map((result, index) => {
           const game = this.challenges[index];
-          const starStr = '⭐'.repeat(result.stars) + '☆'.repeat(5 - result.stars);
+          const maxStars = getMaxStars(game.id);
+          const starStr = '⭐'.repeat(result.stars) + '☆'.repeat(maxStars - result.stars);
           const timeStr = result.time ? `${result.time}s` : '';
           const extras = result.usedHint ? ' 💡' : '';
-          const parInfo = result.parDiff !== undefined ? ` par${result.parDiff > 0 ? '+' : ''}${result.parDiff}` : '';
+          const parInfo = result.parDiff !== undefined ? 
+            (result.parDiff === 999 ? ' gave up' : ` par${result.parDiff > 0 ? '+' : ''}${result.parDiff}`) : '';
           
           return `
             <div class="breakdown-game">
@@ -530,6 +547,82 @@ class DailyChallenge {
     if (totalStars >= 27 && typeof window.triggerConfetti === 'function') {
       setTimeout(() => window.triggerConfetti(), 500);
     }
+  }
+
+  /**
+   * Show review results for a past date
+   */
+  showReviewResults(date) {
+    const result = getResultForDate(date);
+    
+    if (!result) {
+      // No results for this date
+      window.location.href = 'daily.html';
+      return;
+    }
+    
+    const challengeNum = getChallengeNumber(date);
+    const rating = getRating(result.stars);
+    const ratingEmoji = getRatingEmoji(result.stars);
+    
+    // Hide game area
+    document.getElementById('game-area').classList.add('hidden');
+    document.querySelector('.daily-header').classList.add('hidden');
+    
+    // Show results container
+    const resultsContainer = document.getElementById('results-container');
+    resultsContainer.classList.remove('hidden');
+    
+    // Populate results
+    resultsContainer.innerHTML = `
+      <div class="results-header">
+        <div class="results-icon">${ratingEmoji}</div>
+        <h1 class="results-title">Challenge #${challengeNum}</h1>
+        <p class="results-subtitle">${new Date(date + 'T00:00:00').toLocaleDateString('en-US', { 
+          month: 'long', 
+          day: 'numeric', 
+          year: 'numeric' 
+        })}</p>
+        <p class="results-rating">${rating}</p>
+      </div>
+      
+      <div class="results-summary">
+        <div class="summary-stars">${'⭐'.repeat(result.stars > 15 ? 15 : result.stars)}${result.stars > 15 ? `+${result.stars - 15}` : ''}</div>
+        <div class="summary-score">${result.stars}/23 stars</div>
+        <div class="summary-time">⏱️ ${formatTime(result.totalTime)}</div>
+      </div>
+      
+      <div class="results-breakdown">
+        ${result.breakdown.map((gameResult, index) => {
+          const game = GAMES[index];
+          const maxStars = getMaxStars(game.id);
+          const starStr = '⭐'.repeat(gameResult.stars) + '☆'.repeat(maxStars - gameResult.stars);
+          const timeStr = gameResult.time ? `${gameResult.time}s` : '';
+          const extras = gameResult.usedHint ? ' 💡' : '';
+          const parInfo = gameResult.parDiff !== undefined ? 
+            (gameResult.parDiff === 999 ? ' gave up' : ` par${gameResult.parDiff > 0 ? '+' : ''}${gameResult.parDiff}`) : '';
+          
+          return `
+            <div class="breakdown-game">
+              <div class="game-info">
+                <div class="game-emoji">${game.emoji}</div>
+                <div class="game-name">${game.name}</div>
+              </div>
+              <div class="game-result">
+                <div class="game-stars">${starStr}</div>
+                <div class="game-time">${timeStr}${extras}${parInfo}</div>
+              </div>
+            </div>
+          `;
+        }).join('')}
+      </div>
+      
+      <div class="results-actions">
+        <a href="daily.html" class="btn btn-primary btn-large">
+          🏠 Back to Daily Challenge
+        </a>
+      </div>
+    `;
   }
 
   // Game implementations (placeholders - will be implemented next)
@@ -817,6 +910,9 @@ class DailyChallenge {
         
         const result = gameLogic.checkAnswer(correctAnswer);
         
+        // Trigger confetti
+        this.confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+        
         setTimeout(() => {
           resolve({
             correct: true,
@@ -849,6 +945,9 @@ class DailyChallenge {
         // Highlight wrong if incorrect
         if (!isCorrect) {
           button.classList.add('wrong');
+        } else {
+          // Trigger confetti for correct answer
+          this.confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
         }
         
         setTimeout(() => {
@@ -938,10 +1037,11 @@ class DailyChallenge {
         
         <div class="answerRow" style="margin-bottom: 1rem;">
           <input type="text" id="connect-input" placeholder="Type the next country…" autocomplete="off">
-          <button id="connect-add-btn" class="btn btn-primary">Add to Route</button>
+          <button id="submit" class="btn btn-primary">Add to Route</button>
           <div class="secondary-buttons">
-            <button id="connect-undo-btn" class="btn-secondary" disabled>Undo</button>
-            <button id="connect-hint-btn" class="btn-secondary">Show Hint</button>
+            <button id="undo" class="btn-secondary" disabled>↶</button>
+            <button id="showHint" class="btn-secondary">💡</button>
+            <button id="giveUp" class="btn-secondary">✖</button>
           </div>
         </div>
         <div id="connect-feedback"></div>
@@ -949,9 +1049,10 @@ class DailyChallenge {
     `;
     
     const input = document.getElementById('connect-input');
-    const addBtn = document.getElementById('connect-add-btn');
-    const hintBtn = document.getElementById('connect-hint-btn');
-    const undoBtn = document.getElementById('connect-undo-btn');
+    const addBtn = document.getElementById('submit');
+    const hintBtn = document.getElementById('showHint');
+    const undoBtn = document.getElementById('undo');
+    const giveUpBtn = document.getElementById('giveUp');
     const hintDiv = document.getElementById('connect-hint');
     const feedbackDiv = document.getElementById('connect-feedback');
     const mapSvg = document.getElementById('daily-route-map');
@@ -1141,6 +1242,33 @@ class DailyChallenge {
       addBtn.addEventListener('click', addCountry);
       hintBtn.addEventListener('click', showHintFunc);
       undoBtn.addEventListener('click', undo);
+      giveUpBtn.addEventListener('click', () => {
+        if (answered) return;
+        answered = true;
+        
+        // Show the optimal solution
+        const solution = gameLogic.optimalPath;
+        if (solution && solution.length > 0) {
+          // Update route display to show solution
+          updateRouteDisplay(solution);
+          
+          // Draw solution on map
+          const routeColors = solution.map((country, i) => ({
+            country,
+            color: i === 0 ? 'start' : i === solution.length - 1 ? 'end' : 'path'
+          }));
+          routeRenderer.drawRoute(routeColors);
+        }
+        
+        setTimeout(() => {
+          resolve({
+            correct: false,
+            time: 0,
+            timeLimit: null,
+            parDiff: 999 // Large number to indicate gave up
+          });
+        }, 3000);
+      });
     });
   }
 }

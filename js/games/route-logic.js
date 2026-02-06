@@ -247,4 +247,8 @@ export class RouteGameLogic {
       hintsRemaining: this.maxHints - this.hintsUsed
     };
   }
+
+  getOptimalPath() {
+    return this.optimalPath;
+  }
 }
