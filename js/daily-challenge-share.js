@@ -11,7 +11,7 @@ import { getRating, formatTime } from './daily-challenge-scoring.js';
 /**
  * Generate shareable text for social media
  * @param {string} date - Date in YYYY-MM-DD format
- * @param {number} totalStars - Total stars earned (0-30)
+ * @param {number} totalStars - Total stars earned (0-23)
  * @param {number} totalTime - Total time in seconds
  * @param {Array} breakdown - Array of per-game results
  * @param {object} stats - Player statistics
@@ -43,22 +43,33 @@ export function generateShareText(date, totalStars, totalTime, breakdown, stats)
     find: 'Find Country',
     trivia: 'Trivia',
     outlines: 'Outlines',
-    picture: 'Picture',
+    picture: 'Heritage',
     capitals: 'Capitals',
     connect: 'Connect'
+  };
+  
+  const maxStars = {
+    find: 5,
+    trivia: 2,
+    outlines: 4,
+    picture: 3,
+    capitals: 4,
+    connect: 5
   };
 
   let text = `🌍 GeoQuiz Daily Challenge #${challengeNum}\n`;
   text += `📅 ${dateFormatted}\n\n`;
-  text += `⭐ ${totalStars}/30 stars in ${timeStr}\n\n`;
+  text += `⭐ ${totalStars}/23 stars in ${timeStr}\n\n`;
 
   breakdown.forEach(result => {
     const emoji = gameEmojis[result.gameId];
     const name = gameNames[result.gameId].padEnd(12);
-    const starStr = '⭐'.repeat(result.stars) + '☆'.repeat(5 - result.stars);
-    const timeStr = result.time ? `${result.time}s` : '';
+    const max = maxStars[result.gameId] || 5;
+    const starStr = '⭐'.repeat(result.stars) + '☆'.repeat(max - result.stars);
+    const timeStr = result.time !== undefined && result.time !== null ? `${result.time.toFixed(1)}s` : '';
     const extras = result.usedHint ? ' 💡' : '';
-    const parInfo = result.parDiff !== undefined ? ` par${result.parDiff > 0 ? '+' : ''}${result.parDiff}` : '';
+    const parInfo = result.parDiff !== undefined ? 
+      (result.parDiff === 999 ? ' gave up' : ` par${result.parDiff > 0 ? '+' : ''}${result.parDiff}`) : '';
     
     text += `${emoji} ${name} ${starStr} ${timeStr}${extras}${parInfo}\n`;
   });
