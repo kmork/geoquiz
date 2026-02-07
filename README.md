@@ -5,7 +5,7 @@ A collection of engaging geography quiz games to test and improve your knowledge
 **[Play Now at geoquiz.info](https://geoquiz.info)** 🎮
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![Games: 6](https://img.shields.io/badge/Games-6-green.svg)
+![Games: 7](https://img.shields.io/badge/Games-7-green.svg)
 ![Countries: 195+](https://img.shields.io/badge/Countries-195%2B-orange.svg)
 
 ---
@@ -42,18 +42,19 @@ Race against the clock to find countries on the map. How fast can you find all 1
 
 ---
 
-### 🏛️ Where is this?
+### 🏛️ Where is this? (UNESCO Heritage)
 **Identify countries from UNESCO World Heritage Sites**
 
 Can you recognize countries from their iconic UNESCO World Heritage Sites? Test your cultural geography knowledge!
 
 - 🖼️ 47 stunning UNESCO World Heritage Sites
-- 🎯 Two-attempt scoring: text input (2 pts) or multiple choice (1 pt)
+- 🎯 Two-attempt scoring: text input or multiple choice (after wrong answer)
+- 💡 Hint button available (-1 star penalty)
 - 🌍 Mix of natural wonders and cultural landmarks
 - ⌨️ Smart autocomplete with all country names
 - 📱 Optimized images for fast mobile loading (90% smaller!)
 
-[**Play Where is this? →**](picture-guess.html)
+[**Play UNESCO Heritage →**](heritage.html)
 
 ---
 
@@ -211,31 +212,54 @@ Simply visit **[geoquiz.info](https://geoquiz.info)** - no installation needed!
 ```
 GeoQuiz/
 ├── index.html              # Landing page with game selection
+├── daily.html              # Daily Challenge landing page
+├── daily-challenge.html    # Daily Challenge game container
 ├── route.html              # Connect the Countries game
 ├── find-country.html       # Find the Country game
-├── picture-guess.html      # Where is this? UNESCO heritage game
+├── heritage.html           # UNESCO Heritage game (formerly picture-guess.html)
 ├── outlines.html           # Guess the Country game
 ├── capitals.html           # Capitals quiz
-├── trivia.html            # Geography trivia
+├── trivia.html             # Geography trivia
 │
 ├── css/
-│   └── styles.css         # Global styles with dark/light themes
+│   ├── styles.css          # Global styles with dark/light themes
+│   └── daily-challenge.css # Daily challenge specific styles
 │
 ├── js/
-│   ├── route-main.js      # Route game initialization
-│   ├── route-game.js      # Route game logic
-│   ├── find-country-main.js  # Find country game with canvas
-│   ├── picture-guess-main.js # Picture guess initialization
-│   ├── picture-guess-game.js # Picture guess logic
-│   ├── outlines-main.js
-│   ├── main.js            # Capitals game
-│   ├── mobile-autocomplete.js # Shared autocomplete module
-│   ├── aliases.js         # 76 country name aliases
-│   ├── geojson-loader.js  # Compressed file loader
-│   ├── pako.min.js        # Gzip decompression
-│   ├── confetti.js        # Victory animations
-│   ├── theme.js           # Dark/light mode
-│   └── utils.js           # Helper functions
+│   ├── daily-challenge-main.js      # Daily challenge orchestrator
+│   ├── daily-challenge-scoring.js   # Difficulty-based star system
+│   ├── daily-challenge-share.js     # Social sharing functionality
+│   ├── seeded-random.js             # Deterministic RNG for daily challenges
+│   │
+│   ├── games/                       # Shared game logic modules
+│   │   ├── trivia-logic.js
+│   │   ├── find-logic.js
+│   │   ├── outlines-logic.js
+│   │   ├── picture-logic.js         # Heritage game logic
+│   │   ├── heritage-logic.js        # Re-exports picture-logic
+│   │   ├── capitals-logic.js
+│   │   └── route-logic.js
+│   │
+│   ├── ui-components/               # Shared UI renderers
+│   │   ├── picture-ui.js            # Heritage UI components
+│   │   ├── heritage-ui.js           # Re-exports picture-ui
+│   │   ├── outlines-renderer.js
+│   │   ├── map-renderer.js
+│   │   └── route-renderer.js
+│   │
+│   ├── route-main.js                # Route game initialization
+│   ├── find-country-main.js         # Find country initialization
+│   ├── heritage-main.js             # Heritage initialization
+│   ├── outlines-main.js             # Outlines initialization
+│   │
+│   ├── mobile-autocomplete.js       # Shared autocomplete module
+│   ├── aliases.js                   # 76 country name aliases
+│   ├── geojson-loader.js            # Compressed file loader
+│   ├── pako.min.js                  # Gzip decompression
+│   ├── confetti.js                  # Victory animations
+│   ├── theme.js                     # Dark/light mode
+│   ├── game-utils.js                # Shared utilities
+│   └── utils.js                     # Helper functions
 │
 ├── data/
 │   ├── ne_10m_admin_0_countries.geojson.gz        # 6.7 MB
@@ -243,7 +267,7 @@ GeoQuiz/
 │   ├── heritage-sites.json                         # 47 UNESCO sites
 │   ├── countries-neighbors.json
 │   ├── places.geojson
-│   ├── qa.json            # 120+ trivia questions
+│   ├── qa.json                                     # 120+ trivia questions
 │   └── countries.geojson
 │
 ├── img/
@@ -305,6 +329,49 @@ Or test on real devices for best results.
 ---
 
 ## 📊 Recent Improvements
+
+### v3.2 - Daily Challenge & Scoring System (February 2026)
+
+#### 🎮 New Daily Challenge Mode
+- **6 Mini-Games in One** - Complete all games in a single daily challenge
+- **Difficulty-Based Scoring** - Stars based on game difficulty (1-5 stars per game, 23 total)
+- **Speed Bonuses** - Earn extra stars for fast answers
+- **Smart Penalties** - Using hints reduces your star count
+- **Share Your Score** - Copy formatted results to share with friends
+- **Once-Per-Day** - New challenge every day for everyone
+- **Streak Tracking** - Track your daily completion streak
+
+#### ⭐ New Scoring System
+- **Trivia**: 1 base star + 1 speed bonus (< 5 seconds)
+- **Heritage**: 2 base + 1 time bonus - 1 hint penalty
+- **Outlines/Capitals**: 3 base + 1 time bonus - 1 hint penalty
+- **Find/Connect**: 4-5 stars based on performance
+- **Total**: 23 stars maximum per day
+
+#### 🏛️ Heritage Game Enhancements
+- **Multiple Choice Support** - Get multiple choice buttons after wrong text answer
+- **Hint System** - Request hints at cost of 1 star
+- **Time Tracking** - Accurate time measurement for speed bonuses
+- **Proper Scoring** - Correct star calculation with time bonuses
+
+#### 🗺️ Map Interaction Improvements
+- **Pan/Zoom Constraints** - Countries always remain partially visible (20% minimum)
+- **No Touch Flicker** - Removed mobile tap highlight artifacts
+- **Smooth Canvas** - Optimized rendering for mobile devices
+- **Better Controls** - Improved touch interaction on all map games
+
+### v3.1 - Game Renaming & UI Polish (February 2026)
+
+#### 📝 Heritage Branding
+- **Renamed "Where is this?"** to **"UNESCO Heritage"**
+- Updated all references in UI and code
+- Maintained backward compatibility with old URLs
+
+#### 🎯 UI Improvements  
+- **Globe Ring Alignment** - Fixed positioning on index page
+- **Star Display** - Proper wrapping for long star counts
+- **Time Format** - One decimal place for all times
+- **Rating System** - Updated for 23-star total
 
 ### v3.0 - New Game & Mobile Enhancements (February 2026)
 
@@ -413,7 +480,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🎯 Fun Facts
 
 - 🌍 **195 Countries** - All UN-recognized countries included
-- 🎮 **6 Games** - Different ways to test your geography knowledge
+- 🎮 **7 Game Modes** - Six standalone + Daily Challenge
+- 🏆 **23 Stars** - Maximum daily challenge score
 - 🏛️ **47 UNESCO Sites** - From Great Wall to Machu Picchu
 - 📚 **120+ Trivia Questions** - Mix of facts and fun
 - 🗺️ **2.2M Lines** - Of GeoJSON coordinate data
@@ -423,6 +491,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - 📱 **44px** - Minimum touch target size (iOS standard)
 - 🔀 **76** - Country name aliases supported
 - ⌨️ **4 Keys** - Arrow keys + Enter for autocomplete navigation
+- 🎯 **20%** - Minimum country visibility constraint for pan/zoom
 
 ---
 
