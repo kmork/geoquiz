@@ -6,8 +6,12 @@ import { RouteRenderer } from "./ui-components/route-renderer.js";
 import { attachZoomPan } from "./map-zoom-pan.js";
 import { norm } from "./utils.js";
 
-// Make aliases globally available for route-game.js
 window.COUNTRY_ALIASES = COUNTRY_ALIASES;
+
+function hideInitOverlay() {
+  const overlay = document.getElementById("init-overlay");
+  if (overlay) overlay.style.display = "none";
+}
 
 // UI
 const ui = {
@@ -27,7 +31,6 @@ const ui = {
 const MAP_W = 600;
 const MAP_H = 320;
 
-// Confetti
 const confetti = initConfetti("confetti");
 
 // Load neighbors + GeoJSON
@@ -36,6 +39,9 @@ const [NEIGHBORS, worldData] = await Promise.all([
   loadGeoJSON("data/ne_10m_admin_0_countries_route.geojson.gz"),
 ]);
 
+// ✅ Hide loading overlay once assets are ready
+hideInitOverlay();
+
 const WORLD = worldData.features || [];
 const renderer = new RouteRenderer(ui.map, worldData, { aliases: COUNTRY_ALIASES });
 
@@ -43,7 +49,7 @@ function drawCountries(countryList) {
   renderer.drawRoute(countryList);
 }
 
-// Add mobile autocomplete if present
+// Mobile autocomplete
 if (ui.answerInput) {
   ui.answerInput.removeAttribute("list");
   if (typeof window.initMobileAutocomplete === "function" && window.DATA) {
@@ -61,14 +67,12 @@ if (ui.answerInput) {
   }
 }
 
-// Add zoom and pan interactions
+// Zoom/pan
 let baseViewBox = { x: 0, y: 0, w: MAP_W, h: MAP_H };
-
-// Wrapper to track baseViewBox when drawing
 const originalDrawCountries = drawCountries;
+
 function drawCountriesWithZoom(countryList) {
   originalDrawCountries(countryList);
-  // Capture the viewBox after drawing as the new base
   const vb = ui.map.viewBox.baseVal;
   baseViewBox = { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
 }
@@ -83,20 +87,15 @@ const game = createRouteGame({
   },
 });
 
-// Event listeners
 ui.submitBtn?.addEventListener("click", () => {
   const guess = ui.answerInput.value.trim();
-  if (guess) {
-    game.processGuess(guess);
-  }
+  if (guess) game.processGuess(guess);
 });
 
 ui.answerInput?.addEventListener("keypress", (e) => {
   if (e.key === "Enter") {
     const guess = ui.answerInput.value.trim();
-    if (guess) {
-      game.processGuess(guess);
-    }
+    if (guess) game.processGuess(guess);
   }
 });
 
@@ -104,8 +103,6 @@ ui.undoBtn?.addEventListener("click", () => game.undo());
 ui.showHintBtn?.addEventListener("click", () => game.showHint());
 ui.giveUpBtn?.addEventListener("click", () => game.giveUp());
 
-// Attach zoom/pan interactions (shared module)
 attachZoomPan(ui.map, () => baseViewBox);
 
-// Start the game
 game.start();
