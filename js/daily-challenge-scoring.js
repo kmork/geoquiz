@@ -1,6 +1,6 @@
 /**
  * Daily Challenge Scoring & Statistics
- * 
+ *
  * Manages localStorage for daily challenge results, streaks, and statistics.
  * Enforces once-per-day limitation.
  */
@@ -18,7 +18,7 @@ const STORAGE_KEY_STATS = 'geoquiz-daily-stats';
  * - Find: 5★ max (very hard - speed + precision)
  * - Connect: 5★ max (very hard - path optimization)
  * Total: 23★
- * 
+ *
  * @param {object} result - Game result
  * @param {boolean} result.correct - Whether answer was correct
  * @param {number} result.time - Time taken in seconds
@@ -81,9 +81,13 @@ export function calculateStars(result, gameId) {
   }
 
   // Hint penalty
-  if (result.usedHint) {
-    stars -= 1;
-  }
+  // Apply penalty even if usedHint is missing/false, as long as hintPenalty indicates hint usage.
+  const hintPenalty =
+    (typeof result.hintPenalty === 'number')
+      ? Math.max(0, Math.min(2, result.hintPenalty))
+      : (result.usedHint ? 1 : 0);
+
+  stars -= hintPenalty;
 
   return Math.max(0, stars);
 }
@@ -162,7 +166,7 @@ function updateStats(date, stars) {
 
   // Average stars
   const totalStars = Object.values(history).reduce((sum, r) => sum + r.stars, 0);
-  stats.averageStars = stats.totalCompleted > 0 
+  stats.averageStars = stats.totalCompleted > 0
     ? (totalStars / stats.totalCompleted).toFixed(1)
     : '0.0';
 
@@ -292,11 +296,11 @@ export function getTimeUntilNext() {
   const tomorrow = new Date(now);
   tomorrow.setDate(tomorrow.getDate() + 1);
   tomorrow.setHours(0, 0, 0, 0);
-  
+
   const diffMs = tomorrow - now;
   const hours = Math.floor(diffMs / (1000 * 60 * 60));
   const minutes = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60));
-  
+
   return { hours, minutes };
 }
 

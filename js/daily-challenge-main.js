@@ -812,13 +812,60 @@ class DailyChallenge {
   async runPictureGame(challenge, container) {
     const site = challenge.data;
 
-    // Import the complete picture game factory
     const { createCompletePictureGame } = await import('./picture-complete.js');
 
     return new Promise(async (resolve) => {
       let hasResolved = false;
 
-      // Create game using same factory as standalone
+      // ✅ Local hint tracking (independent of picture-complete.js)
+      // Rule:
+      // - Click hint button => penalty = 1
+      // - Multiple-choice shown => penalty = 2
+      let localHintPenalty = 0;
+
+      const setPenalty = (n) => {
+        if (n > localHintPenalty) localHintPenalty = n;
+      };
+
+      // Track hint button clicks (capture phase so it always fires)
+      const onClickCapture = (e) => {
+        const t = e.target;
+        if (!t) return;
+
+        // Hint button id used by picture-ui
+        if (t.id === 'pg-hint-btn') {
+          setPenalty(1);
+        }
+      };
+      container.addEventListener('click', onClickCapture, true);
+
+      // Track multiple-choice reveal (shown after wrong guess)
+      let mcObserver = null;
+      const attachMcObserver = () => {
+        const mc = container.querySelector('#pg-mc-section');
+        if (!mc) return;
+
+        const check = () => {
+          // treat "alternatives revealed" as stronger hint
+          const display = mc.style.display;
+          if (display && display !== 'none') setPenalty(2);
+        };
+
+        check();
+
+        mcObserver = new MutationObserver(check);
+        mcObserver.observe(mc, { attributes: true, attributeFilter: ['style', 'class'] });
+      };
+
+      // Try now, and also after the game renders
+      attachMcObserver();
+
+      const cleanup = () => {
+        container.removeEventListener('click', onClickCapture, true);
+        if (mcObserver) mcObserver.disconnect();
+        mcObserver = null;
+      };
+
       const result = await createCompletePictureGame({
         container,
         confetti: this.confetti,
@@ -828,32 +875,59 @@ class DailyChallenge {
         onComplete: (finalResult) => {
           if (hasResolved) return;
           hasResolved = true;
+          cleanup();
+
+          // Prefer local hint tracking; fall back to finalResult if present
+          const penaltyFromFinal =
+            (typeof finalResult?.hintPenalty === 'number') ? finalResult.hintPenalty :
+              (finalResult?.hintUsed ? 1 : 0);
+
+          const hintPenalty = Math.max(localHintPenalty, penaltyFromFinal);
+          const usedHint = hintPenalty > 0 || !!finalResult?.usedHint || !!finalResult?.hintUsed;
+
           resolve({
-            correct: finalResult.correct || finalResult.correctCount > 0,
-            time: finalResult.time || 0,
+            correct: !!(finalResult?.correct || finalResult?.correctCount > 0),
+            time: finalResult?.time || 0,
             timeLimit: challenge.timeLimit,
-            usedHint: finalResult.usedHint || false
+            usedHint,
+            hintPenalty
           });
         }
       });
 
+      // If factory failed, resolve safely (your previous code referenced finalResult here, which is a bug)
       if (!result) {
-        resolve({ correct: false, time: challenge.timeLimit, timeLimit: challenge.timeLimit });
-        return;
-      }
-
-      // Set specific site and start
-      result.setSite(site);
-      result.start();
-
-      // Setup timeout handler
-      window.addEventListener('daily-timeout', () => {
-        if (hasResolved) return;
-        hasResolved = true;
+        cleanup();
         resolve({
           correct: false,
           time: challenge.timeLimit,
-          timeLimit: challenge.timeLimit
+          timeLimit: challenge.timeLimit,
+          usedHint: false,
+          hintPenalty: 0
+        });
+        return;
+      }
+
+      // Ensure observer attaches after UI is actually in DOM
+      // (createCompletePictureGame may render asynchronously)
+      setTimeout(attachMcObserver, 0);
+
+      // Start
+      result.setSite(site);
+      result.start();
+
+      // Timeout handler (also previously referenced finalResult, which is a bug)
+      window.addEventListener('daily-timeout', () => {
+        if (hasResolved) return;
+        hasResolved = true;
+        cleanup();
+
+        resolve({
+          correct: false,
+          time: challenge.timeLimit,
+          timeLimit: challenge.timeLimit,
+          usedHint: localHintPenalty > 0,
+          hintPenalty: localHintPenalty
         });
       }, { once: true });
     });

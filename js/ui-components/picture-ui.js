@@ -23,7 +23,7 @@ export function renderPictureUI(container, site, options = {}) {
     onAnswer = () => {},
     onHintUsed = () => {}
   } = options;
-  
+
   // Build HTML using existing CSS classes
   const html = `
     ${showProgress ? `
@@ -32,7 +32,7 @@ export function renderPictureUI(container, site, options = {}) {
         <div class="pill">Progress: <b id="pg-progress">0 / 0</b></div>
       </div>
     ` : ''}
-    
+
     <!-- Image -->
     <div class="picture-container">
       <img id="pg-image" src="${site.imageUrl}" alt="UNESCO Site" style="opacity: 0;">
@@ -40,7 +40,7 @@ export function renderPictureUI(container, site, options = {}) {
         <div class="spinner"></div>
       </div>
     </div>
-    
+
     <!-- Text input section -->
     <div id="pg-text-section" class="input-section">
       <div class="answerRow">
@@ -50,7 +50,7 @@ export function renderPictureUI(container, site, options = {}) {
         ` : ''}
         <button id="pg-submit-btn" class="btn btn-primary">Submit</button>
       </div>
-      
+
       <!-- Hint display -->
       ${showHint ? `
         <div id="pg-hint" class="hint-text" style="display: none;">
@@ -58,7 +58,7 @@ export function renderPictureUI(container, site, options = {}) {
         </div>
       ` : ''}
     </div>
-    
+
     ${allowMultipleChoice ? `
       <!-- Multiple choice section (hidden initially) -->
       <div id="pg-mc-section" class="multiple-choice-section" style="display: none;">
@@ -68,13 +68,13 @@ export function renderPictureUI(container, site, options = {}) {
         <div id="pg-choices" class="choices"></div>
       </div>
     ` : ''}
-    
+
     <!-- Feedback/Status -->
     <div id="pg-feedback" class="status" style="display: none;"></div>
   `;
-  
+
   container.innerHTML = html;
-  
+
   // Get element references
   const elements = {
     image: document.getElementById('pg-image'),
@@ -92,7 +92,7 @@ export function renderPictureUI(container, site, options = {}) {
     score: document.getElementById('pg-score'),
     progress: document.getElementById('pg-progress')
   };
-  
+
   // Load image with fade-in
   const img = new Image();
   img.onload = () => {
@@ -106,53 +106,55 @@ export function renderPictureUI(container, site, options = {}) {
     elements.image.style.opacity = '1';
   };
   img.src = site.imageUrl;
-  
+
   // Track state
-  let hintUsed = false;
+  let hintUsed = false;   // legacy boolean
+  let hintPenalty = 0;    // 0=no hint, 1=hint button, 2=multiple choice
   let answered = false;
-  
+
   // Event handlers
   const handleSubmit = () => {
     if (answered) return;
     const answer = elements.input.value.trim();
     if (!answer) return;
-    
+
     answered = true;
     elements.input.disabled = true;
     elements.submitBtn.disabled = true;
-    
-    onAnswer({ answer, hintUsed });
+
+    onAnswer({ answer, hintUsed, hintPenalty });
   };
-  
+
   const handleHint = () => {
     if (hintUsed) return;
     hintUsed = true;
+    if (hintPenalty < 1) hintPenalty = 1;
     elements.hintDiv.style.display = 'block';
     elements.hintBtn.disabled = true;
     elements.hintBtn.style.opacity = '0.5';
-    onHintUsed();
+    onHintUsed({ type: 'hint-button' }); // caller may ignore args
   };
-  
+
   // Attach events
   elements.submitBtn.addEventListener('click', handleSubmit);
   elements.input.addEventListener('keypress', (e) => {
     if (e.key === 'Enter') handleSubmit();
   });
-  
+
   if (elements.hintBtn) {
     elements.hintBtn.addEventListener('click', handleHint);
   }
-  
+
   // Auto-focus on desktop (not mobile to avoid keyboard popup)
   const isMobile = window.innerWidth <= 640 || /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   if (!isMobile) {
     elements.input.focus();
   }
-  
+
   // Return control methods
   return {
     elements,
-    
+
     /**
      * Show feedback message
      * @param {string} message - Feedback text
@@ -163,7 +165,7 @@ export function renderPictureUI(container, site, options = {}) {
       elements.feedback.className = isCorrect ? 'status good' : 'status bad';
       elements.feedback.style.display = 'block';
     },
-    
+
     /**
      * Show multiple choice options
      * @param {string[]} options - Array of 4 country names (including correct)
@@ -171,14 +173,19 @@ export function renderPictureUI(container, site, options = {}) {
      */
     showMultipleChoice(options, onChoiceClick) {
       if (!allowMultipleChoice) return;
-      
+
+      // Alternatives count as the stronger hint (-2 stars)
+      hintUsed = true;
+      hintPenalty = 2;
+      onHintUsed({ type: 'multiple-choice' }); // optional
+
       // Reset answered flag to allow multiple choice interaction
       answered = false;
-      
+
       elements.textSection.style.display = 'none';
       elements.mcSection.style.display = 'block';
       elements.choices.innerHTML = '';
-      
+
       options.forEach(option => {
         const btn = document.createElement('button');
         btn.textContent = option;
@@ -186,16 +193,16 @@ export function renderPictureUI(container, site, options = {}) {
         btn.addEventListener('click', () => {
           if (answered) return;
           answered = true;
-          
+
           // Disable all buttons
           elements.choices.querySelectorAll('button').forEach(b => b.disabled = true);
-          
+
           onChoiceClick(option);
         });
         elements.choices.appendChild(btn);
       });
     },
-    
+
     /**
      * Highlight correct/wrong choices in multiple choice
      * @param {string} correctAnswer - The correct country
@@ -215,7 +222,7 @@ export function renderPictureUI(container, site, options = {}) {
         }
       });
     },
-    
+
     /**
      * Update score/progress display
      * @param {number} score - Current score
@@ -226,7 +233,7 @@ export function renderPictureUI(container, site, options = {}) {
       if (elements.score) elements.score.textContent = score;
       if (elements.progress) elements.progress.textContent = `${current} / ${total}`;
     },
-    
+
     /**
      * Reset to initial state for next question
      */
@@ -255,7 +262,7 @@ export function renderPictureUI(container, site, options = {}) {
  */
 export function setupPictureAutocomplete(input, suggestions) {
   if (!input || !suggestions || suggestions.length === 0) return;
-  
+
   // Check if mobile autocomplete is available
   if (typeof initMobileAutocomplete === 'function') {
     input.removeAttribute('list'); // Remove datalist if exists
