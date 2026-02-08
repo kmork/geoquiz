@@ -706,9 +706,3 @@
   color: var(--text-primary);
 }
 
-/* Remove tap flash ONLY on the Find-the-Country map */
-#find-map {
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
-  outline: none;
-  touch-action: manipulation;
-}

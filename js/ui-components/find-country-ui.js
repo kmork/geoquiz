@@ -39,26 +39,6 @@ export function renderFindCountryUI(container, country, options = {}) {
     feedback: document.getElementById('find-feedback')
   };
 
-  // --- Mobile tap flash suppression (ONLY for Find-the-Country canvas) ---
-  // Chrome/Edge Android can show a "pressed" flash on canvas taps even when preventDefault is used.
-  // These styles are applied only to #find-map.
-  if (elements.canvas) {
-    elements.canvas.style.setProperty('-webkit-tap-highlight-color', 'rgba(0,0,0,0)');
-    elements.canvas.style.setProperty('tap-highlight-color', 'rgba(0,0,0,0)');
-    elements.canvas.style.setProperty('-webkit-touch-callout', 'none');
-    elements.canvas.style.setProperty('-webkit-user-select', 'none');
-    elements.canvas.style.setProperty('user-select', 'none');
-    elements.canvas.style.setProperty('outline', 'none');
-
-    // Important: prevents the browser from doing its own touch handling that can cause flashes
-    // (your game already implements pan/zoom in JS)
-    elements.canvas.style.setProperty('touch-action', 'none');
-
-    // Extra safety: avoid any default click/selection effects
-    elements.canvas.addEventListener('click', (e) => e.preventDefault(), { passive: false });
-    elements.canvas.addEventListener('contextmenu', (e) => e.preventDefault());
-  }
-
   // Helper: show feedback message
   function showFeedback(message, isCorrect) {
     if (!elements.feedback) return;

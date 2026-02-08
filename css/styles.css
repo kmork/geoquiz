@@ -1127,7 +1127,8 @@ select option {
   justify-content: center;
 }
 
-.find-country-page #map {
+.find-country-page #map,
+.daily-game-container #dc-map {
   flex: 1;
   max-width: 100%;
   max-height: 100%;
