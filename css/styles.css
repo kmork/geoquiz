@@ -115,7 +115,20 @@ html.light-mode {
   --map-dot-stroke: rgba(0,0,0,.85);
 }
 
-body{margin:0;background:var(--bg-primary);color:var(--text-primary)}
+html {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+body{
+  margin:0;
+  background:var(--bg-primary);
+  color:var(--text-primary);
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
 .wrap{max-width:980px;margin:0 auto;padding:24px}
 .card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;padding:18px;box-shadow:0 12px 40px var(--card-shadow)}
 
@@ -197,16 +210,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
 }
 
 .mapwrap{margin:10px 0}
-
-/* Canvas for Find the Country game */
-canvas {
-  display: block;
-  touch-action: none;
-  user-select: none;
-  -webkit-user-select: none;
-  -webkit-tap-highlight-color: transparent;
-  -webkit-touch-callout: none;
-}
 
 #map{
   border-radius:14px;
