@@ -6,16 +6,16 @@
   <title>Daily Challenge - GeoQuiz</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <meta name="description" content="Play today's daily geography challenge!">
-  
+
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/daily-challenge.css">
-  
+
   <style>
     /* Inline critical styles to ensure page renders */
     * { box-sizing: border-box; }
     body { margin: 0; font-family: system-ui, -apple-system, sans-serif; }
   </style>
-  
+
   <script>
     // Prevent FOUC - apply theme immediately
     (function() {
@@ -26,7 +26,7 @@
         document.documentElement.classList.add('light-mode');
       }
     })();
-    
+
     // Debug: Log CSS loading
     window.addEventListener('DOMContentLoaded', () => {
       console.log('DOMContentLoaded - Checking stylesheets...');
@@ -40,7 +40,6 @@
 <body>
   <header>
     <nav>
-      <a href="index.html" class="logo">🌍 GeoQuiz</a>
     </nav>
   </header>
 
