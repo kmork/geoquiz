@@ -221,6 +221,25 @@
   width: 100%;
 }
 
+/* Daily "Find the Country": make the canvas span the card edges (left/right/bottom) */
+.daily-game-container #dc-map {
+  display: block;
+
+  /* card padding is 18px, so expand by 18px on each side */
+  width: calc(100% + 36px);
+  margin-left: -18px;
+  margin-right: -18px;
+  margin-bottom: -18px;
+
+  /* optional: prevent any gap */
+  height: auto;
+}
+
+.daily-game-container #dc-map {
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
 .daily-header {
   display: flex;
   justify-content: space-between;
@@ -706,3 +725,12 @@
   color: var(--text-primary);
 }
 
+/* Daily Connect embed: use the available width (don't inherit .wrap max-width) */
+.daily-embed {
+  width: 100%;
+}
+
+.daily-embed-card {
+  width: 100%;
+  max-width: none;   /* override page-level card max widths */
+}

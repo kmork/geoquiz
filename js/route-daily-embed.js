@@ -13,8 +13,8 @@ export async function runEmbeddedRouteGame(container, { fixedRound, neighbors, c
   const optimalCountriesText = `${optimalBetween} countr${optimalBetween === 1 ? "y" : "ies"}`;
 
   container.innerHTML = `
-    <div class="wrap">
-      <div class="card">
+    <div class="daily-embed">
+      <div class="card daily-embed-card">
         <div class="muted">
           Find the shortest land route between two countries. Optimal route: <b>${optimalCountriesText}</b>
         </div>
