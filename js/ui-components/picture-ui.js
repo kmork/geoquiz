@@ -43,14 +43,16 @@ export function renderPictureUI(container, site, options = {}) {
 
     <!-- Text input section -->
     <div id="pg-text-section" class="input-section">
-      <div class="answerRow">
+      <div class="answerRow picture-answerRow">
         <input type="text" id="pg-input" class="country-input" placeholder="Type country name..." spellcheck="false">
-        ${showHint ? `
-          <button id="pg-hint-btn" class="btn btn-secondary">💡 Hint</button>
-        ` : ''}
-        <button id="pg-submit-btn" class="btn btn-primary">Submit</button>
-      </div>
+        <button id="pg-submit-btn" class="btn btn-primary">Guess</button>
 
+        ${showHint ? `
+          <div class="secondary-buttons">
+            <button id="pg-hint-btn" class="btn-secondary" type="button">Hint</button>
+          </div>
+        ` : ''}
+      </div>
       <!-- Hint display -->
       ${showHint ? `
         <div id="pg-hint" class="hint-text" style="display: none;">

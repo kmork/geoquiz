@@ -1,6 +1,6 @@
 :root{
   font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  
+
   /* Color palette - Dark mode (default) */
   --bg-primary: #0b1020;
   --text-primary: #e8ecff;
@@ -37,7 +37,7 @@
   --init-overlay-color: rgba(232,236,255,.9);
   --bonus-bg: rgba(255,255,255,.06);
   --bonus-color: rgba(232,236,255,.9);
-  
+
   /* Map SVG colors */
   --map-country-stroke: rgba(232,236,255,.3);
   --map-country-stroke-neighbor: rgba(232,236,255,.5);
@@ -52,7 +52,7 @@
   --map-wrong-stroke: rgba(252, 165, 161, 0.95);
   --map-dot-fill: #6ee7b7;
   --map-dot-stroke: rgba(232,236,255,.9);
-  
+
   /* Route game colors */
   --color-green: rgba(34, 197, 94, 0.8);
   --color-orange: rgba(249, 115, 22, 0.8);
@@ -98,7 +98,7 @@ html.light-mode {
   --init-overlay-color: rgba(26,32,44,.9);
   --bonus-bg: rgba(0,0,0,.04);
   --bonus-color: rgba(26,32,44,.9);
-  
+
   /* Map SVG colors - black strokes for light mode (mirror of white strokes in dark mode) */
   --map-country-stroke: rgba(0,0,0,.35);
   --map-country-stroke-neighbor: rgba(0,0,0,.5);
@@ -626,9 +626,9 @@ select option {
     height: 44px;
     font-size: 20px;
   }
-  
+
   /* Mobile fixes for Connect the Countries game */
-  
+
   /* Responsive map height - shorter on mobile to fit controls on screen */
   /* Only apply to route/outlines games, not find-country */
   .wrap:not(.find-country-page) .mapwrap {
@@ -636,12 +636,12 @@ select option {
     min-height: 200px; /* Reduced from 250px */
     max-height: 300px; /* Reduced from 400px */
   }
-  
+
   .wrap:not(.find-country-page) #map {
     height: 100%;
     width: 100%;
   }
-  
+
   /* Compact mobile layout for input and buttons */
   .answerRow {
     display: grid;
@@ -653,7 +653,7 @@ select option {
     width: 100%;
     align-items: center; /* Vertically align input and button */
   }
-  
+
   .answerRow input {
     grid-area: input;
     font-size: 16px; /* Prevent iOS auto-zoom */
@@ -662,7 +662,7 @@ select option {
     box-sizing: border-box; /* Include padding in height calculation */
     line-height: 1.5; /* Explicit line height for consistency */
   }
-  
+
   #submit {
     grid-area: submit;
     height: 44px; /* Match input exactly */
@@ -672,21 +672,21 @@ select option {
     font-size: 15px;
     white-space: nowrap;
   }
-  
+
   /* Change "Add to Route" to just "Add" on mobile - ONLY for route game */
   .route-display ~ .answerRow #submit::before {
     content: "Add";
   }
-  
+
   .route-display ~ .answerRow #submit {
     font-size: 0; /* Hide original text */
   }
-  
+
   .route-display ~ .answerRow #submit::before {
     font-size: 15px; /* Show replacement text */
     font-weight: 650;
   }
-  
+
   /* Secondary buttons container - create flex wrapper */
   .secondary-buttons {
     grid-area: buttons;
@@ -694,7 +694,50 @@ select option {
     gap: 12px; /* Use flex gap instead of margins */
     width: 100%;
   }
-  
+
+  /* ===============================================
+   Picture Guess (UNESCO) - make Hint match Connect icon button
+   =============================================== */
+
+  .picture-answerRow #pg-input { grid-area: input; }
+  .picture-answerRow #pg-submit-btn { grid-area: submit; }
+  .picture-answerRow .secondary-buttons { grid-area: buttons; }
+
+  /* Make the picture hint button look like Connect's #showHint icon button */
+  #pg-hint-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 44px;
+    min-width: 44px;
+    padding: 10px;
+    box-sizing: border-box;
+    font-size: 0;            /* hide text */
+    border: 2px solid;
+    transition: all 0.2s ease;
+    background: rgba(251, 191, 36, 0.15);
+    border-color: rgba(251, 191, 36, 0.4);
+  }
+
+  #pg-hint-btn:hover {
+    background: rgba(251, 191, 36, 0.25);
+    border-color: rgba(251, 191, 36, 0.6);
+  }
+
+  #pg-hint-btn::before {
+    content: "💡";
+    font-size: 22px;
+    line-height: 1;
+    filter: brightness(1.2) contrast(1.1);
+  }
+
+  /* Make sure picture submit matches input height on all sizes */
+  #pg-submit-btn,
+  #pg-input {
+    height: 44px;
+    box-sizing: border-box;
+  }
+
   /* Group secondary buttons on one row with icons */
   #undo,
   #showHint,
@@ -711,40 +754,40 @@ select option {
     border: 2px solid; /* Thicker border for emphasis */
     transition: all 0.2s ease; /* Smooth hover effect */
   }
-  
+
   /* Individual button colors and styling */
   #undo {
     background: rgba(59, 130, 246, 0.15); /* Blue background */
     border-color: rgba(59, 130, 246, 0.4);
   }
-  
+
   #undo:hover:not(:disabled) {
     background: rgba(59, 130, 246, 0.25);
     border-color: rgba(59, 130, 246, 0.6);
   }
-  
+
   #showHint {
     background: rgba(251, 191, 36, 0.15); /* Gold/yellow background */
     border-color: rgba(251, 191, 36, 0.4);
   }
-  
+
   #showHint:hover {
     background: rgba(251, 191, 36, 0.25);
     border-color: rgba(251, 191, 36, 0.6);
   }
-  
+
   #giveUp {
     background: rgba(239, 68, 68, 0.15); /* Red background */
     border-color: rgba(239, 68, 68, 0.4);
   }
-  
+
   #giveUp:hover {
     background: rgba(239, 68, 68, 0.25);
     border-color: rgba(239, 68, 68, 0.6);
   }
-  
+
   /* No margin needed - using flex gap on parent */
-  
+
   /* Add icons to secondary buttons using ::before */
   #undo::before {
     content: "↶";
@@ -754,14 +797,14 @@ select option {
     color: rgb(59, 130, 246); /* Blue color */
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
   }
-  
+
   #showHint::before {
     content: "💡";
     font-size: 22px; /* Larger icon */
     line-height: 1;
     filter: brightness(1.2) contrast(1.1); /* Enhance emoji brightness */
   }
-  
+
   #giveUp::before {
     content: "🏳";
     font-size: 22px; /* Larger icon */
@@ -769,7 +812,7 @@ select option {
     filter: brightness(1.3) contrast(1.2) drop-shadow(0 0 1px rgba(0,0,0,0.8)); /* Enhanced with dark outline */
     -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.3); /* Dark outline for white flag */
   }
-  
+
   /* Alternative: use unicode symbols if emojis don't work well */
   /* Uncomment these if you prefer symbols over emojis
   #showHint::before {
@@ -777,14 +820,14 @@ select option {
     font-size: 20px;
     font-weight: 700;
   }
-  
+
   #giveUp::before {
     content: "✕";
     font-size: 20px;
     font-weight: 400;
   }
   */
-  
+
   /* Optimize route display for mobile */
   .route-display {
     font-size: 14px;
@@ -792,28 +835,28 @@ select option {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
-  
+
   .route-country {
     font-size: 14px;
     padding: 6px 10px;
   }
-  
+
   .route-arrow {
     font-size: 14px;
   }
-  
+
   /* Add safe area insets for notched phones */
   body {
     padding-left: env(safe-area-inset-left);
     padding-right: env(safe-area-inset-right);
     padding-bottom: env(safe-area-inset-bottom);
   }
-  
+
   .wrap {
     padding-left: max(20px, env(safe-area-inset-left));
     padding-right: max(20px, env(safe-area-inset-right));
   }
-  
+
   /* Mobile autocomplete dropdown */
   .mobile-autocomplete-dropdown {
     position: absolute;
@@ -832,7 +875,7 @@ select option {
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
     -webkit-overflow-scrolling: touch;
   }
-  
+
   .autocomplete-item {
     padding: 12px 14px;
     color: var(--input-color);
@@ -841,22 +884,22 @@ select option {
     cursor: pointer;
     transition: background 0.15s ease;
   }
-  
+
   .autocomplete-item:last-child {
     border-bottom: none;
   }
-  
+
   .autocomplete-item:active {
     background: var(--button-hover);
   }
-  
+
   .autocomplete-item mark {
     background: rgba(251, 191, 36, 0.3);
     color: var(--input-color);
     font-weight: 650;
     padding: 2px 0;
   }
-  
+
   /* Ensure parent container has position: relative */
   .answerRow {
     position: relative;
@@ -916,7 +959,7 @@ select option {
   .mobile-autocomplete-dropdown {
     max-height: 200px;
   }
-  
+
   .autocomplete-item {
     padding: 8px 12px;
     font-size: 16px; /* Prevent iOS zoom */
@@ -926,7 +969,7 @@ select option {
 /* Desktop Layout Improvements (641px and up) */
 @media (min-width: 641px) {
   /* Route game - consistent button heights and compact icon layout */
-  
+
   /* Fix input and button heights on desktop */
   .answerRow input {
     height: 44px;
@@ -934,13 +977,13 @@ select option {
     box-sizing: border-box;
     line-height: 1.5;
   }
-  
+
   .answerRow button {
     height: 44px;
     padding: 10px 16px;
     box-sizing: border-box;
   }
-  
+
   /* Layout: input, Add button, then icon buttons inline */
   .answerRow {
     display: flex;
@@ -948,23 +991,23 @@ select option {
     gap: 12px;
     align-items: center;
   }
-  
+
   .answerRow input {
     flex: 1 1 300px; /* Grow but maintain min-width */
     min-width: 200px;
   }
-  
+
   #submit {
     flex: 0 0 auto;
     min-width: 120px; /* Room for "Add to Route" */
   }
-  
+
   .secondary-buttons {
     display: flex;
     gap: 10px;
     flex: 0 0 auto;
   }
-  
+
   /* Convert secondary buttons to icons on desktop too */
   #undo,
   #showHint,
@@ -981,41 +1024,41 @@ select option {
     border: 2px solid;
     transition: all 0.2s ease;
   }
-  
+
   /* Same color scheme as mobile */
   #undo {
     background: rgba(59, 130, 246, 0.15);
     border-color: rgba(59, 130, 246, 0.4);
   }
-  
+
   #undo:hover:not(:disabled) {
     background: rgba(59, 130, 246, 0.25);
     border-color: rgba(59, 130, 246, 0.6);
     transform: scale(1.05);
   }
-  
+
   #showHint {
     background: rgba(251, 191, 36, 0.15);
     border-color: rgba(251, 191, 36, 0.4);
   }
-  
+
   #showHint:hover {
     background: rgba(251, 191, 36, 0.25);
     border-color: rgba(251, 191, 36, 0.6);
     transform: scale(1.05);
   }
-  
+
   #giveUp {
     background: rgba(239, 68, 68, 0.15);
     border-color: rgba(239, 68, 68, 0.4);
   }
-  
+
   #giveUp:hover {
     background: rgba(239, 68, 68, 0.25);
     border-color: rgba(239, 68, 68, 0.6);
     transform: scale(1.05);
   }
-  
+
   /* Add icons using ::before */
   #undo::before {
     content: "↶";
@@ -1025,14 +1068,14 @@ select option {
     color: rgb(59, 130, 246);
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
   }
-  
+
   #showHint::before {
     content: "💡";
     font-size: 22px;
     line-height: 1;
     filter: brightness(1.2) contrast(1.1);
   }
-  
+
   #giveUp::before {
     content: "🏳";
     font-size: 22px;
@@ -1040,7 +1083,7 @@ select option {
     filter: brightness(1.3) contrast(1.2) drop-shadow(0 0 1px rgba(0,0,0,0.8));
     -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.3);
   }
-  
+
   /* Disabled state */
   #undo:disabled,
   #showHint:disabled,
@@ -1049,7 +1092,7 @@ select option {
     cursor: not-allowed;
     transform: none;
   }
-  
+
   #undo:disabled:hover,
   #showHint:disabled:hover,
   #giveUp:disabled:hover {
@@ -1345,12 +1388,12 @@ select option {
   .picture-guess-page .answerRow {
     gap: 8px;
   }
-  
+
   .picture-guess-page .answerRow input {
     font-size: 16px; /* Prevent iOS zoom */
     min-width: 0; /* Allow shrinking */
   }
-  
+
   .picture-guess-page .answerRow button {
     padding: 12px 16px; /* Slightly smaller padding on mobile */
     flex-shrink: 0; /* Don't shrink button */
