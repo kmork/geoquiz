@@ -9,17 +9,14 @@ import { norm } from "./utils.js";
 window.COUNTRY_ALIASES = COUNTRY_ALIASES;
 
 export async function runEmbeddedRouteGame(container, { fixedRound, neighbors, confetti }) {
+  const optimalBetween = Math.max(0, (fixedRound?.path?.length || 2) - 2);
+  const optimalCountriesText = `${optimalBetween} countr${optimalBetween === 1 ? "y" : "ies"}`;
+
   container.innerHTML = `
     <div class="wrap">
       <div class="card">
-        <div class="row row-space-between">
-          <div>
-            <div class="muted">Find the shortest land route between two countries.</div>
-          </div>
-          <div class="row">
-            <div class="pill">Score: <b id="score">0</b></div>
-            <div class="pill">Optimal: <b id="optimalHint">?</b> countries</div>
-          </div>
+        <div class="muted">
+          Find the shortest land route between two countries. Optimal route: <b>${optimalCountriesText}</b>
         </div>
 
         <div class="hr"></div>
@@ -55,11 +52,13 @@ export async function runEmbeddedRouteGame(container, { fixedRound, neighbors, c
     undoBtn: container.querySelector("#undo"),
     showHintBtn: container.querySelector("#showHint"),
     giveUpBtn: container.querySelector("#giveUp"),
-    scoreEl: container.querySelector("#score"),
-    optimalHintEl: container.querySelector("#optimalHint"),
     routeEl: container.querySelector("#route"),
     statusEl: container.querySelector("#status"),
     hintEl: container.querySelector("#hint"),
+
+    // ✅ Not shown in daily UI:
+    scoreEl: null,
+    optimalHintEl: null,
   };
 
   const worldData = await loadGeoJSON("data/ne_10m_admin_0_countries_route.geojson.gz");

@@ -96,7 +96,7 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
   }
 
   function updateUI() {
-    ui.scoreEl.textContent = score;
+    if (ui.scoreEl) ui.scoreEl.textContent = score;
 
     // Enable/disable undo button based on path history
     const canUndo = currentRound && currentRound.pathHistory.length > 0 && !roundEnded;
@@ -197,7 +197,7 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
 
     // Show optimal path length in header from the start
     const optimalLength = currentRound.optimalPath.length - 2;
-    ui.optimalHintEl.textContent = optimalLength;
+    if (ui.optimalHintEl) ui.optimalHintEl.textContent = optimalLength;
 
     updateRouteDisplay();
     updateUI();
