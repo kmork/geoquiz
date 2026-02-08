@@ -221,25 +221,6 @@
   width: 100%;
 }
 
-/* Daily "Find the Country": make the canvas span the card edges (left/right/bottom) */
-.daily-game-container #dc-map {
-  display: block;
-
-  /* card padding is 18px, so expand by 18px on each side */
-  width: calc(100% + 36px);
-  margin-left: -18px;
-  margin-right: -18px;
-  margin-bottom: -18px;
-
-  /* optional: prevent any gap */
-  height: auto;
-}
-
-.daily-game-container #dc-map {
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
-}
-
 .daily-header {
   display: flex;
   justify-content: space-between;
@@ -733,4 +714,51 @@
 .daily-embed-card {
   width: 100%;
   max-width: none;   /* override page-level card max widths */
+}
+
+/* ===== Daily Find-the-Country: full-width map without resize shrink ===== */
+
+/* Remove the extra bottom padding ONLY for the Find card */
+.game-area .card:has(#dc-map) {
+  padding-bottom: 0;
+}
+
+/* Bleed the WRAPPER (stable height lives here), NOT the canvas */
+.game-area .mapwrap:has(#dc-map) {
+  /* keep your existing height logic, but use the card space */
+  margin: 10px -18px -18px -18px;  /* card padding is 18px */
+  height: calc(100vh - 350px);
+  min-height: 250px;
+  max-height: 600px;
+}
+
+/* Preserve your existing responsive height behavior */
+@media (max-height: 800px) {
+  .game-area .mapwrap:has(#dc-map) {
+    height: calc(100vh - 320px);
+  }
+}
+@media (max-height: 600px) {
+  .game-area .mapwrap:has(#dc-map) {
+    height: calc(100vh - 280px);
+    min-height: 200px;
+  }
+}
+
+/* Canvas just fills the wrapper */
+.game-area .mapwrap:has(#dc-map) #dc-map {
+  width: 100%;
+  height: 100%;
+  display: block;
+
+  background: var(--map-bg);
+  border: 0; /* avoid double border when bleeding */
+  border-radius: 0 0 16px 16px; /* match card rounding */
+
+  touch-action: none;
+  cursor: pointer;
+
+  /* stop mobile tap flash */
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  outline: none;
 }
