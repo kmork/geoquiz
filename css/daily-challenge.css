@@ -183,33 +183,55 @@
 
 /* Info Section */
 
-.daily-info {
+/* Practice CTA card */
+.daily-practice-card {
   background: var(--card-bg);
   border-radius: 16px;
   padding: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border: 2px solid rgba(102, 126, 234, 0.15);
 }
 
-.daily-info h3 {
-  margin: 0 0 1rem 0;
+.daily-practice-card .practice-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.daily-practice-card h3 {
+  margin: 0 0 0.5rem 0;
   color: var(--text-primary);
+  font-size: 1.2rem;
 }
 
-.daily-info ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.daily-info li {
-  padding: 0.75rem 0;
-  border-bottom: 1px solid var(--border-color);
+.daily-practice-card p {
+  margin: 0 0 1.25rem 0;
   color: var(--text-secondary);
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
-.daily-info li:last-child {
-  border-bottom: none;
+.btn-practice {
+  display: inline-block;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  padding: 0.75rem 2rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 12px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 14px rgba(102, 126, 234, 0.3);
+}
+
+.btn-practice:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.45);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+}
+
+.btn-practice:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.2);
 }
 
 /* ===== Game Page ===== */
