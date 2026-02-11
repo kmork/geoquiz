@@ -1016,7 +1016,8 @@ class DailyChallenge {
           resolve({
             correct: true,
             time: result.time,
-            timeLimit: challenge.timeLimit
+            timeLimit: challenge.timeLimit,
+            usedHint: mcShown
           });
         }, 1200);
       };
@@ -1053,7 +1054,8 @@ class DailyChallenge {
           resolve({
             correct: isCorrect,
             time: result.time,
-            timeLimit: challenge.timeLimit
+            timeLimit: challenge.timeLimit,
+            usedHint: mcShown
           });
         }, 1200);
       };
