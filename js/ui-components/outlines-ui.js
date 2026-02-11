@@ -34,7 +34,7 @@ export function renderOutlinesUI(container, country, options = {}) {
           💡 Hint
         </button>
         <button id="outline-submit-btn" class="btn btn-primary" style="padding: 0.75rem 1.5rem;">
-          Submit
+          Guess
         </button>
       </div>
       
