@@ -12,6 +12,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
   let answeredThisRound = false;
   let autoAdvanceTimer = null;
   let currentUI = null;
+  let roundStartTime = 0;
 
   const AUTO_MS_CORRECT = config.autoMsCorrect ?? 2500;
   const AUTO_MS_WRONG = config.autoMsWrong ?? 3500;
@@ -86,6 +87,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
     answeredThisRound = false;
     currentAttempt = 1;
     clearTimeout(autoAdvanceTimer);
+    roundStartTime = Date.now();
 
     const site = sites[currentIndex];
     console.log(`[${currentIndex + 1}/${sites.length}] Showing: ${site.siteName} (${site.country})`);
@@ -161,7 +163,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
           customOnComplete({
             correct: true,
             score: 2,
-            time: 0 // TODO: track time if needed
+            time: (Date.now() - roundStartTime) / 1000
           });
         }
       } else {
@@ -214,7 +216,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
           customOnComplete({
             correct: true,
             score: 1,
-            time: 0 // TODO: track time if needed
+            time: (Date.now() - roundStartTime) / 1000
           });
         }
       } else {
@@ -236,7 +238,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
           customOnComplete({
             correct: false,
             score: 0,
-            time: 0 // TODO: track time if needed
+            time: (Date.now() - roundStartTime) / 1000
           });
         }
       } else {
