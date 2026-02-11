@@ -1,14 +1,14 @@
 /**
- * Picture Guess Game - Pure Logic Module
- * 
- * Handles picture guess game logic without any DOM dependencies.
+ * Heritage Game - Pure Logic Module
+ *
+ * Handles heritage game logic without any DOM dependencies.
  * Can be used by both standalone game and Daily Challenge.
  */
 
 import { norm } from "../utils.js";
 import { shuffleArray } from "../game-utils.js";
 
-export class PictureGuessGameLogic {
+export class HeritageGameLogic {
   constructor({ onAnswer, onComplete, singleRound = false }) {
     this.maxRounds = singleRound ? 1 : 10;
     this.singleRound = singleRound;

@@ -1,7 +1,7 @@
 import { shuffleArray } from "./game-utils.js";
-import { renderPictureUI, setupPictureAutocomplete } from "./ui-components/picture-ui.js";
+import { renderHeritageUI, setupHeritageAutocomplete } from "./ui-components/heritage-ui.js";
 
-export function createPictureGuessGame({ container, confetti, config = {} }) {
+export function createHeritageGame({ container, confetti, config = {} }) {
   let sites = [];
   let currentIndex = 0;
   let score = 0;
@@ -91,7 +91,7 @@ export function createPictureGuessGame({ container, confetti, config = {} }) {
     console.log(`[${currentIndex + 1}/${sites.length}] Showing: ${site.siteName} (${site.country})`);
 
     // Render UI using shared component
-    currentUI = renderPictureUI(container, site, {
+    currentUI = renderHeritageUI(container, site, {
       showProgress: false, // Using external progress display
       allowMultipleChoice,
       showHint,
@@ -125,7 +125,7 @@ export function createPictureGuessGame({ container, confetti, config = {} }) {
       });
     }
     
-    setupPictureAutocomplete(currentUI.elements.input, countryList.sort());
+    setupHeritageAutocomplete(currentUI.elements.input, countryList.sort());
 
     updateUI();
   }

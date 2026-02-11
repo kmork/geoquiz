@@ -1,9 +1,9 @@
 /**
- * Picture Guess - Complete Game Factory
+ * Heritage Game - Complete Game Factory
  * Used by both standalone and Daily Challenge
  */
 
-import { createPictureGuessGame } from "./picture-guess-game.js";
+import { createHeritageGame } from "./heritage-game.js";
 import { initConfetti } from "./confetti.js";
 import { norm } from "./utils.js";
 import { COUNTRY_ALIASES } from "./aliases.js";
@@ -20,7 +20,7 @@ window.normalizeCountryName = function(name) {
 };
 
 /**
- * Create complete Picture Guess game
+ * Create complete Heritage game
  * @param {Object} config
  * @param {HTMLElement} config.container - Game container
  * @param {Object} [config.confetti] - Confetti instance
@@ -30,7 +30,7 @@ window.normalizeCountryName = function(name) {
  * @param {boolean} [config.showHint=true] - Show hint button
  * @returns {Promise<Object>} Game instance
  */
-export async function createCompletePictureGame({
+export async function createCompleteHeritageGame({
   container,
   confetti: confettiInstance,
   singleRound = false,
@@ -42,7 +42,7 @@ export async function createCompletePictureGame({
   const confetti = confettiInstance || (singleRound ? null : initConfetti("confetti"));
   
   // Create game instance
-  const game = createPictureGuessGame({ 
+  const game = createHeritageGame({ 
     container, 
     confetti,
     config: {

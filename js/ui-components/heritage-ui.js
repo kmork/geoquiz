@@ -1,10 +1,10 @@
 /**
- * Picture Guess UI Component
+ * Heritage UI Component
  * Shared UI rendering for both standalone and Daily Challenge modes
  */
 
 /**
- * Renders the Picture Guess game UI
+ * Renders the Heritage game UI
  * @param {HTMLElement} container - Container to render into
  * @param {Object} site - Heritage site data {siteName, country, imageUrl, hint}
  * @param {Object} options - Configuration options
@@ -15,7 +15,7 @@
  * @param {Function} options.onHintUsed - Callback when hint used
  * @returns {Object} UI controls and methods
  */
-export function renderPictureUI(container, site, options = {}) {
+export function renderHeritageUI(container, site, options = {}) {
   const {
     showProgress = false,
     allowMultipleChoice = false,
@@ -262,7 +262,7 @@ export function renderPictureUI(container, site, options = {}) {
  * @param {HTMLInputElement} input - Input element
  * @param {string[]} suggestions - Array of suggestions
  */
-export function setupPictureAutocomplete(input, suggestions) {
+export function setupHeritageAutocomplete(input, suggestions) {
   if (!input || !suggestions || suggestions.length === 0) return;
 
   // Check if mobile autocomplete is available

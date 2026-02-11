@@ -15,12 +15,12 @@ import { runEmbeddedRouteGame } from "./route-daily-embed.js";
 import { TriviaGameLogic } from './games/trivia-logic.js';
 import { FindCountryGameLogic } from './games/find-logic.js';
 import { OutlinesGameLogic } from './games/outlines-logic.js';
-import { PictureGuessGameLogic } from './games/picture-logic.js';
+import { HeritageGameLogic } from './games/heritage-logic.js';
 import { CapitalsGameLogic } from './games/capitals-logic.js';
 import { RouteGameLogic } from './games/route-logic.js';
 
 // Import UI components
-import { renderPictureUI, setupPictureAutocomplete } from './ui-components/picture-ui.js';
+import { renderHeritageUI, setupHeritageAutocomplete } from './ui-components/heritage-ui.js';
 import { renderOutlinesUI } from './ui-components/outlines-ui.js';
 import { renderCapitalsUI, setupCapitalsAutocomplete } from './ui-components/capitals-ui.js';
 import { OutlinesRenderer } from './ui-components/outlines-renderer.js';
@@ -202,7 +202,7 @@ class DailyChallenge {
         data: this.rng.choice(data)
       },
 
-      // 4. Picture Guess
+      // 4. Heritage
       {
         ...GAMES[3],
         data: this.rng.choice(heritageData)
@@ -357,7 +357,7 @@ class DailyChallenge {
       case 'outlines':
         return await this.runOutlinesGame(challenge, gameContent);
       case 'picture':
-        return await this.runPictureGame(challenge, gameContent);
+        return await this.runHeritageGame(challenge, gameContent);
       case 'capitals':
         return await this.runCapitalsGame(challenge, gameContent);
       case 'connect':
@@ -809,15 +809,15 @@ class DailyChallenge {
     });
   }
 
-  async runPictureGame(challenge, container) {
+  async runHeritageGame(challenge, container) {
     const site = challenge.data;
 
-    const { createCompletePictureGame } = await import('./picture-complete.js');
+    const { createCompleteHeritageGame } = await import('./heritage-complete.js');
 
     return new Promise(async (resolve) => {
       let hasResolved = false;
 
-      // ✅ Local hint tracking (independent of picture-complete.js)
+      // ✅ Local hint tracking (independent of heritage-complete.js)
       // Rule:
       // - Click hint button => penalty = 1
       // - Multiple-choice shown => penalty = 2
@@ -832,7 +832,7 @@ class DailyChallenge {
         const t = e.target;
         if (!t) return;
 
-        // Hint button id used by picture-ui
+        // Hint button id used by heritage-ui
         if (t.id === 'pg-hint-btn') {
           setPenalty(1);
         }
@@ -866,7 +866,7 @@ class DailyChallenge {
         mcObserver = null;
       };
 
-      const result = await createCompletePictureGame({
+      const result = await createCompleteHeritageGame({
         container,
         confetti: this.confetti,
         singleRound: true,
@@ -909,7 +909,7 @@ class DailyChallenge {
       }
 
       // Ensure observer attaches after UI is actually in DOM
-      // (createCompletePictureGame may render asynchronously)
+      // (createCompleteHeritageGame may render asynchronously)
       setTimeout(attachMcObserver, 0);
 
       // Start
