@@ -83,7 +83,8 @@ const game = createRouteGame({
   confetti,
   drawCountries: drawCountriesWithZoom,
   getCountryFeature: (countryName) => {
-    return WORLD.find((f) => norm(f.properties.ADMIN) === norm(countryName));
+    const n = norm(countryName);
+    return WORLD.find((f) => norm(f.properties.ADMIN) === n || norm(f.properties.NAME || "") === n);
   },
 });
 

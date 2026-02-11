@@ -80,7 +80,8 @@ export function createMap({ svgEl, worldUrl, placesUrl }) {
     }
 
     const mapName = COUNTRY_ALIASES[country] || country;
-    const hits = WORLD.filter((f) => norm(f.properties.ADMIN || "") === norm(mapName));
+    const n = norm(mapName);
+    const hits = WORLD.filter((f) => norm(f.properties.ADMIN || "") === n || norm(f.properties.NAME || "") === n);
 
     if (!hits.length) {
       baseViewBox = { x: 0, y: 0, w: MAP_W, h: MAP_H };

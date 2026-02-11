@@ -173,8 +173,9 @@ class DailyChallenge {
 
     // ✅ RESTORE: Build country data with regions from GeoJSON (used by games 1,3,5)
     const data = window.DATA.map(countryData => {
+      const n = norm(countryData.country);
       const feature = geoData.features.find(f =>
-        (f.properties.ADMIN || f.properties.NAME || '') === countryData.country
+        norm(f.properties.ADMIN || '') === n || norm(f.properties.NAME || '') === n
       );
       return {
         ...countryData,

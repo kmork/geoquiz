@@ -76,7 +76,8 @@ export async function runEmbeddedRouteGame(container, { fixedRound, neighbors, c
 
   const WORLD = worldData.features || [];
   function getCountryFeature(countryName) {
-    return WORLD.find((f) => norm(f.properties.ADMIN || "") === norm(countryName));
+    const n = norm(countryName);
+    return WORLD.find((f) => norm(f.properties.ADMIN || "") === n || norm(f.properties.NAME || "") === n);
   }
 
   // Populate desktop datalist (optional; mobile autocomplete usually replaces it)

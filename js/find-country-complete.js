@@ -280,8 +280,9 @@ export async function createCompleteMap({
   // Get country bounding box
   function getCountryBBox(countryName) {
     const mapName = COUNTRY_ALIASES[countryName] || countryName;
-    const features = WORLD.filter((f) => norm(f.properties.ADMIN || "") === norm(mapName));
-    
+    const n = norm(mapName);
+    const features = WORLD.filter((f) => norm(f.properties.ADMIN || "") === n || norm(f.properties.NAME || "") === n);
+
     if (features.length === 0) return null;
     
     let minLon = Infinity, minLat = Infinity, maxLon = -Infinity, maxLat = -Infinity;

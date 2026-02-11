@@ -31,8 +31,9 @@ export class OutlinesRenderer {
     
     // Find target country features
     const mapName = this.countryAliases[targetCountry] || targetCountry;
-    const targetFeatures = this.worldData.filter(f => 
-      norm(f.properties.ADMIN || f.properties.NAME || '') === norm(mapName)
+    const n = norm(mapName);
+    const targetFeatures = this.worldData.filter(f =>
+      norm(f.properties.ADMIN || '') === n || norm(f.properties.NAME || '') === n
     );
     
     if (targetFeatures.length === 0) {
@@ -56,8 +57,9 @@ export class OutlinesRenderer {
     const neighborFeatures = [];
     for (const neighborCountry of neighborCountries) {
       const neighborMapName = this.countryAliases[neighborCountry] || neighborCountry;
-      const features = this.worldData.filter(f => 
-        norm(f.properties.ADMIN || f.properties.NAME || '') === norm(neighborMapName)
+      const nn = norm(neighborMapName);
+      const features = this.worldData.filter(f =>
+        norm(f.properties.ADMIN || '') === nn || norm(f.properties.NAME || '') === nn
       );
       neighborFeatures.push(...features);
       

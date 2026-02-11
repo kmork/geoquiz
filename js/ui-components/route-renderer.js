@@ -153,8 +153,9 @@ export class RouteRenderer {
     
     for (const item of countryList) {
       const mapName = this.aliases[item.country] || item.country;
-      const features = this.worldFeatures.filter(f => 
-        norm(f.properties.ADMIN || "") === norm(mapName)
+      const n = norm(mapName);
+      const features = this.worldFeatures.filter(f =>
+        norm(f.properties.ADMIN || "") === n || norm(f.properties.NAME || "") === n
       );
       
       for (const feature of features) {
