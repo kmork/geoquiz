@@ -184,11 +184,16 @@ class DailyChallenge {
       };
     });
 
+    // Pick Find the Country and Outlines from different countries
+    const findCountry = this.rng.choice(data);
+    const outlinesPool = data.filter(c => c.country !== findCountry.country);
+    const outlinesCountry = this.rng.choice(outlinesPool.length > 0 ? outlinesPool : data);
+
     this.challenges = [
       // 1. Find the Country
       {
         ...GAMES[0],
-        data: this.rng.choice(data)
+        data: findCountry
       },
 
       // 2. Geography Trivia
@@ -200,7 +205,7 @@ class DailyChallenge {
       // 3. Outlines
       {
         ...GAMES[2],
-        data: this.rng.choice(data)
+        data: outlinesCountry
       },
 
       // 4. Heritage
