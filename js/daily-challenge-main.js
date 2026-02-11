@@ -652,8 +652,9 @@ class DailyChallenge {
     const targetCountry = challenge.data;
 
     // Setup UI container matching standalone structure
+    // Hide card until map data is loaded to avoid showing an empty canvas
     container.innerHTML = `
-      <div class="card">
+      <div class="card" style="visibility:hidden">
         <div class="country" id="dc-country">${targetCountry.country}</div>
         <div class="mapwrap">
           <canvas id="dc-map" width="600" height="320"></canvas>
@@ -661,6 +662,7 @@ class DailyChallenge {
       </div>
     `;
 
+    const card = container.querySelector('.card');
     const canvas = container.querySelector('#dc-map');
     const countryNameEl = container.querySelector('#dc-country');
 
@@ -687,6 +689,9 @@ class DailyChallenge {
       // Set the specific country BEFORE starting
       result.setCountry(targetCountry);
       result.nextQ();
+
+      // Show the card now that the map is fully loaded and drawn
+      card.style.visibility = '';
 
       // Setup timeout handler
       window.addEventListener('daily-timeout', () => {
