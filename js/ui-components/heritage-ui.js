@@ -39,26 +39,22 @@ export function renderHeritageUI(container, site, options = {}) {
       <div id="pg-loading" class="image-loading">
         <div class="spinner"></div>
       </div>
+      ${showHint ? `<button id="pg-hint-btn" class="picture-hint-btn" type="button" title="Show hint">💡</button>` : ''}
     </div>
+
+    <!-- Hint display (below image) -->
+    ${showHint ? `
+      <div id="pg-hint" class="hint-text" style="display: none;">
+        <strong>Hint:</strong> <span id="pg-hint-text">${site.hint || `Located in ${site.country}`}</span>
+      </div>
+    ` : ''}
 
     <!-- Text input section -->
     <div id="pg-text-section" class="input-section">
       <div class="answerRow picture-answerRow">
         <input type="text" id="pg-input" class="country-input" placeholder="Type country name..." spellcheck="false">
         <button id="pg-submit-btn" class="btn btn-primary">Guess</button>
-
-        ${showHint ? `
-          <div class="secondary-buttons">
-            <button id="pg-hint-btn" class="btn-secondary" type="button">Hint</button>
-          </div>
-        ` : ''}
       </div>
-      <!-- Hint display -->
-      ${showHint ? `
-        <div id="pg-hint" class="hint-text" style="display: none;">
-          <strong>Hint:</strong> <span id="pg-hint-text">${site.hint || `Located in ${site.country}`}</span>
-        </div>
-      ` : ''}
     </div>
 
     ${allowMultipleChoice ? `
