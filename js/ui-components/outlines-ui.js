@@ -3,6 +3,8 @@
  * Shared UI rendering for both standalone and Daily Challenge modes
  */
 
+import { isMobileDevice } from '../game-utils.js';
+
 /**
  * Renders the Outlines Quiz UI
  * @param {HTMLElement} container - Container to render into
@@ -127,7 +129,3 @@ export function renderOutlinesUI(container, country, options = {}) {
   };
 }
 
-// Helper: detect mobile device
-function isMobileDevice() {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-}

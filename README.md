@@ -236,13 +236,11 @@ GeoQuiz/
 │   │   ├── find-logic.js
 │   │   ├── outlines-logic.js
 │   │   ├── picture-logic.js         # Heritage game logic
-│   │   ├── heritage-logic.js        # Re-exports picture-logic
 │   │   ├── capitals-logic.js
 │   │   └── route-logic.js
 │   │
 │   ├── ui-components/               # Shared UI renderers
 │   │   ├── picture-ui.js            # Heritage UI components
-│   │   ├── heritage-ui.js           # Re-exports picture-ui
 │   │   ├── outlines-renderer.js
 │   │   ├── map-renderer.js
 │   │   └── route-renderer.js

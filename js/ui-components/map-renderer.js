@@ -5,28 +5,18 @@
  */
 
 import { norm } from "../utils.js";
-
-const MAP_W = 600;
-const MAP_H = 320;
+import { MAP_W, MAP_H, proj, getCSSVar } from "../map-utils.js";
 
 /**
- * Simple equirectangular projection
- */
-const proj = ([lon, lat]) => [
-  ((lon + 180) / 360) * MAP_W,
-  ((90 - lat) / 180) * MAP_H
-];
-
-/**
- * Convert GeoJSON feature to path coordinates
+ * Convert GeoJSON feature to path coordinates (for Canvas rendering)
  */
 function coordsFromFeature(f) {
   if (!f.geometry) return [];
-  const polys = f.geometry.type === "Polygon" ? 
-    [f.geometry.coordinates] : 
+  const polys = f.geometry.type === "Polygon" ?
+    [f.geometry.coordinates] :
     f.geometry.coordinates;
   const paths = [];
-  
+
   for (const poly of polys) {
     for (const ring of poly) {
       const coords = ring.map(([lon, lat]) => proj([lon, lat]));
@@ -34,13 +24,6 @@ function coordsFromFeature(f) {
     }
   }
   return paths;
-}
-
-/**
- * Get CSS variable value
- */
-function getCSSVar(name) {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 
 /**

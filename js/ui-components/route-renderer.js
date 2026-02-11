@@ -4,6 +4,7 @@
  */
 
 import { norm } from '../utils.js';
+import { padBBox } from '../map-utils.js';
 
 export class RouteRenderer {
   constructor(svgElement, worldData, options = {}) {
@@ -135,18 +136,6 @@ export class RouteRenderer {
     return { minLon, minLat, maxLon, maxLat };
   }
   
-  // Pad bounding box by percentage
-  padBBox(bbox, padding) {
-    const lonRange = bbox.maxLon - bbox.minLon;
-    const latRange = bbox.maxLat - bbox.minLat;
-    
-    return {
-      minLon: bbox.minLon - lonRange * padding,
-      maxLon: bbox.maxLon + lonRange * padding,
-      minLat: bbox.minLat - latRange * padding,
-      maxLat: bbox.maxLat + latRange * padding
-    };
-  }
   
   /**
    * Draw route visualization
@@ -190,7 +179,7 @@ export class RouteRenderer {
     
     // Set viewBox to fit highlighted countries
     if (bbox) {
-      bbox = this.padBBox(bbox, 0.18);
+      bbox = padBBox(bbox, 0.18);
       const [x1, y1] = this.proj([bbox.minLon, bbox.maxLat]);
       const [x2, y2] = this.proj([bbox.maxLon, bbox.minLat]);
       

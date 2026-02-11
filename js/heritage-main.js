@@ -1,4 +1,4 @@
-import { createCompleteHeritageGame } from "./heritage-complete.js";
+import { createCompletePictureGame as createCompleteHeritageGame } from "./picture-complete.js";
 
 const initOverlay = document.getElementById("init-overlay");
 const gameContainer = document.getElementById("game-container");

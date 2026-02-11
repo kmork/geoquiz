@@ -4,6 +4,7 @@
  */
 
 import { norm } from '../utils.js';
+import { isMobileDevice } from '../game-utils.js';
 
 /**
  * Renders the Capitals Quiz UI (matching standalone game exactly)
@@ -111,11 +112,6 @@ export function renderCapitalsUI(container, country, options = {}) {
       }
     }
   };
-}
-
-// Helper: detect mobile device
-function isMobileDevice() {
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
 /**

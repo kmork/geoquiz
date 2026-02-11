@@ -13,3 +13,10 @@ data/ne_10m_admin_0_countries_route.geojson
 
 # Keep backup files local only
 data/*.bak
+
+# Heritage backup images (full-size originals)
+img/heritage-backup/
+
+# Logs and development artifacts
+*.log
+diagnostic-plan.md

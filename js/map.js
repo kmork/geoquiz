@@ -1,73 +1,15 @@
 import { norm } from "./utils.js";
 import { COUNTRY_ALIASES } from "./aliases.js";
 import { loadGeoJSON } from "./geojson-loader.js";
-
-// Helper to get CSS variable values
-function getCSSVar(name) {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-}
+import { MAP_W, MAP_H, proj, pathFromFeature, bboxOfFeatureLonLat, padBBox, getCSSVar } from "./map-utils.js";
 
 export function createMap({ svgEl, worldUrl, placesUrl }) {
   let WORLD = null,
     PATHS = null,
     CAPITALS = null;
 
-  const MAP_W = 600;
-  const MAP_H = 320;
-
   // Keep track of a "base" viewBox per question (before user zoom/pan)
   let baseViewBox = { x: 0, y: 0, w: MAP_W, h: MAP_H };
-
-  // --- projection ---
-  const proj = ([lon, lat]) => [((lon + 180) / 360) * MAP_W, ((90 - lat) / 180) * MAP_H];
-
-  function pathFromFeature(f) {
-    if (!f.geometry) return "";
-    const polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
-    let d = "";
-    for (const poly of polys) {
-      for (const ring of poly) {
-        ring.forEach(([lon, lat], i) => {
-          const [x, y] = proj([lon, lat]);
-          d += (i ? "L" : "M") + x + " " + y + " ";
-        });
-        d += "Z ";
-      }
-    }
-    return d;
-  }
-
-  // --- bbox helpers (lon/lat bbox -> projected viewBox) ---
-  function bboxOfFeatureLonLat(f) {
-    let minLon = Infinity,
-      minLat = Infinity,
-      maxLon = -Infinity,
-      maxLat = -Infinity;
-
-    const rings = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
-    for (const poly of rings) {
-      for (const ring of poly) {
-        for (const [lon, lat] of ring) {
-          if (lon < minLon) minLon = lon;
-          if (lat < minLat) minLat = lat;
-          if (lon > maxLon) maxLon = lon;
-          if (lat > maxLat) maxLat = lat;
-        }
-      }
-    }
-    return { minLon, minLat, maxLon, maxLat };
-  }
-
-  function padBBox(bb, padRatio = 0.18) {
-    const dLon = bb.maxLon - bb.minLon;
-    const dLat = bb.maxLat - bb.minLat;
-    return {
-      minLon: bb.minLon - dLon * padRatio,
-      maxLon: bb.maxLon + dLon * padRatio,
-      minLat: bb.minLat - dLat * padRatio,
-      maxLat: bb.maxLat + dLat * padRatio,
-    };
-  }
 
   function setViewBox(vb) {
     svgEl.setAttribute("viewBox", `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
