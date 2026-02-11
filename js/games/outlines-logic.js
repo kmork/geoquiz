@@ -9,8 +9,9 @@ import { norm } from "../utils.js";
 import { shuffleInPlace } from "../game-utils.js";
 
 export class OutlinesGameLogic {
-  constructor({ onAnswer, onComplete, onHintUsed, singleRound = false }) {
+  constructor({ onAnswer, onComplete, onHintUsed, singleRound = false, neighbors = {} }) {
     this.DATA = window.DATA;
+    this.neighbors = neighbors;
     this.maxRounds = singleRound ? 1 : 10;
     this.singleRound = singleRound;
     this.onAnswer = onAnswer;
@@ -101,6 +102,8 @@ export class OutlinesGameLogic {
     this.attempt++;
     const timeTaken = (Date.now() - this.startTime) / 1000;
 
+    const hasNeighbors = this.current && (this.neighbors[this.current.country] || []).length > 0;
+
     // Empty answer is treated as skip/wrong
     if (!trimmed) {
       if (this.attempt === 1) {
@@ -113,7 +116,9 @@ export class OutlinesGameLogic {
           action: 'empty',
           isCorrect: false,
           showNeighbors: true,
-          message: "❌ Try again with neighbor hints!",
+          message: hasNeighbors
+            ? "❌ Try again with neighbor hints!"
+            : "❌ Try again, this country has no land borders!",
           time: timeTaken
         };
       } else {
@@ -201,7 +206,9 @@ export class OutlinesGameLogic {
           action: 'wrong_first',
           isCorrect: false,
           showNeighbors: true,
-          message: "❌ Not quite. Try again with neighbor hints!",
+          message: hasNeighbors
+            ? "❌ Not quite. Try again with neighbor hints!"
+            : "❌ Not quite. Try again, this country has no land borders!",
           time: timeTaken
         };
       } else {

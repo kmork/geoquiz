@@ -17,6 +17,7 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, con
   // Create game logic instance
   const gameLogic = new OutlinesGameLogic({
     singleRound,
+    neighbors,
     onAnswer: (result) => {
       // Logic has processed the answer, handle UI feedback
       handleAnswerFeedback(result);
