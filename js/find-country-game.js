@@ -1,4 +1,5 @@
 import { FindCountryGameLogic } from "./games/find-logic.js";
+import { hapticFeedback } from "./game-utils.js";
 
 export function createFindCountryGame({ ui, confetti, checkClickedCountry, highlightCountry, zoomToCountries, resetMapView, config = {} }) {
   let continueTimer = null;
@@ -99,8 +100,9 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
       updateUI();
       continueTimer = setTimeout(() => nextQ(), AUTO_MS_CORRECT);
     } else {
+      hapticFeedback('wrong');
       showStatus(`❌ Wrong. The answer was: ${result.correctCountry}`, false);
-      
+
       // Zoom to show both countries if wrong guess was made
       if (result.clickedCountry) {
         zoomToCountries(result.clickedCountry, result.correctCountry);

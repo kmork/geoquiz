@@ -1,3 +1,32 @@
+// Play a short celebratory ping on mobile devices
+function playPing() {
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (!isMobile) return;
+
+  try {
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const now = ac.currentTime;
+
+    // Two-tone ping: quick rising notes
+    [880, 1318].forEach((freq, i) => {
+      const osc = ac.createOscillator();
+      const gain = ac.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.15, now + i * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.25);
+      osc.connect(gain).connect(ac.destination);
+      osc.start(now + i * 0.08);
+      osc.stop(now + i * 0.08 + 0.25);
+    });
+
+    // Close context after sounds finish
+    setTimeout(() => ac.close(), 500);
+  } catch (e) {
+    // AudioContext not available - silently ignore
+  }
+}
+
 export function initConfetti(id="confetti") {
   const canvas = document.getElementById(id);
   if (!canvas) return { burst:()=>{} };
@@ -35,6 +64,7 @@ export function initConfetti(id="confetti") {
   }
 
   function burst({x=innerWidth/2,y=innerHeight/2,count=120}={}){
+    playPing();
     const now=performance.now();
     const colors=["#6ee7b7","#a5b4fc","#e8ecff","#fda4af","#fde68a"];
     for(let i=0;i<count;i++){

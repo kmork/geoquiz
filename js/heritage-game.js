@@ -1,4 +1,4 @@
-import { shuffleArray } from "./game-utils.js";
+import { shuffleArray, hapticFeedback } from "./game-utils.js";
 import { renderHeritageUI, setupHeritageAutocomplete } from "./ui-components/heritage-ui.js";
 
 export function createHeritageGame({ container, confetti, config = {} }) {
@@ -174,6 +174,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
       }
     } else {
       // Wrong - show multiple choice
+      hapticFeedback('wrong');
       currentAttempt = 2;
       showMultipleChoice();
     }
@@ -228,8 +229,9 @@ export function createHeritageGame({ container, confetti, config = {} }) {
         }, AUTO_MS_CORRECT);
       }
     } else {
+      hapticFeedback('wrong');
       currentUI.showFeedback(`❌ Wrong. This is ${site.siteName} in ${site.country}.`, false);
-      
+
       // Call custom callback if provided
       if (customOnAnswer) customOnAnswer({ isCorrect: false, points: 0 });
       

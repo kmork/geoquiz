@@ -1,4 +1,5 @@
 import { TriviaGameLogic } from "./games/trivia-logic.js";
+import { hapticFeedback } from "./game-utils.js";
 
 export function createTriviaGame({ ui, confetti, config = {} }) {
   let autoAdvanceTimer = null;
@@ -70,6 +71,8 @@ export function createTriviaGame({ ui, confetti, config = {} }) {
     
     if (result.correct) {
       confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    } else {
+      hapticFeedback('wrong');
     }
 
     showAnswerFeedback(result);
