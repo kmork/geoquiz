@@ -541,25 +541,26 @@ export async function createCompleteMap({
         if (touches.length === 2) {
           isDragging = false;
           isPointerDown = false;
-          
+          previousTouchCount = 2;
+
           const midX = (touches[0].clientX + touches[1].clientX) / 2;
           const midY = (touches[0].clientY + touches[1].clientY) / 2;
           const rect = canvas.getBoundingClientRect();
           const canvasMidX = midX - rect.left;
           const canvasMidY = midY - rect.top;
-          
+
           const mapXBefore = canvasMidX / zoom + scrollX;
           const mapYBefore = canvasMidY / zoom + scrollY;
-          
+
           const newDistance = getDistance(touches[0], touches[1]);
           const scale = newDistance / initialPinchDistance;
           const newZoom = Math.max(minZoom, Math.min(100, initialZoom * scale));
-          
+
           scrollX = mapXBefore - canvasMidX / newZoom;
           scrollY = mapYBefore - canvasMidY / newZoom;
-          
+
           scrollY = Math.max(0, Math.min(Math.max(0, MAP_H - canvasDisplayHeight / newZoom), scrollY));
-          
+
           zoom = newZoom;
           drawWorldMap();
           return;
@@ -578,8 +579,11 @@ export async function createCompleteMap({
         const dx = currentX - lastX;
         const dy = currentY - lastY;
         const dt = Date.now() - lastTime;
-        
-        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+
+        // Use total distance from start to detect drag (not per-frame delta)
+        const totalDx = currentX - startX;
+        const totalDy = currentY - startY;
+        if (Math.abs(totalDx) > 5 || Math.abs(totalDy) > 5) {
           isDragging = true;
         }
         
