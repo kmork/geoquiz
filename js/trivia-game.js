@@ -90,12 +90,8 @@ export function createTriviaGame({ ui, confetti, config = {} }) {
       btn.disabled = true;
       if (btn.textContent === result.correctAnswer) {
         btn.classList.add("correct");
-      } else if (btn.textContent !== result.correctAnswer && result.correct === false) {
-        // Highlight wrong answer if user was incorrect
-        const selectedWasThis = !result.correct && currentShuffledOptions.includes(btn.textContent);
-        if (selectedWasThis) {
-          btn.classList.add("wrong");
-        }
+      } else if (btn.textContent === result.selectedOption && !result.correct) {
+        btn.classList.add("wrong");
       }
     });
 
