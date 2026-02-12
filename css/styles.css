@@ -857,24 +857,7 @@ select option {
     padding-right: max(20px, env(safe-area-inset-right));
   }
 
-  /* Mobile autocomplete dropdown */
-  .mobile-autocomplete-dropdown {
-    position: absolute;
-    top: 100%; /* Position below the input field */
-    left: 0;
-    right: 0;
-    background: var(--card-bg);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 2px solid var(--input-border);
-    border-radius: 12px;
-    margin-top: 4px;
-    max-height: 200px; /* Smaller on mobile to avoid covering too much */
-    overflow-y: auto;
-    z-index: 1000;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
-    -webkit-overflow-scrolling: touch;
-  }
+  /* Mobile autocomplete dropdown — JS positions via fixed; see shared rule below */
 
   .autocomplete-item {
     padding: 12px 14px;
@@ -907,18 +890,16 @@ select option {
 }
 
 /* Custom autocomplete dropdown - available on all devices */
+/* Positioned via position:fixed; JS sets top/left/width/maxHeight dynamically */
 .mobile-autocomplete-dropdown {
-  position: absolute;
-  top: 100%; /* Position below the input field */
-  left: 0;
-  right: 0;
+  position: fixed;
   background: var(--card-bg);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 2px solid var(--input-border);
   border-radius: 12px;
-  margin-top: 4px;
-  max-height: 250px; /* Increased height for better scrolling */
+  max-height: 40vh; /* CSS fallback; JS overrides */
+  min-width: 220px;
   overflow-y: auto;
   z-index: 1000;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
@@ -956,10 +937,6 @@ select option {
 
 /* Mobile specific adjustments */
 @media (max-width: 640px) {
-  .mobile-autocomplete-dropdown {
-    max-height: 200px;
-  }
-
   .autocomplete-item {
     padding: 8px 12px;
     font-size: 16px; /* Prevent iOS zoom */

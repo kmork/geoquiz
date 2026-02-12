@@ -28,41 +28,68 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     placeholder = 'Type to search...'
   } = options;
   
-  // Create dropdown container
+  // Create dropdown container (appended to body so it's never clipped by ancestors)
   const dropdown = document.createElement('div');
   dropdown.className = 'mobile-autocomplete-dropdown';
   dropdown.style.display = 'none';
-  
-  // Insert dropdown after input
-  inputElement.parentNode.insertBefore(dropdown, inputElement.nextSibling);
+  document.body.appendChild(dropdown);
   
   // Track currently highlighted index for keyboard navigation
   let highlightedIndex = -1;
   
+  // Position & size the fixed dropdown relative to the input's viewport rect
+  function sizeDropdown() {
+    const rect = inputElement.getBoundingClientRect();
+    const viewportW = window.visualViewport
+      ? window.visualViewport.width
+      : window.innerWidth;
+    const viewportH = window.visualViewport
+      ? window.visualViewport.height
+      : window.innerHeight;
+    const gap = 4;
+    const margin = 16;
+
+    // Vertical: fill space below input
+    const availableH = viewportH - rect.bottom - gap - margin;
+    dropdown.style.maxHeight = Math.max(availableH, 80) + 'px';
+    dropdown.style.top = (rect.bottom + gap) + 'px';
+
+    // Horizontal: match input width but enforce a minimum, clamped to viewport
+    const minW = 220;
+    let width = Math.max(rect.width, minW);
+    let left = rect.left;
+    // Keep dropdown within viewport
+    if (left + width > viewportW - margin) {
+      left = Math.max(margin, viewportW - margin - width);
+    }
+    dropdown.style.left = left + 'px';
+    dropdown.style.width = width + 'px';
+  }
+
   // Filter and show suggestions
   function updateSuggestions() {
     const value = inputElement.value.trim();
-    
+
     if (value.length < minChars) {
       dropdown.style.display = 'none';
       highlightedIndex = -1;
       return;
     }
-    
+
     // Filter suggestions (case-insensitive, starts with)
-    const matches = suggestions.filter(item => 
+    const matches = suggestions.filter(item =>
       item.toLowerCase().startsWith(value.toLowerCase())
     );
-    
+
     if (matches.length === 0) {
       dropdown.style.display = 'none';
       highlightedIndex = -1;
       return;
     }
-    
+
     // Show all matches (no limit - scrollable dropdown will handle overflow)
     const displayMatches = maxSuggestions ? matches.slice(0, maxSuggestions) : matches;
-    
+
     // Build dropdown HTML
     dropdown.innerHTML = displayMatches.map((match, index) => {
       // Highlight matching text
@@ -70,8 +97,9 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
       const highlighted = match.replace(regex, '<mark>$1</mark>');
       return `<div class="autocomplete-item" data-value="${match}" data-index="${index}">${highlighted}</div>`;
     }).join('');
-    
+
     dropdown.style.display = 'block';
+    sizeDropdown();
     highlightedIndex = -1; // Reset highlight when updating suggestions
   }
   
@@ -195,8 +223,16 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     }
   });
   
+  // Re-size dropdown when viewport changes (e.g. mobile keyboard open/close)
+  const resizeTarget = window.visualViewport || window;
+  const onResize = () => {
+    if (dropdown.style.display !== 'none') sizeDropdown();
+  };
+  resizeTarget.addEventListener('resize', onResize);
+
   // Clean up function
   return () => {
+    resizeTarget.removeEventListener('resize', onResize);
     dropdown.remove();
   };
 }
