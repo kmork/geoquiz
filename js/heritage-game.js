@@ -206,7 +206,8 @@ export function createHeritageGame({ container, confetti, config = {} }) {
       score += 1;
       totalCorrect++;
       currentUI.showFeedback(`✅ Correct! This is ${site.siteName} in ${site.country}. +1 point`, true);
-      
+      confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+
       // Call custom callback if provided
       if (customOnAnswer) customOnAnswer({ isCorrect: true, points: 1 });
       
