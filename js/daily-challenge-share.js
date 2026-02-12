@@ -11,7 +11,7 @@ import { getRating, formatTime } from './daily-challenge-scoring.js';
 /**
  * Generate shareable text for social media
  * @param {string} date - Date in YYYY-MM-DD format
- * @param {number} totalStars - Total stars earned (0-23)
+ * @param {number} totalStars - Total stars earned (0-21)
  * @param {number} totalTime - Total time in seconds
  * @param {Array} breakdown - Array of per-game results
  * @param {object} stats - Player statistics
@@ -49,7 +49,7 @@ export function generateShareText(date, totalStars, totalTime, breakdown, stats)
   };
   
   const maxStars = {
-    find: 5,
+    find: 3,
     trivia: 2,
     outlines: 4,
     picture: 3,
@@ -59,7 +59,7 @@ export function generateShareText(date, totalStars, totalTime, breakdown, stats)
 
   let text = `🌍 GeoQuiz Daily Challenge #${challengeNum}\n`;
   text += `📅 ${dateFormatted}\n\n`;
-  text += `⭐ ${totalStars}/23 stars in ${timeStr}\n\n`;
+  text += `⭐ ${totalStars}/21 stars in ${timeStr}\n\n`;
 
   breakdown.forEach(result => {
     const emoji = gameEmojis[result.gameId];

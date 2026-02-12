@@ -15,9 +15,9 @@ const STORAGE_KEY_STATS = 'geoquiz-daily-stats';
  * - Heritage: 3★ max (medium - visual + autocomplete)
  * - Outlines: 4★ max (hard - shape recognition)
  * - Capitals: 4★ max (hard - knowledge test)
- * - Find: 5★ max (very hard - speed + precision)
+ * - Find: 3★ max (1 base + 2 time bonus)
  * - Connect: 5★ max (very hard - path optimization)
- * Total: 23★
+ * Total: 21★
  *
  * @param {object} result - Game result
  * @param {boolean} result.correct - Whether answer was correct
@@ -57,7 +57,7 @@ export function calculateStars(result, gameId) {
   } else if (gameId === 'outlines' || gameId === 'capitals') {
     stars = 3; // Outlines/Capitals: 4★ max (3 base + 1 time)
   } else if (gameId === 'find') {
-    stars = 3; // Find: 5★ max (3 base + 2 time)
+    stars = 1; // Find: 3★ max (1 base + 2 time)
   } else {
     stars = 3; // Default
   }
@@ -95,7 +95,7 @@ export function calculateStars(result, gameId) {
 /**
  * Save today's challenge result to localStorage
  * @param {string} date - Date in YYYY-MM-DD format
- * @param {number} totalStars - Total stars earned (0-23)
+ * @param {number} totalStars - Total stars earned (0-21)
  * @param {number} totalTime - Total time in seconds
  * @param {Array} breakdown - Array of per-game results
  */
@@ -233,29 +233,29 @@ function calculateStreak(history, currentDate) {
 
 /**
  * Get rating based on total stars
- * @param {number} stars - Total stars (0-23)
+ * @param {number} stars - Total stars (0-21)
  * @returns {string} Rating text
  */
 export function getRating(stars) {
-  if (stars >= 21) return 'Geography Master';
-  if (stars >= 18) return 'World Expert';
-  if (stars >= 14) return 'Globe Trotter';
-  if (stars >= 10) return 'Explorer';
-  if (stars >= 6) return 'Traveler';
+  if (stars >= 19) return 'Geography Master';
+  if (stars >= 16) return 'World Expert';
+  if (stars >= 12) return 'Globe Trotter';
+  if (stars >= 9) return 'Explorer';
+  if (stars >= 5) return 'Traveler';
   return 'Tourist';
 }
 
 /**
  * Get rating emoji based on total stars
- * @param {number} stars - Total stars (0-23)
+ * @param {number} stars - Total stars (0-21)
  * @returns {string} Rating emoji
  */
 export function getRatingEmoji(stars) {
-  if (stars >= 21) return '🏆';
-  if (stars >= 18) return '⭐';
-  if (stars >= 14) return '🌟';
-  if (stars >= 10) return '✨';
-  if (stars >= 6) return '🎯';
+  if (stars >= 19) return '🏆';
+  if (stars >= 16) return '⭐';
+  if (stars >= 12) return '🌟';
+  if (stars >= 9) return '✨';
+  if (stars >= 5) return '🎯';
   return '🗺️';
 }
 
@@ -270,7 +270,7 @@ export function getMaxStars(gameId) {
     'picture': 3,     // Medium: visual + autocomplete
     'outlines': 4,    // Hard: shape recognition
     'capitals': 4,    // Hard: knowledge test
-    'find': 5,        // Very hard: speed + precision
+    'find': 3,        // 1 base + 2 time bonus
     'connect': 5      // Very hard: path optimization
   };
   return maxStars[gameId] || 5;

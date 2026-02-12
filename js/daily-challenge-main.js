@@ -512,7 +512,7 @@ class DailyChallenge {
 
       <div class="results-summary">
         <div class="summary-stars">${'⭐'.repeat(totalStars)}</div>
-        <div class="summary-score">${totalStars}/23 stars</div>
+        <div class="summary-score">${totalStars}/21 stars</div>
         <div class="summary-time">⏱️ ${formatTime(totalTime)}</div>
       </div>
 
@@ -610,7 +610,7 @@ class DailyChallenge {
 
       <div class="results-summary">
         <div class="summary-stars">${'⭐'.repeat(result.stars)}</div>
-        <div class="summary-score">${result.stars}/23 stars</div>
+        <div class="summary-score">${result.stars}/21 stars</div>
         <div class="summary-time">⏱️ ${formatTime(result.totalTime)}</div>
       </div>
 
