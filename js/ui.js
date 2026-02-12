@@ -12,14 +12,6 @@ export function getUI() {
     bonusLabelEl: document.getElementById("bonusLabel"),
 
     finalOverlay: document.getElementById("finalOverlay"),
-    finalSubtitle: document.getElementById("finalSubtitle"),
-    finalScore: document.getElementById("finalScore"),
-    finalCountries: document.getElementById("finalCountries"),
-    finalCorrect: document.getElementById("finalCorrect"),
-    finalFirstTry: document.getElementById("finalFirstTry"),
-    playAgainBtn: document.getElementById("playAgain"),
-    closeFinalBtn: document.getElementById("closeFinal"),
-    shareScoreBtn: document.getElementById("shareScore"),
   };
 }
 

@@ -243,6 +243,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
   align-items:center;
   justify-content:center;
   padding:20px;
+  z-index:2000;
 }
 .overlay .panel{
   width:min(720px, 100%);
@@ -255,6 +256,57 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .overlay h2{margin:0 0 8px}
 .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 @media (max-width:520px){ .grid2{grid-template-columns:1fr} }
+
+/* ── Finish screen (standalone games) ───────────────────────── */
+.finish-panel{text-align:center}
+.finish-header{margin-bottom:1.5rem}
+.finish-emoji{font-size:3.5rem;margin-bottom:0.5rem}
+.finish-title{font-size:1.6rem;margin:0 0 0.25rem}
+.finish-subtitle{color:var(--text-muted);font-size:1.1rem;margin:0}
+
+.finish-stats{
+  display:grid;grid-template-columns:1fr 1fr;gap:16px;
+  margin-bottom:1.25rem;
+}
+.finish-stat{
+  background:var(--pill-bg);border:1px solid var(--pill-border);
+  border-radius:14px;padding:16px 12px;
+}
+.finish-stat-value{font-size:1.8rem;font-weight:700;line-height:1.2}
+.finish-stat-label{font-size:0.85rem;color:var(--text-muted);margin-top:2px}
+.finish-record{
+  display:inline-block;margin-top:6px;padding:3px 10px;
+  border-radius:999px;font-size:0.75rem;font-weight:700;
+  background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#1a202c;
+}
+.finish-best{font-size:0.8rem;color:var(--text-muted);margin-top:4px}
+
+.finish-extra-stats{
+  display:flex;justify-content:center;gap:24px;
+  margin-bottom:1.25rem;color:var(--text-muted);font-size:0.9rem;
+}
+.finish-extra-value{font-weight:700;color:var(--text-primary)}
+
+.finish-actions{display:flex;gap:12px;justify-content:center}
+.finish-btn{
+  flex:1;max-width:200px;padding:12px 20px;font-size:1rem;font-weight:600;
+  border-radius:12px;border:1px solid var(--button-border);cursor:pointer;
+  transition:background .15s,transform .15s;
+}
+.finish-btn-primary{background:var(--button-bg);color:var(--button-color)}
+.finish-btn-primary:hover{background:var(--button-hover)}
+.finish-btn-secondary{
+  background:var(--pill-bg);color:var(--text-muted);
+  border-color:var(--pill-border);
+}
+.finish-btn-secondary:hover{background:var(--button-hover)}
+
+@media(max-width:420px){
+  .finish-stats{grid-template-columns:1fr}
+  .finish-stat-value{font-size:1.5rem}
+  .finish-actions{flex-direction:column;align-items:center}
+  .finish-btn{max-width:100%;width:100%}
+}
 
 .starStack{
   display:inline-block;

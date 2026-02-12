@@ -7,13 +7,6 @@ const ui = {
   scoreEl: document.getElementById("score"),
   progressEl: document.getElementById("progress"),
   finalOverlay: document.getElementById("finalOverlay"),
-  finalScoreEl: document.getElementById("finalScore"),
-  finalCountriesEl: document.getElementById("finalCountries"),
-  finalCorrectEl: document.getElementById("finalCorrect"),
-  finalAccuracyEl: document.getElementById("finalAccuracy"),
-  finalSubtitleEl: document.getElementById("finalSubtitle"),
-  playAgainBtn: document.getElementById("playAgain"),
-  closeFinalBtn: document.getElementById("closeFinal"),
 };
 
 const canvas = document.getElementById("map");
@@ -40,18 +33,7 @@ let gameInstance = null;
     
     // Attach Wikipedia popup
     attachWikipediaPopup(ui.countryNameEl, () => gameInstance.getCurrent());
-    
-    // Setup play again button
-    ui.playAgainBtn?.addEventListener("click", () => {
-      ui.finalOverlay.style.display = "none";
-      gameInstance.reset();
-      gameInstance.nextQ();
-    });
-    
-    ui.closeFinalBtn?.addEventListener("click", () => {
-      ui.finalOverlay.style.display = "none";
-    });
-    
+
     // Start the game
     gameInstance.reset();
     gameInstance.nextQ();

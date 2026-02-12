@@ -1,5 +1,6 @@
 import { shuffleArray, hapticFeedback } from "./game-utils.js";
 import { renderHeritageUI, setupHeritageAutocomplete } from "./ui-components/heritage-ui.js";
+import { renderFinishScreen } from "./game-records.js";
 
 export function createHeritageGame({ container, confetti, config = {} }) {
   let sites = [];
@@ -13,6 +14,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
   let autoAdvanceTimer = null;
   let currentUI = null;
   let roundStartTime = 0;
+  let gameStartTime = null;
 
   const AUTO_MS_CORRECT = config.autoMsCorrect ?? 2500;
   const AUTO_MS_WRONG = config.autoMsWrong ?? 3500;
@@ -27,11 +29,6 @@ export function createHeritageGame({ container, confetti, config = {} }) {
   const scoreEl = hideScoreUI ? null : document.getElementById("score");
   const progressEl = hideScoreUI ? null : document.getElementById("progress");
   const finalOverlay = hideScoreUI ? null : document.getElementById("finalOverlay");
-  const finalScoreEl = hideScoreUI ? null : document.getElementById("finalScore");
-  const finalSitesEl = hideScoreUI ? null : document.getElementById("finalSites");
-  const finalPerfectEl = hideScoreUI ? null : document.getElementById("finalPerfect");
-  const finalAccuracyEl = hideScoreUI ? null : document.getElementById("finalAccuracy");
-  const finalSubtitleEl = hideScoreUI ? null : document.getElementById("finalSubtitle");
 
   async function loadSites() {
     try {
@@ -65,21 +62,24 @@ export function createHeritageGame({ container, confetti, config = {} }) {
     totalCorrect = 0;
     currentAttempt = 1;
     answeredThisRound = false;
+    gameStartTime = null;
     updateUI();
   }
 
   function showSite() {
     if (currentIndex >= sites.length) {
+      const totalTime = gameStartTime ? (Date.now() - gameStartTime) / 1000 : 0;
       if (customOnComplete) {
         customOnComplete({
           score,
           total: sites.length,
           correctCount: totalCorrect,
           perfectCount: perfectGuesses,
-          accuracy: sites.length > 0 ? Math.round((totalCorrect / sites.length) * 100) : 0
+          accuracy: sites.length > 0 ? Math.round((totalCorrect / sites.length) * 100) : 0,
+          time: totalTime
         });
       } else {
-        showFinalScreen();
+        showFinalScreen(totalTime);
       }
       return;
     }
@@ -88,6 +88,9 @@ export function createHeritageGame({ container, confetti, config = {} }) {
     currentAttempt = 1;
     clearTimeout(autoAdvanceTimer);
     roundStartTime = Date.now();
+    if (!gameStartTime) {
+      gameStartTime = Date.now();
+    }
 
     const site = sites[currentIndex];
     console.log(`[${currentIndex + 1}/${sites.length}] Showing: ${site.siteName} (${site.country})`);
@@ -288,27 +291,31 @@ export function createHeritageGame({ container, confetti, config = {} }) {
     return alternatives.slice(0, 3);
   }
 
-  function showFinalScreen() {
+  function showFinalScreen(totalTime) {
     if (hideScoreUI || !finalOverlay) return;
-    
+
     const accuracy = sites.length > 0 ? Math.round((totalCorrect / sites.length) * 100) : 0;
-    const perfectRate = sites.length > 0 ? Math.round((perfectGuesses / sites.length) * 100) : 0;
 
-    if (finalScoreEl) finalScoreEl.textContent = score;
-    if (finalSitesEl) finalSitesEl.textContent = sites.length;
-    if (finalPerfectEl) finalPerfectEl.textContent = perfectGuesses;
-    if (finalAccuracyEl) finalAccuracyEl.textContent = `${accuracy}%`;
+    renderFinishScreen(finalOverlay, {
+      gameId: 'heritage',
+      score,
+      scoreLabel: 'Score',
+      maxScore: sites.length * 2,
+      time: totalTime,
+      accuracy,
+      stats: [
+        { label: 'Perfect guesses', value: perfectGuesses },
+        { label: 'Accuracy', value: `${accuracy}%` },
+      ],
+      onPlayAgain: () => {
+        reset();
+        showSite();
+      },
+    });
 
-    let subtitle = 'Good effort!';
-    if (perfectRate >= 80) subtitle = 'Amazing! You know your world heritage! 🌟';
-    else if (perfectRate >= 60) subtitle = 'Excellent work! 🎯';
-    else if (perfectRate >= 40) subtitle = 'Well done! 👏';
-    else if (accuracy >= 60) subtitle = 'Not bad! Keep exploring! 🗺️';
+    finalOverlay.style.display = 'flex';
 
-    if (finalSubtitleEl) finalSubtitleEl.textContent = subtitle;
-    if (finalOverlay) finalOverlay.style.display = 'flex';
-
-    if (perfectRate >= 60) {
+    if (accuracy >= 60) {
       confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
     }
   }

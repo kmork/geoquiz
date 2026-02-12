@@ -44,11 +44,6 @@ export async function createCompleteTriviaGame({
       scoreEl: ui.scoreEl || null,
       progressEl: ui.progressEl || null,
       finalOverlay: ui.finalOverlay || null,
-      finalScore: ui.finalScore || null,
-      finalTotal: ui.finalTotal || null,
-      finalCorrect: ui.finalCorrect || null,
-      finalAccuracy: ui.finalAccuracy || null,
-      finalSubtitle: ui.finalSubtitle || null,
     };
   }
   

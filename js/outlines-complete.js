@@ -224,11 +224,6 @@ export async function createCompleteOutlinesGame({
     progressEl: ui.progressEl || null,
     statusEl: ui.statusEl || null,
     finalOverlay: ui.finalOverlay || null,
-    finalScoreEl: ui.finalScoreEl || null,
-    finalCountriesEl: ui.finalCountriesEl || null,
-    finalCorrectEl: ui.finalCorrectEl || null,
-    finalFirstTryEl: ui.finalFirstTryEl || null,
-    finalSubtitleEl: ui.finalSubtitleEl || null,
   };
   
   // Create game instance

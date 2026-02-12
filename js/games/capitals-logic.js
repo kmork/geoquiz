@@ -21,6 +21,7 @@ export class CapitalsGameLogic {
     this.correctCount = 0;
     this.roundEnded = false;
     this.startTime = null;
+    this.gameStartTime = null;
   }
 
   reset() {
@@ -29,12 +30,13 @@ export class CapitalsGameLogic {
       const capital = c.capitals ? c.capitals[0] : c.capital;
       return capital && capital.length > 0;
     });
-    
+
     this.deck = shuffleArray(countriesWithCapitals).slice(0, this.maxRounds);
     this.current = null;
     this.score = 0;
     this.correctCount = 0;
     this.roundEnded = false;
+    this.gameStartTime = null;
   }
 
   setCountry(country) {
@@ -48,11 +50,13 @@ export class CapitalsGameLogic {
   nextRound() {
     if (this.deck.length === 0) {
       if (this.onComplete) {
+        const totalTime = this.gameStartTime ? (Date.now() - this.gameStartTime) / 1000 : 0;
         this.onComplete({
           score: this.score,
           total: this.maxRounds,
           correctCount: this.correctCount,
-          accuracy: this.getAccuracy()
+          accuracy: this.getAccuracy(),
+          time: totalTime
         });
       }
       return null;
@@ -61,6 +65,9 @@ export class CapitalsGameLogic {
     this.current = this.deck.pop();
     this.roundEnded = false;
     this.startTime = Date.now();
+    if (!this.gameStartTime) {
+      this.gameStartTime = Date.now();
+    }
     return this.current;
   }
 

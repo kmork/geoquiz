@@ -1,5 +1,6 @@
 import { FindCountryGameLogic } from "./games/find-logic.js";
 import { hapticFeedback } from "./game-utils.js";
+import { renderFinishScreen } from "./game-records.js";
 
 export function createFindCountryGame({ ui, confetti, checkClickedCountry, highlightCountry, zoomToCountries, resetMapView, config = {} }) {
   let continueTimer = null;
@@ -121,18 +122,24 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
 
   function showFinal(finalResult) {
     if (hideScoreUI || !ui.finalOverlay) return;
-    
-    if (ui.finalScoreEl) ui.finalScoreEl.textContent = finalResult.score;
-    if (ui.finalCountriesEl) ui.finalCountriesEl.textContent = finalResult.total;
-    if (ui.finalCorrectEl) ui.finalCorrectEl.textContent = finalResult.correctCount;
-    if (ui.finalAccuracyEl) ui.finalAccuracyEl.textContent = `${finalResult.accuracy}%`;
 
-    let subtitle = "Great job!";
-    if (finalResult.accuracy === 100) subtitle = "Perfect score! 🌟";
-    else if (finalResult.accuracy >= 80) subtitle = "Excellent work! 🎯";
-    else if (finalResult.accuracy >= 60) subtitle = "Well done! 👏";
-    
-    if (ui.finalSubtitleEl) ui.finalSubtitleEl.textContent = subtitle;
+    renderFinishScreen(ui.finalOverlay, {
+      gameId: 'find',
+      score: finalResult.score,
+      scoreLabel: 'Score',
+      maxScore: finalResult.total,
+      time: finalResult.time,
+      accuracy: finalResult.accuracy,
+      stats: [
+        { label: 'Correct', value: finalResult.correctCount },
+        { label: 'Accuracy', value: `${finalResult.accuracy}%` },
+      ],
+      onPlayAgain: () => {
+        reset();
+        nextQ();
+      },
+    });
+
     ui.finalOverlay.style.display = "flex";
 
     if (finalResult.accuracy >= 80) {

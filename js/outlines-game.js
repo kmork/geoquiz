@@ -1,5 +1,6 @@
 import { OutlinesGameLogic } from "./games/outlines-logic.js";
 import { isMobileDevice, hapticFeedback, shakeWrong } from "./game-utils.js";
+import { renderFinishScreen } from "./game-records.js";
 
 export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, config = {} }) {
   let continueTimer = null;
@@ -178,18 +179,24 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, con
 
   function showFinal(finalResult) {
     if (hideScoreUI || !ui.finalOverlay) return;
-    
-    if (ui.finalScoreEl) ui.finalScoreEl.textContent = finalResult.score;
-    if (ui.finalCountriesEl) ui.finalCountriesEl.textContent = finalResult.total;
-    if (ui.finalCorrectEl) ui.finalCorrectEl.textContent = finalResult.correctAny;
-    if (ui.finalFirstTryEl) ui.finalFirstTryEl.textContent = finalResult.correctFirstTry;
 
-    let subtitle = "Great job!";
-    if (finalResult.accuracy === 100) subtitle = "Perfect score! 🌟";
-    else if (finalResult.accuracy >= 80) subtitle = "Excellent work! 🎯";
-    else if (finalResult.accuracy >= 60) subtitle = "Well done! 👏";
-    
-    if (ui.finalSubtitleEl) ui.finalSubtitleEl.textContent = subtitle;
+    renderFinishScreen(ui.finalOverlay, {
+      gameId: 'outlines',
+      score: finalResult.score,
+      scoreLabel: 'Points',
+      maxScore: finalResult.total * 2,
+      time: finalResult.time,
+      accuracy: finalResult.accuracy,
+      stats: [
+        { label: 'Correct', value: finalResult.correctAny },
+        { label: 'First try', value: finalResult.correctFirstTry },
+      ],
+      onPlayAgain: () => {
+        reset();
+        nextQ();
+      },
+    });
+
     ui.finalOverlay.style.display = "flex";
 
     if (finalResult.accuracy >= 80) {

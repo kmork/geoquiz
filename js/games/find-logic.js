@@ -22,6 +22,7 @@ export class FindCountryGameLogic {
     this.selectedCountry = null; // Track first click selection
     this.roundEnded = false;
     this.startTime = null;
+    this.gameStartTime = null;
     this.lastAnswerTime = 0; // Track time from last answer
   }
 
@@ -32,6 +33,7 @@ export class FindCountryGameLogic {
     this.correctCount = 0;
     this.selectedCountry = null;
     this.roundEnded = false;
+    this.gameStartTime = null;
   }
 
   setCountry(country) {
@@ -45,12 +47,13 @@ export class FindCountryGameLogic {
   nextRound() {
     if (this.deck.length === 0) {
       if (this.onComplete) {
+        const totalTime = this.gameStartTime ? (Date.now() - this.gameStartTime) / 1000 : 0;
         this.onComplete({
           score: this.score,
           total: this.maxRounds,
           correctCount: this.correctCount,
           accuracy: this.getAccuracy(),
-          time: this.lastAnswerTime // Include time from last answer
+          time: totalTime
         });
       }
       return null;
@@ -60,6 +63,9 @@ export class FindCountryGameLogic {
     this.roundEnded = false;
     this.selectedCountry = null;
     this.startTime = Date.now();
+    if (!this.gameStartTime) {
+      this.gameStartTime = Date.now();
+    }
     return this.current;
   }
 

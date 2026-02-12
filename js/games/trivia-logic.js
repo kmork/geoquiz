@@ -17,6 +17,7 @@ export class TriviaGameLogic {
     this.onAnswer = onAnswer; // Callback when user answers
     this.onComplete = onComplete; // Callback when game completes
     this.startTime = null;
+    this.gameStartTime = null;
   }
 
   async loadQuestions(dataUrl = 'data/qa.json') {
@@ -52,6 +53,9 @@ export class TriviaGameLogic {
 
   startQuestion() {
     this.startTime = Date.now();
+    if (!this.gameStartTime) {
+      this.gameStartTime = Date.now();
+    }
   }
 
   submitAnswer(selectedOption) {
@@ -83,11 +87,13 @@ export class TriviaGameLogic {
     const isLastQuestion = this.currentIndex >= this.questions.length - 1;
     
     if (isLastQuestion && this.onComplete) {
+      const totalTime = this.gameStartTime ? (Date.now() - this.gameStartTime) / 1000 : 0;
       this.onComplete({
         score: this.score,
         total: this.questions.length,
         correctCount: this.correctCount,
-        accuracy: this.getAccuracy()
+        accuracy: this.getAccuracy(),
+        time: totalTime
       });
     }
 
@@ -128,6 +134,7 @@ export class TriviaGameLogic {
     this.currentIndex = 0;
     this.score = 0;
     this.correctCount = 0;
+    this.gameStartTime = null;
     this.questions = shuffleArray(this.questions);
   }
 }

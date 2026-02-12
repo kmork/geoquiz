@@ -9,29 +9,6 @@ const confetti = initConfetti("confetti");
 
 const initOverlay = document.getElementById("init-overlay");
 
-// Share score function
-async function shareScore(score, total, gameName) {
-  const text = `I scored ${score}/${total} in ${gameName}! 🌍 Can you beat my score?`;
-  const url = window.location.href;
-  
-  if (navigator.share) {
-    try {
-      await navigator.share({ text, url });
-    } catch (err) {
-      if (err.name !== 'AbortError') {
-        console.log('Share failed:', err);
-      }
-    }
-  } else {
-    try {
-      await navigator.clipboard.writeText(`${text}\n${url}`);
-      alert('Score copied to clipboard! 📋');
-    } catch (err) {
-      prompt('Copy this to share:', `${text}\n${url}`);
-    }
-  }
-}
-
 // Make sure the overlay is shown while we initialize
 if (initOverlay) {
   initOverlay.classList.remove("hidden");
@@ -56,30 +33,7 @@ mapApi.attachInteractions();
 const game = createGame({ ui, mapApi, confetti });
 attachWikipediaPopup(ui.elCountry, () => game.getCurrent());
 
-ui.playAgainBtn?.addEventListener("click", () => {
-  ui.finalOverlay.style.display = "none";
-  game.reset();
-  game.nextQ();
-});
-
-ui.closeFinalBtn?.addEventListener("click", () => {
-  ui.finalOverlay.style.display = "none";
-});
-
-ui.shareScoreBtn?.addEventListener("click", () => {
-  const score = parseInt(ui.finalScore.textContent) || 0;
-  const total = parseInt(ui.finalCountries.textContent) || 0;
-  shareScore(score, total, "Capitals of the World (GeoQuiz)");
-});
-
-// Keyboard navigation: Escape to close modals
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") {
-    if (ui.finalOverlay && ui.finalOverlay.style.display !== "none") {
-      ui.finalOverlay.style.display = "none";
-    }
-  }
-});
+// Buttons are now wired dynamically by renderFinishScreen
 
 // Start the first round
 game.reset();

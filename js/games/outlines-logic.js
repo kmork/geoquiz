@@ -38,6 +38,7 @@ export class OutlinesGameLogic {
     this.attempt = 0;
     this.roundEnded = false;
     this.usedHint = false;
+    this.gameStartTime = null;
   }
 
   setCountry(country) {

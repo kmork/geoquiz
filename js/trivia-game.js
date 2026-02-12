@@ -1,5 +1,6 @@
 import { TriviaGameLogic } from "./games/trivia-logic.js";
 import { hapticFeedback } from "./game-utils.js";
+import { renderFinishScreen } from "./game-records.js";
 
 export function createTriviaGame({ ui, confetti, config = {} }) {
   let autoAdvanceTimer = null;
@@ -108,23 +109,23 @@ export function createTriviaGame({ ui, confetti, config = {} }) {
 
   function showFinalScreen(finalResult) {
     if (hideScoreUI || !ui.finalOverlay) return;
-    
-    if (ui.finalScore) ui.finalScore.textContent = finalResult.score;
-    if (ui.finalTotal) ui.finalTotal.textContent = finalResult.total;
-    if (ui.finalCorrect) ui.finalCorrect.textContent = finalResult.correctCount;
-    if (ui.finalAccuracy) ui.finalAccuracy.textContent = `${finalResult.accuracy}%`;
-    
-    if (ui.finalSubtitle) {
-      if (finalResult.accuracy === 100) {
-        ui.finalSubtitle.textContent = "Perfect score! Amazing! 🎊";
-      } else if (finalResult.accuracy >= 80) {
-        ui.finalSubtitle.textContent = "Excellent work! 🌟";
-      } else if (finalResult.accuracy >= 60) {
-        ui.finalSubtitle.textContent = "Good job! 👍";
-      } else {
-        ui.finalSubtitle.textContent = "Keep practicing! 💪";
-      }
-    }
+
+    renderFinishScreen(ui.finalOverlay, {
+      gameId: 'trivia',
+      score: finalResult.score,
+      scoreLabel: 'Score',
+      maxScore: finalResult.total,
+      time: finalResult.time,
+      accuracy: finalResult.accuracy,
+      stats: [
+        { label: 'Correct', value: finalResult.correctCount },
+        { label: 'Accuracy', value: `${finalResult.accuracy}%` },
+      ],
+      onPlayAgain: () => {
+        reset();
+        showQuestion();
+      },
+    });
 
     ui.finalOverlay.style.display = "flex";
     confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });

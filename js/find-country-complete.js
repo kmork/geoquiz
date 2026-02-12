@@ -683,11 +683,6 @@ export async function createCompleteMap({
     scoreEl: ui.scoreEl || null,
     progressEl: ui.progressEl || null,
     finalOverlay: ui.finalOverlay || null,
-    finalScoreEl: ui.finalScoreEl || null,
-    finalCountriesEl: ui.finalCountriesEl || null,
-    finalCorrectEl: ui.finalCorrectEl || null,
-    finalAccuracyEl: ui.finalAccuracyEl || null,
-    finalSubtitleEl: ui.finalSubtitleEl || null,
   };
   
   // Create game instance

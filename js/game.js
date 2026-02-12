@@ -1,6 +1,7 @@
 import { norm } from "./utils.js";
 import { updateProgress } from "./ui.js";
 import { isMobileDevice, hapticFeedback, flashCorrect, shakeWrong, shuffleInPlace } from "./game-utils.js";
+import { renderFinishScreen } from "./game-records.js";
 
 // Helper to get CSS variable values
 function getCSSVar(name) {
@@ -17,6 +18,7 @@ export function createGame({ ui, mapApi, confetti }) {
   let score = 0;
   let correctFirstTry = 0;
   let correctAny = 0;
+  let gameStartTime = null;
 
   let stars = 0;
   let bonusMode = false;
@@ -279,6 +281,7 @@ export function createGame({ ui, mapApi, confetti }) {
     score = 0;
     correctFirstTry = 0;
     correctAny = 0;
+    gameStartTime = null;
 
     ui.scoreEl.textContent = "0";
     stars = 0;
@@ -299,16 +302,35 @@ export function createGame({ ui, mapApi, confetti }) {
     bonusMode = false;
 
     if (!deck.length) {
+      const totalTime = gameStartTime ? (Date.now() - gameStartTime) / 1000 : 0;
+      const accuracy = MAX_ROUNDS > 0 ? Math.round((correctAny / MAX_ROUNDS) * 100) : 0;
+
+      renderFinishScreen(ui.finalOverlay, {
+        gameId: 'capitals',
+        score,
+        scoreLabel: 'Score',
+        maxScore: MAX_ROUNDS * 2,
+        time: totalTime,
+        accuracy,
+        stats: [
+          { label: 'Correct', value: correctAny },
+          { label: 'First try', value: correctFirstTry },
+        ],
+        onPlayAgain: () => {
+          reset();
+          nextQ();
+        },
+      });
+
       ui.finalOverlay.style.display = "flex";
-      ui.finalScore.textContent = String(score);
-      ui.finalCountries.textContent = String(MAX_ROUNDS);
-      ui.finalCorrect.textContent = String(correctAny);
-      ui.finalFirstTry.textContent = String(correctFirstTry);
-      ui.finalSubtitle.textContent = "Nice work!";
+      confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
       return;
     }
 
     current = deck.pop();
+    if (!gameStartTime) {
+      gameStartTime = Date.now();
+    }
     ui.elCountry.textContent = current.country;
 
     updateProgress(ui.progressEl, MAX_ROUNDS - deck.length, MAX_ROUNDS);
