@@ -1,8 +1,10 @@
 import { norm } from "./utils.js";
 import { isMobileDevice, hapticFeedback, flashCorrect, shakeWrong, shuffleInPlace } from "./game-utils.js";
+import { SHORT_DISPLAY_NAMES } from "./aliases.js";
 
 export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCountryFeature, fixedRound = null, onFinish = null }) {
   const DATA = window.DATA;
+  const shortName = c => SHORT_DISPLAY_NAMES[c] || c;
 
   let deck = [];
   let currentRound = null; // { start, end, optimalPath, currentPath, wrongGuesses, hintsUsed, pathHistory }
@@ -349,11 +351,11 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
       if (p === "?") {
         return `<span class="route-placeholder">?</span>`;
       } else if (p === currentRound.start) {
-        return `<span class="route-country start">${p}</span>`;
+        return `<span class="route-country start">${shortName(p)}</span>`;
       } else if (p === currentRound.end) {
-        return `<span class="route-country end">${p}</span>`;
+        return `<span class="route-country end">${shortName(p)}</span>`;
       } else {
-        return `<span class="route-country path">${p}</span>`;
+        return `<span class="route-country path">${shortName(p)}</span>`;
       }
     }).join('<span class="route-arrow">→</span>');
   }
@@ -474,11 +476,11 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
 
     ui.routeEl.innerHTML = optimalPath.map((country, idx) => {
       if (idx === 0) {
-        return `<span class="route-country start">${country}</span>`;
+        return `<span class="route-country start">${shortName(country)}</span>`;
       } else if (idx === optimalPath.length - 1) {
-        return `<span class="route-country end">${country}</span>`;
+        return `<span class="route-country end">${shortName(country)}</span>`;
       } else {
-        return `<span class="route-country optimal-display">${country}</span>`;
+        return `<span class="route-country optimal-display">${shortName(country)}</span>`;
       }
     }).join('<span class="route-arrow">→</span>');
   }

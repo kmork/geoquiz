@@ -107,3 +107,23 @@ export const COUNTRY_ALIASES = {
   // === Regional/informal names ===
   "Holland": "Netherlands",
 };
+
+export const SHORT_DISPLAY_NAMES = {
+  "Democratic Republic of the Congo": "DR Congo",
+  "United Republic of Tanzania": "Tanzania",
+  "Central African Republic": "C.A.R.",
+  "Saint Vincent and the Grenadines": "St. Vincent",
+  "Bosnia and Herzegovina": "Bosnia",
+  "São Tomé and Príncipe": "São Tomé",
+  "Antigua and Barbuda": "Antigua",
+  "Trinidad and Tobago": "Trinidad",
+  "Saint Kitts and Nevis": "St. Kitts",
+  "United Arab Emirates": "UAE",
+  "Dominican Republic": "Dom. Rep.",
+  "Equatorial Guinea": "Eq. Guinea",
+  "Papua New Guinea": "Papua N.G.",
+  "North Macedonia": "N. Macedonia",
+  "Marshall Islands": "Marshalls",
+  "Solomon Islands": "Solomons",
+  "Côte d'Ivoire": "Ivory Coast",
+};
