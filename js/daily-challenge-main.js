@@ -974,7 +974,7 @@ class DailyChallenge {
       const { createMap } = await import('./map.js');
       const mapApi = createMap({
         svgEl: ui.elements.map,
-        worldUrl: 'data/ne_10m_admin_0_countries.geojson.gz',
+        worldUrl: 'data/ne_10m_admin_0_countries_route.geojson.gz',
         placesUrl: 'data/places.geojson'
       });
 

@@ -40,7 +40,7 @@ if (initOverlay) {
 
 const mapApi = createMap({
   svgEl: ui.map,
-  worldUrl: "data/ne_10m_admin_0_countries.geojson.gz",
+  worldUrl: "data/ne_10m_admin_0_countries_route.geojson.gz",
   placesUrl: "data/places.geojson",
 });
 
