@@ -89,7 +89,7 @@ export function calculateStars(result, gameId) {
 
   stars -= hintPenalty;
 
-  return Math.max(0, stars);
+  return Math.max(1, stars);
 }
 
 /**

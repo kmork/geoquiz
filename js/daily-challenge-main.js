@@ -795,7 +795,7 @@ class DailyChallenge {
             correct: finalResult.correctFirstTry > 0 || finalResult.correctAny > 0,
             time: finalResult.time || 0,
             timeLimit: challenge.timeLimit,
-            usedHint: finalResult.usedHint || false
+            hintPenalty: finalResult.usedHint ? 2 : 0
           });
         }
       });
@@ -1024,7 +1024,7 @@ class DailyChallenge {
             correct: true,
             time: result.time,
             timeLimit: challenge.timeLimit,
-            usedHint: mcShown
+            hintPenalty: mcShown ? 2 : 0
           });
         }, 1200);
       };
@@ -1062,7 +1062,7 @@ class DailyChallenge {
             correct: isCorrect,
             time: result.time,
             timeLimit: challenge.timeLimit,
-            usedHint: mcShown
+            hintPenalty: mcShown ? 2 : 0
           });
         }, 1200);
       };
