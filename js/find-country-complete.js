@@ -665,6 +665,8 @@ export async function createCompleteMap({
   
   // Initialize canvas
   resizeCanvas();
+  // Center on Europe/Africa (longitude 0°) rather than the date line
+  scrollX = MAP_W / 2 - canvasDisplayWidth / (2 * zoom);
   window.addEventListener('resize', resizeCanvas);
   drawWorldMap();
   

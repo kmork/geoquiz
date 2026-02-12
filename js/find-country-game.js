@@ -70,7 +70,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
 
     hideStatus();
     resetMapView();
-    ui.countryNameEl.textContent = country.country;
+    if (ui.countryNameEl) ui.countryNameEl.textContent = country.country;
     updateUI();
   }
 

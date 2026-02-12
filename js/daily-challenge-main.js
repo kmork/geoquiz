@@ -309,8 +309,11 @@ class DailyChallenge {
     // Update progress UI
     this.updateProgress();
 
-    // Update game title
-    document.getElementById('game-title').textContent = `${challenge.emoji} ${challenge.name}`;
+    // Update game title (Find game includes country name directly in the title)
+    const titleText = challenge.id === 'find'
+      ? `${challenge.emoji} Find ${challenge.data.country}`
+      : `${challenge.emoji} ${challenge.name}`;
+    document.getElementById('game-title').textContent = titleText;
 
     // Start timer if game has time limit
     if (challenge.timeLimit) {
@@ -653,9 +656,9 @@ class DailyChallenge {
 
     // Setup UI container matching standalone structure
     // Hide card until map data is loaded to avoid showing an empty canvas
+    // Country name is shown in the game title instead to maximize map space
     container.innerHTML = `
       <div class="card" style="visibility:hidden">
-        <div class="country" id="dc-country">${targetCountry.country}</div>
         <div class="mapwrap">
           <canvas id="dc-map" width="600" height="320"></canvas>
         </div>
@@ -664,7 +667,6 @@ class DailyChallenge {
 
     const card = container.querySelector('.card');
     const canvas = container.querySelector('#dc-map');
-    const countryNameEl = container.querySelector('#dc-country');
 
     // Import the complete map factory
     const { createCompleteMap } = await import('./find-country-complete.js');
@@ -674,7 +676,7 @@ class DailyChallenge {
       const result = await createCompleteMap({
         container,
         canvas,
-        countryNameEl,
+        countryNameEl: null,
         confetti: this.confetti,
         singleRound: true,
         onComplete: (finalResult) => {

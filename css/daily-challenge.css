@@ -740,15 +740,14 @@
 
 /* ===== Daily Find-the-Country: full-width map without resize shrink ===== */
 
-/* Remove the extra bottom padding ONLY for the Find card */
+/* Remove padding for the Find card so the map fills it entirely */
 .game-area .card:has(#dc-map) {
-  padding-bottom: 0;
+  padding: 0;
 }
 
 /* Bleed the WRAPPER (stable height lives here), NOT the canvas */
 .game-area .mapwrap:has(#dc-map) {
-  /* keep your existing height logic, but use the card space */
-  margin: 10px -18px -18px -18px;  /* card padding is 18px */
+  margin: 0;
   height: calc(100vh - 350px);
   min-height: 250px;
   max-height: 600px;
@@ -775,7 +774,7 @@
 
   background: var(--map-bg);
   border: 0; /* avoid double border when bleeding */
-  border-radius: 0 0 16px 16px; /* match card rounding */
+  border-radius: 16px; /* match card rounding */
 
   touch-action: none;
   cursor: pointer;
