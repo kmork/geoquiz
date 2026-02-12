@@ -111,7 +111,26 @@ export async function createCompleteMap({
     }
   }
   countryPaths = Array.from(countryMap.values());
-  
+
+  // Build lookup: DATA name → GeoJSON ADMIN name.
+  // Aliases map alternative names → canonical DATA names, so we check
+  // each GeoJSON name to see if it's an alias key pointing to a DATA name.
+  const dataToGeo = {};
+  const geoNames = Array.from(countryMap.keys());
+  for (const geoName of geoNames) {
+    // Direct match with a DATA name
+    const directMatch = (window.DATA || []).find(d => norm(d.country) === norm(geoName));
+    if (directMatch) {
+      dataToGeo[directMatch.country] = geoName;
+      continue;
+    }
+    // GeoJSON name is an alias key → maps to a DATA name
+    const target = COUNTRY_ALIASES[geoName];
+    if (target) {
+      dataToGeo[target] = geoName;
+    }
+  }
+
   // Point-in-polygon test
   function pointInPolygon(x, y, polygon) {
     let inside = false;
@@ -205,31 +224,39 @@ export async function createCompleteMap({
   }
   
   // Check clicked country
+  // Resolve a GeoJSON ADMIN name to the matching DATA country name.
+  // Checks direct match and alias lookup (alias keys are alternative names
+  // that map TO canonical DATA names).
+  function resolveToDataName(geoName) {
+    const gn = norm(geoName);
+    // Check if the GeoJSON name is a known alias → canonical DATA name
+    const aliasTarget = COUNTRY_ALIASES[geoName];
+    const dataCountries = window.DATA.map(d => d.country);
+    for (const dc of dataCountries) {
+      if (norm(dc) === gn) return dc;                        // direct match
+      if (aliasTarget && norm(aliasTarget) === norm(dc)) return dc; // alias match
+    }
+    return null;
+  }
+
   function checkClickedCountry(canvasX, canvasY) {
     const mapX = (canvasX / zoom) + scrollX;
     const mapY = (canvasY / zoom) + scrollY;
     const normalizedMapX = ((mapX % MAP_W) + MAP_W) % MAP_W;
-    
+
     for (const country of countryPaths) {
       for (const polygon of country.paths) {
         if (pointInPolygon(normalizedMapX, mapY, polygon)) {
-          const dataCountries = window.DATA.map(d => d.country);
-          for (const dc of dataCountries) {
-            const alias = COUNTRY_ALIASES[dc] || dc;
-            if (norm(alias) === norm(country.name)) {
-              return dc;
-            }
-          }
-          return country.name;
+          return resolveToDataName(country.name) || country.name;
         }
       }
     }
-    
+
     // Check nearby small countries
     const PROXIMITY_THRESHOLD = 30;
     let nearestSmallCountry = null;
     let nearestDistance = Infinity;
-    
+
     for (const country of countryPaths) {
       let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
       for (const polygon of country.paths) {
@@ -240,38 +267,26 @@ export async function createCompleteMap({
           if (y > maxY) maxY = y;
         }
       }
-      
+
       const size = Math.max(maxX - minX, maxY - minY);
       if (size > 50) continue;
-      
+
       const centerX = (minX + maxX) / 2;
       const centerY = (minY + maxY) / 2;
       const distance = Math.sqrt(Math.pow(normalizedMapX - centerX, 2) + Math.pow(mapY - centerY, 2));
-      
+
       if (distance < nearestDistance && distance < PROXIMITY_THRESHOLD) {
         nearestDistance = distance;
-        
-        const dataCountries = window.DATA.map(d => d.country);
-        for (const dc of dataCountries) {
-          const alias = COUNTRY_ALIASES[dc] || dc;
-          if (norm(alias) === norm(country.name)) {
-            nearestSmallCountry = dc;
-            break;
-          }
-        }
-        
-        if (!nearestSmallCountry) {
-          nearestSmallCountry = country.name;
-        }
+        nearestSmallCountry = resolveToDataName(country.name) || country.name;
       }
     }
-    
+
     return nearestSmallCountry;
   }
   
   // Highlight country
   function highlightCountry(countryName, type) {
-    const mapName = COUNTRY_ALIASES[countryName] || countryName;
+    const mapName = dataToGeo[countryName] || countryName;
     highlightedCountry = mapName;
     highlightType = type;
     drawWorldMap();
@@ -279,7 +294,7 @@ export async function createCompleteMap({
   
   // Get country bounding box
   function getCountryBBox(countryName) {
-    const mapName = COUNTRY_ALIASES[countryName] || countryName;
+    const mapName = dataToGeo[countryName] || countryName;
     const n = norm(mapName);
     const features = WORLD.filter((f) => norm(f.properties.ADMIN || "") === n || norm(f.properties.NAME || "") === n);
 

@@ -7,9 +7,12 @@
 
 import { shuffleInPlace } from "../game-utils.js";
 
+// Countries with no visible outline on the map even when fully zoomed in
+const FIND_EXCLUDE = new Set(["Vatican City"]);
+
 export class FindCountryGameLogic {
   constructor({ onAnswer, onComplete, singleRound = false }) {
-    this.DATA = window.DATA;
+    this.DATA = window.DATA.filter(c => !FIND_EXCLUDE.has(c.country));
     this.maxRounds = singleRound ? 1 : 10;
     this.singleRound = singleRound;
     this.onAnswer = onAnswer;
