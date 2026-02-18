@@ -100,7 +100,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
   function handleAnswerFeedback(result) {
     if (result.isCorrect) {
       showStatus(`✅ Correct! +1 point`, true);
-      highlightCountry(result.correctCountry, "correct");
+      highlightCountry(result.correctCountry, "correct_self");
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
       updateUI();
       continueTimer = setTimeout(() => nextQ(), AUTO_MS_CORRECT);

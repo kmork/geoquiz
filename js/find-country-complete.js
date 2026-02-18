@@ -225,7 +225,7 @@ export async function createCompleteMap({
           fillStyle = getCSSVar('--map-selected-fill') || "rgba(165, 180, 252, 0.35)";
           strokeStyle = getCSSVar('--map-selected-stroke') || "rgba(165, 180, 252, 0.95)";
           strokeWidth = 1.5;
-        } else if (highlightType === "correct") {
+        } else if (highlightType === "correct" || highlightType === "correct_self") {
           fillStyle = getCSSVar('--map-correct-fill') || "rgba(110, 231, 183, 0.5)";
           strokeStyle = getCSSVar('--map-correct-stroke') || "rgba(110, 231, 183, 0.95)";
           strokeWidth = 1.2;
@@ -251,39 +251,26 @@ export async function createCompleteMap({
       }
     }
 
-    // For small correctly-highlighted countries, draw a green circle so
-    // they are visible even at default (zoomed-out) view.
+    // After a wrong answer, draw a small green ring around the correct country's centroid
+    // if it's too small to be clearly visible at the current zoom level.
+    // Not drawn for "correct_self" (player found it themselves — no need to point it out).
     if (highlightType === 'correct' && highlightedCountry) {
       const hn = norm(highlightedCountry);
       const hc = countryPaths.find(c => norm(c.name) === hn);
-      if (hc) {
-        let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-        for (const polygon of hc.paths) {
-          for (const [x, y] of polygon) {
-            if (x < minX) minX = x;
-            if (y < minY) minY = y;
-            if (x > maxX) maxX = x;
-            if (y > maxY) maxY = y;
-          }
-        }
-        const size = Math.max(maxX - minX, maxY - minY);
-        if (size < 20) {
-          const cx = (minX + maxX) / 2;
-          const cy = (minY + maxY) / 2;
-          const r = Math.max(15, size * 0.6 + 10); // radius in map units
-          const normalizedScrollX = ((scrollX % MAP_W) + MAP_W) % MAP_W;
-          const baseOffset2 = scrollX - normalizedScrollX;
-          for (let i = -1; i <= 1; i++) {
-            const sx = (cx + baseOffset2 + i * MAP_W - scrollX) * zoom;
-            const sy = (cy - scrollY) * zoom;
-            ctx.save();
-            ctx.beginPath();
-            ctx.arc(sx, sy, r * zoom, 0, Math.PI * 2);
-            ctx.strokeStyle = getCSSVar('--map-correct-stroke') || 'rgba(110,231,183,0.95)';
-            ctx.lineWidth = 2.5;
-            ctx.stroke();
-            ctx.restore();
-          }
+      // Only draw when the country is narrower than 30 canvas pixels at current zoom
+      if (hc && hc.bboxSize * zoom < 30) {
+        const normalizedScrollX = ((scrollX % MAP_W) + MAP_W) % MAP_W;
+        const baseOffset2 = scrollX - normalizedScrollX;
+        for (let i = -1; i <= 1; i++) {
+          const sx = (hc.bboxCx + baseOffset2 + i * MAP_W - scrollX) * zoom;
+          const sy = (hc.bboxCy - scrollY) * zoom;
+          ctx.save();
+          ctx.beginPath();
+          ctx.arc(sx, sy, 10, 0, Math.PI * 2); // fixed 10 canvas-px radius
+          ctx.strokeStyle = getCSSVar('--map-correct-stroke') || 'rgba(110,231,183,0.95)';
+          ctx.lineWidth = 2.5;
+          ctx.stroke();
+          ctx.restore();
         }
       }
     }
