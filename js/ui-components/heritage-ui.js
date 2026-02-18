@@ -181,6 +181,7 @@ export function renderHeritageUI(container, site, options = {}) {
       answered = false;
 
       elements.textSection.style.display = 'none';
+      if (elements.hintDiv) elements.hintDiv.style.display = 'none';
       elements.mcSection.style.display = 'block';
       elements.choices.innerHTML = '';
 
