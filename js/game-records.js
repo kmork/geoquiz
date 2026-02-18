@@ -8,7 +8,23 @@
  *   renderFinishScreen(overlayEl, data)  — builds the entire overlay innerHTML
  */
 
+import { copyToClipboard, showNotification, showCopyModal } from './daily-challenge-share.js';
+
 const STORAGE_PREFIX = 'geoquiz-record-';
+
+const GAME_NAMES = {
+  find:     'Find the Country',
+  outlines: 'Guess the Country',
+  trivia:   'Geography Trivia',
+  heritage: 'UNESCO Heritage',
+  capitals: 'Capitals Quiz',
+};
+
+const DIFFICULTY_LABELS = {
+  short:  'Short',
+  medium: 'Medium',
+  long:   'Long',
+};
 
 /* ── localStorage helpers ───────────────────────────────────── */
 
@@ -40,6 +56,23 @@ export function formatGameTime(seconds) {
   const m = Math.floor(s / 60);
   const ss = String(s % 60).padStart(2, '0');
   return `${m}:${ss}`;
+}
+
+/* ── Share text ─────────────────────────────────────────────── */
+
+function buildShareText({ gameId, score, maxScore, time, accuracy }) {
+  const dash     = gameId.lastIndexOf('-');
+  const gameKey  = dash >= 0 ? gameId.slice(0, dash) : gameId;
+  const suffix   = dash >= 0 ? gameId.slice(dash + 1) : '';
+  const gameName = GAME_NAMES[gameKey] || gameId;
+  const diff     = DIFFICULTY_LABELS[suffix];
+
+  let text = `🌍 GeoQuiz – ${gameName}`;
+  if (diff) text += ` (${diff})`;
+  text += `\nScore: ${score}/${maxScore} · ${formatGameTime(time)} ⏱️`;
+  text += `\n${ratingEmoji(accuracy)} ${ratingSubtitle(accuracy)}`;
+  text += `\n\ngeoquiz.info`;
+  return text;
 }
 
 /* ── Emoji / subtitle helpers ───────────────────────────────── */
@@ -140,8 +173,9 @@ export function renderFinishScreen(overlayEl, data) {
   // Action buttons
   html += `
     <div class="finish-actions">
-      <button class="finish-btn finish-btn-primary" data-action="again">Play Again</button>
-      <button class="finish-btn finish-btn-secondary" data-action="home">Home</button>
+      <button class="finish-btn finish-btn-primary" data-action="again">🔄 Play Again</button>
+      <button class="finish-btn finish-btn-share" data-action="share">📋 Share</button>
+      <button class="finish-btn finish-btn-secondary" data-action="home">🏠 Home</button>
     </div>`;
 
   html += `</div>`; // .panel
@@ -152,6 +186,24 @@ export function renderFinishScreen(overlayEl, data) {
   overlayEl.querySelector('[data-action="again"]').addEventListener('click', () => {
     overlayEl.style.display = 'none';
     if (onPlayAgain) onPlayAgain();
+  });
+
+  overlayEl.querySelector('[data-action="share"]').addEventListener('click', async () => {
+    const text = buildShareText({ gameId, score, maxScore, time, accuracy });
+    if (navigator.share) {
+      try {
+        await navigator.share({ text });
+        return;
+      } catch (e) {
+        if (e.name === 'AbortError') return; // user cancelled
+      }
+    }
+    const ok = await copyToClipboard(text);
+    if (ok) {
+      showNotification('✅ Copied to clipboard!');
+    } else {
+      showCopyModal(text);
+    }
   });
 
   overlayEl.querySelector('[data-action="home"]').addEventListener('click', () => {

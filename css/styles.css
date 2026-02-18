@@ -300,12 +300,53 @@ button:disabled{opacity:.55;cursor:not-allowed}
   border-color:var(--pill-border);
 }
 .finish-btn-secondary:hover{background:var(--button-hover)}
+.finish-btn-share{
+  background:var(--correct-bg);color:var(--good-color);
+  border-color:var(--correct-border);
+}
+.finish-btn-share:hover{background:rgba(110,231,183,.22)}
 
 @media(max-width:420px){
   .finish-stat-value{font-size:1.5rem}
   .finish-actions{flex-direction:column;align-items:center}
   .finish-btn{max-width:100%;width:100%}
 }
+
+/* Share notification toast */
+.share-notification{
+  position:fixed;top:-100px;left:50%;transform:translateX(-50%);
+  background:var(--good-color,#22c55e);color:#fff;
+  padding:1rem 2rem;border-radius:8px;
+  box-shadow:0 4px 12px rgba(0,0,0,.2);
+  font-weight:600;transition:top .3s ease-in-out;z-index:10000;
+  white-space:nowrap;
+}
+.share-notification.show{top:2rem}
+.share-notification-error{background:#ef4444}
+.share-notification-info{background:var(--button-bg)}
+
+/* Copy fallback modal */
+.copy-modal{
+  position:fixed;inset:0;z-index:10000;
+  display:flex;align-items:center;justify-content:center;padding:1rem;
+}
+.modal-backdrop{position:absolute;inset:0;background:rgba(0,0,0,.5)}
+.modal-content{
+  position:relative;background:var(--card-bg);border-radius:16px;
+  padding:2rem;max-width:500px;width:100%;
+  box-shadow:0 8px 24px rgba(0,0,0,.2);
+  border:1px solid var(--card-border);
+}
+.modal-content h3{margin:0 0 1rem;color:var(--text-primary)}
+.modal-content p{margin:0 0 1rem;color:var(--text-muted)}
+.share-textarea{
+  width:100%;min-height:160px;padding:1rem;box-sizing:border-box;
+  border:1px solid var(--input-border);border-radius:8px;
+  font-family:monospace;font-size:.9rem;resize:vertical;
+  background:var(--input-bg);color:var(--text-primary);margin-bottom:1rem;
+}
+.modal-buttons{display:flex;gap:1rem}
+.modal-buttons .btn{flex:1}
 
 .starStack{
   display:inline-block;
