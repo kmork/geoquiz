@@ -72,6 +72,7 @@ export class OutlinesGameLogic {
     this.current = this.deck.pop();
     this.attempt = 0;
     this.roundEnded = false;
+    this.usedHint = false;
     this.startTime = Date.now();
     
     // Track game start time on first round
