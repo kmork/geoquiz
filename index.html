@@ -18,7 +18,7 @@
   </script>
   <style>
     * { box-sizing: border-box; }
-    
+
     /* Dark mode (default) */
     :root {
       --bg-primary: #0f172a;
@@ -44,7 +44,7 @@
       --globe-gradient-2: #8b5cf6;
       --ring-color: rgba(59, 130, 246, 0.3);
     }
-    
+
     /* Light mode */
     html.light-mode,
     body.light-mode {
@@ -71,7 +71,7 @@
       --globe-gradient-2: #581c87;
       --ring-color: rgba(59, 130, 246, 0.2);
     }
-    
+
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -83,13 +83,13 @@
       width: 100%;
       max-width: 100vw;
     }
-    
+
     html {
       overflow-x: hidden;
       width: 100%;
       max-width: 100vw;
     }
-    
+
     /* Animated world map background */
     .map-background {
       position: fixed;
@@ -97,30 +97,30 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: 
+      background:
         radial-gradient(circle at 20% 50%, var(--bg-gradient-1) 0%, transparent 50%),
         radial-gradient(circle at 80% 50%, var(--bg-gradient-2) 0%, transparent 50%);
       z-index: 0;
     }
-    
+
     .map-dots {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: 
+      background-image:
         radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
       background-size: 50px 50px;
       opacity: 0.3;
       animation: map-float 20s ease-in-out infinite;
     }
-    
+
     @keyframes map-float {
       0%, 100% { transform: translate(0, 0); }
       50% { transform: translate(-20px, -20px); }
     }
-    
+
     .content {
       position: relative;
       z-index: 1;
@@ -128,12 +128,12 @@
       margin: 0 auto;
       padding: 60px 24px;
     }
-    
+
     .header {
       text-align: center;
       margin-bottom: 60px;
     }
-    
+
     .globe-container {
       display: inline-flex;
       flex-direction: column;
@@ -142,7 +142,7 @@
       position: relative;
       margin-bottom: 20px;
     }
-    
+
     .globe-emoji {
       font-size: 100px;
       line-height: 1;
@@ -150,12 +150,12 @@
       position: relative;
       animation: rotate-globe 10s linear infinite;
     }
-    
+
     @keyframes rotate-globe {
       from { transform: rotate(0deg); }
       to { transform: rotate(360deg); }
     }
-    
+
     .globe-ring {
       position: absolute;
       top: 50px;
@@ -168,12 +168,12 @@
       animation: pulse-ring 2s ease-in-out infinite;
       pointer-events: none;
     }
-    
+
     @keyframes pulse-ring {
       0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
       50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.2; }
     }
-    
+
     h1 {
       font-size: 52px;
       font-weight: 800;
@@ -183,20 +183,20 @@
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
-    
+
     .subtitle {
       font-size: 18px;
       color: var(--text-secondary);
       margin-bottom: 30px;
     }
-    
+
     .games-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 24px;
       margin-top: 40px;
     }
-    
+
     .glass-card {
       background: var(--card-bg);
       backdrop-filter: blur(10px);
@@ -210,7 +210,7 @@
       position: relative;
       overflow: hidden;
     }
-    
+
     .glass-card::before {
       content: '';
       position: absolute;
@@ -218,36 +218,36 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background: linear-gradient(135deg, 
-        rgba(var(--accent-color-rgb), 0.15) 0%, 
+      background: linear-gradient(135deg,
+        rgba(var(--accent-color-rgb), 0.15) 0%,
         rgba(var(--accent-color-rgb), 0.05) 100%);
       opacity: 0;
       transition: opacity 0.4s;
     }
-    
+
     .glass-card:hover {
       transform: translateY(-8px) scale(1.02);
       background: var(--card-bg-hover);
       border-color: var(--card-border-hover);
       box-shadow: 0 20px 60px var(--card-shadow);
     }
-    
+
     .glass-card:hover::before {
       opacity: 1;
     }
-    
+
     .card-content {
       position: relative;
       z-index: 1;
     }
-    
+
     .pin-marker {
       font-size: 50px;
       display: block;
       margin-bottom: 15px;
       animation: pin-bounce 2s ease-in-out infinite;
     }
-    
+
     .game-icon {
       width: 80px;
       height: 80px;
@@ -256,29 +256,29 @@
       filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
       transition: transform 0.3s ease;
     }
-    
+
     .glass-card:hover .game-icon {
       transform: scale(1.1);
     }
-    
+
     @keyframes pin-bounce {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
-    
+
     .card-title {
       font-size: 24px;
       font-weight: 700;
       margin-bottom: 12px;
       color: var(--text-primary);
     }
-    
+
     .card-description {
       font-size: 14px;
       color: var(--text-secondary);
       line-height: 1.6;
     }
-    
+
     .play-button {
       display: inline-flex;
       align-items: center;
@@ -293,13 +293,13 @@
       font-size: 14px;
       transition: all 0.3s;
     }
-    
+
     .glass-card:hover .play-button {
       background: var(--button-bg-hover);
       border-color: var(--button-border-hover);
       color: var(--button-text-hover);
     }
-    
+
     .theme-icon {
       pointer-events: none;
     }
@@ -447,16 +447,16 @@
       transition: all 0.2s;
     }
     .clear-records-btn:hover { background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.6); }
-    
+
     @media (max-width: 640px) {
       .content {
         padding: 30px 16px;
       }
-      
+
       .header {
         margin-bottom: 30px;
       }
-      
+
       .globe-container {
         margin-bottom: 0;
         position: relative;
@@ -465,13 +465,13 @@
         align-items: center;
         justify-content: center;
       }
-      
+
       .globe-emoji {
         font-size: 100px;
         opacity: 0.15;
         line-height: 1;
       }
-      
+
       .globe-ring {
         position: absolute;
         top: 50%;
@@ -481,7 +481,7 @@
         height: 120px;
         border-width: 1px;
       }
-      
+
       .globe-container + h1 {
         font-size: 32px;
         margin: 0;
@@ -493,7 +493,7 @@
         z-index: 10;
         line-height: 1.2;
       }
-      
+
       /* Target h1 when inside globe-container on mobile */
       .globe-container h1 {
         font-size: 32px;
@@ -506,24 +506,24 @@
         z-index: 10;
         line-height: 1.2;
       }
-      
+
       .subtitle {
         font-size: 15px;
         margin-bottom: 20px;
         margin-top: 12px;
       }
-      
+
       .games-grid {
         grid-template-columns: 1fr;
         gap: 16px;
         margin-top: 20px;
       }
-      
+
       .glass-card {
         padding: 20px;
         border-radius: 16px;
       }
-      
+
       .card-content {
         display: grid;
         grid-template-columns: 60px 1fr;
@@ -534,7 +534,7 @@
           "desc desc"
           "button button";
       }
-      
+
       .game-icon {
         grid-area: icon;
         width: 60px;
@@ -542,21 +542,21 @@
         margin: 0;
         align-self: center;
       }
-      
+
       .card-title {
         grid-area: title;
         font-size: 20px;
         margin: 0;
         align-self: center;
       }
-      
+
       .card-description {
         grid-area: desc;
         font-size: 13px;
         line-height: 1.5;
         margin: 0;
       }
-      
+
       .play-button {
         grid-area: button;
         margin: 0;
@@ -565,7 +565,7 @@
         justify-self: start;
         width: auto;
       }
-      
+
       .pin-marker {
         font-size: 36px;
         margin-bottom: 10px;
@@ -586,9 +586,9 @@
 <body>
   <div class="map-background"></div>
   <div class="map-dots"></div>
-  
+
   <button id="menu-btn" class="menu-btn" aria-label="Open menu">☰</button>
-  
+
   <div class="content">
     <div class="header">
       <div class="globe-container">
@@ -598,7 +598,7 @@
       </div>
       <div class="subtitle">Explore the world through interactive geography games</div>
     </div>
-    
+
     <div class="games-grid">
       <!-- Daily Challenge -->
       <a href="daily.html" class="glass-card">
@@ -625,7 +625,7 @@
           <div class="play-button">Play Today →</div>
         </div>
       </a>
-      
+
       <a href="play.html?game=find" class="glass-card">
         <div class="card-content">
           <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -636,7 +636,7 @@
               </linearGradient>
             </defs>
             <!-- Map/World outline -->
-            <path d="M15 30 Q20 25 30 25 L70 25 Q80 25 85 30 L85 70 Q80 75 70 75 L30 75 Q20 75 15 70 Z" 
+            <path d="M15 30 Q20 25 30 25 L70 25 Q80 25 85 30 L85 70 Q80 75 70 75 L30 75 Q20 75 15 70 Z"
                   fill="none" stroke="url(#grad-find)" stroke-width="3" opacity="0.4"/>
             <circle cx="40" cy="45" r="3" fill="url(#grad-find)" opacity="0.6"/>
             <circle cx="55" cy="38" r="2.5" fill="url(#grad-find)" opacity="0.6"/>
@@ -652,7 +652,7 @@
           <div class="play-button">Play Now →</div>
         </div>
       </a>
-      
+
       <a href="play.html?game=outlines" class="glass-card">
         <div class="card-content">
           <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -663,7 +663,7 @@
               </linearGradient>
             </defs>
             <!-- Country outline shape (abstract) -->
-            <path d="M25 45 Q30 30 45 35 L55 32 Q70 30 75 40 L78 55 Q75 70 60 72 L40 70 Q28 65 25 55 Z" 
+            <path d="M25 45 Q30 30 45 35 L55 32 Q70 30 75 40 L78 55 Q75 70 60 72 L40 70 Q28 65 25 55 Z"
                   fill="url(#grad-outline)" opacity="0.3" stroke="url(#grad-outline)" stroke-width="3"/>
             <!-- Puzzle piece notches -->
             <circle cx="40" cy="35" r="4" fill="none" stroke="url(#grad-outline)" stroke-width="2.5"/>
@@ -677,7 +677,7 @@
           <div class="play-button">Play Now →</div>
         </div>
       </a>
-      
+
       <a href="play.html?game=capitals" class="glass-card">
         <div class="card-content">
           <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -703,7 +703,7 @@
           <div class="play-button">Play Now →</div>
         </div>
       </a>
-      
+
       <a href="route.html" class="glass-card">
         <div class="card-content">
           <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -729,7 +729,7 @@
           <div class="play-button">Play Now →</div>
         </div>
       </a>
-      
+
       <a href="play.html?game=trivia" class="glass-card">
         <div class="card-content">
           <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -756,7 +756,7 @@
           <div class="play-button">Play Now →</div>
         </div>
       </a>
-      
+
       <a href="play.html?game=heritage" class="glass-card">
         <div class="card-content">
           <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
@@ -798,7 +798,7 @@
           <span class="menu-about-name">Geo Quiz</span>
         </div>
         <p class="menu-about-text">
-          A collection of interactive geography games — free for everyone, no ads, just the fun of exploring the world.
+          A collection of interactive geography games — free for everyone, no ads, no cookies, just the fun of exploring the world.
         </p>
         <p class="menu-about-text">
           Created by <strong>Knut Mork</strong>.<br>
