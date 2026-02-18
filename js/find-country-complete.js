@@ -530,6 +530,7 @@ export async function createCompleteMap({
     let initialZoom = 1;
     let wasRecentlyPinching = false;
     let pinchCooldownTimer = null;
+    let hadPinch = false;
     let previousTouchCount = 0;
     
     function getDistance(t1, t2) {
@@ -548,7 +549,9 @@ export async function createCompleteMap({
           initialPinchDistance = getDistance(touches[0], touches[1]);
           initialZoom = zoom;
           isDragging = false;
+          hadPinch = true;
         } else if (touches.length === 1) {
+          hadPinch = false;
           isPointerDown = true;
           const rect = canvas.getBoundingClientRect();
           startX = lastX = e.clientX - rect.left;
@@ -618,12 +621,12 @@ export async function createCompleteMap({
           zoom = newZoom;
           drawWorldMap();
           return;
-        } else if (previousTouchCount === 2 && touches.length === 1) {
+        } else if (hadPinch && touches.length === 1) {
           wasRecentlyPinching = true;
           if (pinchCooldownTimer) clearTimeout(pinchCooldownTimer);
           pinchCooldownTimer = setTimeout(() => {
             wasRecentlyPinching = false;
-          }, 300);
+          }, 400);
         }
         
         previousTouchCount = touches.length;
@@ -663,14 +666,15 @@ export async function createCompleteMap({
       if (e.pointerType === 'touch') {
         touches = touches.filter(t => t.pointerId !== e.pointerId);
         
-        if (previousTouchCount === 2 && touches.length === 0) {
+        if (hadPinch && touches.length === 0) {
           wasRecentlyPinching = true;
+          hadPinch = false;
           if (pinchCooldownTimer) clearTimeout(pinchCooldownTimer);
           pinchCooldownTimer = setTimeout(() => {
             wasRecentlyPinching = false;
-          }, 300);
+          }, 400);
         }
-        
+
         previousTouchCount = touches.length;
         
         if (touches.length === 0) {
