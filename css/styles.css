@@ -302,7 +302,6 @@ button:disabled{opacity:.55;cursor:not-allowed}
 .finish-btn-secondary:hover{background:var(--button-hover)}
 
 @media(max-width:420px){
-  .finish-stats{grid-template-columns:1fr}
   .finish-stat-value{font-size:1.5rem}
   .finish-actions{flex-direction:column;align-items:center}
   .finish-btn{max-width:100%;width:100%}

@@ -203,7 +203,14 @@
     .diff-rounds {
       font-size: 14px;
       color: var(--text-secondary);
-      margin-bottom: 16px;
+      margin-bottom: 8px;
+    }
+
+    .diff-record {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin-bottom: 12px;
+      opacity: 0.85;
     }
 
     .diff-play {
@@ -254,15 +261,38 @@
 
       .diff-info {
         flex: 1;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 1px 10px;
+        align-items: start;
       }
 
       .diff-name {
+        grid-column: 1;
+        grid-row: 1;
         font-size: 18px;
-        margin-bottom: 2px;
+        margin-bottom: 0;
       }
 
       .diff-rounds {
-        margin-bottom: 8px;
+        grid-column: 1;
+        grid-row: 2;
+        margin-bottom: 0;
+      }
+
+      .diff-record {
+        grid-column: 2;
+        grid-row: 1 / 3;
+        align-self: center;
+        text-align: right;
+        margin: 0;
+      }
+
+      .diff-play {
+        grid-column: 1 / 3;
+        grid-row: 3;
+        margin: 8px 0 0;
+        justify-self: start;
       }
     }
   </style>
@@ -282,12 +312,24 @@
   </div>
 
   <script>
+    const STORAGE_PREFIX = 'geoquiz-record-';
+
+    function getRecord(key) {
+      try { return JSON.parse(localStorage.getItem(STORAGE_PREFIX + key)); } catch { return null; }
+    }
+
+    function fmtTime(s) {
+      const r = Math.round(s), m = Math.floor(r / 60), ss = String(r % 60).padStart(2, '0');
+      return `${m}:${ss}`;
+    }
+
     const GAMES = {
       find: {
         title: 'Find the Country',
         desc: 'Locate and click on the correct country on the interactive world map.',
         url: 'find-country.html',
         fullCount: 192,
+        pointsPerRound: 1,
         icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style="stop-color:#3b82f6"/>
@@ -307,6 +349,7 @@
         desc: 'Identify countries from their unique outlines and geographical shapes.',
         url: 'outlines.html',
         fullCount: 193,
+        pointsPerRound: 2,
         icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style="stop-color:#f093fb"/>
@@ -325,6 +368,7 @@
         desc: 'Guess the capitals and their locations on an interactive world map.',
         url: 'capitals.html',
         fullCount: 193,
+        pointsPerRound: 2,
         icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style="stop-color:#8b5cf6"/>
@@ -344,6 +388,7 @@
         desc: 'Answer multiple-choice questions about world geography and culture.',
         url: 'trivia.html',
         fullCount: 124,
+        pointsPerRound: 1,
         icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style="stop-color:#10b981"/>
@@ -364,6 +409,7 @@
         desc: 'Identify countries from stunning UNESCO World Heritage Sites.',
         url: 'heritage.html',
         fullCount: 47,
+        pointsPerRound: 2,
         icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
           <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" style="stop-color:#ec4899"/>
@@ -408,16 +454,24 @@
 
       // Build difficulty cards
       const grid = document.getElementById('difficulty-grid');
-      grid.innerHTML = DIFFICULTIES.map(d => `
-        <a class="diff-card" href="${game.url}?rounds=${d.rounds}">
-          <span class="diff-emoji">${d.emoji}</span>
-          <div class="diff-info">
-            <div class="diff-name">${d.label}</div>
-            <div class="diff-rounds">${d.desc}</div>
-            <span class="diff-play">Play →</span>
-          </div>
-        </a>
-      `).join('');
+      grid.innerHTML = DIFFICULTIES.map(d => {
+        const count = d.rounds === 'all' ? game.fullCount : parseInt(d.rounds);
+        const maxScore = count * game.pointsPerRound;
+        const rec = getRecord(`${gameKey}-${d.key}`);
+        const recordHtml = rec
+          ? `<div class="diff-record">Best: ${rec.bestScore}/${maxScore} · ${fmtTime(rec.bestTime)}</div>`
+          : '';
+        return `
+          <a class="diff-card" href="${game.url}?rounds=${d.rounds}">
+            <span class="diff-emoji">${d.emoji}</span>
+            <div class="diff-info">
+              <div class="diff-name">${d.label}</div>
+              <div class="diff-rounds">${d.desc}</div>
+              ${recordHtml}
+              <span class="diff-play">Play →</span>
+            </div>
+          </a>`;
+      }).join('');
     }
   </script>
 </body>
