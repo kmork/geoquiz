@@ -8,12 +8,13 @@
 import { shuffleArray } from "../game-utils.js";
 
 export class TriviaGameLogic {
-  constructor({ onAnswer, onComplete, singleRound = false }) {
+  constructor({ onAnswer, onComplete, singleRound = false, maxCount = 10 }) {
     this.questions = [];
     this.currentIndex = 0;
     this.score = 0;
     this.correctCount = 0;
     this.singleRound = singleRound;
+    this._configMaxCount = singleRound ? 1 : maxCount;
     this.onAnswer = onAnswer; // Callback when user answers
     this.onComplete = onComplete; // Callback when game completes
     this.startTime = null;
@@ -25,7 +26,7 @@ export class TriviaGameLogic {
       const response = await fetch(dataUrl);
       const data = await response.json();
       const shuffled = shuffleArray(data);
-      this.questions = this.singleRound ? shuffled.slice(0, 1) : shuffled.slice(0, 10);
+      this.questions = shuffled.slice(0, this._configMaxCount);
       return true;
     } catch (err) {
       console.error("Failed to load questions:", err);

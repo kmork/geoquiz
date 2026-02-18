@@ -11,9 +11,10 @@ import { shuffleInPlace } from "../game-utils.js";
 const FIND_EXCLUDE = new Set(["Vatican City"]);
 
 export class FindCountryGameLogic {
-  constructor({ onAnswer, onComplete, singleRound = false }) {
+  constructor({ onAnswer, onComplete, singleRound = false, maxRounds = 10 }) {
     this.DATA = window.DATA.filter(c => !FIND_EXCLUDE.has(c.country));
-    this.maxRounds = singleRound ? 1 : 10;
+    this._configMaxRounds = singleRound ? 1 : maxRounds;
+    this.maxRounds = this._configMaxRounds;
     this.singleRound = singleRound;
     this.onAnswer = onAnswer;
     this.onComplete = onComplete;
@@ -30,7 +31,8 @@ export class FindCountryGameLogic {
   }
 
   reset() {
-    this.deck = shuffleInPlace([...this.DATA]).slice(0, this.maxRounds);
+    this.deck = shuffleInPlace([...this.DATA]).slice(0, this._configMaxRounds);
+    this.maxRounds = this.deck.length;
     this.current = null;
     this.score = 0;
     this.correctCount = 0;

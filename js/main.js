@@ -4,6 +4,11 @@ import { createMap } from "./map.js";
 import { createGame } from "./game.js";
 import { attachWikipediaPopup } from "./wiki.js";
 
+const _params = new URLSearchParams(location.search);
+const _roundsParam = _params.get('rounds') || '10';
+const _maxRounds = _roundsParam === 'all' ? Infinity : (parseInt(_roundsParam) || 10);
+const _gameIdSuffix = _roundsParam === 'all' ? 'long' : (_roundsParam === '25' ? 'medium' : 'short');
+
 const ui = getUI();
 const confetti = initConfetti("confetti");
 
@@ -30,7 +35,7 @@ try {
 
 mapApi.attachInteractions();
 
-const game = createGame({ ui, mapApi, confetti });
+const game = createGame({ ui, mapApi, confetti, config: { maxRounds: _maxRounds, gameIdSuffix: _gameIdSuffix } });
 attachWikipediaPopup(ui.elCountry, () => game.getCurrent());
 
 // Buttons are now wired dynamically by renderFinishScreen

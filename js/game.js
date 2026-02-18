@@ -8,9 +8,11 @@ function getCSSVar(name) {
   return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
 }
 
-export function createGame({ ui, mapApi, confetti }) {
+export function createGame({ ui, mapApi, confetti, config = {} }) {
   const DATA = window.DATA; // IMPORTANT: data.js sets window.DATA
-  const MAX_ROUNDS = 10;
+  const configMaxRounds = config.maxRounds ?? 10;
+  const gameIdSuffix = config.gameIdSuffix || 'short';
+  let totalRounds = configMaxRounds;
 
   let deck = [];
   let current = null;
@@ -274,8 +276,8 @@ export function createGame({ ui, mapApi, confetti }) {
   }
 
   function reset() {
-    // Shuffle all countries and take only first 10
-    deck = shuffleInPlace([...(DATA || [])]).slice(0, MAX_ROUNDS);
+    deck = shuffleInPlace([...(DATA || [])]).slice(0, configMaxRounds);
+    totalRounds = deck.length;
     current = null;
 
     score = 0;
@@ -287,8 +289,7 @@ export function createGame({ ui, mapApi, confetti }) {
     stars = 0;
     updateStarsUI();
 
-    // (Removed usage of bonusHintEl entirely)
-    updateProgress(ui.progressEl, 0, MAX_ROUNDS);
+    updateProgress(ui.progressEl, 0, totalRounds);
   }
 
   function nextQ() {
@@ -303,13 +304,13 @@ export function createGame({ ui, mapApi, confetti }) {
 
     if (!deck.length) {
       const totalTime = gameStartTime ? (Date.now() - gameStartTime) / 1000 : 0;
-      const accuracy = MAX_ROUNDS > 0 ? Math.round((correctAny / MAX_ROUNDS) * 100) : 0;
+      const accuracy = totalRounds > 0 ? Math.round((correctAny / totalRounds) * 100) : 0;
 
       renderFinishScreen(ui.finalOverlay, {
-        gameId: 'capitals',
+        gameId: `capitals-${gameIdSuffix}`,
         score,
         scoreLabel: 'Score',
-        maxScore: MAX_ROUNDS * 2,
+        maxScore: totalRounds * 2,
         time: totalTime,
         accuracy,
         stats: [
@@ -333,7 +334,7 @@ export function createGame({ ui, mapApi, confetti }) {
     }
     ui.elCountry.textContent = current.country;
 
-    updateProgress(ui.progressEl, MAX_ROUNDS - deck.length, MAX_ROUNDS);
+    updateProgress(ui.progressEl, totalRounds - deck.length, totalRounds);
     mapApi?.draw?.(current.country, false);
 
     // Only auto-focus on desktop (not mobile to avoid unwanted keyboard)

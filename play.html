@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Geo Quiz - Select Difficulty</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <script>
+    (function() {
+      const saved = localStorage.getItem('geoquiz-theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const theme = saved || system;
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+    })();
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #0f172a;
+      --bg-gradient-1: rgba(59, 130, 246, 0.1);
+      --bg-gradient-2: rgba(139, 92, 246, 0.1);
+      --text-primary: #ffffff;
+      --text-secondary: #94a3b8;
+      --accent-color: #3b82f6;
+      --accent-color-rgb: 59, 130, 246;
+      --dot-color: rgba(59, 130, 246, 0.3);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-bg-hover: rgba(255, 255, 255, 0.1);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --card-border-hover: rgba(59, 130, 246, 0.5);
+      --card-shadow: rgba(59, 130, 246, 0.3);
+      --button-bg: rgba(59, 130, 246, 0.2);
+      --button-bg-hover: rgba(59, 130, 246, 0.4);
+      --button-border: rgba(59, 130, 246, 0.4);
+      --button-border-hover: rgba(59, 130, 246, 0.6);
+      --button-text: #60a5fa;
+      --button-text-hover: #ffffff;
+      --globe-gradient-1: #3b82f6;
+      --globe-gradient-2: #8b5cf6;
+      --ring-color: rgba(59, 130, 246, 0.3);
+    }
+
+    html.light-mode,
+    body.light-mode {
+      --bg-primary: linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%);
+      --bg-gradient-1: rgba(59, 130, 246, 0.05);
+      --bg-gradient-2: rgba(139, 92, 246, 0.05);
+      --text-primary: #0f172a;
+      --text-secondary: #64748b;
+      --accent-color: #2563eb;
+      --accent-color-rgb: 37, 99, 235;
+      --dot-color: rgba(100, 116, 139, 0.15);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-bg-hover: rgba(255, 255, 255, 1);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --card-border-hover: rgba(37, 99, 235, 0.4);
+      --card-shadow: rgba(0, 0, 0, 0.1);
+      --button-bg: rgba(37, 99, 235, 0.1);
+      --button-bg-hover: rgba(37, 99, 235, 0.2);
+      --button-border: rgba(37, 99, 235, 0.3);
+      --button-border-hover: rgba(37, 99, 235, 0.5);
+      --button-text: #2563eb;
+      --button-text-hover: #1e40af;
+      --globe-gradient-1: #1e3a8a;
+      --globe-gradient-2: #581c87;
+      --ring-color: rgba(59, 130, 246, 0.2);
+    }
+
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .map-background {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 20% 50%, var(--bg-gradient-1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, var(--bg-gradient-2) 0%, transparent 50%);
+      z-index: 0;
+    }
+
+    .map-dots {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.3;
+      animation: map-float 20s ease-in-out infinite;
+    }
+
+    @keyframes map-float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-20px, -20px); }
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 60px 24px 40px;
+    }
+
+    .game-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .game-icon-large {
+      width: 80px;
+      height: 80px;
+      display: block;
+      margin: 0 auto 16px;
+      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
+    }
+
+    .game-title {
+      display: block;
+      font-size: 36px;
+      font-weight: 800;
+      margin: 0 0 10px;
+      background: linear-gradient(135deg, var(--globe-gradient-1) 0%, var(--globe-gradient-2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    .game-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .difficulty-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .diff-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 28px 20px;
+      text-decoration: none;
+      color: var(--text-primary);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diff-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg,
+        rgba(var(--accent-color-rgb), 0.15) 0%,
+        rgba(var(--accent-color-rgb), 0.05) 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .diff-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--card-border-hover);
+      box-shadow: 0 16px 48px var(--card-shadow);
+    }
+
+    .diff-card:hover::before {
+      opacity: 1;
+    }
+
+    .diff-emoji {
+      font-size: 40px;
+      display: block;
+      margin-bottom: 12px;
+      line-height: 1;
+    }
+
+    .diff-name {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .diff-rounds {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 16px;
+    }
+
+    .diff-play {
+      display: inline-block;
+      padding: 8px 20px;
+      background: var(--button-bg);
+      border: 1px solid var(--button-border);
+      border-radius: 10px;
+      color: var(--button-text);
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .diff-card:hover .diff-play {
+      background: var(--button-bg-hover);
+      border-color: var(--button-border-hover);
+      color: var(--button-text-hover);
+    }
+
+    @media (max-width: 600px) {
+      .content {
+        padding: 40px 16px 32px;
+      }
+
+      .game-title {
+        font-size: 28px;
+      }
+
+      .difficulty-grid {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .diff-card {
+        padding: 20px 16px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        text-align: left;
+      }
+
+      .diff-emoji {
+        font-size: 32px;
+        margin: 0;
+        flex-shrink: 0;
+      }
+
+      .diff-info {
+        flex: 1;
+      }
+
+      .diff-name {
+        font-size: 18px;
+        margin-bottom: 2px;
+      }
+
+      .diff-rounds {
+        margin-bottom: 8px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="map-background"></div>
+  <div class="map-dots"></div>
+
+  <div class="content">
+    <div class="game-header" id="game-header">
+      <!-- Filled by JS -->
+    </div>
+
+    <div class="difficulty-grid" id="difficulty-grid">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+  <script>
+    const GAMES = {
+      find: {
+        title: 'Find the Country',
+        desc: 'Locate and click on the correct country on the interactive world map.',
+        url: 'find-country.html',
+        fullCount: 192,
+        icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#3b82f6"/>
+            <stop offset="100%" style="stop-color:#06b6d4"/>
+          </linearGradient></defs>
+          <path d="M15 30 Q20 25 30 25 L70 25 Q80 25 85 30 L85 70 Q80 75 70 75 L30 75 Q20 75 15 70 Z"
+                fill="none" stroke="url(#g)" stroke-width="3" opacity="0.4"/>
+          <circle cx="40" cy="45" r="3" fill="url(#g)" opacity="0.6"/>
+          <circle cx="55" cy="38" r="2.5" fill="url(#g)" opacity="0.6"/>
+          <circle cx="60" cy="55" r="18" fill="none" stroke="url(#g)" stroke-width="4"/>
+          <line x1="72" y1="67" x2="85" y2="80" stroke="url(#g)" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="60" cy="55" r="5" fill="url(#g)"/>
+        </svg>`
+      },
+      outlines: {
+        title: 'Guess the Country',
+        desc: 'Identify countries from their unique outlines and geographical shapes.',
+        url: 'outlines.html',
+        fullCount: 193,
+        icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#f093fb"/>
+            <stop offset="100%" style="stop-color:#f5576c"/>
+          </linearGradient></defs>
+          <path d="M25 45 Q30 30 45 35 L55 32 Q70 30 75 40 L78 55 Q75 70 60 72 L40 70 Q28 65 25 55 Z"
+                fill="url(#g)" opacity="0.3" stroke="url(#g)" stroke-width="3"/>
+          <circle cx="40" cy="35" r="4" fill="none" stroke="url(#g)" stroke-width="2.5"/>
+          <circle cx="65" cy="50" r="4" fill="none" stroke="url(#g)" stroke-width="2.5"/>
+          <path d="M48 55 Q48 48 52 45 Q56 42 56 48 L56 52" fill="none" stroke="url(#g)" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="56" cy="58" r="2" fill="url(#g)"/>
+        </svg>`
+      },
+      capitals: {
+        title: 'Capitals of the World',
+        desc: 'Guess the capitals and their locations on an interactive world map.',
+        url: 'capitals.html',
+        fullCount: 193,
+        icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#8b5cf6"/>
+            <stop offset="100%" style="stop-color:#ec4899"/>
+          </linearGradient></defs>
+          <circle cx="50" cy="50" r="35" fill="none" stroke="url(#g)" stroke-width="3" opacity="0.4"/>
+          <ellipse cx="50" cy="50" rx="35" ry="15" fill="none" stroke="url(#g)" stroke-width="2.5" opacity="0.4"/>
+          <ellipse cx="50" cy="50" rx="15" ry="35" fill="none" stroke="url(#g)" stroke-width="2.5" opacity="0.4"/>
+          <path d="M50 25 L55 35 L60 35 L60 45 L40 45 L40 35 L45 35 Z" fill="url(#g)"/>
+          <circle cx="50" cy="22" r="4" fill="url(#g)"/>
+          <rect x="42" y="45" width="16" height="3" fill="url(#g)"/>
+          <path d="M70 30 L72 36 L78 36 L73 40 L75 46 L70 42 L65 46 L67 40 L62 36 L68 36 Z" fill="url(#g)" opacity="0.8"/>
+        </svg>`
+      },
+      trivia: {
+        title: 'Geography Trivia',
+        desc: 'Answer multiple-choice questions about world geography and culture.',
+        url: 'trivia.html',
+        fullCount: 124,
+        icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#10b981"/>
+            <stop offset="100%" style="stop-color:#3b82f6"/>
+          </linearGradient></defs>
+          <rect x="25" y="35" width="50" height="40" rx="3" fill="url(#g)" opacity="0.3"/>
+          <line x1="50" y1="35" x2="50" y2="75" stroke="url(#g)" stroke-width="2" opacity="0.5"/>
+          <circle cx="50" cy="50" r="18" fill="none" stroke="url(#g)" stroke-width="3"/>
+          <ellipse cx="50" cy="50" rx="18" ry="8" fill="none" stroke="url(#g)" stroke-width="2.5"/>
+          <ellipse cx="50" cy="50" rx="8" ry="18" fill="none" stroke="url(#g)" stroke-width="2.5"/>
+          <text x="20" y="30" font-size="14" fill="url(#g)" font-family="Arial, sans-serif" font-weight="bold">?</text>
+          <text x="75" y="30" font-size="14" fill="url(#g)" font-family="Arial, sans-serif" font-weight="bold">?</text>
+          <text x="20" y="80" font-size="14" fill="url(#g)" font-family="Arial, sans-serif" font-weight="bold">?</text>
+        </svg>`
+      },
+      heritage: {
+        title: 'UNESCO Heritage',
+        desc: 'Identify countries from stunning UNESCO World Heritage Sites.',
+        url: 'heritage.html',
+        fullCount: 47,
+        icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#ec4899"/>
+            <stop offset="100%" style="stop-color:#f97316"/>
+          </linearGradient></defs>
+          <rect x="20" y="35" width="60" height="40" rx="8" fill="url(#g)" opacity="0.3"/>
+          <circle cx="55" cy="55" r="15" fill="none" stroke="url(#g)" stroke-width="4"/>
+          <circle cx="55" cy="55" r="10" fill="url(#g)" opacity="0.6"/>
+          <rect x="25" y="30" width="8" height="6" rx="2" fill="url(#g)"/>
+          <circle cx="75" cy="35" r="8" fill="url(#g)"/>
+          <path d="M75 27 L75 20" stroke="url(#g)" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="75" cy="18" r="3" fill="url(#g)"/>
+        </svg>`
+      }
+    };
+
+    const DIFFICULTIES = [
+      { key: 'short',  rounds: '10',  label: 'Short',  emoji: '⚡', desc: '10 rounds' },
+      { key: 'medium', rounds: '25',  label: 'Medium', emoji: '🎯', desc: '25 rounds' },
+      { key: 'long',   rounds: 'all', label: 'Long',   emoji: '🏆', desc: null /* filled below */ }
+    ];
+
+    const params = new URLSearchParams(location.search);
+    const gameKey = params.get('game');
+    const game = GAMES[gameKey];
+
+    if (!game) {
+      location.href = 'index.html';
+    } else {
+      // Set page title
+      document.title = `Geo Quiz - ${game.title}`;
+
+      // Fill game header
+      document.getElementById('game-header').innerHTML = `
+        <a href="index.html" style="text-decoration:none">${game.icon}</a>
+        <a href="index.html" class="game-title">${game.title}</a>
+        <p class="game-desc">${game.desc}</p>
+      `;
+
+      // Set long round count description
+      DIFFICULTIES[2].desc = `All ${game.fullCount} rounds`;
+
+      // Build difficulty cards
+      const grid = document.getElementById('difficulty-grid');
+      grid.innerHTML = DIFFICULTIES.map(d => `
+        <a class="diff-card" href="${game.url}?rounds=${d.rounds}">
+          <span class="diff-emoji">${d.emoji}</span>
+          <div class="diff-info">
+            <div class="diff-name">${d.label}</div>
+            <div class="diff-rounds">${d.desc}</div>
+            <span class="diff-play">Play →</span>
+          </div>
+        </a>
+      `).join('');
+    }
+  </script>
+</body>
+</html>

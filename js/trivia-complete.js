@@ -18,13 +18,15 @@ import { initConfetti } from "./confetti.js";
  * @param {Function} [config.onAnswer] - Callback when answer submitted
  * @returns {Promise<Object>} Game instance
  */
-export async function createCompleteTriviaGame({ 
-  container, 
+export async function createCompleteTriviaGame({
+  container,
   ui = {},
   confetti: confettiInstance,
   singleRound = false,
   onComplete,
-  onAnswer
+  onAnswer,
+  maxCount = 10,
+  gameIdSuffix = 'short'
 }) {
   
   // If no UI provided, create default UI elements from container
@@ -58,7 +60,9 @@ export async function createCompleteTriviaGame({
       singleRound,
       hideScoreUI: singleRound,
       onComplete: onComplete,
-      onAnswer: onAnswer
+      onAnswer: onAnswer,
+      maxCount,
+      gameIdSuffix
     }
   });
   

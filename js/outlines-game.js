@@ -11,6 +11,8 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, con
   const AUTO_MS_WRONG_SECOND = config.autoMsWrongSecond ?? 1700;
   const hideScoreUI = config.hideScoreUI ?? false;
   const singleRound = config.singleRound ?? false;
+  const maxRounds = config.maxRounds ?? 10;
+  const gameIdSuffix = config.gameIdSuffix || 'short';
   const customOnAnswer = config.onAnswer;
   const customOnComplete = config.onComplete;
   const customOnHintUsed = config.onHintUsed;
@@ -18,6 +20,7 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, con
   // Create game logic instance
   const gameLogic = new OutlinesGameLogic({
     singleRound,
+    maxRounds,
     neighbors,
     onAnswer: (result) => {
       // Logic has processed the answer, handle UI feedback
@@ -181,7 +184,7 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, con
     if (hideScoreUI || !ui.finalOverlay) return;
 
     renderFinishScreen(ui.finalOverlay, {
-      gameId: 'outlines',
+      gameId: `outlines-${gameIdSuffix}`,
       score: finalResult.score,
       scoreLabel: 'Points',
       maxScore: finalResult.total * 2,

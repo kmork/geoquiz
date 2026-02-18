@@ -9,12 +9,15 @@ export function createTriviaGame({ ui, confetti, config = {} }) {
   const AUTO_MS = config.autoMs ?? 4000; // Time to show explanation before next question
   const hideScoreUI = config.hideScoreUI ?? false;
   const singleRound = config.singleRound ?? false;
+  const maxCount = config.maxCount ?? 10;
+  const gameIdSuffix = config.gameIdSuffix || 'short';
   const customOnAnswer = config.onAnswer;
   const customOnComplete = config.onComplete;
 
   // Create game logic instance
   const gameLogic = new TriviaGameLogic({
     singleRound,
+    maxCount,
     onAnswer: (result) => {
       // Update UI with answer feedback
       showAnswerFeedback(result);
@@ -111,7 +114,7 @@ export function createTriviaGame({ ui, confetti, config = {} }) {
     if (hideScoreUI || !ui.finalOverlay) return;
 
     renderFinishScreen(ui.finalOverlay, {
-      gameId: 'trivia',
+      gameId: `trivia-${gameIdSuffix}`,
       score: finalResult.score,
       scoreLabel: 'Score',
       maxScore: finalResult.total,

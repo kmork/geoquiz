@@ -23,15 +23,17 @@ import { loadGeoJSON } from "./geojson-loader.js";
  * @param {number} [config.timeLimit] - Time limit in seconds (for Daily Challenge)
  * @returns {Promise<Object>} Game instance
  */
-export async function createCompleteMap({ 
-  container, 
-  canvas, 
+export async function createCompleteMap({
+  container,
+  canvas,
   countryNameEl,
   ui = {},
   confetti: confettiInstance,
   singleRound = false,
   onComplete,
-  timeLimit
+  timeLimit,
+  maxRounds = 10,
+  gameIdSuffix = 'short'
 }) {
   
   const MAP_W = 600;
@@ -711,7 +713,9 @@ export async function createCompleteMap({
     config: {
       singleRound,
       hideScoreUI: singleRound,
-      onComplete: onComplete
+      onComplete: onComplete,
+      maxRounds,
+      gameIdSuffix
     }
   });
   

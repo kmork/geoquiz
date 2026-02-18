@@ -36,20 +36,24 @@ export async function createCompleteHeritageGame({
   singleRound = false,
   onComplete,
   allowMultipleChoice = true,
-  showHint = true
+  showHint = true,
+  maxSites = 10,
+  gameIdSuffix = 'short'
 }) {
-  
+
   const confetti = confettiInstance || (singleRound ? null : initConfetti("confetti"));
-  
+
   // Create game instance
-  const game = createHeritageGame({ 
-    container, 
+  const game = createHeritageGame({
+    container,
     confetti,
     config: {
       singleRound,
       onComplete,
       allowMultipleChoice,
-      showHint
+      showHint,
+      maxSites,
+      gameIdSuffix
     }
   });
   

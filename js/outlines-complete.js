@@ -26,15 +26,17 @@ window.COUNTRY_ALIASES = COUNTRY_ALIASES;
  * @param {Function} [config.onComplete] - Callback when game completes
  * @returns {Promise<Object>} Game instance
  */
-export async function createCompleteOutlinesGame({ 
-  container, 
+export async function createCompleteOutlinesGame({
+  container,
   svgMap,
   answerInput,
   submitBtn,
   ui = {},
   confetti: confettiInstance,
   singleRound = false,
-  onComplete
+  onComplete,
+  maxRounds = 10,
+  gameIdSuffix = 'short'
 }) {
   
   // Load world data only (neighbors are just country names, loaded separately)
@@ -235,7 +237,9 @@ export async function createCompleteOutlinesGame({
     config: {
       singleRound,
       hideScoreUI: singleRound,
-      onComplete: onComplete
+      onComplete: onComplete,
+      maxRounds,
+      gameIdSuffix
     }
   });
   

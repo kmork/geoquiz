@@ -9,10 +9,11 @@ import { norm } from "../utils.js";
 import { shuffleInPlace } from "../game-utils.js";
 
 export class OutlinesGameLogic {
-  constructor({ onAnswer, onComplete, onHintUsed, singleRound = false, neighbors = {} }) {
+  constructor({ onAnswer, onComplete, onHintUsed, singleRound = false, neighbors = {}, maxRounds = 10 }) {
     this.DATA = window.DATA;
     this.neighbors = neighbors;
-    this.maxRounds = singleRound ? 1 : 10;
+    this._configMaxRounds = singleRound ? 1 : maxRounds;
+    this.maxRounds = this._configMaxRounds;
     this.singleRound = singleRound;
     this.onAnswer = onAnswer;
     this.onComplete = onComplete;
@@ -30,7 +31,8 @@ export class OutlinesGameLogic {
   }
 
   reset() {
-    this.deck = shuffleInPlace([...this.DATA]).slice(0, this.maxRounds);
+    this.deck = shuffleInPlace([...this.DATA]).slice(0, this._configMaxRounds);
+    this.maxRounds = this.deck.length;
     this.current = null;
     this.score = 0;
     this.correctFirstTry = 0;

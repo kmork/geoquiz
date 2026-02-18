@@ -12,9 +12,13 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
   const customOnAnswer = config.onAnswer;
   const customOnComplete = config.onComplete;
 
+  const maxRounds = config.maxRounds ?? 10;
+  const gameIdSuffix = config.gameIdSuffix || 'short';
+
   // Create game logic instance
   const gameLogic = new FindCountryGameLogic({
     singleRound,
+    maxRounds,
     onAnswer: (result) => {
       // Logic has processed the answer, handle UI feedback
       handleAnswerFeedback(result);
@@ -124,7 +128,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
     if (hideScoreUI || !ui.finalOverlay) return;
 
     renderFinishScreen(ui.finalOverlay, {
-      gameId: 'find',
+      gameId: `find-${gameIdSuffix}`,
       score: finalResult.score,
       scoreLabel: 'Score',
       maxScore: finalResult.total,

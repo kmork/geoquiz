@@ -20,6 +20,8 @@ export function createHeritageGame({ container, confetti, config = {} }) {
   const AUTO_MS_WRONG = config.autoMsWrong ?? 3500;
   const hideScoreUI = config.hideScoreUI ?? false;
   const singleRound = config.singleRound ?? false;
+  const maxSites = config.maxSites ?? 10;
+  const gameIdSuffix = config.gameIdSuffix || 'short';
   const allowMultipleChoice = config.allowMultipleChoice ?? true;
   const showHint = config.showHint ?? true;
   const customOnAnswer = config.onAnswer;
@@ -34,10 +36,10 @@ export function createHeritageGame({ container, confetti, config = {} }) {
     try {
       const response = await fetch("data/heritage-sites.json");
       const data = await response.json();
-      // Shuffle all sites and take only first 10
+      // Shuffle all sites and take only the configured number
       const shuffled = shuffleArray(data);
-      sites = shuffled.slice(0, 10);
-      console.log(`Loaded ${sites.length} heritage sites from JSON (limited to 10)`);
+      sites = shuffled.slice(0, maxSites);
+      console.log(`Loaded ${sites.length} heritage sites from JSON`);
       return sites; // Return the loaded sites array
     } catch (err) {
       console.error("Failed to load heritage sites:", err);
@@ -297,7 +299,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
     const accuracy = sites.length > 0 ? Math.round((totalCorrect / sites.length) * 100) : 0;
 
     renderFinishScreen(finalOverlay, {
-      gameId: 'heritage',
+      gameId: `heritage-${gameIdSuffix}`,
       score,
       scoreLabel: 'Score',
       maxScore: sites.length * 2,
