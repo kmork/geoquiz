@@ -131,7 +131,7 @@ export function attachZoomPan(svgEl, getBaseViewBox) {
   const pointers = new Map();
   let startVB = null;
   let panStart = null;
-  let startDist = 0;
+  let prevDist = 0;
 
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
@@ -145,10 +145,10 @@ export function attachZoomPan(svgEl, getBaseViewBox) {
 
     if (pointers.size === 1) {
       panStart = { x: e.clientX, y: e.clientY };
-      startDist = 0;
+      prevDist = 0;
     } else if (pointers.size === 2) {
       const pts = [...pointers.values()];
-      startDist = dist(pts[0], pts[1]);
+      prevDist = dist(pts[0], pts[1]);
       panStart = null;
     }
   };
@@ -168,20 +168,20 @@ export function attachZoomPan(svgEl, getBaseViewBox) {
       const dy = a.y - b.y;
 
       const cand = { x: startVB.x + dx, y: startVB.y + dy, w: startVB.w, h: startVB.h };
-
-      // Ensure the viewBox always overlaps with the content area (base viewBox)
       setViewBox(clampPan(cand));
       return;
     }
 
-    // Two pointers => pinch zoom
+    // Two pointers => pinch zoom, per-frame differential centered at midpoint
     if (pointers.size === 2) {
       const pts = [...pointers.values()];
       const dNow = dist(pts[0], pts[1]);
-      if (!startDist) return;
+      if (!prevDist) return;
 
-      // startDist / dNow: >1 zoom out, <1 zoom in
-      const factor = startDist / dNow;
+      // Per-frame ratio: <1 = zoom in (fingers spreading), >1 = zoom out (fingers closing)
+      const factor = prevDist / dNow;
+      prevDist = dNow;
+
       const midX = (pts[0].x + pts[1].x) / 2;
       const midY = (pts[0].y + pts[1].y) / 2;
 
@@ -196,11 +196,11 @@ export function attachZoomPan(svgEl, getBaseViewBox) {
       const p = [...pointers.values()][0];
       startVB = getVB();
       panStart = { x: p.x, y: p.y };
-      startDist = 0;
+      prevDist = 0;
     } else if (pointers.size === 0) {
       startVB = null;
       panStart = null;
-      startDist = 0;
+      prevDist = 0;
     }
   };
 

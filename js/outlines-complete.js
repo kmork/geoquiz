@@ -175,40 +175,84 @@ export async function createCompleteOutlinesGame({
       zoomAt(factor, e.clientX, e.clientY);
     }, { passive: false });
     
-    // Pan with mouse
-    let isDragging = false;
-    let lastX = 0, lastY = 0;
-    
+    // Pan (single pointer) + pinch zoom (two pointers)
+    svgEl.style.touchAction = "none";
+    const touchPointers = new Map();
+    let panLastX = 0, panLastY = 0;
+    let pinchPrevDist = 0;
+
     svgEl.addEventListener("pointerdown", (e) => {
-      if (e.button !== 0) return;
-      isDragging = true;
-      lastX = e.clientX;
-      lastY = e.clientY;
+      svgEl.setPointerCapture(e.pointerId);
+      touchPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      if (touchPointers.size === 1) {
+        panLastX = e.clientX;
+        panLastY = e.clientY;
+        pinchPrevDist = 0;
+      } else if (touchPointers.size === 2) {
+        const pts = [...touchPointers.values()];
+        pinchPrevDist = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y);
+      }
       svgEl.style.cursor = "grabbing";
     });
-    
+
     svgEl.addEventListener("pointermove", (e) => {
-      if (!isDragging) return;
-      const dx = e.clientX - lastX;
-      const dy = e.clientY - lastY;
-      lastX = e.clientX;
-      lastY = e.clientY;
-      
+      if (!touchPointers.has(e.pointerId)) return;
+      touchPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+
+      if (touchPointers.size === 2) {
+        // Pinch zoom – per-frame differential, centered at midpoint
+        const pts = [...touchPointers.values()];
+        const dNow = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y);
+        if (pinchPrevDist > 0) {
+          // dNow > pinchPrevDist = fingers spreading = zoom in → factor > 1
+          const factor = dNow / pinchPrevDist;
+          const midX = (pts[0].x + pts[1].x) / 2;
+          const midY = (pts[0].y + pts[1].y) / 2;
+          zoomAt(factor, midX, midY);
+        }
+        pinchPrevDist = dNow;
+        return;
+      }
+
+      // Single pointer pan
+      const dx = e.clientX - panLastX;
+      const dy = e.clientY - panLastY;
+      panLastX = e.clientX;
+      panLastY = e.clientY;
+
       const current = getVB();
       const scale = current.w / svgEl.clientWidth;
       panBy(-dx * scale, -dy * scale);
     });
-    
-    svgEl.addEventListener("pointerup", () => {
-      isDragging = false;
-      svgEl.style.cursor = "grab";
+
+    svgEl.addEventListener("pointerup", (e) => {
+      touchPointers.delete(e.pointerId);
+      if (touchPointers.size === 1) {
+        // Went 2→1 finger: reset pan origin to avoid a position jump
+        const p = [...touchPointers.values()][0];
+        panLastX = p.x;
+        panLastY = p.y;
+        pinchPrevDist = 0;
+      } else if (touchPointers.size === 0) {
+        pinchPrevDist = 0;
+        svgEl.style.cursor = "grab";
+      }
     });
-    
-    svgEl.addEventListener("pointerleave", () => {
-      isDragging = false;
-      svgEl.style.cursor = "grab";
+
+    svgEl.addEventListener("pointercancel", (e) => {
+      touchPointers.delete(e.pointerId);
+      pinchPrevDist = 0;
+      if (touchPointers.size === 0) svgEl.style.cursor = "grab";
     });
-    
+
+    svgEl.addEventListener("pointerleave", (e) => {
+      if (e.pointerType !== "touch") {
+        touchPointers.delete(e.pointerId);
+        svgEl.style.cursor = "grab";
+      }
+    });
+
     svgEl.style.cursor = "grab";
   }
   
