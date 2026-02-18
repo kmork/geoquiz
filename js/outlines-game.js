@@ -148,7 +148,6 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, con
         card.style.animation = 'flashCorrect 0.5s';
         setTimeout(() => card.style.animation = '', 500);
       }
-      hapticFeedback('correct');
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
       showStatus(result.message, true);
       ui.answerInput.disabled = true;
