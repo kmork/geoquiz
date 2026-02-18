@@ -114,6 +114,33 @@ export async function createCompleteMap({
   }
   countryPaths = Array.from(countryMap.values());
 
+  // Pre-compute bounding box size for hit-test ordering
+  for (const country of countryPaths) {
+    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+    for (const polygon of country.paths) {
+      for (const [x, y] of polygon) {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y < minY) minY = y;
+        if (y > maxY) maxY = y;
+      }
+    }
+    country.bboxSize = Math.max(maxX - minX, maxY - minY);
+    country.bboxCx   = (minX + maxX) / 2;
+    country.bboxCy   = (minY + maxY) / 2;
+  }
+
+  // Sorted smallest-first for hit-testing:
+  // small enclosed countries (San Marino, Monaco, etc.) get priority over surrounding ones.
+  const hitTestPaths = [...countryPaths].sort((a, b) => a.bboxSize - b.bboxSize);
+
+  // Micro-countries: so tiny their polygon is sub-pixel (Vatican, etc.)
+  // Use centroid proximity instead of point-in-polygon.
+  // Only countries that are truly sub-pixel at normal zoom (Vatican ~0.018, Monaco ~0.045).
+  // San Marino (~0.37) is NOT micro — it has a visible polygon handled by sorted point-in-polygon.
+  const MICRO_SIZE = 0.1; // map units
+  const microCountries = hitTestPaths.filter(c => c.bboxSize < MICRO_SIZE);
+
   // Build lookup: DATA name → GeoJSON ADMIN name.
   // Aliases map alternative names → canonical DATA names, so we check
   // each GeoJSON name to see if it's an alias key pointing to a DATA name.
@@ -278,12 +305,31 @@ export async function createCompleteMap({
     return null;
   }
 
-  function checkClickedCountry(canvasX, canvasY) {
+  function checkClickedCountry(canvasX, canvasY, targetCountry = null) {
     const mapX = (canvasX / zoom) + scrollX;
     const mapY = (canvasY / zoom) + scrollY;
     const normalizedMapX = ((mapX % MAP_W) + MAP_W) % MAP_W;
 
-    for (const country of countryPaths) {
+    // Pre-pass: proximity for micro-countries (polygon too tiny for point-in-polygon).
+    // Only activates when the player is specifically seeking a micro-country, to avoid
+    // false positives on surrounding larger countries (e.g. Italy when near Vatican).
+    if (targetCountry && microCountries.length > 0) {
+      const targetGeoName = dataToGeo[targetCountry] || targetCountry;
+      const targetMicro = microCountries.find(c => norm(c.name) === norm(targetGeoName));
+      if (targetMicro) {
+        const MICRO_PROXIMITY = 3; // map units (~110 km); comfortable at typical Vatican zoom
+        const dx = normalizedMapX - targetMicro.bboxCx;
+        const dy = mapY - targetMicro.bboxCy;
+        if (Math.sqrt(dx * dx + dy * dy) < MICRO_PROXIMITY) {
+          return targetCountry;
+        }
+        // Click missed the micro-country; fall through so the player can still
+        // select the wrong country they actually clicked on.
+      }
+    }
+
+    // Main pass: point-in-polygon, smallest countries checked first
+    for (const country of hitTestPaths) {
       for (const polygon of country.paths) {
         if (pointInPolygon(normalizedMapX, mapY, polygon)) {
           return resolveToDataName(country.name) || country.name;
@@ -291,29 +337,16 @@ export async function createCompleteMap({
       }
     }
 
-    // Check nearby small countries
+    // Proximity fallback for small but non-micro countries that might be missed
     const PROXIMITY_THRESHOLD = 30;
     let nearestSmallCountry = null;
     let nearestDistance = Infinity;
 
-    for (const country of countryPaths) {
-      let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-      for (const polygon of country.paths) {
-        for (const [x, y] of polygon) {
-          if (x < minX) minX = x;
-          if (y < minY) minY = y;
-          if (x > maxX) maxX = x;
-          if (y > maxY) maxY = y;
-        }
-      }
-
-      const size = Math.max(maxX - minX, maxY - minY);
-      if (size > 50) continue;
-
-      const centerX = (minX + maxX) / 2;
-      const centerY = (minY + maxY) / 2;
-      const distance = Math.sqrt(Math.pow(normalizedMapX - centerX, 2) + Math.pow(mapY - centerY, 2));
-
+    for (const country of hitTestPaths) {
+      if (country.bboxSize > 50) continue;
+      const dx = normalizedMapX - country.bboxCx;
+      const dy = mapY - country.bboxCy;
+      const distance = Math.sqrt(dx * dx + dy * dy);
       if (distance < nearestDistance && distance < PROXIMITY_THRESHOLD) {
         nearestDistance = distance;
         nearestSmallCountry = resolveToDataName(country.name) || country.name;
@@ -412,7 +445,7 @@ export async function createCompleteMap({
     
     const zoomX = canvasDisplayWidth / width;
     const zoomY = canvasDisplayHeight / height;
-    zoom = Math.max(minZoom, Math.min(zoomX, zoomY, 100));
+    zoom = Math.max(minZoom, Math.min(zoomX, zoomY, 500));
     
     scrollX = x1 + width / 2 - canvasDisplayWidth / 2 / zoom;
     scrollY = y1 + height / 2 - canvasDisplayHeight / 2 / zoom;
@@ -503,7 +536,7 @@ export async function createCompleteMap({
       const mouseY = e.clientY - rect.top;
       
       const factor = e.deltaY > 0 ? 0.9 : 1.1;
-      const newZoom = Math.max(minZoom, Math.min(100, zoom * factor));
+      const newZoom = Math.max(minZoom, Math.min(500, zoom * factor));
       
       const mapXBefore = mouseX / zoom + scrollX;
       const mapYBefore = mouseY / zoom + scrollY;
@@ -582,7 +615,7 @@ export async function createCompleteMap({
       
       // Update hover
       if (game && game.getCurrent() !== "" && !isPointerDown) {
-        const clickedCountry = checkClickedCountry(currentX, currentY);
+        const clickedCountry = checkClickedCountry(currentX, currentY, game.getCurrent().country);
         if (clickedCountry !== hoverCountry) {
           hoverCountry = clickedCountry;
           drawWorldMap();
@@ -611,7 +644,7 @@ export async function createCompleteMap({
 
           const newDistance = getDistance(touches[0], touches[1]);
           const scale = newDistance / initialPinchDistance;
-          const newZoom = Math.max(minZoom, Math.min(100, initialZoom * scale));
+          const newZoom = Math.max(minZoom, Math.min(500, initialZoom * scale));
 
           scrollX = mapXBefore - canvasMidX / newZoom;
           scrollY = mapYBefore - canvasMidY / newZoom;
@@ -684,8 +717,8 @@ export async function createCompleteMap({
             const rect = canvas.getBoundingClientRect();
             const clickX = e.clientX - rect.left;
             const clickY = e.clientY - rect.top;
-            const clickedCountry = checkClickedCountry(clickX, clickY);
-            
+            const clickedCountry = checkClickedCountry(clickX, clickY, game ? game.getCurrent().country : null);
+
             if (clickedCountry && game) {
               game.handleMapClick(clickedCountry);
             }
@@ -698,7 +731,7 @@ export async function createCompleteMap({
           const rect = canvas.getBoundingClientRect();
           const clickX = e.clientX - rect.left;
           const clickY = e.clientY - rect.top;
-          const clickedCountry = checkClickedCountry(clickX, clickY);
+          const clickedCountry = checkClickedCountry(clickX, clickY, game ? game.getCurrent().country : null);
           
           if (clickedCountry && game) {
             game.handleMapClick(clickedCountry);
