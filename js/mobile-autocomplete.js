@@ -197,36 +197,38 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
   });
   
   dropdown.addEventListener('click', (e) => {
-    if (e.target.matches('.autocomplete-item')) {
-      const value = e.target.getAttribute('data-value');
+    const item = e.target.closest('.autocomplete-item');
+    if (item) {
+      const value = item.getAttribute('data-value');
       selectSuggestion(value);
       // Don't refocus - selectSuggestion already blurs to dismiss keyboard
     }
   });
-  
+
   // Touch handling for better mobile experience
   let touchStartY = 0;
   let touchStartTime = 0;
-  
+
   dropdown.addEventListener('touchstart', (e) => {
-    if (e.target.matches('.autocomplete-item')) {
+    if (e.target.closest('.autocomplete-item')) {
       touchStartY = e.touches[0].clientY;
       touchStartTime = Date.now();
     }
   }, { passive: true });
-  
+
   dropdown.addEventListener('touchend', (e) => {
-    if (e.target.matches('.autocomplete-item')) {
+    const item = e.target.closest('.autocomplete-item');
+    if (item) {
       const touchEndY = e.changedTouches[0].clientY;
       const touchEndTime = Date.now();
       const deltaY = Math.abs(touchEndY - touchStartY);
       const deltaTime = touchEndTime - touchStartTime;
-      
+
       // Only select if it's a tap (not a scroll)
       // Tap: small movement (<10px) and quick (<300ms)
       if (deltaY < 10 && deltaTime < 300) {
         e.preventDefault();
-        const value = e.target.getAttribute('data-value');
+        const value = item.getAttribute('data-value');
         selectSuggestion(value);
         inputElement.focus();
       }
