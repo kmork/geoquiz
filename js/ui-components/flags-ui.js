@@ -21,7 +21,6 @@ export function renderFlagsUI(container, roundData) {
             style="background:var(--card-bg,rgba(255,255,255,0.05));border:1px solid var(--border-color,rgba(255,255,255,0.1));border-radius:12px;padding:10px;cursor:pointer;transition:transform 0.15s,outline 0.15s;outline:none;">
             <img src="img/flags/${opt.iso}.svg" alt="${escapeAttr(opt.country)} flag"
                  style="width:100%;aspect-ratio:3/2;object-fit:cover;border-radius:4px;display:block;pointer-events:none;border:1px solid rgba(128,128,128,0.25);">
-            <div style="font-size:0.8rem;margin-top:6px;color:var(--text-color,#fff);text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${opt.country}</div>
           </button>
         `).join('')}
       </div>
