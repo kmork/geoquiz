@@ -49,10 +49,17 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     const gap = 4;
     const margin = 16;
 
+    // On iOS Safari, position:fixed is relative to the layout viewport, but
+    // getBoundingClientRect() is relative to the visual viewport. When the
+    // keyboard opens, visualViewport.offsetTop/Left becomes non-zero and we
+    // must add it to convert to layout-viewport coordinates.
+    const vvOffsetTop = window.visualViewport ? window.visualViewport.offsetTop : 0;
+    const vvOffsetLeft = window.visualViewport ? window.visualViewport.offsetLeft : 0;
+
     // Vertical: fill space below input
     const availableH = viewportH - rect.bottom - gap - margin;
     dropdown.style.maxHeight = Math.max(availableH, 80) + 'px';
-    dropdown.style.top = (rect.bottom + gap) + 'px';
+    dropdown.style.top = (rect.bottom + gap + vvOffsetTop) + 'px';
 
     // Horizontal: match input width but enforce a minimum, clamped to viewport
     const minW = 220;
@@ -62,7 +69,7 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     if (left + width > viewportW - margin) {
       left = Math.max(margin, viewportW - margin - width);
     }
-    dropdown.style.left = left + 'px';
+    dropdown.style.left = (left + vvOffsetLeft) + 'px';
     dropdown.style.width = width + 'px';
   }
 
