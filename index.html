@@ -249,11 +249,11 @@
     }
 
     .game-icon {
-      width: 80px;
-      height: 80px;
+      font-size: 64px;
+      line-height: 1;
+      text-align: center;
       display: block;
       margin: 0 auto 15px;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
       transition: transform 0.3s ease;
     }
 
@@ -537,8 +537,9 @@
 
       .game-icon {
         grid-area: icon;
-        width: 60px;
-        height: 60px;
+        font-size: 48px;
+        line-height: 1;
+        text-align: center;
         margin: 0;
         align-self: center;
       }
@@ -603,23 +604,7 @@
       <!-- Daily Challenge -->
       <a href="daily.html" class="glass-card">
         <div class="card-content">
-          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="grad-daily" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#fbbf24;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1" />
-              </linearGradient>
-            </defs>
-            <!-- Calendar -->
-            <rect x="20" y="25" width="60" height="55" rx="5" fill="none" stroke="url(#grad-daily)" stroke-width="3"/>
-            <line x1="30" y1="20" x2="30" y2="30" stroke="url(#grad-daily)" stroke-width="3" stroke-linecap="round"/>
-            <line x1="50" y1="20" x2="50" y2="30" stroke="url(#grad-daily)" stroke-width="3" stroke-linecap="round"/>
-            <line x1="70" y1="20" x2="70" y2="30" stroke="url(#grad-daily)" stroke-width="3" stroke-linecap="round"/>
-            <line x1="20" y1="38" x2="80" y2="38" stroke="url(#grad-daily)" stroke-width="2"/>
-            <!-- Stars -->
-            <path d="M35 55 L37 61 L43 61 L38 65 L40 71 L35 67 L30 71 L32 65 L27 61 L33 61 Z" fill="url(#grad-daily)"/>
-            <path d="M58 55 L60 61 L66 61 L61 65 L63 71 L58 67 L53 71 L55 65 L50 61 L56 61 Z" fill="url(#grad-daily)"/>
-          </svg>
+          <div class="game-icon">📅</div>
           <div class="card-title">Daily Challenge</div>
           <div class="card-description">7 mini-games, one daily challenge. Share your score and build your streak!</div>
           <div class="play-button">Play Today →</div>
@@ -628,25 +613,7 @@
 
       <a href="play.html?game=find" class="glass-card">
         <div class="card-content">
-          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="grad-find" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:1" />
-              </linearGradient>
-            </defs>
-            <!-- Map/World outline -->
-            <path d="M15 30 Q20 25 30 25 L70 25 Q80 25 85 30 L85 70 Q80 75 70 75 L30 75 Q20 75 15 70 Z"
-                  fill="none" stroke="url(#grad-find)" stroke-width="3" opacity="0.4"/>
-            <circle cx="40" cy="45" r="3" fill="url(#grad-find)" opacity="0.6"/>
-            <circle cx="55" cy="38" r="2.5" fill="url(#grad-find)" opacity="0.6"/>
-            <circle cx="65" cy="55" r="3" fill="url(#grad-find)" opacity="0.6"/>
-            <!-- Magnifying glass -->
-            <circle cx="60" cy="55" r="18" fill="none" stroke="url(#grad-find)" stroke-width="4"/>
-            <line x1="72" y1="67" x2="85" y2="80" stroke="url(#grad-find)" stroke-width="5" stroke-linecap="round"/>
-            <!-- Target pin -->
-            <circle cx="60" cy="55" r="5" fill="url(#grad-find)"/>
-          </svg>
+          <div class="game-icon">🗺️</div>
           <div class="card-title">Find the Country</div>
           <div class="card-description">Locate and click on the correct country on the interactive world map.</div>
           <div class="play-button">Play Now →</div>
@@ -655,23 +622,7 @@
 
       <a href="play.html?game=outlines" class="glass-card">
         <div class="card-content">
-          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="grad-outline" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#f093fb;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#f5576c;stop-opacity:1" />
-              </linearGradient>
-            </defs>
-            <!-- Country outline shape (abstract) -->
-            <path d="M25 45 Q30 30 45 35 L55 32 Q70 30 75 40 L78 55 Q75 70 60 72 L40 70 Q28 65 25 55 Z"
-                  fill="url(#grad-outline)" opacity="0.3" stroke="url(#grad-outline)" stroke-width="3"/>
-            <!-- Puzzle piece notches -->
-            <circle cx="40" cy="35" r="4" fill="none" stroke="url(#grad-outline)" stroke-width="2.5"/>
-            <circle cx="65" cy="50" r="4" fill="none" stroke="url(#grad-outline)" stroke-width="2.5"/>
-            <!-- Question mark -->
-            <path d="M48 55 Q48 48 52 45 Q56 42 56 48 L56 52" fill="none" stroke="url(#grad-outline)" stroke-width="3.5" stroke-linecap="round"/>
-            <circle cx="56" cy="58" r="2" fill="url(#grad-outline)"/>
-          </svg>
+          <div class="game-icon">🌍</div>
           <div class="card-title">Guess the Country</div>
           <div class="card-description">Identify countries from their unique outlines and geographical shapes.</div>
           <div class="play-button">Play Now →</div>
@@ -680,24 +631,7 @@
 
       <a href="play.html?game=capitals" class="glass-card">
         <div class="card-content">
-          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="grad-capital" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#8b5cf6;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#ec4899;stop-opacity:1" />
-              </linearGradient>
-            </defs>
-            <!-- Globe circle -->
-            <circle cx="50" cy="50" r="35" fill="none" stroke="url(#grad-capital)" stroke-width="3" opacity="0.4"/>
-            <ellipse cx="50" cy="50" rx="35" ry="15" fill="none" stroke="url(#grad-capital)" stroke-width="2.5" opacity="0.4"/>
-            <ellipse cx="50" cy="50" rx="15" ry="35" fill="none" stroke="url(#grad-capital)" stroke-width="2.5" opacity="0.4"/>
-            <!-- Capitol building/landmark -->
-            <path d="M50 25 L55 35 L60 35 L60 45 L40 45 L40 35 L45 35 Z" fill="url(#grad-capital)"/>
-            <circle cx="50" cy="22" r="4" fill="url(#grad-capital)"/>
-            <rect x="42" y="45" width="16" height="3" fill="url(#grad-capital)"/>
-            <!-- Star markers for capitals -->
-            <path d="M70 30 L72 36 L78 36 L73 40 L75 46 L70 42 L65 46 L67 40 L62 36 L68 36 Z" fill="url(#grad-capital)" opacity="0.8"/>
-          </svg>
+          <div class="game-icon">🏛️</div>
           <div class="card-title">Capitals of the World</div>
           <div class="card-description">Guess the countries capital and their locations on an interactive world map.</div>
           <div class="play-button">Play Now →</div>
@@ -706,24 +640,7 @@
 
       <a href="route.html" class="glass-card">
         <div class="card-content">
-          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="grad-route" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#f97316;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#9333ea;stop-opacity:1" />
-              </linearGradient>
-            </defs>
-            <!-- Starting pin -->
-            <circle cx="30" cy="40" r="8" fill="url(#grad-route)"/>
-            <path d="M30 32 L30 20" stroke="url(#grad-route)" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="30" cy="18" r="4" fill="url(#grad-route)"/>
-            <!-- Ending pin -->
-            <circle cx="70" cy="60" r="8" fill="url(#grad-route)"/>
-            <path d="M70 52 L70 40" stroke="url(#grad-route)" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="70" cy="38" r="4" fill="url(#grad-route)"/>
-            <!-- Connecting path -->
-            <path d="M30 40 Q40 35 50 45 Q60 55 70 60" fill="none" stroke="url(#grad-route)" stroke-width="3" stroke-linecap="round" stroke-dasharray="5,5" opacity="0.6"/>
-          </svg>
+          <div class="game-icon">🔗</div>
           <div class="card-title">Connect the Countries</div>
           <div class="card-description">Find the shortest land route between two random countries.</div>
           <div class="play-button">Play Now →</div>
@@ -732,25 +649,7 @@
 
       <a href="play.html?game=trivia" class="glass-card">
         <div class="card-content">
-          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="grad-trivia" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#10b981;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
-              </linearGradient>
-            </defs>
-            <!-- Book pages -->
-            <rect x="25" y="35" width="50" height="40" rx="3" fill="url(#grad-trivia)" opacity="0.3"/>
-            <line x1="50" y1="35" x2="50" y2="75" stroke="url(#grad-trivia)" stroke-width="2" opacity="0.5"/>
-            <!-- Globe on book -->
-            <circle cx="50" cy="50" r="18" fill="none" stroke="url(#grad-trivia)" stroke-width="3"/>
-            <ellipse cx="50" cy="50" rx="18" ry="8" fill="none" stroke="url(#grad-trivia)" stroke-width="2.5"/>
-            <ellipse cx="50" cy="50" rx="8" ry="18" fill="none" stroke="url(#grad-trivia)" stroke-width="2.5"/>
-            <!-- Question marks around -->
-            <text x="20" y="30" font-size="14" fill="url(#grad-trivia)" font-family="Arial, sans-serif" font-weight="bold">?</text>
-            <text x="75" y="30" font-size="14" fill="url(#grad-trivia)" font-family="Arial, sans-serif" font-weight="bold">?</text>
-            <text x="20" y="80" font-size="14" fill="url(#grad-trivia)" font-family="Arial, sans-serif" font-weight="bold">?</text>
-          </svg>
+          <div class="game-icon">📚</div>
           <div class="card-title">Geography Trivia</div>
           <div class="card-description">Answer multiple-choice questions about world geography and culture.</div>
           <div class="play-button">Play Now →</div>
@@ -759,24 +658,7 @@
 
       <a href="play.html?game=heritage" class="glass-card">
         <div class="card-content">
-          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="grad-picture" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#f97316;stop-opacity:1" />
-              </linearGradient>
-            </defs>
-            <!-- Camera body -->
-            <rect x="20" y="35" width="60" height="40" rx="8" fill="url(#grad-picture)" opacity="0.3"/>
-            <circle cx="55" cy="55" r="15" fill="none" stroke="url(#grad-picture)" stroke-width="4"/>
-            <circle cx="55" cy="55" r="10" fill="url(#grad-picture)" opacity="0.6"/>
-            <!-- Flash -->
-            <rect x="25" y="30" width="8" height="6" rx="2" fill="url(#grad-picture)"/>
-            <!-- Location pin overlay -->
-            <circle cx="75" cy="35" r="8" fill="url(#grad-picture)"/>
-            <path d="M75 27 L75 20" stroke="url(#grad-picture)" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="75" cy="18" r="3" fill="url(#grad-picture)"/>
-          </svg>
+          <div class="game-icon">🖼️</div>
           <div class="card-title">UNESCO Heritage</div>
           <div class="card-description">Identify countries from stunning UNESCO World Heritage Sites.</div>
           <div class="play-button">Play Now →</div>
@@ -785,20 +667,7 @@
 
       <a href="play.html?game=flags" class="glass-card">
         <div class="card-content">
-          <svg class="game-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <linearGradient id="grad-flags" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" style="stop-color:#14b8a6;stop-opacity:1" />
-                <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
-              </linearGradient>
-            </defs>
-            <!-- Flag pole -->
-            <line x1="28" y1="18" x2="28" y2="82" stroke="url(#grad-flags)" stroke-width="4" stroke-linecap="round"/>
-            <!-- Flag body -->
-            <path d="M28 20 L78 30 L78 58 L28 48 Z" fill="url(#grad-flags)" opacity="0.85"/>
-            <!-- Flag stripe detail -->
-            <line x1="28" y1="34" x2="78" y2="44" stroke="white" stroke-width="2" opacity="0.4"/>
-          </svg>
+          <div class="game-icon">🚩</div>
           <div class="card-title">Flags of the World</div>
           <div class="card-description">Match the flag to the country — neighbors make it tricky.</div>
           <div class="play-button">Play Now →</div>

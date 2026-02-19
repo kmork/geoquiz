@@ -134,12 +134,11 @@ body{
 
 /* Game page header with icon */
 .game-header-icon {
-  width: 60px;
-  height: 60px;
+  font-size: 44px;
   display: inline-block;
   vertical-align: middle;
-  margin-right: 12px;
-  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+  margin-right: 10px;
+  line-height: 1;
 }
 
 h1{margin:0 0 6px;font-size:22px}
