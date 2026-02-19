@@ -22,7 +22,7 @@ import { RouteGameLogic } from './games/route-logic.js';
 // Import UI components
 import { renderHeritageUI, setupHeritageAutocomplete } from './ui-components/heritage-ui.js';
 import { renderOutlinesUI } from './ui-components/outlines-ui.js';
-import { renderCapitalsUI, setupCapitalsAutocomplete } from './ui-components/capitals-ui.js';
+import { renderCapitalsUI } from './ui-components/capitals-ui.js';
 import { OutlinesRenderer } from './ui-components/outlines-renderer.js';
 import { FindCountryMapRenderer } from './ui-components/map-renderer.js';
 import { RouteRenderer } from './ui-components/route-renderer.js';
@@ -1009,10 +1009,6 @@ class DailyChallenge {
       }
     }
 
-    // Setup autocomplete with capital names
-    const capitals = challenge.allData.flatMap(c => c.capitals || (c.capital ? [c.capital] : [])).filter(Boolean).sort();
-    setupCapitalsAutocomplete(ui.elements.datalist, capitals);
-
     return new Promise(resolve => {
       let answered = false;
       let mcShown = false;
@@ -1122,6 +1118,15 @@ class DailyChallenge {
         onTextSubmit: handleTextSubmit,
         onEnter: handleTextSubmit
       });
+
+      // Mobile autocomplete with capital names
+      if (window.initMobileAutocomplete) {
+        const capitalSuggestions = challenge.allData.flatMap(c => c.capitals || []).filter(Boolean).sort();
+        window.initMobileAutocomplete(ui.elements.input, capitalSuggestions, {
+          onSelect: () => handleTextSubmit()
+        });
+      }
+
       window.addEventListener('daily-timeout', handleTimeout, { once: true });
     });
   }

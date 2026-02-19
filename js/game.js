@@ -495,6 +495,14 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
     true
   );
 
+  // Autocomplete for the capital input with all capital names
+  if (window.initMobileAutocomplete && DATA) {
+    const allCapitals = DATA.flatMap(c => c.capitals || []).filter(Boolean).sort();
+    window.initMobileAutocomplete(ui.answer, allCapitals, {
+      onSelect: () => ui.submit.click()
+    });
+  }
+
   return {
     reset,
     nextQ,
