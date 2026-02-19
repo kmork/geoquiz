@@ -118,11 +118,11 @@
     }
 
     .game-icon-large {
-      width: 80px;
-      height: 80px;
+      font-size: 72px;
+      line-height: 1;
       display: block;
+      text-align: center;
       margin: 0 auto 16px;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.2));
     }
 
     .game-title {
@@ -330,19 +330,7 @@
         url: 'find-country.html',
         fullCount: 193,
         pointsPerRound: 1,
-        icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#3b82f6"/>
-            <stop offset="100%" style="stop-color:#06b6d4"/>
-          </linearGradient></defs>
-          <path d="M15 30 Q20 25 30 25 L70 25 Q80 25 85 30 L85 70 Q80 75 70 75 L30 75 Q20 75 15 70 Z"
-                fill="none" stroke="url(#g)" stroke-width="3" opacity="0.4"/>
-          <circle cx="40" cy="45" r="3" fill="url(#g)" opacity="0.6"/>
-          <circle cx="55" cy="38" r="2.5" fill="url(#g)" opacity="0.6"/>
-          <circle cx="60" cy="55" r="18" fill="none" stroke="url(#g)" stroke-width="4"/>
-          <line x1="72" y1="67" x2="85" y2="80" stroke="url(#g)" stroke-width="5" stroke-linecap="round"/>
-          <circle cx="60" cy="55" r="5" fill="url(#g)"/>
-        </svg>`
+        icon: `<div class="game-icon-large">🗺️</div>`
       },
       outlines: {
         title: 'Guess the Country',
@@ -350,18 +338,7 @@
         url: 'outlines.html',
         fullCount: 193,
         pointsPerRound: 2,
-        icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#f093fb"/>
-            <stop offset="100%" style="stop-color:#f5576c"/>
-          </linearGradient></defs>
-          <path d="M25 45 Q30 30 45 35 L55 32 Q70 30 75 40 L78 55 Q75 70 60 72 L40 70 Q28 65 25 55 Z"
-                fill="url(#g)" opacity="0.3" stroke="url(#g)" stroke-width="3"/>
-          <circle cx="40" cy="35" r="4" fill="none" stroke="url(#g)" stroke-width="2.5"/>
-          <circle cx="65" cy="50" r="4" fill="none" stroke="url(#g)" stroke-width="2.5"/>
-          <path d="M48 55 Q48 48 52 45 Q56 42 56 48 L56 52" fill="none" stroke="url(#g)" stroke-width="3.5" stroke-linecap="round"/>
-          <circle cx="56" cy="58" r="2" fill="url(#g)"/>
-        </svg>`
+        icon: `<div class="game-icon-large">🌍</div>`
       },
       capitals: {
         title: 'Capitals of the World',
@@ -369,19 +346,7 @@
         url: 'capitals.html',
         fullCount: 193,
         pointsPerRound: 2,
-        icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#8b5cf6"/>
-            <stop offset="100%" style="stop-color:#ec4899"/>
-          </linearGradient></defs>
-          <circle cx="50" cy="50" r="35" fill="none" stroke="url(#g)" stroke-width="3" opacity="0.4"/>
-          <ellipse cx="50" cy="50" rx="35" ry="15" fill="none" stroke="url(#g)" stroke-width="2.5" opacity="0.4"/>
-          <ellipse cx="50" cy="50" rx="15" ry="35" fill="none" stroke="url(#g)" stroke-width="2.5" opacity="0.4"/>
-          <path d="M50 25 L55 35 L60 35 L60 45 L40 45 L40 35 L45 35 Z" fill="url(#g)"/>
-          <circle cx="50" cy="22" r="4" fill="url(#g)"/>
-          <rect x="42" y="45" width="16" height="3" fill="url(#g)"/>
-          <path d="M70 30 L72 36 L78 36 L73 40 L75 46 L70 42 L65 46 L67 40 L62 36 L68 36 Z" fill="url(#g)" opacity="0.8"/>
-        </svg>`
+        icon: `<div class="game-icon-large">🏛️</div>`
       },
       trivia: {
         title: 'Geography Trivia',
@@ -389,20 +354,7 @@
         url: 'trivia.html',
         fullCount: 124,
         pointsPerRound: 1,
-        icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#10b981"/>
-            <stop offset="100%" style="stop-color:#3b82f6"/>
-          </linearGradient></defs>
-          <rect x="25" y="35" width="50" height="40" rx="3" fill="url(#g)" opacity="0.3"/>
-          <line x1="50" y1="35" x2="50" y2="75" stroke="url(#g)" stroke-width="2" opacity="0.5"/>
-          <circle cx="50" cy="50" r="18" fill="none" stroke="url(#g)" stroke-width="3"/>
-          <ellipse cx="50" cy="50" rx="18" ry="8" fill="none" stroke="url(#g)" stroke-width="2.5"/>
-          <ellipse cx="50" cy="50" rx="8" ry="18" fill="none" stroke="url(#g)" stroke-width="2.5"/>
-          <text x="20" y="30" font-size="14" fill="url(#g)" font-family="Arial, sans-serif" font-weight="bold">?</text>
-          <text x="75" y="30" font-size="14" fill="url(#g)" font-family="Arial, sans-serif" font-weight="bold">?</text>
-          <text x="20" y="80" font-size="14" fill="url(#g)" font-family="Arial, sans-serif" font-weight="bold">?</text>
-        </svg>`
+        icon: `<div class="game-icon-large">📚</div>`
       },
       heritage: {
         title: 'UNESCO Heritage',
@@ -410,19 +362,7 @@
         url: 'heritage.html',
         fullCount: 47,
         pointsPerRound: 2,
-        icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#ec4899"/>
-            <stop offset="100%" style="stop-color:#f97316"/>
-          </linearGradient></defs>
-          <rect x="20" y="35" width="60" height="40" rx="8" fill="url(#g)" opacity="0.3"/>
-          <circle cx="55" cy="55" r="15" fill="none" stroke="url(#g)" stroke-width="4"/>
-          <circle cx="55" cy="55" r="10" fill="url(#g)" opacity="0.6"/>
-          <rect x="25" y="30" width="8" height="6" rx="2" fill="url(#g)"/>
-          <circle cx="75" cy="35" r="8" fill="url(#g)"/>
-          <path d="M75 27 L75 20" stroke="url(#g)" stroke-width="3" stroke-linecap="round"/>
-          <circle cx="75" cy="18" r="3" fill="url(#g)"/>
-        </svg>`
+        icon: `<div class="game-icon-large">🖼️</div>`
       },
       flags: {
         title: 'Flags of the World',
@@ -430,15 +370,7 @@
         url: 'flags.html',
         fullCount: 193,
         pointsPerRound: 1,
-        icon: `<svg class="game-icon-large" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" style="stop-color:#14b8a6"/>
-            <stop offset="100%" style="stop-color:#3b82f6"/>
-          </linearGradient></defs>
-          <line x1="28" y1="18" x2="28" y2="82" stroke="url(#g)" stroke-width="4" stroke-linecap="round"/>
-          <path d="M28 20 L78 30 L78 58 L28 48 Z" fill="url(#g)" opacity="0.85"/>
-          <line x1="28" y1="34" x2="78" y2="44" stroke="white" stroke-width="2" opacity="0.4"/>
-        </svg>`
+        icon: `<div class="game-icon-large">🚩</div>`
       }
     };
 
