@@ -53,8 +53,11 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     // getBoundingClientRect() is relative to the visual viewport. When the
     // keyboard opens, visualViewport.offsetTop/Left becomes non-zero and we
     // must add it to convert to layout-viewport coordinates.
-    const vvOffsetTop = window.visualViewport ? window.visualViewport.offsetTop : 0;
-    const vvOffsetLeft = window.visualViewport ? window.visualViewport.offsetLeft : 0;
+    // Android Chrome does NOT need this — there fixed is relative to the
+    // visual viewport, so adding the offset would push the dropdown off-screen.
+    const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    const vvOffsetTop = (isIOS && window.visualViewport) ? window.visualViewport.offsetTop : 0;
+    const vvOffsetLeft = (isIOS && window.visualViewport) ? window.visualViewport.offsetLeft : 0;
 
     // Vertical: fill space below input
     const availableH = viewportH - rect.bottom - gap - margin;
