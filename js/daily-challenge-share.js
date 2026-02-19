@@ -35,6 +35,7 @@ export function generateShareText(date, totalStars, totalTime, breakdown, stats)
     trivia: '📚',
     outlines: '🌍',
     picture: '🖼️',
+    flags: '🚩',
     capitals: '🏛️',
     connect: '🔗'
   };
@@ -44,22 +45,24 @@ export function generateShareText(date, totalStars, totalTime, breakdown, stats)
     trivia: 'Trivia',
     outlines: 'Outlines',
     picture: 'Heritage',
+    flags: 'Flags',
     capitals: 'Capitals',
     connect: 'Connect'
   };
-  
+
   const maxStars = {
     find: 3,
     trivia: 2,
     outlines: 4,
     picture: 3,
+    flags: 3,
     capitals: 4,
     connect: 5
   };
 
   let text = `🌍 GeoQuiz Daily Challenge #${challengeNum}\n`;
   text += `📅 ${dateFormatted}\n\n`;
-  text += `⭐ ${totalStars}/21 stars in ${timeStr}\n\n`;
+  text += `⭐ ${totalStars}/24 stars in ${timeStr}\n\n`;
 
   breakdown.forEach(result => {
     const emoji = gameEmojis[result.gameId];

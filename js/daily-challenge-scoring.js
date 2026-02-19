@@ -54,6 +54,8 @@ export function calculateStars(result, gameId) {
   let stars;
   if (gameId === 'picture') {
     stars = 2; // Heritage: 3★ max (2 base + 1 time)
+  } else if (gameId === 'flags') {
+    stars = 2; // Flags: 3★ max (2 base + 1 time)
   } else if (gameId === 'outlines' || gameId === 'capitals') {
     stars = 3; // Outlines/Capitals: 4★ max (3 base + 1 time)
   } else if (gameId === 'find') {
@@ -237,11 +239,11 @@ function calculateStreak(history, currentDate) {
  * @returns {string} Rating text
  */
 export function getRating(stars) {
-  if (stars >= 19) return 'Geography Master';
-  if (stars >= 16) return 'World Expert';
-  if (stars >= 12) return 'Globe Trotter';
-  if (stars >= 9) return 'Explorer';
-  if (stars >= 5) return 'Traveler';
+  if (stars >= 22) return 'Geography Master';
+  if (stars >= 19) return 'World Expert';
+  if (stars >= 14) return 'Globe Trotter';
+  if (stars >= 10) return 'Explorer';
+  if (stars >= 6)  return 'Traveler';
   return 'Tourist';
 }
 
@@ -251,11 +253,11 @@ export function getRating(stars) {
  * @returns {string} Rating emoji
  */
 export function getRatingEmoji(stars) {
-  if (stars >= 19) return '🏆';
-  if (stars >= 16) return '⭐';
-  if (stars >= 12) return '🌟';
-  if (stars >= 9) return '✨';
-  if (stars >= 5) return '🎯';
+  if (stars >= 22) return '🏆';
+  if (stars >= 19) return '⭐';
+  if (stars >= 14) return '🌟';
+  if (stars >= 10) return '✨';
+  if (stars >= 6)  return '🎯';
   return '🗺️';
 }
 
@@ -268,6 +270,7 @@ export function getMaxStars(gameId) {
   const maxStars = {
     'trivia': 2,      // Easy: multiple choice
     'picture': 3,     // Medium: visual + autocomplete
+    'flags': 3,       // Medium: visual flag matching
     'outlines': 4,    // Hard: shape recognition
     'capitals': 4,    // Hard: knowledge test
     'find': 3,        // 1 base + 2 time bonus

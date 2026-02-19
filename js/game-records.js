@@ -18,6 +18,7 @@ const GAME_NAMES = {
   trivia:   'Geography Trivia',
   heritage: 'UNESCO Heritage',
   capitals: 'Capitals Quiz',
+  flags:    'Flags of the World',
 };
 
 const DIFFICULTY_LABELS = {

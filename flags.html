@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Flags of the World - GeoQuiz</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    // Prevent FOUC - apply theme immediately
+    (function() {
+      const saved = localStorage.getItem('geoquiz-theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const theme = saved || system;
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+    })();
+  </script>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="card">
+
+    <div id="init-overlay">
+      <div class="spinner"></div>
+      <div>Loading Flags...</div>
+    </div>
+
+    <div class="row row-space-between">
+      <div>
+        <h1>
+          <a href="index.html" style="text-decoration: none; color: inherit;">
+            <svg class="game-icon game-header-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="grad-flags-header" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" style="stop-color:#14b8a6;stop-opacity:1" />
+                  <stop offset="100%" style="stop-color:#3b82f6;stop-opacity:1" />
+                </linearGradient>
+              </defs>
+              <!-- Flag pole -->
+              <line x1="28" y1="20" x2="28" y2="82" stroke="url(#grad-flags-header)" stroke-width="4" stroke-linecap="round"/>
+              <!-- Flag body -->
+              <path d="M28 22 L78 32 L78 58 L28 48 Z" fill="url(#grad-flags-header)" opacity="0.85"/>
+              <!-- Flag stripe detail -->
+              <line x1="28" y1="35" x2="78" y2="45" stroke="white" stroke-width="1.5" opacity="0.4"/>
+            </svg>
+            Flags of the World
+          </a>
+        </h1>
+        <div class="muted">Pick the flag that belongs to the country.</div>
+      </div>
+      <div class="row">
+        <div class="pill">Score: <b id="score">0</b></div>
+        <div class="pill">Progress: <b id="progress">0 / 10</b></div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div id="game-content">
+      <!-- Filled by JS each round -->
+    </div>
+
+  </div>
+</div>
+
+<!-- Final score screen -->
+<div class="overlay" id="finalOverlay" role="dialog" aria-modal="true"></div>
+
+<canvas id="confetti"></canvas>
+
+<script src="js/pako.min.js"></script>
+<script src="js/theme.js"></script>
+<script src="js/data.js"></script>
+<script type="module" src="js/flags-main.js"></script>
+
+</body>
+</html>

@@ -91,6 +91,12 @@ const GAMES = [
     timeLimit: 30
   },
   {
+    id: 'flags',
+    name: 'Flags of the World',
+    emoji: '🚩',
+    timeLimit: 20
+  },
+  {
     id: 'capitals',
     name: 'Capitals Quiz',
     emoji: '🏛️',
@@ -156,15 +162,16 @@ class DailyChallenge {
   }
 
   /**
-   * Generate challenge data for all 6 games using seeded RNG
+   * Generate challenge data for all 7 games using seeded RNG
    */
   async generateChallenges() {
     // Load required data
     // Note: window.DATA is set by data.js (loaded in HTML)
-    const [triviaData, heritageData, neighborsData, geoData] = await Promise.all([
+    const [triviaData, heritageData, neighborsData, flagsData, geoData] = await Promise.all([
       fetch('data/qa.json').then(r => r.json()),
       fetch('data/heritage-sites.json').then(r => r.json()),
       fetch('data/countries-neighbors.json').then(r => r.json()),
+      fetch('data/countries-flags.json').then(r => r.json()),
       (async () => {
         const { loadGeoJSON } = await import('./geojson-loader.js');
         return await loadGeoJSON('data/ne_10m_admin_0_countries.geojson.gz');
@@ -188,6 +195,9 @@ class DailyChallenge {
     const findCountry = this.rng.choice(data);
     const outlinesPool = data.filter(c => c.country !== findCountry.country);
     const outlinesCountry = this.rng.choice(outlinesPool.length > 0 ? outlinesPool : data);
+
+    // Countries with valid flags (for flags game)
+    const countriesWithFlags = data.filter(c => flagsData[c.country]);
 
     this.challenges = [
       // 1. Find the Country
@@ -214,16 +224,25 @@ class DailyChallenge {
         data: this.rng.choice(heritageData)
       },
 
-      // 5. Capitals Quiz
+      // 5. Flags of the World
       {
         ...GAMES[4],
+        data: this.rng.choice(countriesWithFlags),
+        allData: countriesWithFlags,
+        flagsData,
+        neighborsData
+      },
+
+      // 6. Capitals Quiz
+      {
+        ...GAMES[5],
         data: this.rng.choice(data),
         allData: data // Need for wrong answers
       },
 
-      // 6. Connect the Countries
+      // 7. Connect the Countries
       {
-        ...GAMES[5],
+        ...GAMES[6],
         data: (() => {
           // Pick start/end from neighbors keys (best for map/graph naming),
           // but restrict to countries also present in DATA (guessable).
@@ -367,6 +386,8 @@ class DailyChallenge {
         return await this.runOutlinesGame(challenge, gameContent);
       case 'picture':
         return await this.runHeritageGame(challenge, gameContent);
+      case 'flags':
+        return await this.runFlagsGame(challenge, gameContent);
       case 'capitals':
         return await this.runCapitalsGame(challenge, gameContent);
       case 'connect':
@@ -433,7 +454,7 @@ class DailyChallenge {
     });
 
     document.getElementById('game-progress').textContent =
-      `Game ${this.currentGameIndex + 1}/6`;
+      `Game ${this.currentGameIndex + 1}/7`;
   }
 
   /**
@@ -512,7 +533,7 @@ class DailyChallenge {
 
       <div class="results-summary">
         <div class="summary-stars">${'⭐'.repeat(totalStars)}</div>
-        <div class="summary-score">${totalStars}/21 stars</div>
+        <div class="summary-score">${totalStars}/24 stars</div>
         <div class="summary-time">⏱️ ${formatTime(totalTime)}</div>
       </div>
 
@@ -566,7 +587,7 @@ class DailyChallenge {
     });
 
     // Trigger confetti for high scores
-    if (totalStars >= 27 && typeof window.triggerConfetti === 'function') {
+    if (totalStars >= 22 && typeof window.triggerConfetti === 'function') {
       setTimeout(() => window.triggerConfetti(), 500);
     }
   }
@@ -610,7 +631,7 @@ class DailyChallenge {
 
       <div class="results-summary">
         <div class="summary-stars">${'⭐'.repeat(result.stars)}</div>
-        <div class="summary-score">${result.stars}/21 stars</div>
+        <div class="summary-score">${result.stars}/24 stars</div>
         <div class="summary-time">⏱️ ${formatTime(result.totalTime)}</div>
       </div>
 
@@ -765,7 +786,7 @@ class DailyChallenge {
         <svg id="dc-outlines-map" class="outlines-svg" viewBox="0 0 600 320"></svg>
         <div class="input-row">
           <input type="text" id="dc-outlines-input" placeholder="Enter country name..." autocomplete="off">
-          <button id="dc-outlines-submit" class="btn btn-primary">Submit</button>
+          <button id="dc-outlines-submit" class="btn btn-primary">Guess</button>
         </div>
         <div id="dc-outlines-status" class="status" style="display:none;"></div>
       </div>
@@ -1101,6 +1122,72 @@ class DailyChallenge {
         onEnter: handleTextSubmit
       });
       window.addEventListener('daily-timeout', handleTimeout, { once: true });
+    });
+  }
+
+  async runFlagsGame(challenge, container) {
+    const { FlagsGameLogic } = await import('./games/flags-logic.js');
+    const { renderFlagsUI } = await import('./ui-components/flags-ui.js');
+
+    return new Promise((resolve) => {
+      let hasResolved = false;
+
+      const logic = new FlagsGameLogic({
+        singleRound: true,
+        data: challenge.allData,
+        flagsData: challenge.flagsData,
+        neighborsData: challenge.neighborsData
+      });
+      logic.reset();
+      // Override deck to use the seeded country
+      logic.deck = [challenge.data];
+      const country = logic.nextRound();
+
+      const wrongFlags = logic.generateWrongFlags(this.rng);
+      const correctISO = challenge.flagsData[country.country];
+      const options = this.rng.shuffle([
+        { country: country.country, iso: correctISO },
+        ...wrongFlags.map(c => ({ country: c, iso: challenge.flagsData[c] }))
+      ]);
+
+      const ui = renderFlagsUI(container, { country: country.country, options });
+
+      ui.setupEvents({
+        onClick: (selectedCountry) => {
+          if (hasResolved) return;
+          const result = logic.checkAnswer(selectedCountry);
+          ui.highlightAnswer(country.country, selectedCountry);
+          ui.disableAll();
+
+          const delay = result.isCorrect ? 1200 : 2500;
+          if (!result.isCorrect) {
+            setTimeout(() => ui.animateCorrectFlag(country.country), 500);
+          }
+
+          setTimeout(() => {
+            if (hasResolved) return;
+            hasResolved = true;
+            resolve({
+              correct: result.isCorrect,
+              time: result.time,
+              timeLimit: challenge.timeLimit
+            });
+          }, delay);
+        }
+      });
+
+      window.addEventListener('daily-timeout', () => {
+        if (hasResolved) return;
+        hasResolved = true;
+        // Reveal correct answer
+        ui.highlightAnswer(country.country, null);
+        ui.disableAll();
+        resolve({
+          correct: false,
+          time: challenge.timeLimit,
+          timeLimit: challenge.timeLimit
+        });
+      }, { once: true });
     });
   }
 

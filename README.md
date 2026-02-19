@@ -5,7 +5,7 @@ A collection of engaging geography quiz games to test and improve your knowledge
 **[Play Now at geoquiz.info](https://geoquiz.info)** 🎮
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![Games: 7](https://img.shields.io/badge/Games-7-green.svg)
+![Games: 8](https://img.shields.io/badge/Games-8-green.svg)
 ![Countries: 195+](https://img.shields.io/badge/Countries-195%2B-orange.svg)
 
 ---
@@ -98,6 +98,21 @@ Broader geography questions covering continents, regions, landmarks, and more.
 - 📊 Score tracking
 
 [**Play Geography Trivia →**](trivia.html)
+
+---
+
+### 🚩 Flags of the World
+**Match the flag to the country**
+
+Four flags, one right answer. Neighboring countries are used as distractors — making it much harder than it sounds.
+
+- 🚩 239 country flags sourced from flagcdn.com (local, no external requests)
+- 🌍 Neighbor-priority distractors — geographically close = confusably similar flags
+- ⚡ Fast visual format: tap the correct flag from 4 options
+- 📊 Score and accuracy tracking
+- 🎮 Three difficulty modes (10 / 25 / all rounds)
+
+[**Play Flags of the World →**](flags.html)
 
 ---
 
@@ -216,17 +231,18 @@ GeoQuiz/
 ├── daily-challenge.html    # Daily Challenge game container
 ├── route.html              # Connect the Countries game
 ├── find-country.html       # Find the Country game
-├── heritage.html           # UNESCO Heritage game (formerly picture-guess.html)
+├── heritage.html           # UNESCO Heritage game
 ├── outlines.html           # Guess the Country game
 ├── capitals.html           # Capitals quiz
 ├── trivia.html             # Geography trivia
+├── flags.html              # Flags of the World game
 │
 ├── css/
 │   ├── styles.css          # Global styles with dark/light themes
 │   └── daily-challenge.css # Daily challenge specific styles
 │
 ├── js/
-│   ├── daily-challenge-main.js      # Daily challenge orchestrator
+│   ├── daily-challenge-main.js      # Daily challenge orchestrator (7 games)
 │   ├── daily-challenge-scoring.js   # Difficulty-based star system
 │   ├── daily-challenge-share.js     # Social sharing functionality
 │   ├── seeded-random.js             # Deterministic RNG for daily challenges
@@ -235,12 +251,14 @@ GeoQuiz/
 │   │   ├── trivia-logic.js
 │   │   ├── find-logic.js
 │   │   ├── outlines-logic.js
-│   │   ├── heritage-logic.js        # Heritage game logic
+│   │   ├── heritage-logic.js
 │   │   ├── capitals-logic.js
+│   │   ├── flags-logic.js           # Flags game logic
 │   │   └── route-logic.js
 │   │
 │   ├── ui-components/               # Shared UI renderers
-│   │   ├── heritage-ui.js           # Heritage UI components
+│   │   ├── heritage-ui.js
+│   │   ├── flags-ui.js              # Flags 2×2 grid UI
 │   │   ├── outlines-renderer.js
 │   │   ├── map-renderer.js
 │   │   └── route-renderer.js
@@ -249,6 +267,7 @@ GeoQuiz/
 │   ├── find-country-main.js         # Find country initialization
 │   ├── heritage-main.js             # Heritage initialization
 │   ├── outlines-main.js             # Outlines initialization
+│   ├── flags-main.js                # Flags game initialization
 │   │
 │   ├── mobile-autocomplete.js       # Shared autocomplete module
 │   ├── aliases.js                   # 76 country name aliases
@@ -264,14 +283,18 @@ GeoQuiz/
 │   ├── ne_10m_admin_0_countries_route.geojson.gz  # 7.8 MB
 │   ├── heritage-sites.json                         # 47 UNESCO sites
 │   ├── countries-neighbors.json
+│   ├── countries-flags.json                        # Country → ISO_A2 mapping
 │   ├── places.geojson
 │   ├── qa.json                                     # 120+ trivia questions
 │   └── countries.geojson
 │
 ├── img/
-│   └── heritage/          # 47 optimized UNESCO images (42 MB)
+│   ├── heritage/          # 47 optimized UNESCO images (42 MB)
+│   └── flags/             # 239 SVG flag files from flagcdn.com (193 playable countries)
 │
-└── process-countries.js   # Data processing script
+├── process-countries.js   # Data processing script
+├── generate-flags-mapping.js  # Regenerate country→ISO_A2 mapping
+└── download-flags.js      # Download flag SVGs from flagcdn.com
 ```
 
 ---
@@ -303,6 +326,20 @@ gzip -9 -k ne_10m_admin_0_countries_route.geojson
 
 The `-9` flag maximizes compression, `-k` keeps the original files.
 
+### Flags Data
+
+To regenerate the country → ISO_A2 mapping from GeoJSON:
+
+```bash
+node generate-flags-mapping.js
+```
+
+To download all flag SVGs from flagcdn.com (skips already-downloaded files):
+
+```bash
+node download-flags.js
+```
+
 ### Optimizing Images
 
 To optimize large images for web:
@@ -328,11 +365,27 @@ Or test on real devices for best results.
 
 ## 📊 Recent Improvements
 
+### v3.3 - Flags of the World (February 2026)
+
+#### 🚩 New Game: Flags of the World
+- **239 country flags** - All downloaded locally (no external requests at play time)
+- **Neighbor-based distractors** - Wrong options are drawn from neighboring countries first, making similar-looking flags the challenge
+- **2×2 flag grid** - Tap or click the correct flag; green/red outline feedback
+- **Three difficulty modes** - 10, 25, or all-countries rounds
+- **Daily Challenge integration** - Flags is now game #5, with a 20-second time limit and 3★ max
+
+#### ⭐ Updated Daily Challenge (7 games, 24★)
+- **7 mini-games** - Added Flags between UNESCO Heritage and Capitals Quiz
+- **24 total stars** - Up from 21 (find 3 + trivia 2 + outlines 4 + heritage 3 + flags 3 + capitals 4 + connect 5)
+- **Updated rating thresholds** - Geography Master ≥22, World Expert ≥19, Globe Trotter ≥14, Explorer ≥10, Traveler ≥6
+
+---
+
 ### v3.2 - Daily Challenge & Scoring System (February 2026)
 
 #### 🎮 New Daily Challenge Mode
 - **6 Mini-Games in One** - Complete all games in a single daily challenge
-- **Difficulty-Based Scoring** - Stars based on game difficulty (1-5 stars per game, 23 total)
+- **Difficulty-Based Scoring** - Stars based on game difficulty (1-5 stars per game, 21 total)
 - **Speed Bonuses** - Earn extra stars for fast answers
 - **Smart Penalties** - Using hints reduces your star count
 - **Share Your Score** - Copy formatted results to share with friends
@@ -344,7 +397,7 @@ Or test on real devices for best results.
 - **Heritage**: 2 base + 1 time bonus - 1 hint penalty
 - **Outlines/Capitals**: 3 base + 1 time bonus - 1 hint penalty
 - **Find/Connect**: 4-5 stars based on performance
-- **Total**: 23 stars maximum per day
+- **Total**: 21 stars maximum per day
 
 #### 🏛️ Heritage Game Enhancements
 - **Multiple Choice Support** - Get multiple choice buttons after wrong text answer
@@ -369,7 +422,7 @@ Or test on real devices for best results.
 - **Globe Ring Alignment** - Fixed positioning on index page
 - **Star Display** - Proper wrapping for long star counts
 - **Time Format** - One decimal place for all times
-- **Rating System** - Updated for 23-star total
+- **Rating System** - Updated for 21-star total
 
 ### v3.0 - New Game & Mobile Enhancements (February 2026)
 
@@ -478,8 +531,9 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## 🎯 Fun Facts
 
 - 🌍 **195 Countries** - All UN-recognized countries included
-- 🎮 **7 Game Modes** - Six standalone + Daily Challenge
-- 🏆 **23 Stars** - Maximum daily challenge score
+- 🎮 **8 Game Modes** - Seven standalone + Daily Challenge
+- 🏆 **24 Stars** - Maximum daily challenge score
+- 🚩 **239 Flags** - SVG flag files served locally (239 unique ISOs, 193 playable countries)
 - 🏛️ **47 UNESCO Sites** - From Great Wall to Machu Picchu
 - 📚 **120+ Trivia Questions** - Mix of facts and fun
 - 🗺️ **2.2M Lines** - Of GeoJSON coordinate data
