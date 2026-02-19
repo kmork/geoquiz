@@ -370,9 +370,10 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
     ui.elChoices.style.display = "grid";
     ui.elChoices.innerHTML = "";
 
-    const correct = current.capitals[0];
+    const correctCapitals = current.capitals;
 
-    let opts = [correct];
+    // Start with all correct capitals, then fill to 4 with wrong ones
+    let opts = [...correctCapitals];
     while (opts.length < 4) {
       const c = DATA[(Math.random() * DATA.length) | 0].capitals[0];
       if (!opts.includes(c)) opts.push(c);
@@ -388,12 +389,12 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
       b.onclick = () => {
         if (roundEnded) return;
 
-        const isCorrect = option === correct;
+        const isCorrect = correctCapitals.includes(option);
 
         ui.elChoices.querySelectorAll("button").forEach((btn) => (btn.disabled = true));
 
         ui.elChoices.querySelectorAll("button").forEach((btn) => {
-          if (btn.textContent === correct) btn.classList.add("correct");
+          if (correctCapitals.includes(btn.textContent)) btn.classList.add("correct");
         });
 
         if (!isCorrect) b.classList.add("wrong");
@@ -432,7 +433,7 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
       return;
     }
 
-    const ok = user === norm(current.capitals[0]);
+    const ok = current.capitals.some(cap => user === norm(cap));
 
     if (ok) {
       correctAny++;

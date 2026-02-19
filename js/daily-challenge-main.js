@@ -980,8 +980,9 @@ class DailyChallenge {
 
     // Generate wrong answers and shuffle
     const wrongAnswers = gameLogic.generateWrongAnswers(this.rng);
-    const correctAnswer = gameLogic.getCorrectCapital();
-    const allOptions = [correctAnswer, ...wrongAnswers.slice(0, 3)];
+    const correctCapitals = targetCountry.capitals || [gameLogic.getCorrectCapital()];
+    const correctAnswer = correctCapitals[0]; // primary capital for display/fallback
+    const allOptions = [...correctCapitals, ...wrongAnswers.slice(0, 4 - correctCapitals.length)];
     const shuffled = this.rng.shuffle(allOptions);
 
     // Render UI - matches standalone exactly
@@ -1009,7 +1010,7 @@ class DailyChallenge {
     }
 
     // Setup autocomplete with capital names
-    const capitals = challenge.allData.map(c => c.capital).filter(Boolean).sort();
+    const capitals = challenge.allData.flatMap(c => c.capitals || (c.capital ? [c.capital] : [])).filter(Boolean).sort();
     setupCapitalsAutocomplete(ui.elements.datalist, capitals);
 
     return new Promise(resolve => {
@@ -1022,7 +1023,7 @@ class DailyChallenge {
         const userInput = ui.elements.input.value.trim();
 
         // Empty or wrong - show multiple choice
-        if (!userInput || norm(userInput) !== norm(correctAnswer)) {
+        if (!userInput || !correctCapitals.some(c => norm(userInput) === norm(c))) {
           mcShown = true;
           ui.showMultipleChoice();
 
@@ -1054,7 +1055,7 @@ class DailyChallenge {
         if (answered) return;
         answered = true;
 
-        const isCorrect = selected === correct;
+        const isCorrect = correctCapitals.includes(selected);
 
         // Check answer using game logic
         const result = gameLogic.checkAnswer(selected);
@@ -1063,9 +1064,9 @@ class DailyChallenge {
         const buttons = ui.elements.choices.querySelectorAll('button');
         buttons.forEach(btn => btn.disabled = true);
 
-        // Highlight correct answer
+        // Highlight all correct answers
         buttons.forEach(btn => {
-          if (btn.textContent === correct) {
+          if (correctCapitals.includes(btn.textContent)) {
             btn.classList.add('correct');
           }
         });
@@ -1098,10 +1099,10 @@ class DailyChallenge {
           ui.populateChoices(shuffled, correctAnswer, () => {});
         }
 
-        // Highlight correct answer
+        // Highlight correct answers
         const buttons = ui.elements.choices.querySelectorAll('button');
         buttons.forEach(btn => {
-          if (btn.textContent === correctAnswer) {
+          if (correctCapitals.includes(btn.textContent)) {
             btn.classList.add('correct');
           }
           btn.disabled = true;

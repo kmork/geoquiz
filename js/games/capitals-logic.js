@@ -87,31 +87,33 @@ export class CapitalsGameLogic {
   generateWrongAnswers(rng = null) {
     const correctCapital = this.getCorrectCapital();
     
+    const allCorrectCapitals = this.current.capitals || [correctCapital];
+
     // Get capitals from same region
     const sameRegion = this.DATA.filter(c => {
       const capital = c.capitals ? c.capitals[0] : c.capital;
-      return c.region === this.current.region && 
-        capital && 
-        capital !== correctCapital;
+      return c.region === this.current.region &&
+        capital &&
+        !allCorrectCapitals.includes(capital);
     });
-    
+
     const wrongAnswers = [];
-    
+
     // Use provided RNG or default shuffle
     const shuffle = rng ? (arr) => rng.shuffle(arr) : shuffleArray;
     const shuffled = shuffle([...sameRegion]);
-    
+
     // Take up to 3 from same region
     for (let i = 0; i < Math.min(3, shuffled.length); i++) {
       const capital = shuffled[i].capitals ? shuffled[i].capitals[0] : shuffled[i].capital;
       wrongAnswers.push(capital);
     }
-    
+
     // Fill remaining with random capitals if needed
     while (wrongAnswers.length < 3) {
       const allOthers = this.DATA.filter(c => {
         const capital = c.capitals ? c.capitals[0] : c.capital;
-        return capital && capital !== correctCapital && !wrongAnswers.includes(capital);
+        return capital && !allCorrectCapitals.includes(capital) && !wrongAnswers.includes(capital);
       });
       
       if (allOthers.length === 0) break;
@@ -134,7 +136,9 @@ export class CapitalsGameLogic {
     }
 
     const correctCapital = this.getCorrectCapital();
-    const isCorrect = selectedCapital === correctCapital;
+    const isCorrect = this.current.capitals
+      ? this.current.capitals.includes(selectedCapital)
+      : selectedCapital === correctCapital;
     const timeTaken = (Date.now() - this.startTime) / 1000;
     
     this.roundEnded = true;
