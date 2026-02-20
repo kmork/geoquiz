@@ -64,18 +64,18 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     const availableAbove = rect.top - gap - margin;
     const showAbove = availableBelow < 120 && availableAbove > availableBelow;
 
+    // Always use `top` (never `bottom`) so position:fixed reference is consistent
+    // across iOS and Android. For the "above" case, translateY(-100%) flips the
+    // element upward so its bottom edge sits at rect.top - gap, regardless of
+    // how many items are in the dropdown.
     if (showAbove) {
       dropdown.style.maxHeight = Math.max(availableAbove, 80) + 'px';
-      dropdown.style.top = 'auto';
-      // position:fixed bottom = distance from bottom of the reference viewport
-      // iOS: fixed is relative to layout viewport (window.innerHeight)
-      // Android: fixed is relative to visual viewport (viewportH)
-      const layoutViewportH = isIOS ? window.innerHeight : viewportH;
-      dropdown.style.bottom = (layoutViewportH - rect.top - vvOffsetTop + gap) + 'px';
+      dropdown.style.top = (rect.top - gap + vvOffsetTop) + 'px';
+      dropdown.style.transform = 'translateY(-100%)';
     } else {
       dropdown.style.maxHeight = Math.max(availableBelow, 80) + 'px';
-      dropdown.style.bottom = 'auto';
       dropdown.style.top = (rect.bottom + gap + vvOffsetTop) + 'px';
+      dropdown.style.transform = '';
     }
 
     // Horizontal: match input width but enforce a minimum, clamped to viewport

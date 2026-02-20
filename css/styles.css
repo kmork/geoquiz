@@ -724,7 +724,6 @@ select option {
   /* Only apply to route/outlines games, not find-country */
   .wrap:not(.find-country-page) .mapwrap {
     height: 35vh; /* Reduced from 50vh to fit everything on screen */
-    height: 35dvh;
     min-height: 200px; /* Reduced from 250px */
     max-height: 300px; /* Reduced from 400px */
   }
@@ -1173,7 +1172,6 @@ select option {
 .find-country-page {
   max-width: 1600px;
   height: 100vh;
-  height: 100dvh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box; /* Include padding in height calculation */

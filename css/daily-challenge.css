@@ -571,7 +571,6 @@
 .game-area .mapwrap:has(canvas) {
   margin: 10px 0;
   height: calc(100vh - 350px);
-  height: calc(100dvh - 350px);
   min-height: 250px;
   max-height: 600px;
 }
@@ -579,14 +578,12 @@
 @media (max-height: 800px) {
   .game-area .mapwrap:has(canvas) {
     height: calc(100vh - 320px);
-    height: calc(100dvh - 320px);
   }
 }
 
 @media (max-height: 600px) {
   .game-area .mapwrap:has(canvas) {
     height: calc(100vh - 280px);
-    height: calc(100dvh - 280px);
     min-height: 200px;
   }
 }
@@ -664,7 +661,6 @@
 .game-area .mapwrap:has(#dc-map) {
   margin: 0;
   height: calc(100vh - 350px);
-  height: calc(100dvh - 350px);
   min-height: 250px;
   max-height: 600px;
 }
@@ -673,13 +669,11 @@
 @media (max-height: 800px) {
   .game-area .mapwrap:has(#dc-map) {
     height: calc(100vh - 320px);
-    height: calc(100dvh - 320px);
   }
 }
 @media (max-height: 600px) {
   .game-area .mapwrap:has(#dc-map) {
     height: calc(100vh - 280px);
-    height: calc(100dvh - 280px);
     min-height: 200px;
   }
 }
