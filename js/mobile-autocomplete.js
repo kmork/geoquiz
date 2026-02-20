@@ -59,10 +59,24 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     const vvOffsetTop = (isIOS && window.visualViewport) ? window.visualViewport.offsetTop : 0;
     const vvOffsetLeft = (isIOS && window.visualViewport) ? window.visualViewport.offsetLeft : 0;
 
-    // Vertical: fill space below input
-    const availableH = viewportH - rect.bottom - gap - margin;
-    dropdown.style.maxHeight = Math.max(availableH, 80) + 'px';
-    dropdown.style.top = (rect.bottom + gap + vvOffsetTop) + 'px';
+    // Vertical: open above input when keyboard is likely shown (little space below)
+    const availableBelow = viewportH - rect.bottom - gap - margin;
+    const availableAbove = rect.top - gap - margin;
+    const showAbove = availableBelow < 120 && availableAbove > availableBelow;
+
+    if (showAbove) {
+      dropdown.style.maxHeight = Math.max(availableAbove, 80) + 'px';
+      dropdown.style.top = 'auto';
+      // position:fixed bottom = distance from bottom of the reference viewport
+      // iOS: fixed is relative to layout viewport (window.innerHeight)
+      // Android: fixed is relative to visual viewport (viewportH)
+      const layoutViewportH = isIOS ? window.innerHeight : viewportH;
+      dropdown.style.bottom = (layoutViewportH - rect.top - vvOffsetTop + gap) + 'px';
+    } else {
+      dropdown.style.maxHeight = Math.max(availableBelow, 80) + 'px';
+      dropdown.style.bottom = 'auto';
+      dropdown.style.top = (rect.bottom + gap + vvOffsetTop) + 'px';
+    }
 
     // Horizontal: match input width but enforce a minimum, clamped to viewport
     const minW = 220;
