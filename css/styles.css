@@ -718,14 +718,30 @@ select option {
     font-size: 20px;
   }
 
-  /* Mobile fixes for Connect the Countries game */
+  /* Fill the visual viewport so there is no gap below the game card when the
+     keyboard is open. --vvh is set by JS (mobile-autocomplete.js) and tracks
+     window.visualViewport.height, which shrinks when keyboard opens. */
+  .wrap:not(.find-country-page) {
+    height: var(--vvh, 100svh);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+  }
 
-  /* Responsive map height - shorter on mobile to fit controls on screen */
-  /* Only apply to route/outlines games, not find-country */
+  .wrap:not(.find-country-page) > .card {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  /* Map grows to fill space between header and input row */
   .wrap:not(.find-country-page) .mapwrap {
-    height: 35vh; /* Reduced from 50vh to fit everything on screen */
-    min-height: 200px; /* Reduced from 250px */
-    max-height: 300px; /* Reduced from 400px */
+    flex: 1;
+    height: auto;
+    min-height: 150px;
+    max-height: 350px;
   }
 
   .wrap:not(.find-country-page) #map {

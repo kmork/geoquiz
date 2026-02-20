@@ -263,5 +263,18 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
   };
 }
 
+// Track visual viewport height as --vvh CSS variable.
+// window.visualViewport.height shrinks when the keyboard opens on both iOS and
+// Android, unlike `vh`/`svh` which are tied to the layout viewport.
+// CSS uses var(--vvh) to fill the page and eliminate the gap below game cards.
+(function trackVisualViewport() {
+  if (!window.visualViewport) return;
+  const update = () => {
+    document.documentElement.style.setProperty('--vvh', window.visualViewport.height + 'px');
+  };
+  window.visualViewport.addEventListener('resize', update);
+  update();
+})();
+
 // Export for use in other modules
 window.initMobileAutocomplete = initMobileAutocomplete;
