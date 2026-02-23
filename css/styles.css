@@ -217,6 +217,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
   touch-action:none;
   will-change:transform;
   transform:translateZ(0);
+  height:clamp(320px, 50vh, 560px);
 }
 
 .country{
