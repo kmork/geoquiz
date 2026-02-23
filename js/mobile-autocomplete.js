@@ -150,6 +150,7 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
   
   // Select suggestion
   function selectSuggestion(value) {
+    if (inputElement.disabled) return; // Input disabled (e.g. MC shown) — ignore stale dropdown taps
     inputElement.value = value;
     dropdown.style.display = 'none';
 

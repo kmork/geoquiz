@@ -417,19 +417,23 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
   }
 
   // Guess handler: correct on first try => bonus round; wrong/blank => MC alternatives
+  let guessInProgress = false;
   function handleGuess() {
+    if (guessInProgress) return;
     if (bonusMode) {
       bonusCommit?.();
       return;
     }
     if (roundEnded) return;
 
+    guessInProgress = true;
     const user = norm(ui.answer.value);
 
     if (!user) {
       shakeWrong(ui.answer);
       hapticFeedback('wrong');
       showMC();
+      guessInProgress = false;
       return;
     }
 
@@ -447,11 +451,12 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
       hapticFeedback('wrong');
       showMC();
     }
+    guessInProgress = false;
   }
 
   ui.submit.onclick = handleGuess;
 
-  // Enter key submits
+  // Enter key submits (when no autocomplete item is selected)
   ui.answer.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') handleGuess();
   });
