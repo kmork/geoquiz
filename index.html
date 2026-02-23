@@ -433,6 +433,33 @@
     }
     .theme-toggle:hover { background: var(--card-bg-hover); transform: scale(1.1); }
 
+    /* ── Toggle switch ── */
+    .pref-toggle {
+      flex-shrink: 0;
+      position: relative;
+      width: 48px;
+      height: 26px;
+      background: var(--card-border);
+      border-radius: 13px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      padding: 0;
+    }
+    .pref-toggle[aria-checked="true"] { background: var(--accent-color); }
+    .pref-toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .pref-toggle[aria-checked="true"]::after { transform: translateX(22px); }
+
     /* ── Clear records button ── */
     .clear-records-btn {
       flex-shrink: 0;
@@ -719,6 +746,14 @@
 
         <div class="pref-row">
           <div class="pref-label">
+            <span class="pref-label-title">Autocomplete</span>
+            <span class="pref-label-desc">Show suggestions while typing</span>
+          </div>
+          <button id="autocomplete-toggle" class="pref-toggle" role="switch" aria-checked="true" aria-label="Toggle autocomplete"></button>
+        </div>
+
+        <div class="pref-row">
+          <div class="pref-label">
             <span class="pref-label-title">Game Records</span>
             <span class="pref-label-desc">Clears all saved best scores and times</span>
           </div>
@@ -732,10 +767,11 @@
   <script src="js/theme.js"></script>
   <script>
     (function() {
-      const overlay  = document.getElementById('menu-overlay');
-      const menuBtn  = document.getElementById('menu-btn');
-      const closeBtn = document.getElementById('menu-close');
-      const clearBtn = document.getElementById('clear-records-btn');
+      const overlay         = document.getElementById('menu-overlay');
+      const menuBtn         = document.getElementById('menu-btn');
+      const closeBtn        = document.getElementById('menu-close');
+      const clearBtn        = document.getElementById('clear-records-btn');
+      const autocompleteBtn = document.getElementById('autocomplete-toggle');
 
       menuBtn.addEventListener('click', () => overlay.classList.add('open'));
       closeBtn.addEventListener('click', () => overlay.classList.remove('open'));
@@ -748,6 +784,15 @@
       // Escape key to close
       document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') overlay.classList.remove('open');
+      });
+
+      // Autocomplete toggle
+      const autocompleteOn = localStorage.getItem('geoquiz-autocomplete') !== 'off';
+      autocompleteBtn.setAttribute('aria-checked', String(autocompleteOn));
+      autocompleteBtn.addEventListener('click', () => {
+        const next = autocompleteBtn.getAttribute('aria-checked') !== 'true';
+        autocompleteBtn.setAttribute('aria-checked', String(next));
+        localStorage.setItem('geoquiz-autocomplete', next ? 'on' : 'off');
       });
 
       // Clear all game records from localStorage

@@ -20,6 +20,10 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
   if (!inputElement || !suggestions) {
     return; // Don't init if missing required params
   }
+
+  if (localStorage.getItem('geoquiz-autocomplete') === 'off') {
+    return; // Disabled by user preference
+  }
   
   const {
     maxSuggestions = 5,
