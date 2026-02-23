@@ -95,7 +95,7 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
   }
 
   // Filter and show suggestions
-  function updateSuggestions() {
+  function updateSuggestions(e) {
     const value = inputElement.value.trim();
 
     if (value.length < minChars) {
@@ -110,6 +110,15 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     );
 
     if (matches.length === 0) {
+      dropdown.style.display = 'none';
+      highlightedIndex = -1;
+      return;
+    }
+
+    // Auto-fill when exactly one suggestion matches, but not when user is deleting
+    const isDeleting = e && e.inputType && e.inputType.startsWith('delete');
+    if (matches.length === 1 && !isDeleting) {
+      inputElement.value = matches[0];
       dropdown.style.display = 'none';
       highlightedIndex = -1;
       return;
