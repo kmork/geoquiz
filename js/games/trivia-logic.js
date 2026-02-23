@@ -1,6 +1,6 @@
 /**
  * Trivia Game - Pure Logic Module
- * 
+ *
  * Handles trivia game logic without any DOM dependencies.
  * Can be used by both standalone game and Daily Challenge.
  */
@@ -21,7 +21,7 @@ export class TriviaGameLogic {
     this.gameStartTime = null;
   }
 
-  async loadQuestions(dataUrl = 'data/qa.json') {
+  async loadQuestions(dataUrl = 'data/trivia.json') {
     try {
       const response = await fetch(dataUrl);
       const data = await response.json();
@@ -86,7 +86,7 @@ export class TriviaGameLogic {
 
     // Check if game is complete
     const isLastQuestion = this.currentIndex >= this.questions.length - 1;
-    
+
     if (isLastQuestion && this.onComplete) {
       const totalTime = this.gameStartTime ? (Date.now() - this.gameStartTime) / 1000 : 0;
       this.onComplete({
@@ -118,8 +118,8 @@ export class TriviaGameLogic {
   }
 
   getAccuracy() {
-    return this.questions.length > 0 
-      ? Math.round((this.correctCount / this.questions.length) * 100) 
+    return this.questions.length > 0
+      ? Math.round((this.correctCount / this.questions.length) * 100)
       : 0;
   }
 
