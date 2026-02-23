@@ -1,7 +1,7 @@
-import { getUI } from "./ui.js";
+import { getUI } from "./capitals-ui.js";
 import { initConfetti } from "./confetti.js";
 import { createMap } from "./map.js";
-import { createGame } from "./game.js";
+import { createGame } from "./capitals-game.js";
 import { attachWikipediaPopup } from "./wiki.js";
 
 const _params = new URLSearchParams(location.search);

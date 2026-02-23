@@ -1,5 +1,5 @@
 import { norm } from "./utils.js";
-import { updateProgress } from "./ui.js";
+import { updateProgress } from "./capitals-ui.js";
 import { isMobileDevice, hapticFeedback, flashCorrect, shakeWrong, shuffleInPlace } from "./game-utils.js";
 import { renderFinishScreen } from "./game-records.js";
 
