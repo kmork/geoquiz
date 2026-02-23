@@ -106,7 +106,13 @@ const game = createRouteGame({
   drawCountries: drawCountriesWithZoom,
   getCountryFeature: (countryName) => {
     const n = norm(countryName);
-    return WORLD.find((f) => norm(f.properties.ADMIN) === n || norm(f.properties.NAME || "") === n);
+    return WORLD.find((f) => {
+      const admin = f.properties.ADMIN || "";
+      if (norm(admin) === n || norm(f.properties.NAME || "") === n) return true;
+      // COUNTRY_ALIASES maps GeoJSON names like "United States of America" → "United States"
+      const resolved = COUNTRY_ALIASES[admin];
+      return resolved ? norm(resolved) === n : false;
+    });
   },
 });
 
