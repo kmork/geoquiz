@@ -417,7 +417,7 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
   }
 
   // Guess handler: correct on first try => bonus round; wrong/blank => MC alternatives
-  ui.submit.onclick = () => {
+  function handleGuess() {
     if (bonusMode) {
       bonusCommit?.();
       return;
@@ -447,7 +447,14 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
       hapticFeedback('wrong');
       showMC();
     }
-  };
+  }
+
+  ui.submit.onclick = handleGuess;
+
+  // Enter key submits
+  ui.answer.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') handleGuess();
+  });
 
   // Tap anywhere / Enter to continue
   document.addEventListener(
@@ -499,7 +506,7 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
   if (window.initMobileAutocomplete && DATA) {
     const allCapitals = DATA.flatMap(c => c.capitals || []).filter(Boolean).sort();
     window.initMobileAutocomplete(ui.answer, allCapitals, {
-      onSelect: () => ui.submit.click()
+      onSelect: (val) => { ui.answer.value = val; handleGuess(); }
     });
   }
 
