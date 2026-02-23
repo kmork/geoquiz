@@ -152,11 +152,13 @@ export class RouteRenderer {
     let bbox = null;
     
     for (const item of countryList) {
-      const mapName = this.aliases[item.country] || item.country;
-      const n = norm(mapName);
-      const features = this.worldFeatures.filter(f =>
-        norm(f.properties.ADMIN || "") === n || norm(f.properties.NAME || "") === n
-      );
+      const n = norm(item.country);
+      const features = this.worldFeatures.filter(f => {
+        const admin = f.properties.ADMIN || "";
+        if (norm(admin) === n || norm(f.properties.NAME || "") === n) return true;
+        // aliases maps GeoJSON name → DATA name (e.g. "United States of America" → "United States")
+        return norm(this.aliases[admin] || "") === n;
+      });
       
       for (const feature of features) {
         highlightedFeatures.push({ feature, color: item.color });
