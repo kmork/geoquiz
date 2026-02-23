@@ -317,6 +317,7 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
       showStatus(`❌ ${guessedCountry} doesn't border any country in your path`, "wrong");
       shakeWrong(ui.answerInput);
       hapticFeedback('wrong');
+      ui.answerInput.focus();
     }
   }
 

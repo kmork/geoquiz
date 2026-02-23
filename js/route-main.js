@@ -61,6 +61,7 @@ if (ui.answerInput) {
     window.initMobileAutocomplete(ui.answerInput, uniqueSuggestions, {
       maxSuggestions: null,
       minChars: 1,
+      onSelect: () => ui.submitBtn.click(),
     });
   }
 }

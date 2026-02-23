@@ -258,8 +258,9 @@ export function renderHeritageUI(container, site, options = {}) {
  * Setup autocomplete for country/site input
  * @param {HTMLInputElement} input - Input element
  * @param {string[]} suggestions - Array of suggestions
+ * @param {Function} [onSelect] - Optional callback invoked when user picks a suggestion
  */
-export function setupHeritageAutocomplete(input, suggestions) {
+export function setupHeritageAutocomplete(input, suggestions, onSelect) {
   if (!input || !suggestions || suggestions.length === 0) return;
 
   // Check if mobile autocomplete is available
@@ -267,7 +268,8 @@ export function setupHeritageAutocomplete(input, suggestions) {
     input.removeAttribute('list'); // Remove datalist if exists
     initMobileAutocomplete(input, suggestions, {
       maxSuggestions: null, // Show all matches (scrollable)
-      minChars: 1
+      minChars: 1,
+      ...(onSelect && { onSelect })
     });
   } else {
     console.warn('initMobileAutocomplete not available');

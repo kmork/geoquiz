@@ -132,7 +132,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
       }
     });
     
-    setupHeritageAutocomplete(currentUI.elements.input, countryList.sort());
+    setupHeritageAutocomplete(currentUI.elements.input, countryList.sort(), () => currentUI.elements.submitBtn.click());
 
     updateUI();
   }

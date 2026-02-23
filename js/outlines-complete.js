@@ -297,7 +297,7 @@ export async function createCompleteOutlinesGame({
     if (typeof window.initMobileAutocomplete === 'function') {
       // Mobile autocomplete (if available)
       console.log('Calling initMobileAutocomplete');
-      window.initMobileAutocomplete(answerInput, countryNames);
+      window.initMobileAutocomplete(answerInput, countryNames, { onSelect: () => submitBtn.click() });
     } else {
       // Fallback to HTML5 datalist
       console.log('Using HTML5 datalist');

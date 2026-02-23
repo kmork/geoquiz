@@ -148,13 +148,14 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
   function selectSuggestion(value) {
     inputElement.value = value;
     dropdown.style.display = 'none';
-    
-    // Callback if provided (call BEFORE blur to let it process)
+
     if (onSelect) {
+      // Let the submit handler decide what to do with focus
       onSelect(value);
+      return;
     }
-    
-    // Blur input to dismiss keyboard on mobile (delayed to ensure it happens last)
+
+    // No onSelect: blur to dismiss mobile keyboard
     setTimeout(() => {
       inputElement.blur();
     }, 100);

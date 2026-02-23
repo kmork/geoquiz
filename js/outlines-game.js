@@ -133,10 +133,8 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, con
         isProcessing = false;
       }, 100);
       
-      if (!isMobileDevice()) {
-        ui.answerInput.focus();
-      }
-      
+      ui.answerInput.focus();
+
       // Neighbors are drawn by onHintUsed callback
       return;
     }
