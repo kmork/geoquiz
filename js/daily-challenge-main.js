@@ -147,7 +147,7 @@ class DailyChallenge {
     // Load required data
     // Note: window.DATA is set by data.js (loaded in HTML)
     const [triviaData, heritageData, neighborsData, flagsData, geoData] = await Promise.all([
-      fetch('data/qa.json').then(r => r.json()),
+      fetch('data/trivia.json').then(r => r.json()),
       fetch('data/heritage-sites.json').then(r => r.json()),
       fetch('data/countries-neighbors.json').then(r => r.json()),
       fetch('data/countries-flags.json').then(r => r.json()),

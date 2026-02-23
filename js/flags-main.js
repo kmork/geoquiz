@@ -8,7 +8,9 @@ const params = new URLSearchParams(location.search);
 const roundsParam = params.get('rounds') || '10';
 const maxRounds = roundsParam === 'all' ? Infinity : (parseInt(roundsParam) || 10);
 const gameIdSuffix = roundsParam === 'all' ? 'long' : (roundsParam === '25' ? 'medium' : 'short');
-const gameId = `flags-${gameIdSuffix}`;
+const continentParam = params.get('continent');
+const continentSlug = continentParam ? continentParam.toLowerCase().replace(/\s+/g, '-') : null;
+const gameId = continentSlug ? `flags-${continentSlug}-${gameIdSuffix}` : `flags-${gameIdSuffix}`;
 
 const initOverlay = document.getElementById('init-overlay');
 const gameContent = document.getElementById('game-content');
@@ -23,6 +25,16 @@ let gameStartTime;
 
 async function init() {
   if (initOverlay) initOverlay.style.display = 'flex';
+
+  if (continentParam) {
+    try {
+      const continentsData = await fetch('data/countries-continents.json').then(r => r.json());
+      const filtered = window.DATA.filter(c => continentsData[c.country] === continentParam);
+      if (filtered.length > 0) window.DATA = filtered;
+    } catch (e) {
+      console.warn('Could not load continent filter:', e);
+    }
+  }
 
   logic = new FlagsGameLogic({
     onAnswer: null,

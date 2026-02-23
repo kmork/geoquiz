@@ -31,6 +31,10 @@ const MAP_H = 320;
 
 const confetti = initConfetti("confetti");
 
+const params = new URLSearchParams(location.search);
+const continentParam = params.get('continent');
+const difficultyParam = params.get('difficulty'); // 'easy' | 'normal' | 'hard' | null
+
 // Load neighbors + GeoJSON
 const [NEIGHBORS, worldData] = await Promise.all([
   fetch("data/countries-neighbors.json").then((r) => r.json()),
@@ -39,6 +43,24 @@ const [NEIGHBORS, worldData] = await Promise.all([
 
 // ✅ Hide loading overlay once assets are ready
 hideInitOverlay();
+
+// Apply continent filter if requested
+let filteredNeighbors = NEIGHBORS;
+if (continentParam) {
+  try {
+    const continentsData = await fetch('data/countries-continents.json').then(r => r.json());
+    const filtered = window.DATA.filter(c => continentsData[c.country] === continentParam);
+    if (filtered.length > 0) {
+      window.DATA = filtered;
+      const continentSet = new Set(filtered.map(c => c.country));
+      filteredNeighbors = Object.fromEntries(
+        Object.entries(NEIGHBORS).filter(([country]) => continentSet.has(country))
+      );
+    }
+  } catch (e) {
+    console.warn('Could not load continent filter:', e);
+  }
+}
 
 const WORLD = worldData.features || [];
 const renderer = new RouteRenderer(ui.map, worldData, { aliases: COUNTRY_ALIASES });
@@ -78,7 +100,8 @@ function drawCountriesWithZoom(countryList) {
 
 const game = createRouteGame({
   ui,
-  neighbors: NEIGHBORS,
+  neighbors: filteredNeighbors,
+  difficulty: difficultyParam,
   confetti,
   drawCountries: drawCountriesWithZoom,
   getCountryFeature: (countryName) => {

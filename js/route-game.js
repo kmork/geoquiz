@@ -2,7 +2,7 @@ import { norm } from "./utils.js";
 import { isMobileDevice, hapticFeedback, flashCorrect, shakeWrong, shuffleInPlace } from "./game-utils.js";
 import { SHORT_DISPLAY_NAMES, resolveAlias } from "./aliases.js";
 
-export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCountryFeature, fixedRound = null, onFinish = null }) {
+export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCountryFeature, fixedRound = null, onFinish = null, difficulty = null }) {
   const DATA = window.DATA;
   const shortName = c => SHORT_DISPLAY_NAMES[c] || c;
 
@@ -119,7 +119,12 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
     const validPairs = [];
     const countryNames = Object.keys(neighbors);
 
-    // Generate pairs with random difficulty (1-8 countries in between)
+    // Determine path-length range from difficulty param
+    let minLen = 1, maxLen = Infinity;
+    if (difficulty === 'easy')   { minLen = 1; maxLen = 2; }
+    if (difficulty === 'normal') { minLen = 3; maxLen = 6; }
+    if (difficulty === 'hard')   { minLen = 7; maxLen = Infinity; }
+
     for (let i = 0; i < countryNames.length; i++) {
       for (let j = i + 1; j < countryNames.length; j++) {
         const start = countryNames[i];
@@ -127,8 +132,7 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
 
         const pathInfo = findShortestPath(start, end, neighbors);
 
-        // Only include pairs with 1-8 countries in between
-        if (pathInfo && pathInfo.length >= 1 && pathInfo.length <= 8) {
+        if (pathInfo && pathInfo.length >= minLen && pathInfo.length <= maxLen) {
           validPairs.push({
             start,
             end,

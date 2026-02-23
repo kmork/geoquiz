@@ -7,7 +7,20 @@ import { attachWikipediaPopup } from "./wiki.js";
 const _params = new URLSearchParams(location.search);
 const _roundsParam = _params.get('rounds') || '10';
 const _maxRounds = _roundsParam === 'all' ? Infinity : (parseInt(_roundsParam) || 10);
-const _gameIdSuffix = _roundsParam === 'all' ? 'long' : (_roundsParam === '25' ? 'medium' : 'short');
+const _diffSuffix = _roundsParam === 'all' ? 'long' : (_roundsParam === '25' ? 'medium' : 'short');
+const _continentParam = _params.get('continent');
+const _continentSlug = _continentParam ? _continentParam.toLowerCase().replace(/\s+/g, '-') : null;
+const _gameIdSuffix = _continentSlug ? `${_continentSlug}-${_diffSuffix}` : _diffSuffix;
+
+if (_continentParam) {
+  try {
+    const continentsData = await fetch('data/countries-continents.json').then(r => r.json());
+    const filtered = window.DATA.filter(c => continentsData[c.country] === _continentParam);
+    if (filtered.length > 0) window.DATA = filtered;
+  } catch (e) {
+    console.warn('Could not load continent filter:', e);
+  }
+}
 
 const ui = getUI();
 const confetti = initConfetti("confetti");

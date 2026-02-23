@@ -143,10 +143,19 @@
       margin: 0;
     }
 
-    .difficulty-grid {
+    .card-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 20px;
+    }
+
+    .section-label {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin: 36px 0 16px;
     }
 
     .diff-card {
@@ -240,7 +249,7 @@
         font-size: 28px;
       }
 
-      .difficulty-grid {
+      .card-grid {
         grid-template-columns: 1fr;
         gap: 14px;
       }
@@ -306,7 +315,7 @@
       <!-- Filled by JS -->
     </div>
 
-    <div class="difficulty-grid" id="difficulty-grid">
+    <div id="game-cards">
       <!-- Filled by JS -->
     </div>
   </div>
@@ -328,7 +337,7 @@
         title: 'Find the Country',
         desc: 'Locate and click on the correct country on the interactive world map.',
         url: 'find-country.html',
-        fullCount: 193,
+        fullCount: 194,
         pointsPerRound: 1,
         icon: `<div class="game-icon-large">🗺️</div>`
       },
@@ -336,7 +345,7 @@
         title: 'Guess the Country',
         desc: 'Identify countries from their unique outlines and geographical shapes.',
         url: 'outlines.html',
-        fullCount: 193,
+        fullCount: 194,
         pointsPerRound: 2,
         icon: `<div class="game-icon-large">🌍</div>`
       },
@@ -344,7 +353,7 @@
         title: 'Capitals of the World',
         desc: 'Guess the capitals and their locations on an interactive world map.',
         url: 'capitals.html',
-        fullCount: 193,
+        fullCount: 194,
         pointsPerRound: 2,
         icon: `<div class="game-icon-large">🏛️</div>`
       },
@@ -368,16 +377,39 @@
         title: 'Flags of the World',
         desc: 'Match the flag to the country — nearby neighbors make it tricky.',
         url: 'flags.html',
-        fullCount: 193,
+        fullCount: 194,
         pointsPerRound: 1,
         icon: `<div class="game-icon-large">🚩</div>`
+      },
+      route: {
+        title: 'Connect the Countries',
+        desc: 'Find the land route between two countries through neighboring borders.',
+        url: 'route.html',
+        fullCount: 194,
+        pointsPerRound: null,
+        icon: `<div class="game-icon-large">🔗</div>`,
+        customDifficulties: [
+          { key: 'easy',   urlParam: 'difficulty=easy',   label: 'Easy',   emoji: '⚡', desc: '1–2 countries between' },
+          { key: 'normal', urlParam: 'difficulty=normal', label: 'Normal', emoji: '🎯', desc: '3–6 countries between' },
+          { key: 'hard',   urlParam: 'difficulty=hard',   label: 'Hard',   emoji: '🏆', desc: '7+ countries between' },
+        ],
+        continentSlugs: ['africa', 'americas', 'asia', 'europe'], // Oceania excluded (no land borders)
       }
     };
 
     const DIFFICULTIES = [
       { key: 'short',  rounds: '10',  label: 'Short',  emoji: '⚡', desc: '10 rounds' },
       { key: 'medium', rounds: '25',  label: 'Medium', emoji: '🎯', desc: '25 rounds' },
-      { key: 'long',   rounds: 'all', label: 'Long',   emoji: '🏆', desc: null /* filled below */ }
+      { key: 'long',   rounds: 'all', label: 'Long',   emoji: '🏆', desc: null /* filled per game */ }
+    ];
+
+    // All 5 continents for standard games
+    const CONTINENTS = [
+      { label: 'Africa',   slug: 'africa',   continent: 'Africa',   emoji: '🌍' },
+      { label: 'Americas', slug: 'americas', continent: 'Americas', emoji: '🌎' },
+      { label: 'Asia',     slug: 'asia',     continent: 'Asia',     emoji: '🌏' },
+      { label: 'Europe',   slug: 'europe',   continent: 'Europe',   emoji: '🌍' },
+      { label: 'Oceania',  slug: 'oceania',  continent: 'Oceania',  emoji: '🌏' },
     ];
 
     const params = new URLSearchParams(location.search);
@@ -387,39 +419,101 @@
     if (!game) {
       location.href = 'index.html';
     } else {
-      // Set page title
       document.title = `Geo Quiz - ${game.title}`;
 
-      // Fill game header
       document.getElementById('game-header').innerHTML = `
         <a href="index.html" style="text-decoration:none">${game.icon}</a>
         <a href="index.html" class="game-title">${game.title}</a>
         <p class="game-desc">${game.desc}</p>
       `;
 
-      // Set long round count description
-      DIFFICULTIES[2].desc = `All ${game.fullCount} rounds`;
+      const supportsContinent = !['trivia', 'heritage'].includes(gameKey);
 
-      // Build difficulty cards
-      const grid = document.getElementById('difficulty-grid');
-      grid.innerHTML = DIFFICULTIES.map(d => {
-        const count = d.rounds === 'all' ? game.fullCount : parseInt(d.rounds);
-        const maxScore = count * game.pointsPerRound;
-        const rec = getRecord(`${gameKey}-${d.key}`);
-        const recordHtml = rec
-          ? `<div class="diff-record">Best: ${rec.bestScore}/${maxScore} · ${fmtTime(rec.bestTime)}</div>`
-          : '';
+      function makeCard(href, emoji, name, rounds, recordHtml) {
         return `
-          <a class="diff-card" href="${game.url}?rounds=${d.rounds}">
-            <span class="diff-emoji">${d.emoji}</span>
+          <a class="diff-card" href="${href}">
+            <span class="diff-emoji">${emoji}</span>
             <div class="diff-info">
-              <div class="diff-name">${d.label}</div>
-              <div class="diff-rounds">${d.desc}</div>
+              <div class="diff-name">${name}</div>
+              <div class="diff-rounds">${rounds}</div>
               ${recordHtml}
               <span class="diff-play">Play →</span>
             </div>
           </a>`;
-      }).join('');
+      }
+
+      function renderGame(continentsData) {
+        function countFor(continent) {
+          if (!continentsData) return '…';
+          return Object.values(continentsData).filter(c => c === continent).length;
+        }
+
+        const diffs = game.customDifficulties || DIFFICULTIES;
+
+        // --- Difficulty / mode section ---
+        const diffCards = diffs.map(d => {
+          let href, roundsLabel, recHtml = '';
+          if (game.customDifficulties) {
+            href = `${game.url}?${d.urlParam}`;
+            roundsLabel = d.desc;
+          } else {
+            const count = d.rounds === 'all' ? game.fullCount : parseInt(d.rounds);
+            const maxScore = count * game.pointsPerRound;
+            const rec = getRecord(`${gameKey}-${d.key}`);
+            roundsLabel = d.rounds === 'all' ? `All ${game.fullCount} rounds` : d.desc;
+            recHtml = rec
+              ? `<div class="diff-record">Best: ${rec.bestScore}/${maxScore} · ${fmtTime(rec.bestTime)}</div>`
+              : '';
+            href = `${game.url}?rounds=${d.rounds}`;
+          }
+          return makeCard(href, d.emoji, d.label, roundsLabel, recHtml);
+        }).join('');
+
+        let html = `<div class="card-grid">${diffCards}</div>`;
+
+        // --- Continent section ---
+        if (supportsContinent) {
+          // Use game-specific continent list if defined (e.g. route excludes Oceania)
+          const contList = game.continentSlugs
+            ? CONTINENTS.filter(c => game.continentSlugs.includes(c.slug))
+            : CONTINENTS;
+
+          const contCards = contList.map(c => {
+            const count = countFor(c.continent);
+            let href, recHtml = '';
+            if (game.customDifficulties) {
+              href = `${game.url}?continent=${encodeURIComponent(c.continent)}`;
+            } else {
+              href = `${game.url}?rounds=all&continent=${encodeURIComponent(c.continent)}`;
+              const rec = getRecord(`${gameKey}-${c.slug}-long`);
+              const maxScore = typeof count === 'number' ? count * game.pointsPerRound : null;
+              recHtml = rec && maxScore
+                ? `<div class="diff-record">Best: ${rec.bestScore}/${maxScore} · ${fmtTime(rec.bestTime)}</div>`
+                : '';
+            }
+            return makeCard(href, c.emoji, c.label, `All ${count} rounds`, recHtml);
+          }).join('');
+
+          html += `<div class="section-label">By continent</div>
+                   <div class="card-grid">${contCards}</div>`;
+        }
+
+        document.getElementById('game-cards').innerHTML = html;
+      }
+
+      // Initialize
+      (async () => {
+        let continentsData = null;
+        if (supportsContinent) {
+          try {
+            continentsData = await fetch('data/countries-continents.json').then(r => r.json());
+          } catch (e) {
+            console.warn('Could not load continents:', e);
+          }
+        }
+
+        renderGame(continentsData);
+      })();
     }
   </script>
 </body>
