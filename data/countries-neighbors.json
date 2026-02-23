@@ -146,7 +146,7 @@
   ],
   "Burundi": [
     "Rwanda",
-    "United Republic of Tanzania",
+    "Tanzania",
     "Democratic Republic of the Congo"
   ],
   "Cabo Verde": [],
@@ -251,7 +251,7 @@
     "Uganda",
     "Rwanda",
     "Burundi",
-    "United Republic of Tanzania",
+    "Tanzania",
     "Zambia",
     "Angola"
   ],
@@ -266,9 +266,6 @@
   "Dominica": [],
   "Dominican Republic": [
     "Haiti"
-  ],
-  "East Timor": [
-    "Indonesia"
   ],
   "Ecuador": [
     "Colombia",
@@ -413,7 +410,7 @@
   ],
   "Indonesia": [
     "Papua New Guinea",
-    "East Timor",
+    "Timor-Leste",
     "Malaysia"
   ],
   "Iran": [
@@ -476,7 +473,7 @@
     "Ethiopia",
     "South Sudan",
     "Uganda",
-    "United Republic of Tanzania"
+    "Tanzania"
   ],
   "Kiribati": [],
   "Kosovo": [
@@ -546,7 +543,7 @@
   "Madagascar": [],
   "Malawi": [
     "Zambia",
-    "United Republic of Tanzania",
+    "Tanzania",
     "Mozambique"
   ],
   "Malaysia": [
@@ -603,7 +600,7 @@
     "Mauritania"
   ],
   "Mozambique": [
-    "United Republic of Tanzania",
+    "Tanzania",
     "Malawi",
     "Zambia",
     "Zimbabwe",
@@ -746,7 +743,7 @@
   ],
   "Rwanda": [
     "Uganda",
-    "United Republic of Tanzania",
+    "Tanzania",
     "Burundi",
     "Democratic Republic of the Congo"
   ],
@@ -757,7 +754,6 @@
   "San Marino": [
     "Italy"
   ],
-  "São Tomé and Príncipe": [],
   "Saudi Arabia": [
     "Jordan",
     "Iraq",
@@ -872,16 +868,6 @@
     "Kyrgyzstan",
     "China"
   ],
-  "United Republic of Tanzania": [
-    "Kenya",
-    "Uganda",
-    "Rwanda",
-    "Burundi",
-    "Democratic Republic of the Congo",
-    "Zambia",
-    "Malawi",
-    "Mozambique"
-  ],
   "Thailand": [
     "Myanmar",
     "Laos",
@@ -919,7 +905,7 @@
   "Uganda": [
     "South Sudan",
     "Kenya",
-    "United Republic of Tanzania",
+    "Tanzania",
     "Rwanda",
     "Democratic Republic of the Congo"
   ],
@@ -975,7 +961,7 @@
   "Zambia": [
     "Angola",
     "Democratic Republic of the Congo",
-    "United Republic of Tanzania",
+    "Tanzania",
     "Malawi",
     "Mozambique",
     "Zimbabwe",
@@ -987,5 +973,19 @@
     "Mozambique",
     "South Africa",
     "Botswana"
-  ]
+  ],
+  "Timor-Leste": [
+    "Indonesia"
+  ],
+  "Tanzania": [
+    "Kenya",
+    "Uganda",
+    "Rwanda",
+    "Burundi",
+    "Democratic Republic of the Congo",
+    "Zambia",
+    "Malawi",
+    "Mozambique"
+  ],
+  "Sao Tome and Principe": []
 }
