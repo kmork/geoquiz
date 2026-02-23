@@ -110,29 +110,34 @@ export class RouteRenderer {
     return d;
   }
   
-  // Calculate bounding box of feature in lon/lat
+  // Calculate bounding box of feature in lon/lat.
+  // Uses only the largest polygon (by outer ring point count) to avoid small
+  // outlier territories (Aleutian Islands, remote islands, etc.) pulling the
+  // viewport far off-center for countries like the USA or Russia.
   bboxOfFeature(feature) {
-    let minLon = Infinity, minLat = Infinity;
-    let maxLon = -Infinity, maxLat = -Infinity;
-    
     if (!feature.geometry) return null;
-    
+
     const polys = feature.geometry.type === "Polygon"
       ? [feature.geometry.coordinates]
       : feature.geometry.coordinates;
-    
-    for (const poly of polys) {
-      for (const ring of poly) {
-        for (const [lon, lat] of ring) {
-          const normalizedLon = this.normalizeLon(lon);
-          minLon = Math.min(minLon, normalizedLon);
-          maxLon = Math.max(maxLon, normalizedLon);
-          minLat = Math.min(minLat, lat);
-          maxLat = Math.max(maxLat, lat);
-        }
+
+    const mainPoly = polys.reduce((best, poly) =>
+      poly[0].length > best[0].length ? poly : best
+    );
+
+    let minLon = Infinity, minLat = Infinity;
+    let maxLon = -Infinity, maxLat = -Infinity;
+
+    for (const ring of mainPoly) {
+      for (const [lon, lat] of ring) {
+        const normalizedLon = this.normalizeLon(lon);
+        minLon = Math.min(minLon, normalizedLon);
+        maxLon = Math.max(maxLon, normalizedLon);
+        minLat = Math.min(minLat, lat);
+        maxLat = Math.max(maxLat, lat);
       }
     }
-    
+
     return { minLon, minLat, maxLon, maxLat };
   }
   
