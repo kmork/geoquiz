@@ -5,19 +5,6 @@
 
 import { createHeritageGame } from "./heritage-game.js";
 import { initConfetti } from "./confetti.js";
-import { norm } from "./utils.js";
-import { COUNTRY_ALIASES } from "./aliases.js";
-
-// Set up normalization
-window.normalizeCountryName = function(name) {
-  const normalized = norm(name);
-  for (const [canonical, alias] of Object.entries(COUNTRY_ALIASES)) {
-    if (norm(alias) === normalized) {
-      return norm(canonical);
-    }
-  }
-  return normalized;
-};
 
 /**
  * Create complete Heritage game

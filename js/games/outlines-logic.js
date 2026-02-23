@@ -7,6 +7,7 @@
 
 import { norm } from "../utils.js";
 import { shuffleInPlace } from "../game-utils.js";
+import { resolveAlias } from "../aliases.js";
 
 export class OutlinesGameLogic {
   constructor({ onAnswer, onComplete, onHintUsed, singleRound = false, neighbors = {}, maxRounds = 10 }) {
@@ -147,17 +148,8 @@ export class OutlinesGameLogic {
     }
 
     // Check answer (handle aliases)
-    const normAnswer = norm(trimmed);
     const normCountry = norm(this.current.country);
-    
-    let searchName = trimmed;
-    for (const [alias, official] of Object.entries(window.COUNTRY_ALIASES || {})) {
-      if (norm(alias) === normAnswer) {
-        searchName = official;
-        break;
-      }
-    }
-
+    const searchName = resolveAlias(trimmed);
     const isCorrect = norm(searchName) === normCountry;
 
     if (isCorrect) {

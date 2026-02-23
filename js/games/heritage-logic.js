@@ -7,6 +7,7 @@
 
 import { norm } from "../utils.js";
 import { shuffleArray } from "../game-utils.js";
+import { resolveAlias } from "../aliases.js";
 
 export class HeritageGameLogic {
   constructor({ onAnswer, onComplete, singleRound = false }) {
@@ -114,9 +115,7 @@ export class HeritageGameLogic {
     }
 
     // Normalize answer and check against country (with alias support)
-    const normAnswer = window.normalizeCountryName ? window.normalizeCountryName(trimmed) : norm(trimmed);
-    const normCountry = window.normalizeCountryName ? window.normalizeCountryName(this.currentSite.country) : norm(this.currentSite.country);
-    const isCorrect = normAnswer === normCountry;
+    const isCorrect = norm(resolveAlias(trimmed)) === norm(this.currentSite.country);
 
     this.roundEnded = true;
 

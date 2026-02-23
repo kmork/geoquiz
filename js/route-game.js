@@ -1,6 +1,6 @@
 import { norm } from "./utils.js";
 import { isMobileDevice, hapticFeedback, flashCorrect, shakeWrong, shuffleInPlace } from "./game-utils.js";
-import { SHORT_DISPLAY_NAMES } from "./aliases.js";
+import { SHORT_DISPLAY_NAMES, resolveAlias } from "./aliases.js";
 
 export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCountryFeature, fixedRound = null, onFinish = null }) {
   const DATA = window.DATA;
@@ -219,22 +219,9 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
   function processGuess(guess) {
     if (roundEnded) return;
 
-    const normalizedGuess = norm(guess);
-
-    // Check if the guess is an alias first
-    let searchName = guess;
-    for (const [alias, official] of Object.entries(window.COUNTRY_ALIASES || {})) {
-      if (norm(alias) === normalizedGuess) {
-        searchName = official;
-        break;
-      }
-    }
-
-    // Find matching country (try alias-resolved name first, then original input)
+    // Resolve alias and find matching country
+    const searchName = resolveAlias(guess);
     let match = DATA.find(c => norm(c.country) === norm(searchName));
-    if (!match && searchName !== guess) {
-      match = DATA.find(c => norm(c.country) === normalizedGuess);
-    }
 
     if (!match) {
       showStatus("❌ Country not found. Check spelling.", "wrong");

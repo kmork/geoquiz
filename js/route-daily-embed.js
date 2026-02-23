@@ -5,9 +5,6 @@ import { RouteRenderer } from "./ui-components/route-renderer.js";
 import { attachZoomPan } from "./map-zoom-pan.js";
 import { norm } from "./utils.js";
 
-// Match route-main behavior: make aliases global for route-game.js
-window.COUNTRY_ALIASES = COUNTRY_ALIASES;
-
 export async function runEmbeddedRouteGame(container, { fixedRound, neighbors, confetti }) {
   const optimalBetween = Math.max(0, (fixedRound?.path?.length || 2) - 2);
   const optimalCountriesText = `${optimalBetween} countr${optimalBetween === 1 ? "y" : "ies"}`;

@@ -10,9 +10,6 @@ import { OutlinesRenderer } from "./ui-components/outlines-renderer.js";
 import { COUNTRY_ALIASES } from "./aliases.js";
 import { loadGeoJSON } from "./geojson-loader.js";
 
-// Make aliases globally available
-window.COUNTRY_ALIASES = COUNTRY_ALIASES;
-
 /**
  * Create a complete Outlines game instance
  * @param {Object} config Configuration
@@ -287,10 +284,14 @@ export async function createCompleteOutlinesGame({
     }
   });
   
-  // Setup autocomplete with country names
+  // Setup autocomplete with country names and aliases
   if (window.DATA && Array.isArray(window.DATA)) {
     console.log('Setting up autocomplete with', window.DATA.length, 'countries');
-    const countryNames = window.DATA.map(c => c.country).filter(Boolean).sort();
+    const countryNames = window.DATA.map(c => c.country).filter(Boolean);
+    Object.keys(COUNTRY_ALIASES).forEach(alias => {
+      if (!countryNames.includes(alias)) countryNames.push(alias);
+    });
+    countryNames.sort();
     
     // Check if we need to create a datalist or use mobile autocomplete
     if (typeof window.initMobileAutocomplete === 'function') {

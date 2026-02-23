@@ -1,6 +1,8 @@
 import { shuffleArray, hapticFeedback } from "./game-utils.js";
 import { renderHeritageUI, setupHeritageAutocomplete } from "./ui-components/heritage-ui.js";
 import { renderFinishScreen } from "./game-records.js";
+import { COUNTRY_ALIASES, resolveAlias } from "./aliases.js";
+import { norm } from "./utils.js";
 
 export function createHeritageGame({ container, confetti, config = {} }) {
   let sites = [];
@@ -123,14 +125,12 @@ export function createHeritageGame({ container, confetti, config = {} }) {
       });
     }
     
-    // Add aliases if available
-    if (window.COUNTRY_ALIASES) {
-      Object.keys(window.COUNTRY_ALIASES).forEach(alias => {
-        if (!countryList.includes(alias)) {
-          countryList.push(alias);
-        }
-      });
-    }
+    // Add aliases
+    Object.keys(COUNTRY_ALIASES).forEach(alias => {
+      if (!countryList.includes(alias)) {
+        countryList.push(alias);
+      }
+    });
     
     setupHeritageAutocomplete(currentUI.elements.input, countryList.sort());
 
@@ -141,10 +141,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
     if (answeredThisRound || currentAttempt !== 1) return;
 
     const site = sites[currentIndex];
-    const normalizedGuess = window.normalizeCountryName(answer);
-    const normalizedAnswer = window.normalizeCountryName(site.country);
-
-    const isCorrect = normalizedGuess === normalizedAnswer;
+    const isCorrect = norm(resolveAlias(answer)) === norm(site.country);
 
     if (isCorrect) {
       // Correct on first try! 2 points

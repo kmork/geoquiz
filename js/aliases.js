@@ -7,6 +7,8 @@
  * so aliases should target the game data name, not the GeoJSON ADMIN name.
  */
 
+import { norm } from './utils.js';
+
 export const COUNTRY_ALIASES = {
   // === Abbreviations ===
   "US": "United States",
@@ -107,6 +109,18 @@ export const COUNTRY_ALIASES = {
   // === Regional/informal names ===
   "Holland": "Netherlands",
 };
+
+/**
+ * Resolve user-typed input to its canonical game data name.
+ * Returns the official name if an alias matches, otherwise returns the input unchanged.
+ */
+export function resolveAlias(userInput) {
+  const n = norm(userInput);
+  for (const [alias, official] of Object.entries(COUNTRY_ALIASES)) {
+    if (norm(alias) === n) return official;
+  }
+  return userInput;
+}
 
 export const SHORT_DISPLAY_NAMES = {
   "Democratic Republic of the Congo": "DR Congo",

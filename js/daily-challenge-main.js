@@ -43,27 +43,6 @@ import {
 // Import map creation for Capitals game
 import { createMap } from './map.js';
 
-/**
- * Normalize user input to match official country name
- * Handles aliases and case-insensitive matching
- */
-function normalizeCountryInput(userInput, countries) {
-  const normalized = norm(userInput);
-
-  // Check aliases first
-  if (window.COUNTRY_ALIASES) {
-    for (const [alias, official] of Object.entries(window.COUNTRY_ALIASES)) {
-      if (norm(alias) === normalized) {
-        return official;
-      }
-    }
-  }
-
-  // Find matching country
-  const match = countries.find(c => norm(c.country) === normalized);
-  return match ? match.country : null;
-}
-
 // Game configuration
 const GAMES = [
   {

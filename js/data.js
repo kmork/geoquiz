@@ -161,6 +161,7 @@ window.DATA = [
   {"country":"Solomon Islands","capitals":["Honiara"]},
   {"country":"Somalia","capitals":["Mogadishu"]},
   {"country":"South Africa","capitals":["Pretoria","Cape Town","Bloemfontein"]},
+  {"country":"South Korea","capitals":["Seoul"]},
   {"country":"South Sudan","capitals":["Juba"]},
   {"country":"Spain","capitals":["Madrid"]},
   {"country":"Sri Lanka","capitals":["Sri Jayawardenepura Kotte"]},

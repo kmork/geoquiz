@@ -6,8 +6,6 @@ import { RouteRenderer } from "./ui-components/route-renderer.js";
 import { attachZoomPan } from "./map-zoom-pan.js";
 import { norm } from "./utils.js";
 
-window.COUNTRY_ALIASES = COUNTRY_ALIASES;
-
 function hideInitOverlay() {
   const overlay = document.getElementById("init-overlay");
   if (overlay) overlay.style.display = "none";
