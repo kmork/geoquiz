@@ -50,6 +50,8 @@
   --map-correct-stroke: rgba(110, 231, 183, 0.95);
   --map-wrong-fill: rgba(252, 165, 161, 0.5);
   --map-wrong-stroke: rgba(252, 165, 161, 0.95);
+  --map-missed-fill: rgba(251, 191, 36, 0.4);
+  --map-missed-stroke: rgba(251, 191, 36, 0.9);
   --map-dot-fill: #6ee7b7;
   --map-dot-stroke: rgba(232,236,255,.9);
 
@@ -111,6 +113,8 @@ html.light-mode {
   --map-correct-stroke: rgba(5, 150, 105, 0.95);
   --map-wrong-fill: rgba(220, 38, 38, 0.35);
   --map-wrong-stroke: rgba(220, 38, 38, 0.95);
+  --map-missed-fill: rgba(234, 179, 8, 0.35);
+  --map-missed-stroke: rgba(234, 179, 8, 0.9);
   --map-dot-fill: #059669;
   --map-dot-stroke: rgba(0,0,0,.85);
 }

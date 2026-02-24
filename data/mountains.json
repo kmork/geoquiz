@@ -1,0 +1,98 @@
+[
+  {
+    "name": "Alps",
+    "countries": ["France", "Switzerland", "Austria", "Italy", "Germany", "Liechtenstein", "Slovenia", "Monaco"],
+    "hint": "Major mountain range in central Europe forming a natural barrier between north and south, home to Mont Blanc",
+    "path": [[6.0, 44.0], [7.5, 45.5], [9.5, 47.0], [11.0, 47.5], [13.0, 47.5], [14.5, 46.5]]
+  },
+  {
+    "name": "Himalayas",
+    "countries": ["India", "Nepal", "Bhutan", "China", "Pakistan"],
+    "hint": "World's highest mountain range, containing all peaks over 8,000 m including Mount Everest",
+    "path": [[74.0, 36.0], [78.0, 34.0], [83.0, 29.5], [87.0, 28.0], [91.0, 27.5], [95.0, 27.0]]
+  },
+  {
+    "name": "Andes",
+    "countries": ["Colombia", "Ecuador", "Peru", "Bolivia", "Chile", "Argentina", "Venezuela"],
+    "hint": "World's longest continental mountain range, running along the entire western coast of South America",
+    "path": [[-73.0, 7.0], [-77.0, 0.0], [-75.0, -10.0], [-68.0, -20.0], [-67.5, -30.0], [-70.0, -40.0], [-71.0, -50.0]]
+  },
+  {
+    "name": "Pyrenees",
+    "countries": ["France", "Spain", "Andorra"],
+    "hint": "Mountain range forming a natural border between France and Spain on the Iberian Peninsula",
+    "path": [[-1.5, 43.5], [0.5, 42.5], [2.0, 42.5]]
+  },
+  {
+    "name": "Caucasus",
+    "countries": ["Russia", "Georgia", "Armenia", "Azerbaijan"],
+    "hint": "Mountain range stretching between the Black Sea and the Caspian Sea, with Mount Elbrus as its highest peak",
+    "path": [[39.0, 43.5], [43.0, 42.5], [46.0, 41.5], [49.0, 41.0]]
+  },
+  {
+    "name": "Carpathians",
+    "countries": ["Czechia", "Slovakia", "Poland", "Ukraine", "Romania"],
+    "hint": "Arc-shaped mountain range in Central and Eastern Europe forming a natural boundary across multiple countries",
+    "path": [[17.0, 49.5], [20.0, 49.5], [22.5, 50.0], [24.0, 49.0], [25.5, 47.5], [26.0, 45.5]]
+  },
+  {
+    "name": "Atlas",
+    "countries": ["Morocco", "Algeria", "Tunisia"],
+    "hint": "Mountain range running through northwestern Africa, separating the Sahara Desert from the Mediterranean coast",
+    "path": [[-8.0, 33.5], [-3.0, 33.0], [3.0, 36.0], [8.5, 36.5]]
+  },
+  {
+    "name": "Rockies",
+    "countries": ["United States", "Canada"],
+    "hint": "Major mountain range in western North America stretching from Canada southward into the United States",
+    "path": [[-114.0, 60.0], [-115.0, 54.0], [-116.0, 50.0], [-106.0, 45.0], [-105.0, 38.0], [-107.0, 35.5]]
+  },
+  {
+    "name": "Urals",
+    "countries": ["Russia", "Kazakhstan"],
+    "hint": "Mountain range running north-south through Russia, traditionally marking the boundary between Europe and Asia",
+    "path": [[60.0, 69.0], [60.5, 65.0], [59.5, 60.0], [59.0, 55.0], [58.5, 52.0]]
+  },
+  {
+    "name": "Scandinavian Mountains",
+    "countries": ["Norway", "Sweden"],
+    "hint": "Mountain range forming the spine of the Scandinavian Peninsula, creating Norway's dramatic fjords on its western side",
+    "path": [[14.0, 70.0], [15.0, 66.0], [13.5, 63.0], [12.0, 61.5]]
+  },
+  {
+    "name": "Zagros",
+    "countries": ["Turkey", "Iran", "Iraq"],
+    "hint": "Extensive mountain range in the Middle East forming the geological border between the Arabian and Eurasian plates",
+    "path": [[45.0, 37.0], [47.0, 33.5], [50.0, 30.0], [54.0, 27.0]]
+  },
+  {
+    "name": "Hindu Kush",
+    "countries": ["Afghanistan", "Pakistan"],
+    "hint": "Mountain range forming the western extension of the Himalayas, dividing Central and South Asia",
+    "path": [[67.0, 36.5], [69.5, 35.0], [72.0, 34.5], [74.5, 36.5]]
+  },
+  {
+    "name": "Tian Shan",
+    "countries": ["China", "Kyrgyzstan", "Kazakhstan", "Tajikistan"],
+    "hint": "Vast Central Asian mountain system extending from western China through multiple countries, with peaks over 7,000 m",
+    "path": [[76.0, 42.5], [79.0, 42.0], [82.0, 41.5], [86.0, 42.0], [88.0, 43.5]]
+  },
+  {
+    "name": "Altai",
+    "countries": ["Russia", "China", "Mongolia", "Kazakhstan"],
+    "hint": "Mountain range at the convergence of four countries in the heart of Eurasia, source of the Irtysh and Ob rivers",
+    "path": [[85.0, 52.0], [87.5, 50.0], [90.0, 49.0], [92.0, 48.0], [87.0, 47.0], [83.0, 48.0]]
+  },
+  {
+    "name": "Drakensberg",
+    "countries": ["South Africa", "Lesotho"],
+    "hint": "Great escarpment and mountain range forming a dramatic wall along the eastern edge of the southern African plateau",
+    "path": [[27.0, -29.5], [29.0, -31.0], [29.5, -33.0]]
+  },
+  {
+    "name": "Rwenzori",
+    "countries": ["Uganda", "Democratic Republic of the Congo"],
+    "hint": "Equatorial mountain range on the Uganda-DRC border, known as the 'Mountains of the Moon' with glaciers at the equator",
+    "path": [[30.0, -0.5], [29.8, 0.0], [29.5, 0.4]]
+  }
+]

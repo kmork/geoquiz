@@ -1,0 +1,134 @@
+[
+  {
+    "name": "Nile",
+    "countries": ["Egypt", "Sudan", "South Sudan", "Uganda", "Ethiopia"],
+    "hint": "The world's longest river, flowing northward through northeastern Africa to the Mediterranean Sea",
+    "path": [[31.0, 4.0], [32.0, 8.0], [32.5, 15.0], [31.5, 19.0], [30.5, 26.0], [31.2, 30.0]]
+  },
+  {
+    "name": "Amazon",
+    "countries": ["Brazil", "Peru", "Colombia"],
+    "hint": "The world's largest river by discharge, flowing through the vast rainforest of South America",
+    "path": [[-74.0, -4.5], [-70.0, -4.0], [-60.0, -3.5], [-52.0, -2.5], [-49.5, -1.5]]
+  },
+  {
+    "name": "Congo",
+    "countries": ["Democratic Republic of the Congo", "Congo", "Central African Republic"],
+    "hint": "Africa's deepest river and the world's second largest by discharge, flowing in a great arc through central Africa",
+    "path": [[28.0, -11.0], [25.5, -5.0], [22.0, -2.0], [18.0, 0.5], [16.0, 1.5]]
+  },
+  {
+    "name": "Danube",
+    "countries": ["Germany", "Austria", "Slovakia", "Hungary", "Croatia", "Serbia", "Romania", "Bulgaria", "Moldova", "Ukraine"],
+    "hint": "Europe's second longest river, flowing eastward from the Black Forest through 10 countries to the Black Sea",
+    "path": [[10.0, 48.0], [14.5, 48.5], [17.0, 47.5], [18.5, 47.5], [19.0, 46.0], [21.5, 45.5], [25.0, 44.5], [27.0, 45.0], [29.5, 45.5]]
+  },
+  {
+    "name": "Rhine",
+    "countries": ["Switzerland", "Liechtenstein", "Austria", "Germany", "France", "Netherlands"],
+    "hint": "A major European river flowing from the Swiss Alps northward to the North Sea, forming borders along the way",
+    "path": [[9.5, 47.0], [9.0, 47.5], [8.0, 48.5], [7.5, 49.5], [6.5, 51.0], [5.5, 52.0]]
+  },
+  {
+    "name": "Mekong",
+    "countries": ["China", "Myanmar", "Laos", "Thailand", "Cambodia", "Vietnam"],
+    "hint": "Southeast Asia's longest river, flowing from the Tibetan Plateau through six countries to the South China Sea",
+    "path": [[101.0, 22.5], [100.0, 20.5], [102.0, 18.0], [104.0, 15.5], [105.0, 12.0], [106.0, 10.5]]
+  },
+  {
+    "name": "Zambezi",
+    "countries": ["Zambia", "Zimbabwe", "Mozambique", "Angola", "Namibia", "Botswana"],
+    "hint": "Southern Africa's fourth longest river, famous for Victoria Falls on the Zambia-Zimbabwe border",
+    "path": [[22.0, -11.5], [24.5, -15.5], [27.5, -17.0], [31.0, -17.5], [33.5, -17.5], [35.5, -18.5]]
+  },
+  {
+    "name": "Niger",
+    "countries": ["Guinea", "Mali", "Niger", "Benin", "Nigeria"],
+    "hint": "West Africa's principal river, making a distinctive inland arc through the Sahel before turning south to the Atlantic",
+    "path": [[-11.0, 10.0], [-4.0, 16.0], [2.0, 15.5], [3.0, 13.0], [4.0, 10.5], [5.5, 5.5]]
+  },
+  {
+    "name": "Ganges",
+    "countries": ["India", "Bangladesh"],
+    "hint": "The sacred river of the Indian subcontinent, rising in the Himalayas and flowing to the Bay of Bengal",
+    "path": [[78.0, 30.0], [82.0, 27.5], [85.0, 25.5], [88.0, 24.0], [90.0, 23.5]]
+  },
+  {
+    "name": "Euphrates",
+    "countries": ["Turkey", "Syria", "Iraq"],
+    "hint": "One of the cradles of civilization in the Middle East, flowing from Anatolia to the Persian Gulf",
+    "path": [[38.0, 38.5], [38.5, 37.0], [40.0, 36.0], [43.0, 34.0], [46.0, 31.5], [47.5, 30.5]]
+  },
+  {
+    "name": "Tigris",
+    "countries": ["Turkey", "Syria", "Iraq"],
+    "hint": "Ancient river flowing through Mesopotamia alongside the Euphrates, heartland of early civilizations",
+    "path": [[38.5, 38.5], [41.0, 37.5], [42.0, 36.5], [43.5, 35.5], [44.5, 34.0], [47.5, 30.5]]
+  },
+  {
+    "name": "Indus",
+    "countries": ["China", "India", "Pakistan"],
+    "hint": "One of the longest rivers in Asia, originating in Tibet and flowing to the Arabian Sea through the Indian subcontinent",
+    "path": [[78.0, 35.0], [75.0, 33.5], [71.0, 30.0], [68.5, 27.0], [67.5, 24.0], [67.5, 23.5]]
+  },
+  {
+    "name": "Orange",
+    "countries": ["Lesotho", "South Africa", "Namibia"],
+    "hint": "The longest river entirely in southern Africa, flowing westward from the Drakensberg to the Atlantic Ocean",
+    "path": [[29.0, -29.5], [26.0, -28.5], [22.5, -29.0], [18.0, -28.5], [16.5, -28.5]]
+  },
+  {
+    "name": "Senegal",
+    "countries": ["Guinea", "Mali", "Senegal", "Mauritania"],
+    "hint": "West African river forming the natural border between Senegal and Mauritania before emptying into the Atlantic",
+    "path": [[-10.5, 12.0], [-11.5, 13.0], [-13.5, 13.5], [-15.5, 14.5], [-16.5, 16.0]]
+  },
+  {
+    "name": "Okavango",
+    "countries": ["Angola", "Namibia", "Botswana"],
+    "hint": "A unique river that flows inland to form a vast delta in the Kalahari Desert instead of reaching the sea",
+    "path": [[22.5, -15.0], [20.0, -18.0], [18.5, -18.5], [22.5, -19.5]]
+  },
+  {
+    "name": "Orinoco",
+    "countries": ["Venezuela", "Colombia"],
+    "hint": "One of South America's longest rivers, forming much of the natural border between Venezuela and Colombia",
+    "path": [[-67.5, 4.0], [-65.0, 6.5], [-63.0, 6.5], [-62.0, 7.5], [-61.5, 8.0], [-62.0, 9.5]]
+  },
+  {
+    "name": "Paraná",
+    "countries": ["Brazil", "Paraguay", "Argentina"],
+    "hint": "South America's second largest river by discharge, flowing southward through three countries",
+    "path": [[-52.0, -18.0], [-54.5, -23.0], [-57.0, -27.0], [-58.0, -33.5]]
+  },
+  {
+    "name": "Rio Grande",
+    "countries": ["United States", "Mexico"],
+    "hint": "Long river forming a natural border between the United States and Mexico before emptying into the Gulf of Mexico",
+    "path": [[-107.0, 31.0], [-104.5, 29.5], [-103.0, 29.0], [-100.0, 28.5], [-97.5, 26.0], [-97.0, 25.5]]
+  },
+  {
+    "name": "Amur",
+    "countries": ["Russia", "China"],
+    "hint": "One of the world's longest rivers, forming most of the boundary between the Russian Far East and northeastern China",
+    "path": [[120.0, 53.0], [126.0, 52.0], [130.0, 49.0], [134.0, 48.0], [141.0, 53.0]]
+  },
+  {
+    "name": "Irtysh",
+    "countries": ["China", "Kazakhstan", "Russia"],
+    "hint": "Major river flowing from China's Xinjiang through Kazakhstan's steppes into the vast Siberian plains of Russia",
+    "path": [[87.0, 49.0], [84.0, 52.0], [73.0, 57.0], [68.0, 58.0], [68.5, 61.0]]
+  },
+  {
+    "name": "Columbia",
+    "countries": ["United States", "Canada"],
+    "hint": "Major river in the Pacific Northwest, originating in Canada's Rocky Mountains before flowing through the United States to the Pacific",
+    "path": [[-117.0, 51.5], [-117.5, 49.0], [-119.0, 47.0], [-120.0, 46.5], [-122.0, 45.5], [-124.0, 46.0]]
+  },
+  {
+    "name": "Jordan",
+    "countries": ["Lebanon", "Syria", "Jordan", "Israel"],
+    "hint": "Historic river in the Middle East flowing from Mount Hermon through the Sea of Galilee to the Dead Sea",
+    "path": [[35.7, 33.5], [35.6, 32.8], [35.5, 32.5], [35.5, 32.0], [35.5, 31.5]]
+  }
+]
