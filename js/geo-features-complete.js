@@ -13,6 +13,7 @@ import { norm } from './utils.js';
 import { COUNTRY_ALIASES } from './aliases.js';
 import { loadGeoJSON } from './geojson-loader.js';
 import { renderFinishScreen } from './game-records.js';
+import { initConfetti } from './confetti.js';
 
 /**
  * @param {Object}  config
@@ -42,6 +43,8 @@ export async function createGeoFeaturesGame({
   gameId,
   initOverlay,
 }) {
+  const confetti = initConfetti('confetti');
+
   const MAP_W = 600;
   const MAP_H = 320;
 
@@ -641,6 +644,11 @@ export async function createGeoFeaturesGame({
     for (const c of result.correct) highlights.set(c, 'correct');
     for (const c of result.wrong)   highlights.set(c, 'wrong');
     for (const c of result.missed)  highlights.set(c, 'missed');
+
+    // Celebrate a perfect round (no wrong clicks, no missed countries)
+    if (result.wrong.size === 0 && result.missed.size === 0 && result.correct.size > 0) {
+      confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
+    }
 
     // Draw the feature path
     currentFeatureOverlay = logic.current;
