@@ -749,6 +749,16 @@ export async function createGeoFeaturesGame({
   createButtons();
   attachCanvasInteraction();
 
+  // Wikipedia link on the feature name
+  if (featureNameEl) {
+    featureNameEl.title = 'Open Wikipedia';
+    featureNameEl.addEventListener('click', () => {
+      const name = logic.current?.name;
+      if (!name) return;
+      open('https://en.wikipedia.org/wiki/' + encodeURIComponent(name), '_blank', 'noopener,noreferrer,width=900,height=700');
+    });
+  }
+
   if (initOverlay) initOverlay.style.display = 'none';
 
   startGame();
