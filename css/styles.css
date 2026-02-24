@@ -726,14 +726,14 @@ select option {
   /* Fill the visual viewport so there is no gap below the game card when the
      keyboard is open. --vvh is set by JS (mobile-autocomplete.js) and tracks
      window.visualViewport.height, which shrinks when keyboard opens. */
-  .wrap:not(.find-country-page) {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page) {
     height: var(--vvh, 100svh);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
   }
 
-  .wrap:not(.find-country-page) > .card {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page) > .card {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -742,14 +742,14 @@ select option {
   }
 
   /* Map grows to fill space between header and input row */
-  .wrap:not(.find-country-page) .mapwrap {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page) .mapwrap {
     flex: 1;
     height: auto;
     min-height: 150px;
     max-height: 350px;
   }
 
-  .wrap:not(.find-country-page) #map {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page) #map {
     height: 100%;
     width: 100%;
   }
@@ -1241,6 +1241,59 @@ select option {
 /* Mobile breakpoint */
 @media (max-width: 640px) {
   /* No min-height override needed - aspect ratio is preserved by JS */
+}
+
+/* Rivers / Mountains games - same expanded layout as Find the Country */
+.rivers-page,
+.mountains-page {
+  max-width: 1600px;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.rivers-page .card,
+.mountains-page .card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.rivers-page .mapwrap,
+.mountains-page .mapwrap {
+  flex: 1;
+  margin: 10px 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.rivers-page #map,
+.mountains-page #map {
+  flex: 1;
+  max-width: 100%;
+  max-height: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 1400px) {
+  .rivers-page, .mountains-page { max-width: 1200px; }
+}
+
+@media (max-width: 1024px) {
+  .rivers-page, .mountains-page { max-width: 980px; }
+}
+
+@media (max-width: 640px) {
+  .rivers-page,
+  .mountains-page {
+    height: 100svh;
+  }
 }
 
 /* ===============================================
