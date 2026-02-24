@@ -589,19 +589,12 @@ export async function createGeoFeaturesGame({
 
     submitBtn = document.createElement('button');
     submitBtn.textContent = 'Submit';
-    submitBtn.style.cssText = btnBase + `
-      background: rgba(59,130,246,0.25);
-      border-color: rgba(59,130,246,0.6);
-      color: #93c5fd;
-    `;
+    submitBtn.className = 'geo-submit-btn';
+    submitBtn.style.cssText = btnBase;
 
     nextBtn = document.createElement('button');
-    nextBtn.style.cssText = btnBase + `
-      display: none;
-      background: rgba(110,231,183,0.2);
-      border-color: rgba(110,231,183,0.6);
-      color: #6ee7b7;
-    `;
+    nextBtn.className = 'geo-next-btn';
+    nextBtn.style.cssText = btnBase + `display: none;`;
 
     bar.appendChild(submitBtn);
     bar.appendChild(nextBtn);

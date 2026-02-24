@@ -1313,6 +1313,25 @@ select option {
   }
 }
 
+/* Geo-features game buttons (Submit / Next) — theme-aware text color */
+.geo-submit-btn {
+  background: rgba(59,130,246,0.25);
+  border-color: rgba(59,130,246,0.6);
+  color: #93c5fd;
+}
+html.light-mode .geo-submit-btn {
+  color: #1d4ed8;
+}
+
+.geo-next-btn {
+  background: rgba(110,231,183,0.2);
+  border-color: rgba(110,231,183,0.6);
+  color: #6ee7b7;
+}
+html.light-mode .geo-next-btn {
+  color: #047857;
+}
+
 /* ===============================================
    Picture Guess Game Styles
    =============================================== */
