@@ -119,6 +119,9 @@ function initMobileAutocomplete(inputElement, suggestions, options = {}) {
     const isDeleting = e && e.inputType && e.inputType.startsWith('delete');
     if (matches.length === 1 && !isDeleting) {
       inputElement.value = matches[0];
+      // Select the auto-completed suffix so accidental keystrokes replace it
+      // rather than append to the end. Clicking or arrow keys deselect normally.
+      inputElement.setSelectionRange(value.length, matches[0].length);
       dropdown.style.display = 'none';
       highlightedIndex = -1;
       return;
