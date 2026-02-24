@@ -212,6 +212,23 @@ button:disabled{opacity:.55;cursor:not-allowed}
   background: var(--wrong-bg);
 }
 
+/* Geography Trivia — more breathing room on larger screens */
+@media (min-width: 640px) {
+  .trivia-page .card { padding: 28px 32px; }
+  .trivia-page .choices { margin-top: 32px; gap: 14px; }
+  .trivia-page .choices button { padding: 14px 18px; }
+  .trivia-page #explanation { margin-top: 28px; }
+}
+
+@media (min-width: 1024px) {
+  .trivia-page .card { padding: 36px 48px; }
+  .trivia-page .hr { margin: 22px 0; }
+  .trivia-page #questionText { margin: 16px 0; }
+  .trivia-page .choices { margin-top: 40px; gap: 16px; }
+  .trivia-page .choices button { padding: 16px 20px; }
+  .trivia-page #explanation { margin-top: 32px; }
+}
+
 .mapwrap{margin:10px 0}
 
 #map{
