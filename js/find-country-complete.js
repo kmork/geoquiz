@@ -33,7 +33,8 @@ export async function createCompleteMap({
   onComplete,
   timeLimit,
   maxRounds = 10,
-  gameIdSuffix = 'short'
+  gameIdSuffix = 'short',
+  continent = null,
 }) {
 
   const MAP_W = 600;
@@ -174,6 +175,16 @@ export async function createCompleteMap({
     }
   }
 
+  // Set of normalised GeoJSON names for the active continent.
+  // Empty when no continent filter is active (show all countries normally).
+  const continentGeoNames = new Set();
+  if (continent) {
+    for (const d of window.DATA) {
+      const geoName = dataToGeo[d.country] || d.country;
+      continentGeoNames.add(norm(geoName));
+    }
+  }
+
   // Point-in-polygon test
   function pointInPolygon(x, y, polygon) {
     let inside = false;
@@ -228,13 +239,21 @@ export async function createCompleteMap({
     const defaultFill = getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)";
     const defaultStroke = getCSSVar('--map-country-stroke') || "rgba(232,236,255,.3)";
     const hoverFill = getCSSVar('--map-country-fill-highlight') || "rgba(165,180,252,.25)";
+    const dimFill = getCSSVar('--map-country-fill-dim') || 'rgba(165,180,252,.03)';
+    const dimStroke = getCSSVar('--map-country-stroke-dim') || 'rgba(232,236,255,.10)';
 
     for (const country of countryPaths) {
       let fillStyle = defaultFill;
       let strokeStyle = defaultStroke;
       let strokeWidth = 0.5;
 
-      if (highlightedCountry && norm(country.name) === norm(highlightedCountry)) {
+      const isDimmed = continentGeoNames.size > 0 && !continentGeoNames.has(norm(country.name));
+
+      if (isDimmed) {
+        fillStyle = dimFill;
+        strokeStyle = dimStroke;
+        strokeWidth = 0.3;
+      } else if (highlightedCountry && norm(country.name) === norm(highlightedCountry)) {
         if (highlightType === "selected") {
           fillStyle = getCSSVar('--map-selected-fill') || "rgba(165, 180, 252, 0.35)";
           strokeStyle = getCSSVar('--map-selected-stroke') || "rgba(165, 180, 252, 0.95)";
@@ -331,6 +350,8 @@ export async function createCompleteMap({
 
     // Main pass: point-in-polygon, smallest countries checked first
     for (const country of hitTestPaths) {
+      // Skip non-continent countries in continent mode
+      if (continentGeoNames.size > 0 && !continentGeoNames.has(norm(country.name))) continue;
       for (const polygon of country.paths) {
         if (pointInPolygon(normalizedMapX, mapY, polygon)) {
           return resolveToDataName(country.name) || country.name;
@@ -345,6 +366,8 @@ export async function createCompleteMap({
 
     for (const country of hitTestPaths) {
       if (country.bboxSize > 50) continue;
+      // Skip non-continent countries in continent mode
+      if (continentGeoNames.size > 0 && !continentGeoNames.has(norm(country.name))) continue;
       const dx = normalizedMapX - country.bboxCx;
       const dy = mapY - country.bboxCy;
       const distance = Math.sqrt(dx * dx + dy * dy);
@@ -454,6 +477,67 @@ export async function createCompleteMap({
     drawWorldMap();
   }
 
+  // Zoom to fit the active continent in the viewport (no animation)
+  function zoomToContinent() {
+    if (!continentGeoNames.size) return;
+    let bbox = null;
+    for (const d of window.DATA) {
+      const mapName = dataToGeo[d.country] || d.country;
+      const n = norm(mapName);
+      const features = WORLD.filter(f =>
+        norm(f.properties.ADMIN || '') === n || norm(f.properties.NAME || '') === n
+      );
+      // Use only the largest polygon ring (by point count) for each country.
+      // This excludes overseas territories (French Guiana, Réunion, etc.) which
+      // have far fewer coastline points than the main landmass.
+      let bestRing = null;
+      let bestCount = 0;
+      for (const feature of features) {
+        const polys = feature.geometry.type === 'Polygon'
+          ? [feature.geometry.coordinates]
+          : feature.geometry.coordinates;
+        for (const poly of polys) {
+          const ring = poly[0]; // exterior ring
+          if (ring.length > bestCount) { bestCount = ring.length; bestRing = ring; }
+        }
+      }
+      if (!bestRing) continue;
+      let minLon = Infinity, minLat = Infinity, maxLon = -Infinity, maxLat = -Infinity;
+      for (const [lon, lat] of bestRing) {
+        if (lon < minLon) minLon = lon;
+        if (lat < minLat) minLat = lat;
+        if (lon > maxLon) maxLon = lon;
+        if (lat > maxLat) maxLat = lat;
+      }
+      if (!bbox) {
+        bbox = { minLon, minLat, maxLon, maxLat };
+      } else {
+        bbox.minLon = Math.min(bbox.minLon, minLon);
+        bbox.maxLon = Math.max(bbox.maxLon, maxLon);
+        bbox.minLat = Math.min(bbox.minLat, minLat);
+        bbox.maxLat = Math.max(bbox.maxLat, maxLat);
+      }
+    }
+    if (!bbox) return;
+    const PAD = 0.12;
+    const dLon = bbox.maxLon - bbox.minLon;
+    const dLat = bbox.maxLat - bbox.minLat;
+    bbox.minLon -= dLon * PAD;
+    bbox.maxLon += dLon * PAD;
+    bbox.minLat = Math.max(-90, bbox.minLat - dLat * PAD);
+    bbox.maxLat = Math.min(90, bbox.maxLat + dLat * PAD);
+    const [x1, y1] = proj([bbox.minLon, bbox.maxLat]);
+    const [x2, y2] = proj([bbox.maxLon, bbox.minLat]);
+    const width = x2 - x1;
+    const height = y2 - y1;
+    const zoomX = canvasDisplayWidth / width;
+    const zoomY = canvasDisplayHeight / height;
+    zoom = Math.max(minZoom, Math.min(zoomX, zoomY, 500));
+    scrollX = x1 + width / 2 - canvasDisplayWidth / (2 * zoom);
+    scrollY = y1 + height / 2 - canvasDisplayHeight / (2 * zoom);
+    scrollY = Math.max(0, Math.min(scrollY, MAP_H - canvasDisplayHeight / zoom));
+  }
+
   // Reset map view
   function resetMapView() {
     highlightedCountry = null;
@@ -461,6 +545,9 @@ export async function createCompleteMap({
     hoverCountry = null;
     velocityX = 0;
     velocityY = 0;
+    if (continentGeoNames.size > 0) {
+      zoomToContinent();
+    }
     drawWorldMap();
   }
 
@@ -761,8 +848,12 @@ export async function createCompleteMap({
 
   // Initialize canvas
   resizeCanvas();
-  // Center on Europe/Africa (longitude 0°) rather than the date line
-  scrollX = MAP_W / 2 - canvasDisplayWidth / (2 * zoom);
+  if (continent) {
+    zoomToContinent();
+  } else {
+    // Center on Europe/Africa (longitude 0°) rather than the date line
+    scrollX = MAP_W / 2 - canvasDisplayWidth / (2 * zoom);
+  }
   window.addEventListener('resize', resizeCanvas);
   drawWorldMap();
 

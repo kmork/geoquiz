@@ -46,7 +46,8 @@ let gameInstance = null;
       countryNameEl: ui.countryNameEl,
       ui,
       maxRounds: _maxRounds,
-      gameIdSuffix: _gameIdSuffix
+      gameIdSuffix: _gameIdSuffix,
+      continent: _continentParam,
     });
     
     gameInstance = result;

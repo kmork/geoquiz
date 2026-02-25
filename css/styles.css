@@ -43,6 +43,8 @@
   --map-country-stroke-neighbor: rgba(232,236,255,.5);
   --map-country-stroke-highlight: rgba(232,236,255,.95);
   --map-country-fill: rgba(165,180,252,.08);
+  --map-country-fill-dim: rgba(165,180,252,.03);
+  --map-country-stroke-dim: rgba(232,236,255,.10);
   --map-country-fill-highlight: rgba(165,180,252,.25);
   --map-selected-fill: rgba(165, 180, 252, 0.35);
   --map-selected-stroke: rgba(165, 180, 252, 0.95);
@@ -106,6 +108,8 @@ html.light-mode {
   --map-country-stroke-neighbor: rgba(0,0,0,.5);
   --map-country-stroke-highlight: rgba(0,0,0,.85);
   --map-country-fill: rgba(99,102,241,.08);
+  --map-country-fill-dim: rgba(99,102,241,.05);
+  --map-country-stroke-dim: rgba(0,0,0,.15);
   --map-country-fill-highlight: rgba(99,102,241,.25);
   --map-selected-fill: rgba(99, 102, 241, 0.3);
   --map-selected-stroke: rgba(99, 102, 241, 0.95);
