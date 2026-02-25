@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-GeoQuiz is a browser-based geography quiz app with 7 interactive games (6 standalone + Daily Challenge). Live at geoquiz.info.
+GeoQuiz is a browser-based geography quiz app with 10 interactive games (9 standalone + Daily Challenge). Live at geoquiz.info.
 
 **Stack:** Vanilla JavaScript (ES6 modules), HTML5, CSS3. No frameworks, no build system, no package manager.
 
@@ -47,9 +47,9 @@ This separation allows games to be reused inside the Daily Challenge without UI 
 
 ### Daily Challenge System
 
-- `js/daily-challenge-main.js` orchestrates 6 mini-games in sequence
+- `js/daily-challenge-main.js` orchestrates 7 mini-games in sequence (find, trivia, outlines, heritage, flags, capitals, connect)
 - `js/seeded-random.js` provides deterministic RNG so all players get the same daily game
-- `js/daily-challenge-scoring.js` implements a 23-star scoring system
+- `js/daily-challenge-scoring.js` implements a 24-star scoring system (3+2+4+3+3+4+5)
 - Games have both standalone HTML pages and embedded daily-challenge modes
 
 ### Shared Modules
@@ -65,7 +65,11 @@ This separation allows games to be reused inside the Daily Challenge without UI 
 
 - `data/ne_10m_admin_0_countries*.geojson.gz` - Compressed Natural Earth country geometries
 - `data/countries-neighbors.json` - Pre-computed adjacency graph for Connect the Countries
+- `data/countries-continents.json` - 194-entry country → continent mapping (Africa/Americas/Asia/Europe/Oceania)
+- `data/countries-flags.json` - Country → ISO_A2 mapping for flag images
 - `data/heritage-sites.json` - 47 UNESCO sites with metadata
+- `data/rivers.json` - 22 rivers with country lists
+- `data/mountains.json` - 16 mountain ranges with country lists
 - `data/qa.json` - 120+ trivia questions
 - `data/places.geojson` - Capitals and major cities
 
@@ -78,7 +82,7 @@ Colors are defined as CSS custom properties on `:root` with overrides on `html.l
 - All `<script>` tags use `type="module"`
 - Some shared state lives on `window` (e.g., `window.DATA`, `window.COUNTRY_ALIASES`)
 - Country name matching uses normalization: lowercase, strip whitespace/hyphens/apostrophes
-- Map rendering uses SVG for most games, Canvas for Find the Country (performance)
+- Map rendering uses SVG for most games, Canvas for Find the Country and geo-features games (Rivers & Mountains) for performance
 - EditorConfig: 2-space indent, UTF-8, LF line endings
 - No test framework; testing is manual via browser
 - Only external library is pako.js (gzip decompression, vendored at `js/pako.min.js`)
