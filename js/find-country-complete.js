@@ -523,13 +523,26 @@ export async function createCompleteMap({
       return meanLon + d;
     }
 
-    // Build combined bbox from normalised coordinates.
+    // IQR-based fence to clip outlier ring points (e.g. Russia in Europe extends
+    // to 190°E but all other European centroids cluster in -22° – 33°E).
+    // 3×IQR (wider than Tukey's standard 1.5×) keeps genuine outlier countries
+    // like Iceland fully visible while still clipping Russia near the Urals (~60°E).
+    const normCentroids = bestRings
+      .map(r => normLon(r.centroidLon))
+      .sort((a, b) => a - b);
+    const q1 = normCentroids[Math.floor(normCentroids.length * 0.25)];
+    const q3 = normCentroids[Math.floor(normCentroids.length * 0.75)];
+    const iqr = q3 - q1;
+    const fenceLo = q1 - 3 * iqr;
+    const fenceHi = q3 + 3 * iqr;
+
+    // Build combined bbox from normalised, clamped ring points.
     // Normalised lons may exceed ±180°; the linear projection and horizontal
     // map tiling handle this correctly — scrollX can point into the second copy.
     let minLon = Infinity, maxLon = -Infinity, minLat = Infinity, maxLat = -Infinity;
     for (const { ring } of bestRings) {
       for (const [lon, lat] of ring) {
-        const nlon = normLon(lon);
+        const nlon = Math.max(fenceLo, Math.min(fenceHi, normLon(lon)));
         if (nlon < minLon) minLon = nlon;
         if (nlon > maxLon) maxLon = nlon;
         if (lat < minLat) minLat = lat;
