@@ -92,6 +92,7 @@ function nextRound() {
         setTimeout(() => nextRound(), 1200);
       } else {
         hapticFeedback('wrong');
+        ui.showFeedback(`You guessed: ${selectedCountry}`, false);
         // Expand the correct flag after a short pause so the player can study it
         setTimeout(() => ui.animateCorrectFlag(country.country), 500);
         setTimeout(() => nextRound(), 2500);
