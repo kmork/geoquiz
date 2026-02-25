@@ -480,16 +480,15 @@ export async function createCompleteMap({
   // Zoom to fit the active continent in the viewport (no animation)
   function zoomToContinent() {
     if (!continentGeoNames.size) return;
-    let bbox = null;
+
+    // Collect the largest polygon ring per country (excludes overseas territories).
+    const bestRings = [];
     for (const d of window.DATA) {
       const mapName = dataToGeo[d.country] || d.country;
       const n = norm(mapName);
       const features = WORLD.filter(f =>
         norm(f.properties.ADMIN || '') === n || norm(f.properties.NAME || '') === n
       );
-      // Use only the largest polygon ring (by point count) for each country.
-      // This excludes overseas territories (French Guiana, Réunion, etc.) which
-      // have far fewer coastline points than the main landmass.
       let bestRing = null;
       let bestCount = 0;
       for (const feature of features) {
@@ -502,32 +501,55 @@ export async function createCompleteMap({
         }
       }
       if (!bestRing) continue;
-      let minLon = Infinity, minLat = Infinity, maxLon = -Infinity, maxLat = -Infinity;
-      for (const [lon, lat] of bestRing) {
-        if (lon < minLon) minLon = lon;
+      let sumLon = 0;
+      for (const [lon] of bestRing) sumLon += lon;
+      bestRings.push({ ring: bestRing, centroidLon: sumLon / bestRing.length });
+    }
+    if (!bestRings.length) return;
+
+    // Circular mean of centroid longitudes — correctly handles continents that
+    // straddle the antimeridian (e.g. Oceania: most countries at 130–180°E but
+    // Samoa/Tonga at ~188° when expressed east of 180°).
+    const toRad = d => d * Math.PI / 180;
+    const sinSum = bestRings.reduce((s, r) => s + Math.sin(toRad(r.centroidLon)), 0);
+    const cosSum = bestRings.reduce((s, r) => s + Math.cos(toRad(r.centroidLon)), 0);
+    const meanLon = Math.atan2(sinSum, cosSum) * 180 / Math.PI;
+
+    // Normalise a longitude to within ±180° of the circular mean.
+    function normLon(lon) {
+      let d = lon - meanLon;
+      while (d > 180) d -= 360;
+      while (d < -180) d += 360;
+      return meanLon + d;
+    }
+
+    // Build combined bbox from normalised coordinates.
+    // Normalised lons may exceed ±180°; the linear projection and horizontal
+    // map tiling handle this correctly — scrollX can point into the second copy.
+    let minLon = Infinity, maxLon = -Infinity, minLat = Infinity, maxLat = -Infinity;
+    for (const { ring } of bestRings) {
+      for (const [lon, lat] of ring) {
+        const nlon = normLon(lon);
+        if (nlon < minLon) minLon = nlon;
+        if (nlon > maxLon) maxLon = nlon;
         if (lat < minLat) minLat = lat;
-        if (lon > maxLon) maxLon = lon;
         if (lat > maxLat) maxLat = lat;
       }
-      if (!bbox) {
-        bbox = { minLon, minLat, maxLon, maxLat };
-      } else {
-        bbox.minLon = Math.min(bbox.minLon, minLon);
-        bbox.maxLon = Math.max(bbox.maxLon, maxLon);
-        bbox.minLat = Math.min(bbox.minLat, minLat);
-        bbox.maxLat = Math.max(bbox.maxLat, maxLat);
-      }
     }
-    if (!bbox) return;
+
     const PAD = 0.12;
-    const dLon = bbox.maxLon - bbox.minLon;
-    const dLat = bbox.maxLat - bbox.minLat;
-    bbox.minLon -= dLon * PAD;
-    bbox.maxLon += dLon * PAD;
-    bbox.minLat = Math.max(-90, bbox.minLat - dLat * PAD);
-    bbox.maxLat = Math.min(90, bbox.maxLat + dLat * PAD);
-    const [x1, y1] = proj([bbox.minLon, bbox.maxLat]);
-    const [x2, y2] = proj([bbox.maxLon, bbox.minLat]);
+    const dLon = maxLon - minLon;
+    const dLat = maxLat - minLat;
+    minLon -= dLon * PAD;
+    maxLon += dLon * PAD;
+    minLat = Math.max(-90, minLat - dLat * PAD);
+    maxLat = Math.min(90, maxLat + dLat * PAD);
+
+    // Project directly (not via proj()) so normalised lons > 180° map correctly.
+    const x1 = ((minLon + 180) / 360) * MAP_W;
+    const x2 = ((maxLon + 180) / 360) * MAP_W;
+    const y1 = ((90 - maxLat) / 180) * MAP_H;
+    const y2 = ((90 - minLat) / 180) * MAP_H;
     const width = x2 - x1;
     const height = y2 - y1;
     const zoomX = canvasDisplayWidth / width;
@@ -538,16 +560,13 @@ export async function createCompleteMap({
     scrollY = Math.max(0, Math.min(scrollY, MAP_H - canvasDisplayHeight / zoom));
   }
 
-  // Reset map view
+  // Reset map view — clears highlight/hover and stops inertia, but preserves zoom/pan.
   function resetMapView() {
     highlightedCountry = null;
     highlightType = null;
     hoverCountry = null;
     velocityX = 0;
     velocityY = 0;
-    if (continentGeoNames.size > 0) {
-      zoomToContinent();
-    }
     drawWorldMap();
   }
 
