@@ -150,6 +150,9 @@ export function renderCapitalPairsUI(container, { countries, capitals }) {
     container.querySelectorAll('.pair-card').forEach(btn => {
       if (btn.style.visibility !== 'hidden') btn.disabled = false;
     });
+    if (document.activeElement?.classList.contains('pair-card')) {
+      document.activeElement.blur();
+    }
   }
 
   function markWrong(country, capital, cb) {
