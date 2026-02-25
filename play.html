@@ -509,7 +509,8 @@
                 ? `<div class="diff-record">Best: ${rec.bestScore}/${maxScore} · ${fmtTime(rec.bestTime)}</div>`
                 : '';
             }
-            return makeCard(href, c.emoji, c.label, `All ${count} rounds`, recHtml);
+            const contRoundsLabel = game.customDifficulties ? '' : `All ${count} rounds`;
+            return makeCard(href, c.emoji, c.label, contRoundsLabel, recHtml);
           }).join('');
 
           html += `<div class="section-label">By continent</div>
