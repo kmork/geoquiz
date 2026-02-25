@@ -140,8 +140,49 @@ export class RouteRenderer {
 
     return { minLon, minLat, maxLon, maxLat };
   }
-  
-  
+
+  computeViewBbox(bboxes) {
+    if (bboxes.length === 0) return null;
+
+    const BIG_LON_SPAN  = 80;  // lon-span threshold for "large" country (Russia ~153°, Canada ~89°)
+    const OVERREACH_LON = 30;  // max degrees past anchor bbox allowed in longitude
+    const OVERREACH_LAT = 20;  // max degrees past anchor bbox allowed in latitude
+
+    const merge = (a, b) => ({
+      minLon: Math.min(a.minLon, b.minLon), maxLon: Math.max(a.maxLon, b.maxLon),
+      minLat: Math.min(a.minLat, b.minLat), maxLat: Math.max(a.maxLat, b.maxLat),
+    });
+    const merged = bboxes.reduce(merge);
+
+    // Total span is fine — return as-is
+    if (merged.maxLon - merged.minLon <= BIG_LON_SPAN) return merged;
+
+    // Classify: small/normal countries are anchors; oversized ones need clipping
+    let anchor = null;
+    const large = [];
+    for (const b of bboxes) {
+      if (b.maxLon - b.minLon > BIG_LON_SPAN) {
+        large.push(b);
+      } else {
+        anchor = anchor ? merge(anchor, b) : { ...b };
+      }
+    }
+
+    // No anchor (e.g. only Russia shown alone) — fall back to full merged bbox
+    if (!anchor) return merged;
+
+    // Extend anchor bbox by at most OVERREACH toward each large country
+    const result = { ...anchor };
+    for (const lb of large) {
+      result.minLon = Math.min(result.minLon, Math.max(anchor.minLon - OVERREACH_LON, lb.minLon));
+      result.maxLon = Math.max(result.maxLon, Math.min(anchor.maxLon + OVERREACH_LON, lb.maxLon));
+      result.minLat = Math.min(result.minLat, Math.max(anchor.minLat - OVERREACH_LAT, lb.minLat));
+      result.maxLat = Math.max(result.maxLat, Math.min(anchor.maxLat + OVERREACH_LAT, lb.maxLat));
+    }
+    return result;
+  }
+
+
   /**
    * Draw route visualization
    * @param {Array} countryList - Array of {country, color} objects
@@ -154,8 +195,7 @@ export class RouteRenderer {
     
     // Collect all highlighted country features and calculate bounding box
     const highlightedFeatures = [];
-    let bbox = null;
-    
+    const featureBboxes = [];
     for (const item of countryList) {
       const n = norm(item.country);
       const features = this.worldFeatures.filter(f => {
@@ -164,26 +204,14 @@ export class RouteRenderer {
         // aliases maps GeoJSON name → DATA name (e.g. "United States of America" → "United States")
         return norm(this.aliases[admin] || "") === n;
       });
-      
+
       for (const feature of features) {
         highlightedFeatures.push({ feature, color: item.color });
-        
-        // Calculate combined bounding box
         const bb = this.bboxOfFeature(feature);
-        if (bb) {
-          if (!bbox) {
-            bbox = bb;
-          } else {
-            bbox = {
-              minLon: Math.min(bbox.minLon, bb.minLon),
-              minLat: Math.min(bbox.minLat, bb.minLat),
-              maxLon: Math.max(bbox.maxLon, bb.maxLon),
-              maxLat: Math.max(bbox.maxLat, bb.maxLat)
-            };
-          }
-        }
+        if (bb) featureBboxes.push(bb);
       }
     }
+    let bbox = this.computeViewBbox(featureBboxes);
     
     // Set viewBox to fit highlighted countries
     if (bbox) {
