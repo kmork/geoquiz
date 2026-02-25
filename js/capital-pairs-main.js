@@ -92,8 +92,10 @@ function handleAttempt(country, capital) {
         ui.removeCard('capital', capital);
       }
 
-      ui.enableAll();
       updateUI();
+      // Re-enable after replaceCard's 200ms fade animation, so the reused DOM
+      // element has shed its tap state before the user can interact again.
+      setTimeout(() => ui.enableAll(), 250);
     });
   } else {
     hapticFeedback('wrong');

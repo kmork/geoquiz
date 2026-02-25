@@ -172,6 +172,7 @@ export function renderCapitalPairsUI(container, { countries, capitals }) {
       card.dataset.value = newValue;
       card.textContent   = newValue;
       card.classList.remove('fading', 'correct', 'wrong', 'selected');
+      card.blur(); // shed any lingering tap/focus state from the reused DOM element
     }, 200);
   }
 
