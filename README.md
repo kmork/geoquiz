@@ -5,8 +5,8 @@ A collection of engaging geography quiz games to test and improve your knowledge
 **[Play Now at geoquiz.info](https://geoquiz.info)** 🎮
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
-![Games: 8](https://img.shields.io/badge/Games-8-green.svg)
-![Countries: 195+](https://img.shields.io/badge/Countries-195%2B-orange.svg)
+![Games: 9](https://img.shields.io/badge/Games-9-green.svg)
+![Countries: 194](https://img.shields.io/badge/Countries-194-orange.svg)
 
 ---
 
@@ -18,8 +18,7 @@ A collection of engaging geography quiz games to test and improve your knowledge
 Navigate from one country to another by typing neighboring countries. Can you find the optimal path? Features intelligent map zoom, flexible branching, and mobile-optimized interface.
 
 - 🎯 Find shortest routes between any two countries
-- 🔀 Branch from any country in your path (explore freely!)
-- 📱 Fully optimized for mobile devices
+- 🔀 Branch from any country in your path
 - ⌨️ Autocomplete suggestions with keyboard navigation
 - 🚀 Cleaned map data (no distant overseas territories)
 
@@ -30,31 +29,15 @@ Navigate from one country to another by typing neighboring countries. Can you fi
 ### 🎯 Find the Country
 **Click on countries as fast as you can**
 
-Race against the clock to find countries on the map. How fast can you find all 195 countries?
+Race against the clock to find countries on the map. How fast can you find all 194 countries?
 
 - ⏱️ Timed challenge mode
 - 🗺️ Full world map with all territories
-- 🎨 Beautiful color-coded feedback
+- 🎨 Color-coded feedback
 - 📊 Track your best times
-- 📱 Optimized pinch zoom and pan for mobile
+- 📱 Pinch zoom and pan for mobile
 
 [**Play Find the Country →**](find-country.html)
-
----
-
-### 🏛️ Where is this? (UNESCO Heritage)
-**Identify countries from UNESCO World Heritage Sites**
-
-Can you recognize countries from their iconic UNESCO World Heritage Sites? Test your cultural geography knowledge!
-
-- 🖼️ 47 stunning UNESCO World Heritage Sites
-- 🎯 Two-attempt scoring: text input or multiple choice (after wrong answer)
-- 💡 Hint button available (-1 star penalty)
-- 🌍 Mix of natural wonders and cultural landmarks
-- ⌨️ Smart autocomplete with all country names
-- 📱 Optimized images for fast mobile loading (90% smaller!)
-
-[**Play UNESCO Heritage →**](heritage.html)
 
 ---
 
@@ -64,26 +47,81 @@ Can you recognize countries from their iconic UNESCO World Heritage Sites? Test 
 Can you recognize countries just by their shape? Test your geographical intuition!
 
 - 🎭 Country outlines without labels
-- ⌨️ Type country names (76+ aliases supported!)
+- ⌨️ Type country names (76+ aliases supported)
 - 💡 Hint system available
 - ✅ Instant feedback
-- ⌨️ Keyboard navigation for autocomplete
 
 [**Play Guess the Country →**](outlines.html)
 
 ---
 
-### 🏛️ Capitals Quiz
-**Match capitals to their countries**
+### 🏛️ Capitals of the World
+**Find capitals on the map**
 
-Test your knowledge of world capitals. From Kabul to Zagreb, how many can you get right?
+Test your knowledge of world capitals. Type the capital and locate it on the map.
 
-- 🌍 All 195 UN-recognized countries
-- 🎲 Randomized questions
-- 📈 Score tracking
-- 🎯 Multiple game modes
+- 🌍 All 194 countries
+- 🗺️ Interactive map placement
+- ⌨️ Autocomplete input
+- 🎮 Short / Medium / Long modes
 
-[**Play Capitals Quiz →**](capitals.html)
+[**Play Capitals of the World →**](capitals.html)
+
+---
+
+### 🔗 Capital Pairs
+**Match countries to their capitals**
+
+Three countries, three capitals — scrambled. Identify the correct pairs. One wrong guess ends the game.
+
+- 🧩 Staggered-queue mechanic: always 2 safe matches and 1 decoy per side
+- ⚡ Short (10) / Medium (25) / Long (all 194) modes
+- 🌍 Continent filter supported
+- 📊 Score and accuracy tracking
+
+[**Play Capital Pairs →**](capital-pairs.html)
+
+---
+
+### 🏛️ UNESCO Heritage
+**Identify countries from World Heritage Sites**
+
+Can you recognize countries from their iconic UNESCO World Heritage Sites?
+
+- 🖼️ 47 stunning UNESCO World Heritage Sites
+- 🎯 Two-attempt scoring: text input or multiple choice
+- 💡 Hint button available
+- 🌍 Mix of natural wonders and cultural landmarks
+
+[**Play UNESCO Heritage →**](heritage.html)
+
+---
+
+### 🚩 Flags of the World
+**Match the flag to the country**
+
+Four flags, one right answer. Neighboring countries are used as distractors — making it much harder than it sounds.
+
+- 🚩 239 country flags served locally (no external requests)
+- 🌍 Neighbor-priority distractors
+- ⚡ Short (10) / Medium (25) / Long (all) modes
+- 📊 Score and accuracy tracking
+
+[**Play Flags of the World →**](flags.html)
+
+---
+
+### 🌊 Rivers & Mountain Ranges
+**Click every country a feature passes through**
+
+Select all countries a river flows through or a mountain range spans, then submit. Correct countries score points; wrong ones subtract.
+
+- 🐟 22 rivers and 16 mountain ranges
+- 🗺️ Canvas map with toggle-click countries
+- 🔵 River overlay (blue line) / ⛰️ Mountain overlay (brown dots)
+- 🟡 Missed countries highlighted after reveal
+
+[**Play Rivers & Mountain Ranges →**](rivers.html)
 
 ---
 
@@ -95,85 +133,63 @@ Broader geography questions covering continents, regions, landmarks, and more.
 - 📚 120+ questions with interesting facts
 - 🎭 Mix of serious geography and quirky trivia
 - 💡 Detailed explanations for each answer
-- 📊 Score tracking
 
 [**Play Geography Trivia →**](trivia.html)
 
 ---
 
-### 🚩 Flags of the World
-**Match the flag to the country**
+### 📅 Daily Challenge
+**All games in one daily session**
 
-Four flags, one right answer. Neighboring countries are used as distractors — making it much harder than it sounds.
+Seven mini-games in sequence, same puzzle for everyone each day. Up to 24 stars per day.
 
-- 🚩 239 country flags sourced from flagcdn.com (local, no external requests)
-- 🌍 Neighbor-priority distractors — geographically close = confusably similar flags
-- ⚡ Fast visual format: tap the correct flag from 4 options
-- 📊 Score and accuracy tracking
-- 🎮 Three difficulty modes (10 / 25 / all rounds)
+- 🎮 Find · Trivia · Outlines · Heritage · Flags · Capitals · Connect
+- ⭐ 24 stars maximum (3+2+4+3+3+4+5)
+- 📋 Shareable results
+- 🔥 Daily streak tracking
 
-[**Play Flags of the World →**](flags.html)
+[**Play Daily Challenge →**](daily.html)
 
 ---
 
 ## ✨ Features
 
-### 🎨 Beautiful Interface
-- **Dark/Light Mode** - Automatic theme switching based on system preferences
-- **Responsive Design** - Works perfectly on desktop, tablet, and mobile
-- **Smooth Animations** - Confetti celebrations and smooth transitions
-- **Modern UI** - Clean, intuitive interface with card-based layout
+### 🎨 Interface
+- **Dark/Light Mode** — automatic, with manual toggle
+- **Responsive Design** — desktop, tablet, and mobile
+- **Smooth Animations** — confetti and transitions
+- **Continent Filter** — play any game with only one continent's countries
 
-### 🚀 Performance Optimized
-- **82% Smaller Downloads** - GeoJSON files compressed with gzip (77 MB → 14 MB)
-- **90% Image Optimization** - Heritage site images optimized for web (424 MB → 42 MB)
-- **Client-side Decompression** - Fast loading using pako.js
-- **Lazy Loading** - Games load only the data they need
-- **Efficient Rendering** - Optimized SVG and Canvas map rendering
+### 🚀 Performance
+- **Compressed Maps** — GeoJSON compressed with gzip (77 MB → 14 MB)
+- **Optimized Images** — Heritage images reduced 90% (424 MB → 42 MB)
+- **Client-side Decompression** — pako.js
+- **Canvas Rendering** — Find the Country and geo-features games use Canvas for performance
 
-### 📱 Mobile-First Design
-- **Touch-Optimized** - 44px touch targets, iOS Human Interface Guidelines compliant
-- **Gesture Detection** - Smart tap vs scroll recognition for autocomplete
-- **Auto-dismiss Keyboard** - Seamless input flow on mobile
-- **Responsive Map Height** - Adapts to screen size (50vh with constraints)
-- **Safe Area Support** - Works perfectly on notched phones (iPhone X+)
-- **No Tap Highlight Flash** - Smooth interactions without visual artifacts
-- **Grid Button Layout** - Easy to tap, no accidental presses
+### 📱 Mobile
+- **Touch-Optimized** — 44px touch targets
+- **Gesture Detection** — tap vs scroll for autocomplete
+- **Pinch Zoom & Pan** — smooth map interactions
+- **Safe Area Support** — notched phones (iPhone X+)
 
-### ⌨️ Smart Input
-- **Autocomplete** - Dropdown suggestions for all 195+ countries
-- **Keyboard Navigation** - Use arrow keys (⬆️⬇️) to navigate autocomplete, Enter to select
-- **Mobile Scrolling** - Touch-friendly autocomplete with gesture detection
-- **76 Country Aliases** - Type "US" instead of "United States", "UK" instead of "United Kingdom"
-- **Flexible Naming** - Accepts common variations and historical names
-
-### 🗺️ Advanced Mapping
-- **Antimeridian Handling** - Correctly displays Russia, Fiji, and other ±180° spanning countries
-- **Pinch Zoom & Pan** - Smooth touch interactions on mobile with proper centering
-- **Smart Zoom Limits** - Prevents over-zooming, handles tiny islands gracefully
-- **No Accidental Taps** - Cooldown after pinch zoom prevents unintended country selection
-- **Cleaned Route Data** - Removed distant overseas territories for better zoom behavior
-- **Full Territory Display** - Complete maps with all territories for Find the Country game
+### ⌨️ Input
+- **Autocomplete** — dropdown for all 194 countries
+- **Keyboard Navigation** — arrow keys + Enter
+- **76 Country Aliases** — "US", "UK", "DR Congo", etc.
 
 ---
 
 ## 🛠️ Technical Details
 
 ### Technology Stack
-- **Vanilla JavaScript** - No frameworks, pure ES6+ modules
-- **SVG Maps** - Vector graphics for crisp display at any zoom level
-- **CSS3** - Modern styling with CSS Grid and Flexbox
-- **HTML5** - Semantic markup
+- **Vanilla JavaScript** — no frameworks, pure ES6 modules
+- **SVG Maps** — vector graphics for most games
+- **Canvas** — Find the Country and geo-features games
+- **CSS3** — custom properties for theming, Grid and Flexbox layout
 
 ### Key Libraries
-- **pako.js** (45 KB) - Gzip decompression for compressed map data
-- **Natural Earth Data** - High-quality geographic data
-
-### Data Files
-- **Country Geometries** - 6.7 MB compressed (from 23 MB original)
-- **Route Game Data** - 7.8 MB compressed (from 54 MB original)
-- **Neighbors Graph** - Pre-computed country adjacencies
-- **Places Data** - Capitals and major cities
+- **pako.js** (45 KB) — gzip decompression for map data
+- **Natural Earth Data** — geographic source data
 
 ### Browser Support
 - ✅ Chrome/Edge (latest)
@@ -186,39 +202,18 @@ Four flags, one right answer. Neighboring countries are used as distractors — 
 ## 🚀 Getting Started
 
 ### Play Online
-Simply visit **[geoquiz.info](https://geoquiz.info)** - no installation needed!
+Visit **[geoquiz.info](https://geoquiz.info)** — no installation needed.
 
 ### Run Locally
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/GeoQuiz.git
-   cd GeoQuiz
-   ```
+```bash
+git clone https://github.com/yourusername/GeoQuiz.git
+cd GeoQuiz
+python3 -m http.server 8080
+# then open http://localhost:8080
+```
 
-2. **Start a local server**
-   
-   Using Python:
-   ```bash
-   python3 -m http.server 8080
-   ```
-   
-   Using Node.js:
-   ```bash
-   npx http-server -p 8080
-   ```
-   
-   Using PHP:
-   ```bash
-   php -S localhost:8080
-   ```
-
-3. **Open in browser**
-   ```
-   http://localhost:8080
-   ```
-
-> **Note:** A web server is required due to ES6 module imports and CORS restrictions on local files.
+> A web server is required — ES6 modules don't work over `file://`.
 
 ---
 
@@ -226,75 +221,85 @@ Simply visit **[geoquiz.info](https://geoquiz.info)** - no installation needed!
 
 ```
 GeoQuiz/
-├── index.html              # Landing page with game selection
-├── daily.html              # Daily Challenge landing page
-├── daily-challenge.html    # Daily Challenge game container
-├── route.html              # Connect the Countries game
-├── find-country.html       # Find the Country game
-├── heritage.html           # UNESCO Heritage game
-├── outlines.html           # Guess the Country game
-├── capitals.html           # Capitals quiz
-├── trivia.html             # Geography trivia
-├── flags.html              # Flags of the World game
+├── index.html                  # Landing page with game selection
+├── daily.html                  # Daily Challenge landing page
+├── daily-challenge.html        # Daily Challenge game container
+├── route.html                  # Connect the Countries
+├── find-country.html           # Find the Country
+├── outlines.html               # Guess the Country
+├── capitals.html               # Capitals of the World
+├── capital-pairs.html          # Capital Pairs
+├── heritage.html               # UNESCO Heritage
+├── flags.html                  # Flags of the World
+├── rivers.html                 # Rivers & Mountain Ranges
+├── mountains.html              # Mountain Ranges (shares rivers UI)
+├── trivia.html                 # Geography Trivia
+├── play.html                   # Difficulty selection (all games)
 │
 ├── css/
-│   ├── styles.css          # Global styles with dark/light themes
-│   └── daily-challenge.css # Daily challenge specific styles
+│   ├── styles.css              # Global styles, dark/light themes
+│   └── daily-challenge.css     # Daily challenge styles
 │
 ├── js/
-│   ├── daily-challenge-main.js      # Daily challenge orchestrator (7 games)
-│   ├── daily-challenge-scoring.js   # Difficulty-based star system
-│   ├── daily-challenge-share.js     # Social sharing functionality
-│   ├── seeded-random.js             # Deterministic RNG for daily challenges
-│   │
-│   ├── games/                       # Shared game logic modules
-│   │   ├── trivia-logic.js
-│   │   ├── find-logic.js
-│   │   ├── outlines-logic.js
-│   │   ├── heritage-logic.js
+│   ├── games/                  # Pure logic modules (no DOM)
+│   │   ├── capital-pairs-logic.js
 │   │   ├── capitals-logic.js
-│   │   ├── flags-logic.js           # Flags game logic
-│   │   └── route-logic.js
+│   │   ├── find-logic.js
+│   │   ├── flags-logic.js
+│   │   ├── geo-features-logic.js   # Shared rivers + mountains logic
+│   │   ├── heritage-logic.js
+│   │   ├── outlines-logic.js
+│   │   ├── route-logic.js
+│   │   └── trivia-logic.js
 │   │
-│   ├── ui-components/               # Shared UI renderers
+│   ├── ui-components/          # DOM/SVG/Canvas renderers
+│   │   ├── capital-pairs-ui.js
+│   │   ├── flags-ui.js
 │   │   ├── heritage-ui.js
-│   │   ├── flags-ui.js              # Flags 2×2 grid UI
-│   │   ├── outlines-renderer.js
 │   │   ├── map-renderer.js
+│   │   ├── outlines-renderer.js
 │   │   └── route-renderer.js
 │   │
-│   ├── route-main.js                # Route game initialization
-│   ├── find-country-main.js         # Find country initialization
-│   ├── heritage-main.js             # Heritage initialization
-│   ├── outlines-main.js             # Outlines initialization
-│   ├── flags-main.js                # Flags game initialization
+│   ├── capital-pairs-main.js
+│   ├── daily-challenge-main.js
+│   ├── daily-challenge-scoring.js
+│   ├── daily-challenge-share.js
+│   ├── find-country-main.js
+│   ├── flags-main.js
+│   ├── geo-features-complete.js    # Shared canvas factory (rivers + mountains)
+│   ├── heritage-main.js
+│   ├── mountains-main.js
+│   ├── outlines-main.js
+│   ├── rivers-main.js
+│   ├── route-main.js
+│   ├── seeded-random.js
 │   │
-│   ├── mobile-autocomplete.js       # Shared autocomplete module
-│   ├── aliases.js                   # 76 country name aliases
-│   ├── geojson-loader.js            # Compressed file loader
-│   ├── pako.min.js                  # Gzip decompression
-│   ├── confetti.js                  # Victory animations
-│   ├── theme.js                     # Dark/light mode
-│   ├── game-utils.js                # Shared utilities
-│   └── utils.js                     # Helper functions
+│   ├── aliases.js              # 76 country name aliases
+│   ├── confetti.js
+│   ├── data.js                 # window.DATA (194 countries + capitals)
+│   ├── game-records.js         # Finish screen + localStorage records
+│   ├── game-utils.js           # shuffleArray, hapticFeedback, etc.
+│   ├── geojson-loader.js
+│   ├── mobile-autocomplete.js
+│   ├── pako.min.js
+│   ├── theme.js
+│   └── utils.js
 │
 ├── data/
-│   ├── ne_10m_admin_0_countries.geojson.gz        # 6.7 MB
-│   ├── ne_10m_admin_0_countries_route.geojson.gz  # 7.8 MB
-│   ├── heritage-sites.json                         # 47 UNESCO sites
-│   ├── countries-neighbors.json
-│   ├── countries-flags.json                        # Country → ISO_A2 mapping
-│   ├── places.geojson
-│   ├── qa.json                                     # 120+ trivia questions
-│   └── countries.geojson
+│   ├── ne_10m_admin_0_countries.geojson.gz       # 6.7 MB
+│   ├── ne_10m_admin_0_countries_route.geojson.gz # 7.8 MB
+│   ├── countries-continents.json   # country → continent mapping
+│   ├── countries-flags.json        # country → ISO_A2 mapping
+│   ├── countries-neighbors.json    # adjacency graph
+│   ├── heritage-sites.json         # 47 UNESCO sites
+│   ├── mountains.json              # 16 mountain ranges
+│   ├── places.geojson              # capitals + major cities
+│   ├── qa.json                     # 120+ trivia questions
+│   └── rivers.json                 # 22 rivers
 │
-├── img/
-│   ├── heritage/          # 47 optimized UNESCO images (42 MB)
-│   └── flags/             # 239 SVG flag files from flagcdn.com (193 playable countries)
-│
-├── process-countries.js   # Data processing script
-├── generate-flags-mapping.js  # Regenerate country→ISO_A2 mapping
-└── download-flags.js      # Download flag SVGs from flagcdn.com
+└── img/
+    ├── heritage/   # 47 optimized UNESCO images (42 MB)
+    └── flags/      # 239 SVG flag files from flagcdn.com
 ```
 
 ---
@@ -303,247 +308,48 @@ GeoQuiz/
 
 ### Data Processing
 
-To regenerate the cleaned route map data:
-
 ```bash
+# Regenerate cleaned route map data
 node process-countries.js
-```
 
-This script:
-- Removes overseas territories from 9 countries (France, UK, US, Netherlands, Norway, Denmark, Portugal, Spain, Italy)
-- Keeps Alaska for the United States
-- Outputs to `data/ne_10m_admin_0_countries_route.geojson`
+# Compress GeoJSON after modifications
+cd data/ && gzip -9 -k ne_10m_admin_0_countries.geojson
+cd data/ && gzip -9 -k ne_10m_admin_0_countries_route.geojson
 
-### Compressing Map Data
-
-After modifying GeoJSON files:
-
-```bash
-cd data/
-gzip -9 -k ne_10m_admin_0_countries.geojson
-gzip -9 -k ne_10m_admin_0_countries_route.geojson
-```
-
-The `-9` flag maximizes compression, `-k` keeps the original files.
-
-### Flags Data
-
-To regenerate the country → ISO_A2 mapping from GeoJSON:
-
-```bash
+# Regenerate country → ISO_A2 flag mapping
 node generate-flags-mapping.js
-```
 
-To download all flag SVGs from flagcdn.com (skips already-downloaded files):
-
-```bash
+# Download flag SVGs from flagcdn.com (skips existing)
 node download-flags.js
+
+# Optimize heritage images (90% size reduction)
+cd img/heritage/ && sips --resampleWidth 1920 --setProperty formatOptions 85 *.jpg
 ```
-
-### Optimizing Images
-
-To optimize large images for web:
-
-```bash
-cd img/heritage/
-# Resize to max 1920px width, 85% JPEG quality
-sips --resampleWidth 1920 --setProperty formatOptions 85 *.jpg
-```
-
-This reduces file sizes by ~90% while maintaining visual quality for web display.
-
-### Mobile Testing
-
-Test mobile layouts using browser DevTools:
-- Chrome: F12 → Toggle Device Toolbar (Ctrl+Shift+M)
-- Firefox: F12 → Responsive Design Mode (Ctrl+Shift+M)
-- Safari: Develop → Enter Responsive Design Mode
-
-Or test on real devices for best results.
-
----
-
-## 📊 Recent Improvements
-
-### v3.3 - Flags of the World (February 2026)
-
-#### 🚩 New Game: Flags of the World
-- **239 country flags** - All downloaded locally (no external requests at play time)
-- **Neighbor-based distractors** - Wrong options are drawn from neighboring countries first, making similar-looking flags the challenge
-- **2×2 flag grid** - Tap or click the correct flag; green/red outline feedback
-- **Three difficulty modes** - 10, 25, or all-countries rounds
-- **Daily Challenge integration** - Flags is now game #5, with a 20-second time limit and 3★ max
-
-#### ⭐ Updated Daily Challenge (7 games, 24★)
-- **7 mini-games** - Added Flags between UNESCO Heritage and Capitals Quiz
-- **24 total stars** - Up from 21 (find 3 + trivia 2 + outlines 4 + heritage 3 + flags 3 + capitals 4 + connect 5)
-- **Updated rating thresholds** - Geography Master ≥22, World Expert ≥19, Globe Trotter ≥14, Explorer ≥10, Traveler ≥6
-
----
-
-### v3.2 - Daily Challenge & Scoring System (February 2026)
-
-#### 🎮 New Daily Challenge Mode
-- **6 Mini-Games in One** - Complete all games in a single daily challenge
-- **Difficulty-Based Scoring** - Stars based on game difficulty (1-5 stars per game, 21 total)
-- **Speed Bonuses** - Earn extra stars for fast answers
-- **Smart Penalties** - Using hints reduces your star count
-- **Share Your Score** - Copy formatted results to share with friends
-- **Once-Per-Day** - New challenge every day for everyone
-- **Streak Tracking** - Track your daily completion streak
-
-#### ⭐ New Scoring System
-- **Trivia**: 1 base star + 1 speed bonus (< 5 seconds)
-- **Heritage**: 2 base + 1 time bonus - 1 hint penalty
-- **Outlines/Capitals**: 3 base + 1 time bonus - 1 hint penalty
-- **Find/Connect**: 4-5 stars based on performance
-- **Total**: 21 stars maximum per day
-
-#### 🏛️ Heritage Game Enhancements
-- **Multiple Choice Support** - Get multiple choice buttons after wrong text answer
-- **Hint System** - Request hints at cost of 1 star
-- **Time Tracking** - Accurate time measurement for speed bonuses
-- **Proper Scoring** - Correct star calculation with time bonuses
-
-#### 🗺️ Map Interaction Improvements
-- **Pan/Zoom Constraints** - Countries always remain partially visible (20% minimum)
-- **No Touch Flicker** - Removed mobile tap highlight artifacts
-- **Smooth Canvas** - Optimized rendering for mobile devices
-- **Better Controls** - Improved touch interaction on all map games
-
-### v3.1 - Game Renaming & UI Polish (February 2026)
-
-#### 📝 Heritage Branding
-- **Renamed "Where is this?"** to **"UNESCO Heritage"**
-- Updated all references in UI and code
-- Maintained backward compatibility with old URLs
-
-#### 🎯 UI Improvements  
-- **Globe Ring Alignment** - Fixed positioning on index page
-- **Star Display** - Proper wrapping for long star counts
-- **Time Format** - One decimal place for all times
-- **Rating System** - Updated for 21-star total
-
-### v3.0 - New Game & Mobile Enhancements (February 2026)
-
-#### 🏛️ New Game: Where is this?
-- **47 UNESCO World Heritage Sites** - Stunning images from around the world
-- **Two-Attempt Scoring** - Text input (2 pts) or multiple choice (1 pt)
-- **Optimized Images** - 90% size reduction (424 MB → 42 MB)
-- **Smart Alternatives** - Region-based multiple choice options
-- **Full Autocomplete** - All 195+ countries with keyboard navigation
-
-#### ⌨️ Enhanced Autocomplete (All Games)
-- **Keyboard Navigation** - Arrow keys (⬆️⬇️), Enter to select, Escape to close
-- **Dark Mode Visibility** - Opaque background with backdrop blur
-- **Unlimited Suggestions** - Shows all matching countries, scrollable
-- **Mobile Scrolling** - Smart tap vs scroll gesture detection
-- **Compact Design** - Space-efficient rows matching input height
-
-#### 📱 Mobile Touch Improvements
-- **Pinch Zoom Centering** - Properly centers on finger midpoint
-- **No Accidental Selection** - 300ms cooldown after pinch zoom
-- **No Tap Flash** - Removed webkit tap highlight artifact
-- **Gesture Detection** - Distinguishes taps from scrolls (10px/300ms threshold)
-
-#### 🗺️ Map Enhancements
-- **Smart Zoom Limits** - Respects minimum zoom, handles tiny islands
-- **Tiny Island Detection** - Minimum 10° visible area for small countries
-- **Increased Padding** - 40% padding for better country visibility
-
-#### 🧠 Trivia Updates
-- **120+ Questions** - Added 25 new quirky geography facts
-- **Error Corrections** - Fixed 3 wrong answers in existing questions
-- **Humor & Facts** - Mix of serious geography and entertaining trivia
-
-### v2.0 - Major Enhancements (2025)
-
-#### 📱 Mobile Usability
-- **44px Touch Targets** - iOS compliant button sizes
-- **Auto-dismiss Keyboard** - Shows map updates after each answer
-- **Autocomplete Dropdown** - 195+ country suggestions while typing
-- **Responsive Map** - 50vh height with smart constraints
-- **Safe Area Support** - Works on iPhone X+ notched devices
-
-#### 🗺️ Map Fixes
-- **Russia ViewBox Error** - Fixed antimeridian-crossing countries
-- **Flexible Branching** - Add countries from any point in your path
-- **Cleaned Route Data** - Removed overseas territories for better zoom
-
-#### 🚀 Performance
-- **82% Size Reduction** - 77 MB → 14 MB (compressed GeoJSON)
-- **Client-side Decompression** - Fast loading with pako.js
-- **Repository Cleanup** - 100 MB removed from Git history
-
-#### ⌨️ User Experience
-- **76 Country Aliases** - Type "US", "UK", "DR Congo", etc.
-- **Smart Input** - Autocomplete with all countries and aliases
-- **Better Error Messages** - Clear feedback on invalid moves
 
 ---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Here are some ways you can help:
+Contributions are welcome!
 
 - 🐛 Report bugs via [GitHub Issues](https://github.com/yourusername/GeoQuiz/issues)
-- 💡 Suggest new features or improvements
-- 🌍 Add more country aliases for common abbreviations
-- 🎨 Improve UI/UX design
+- 💡 Suggest new features
+- 🌍 Add country aliases in `js/aliases.js`
 - 📱 Test on different devices and browsers
-- 📝 Improve documentation
-
-### Adding Country Aliases
-
-Edit `js/aliases.js`:
-
-```javascript
-export const COUNTRY_ALIASES = {
-  // Existing aliases...
-  "Your Alias": "Official Country Name",
-};
-```
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
 
 ## 🙏 Acknowledgments
 
-- **Natural Earth** - Free vector and raster map data ([naturalearthdata.com](https://www.naturalearthdata.com/))
-- **pako.js** - Fast zlib port to JavaScript
-- **United Nations** - Country definitions and standards
-
----
-
-## 📞 Contact
-
-- **Website:** [geoquiz.info](https://geoquiz.info)
-- **Issues:** [GitHub Issues](https://github.com/yourusername/GeoQuiz/issues)
-- **Email:** your.email@example.com
-
----
-
-## 🎯 Fun Facts
-
-- 🌍 **195 Countries** - All UN-recognized countries included
-- 🎮 **8 Game Modes** - Seven standalone + Daily Challenge
-- 🏆 **24 Stars** - Maximum daily challenge score
-- 🚩 **239 Flags** - SVG flag files served locally (239 unique ISOs, 193 playable countries)
-- 🏛️ **47 UNESCO Sites** - From Great Wall to Machu Picchu
-- 📚 **120+ Trivia Questions** - Mix of facts and fun
-- 🗺️ **2.2M Lines** - Of GeoJSON coordinate data
-- 💾 **14 MB** - Total compressed map data size
-- 🖼️ **42 MB** - Optimized heritage images (was 424 MB!)
-- ⚡ **90%** - Image size reduction from optimization
-- 📱 **44px** - Minimum touch target size (iOS standard)
-- 🔀 **76** - Country name aliases supported
-- ⌨️ **4 Keys** - Arrow keys + Enter for autocomplete navigation
-- 🎯 **20%** - Minimum country visibility constraint for pan/zoom
+- **Natural Earth** — free vector map data ([naturalearthdata.com](https://www.naturalearthdata.com/))
+- **pako.js** — fast zlib port to JavaScript
+- **flagcdn.com** — flag SVG source
 
 ---
 
