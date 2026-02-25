@@ -13,14 +13,15 @@ import { copyToClipboard, showNotification, showCopyModal } from './daily-challe
 const STORAGE_PREFIX = 'geoquiz-record-';
 
 const GAME_NAMES = {
-  find:      'Find the Country',
-  outlines:  'Guess the Country',
-  trivia:    'Geography Trivia',
-  heritage:  'UNESCO Heritage',
-  capitals:  'Capitals Quiz',
-  flags:     'Flags of the World',
-  rivers:    'Rivers of the World',
-  mountains: 'Mountain Ranges',
+  find:            'Find the Country',
+  outlines:        'Guess the Country',
+  trivia:          'Geography Trivia',
+  heritage:        'UNESCO Heritage',
+  capitals:        'Capitals Quiz',
+  flags:           'Flags of the World',
+  rivers:          'Rivers of the World',
+  mountains:       'Mountain Ranges',
+  'capital-pairs': 'Capital Pairs',
 };
 
 const DIFFICULTY_LABELS = {
