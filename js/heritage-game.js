@@ -306,6 +306,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
         { label: 'Perfect guesses', value: perfectGuesses },
         { label: 'Accuracy', value: `${accuracy}%` },
       ],
+      shareUrl: `geoquiz.info${location.pathname}${location.search}`,
       onPlayAgain: () => {
         reset();
         showSite();

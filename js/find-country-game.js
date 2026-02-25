@@ -138,6 +138,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
         { label: 'Correct', value: finalResult.correctCount },
         { label: 'Accuracy', value: `${finalResult.accuracy}%` },
       ],
+      shareUrl: `geoquiz.info${location.pathname}${location.search}`,
       onPlayAgain: () => {
         reset();
         nextQ();

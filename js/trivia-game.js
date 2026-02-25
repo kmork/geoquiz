@@ -124,6 +124,7 @@ export function createTriviaGame({ ui, confetti, config = {} }) {
         { label: 'Correct', value: finalResult.correctCount },
         { label: 'Accuracy', value: `${finalResult.accuracy}%` },
       ],
+      shareUrl: `geoquiz.info${location.pathname}${location.search}`,
       onPlayAgain: () => {
         reset();
         showQuestion();

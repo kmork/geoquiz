@@ -121,6 +121,7 @@ function showFinal() {
     maxScore: progress.total,
     time: elapsed,
     accuracy,
+    shareUrl: `geoquiz.info${location.pathname}${location.search}`,
     onPlayAgain: () => {
       logic.reset();
       gameStartTime = Date.now();

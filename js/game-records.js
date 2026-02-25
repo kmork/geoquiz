@@ -65,7 +65,7 @@ export function formatGameTime(seconds) {
 
 /* ── Share text ─────────────────────────────────────────────── */
 
-function buildShareText({ gameId, score, maxScore, time, accuracy }) {
+function buildShareText({ gameId, score, maxScore, time, accuracy, shareUrl = 'geoquiz.info' }) {
   const dash     = gameId.lastIndexOf('-');
   const gameKey  = dash >= 0 ? gameId.slice(0, dash) : gameId;
   const suffix   = dash >= 0 ? gameId.slice(dash + 1) : '';
@@ -76,7 +76,7 @@ function buildShareText({ gameId, score, maxScore, time, accuracy }) {
   if (diff) text += ` (${diff})`;
   text += `\nScore: ${score}/${maxScore} · ${formatGameTime(time)} ⏱️`;
   text += `\n${ratingEmoji(accuracy)} ${ratingSubtitle(accuracy)}`;
-  text += `\n\ngeoquiz.info`;
+  text += `\n\n${shareUrl}`;
   return text;
 }
 
@@ -117,6 +117,7 @@ export function renderFinishScreen(overlayEl, data) {
     gameId, score, scoreLabel = 'Score', maxScore,
     time, accuracy = 0,
     stats = [],
+    shareUrl,
     onPlayAgain,
   } = data;
 
@@ -194,7 +195,7 @@ export function renderFinishScreen(overlayEl, data) {
   });
 
   overlayEl.querySelector('[data-action="share"]').addEventListener('click', async () => {
-    const text = buildShareText({ gameId, score, maxScore, time, accuracy });
+    const text = buildShareText({ gameId, score, maxScore, time, accuracy, shareUrl });
     if (navigator.share) {
       try {
         await navigator.share({ text });

@@ -123,6 +123,7 @@ function showFinal() {
     time:       logic.getElapsedTime(),
     accuracy:   logic.getAccuracy(),
     stats:      [{ label: 'Wrong guesses', value: logic.wrongGuesses }],
+    shareUrl:   `geoquiz.info${location.pathname}${location.search}`,
     onPlayAgain: () => {
       logic.reset();
       render();

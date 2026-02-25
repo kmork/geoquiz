@@ -191,6 +191,7 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, con
         { label: 'Correct', value: finalResult.correctAny },
         { label: 'First try', value: finalResult.correctFirstTry },
       ],
+      shareUrl: `geoquiz.info${location.pathname}${location.search}`,
       onPlayAgain: () => {
         reset();
         nextQ();
