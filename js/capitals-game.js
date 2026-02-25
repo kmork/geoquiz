@@ -317,6 +317,7 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
           { label: 'Correct', value: correctAny },
           { label: 'First try', value: correctFirstTry },
         ],
+        shareUrl: `geoquiz.info${location.pathname}${location.search}`,
         onPlayAgain: () => {
           reset();
           nextQ();

@@ -706,6 +706,7 @@ export async function createGeoFeaturesGame({
       stats: [
         { label: 'countries in play', value: p.totalPossible },
       ],
+      shareUrl: `geoquiz.info${location.pathname}${location.search}`,
       onPlayAgain: () => {
         finalOverlay.style.display = 'none';
         startGame();
