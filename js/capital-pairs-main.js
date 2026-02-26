@@ -24,6 +24,8 @@ const confetti = initConfetti('confetti');
 
 let logic;
 let ui;
+let displayCountries = []; // current visual order — persisted across re-renders
+let displayCapitals  = [];
 
 async function init() {
   if (initOverlay) initOverlay.style.display = 'flex';
@@ -46,21 +48,17 @@ async function init() {
   render();
 }
 
-function render() {
-  // Shuffle the display order independently of the internal pairIdx ordering
-  const countries = shuffleArray(logic.getVisibleCountries());
-  const capitals  = shuffleArray(logic.getVisibleCapitals());
+function render(countries = null, capitals = null) {
+  // Accept an explicit order (after a match) or shuffle fresh (initial / play-again)
+  displayCountries = countries ?? shuffleArray(logic.getVisibleCountries());
+  displayCapitals  = capitals  ?? shuffleArray(logic.getVisibleCapitals());
 
-  ui = renderCapitalPairsUI(gameContent, { countries, capitals });
+  ui = renderCapitalPairsUI(gameContent, { countries: displayCountries, capitals: displayCapitals });
   ui.setupEvents({ onAttempt: handleAttempt });
   updateUI();
 }
 
 function handleAttempt(country, capital) {
-  // Snapshot visible lists BEFORE checkPair modifies internal state
-  const oldCountries = logic.getVisibleCountries();
-  const oldCapitals  = logic.getVisibleCapitals();
-
   const result = logic.checkPair(country, capital);
 
   if (result.correct) {
@@ -68,34 +66,24 @@ function handleAttempt(country, capital) {
     confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
 
     ui.markCorrect(country, capital, () => {
-      if (result.isDone) {
-        showFinal();
-        return;
-      }
+      if (result.isDone) { showFinal(); return; }
 
       const newCountries = logic.getVisibleCountries();
       const newCapitals  = logic.getVisibleCapitals();
 
-      // Determine what was added (if anything) to fill the freed slot
-      const addedCountry = newCountries.find(c => !oldCountries.includes(c));
-      const addedCapital = newCapitals.find(c => !oldCapitals.includes(c));
+      // Find the one card added to each column (undefined if deck is exhausted)
+      const addedCountry = newCountries.find(c => !displayCountries.includes(c));
+      const addedCapital = newCapitals.find(c => !displayCapitals.includes(c));
 
-      if (addedCountry) {
-        ui.replaceCard('country', country, addedCountry);
-      } else {
-        ui.removeCard('country', country);
-      }
+      // Replace the matched slot with the new card, preserving all other positions
+      const nextCountries = displayCountries
+        .map(c => c === country  ? addedCountry : c)
+        .filter(c => c !== undefined);
+      const nextCapitals = displayCapitals
+        .map(c => c === capital ? addedCapital : c)
+        .filter(c => c !== undefined);
 
-      if (addedCapital) {
-        ui.replaceCard('capital', capital, addedCapital);
-      } else {
-        ui.removeCard('capital', capital);
-      }
-
-      updateUI();
-      // Re-enable after replaceCard's 200ms fade animation, so the reused DOM
-      // element has shed its tap state before the user can interact again.
-      setTimeout(() => ui.enableAll(), 250);
+      render(nextCountries, nextCapitals);
     });
   } else {
     hapticFeedback('wrong');

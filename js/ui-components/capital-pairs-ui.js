@@ -33,7 +33,7 @@ function injectStyles() {
       cursor: pointer;
       font-size: .95rem;
       text-align: center;
-      transition: border-color .15s, background .15s, transform .1s, opacity .2s;
+      transition: border-color .15s, background .15s, transform .1s;
       min-height: 52px;
       width: 100%;
       color: inherit;
@@ -56,7 +56,6 @@ function injectStyles() {
       background: var(--wrong-bg);
     }
     .pair-card:disabled { cursor: default; }
-    .pair-card.fading { opacity: 0; }
   `;
   document.head.appendChild(style);
 }
@@ -64,7 +63,7 @@ function injectStyles() {
 /**
  * @param {HTMLElement} container
  * @param {{ countries: string[], capitals: string[] }} param1
- * @returns {{ setupEvents, markCorrect, markWrong, replaceCard, removeCard, disableAll }}
+ * @returns {{ setupEvents, markCorrect, markWrong }}
  */
 export function renderCapitalPairsUI(container, { countries, capitals }) {
   injectStyles();
@@ -86,8 +85,7 @@ export function renderCapitalPairsUI(container, { countries, capitals }) {
     </div>
   `;
 
-  let selected    = null;  // { type, value }
-  let clickLocked = false; // true during animations; blocks all click processing
+  let selected = null; // { type, value }
 
   function getCard(type, value) {
     const colId = type === 'country' ? 'pairs-countries' : 'pairs-capitals';
@@ -104,12 +102,15 @@ export function renderCapitalPairsUI(container, { countries, capitals }) {
     }
   }
 
+  function disableAll() {
+    container.querySelectorAll('.pair-card').forEach(btn => { btn.disabled = true; });
+  }
+
   function setupEvents({ onAttempt }) {
     const columnsEl = container.querySelector('.pairs-columns');
     if (!columnsEl) return;
 
     columnsEl.addEventListener('click', (e) => {
-      if (clickLocked) return;
       const btn = e.target.closest('.pair-card');
       if (!btn || btn.disabled) return;
 
@@ -140,24 +141,12 @@ export function renderCapitalPairsUI(container, { countries, capitals }) {
   }
 
   function markCorrect(country, capital, cb) {
-    clickLocked = true;
     const cc = getCard('country', country);
     const cp = getCard('capital', capital);
     if (cc) cc.classList.add('correct');
     if (cp) cp.classList.add('correct');
     disableAll();
     setTimeout(cb, 450);
-  }
-
-  function enableAll() {
-    clearSelection(); // discard any stale visual selection before re-enabling
-    container.querySelectorAll('.pair-card').forEach(btn => {
-      if (btn.style.visibility !== 'hidden') btn.disabled = false;
-    });
-    if (document.activeElement && container.contains(document.activeElement)) {
-      document.activeElement.blur();
-    }
-    clickLocked = false; // open for input only after everything is settled
   }
 
   function markWrong(country, capital, cb) {
@@ -169,28 +158,5 @@ export function renderCapitalPairsUI(container, { countries, capitals }) {
     setTimeout(cb, 700);
   }
 
-  function replaceCard(type, oldValue, newValue) {
-    const card = getCard(type, oldValue);
-    if (!card) return;
-    card.classList.add('fading');
-    setTimeout(() => {
-      card.dataset.value = newValue;
-      card.textContent   = newValue;
-      card.classList.remove('fading', 'correct', 'wrong', 'selected');
-      card.blur(); // shed any lingering tap/focus state from the reused DOM element
-    }, 200);
-  }
-
-  function removeCard(type, value) {
-    const card = getCard(type, value);
-    if (!card) return;
-    card.classList.add('fading');
-    setTimeout(() => { card.style.visibility = 'hidden'; }, 200);
-  }
-
-  function disableAll() {
-    container.querySelectorAll('.pair-card').forEach(btn => { btn.disabled = true; });
-  }
-
-  return { setupEvents, markCorrect, markWrong, replaceCard, removeCard, disableAll, enableAll };
+  return { setupEvents, markCorrect, markWrong };
 }
