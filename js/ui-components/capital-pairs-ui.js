@@ -86,7 +86,8 @@ export function renderCapitalPairsUI(container, { countries, capitals }) {
     </div>
   `;
 
-  let selected = null; // { type, value }
+  let selected    = null;  // { type, value }
+  let clickLocked = false; // true during animations; blocks all click processing
 
   function getCard(type, value) {
     const colId = type === 'country' ? 'pairs-countries' : 'pairs-capitals';
@@ -108,6 +109,7 @@ export function renderCapitalPairsUI(container, { countries, capitals }) {
     if (!columnsEl) return;
 
     columnsEl.addEventListener('click', (e) => {
+      if (clickLocked) return;
       const btn = e.target.closest('.pair-card');
       if (!btn || btn.disabled) return;
 
@@ -138,6 +140,7 @@ export function renderCapitalPairsUI(container, { countries, capitals }) {
   }
 
   function markCorrect(country, capital, cb) {
+    clickLocked = true;
     const cc = getCard('country', country);
     const cp = getCard('capital', capital);
     if (cc) cc.classList.add('correct');
@@ -147,12 +150,14 @@ export function renderCapitalPairsUI(container, { countries, capitals }) {
   }
 
   function enableAll() {
+    clearSelection(); // discard any stale visual selection before re-enabling
     container.querySelectorAll('.pair-card').forEach(btn => {
       if (btn.style.visibility !== 'hidden') btn.disabled = false;
     });
-    if (document.activeElement?.classList.contains('pair-card')) {
+    if (document.activeElement && container.contains(document.activeElement)) {
       document.activeElement.blur();
     }
+    clickLocked = false; // open for input only after everything is settled
   }
 
   function markWrong(country, capital, cb) {
