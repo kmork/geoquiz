@@ -313,16 +313,22 @@ class DailyChallenge {
       : `${challenge.emoji} ${challenge.name}`;
     document.getElementById('game-title').textContent = titleText;
 
-    // Start timer if game has time limit
+    // Show timer limit as static display; countdown starts once game is fully rendered
+    const timerEl = document.getElementById('timer');
     if (challenge.timeLimit) {
-      this.startTimer(challenge.timeLimit);
+      timerEl.textContent = challenge.timeLimit;
+      timerEl.classList.remove('timer-warning');
     } else {
-      document.getElementById('timer').textContent = '∞';
+      timerEl.textContent = '∞';
     }
 
-    // Load and run the game
+    // Load and run the game - onReady() starts the timer when the game is interactive
     this.gameStartTime = Date.now();
-    const result = await this.runGame(challenge);
+    const result = await this.runGame(challenge, () => {
+      if (challenge.timeLimit) {
+        this.startTimer(challenge.timeLimit);
+      }
+    });
 
     // Stop timer
     this.stopTimer();
@@ -351,24 +357,24 @@ class DailyChallenge {
   /**
    * Run a specific game and return result
    */
-  async runGame(challenge) {
+  async runGame(challenge, onReady = () => {}) {
     const gameContent = document.getElementById('game-content');
     gameContent.innerHTML = ''; // Clear previous game
 
     // Import and run the appropriate game module
     switch (challenge.id) {
       case 'find':
-        return await this.runFindGame(challenge, gameContent);
+        return await this.runFindGame(challenge, gameContent, onReady);
       case 'trivia':
-        return await this.runTriviaGame(challenge, gameContent);
+        return await this.runTriviaGame(challenge, gameContent, onReady);
       case 'outlines':
-        return await this.runOutlinesGame(challenge, gameContent);
+        return await this.runOutlinesGame(challenge, gameContent, onReady);
       case 'picture':
-        return await this.runHeritageGame(challenge, gameContent);
+        return await this.runHeritageGame(challenge, gameContent, onReady);
       case 'flags':
-        return await this.runFlagsGame(challenge, gameContent);
+        return await this.runFlagsGame(challenge, gameContent, onReady);
       case 'capitals':
-        return await this.runCapitalsGame(challenge, gameContent);
+        return await this.runCapitalsGame(challenge, gameContent, onReady);
       case 'connect':
         return await this.runConnectGame(challenge, gameContent);
       default:
@@ -651,7 +657,7 @@ class DailyChallenge {
 
   // Game implementations (placeholders - will be implemented next)
 
-  async runFindGame(challenge, container) {
+  async runFindGame(challenge, container, onReady = () => {}) {
     const targetCountry = challenge.data;
 
     // Setup UI container matching standalone structure
@@ -694,6 +700,7 @@ class DailyChallenge {
 
       // Show the card now that the map is fully loaded and drawn
       card.style.visibility = '';
+      onReady();
 
       // Setup timeout handler
       window.addEventListener('daily-timeout', () => {
@@ -706,7 +713,7 @@ class DailyChallenge {
     });
   }
 
-  async runTriviaGame(challenge, container) {
+  async runTriviaGame(challenge, container, onReady = () => {}) {
     const question = challenge.data;
 
     // Import the complete trivia factory
@@ -742,6 +749,7 @@ class DailyChallenge {
       // Set the specific question and show it
       result.setQuestion(question);
       result.showQuestion();
+      onReady();
 
       // Setup timeout handler
       window.addEventListener('daily-timeout', () => {
@@ -756,7 +764,7 @@ class DailyChallenge {
     });
   }
 
-  async runOutlinesGame(challenge, container) {
+  async runOutlinesGame(challenge, container, onReady = () => {}) {
     const targetCountry = challenge.data;
 
     // Setup container with SVG
@@ -808,6 +816,7 @@ class DailyChallenge {
       // Set specific country and start
       result.setCountry(targetCountry);
       result.nextQ();
+      onReady();
 
       // Setup timeout handler
       window.addEventListener('daily-timeout', () => {
@@ -822,7 +831,7 @@ class DailyChallenge {
     });
   }
 
-  async runHeritageGame(challenge, container) {
+  async runHeritageGame(challenge, container, onReady = () => {}) {
     const site = challenge.data;
 
     const { createCompleteHeritageGame } = await import('./heritage-complete.js');
@@ -928,6 +937,7 @@ class DailyChallenge {
       // Start
       result.setSite(site);
       result.start();
+      onReady();
 
       // Timeout handler (also previously referenced finalResult, which is a bug)
       window.addEventListener('daily-timeout', () => {
@@ -946,7 +956,7 @@ class DailyChallenge {
     });
   }
 
-  async runCapitalsGame(challenge, container) {
+  async runCapitalsGame(challenge, container, onReady = () => {}) {
     const targetCountry = challenge.data;
 
     // Create game logic instance with enriched data
@@ -1106,11 +1116,13 @@ class DailyChallenge {
         });
       }
 
+      onReady();
+
       window.addEventListener('daily-timeout', handleTimeout, { once: true });
     });
   }
 
-  async runFlagsGame(challenge, container) {
+  async runFlagsGame(challenge, container, onReady = () => {}) {
     const { FlagsGameLogic } = await import('./games/flags-logic.js');
     const { renderFlagsUI } = await import('./ui-components/flags-ui.js');
 
@@ -1160,6 +1172,7 @@ class DailyChallenge {
           }, delay);
         }
       });
+      onReady();
 
       window.addEventListener('daily-timeout', () => {
         if (hasResolved) return;
