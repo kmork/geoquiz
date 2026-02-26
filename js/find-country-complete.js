@@ -98,6 +98,13 @@ export async function createCompleteMap({
   const worldData = await loadGeoJSON("data/ne_10m_admin_0_countries.geojson.gz");
   WORLD = worldData.features;
 
+  // Build lookup: norm(GeoJSON ADMIN) → feature.properties (used for hints)
+  const geoPropsMap = new Map();
+  for (const feature of WORLD) {
+    const admin = feature.properties.ADMIN || "";
+    if (admin) geoPropsMap.set(norm(admin), feature.properties);
+  }
+
   // Pre-process country paths
   const countryMap = new Map();
   for (const feature of WORLD) {
@@ -174,6 +181,18 @@ export async function createCompleteMap({
       dataToGeo[target] = geoName;
     }
   }
+
+  // Neighbors data for hints (loaded non-blocking)
+  let neighborsData = null;
+  fetch('data/countries-neighbors.json')
+    .then(r => r.json())
+    .then(d => { neighborsData = d; })
+    .catch(() => {});
+
+  // Hint UI state
+  let hintPanel = null;
+  let hintBtn = null;
+  let hintPanelVisible = false;
 
   // Set of normalised GeoJSON names for the active continent.
   // Empty when no continent filter is active (show all countries normally).
@@ -573,6 +592,97 @@ export async function createCompleteMap({
     scrollY = Math.max(0, Math.min(scrollY, MAP_H - canvasDisplayHeight / zoom));
   }
 
+  function generateHints(countryDataName) {
+    const hints = [];
+    const geoName = dataToGeo[countryDataName] || countryDataName;
+    const props = geoPropsMap.get(norm(geoName));
+
+    // Subregion / continent
+    if (props?.SUBREGION) {
+      hints.push(`Located in ${props.SUBREGION}`);
+    } else if (props?.CONTINENT) {
+      hints.push(`In ${props.CONTINENT}`);
+    }
+
+    // Capital
+    const entry = (window.DATA || []).find(d => d.country === countryDataName);
+    if (entry?.capitals?.[0]) {
+      hints.push(`Capital: ${entry.capitals[0]}`);
+    }
+
+    // Population
+    if (props?.POP_EST) {
+      const pop = props.POP_EST;
+      const popStr = pop >= 1e9 ? `${(pop / 1e9).toFixed(1)} billion`
+                   : pop >= 1e6 ? `${Math.round(pop / 1e6)} million`
+                   : pop >= 1000 ? `${Math.round(pop / 1000)}K`
+                   : `${pop}`;
+      hints.push(`Population: ~${popStr}`);
+    }
+
+    // Neighbors (from countries-neighbors.json)
+    const nbrs = neighborsData?.[countryDataName];
+    if (nbrs != null) {
+      if (nbrs.length === 0) {
+        hints.push('Island nation — no land borders');
+      } else if (nbrs.length <= 4) {
+        hints.push(`Bordered by: ${nbrs.join(', ')}`);
+      } else {
+        hints.push(`Bordered by ${nbrs.length} countries, incl. ${nbrs.slice(0, 2).join(', ')}`);
+      }
+    }
+
+    return hints;
+  }
+
+  function hideHintPanel() {
+    if (!hintPanel) return;
+    hintPanel.classList.remove('visible');
+    hintPanelVisible = false;
+  }
+
+  function showHintPanel(countryDataName) {
+    if (!hintPanel) return;
+    const hints = generateHints(countryDataName);
+    const list = hintPanel.querySelector('.find-hint-list');
+    list.innerHTML = hints.map(h => `<li>${h}</li>`).join('');
+    hintPanel.classList.add('visible');
+    hintPanelVisible = true;
+  }
+
+  function createHintUI() {
+    const mapwrap = canvas.parentElement;
+
+    hintBtn = document.createElement('button');
+    hintBtn.className = 'picture-hint-btn';
+    hintBtn.textContent = '💡';
+    hintBtn.title = 'Show hints';
+    mapwrap.appendChild(hintBtn);
+
+    hintPanel = document.createElement('div');
+    hintPanel.className = 'find-hint-panel';
+    hintPanel.innerHTML =
+      '<div class="find-hint-panel-header">' +
+        '<span>💡 Hints</span>' +
+        '<button class="find-hint-close" title="Close">✕</button>' +
+      '</div>' +
+      '<ul class="find-hint-list"></ul>';
+    mapwrap.appendChild(hintPanel);
+
+    hintBtn.addEventListener('click', () => {
+      if (hintPanelVisible) {
+        hideHintPanel();
+      } else {
+        const current = game?.getCurrent?.();
+        if (current) showHintPanel(current.country);
+      }
+    });
+
+    hintPanel.addEventListener('click', () => {
+      hideHintPanel();
+    });
+  }
+
   // Reset map view — clears highlight/hover and stops inertia, but preserves zoom/pan.
   function resetMapView() {
     highlightedCountry = null;
@@ -580,6 +690,7 @@ export async function createCompleteMap({
     hoverCountry = null;
     velocityX = 0;
     velocityY = 0;
+    hideHintPanel();
     drawWorldMap();
   }
 
@@ -919,6 +1030,11 @@ export async function createCompleteMap({
 
   // Attach canvas interactions
   attachCanvasInteraction(game);
+
+  // Create hint UI (only for standalone game — canvas.parentElement is .mapwrap)
+  if (!singleRound) {
+    createHintUI();
+  }
 
   return {
     game,
