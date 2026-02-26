@@ -16,13 +16,11 @@ import { TriviaGameLogic } from './games/trivia-logic.js';
 import { FindCountryGameLogic } from './games/find-logic.js';
 import { OutlinesGameLogic } from './games/outlines-logic.js';
 import { HeritageGameLogic } from './games/heritage-logic.js';
-import { CapitalsGameLogic } from './games/capitals-logic.js';
 import { RouteGameLogic } from './games/route-logic.js';
 
 // Import UI components
 import { renderHeritageUI, setupHeritageAutocomplete } from './ui-components/heritage-ui.js';
 import { renderOutlinesUI } from './ui-components/outlines-ui.js';
-import { renderCapitalsUI } from './ui-components/capitals-ui.js';
 import { OutlinesRenderer } from './ui-components/outlines-renderer.js';
 import { FindCountryMapRenderer } from './ui-components/map-renderer.js';
 import { RouteRenderer } from './ui-components/route-renderer.js';
@@ -39,9 +37,6 @@ import {
   onEnterKey,
   getElapsedSeconds
 } from './daily-game-utils.js';
-
-// Import map creation for Capitals game
-import { createMap } from './map.js';
 
 // Game configuration
 const GAMES = [
@@ -957,168 +952,24 @@ class DailyChallenge {
   }
 
   async runCapitalsGame(challenge, container, onReady = () => {}) {
-    const targetCountry = challenge.data;
+    const { createCompleteCapitalsGame } = await import('./capitals-complete.js');
 
-    // Create game logic instance with enriched data
-    const gameLogic = new CapitalsGameLogic({
-      singleRound: true,
-      data: challenge.allData
-    });
-    gameLogic.setCountry(targetCountry);
-    gameLogic.nextRound();
+    return new Promise(async (resolve) => {
+      let hasResolved = false;
 
-    // Generate wrong answers and shuffle
-    const wrongAnswers = gameLogic.generateWrongAnswers(this.rng);
-    const correctCapitals = targetCountry.capitals || [gameLogic.getCorrectCapital()];
-    const correctAnswer = correctCapitals[0]; // primary capital for display/fallback
-    const allOptions = [...correctCapitals, ...wrongAnswers.slice(0, 4 - correctCapitals.length)];
-    const shuffled = this.rng.shuffle(allOptions);
-
-    // Render UI - matches standalone exactly
-    const ui = renderCapitalsUI(container, targetCountry, {
-      showMap: true,
-      choices: shuffled
-    });
-
-    // Create SVG map (like standalone)
-    if (ui.elements.map) {
-      const { createMap } = await import('./map.js');
-      const mapApi = createMap({
-        svgEl: ui.elements.map,
-        worldUrl: 'data/ne_10m_admin_0_countries_route.geojson.gz',
-        placesUrl: 'data/places.geojson'
+      const game = createCompleteCapitalsGame({
+        container,
+        confetti: this.confetti,
+        rng: this.rng,
+        onComplete: (result) => {
+          if (hasResolved) return;
+          hasResolved = true;
+          resolve(result);
+        }
       });
 
-      try {
-        await mapApi.load();
-        mapApi.draw(targetCountry.country, false);
-      } catch (err) {
-        console.error('Map load failed:', err);
-        // Continue without map
-      }
-    }
-
-    return new Promise(resolve => {
-      let answered = false;
-      let mcShown = false;
-
-      const handleTextSubmit = () => {
-        if (answered || mcShown) return;
-
-        const userInput = ui.elements.input.value.trim();
-
-        // Empty or wrong - show multiple choice
-        if (!userInput || !correctCapitals.some(c => norm(userInput) === norm(c))) {
-          mcShown = true;
-          ui.showMultipleChoice();
-
-          // Populate the choices dynamically
-          ui.populateChoices(shuffled, correctAnswer, handleChoiceClick);
-          return;
-        }
-
-        // Correct!
-        answered = true;
-        ui.disableInputs();
-
-        const result = gameLogic.checkAnswer(correctAnswer);
-
-        // Trigger confetti
-        this.confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-
-        setTimeout(() => {
-          resolve({
-            correct: true,
-            time: result.time,
-            timeLimit: challenge.timeLimit,
-            hintPenalty: mcShown ? 2 : 0
-          });
-        }, 1200);
-      };
-
-      const handleChoiceClick = (selected, button, correct) => {
-        if (answered) return;
-        answered = true;
-
-        const isCorrect = correctCapitals.includes(selected);
-
-        // Check answer using game logic
-        const result = gameLogic.checkAnswer(selected);
-
-        // Disable all buttons
-        const buttons = ui.elements.choices.querySelectorAll('button');
-        buttons.forEach(btn => btn.disabled = true);
-
-        // Highlight all correct answers
-        buttons.forEach(btn => {
-          if (correctCapitals.includes(btn.textContent)) {
-            btn.classList.add('correct');
-          }
-        });
-
-        // Highlight wrong if incorrect
-        if (!isCorrect) {
-          button.classList.add('wrong');
-        } else {
-          // Trigger confetti for correct answer
-          this.confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
-        }
-
-        setTimeout(() => {
-          resolve({
-            correct: isCorrect,
-            time: result.time,
-            timeLimit: challenge.timeLimit,
-            hintPenalty: mcShown ? 2 : 0
-          });
-        }, 1200);
-      };
-
-      const handleTimeout = () => {
-        if (answered) return;
-        answered = true;
-
-        // Show multiple choice if not already shown
-        if (!mcShown) {
-          ui.showMultipleChoice();
-          ui.populateChoices(shuffled, correctAnswer, () => {});
-        }
-
-        // Highlight correct answers
-        const buttons = ui.elements.choices.querySelectorAll('button');
-        buttons.forEach(btn => {
-          if (correctCapitals.includes(btn.textContent)) {
-            btn.classList.add('correct');
-          }
-          btn.disabled = true;
-        });
-
-        setTimeout(() => {
-          resolve({
-            correct: false,
-            time: challenge.timeLimit,
-            timeLimit: challenge.timeLimit
-          });
-        }, 1200);
-      };
-
-      // Setup events
-      ui.setupEvents({
-        onTextSubmit: handleTextSubmit,
-        onEnter: handleTextSubmit
-      });
-
-      // Mobile autocomplete with capital names
-      if (window.initMobileAutocomplete) {
-        const capitalSuggestions = challenge.allData.flatMap(c => c.capitals || []).filter(Boolean).sort();
-        window.initMobileAutocomplete(ui.elements.input, capitalSuggestions, {
-          onSelect: () => handleTextSubmit()
-        });
-      }
-
-      onReady();
-
-      window.addEventListener('daily-timeout', handleTimeout, { once: true });
+      game.setCountry(challenge.data, challenge.allData, challenge.timeLimit);
+      await game.start(onReady);
     });
   }
 
