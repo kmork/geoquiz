@@ -7,6 +7,7 @@
 import { SeededRandom, dateToSeed, getTodayDate, getChallengeNumber } from './seeded-random.js';
 import { calculateStars, saveResult, hasCompletedToday, getResultForDate, getStats, getRating, getRatingEmoji, formatTime, getMaxStars } from './daily-challenge-scoring.js';
 import { handleShare } from './daily-challenge-share.js';
+import { hapticFeedback } from './game-utils.js';
 import { initConfetti } from './confetti.js';
 import { norm } from './utils.js';
 import { runEmbeddedRouteGame } from "./route-daily-embed.js";
@@ -1004,6 +1005,7 @@ class DailyChallenge {
         onClick: (selectedCountry) => {
           if (hasResolved) return;
           const result = logic.checkAnswer(selectedCountry);
+          hapticFeedback(result.isCorrect ? 'correct' : 'wrong');
           ui.highlightAnswer(country.country, selectedCountry);
           ui.disableAll();
 
