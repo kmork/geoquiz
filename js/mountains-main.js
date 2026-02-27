@@ -7,7 +7,6 @@ const gameId = 'mountains-all';
 const initOverlay   = document.getElementById('init-overlay');
 const canvas        = document.getElementById('map');
 const featureNameEl = document.getElementById('featureName');
-const hintEl        = document.getElementById('hintText');
 const scoreEl       = document.getElementById('score');
 const progressEl    = document.getElementById('progress');
 const finalOverlay  = document.getElementById('finalOverlay');
@@ -26,7 +25,6 @@ if (initOverlay) {
       container:    canvas.parentElement,
       canvas,
       featureNameEl,
-      hintEl,
       scoreEl,
       progressEl,
       finalOverlay,

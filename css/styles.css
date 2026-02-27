@@ -1371,6 +1371,7 @@ html.light-mode .find-country-page .country {
 
 .rivers-page .mapwrap,
 .mountains-page .mapwrap {
+  position: relative;
   flex: 1;
   margin: 10px 0;
   min-height: 0;

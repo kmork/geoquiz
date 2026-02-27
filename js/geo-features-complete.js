@@ -99,9 +99,11 @@ export async function createGeoFeaturesGame({
 
   // ── Button references (created in createButtons()) ────────────────────────
 
-  let submitBtn = null;
-  let hintBtn   = null;
-  let nextBtn   = null;
+  let submitBtn  = null;
+  let hintBtn    = null;
+  let nextBtn    = null;
+  let hintPanel  = null;
+  let hintUsed   = false;
 
   // ── Load GeoJSON ──────────────────────────────────────────────────────────
 
@@ -599,15 +601,30 @@ export async function createGeoFeaturesGame({
     bar.appendChild(submitBtn);
     bar.appendChild(nextBtn);
 
+    // Hint panel — floating box inside mapwrap, same style as Find the Country
+    hintPanel = document.createElement('div');
+    hintPanel.className = 'find-hint-panel';
+    hintPanel.innerHTML =
+      '<div class="find-hint-panel-header"><span>💡 Hint</span></div>' +
+      '<ul class="find-hint-list"></ul>';
+    container.appendChild(hintPanel);
+
+    hintPanel.addEventListener('click', () => {
+      hintPanel.classList.remove('visible');
+    });
+
     hintBtn.addEventListener('click', () => {
-      if (hintBtn.disabled) return;
-      const hint = logic.useHint();
-      if (hintEl) {
-        hintEl.textContent = hint;
-        hintEl.style.display = '';
+      if (hintPanel.classList.contains('visible')) {
+        hintPanel.classList.remove('visible');
+        return;
       }
-      hintBtn.disabled = true;
-      hintBtn.style.opacity = '0.4';
+      if (!hintUsed) {
+        const hint = logic.useHint();
+        hintPanel.querySelector('.find-hint-list').innerHTML = `<li>${hint}</li>`;
+        hintUsed = true;
+        hintBtn.style.opacity = '0.5';
+      }
+      hintPanel.classList.add('visible');
     });
 
     submitBtn.addEventListener('click', () => {
@@ -628,6 +645,7 @@ export async function createGeoFeaturesGame({
 
     submitBtn.style.display  = 'none';
     hintBtn.style.visibility = 'hidden'; // keep layout stable, just hide it
+    if (hintPanel) hintPanel.classList.remove('visible');
 
     const result = logic.submitAnswer();
     if (!result) return;
@@ -670,8 +688,8 @@ export async function createGeoFeaturesGame({
     roundActive = true;
 
     if (featureNameEl) featureNameEl.textContent = feature.name;
-    if (hintEl) { hintEl.textContent = ''; hintEl.style.display = 'none'; }
-    hintBtn.disabled         = false;
+    if (hintPanel) hintPanel.classList.remove('visible');
+    hintUsed                 = false;
     hintBtn.style.opacity    = '1';
     hintBtn.style.visibility = '';
     submitBtn.style.display  = '';
@@ -727,9 +745,9 @@ export async function createGeoFeaturesGame({
     roundActive = true;
 
     if (featureNameEl) featureNameEl.textContent = feature.name;
-    if (hintEl) { hintEl.textContent = ''; hintEl.style.display = 'none'; }
+    if (hintPanel) hintPanel.classList.remove('visible');
+    hintUsed = false;
     if (hintBtn) {
-      hintBtn.disabled      = false;
       hintBtn.style.opacity    = '1';
       hintBtn.style.visibility = '';
     }
