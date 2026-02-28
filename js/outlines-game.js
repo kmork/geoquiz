@@ -61,7 +61,7 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, con
     gameLogic.reset();
     updateUI();
     ui.answerInput.value = "";
-    ui.statusEl.style.display = "none";
+    if (ui.statusEl) ui.statusEl.style.display = "none";
   }
 
   function getCurrent() {
@@ -75,7 +75,7 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, con
   }
 
   function hideStatus() {
-    ui.statusEl.style.display = "none";
+    if (ui.statusEl) ui.statusEl.style.display = "none";
   }
 
   function nextQ() {
@@ -109,7 +109,7 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, con
     if (isProcessing) {
       return;
     }
-    
+
     const userAnswer = ui.answerInput.value.trim();
     isProcessing = true;
     const result = gameLogic.checkAnswer(userAnswer);
@@ -119,51 +119,27 @@ export function createOutlinesGame({ ui, neighbors, confetti, drawCountries, con
       return;
     }
 
-    // Handle UI feedback based on result
-    if (result.action === 'empty' || result.action === 'wrong_first') {
-      // First attempt wrong or empty - show neighbors and allow retry
-      shakeWrong(ui.answerInput);
-      hapticFeedback('wrong');
-      showStatus(result.message, false);
-      ui.answerInput.value = "";
-      updateUI(); // Update UI to show current progress
-      
-      // Reset processing flag after a brief delay to prevent immediate re-submission
-      setTimeout(() => {
-        isProcessing = false;
-      }, 100);
-      
-      ui.answerInput.focus();
-
-      // Neighbors are drawn by onHintUsed callback
-      return;
-    }
+    ui.answerInput.disabled = true;
+    ui.submitBtn.disabled = true;
 
     if (result.isCorrect) {
-      // Correct answer
       const card = document.querySelector('.card');
       if (card) {
         card.style.animation = 'flashCorrect 0.5s';
         setTimeout(() => card.style.animation = '', 500);
       }
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
-      showStatus(result.message, true);
-      ui.answerInput.disabled = true;
-      ui.submitBtn.disabled = true;
+      hapticFeedback('correct');
       updateUI();
-      
-      const delay = result.action === 'correct_first' ? AUTO_MS_CORRECT_FIRST : AUTO_MS_CORRECT_SECOND;
       continueTimer = setTimeout(() => {
         isProcessing = false;
         nextQ();
-      }, delay);
+      }, AUTO_MS_CORRECT_FIRST);
     } else {
-      // Wrong second attempt
+      // Wrong answer — neighbors shown via onHintUsed, auto-advance
       shakeWrong(ui.answerInput);
       hapticFeedback('wrong');
-      showStatus(result.message, false);
-      ui.answerInput.disabled = true;
-      ui.submitBtn.disabled = true;
+      updateUI();
       continueTimer = setTimeout(() => {
         isProcessing = false;
         nextQ();

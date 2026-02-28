@@ -47,14 +47,50 @@ export async function createCompleteOutlinesGame({
   const renderer = new OutlinesRenderer(svgMap, WORLD, {
     aliases: COUNTRY_ALIASES
   });
-  
+
   let baseViewBox = { x: 0, y: 0, w: 600, h: 320 };
-  
-  // Draw countries wrapper
-  function drawCountries(targetCountry, neighborCountries) {
-    if (renderer) {
+
+  // Raw draw — renders countries; when neighbors are included, keeps the current
+  // viewBox so the map stays focused on the target country (neighbors appear
+  // at the edges as context without giving away the answer by zooming out).
+  function rawDrawCountries(targetCountry, neighborCountries) {
+    if (neighborCountries && neighborCountries.length > 0) {
+      const savedVB = svgMap.getAttribute('viewBox');
+      renderer.drawCountries(targetCountry, neighborCountries);
+      if (savedVB) svgMap.setAttribute('viewBox', savedVB);
+      // baseViewBox unchanged — pan/zoom stays bounded to target-only view
+    } else {
       renderer.drawCountries(targetCountry, neighborCountries);
       baseViewBox = renderer.getViewBox();
+    }
+  }
+
+  // Hint UI state
+  let hintBtn = null;
+  let hintPanel = null;
+  let hintUsed = false;
+
+  function hideHintPanel() {
+    if (hintPanel) hintPanel.classList.remove('visible');
+  }
+
+  function showHintPanel(currentCountryName) {
+    if (!hintPanel) return;
+    const nbrs = NEIGHBORS[currentCountryName] || [];
+    const text = nbrs.length === 0
+      ? 'Island nation — no land borders'
+      : 'Neighboring countries are now shown on the map';
+    hintPanel.querySelector('.find-hint-list').innerHTML = `<li>${text}</li>`;
+    hintPanel.classList.add('visible');
+  }
+
+  // drawCountries — wrapped version passed to the game; detects new rounds (empty neighbors)
+  function drawCountries(targetCountry, neighborCountries) {
+    rawDrawCountries(targetCountry, neighborCountries);
+    if (!neighborCountries || neighborCountries.length === 0) {
+      hideHintPanel();
+      hintUsed = false;
+      if (hintBtn) hintBtn.style.opacity = '1';
     }
   }
   
@@ -254,7 +290,42 @@ export async function createCompleteOutlinesGame({
   }
   
   attachZoomPan();
-  
+
+  function createHintUI() {
+    const mapwrap = svgMap.parentElement;
+
+    hintBtn = document.createElement('button');
+    hintBtn.className = 'picture-hint-btn';
+    hintBtn.textContent = '💡';
+    hintBtn.title = 'Show hint';
+    mapwrap.appendChild(hintBtn);
+
+    hintPanel = document.createElement('div');
+    hintPanel.className = 'find-hint-panel';
+    hintPanel.innerHTML =
+      '<div class="find-hint-panel-header"><span>💡 Hint</span></div>' +
+      '<ul class="find-hint-list"></ul>';
+    mapwrap.appendChild(hintPanel);
+
+    hintPanel.addEventListener('click', () => hideHintPanel());
+
+    hintBtn.addEventListener('click', () => {
+      if (hintPanel.classList.contains('visible')) {
+        hideHintPanel();
+        return;
+      }
+      const currentCountry = game?.getCurrent?.();
+      if (!currentCountry) return;
+      if (!hintUsed) {
+        const nbrs = NEIGHBORS[currentCountry] || [];
+        if (nbrs.length > 0) rawDrawCountries(currentCountry, nbrs);
+        hintUsed = true;
+        hintBtn.style.opacity = '0.5';
+      }
+      showHintPanel(currentCountry);
+    });
+  }
+
   // Create confetti if needed
   const confetti = confettiInstance || (singleRound ? null : initConfetti("confetti"));
   
@@ -270,8 +341,8 @@ export async function createCompleteOutlinesGame({
   };
   
   // Create game instance
-  const game = createOutlinesGame({ 
-    ui: fullUI, 
+  let game = createOutlinesGame({
+    ui: fullUI,
     neighbors: NEIGHBORS,
     confetti,
     drawCountries,
@@ -280,9 +351,17 @@ export async function createCompleteOutlinesGame({
       hideScoreUI: singleRound,
       onComplete: onComplete,
       maxRounds,
-      gameIdSuffix
+      gameIdSuffix,
+      onHintUsed: singleRound ? undefined : () => {
+        // Wrong answer: neighbors drawn on map (via drawCountries in outlines-game.js).
+        // Mark hint as used so 💡 can reopen the panel, but don't auto-show it.
+        hintUsed = true;
+        if (hintBtn) hintBtn.style.opacity = '0.5';
+      },
     }
   });
+
+  if (!singleRound) createHintUI();
   
   // Setup autocomplete with country names and aliases
   if (window.DATA && Array.isArray(window.DATA)) {

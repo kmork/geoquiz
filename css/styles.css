@@ -233,7 +233,7 @@ button:disabled{opacity:.55;cursor:not-allowed}
   .trivia-page #explanation { margin-top: 32px; }
 }
 
-.mapwrap{margin:10px 0}
+.mapwrap{margin:10px 0;position:relative}
 
 #map{
   border-radius:14px;
