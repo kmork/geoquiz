@@ -1277,18 +1277,17 @@ select option {
   /* No min-height override needed - aspect ratio is preserved by JS */
 }
 
-/* Country name overlaid on map — bottom-center, vertically centered with hint button */
+/* Country name overlaid on map — top-left */
 .find-country-page .country {
   position: absolute;
-  bottom: 12px;
-  left: 50%;
-  transform: translateX(-50%);
+  top: 12px;
+  left: 12px;
+  transform: none;
   z-index: 5;
   white-space: nowrap;
-  max-width: calc(100% - 100px); /* leave room for hint button on the right */
-  text-align: center;
+  max-width: calc(100% - 24px);
+  text-align: left;
   margin: 0;
-  line-height: 44px; /* matches button height so text center aligns with button center */
   text-shadow: 0 0 4px var(--card-bg), 0 0 8px var(--card-bg), 0 0 12px var(--card-bg);
 }
 
