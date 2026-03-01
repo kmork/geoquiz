@@ -421,5 +421,185 @@
     "hint": "Ancient Roman defensive wall stretching across northern England",
     "year": 1987,
     "region": "Europe"
+  },
+  {
+    "siteName": "Sigiriya",
+    "country": "Sri Lanka",
+    "imageUrl": "img/heritage/sigiriya.jpg",
+    "type": "cultural",
+    "hint": "Ancient rock fortress rising 200 metres above the jungle, with palace ruins and frescoes at the summit",
+    "year": 1982,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Persepolis",
+    "country": "Iran",
+    "imageUrl": "img/heritage/persepolis.jpg",
+    "type": "cultural",
+    "hint": "Ceremonial capital of the Persian Empire, with towering stone columns once topped by bull-headed capitals",
+    "year": 1979,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Himeji Castle",
+    "country": "Japan",
+    "imageUrl": "img/heritage/himeji-castle.jpg",
+    "type": "cultural",
+    "hint": "Gleaming white hilltop castle nicknamed the 'White Heron Castle', Japan's finest surviving feudal fortress",
+    "year": 1993,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Hallstatt",
+    "country": "Austria",
+    "imageUrl": "img/heritage/hallstatt.jpg",
+    "type": "cultural",
+    "hint": "Tiny Alpine village of pastel houses reflected in a mountain lake, with prehistoric salt mines above",
+    "year": 1997,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Abu Simbel Temples",
+    "country": "Egypt",
+    "imageUrl": "img/heritage/abu-simbel.jpg",
+    "type": "cultural",
+    "hint": "Two enormous rock temples built by Ramesses II, famously relocated piece by piece to save them from rising floodwaters",
+    "year": 1979,
+    "region": "Africa"
+  },
+  {
+    "siteName": "Bryggen",
+    "country": "Norway",
+    "imageUrl": "img/heritage/bryggen.jpg",
+    "type": "cultural",
+    "hint": "Row of colorful medieval timber wharfhouses lining Bergen's harbour, once the hub of Hanseatic trade in northern Europe",
+    "year": 1979,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Skellig Michael",
+    "country": "Ireland",
+    "imageUrl": "img/heritage/skellig-michael.jpg",
+    "type": "cultural",
+    "hint": "Craggy pyramid-shaped island off Ireland's coast with sixth-century stone beehive-shaped monks' cells",
+    "year": 1996,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Old Havana",
+    "country": "Cuba",
+    "imageUrl": "img/heritage/old-havana.jpg",
+    "type": "cultural",
+    "hint": "Vibrant colonial city of colonnaded plazas, Baroque churches, and pastel-painted streets with vintage American cars",
+    "year": 1982,
+    "region": "North America"
+  },
+  {
+    "siteName": "Luang Prabang",
+    "country": "Laos",
+    "imageUrl": "img/heritage/luang-prabang.jpg",
+    "type": "cultural",
+    "hint": "Royal city of gilded Buddhist temples and French colonial villas at the confluence of the Mekong and Nam Khan rivers",
+    "year": 1995,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Walled City of Cartagena",
+    "country": "Colombia",
+    "imageUrl": "img/heritage/cartagena.jpg",
+    "type": "cultural",
+    "hint": "16th-century Spanish colonial city enclosed by massive coral-stone ramparts on the Caribbean coast",
+    "year": 1984,
+    "region": "South America"
+  },
+  {
+    "siteName": "Great Mosque of Djenné",
+    "country": "Mali",
+    "imageUrl": "img/heritage/great-mosque-djenne.jpg",
+    "type": "cultural",
+    "hint": "World's largest mud-brick building, rebuilt annually by the community using the same ancient design",
+    "year": 1988,
+    "region": "Africa"
+  },
+  {
+    "siteName": "Rock-Hewn Churches of Lalibela",
+    "country": "Ethiopia",
+    "imageUrl": "img/heritage/lalibela.jpg",
+    "type": "cultural",
+    "hint": "Eleven medieval Christian churches carved entirely downward into red volcanic rock, still used for worship today",
+    "year": 1978,
+    "region": "Africa"
+  },
+  {
+    "siteName": "Historic Centre of Prague",
+    "country": "Czechia",
+    "imageUrl": "img/heritage/prague-historic-centre.jpg",
+    "type": "cultural",
+    "hint": "Medieval city with a Gothic cathedral on a hill, an ancient astronomical clock, and a stone bridge lined with Baroque statues",
+    "year": 1992,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Þingvellir National Park",
+    "country": "Iceland",
+    "imageUrl": "img/heritage/thingvellir.jpg",
+    "type": "cultural",
+    "hint": "Dramatic rift valley where tectonic plates visibly diverge, and site of the world's oldest parliament founded in 930 AD",
+    "year": 2004,
+    "region": "Europe"
+  },
+  {
+    "siteName": "Island of Gorée",
+    "country": "Senegal",
+    "imageUrl": "img/heritage/goree-island.jpg",
+    "type": "cultural",
+    "hint": "Small island off Dakar that served as the largest slave-trading center on the African coast for three centuries",
+    "year": 1978,
+    "region": "Africa"
+  },
+  {
+    "siteName": "Medina of Marrakesh",
+    "country": "Morocco",
+    "imageUrl": "img/heritage/marrakesh-medina.jpg",
+    "type": "cultural",
+    "hint": "Ancient walled city with a legendary square filled with storytellers, snake charmers, and open-air food stalls",
+    "year": 1985,
+    "region": "Africa"
+  },
+  {
+    "siteName": "Hampi",
+    "country": "India",
+    "imageUrl": "img/heritage/hampi.jpg",
+    "type": "cultural",
+    "hint": "Vast ruined capital of the Vijayanagara Empire, with a famous stone chariot at an ornate riverside temple complex",
+    "year": 1986,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Potala Palace",
+    "country": "China",
+    "imageUrl": "img/heritage/potala-palace.jpg",
+    "type": "cultural",
+    "hint": "Towering 13-storey red and white palace perched on a hill in Lhasa, the former winter residence of the Dalai Lama",
+    "year": 1994,
+    "region": "Asia"
+  },
+  {
+    "siteName": "Teotihuacán",
+    "country": "Mexico",
+    "imageUrl": "img/heritage/teotihuacan.jpg",
+    "type": "cultural",
+    "hint": "Ancient city with two colossal pyramids flanking the Avenue of the Dead, built by a civilization whose identity remains unknown",
+    "year": 1987,
+    "region": "North America"
+  },
+  {
+    "siteName": "Old Bridge of Mostar",
+    "country": "Bosnia and Herzegovina",
+    "imageUrl": "img/heritage/mostar-bridge.jpg",
+    "type": "cultural",
+    "hint": "16th-century Ottoman stone arch bridge spanning an emerald river, destroyed in war in 1993 and faithfully rebuilt",
+    "year": 2005,
+    "region": "Europe"
   }
 ]

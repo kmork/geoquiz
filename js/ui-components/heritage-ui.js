@@ -114,7 +114,11 @@ export function renderHeritageUI(container, site, options = {}) {
   const handleSubmit = () => {
     if (answered) return;
     const answer = elements.input.value.trim();
-    if (!answer) return;
+    if (!answer) {
+      // Empty submit with multiple choice enabled → skip directly to alternatives
+      if (allowMultipleChoice) onAnswer({ answer: '', hintUsed, hintPenalty });
+      return;
+    }
 
     answered = true;
     elements.input.disabled = true;
