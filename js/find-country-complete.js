@@ -193,6 +193,7 @@ export async function createCompleteMap({
   let hintPanel = null;
   let hintBtn = null;
   let hintPanelVisible = false;
+  let hintUsed = false;
 
   // Set of normalised GeoJSON names for the active continent.
   // Empty when no continent filter is active (show all countries normally).
@@ -674,7 +675,10 @@ export async function createCompleteMap({
         hideHintPanel();
       } else {
         const current = game?.getCurrent?.();
-        if (current) showHintPanel(current.country);
+        if (current) {
+          showHintPanel(current.country);
+          hintUsed = true;
+        }
       }
     });
 
@@ -690,6 +694,7 @@ export async function createCompleteMap({
     hoverCountry = null;
     velocityX = 0;
     velocityY = 0;
+    hintUsed = false;
     hideHintPanel();
     drawWorldMap();
   }
@@ -951,7 +956,7 @@ export async function createCompleteMap({
             const clickedCountry = checkClickedCountry(clickX, clickY, game ? game.getCurrent().country : null);
 
             if (clickedCountry && game) {
-              game.handleMapClick(clickedCountry);
+              game.handleMapClick(clickedCountry, hintUsed);
             }
           } else {
             startAnimation();
@@ -965,7 +970,7 @@ export async function createCompleteMap({
           const clickedCountry = checkClickedCountry(clickX, clickY, game ? game.getCurrent().country : null);
 
           if (clickedCountry && game) {
-            game.handleMapClick(clickedCountry);
+            game.handleMapClick(clickedCountry, hintUsed);
           }
         } else {
           startAnimation();

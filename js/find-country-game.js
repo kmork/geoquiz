@@ -80,8 +80,8 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
     updateUI();
   }
 
-  function handleMapClick(clickedCountryName) {
-    const result = gameLogic.handleClick(clickedCountryName);
+  function handleMapClick(clickedCountryName, hintUsed = false) {
+    const result = gameLogic.handleClick(clickedCountryName, hintUsed);
     
     if (result.action === 'ignore') {
       return;
@@ -99,7 +99,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
 
   function handleAnswerFeedback(result) {
     if (result.isCorrect) {
-      showStatus(`✅ Correct! +1 point`, true);
+      showStatus(`✅ Correct! +${result.hintUsed ? 1 : 2} points`, true);
       highlightCountry(result.correctCountry, "correct_self");
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
       updateUI();
@@ -131,7 +131,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
       gameId: `find-${gameIdSuffix}`,
       score: finalResult.score,
       scoreLabel: 'Score',
-      maxScore: finalResult.total,
+      maxScore: finalResult.total * 2,
       time: finalResult.time,
       accuracy: finalResult.accuracy,
       stats: [

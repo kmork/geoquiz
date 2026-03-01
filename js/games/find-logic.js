@@ -87,7 +87,7 @@ export class FindCountryGameLogic {
    * - isCorrect: boolean (for 'correct'/'wrong')
    * - time: number (for 'correct'/'wrong')
    */
-  handleClick(clickedCountryName) {
+  handleClick(clickedCountryName, hintUsed = false) {
     if (this.roundEnded || !this.current) {
       return { action: 'ignore' };
     }
@@ -109,7 +109,7 @@ export class FindCountryGameLogic {
     this.lastAnswerTime = timeTaken; // Save time for final result
 
     if (isCorrect) {
-      this.score += 1;
+      this.score += hintUsed ? 1 : 2;
       this.correctCount++;
     }
 
@@ -118,6 +118,7 @@ export class FindCountryGameLogic {
       clickedCountry: clickedCountryName,
       correctCountry: this.current.country,
       isCorrect,
+      hintUsed,
       time: timeTaken,
       score: this.score
     };
