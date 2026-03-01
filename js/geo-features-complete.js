@@ -5,6 +5,9 @@
  * Players toggle-click countries then submit; after each round the feature
  * path is drawn on the map (blue line for rivers, brown dots for mountains).
  *
+ * Mountains additionally supports a bonus round: after submit the map zooms
+ * into the range and the player clicks the highest named peak.
+ *
  * Adapted from find-country-complete.js — same pan/zoom/world-wrap engine,
  * new multi-highlight map and feature-overlay rendering.
  */
@@ -28,6 +31,10 @@ import { initConfetti } from './confetti.js';
  * @param {'river'|'mountain'} config.featureType     - Determines overlay style
  * @param {string}             config.gameId          - Record key (e.g. 'rivers-short')
  * @param {HTMLElement}        [config.initOverlay]   - Loading overlay to hide after load
+ * @param {Function}           [config.onBonusRound]  - async (feature, api) => void (mountains only)
+ * @param {Function}           [config.getExtraScore]    - () => number
+ * @param {Function}           [config.getExtraMaxScore] - () => number
+ * @param {Function}           [config.onPlayAgainHook]  - Called at start of startGame()
  * @returns {Promise<void>}
  */
 export async function createGeoFeaturesGame({
@@ -42,6 +49,10 @@ export async function createGeoFeaturesGame({
   featureType,
   gameId,
   initOverlay,
+  onBonusRound = null,
+  getExtraScore = null,
+  getExtraMaxScore = null,
+  onPlayAgainHook = null,
 }) {
   const confetti = initConfetti('confetti');
 
@@ -97,11 +108,22 @@ export async function createGeoFeaturesGame({
   let roundActive = false;
   let submitted = false;
 
+  // ── Bonus round state ─────────────────────────────────────────────────────
+
+  let bonusPhase = false;
+  let bonusHighlight = null;       // name of correct peak (shown green after answer)
+  let bonusWrongPeak = null;       // name of the wrong-clicked peak (shown red)
+  let currentPeaks = null;         // peaks array of current feature
+  let peakLabelsVisible = false;   // revealed by hint button
+  let pendingBonusFeature = null;  // set after submit; bonus starts when user clicks Next
+  let bonusNextResolve = null;     // resolves when user clicks Next during bonus result view
+
   // ── Button references (created in createButtons()) ────────────────────────
 
   let submitBtn  = null;
   let hintBtn    = null;
   let nextBtn    = null;
+  let bonusBtn   = null;
   let hintPanel  = null;
   let hintUsed   = false;
 
@@ -293,6 +315,190 @@ export async function createGeoFeaturesGame({
     ctx.restore();
   }
 
+  function drawPeakMarkers(peaks, mode) {
+    if (!peaks?.length) return;
+
+    const normalizedScrollX = ((scrollX % MAP_W) + MAP_W) % MAP_W;
+    const baseOffset = scrollX - normalizedScrollX;
+    const viewWidthInMapUnits = canvasDisplayWidth / zoom;
+    const viewLeft  = scrollX - viewWidthInMapUnits / 2;
+    const viewRight = scrollX + viewWidthInMapUnits / 2;
+
+    ctx.save();
+
+    for (let i = -1; i <= 1; i++) {
+      const offset = baseOffset + i * MAP_W;
+      if (offset + MAP_W < viewLeft || offset > viewRight) continue;
+
+      for (const peak of peaks) {
+        const [mx, my] = proj([peak.lon, peak.lat]);
+        const px = (mx + offset - scrollX) * zoom;
+        const py = (my - scrollY) * zoom;
+
+        // Skip if off screen
+        if (px < -20 || px > canvasDisplayWidth + 20 || py < -20 || py > canvasDisplayHeight + 20) continue;
+
+        const isCorrect = bonusHighlight  === peak.name;
+        const isWrong   = bonusWrongPeak  === peak.name;
+
+        if (mode === 'subtle') {
+          // Small upward triangle
+          const s = 4;
+          ctx.fillStyle = 'rgba(180, 120, 60, 0.85)';
+          ctx.beginPath();
+          ctx.moveTo(px, py - s);
+          ctx.lineTo(px + s * 0.87, py + s * 0.5);
+          ctx.lineTo(px - s * 0.87, py + s * 0.5);
+          ctx.closePath();
+          ctx.fill();
+
+          if (peakLabelsVisible) {
+            const labelY = py - s - 3;
+            ctx.font = `bold ${Math.max(9, Math.min(11, zoom * 1.2))}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+            ctx.lineWidth = 3;
+            ctx.lineJoin = 'round';
+            ctx.strokeText(peak.name, px, labelY);
+            ctx.fillStyle = '#f5deb3';
+            ctx.fillText(peak.name, px, labelY);
+          }
+        } else {
+          // Interactive mode: prominent circle + outer ring, label only when revealed
+          const radius = 10;
+          // Outer glow ring
+          const glowColor = isCorrect ? 'rgba(110,231,183,0.45)' : isWrong ? 'rgba(252,165,161,0.45)' : 'rgba(180,120,60,0.35)';
+          ctx.beginPath();
+          ctx.arc(px, py, radius + 5, 0, Math.PI * 2);
+          ctx.strokeStyle = glowColor;
+          ctx.lineWidth = 3;
+          ctx.stroke();
+          // Main filled circle
+          const fillColor = isCorrect ? '#6ee7b7' : isWrong ? '#fda4af' : 'rgba(180, 120, 60, 0.92)';
+          ctx.beginPath();
+          ctx.arc(px, py, radius, 0, Math.PI * 2);
+          ctx.fillStyle = fillColor;
+          ctx.fill();
+          ctx.strokeStyle = 'white';
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          if (peakLabelsVisible) {
+            const labelY = py - radius - 3;
+            const labelText = bonusHighlight !== null
+              ? `${peak.name}  ${peak.elev} m`
+              : peak.name;
+            ctx.font = `bold ${Math.max(9, Math.min(13, zoom * 1.5))}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            ctx.strokeStyle = 'rgba(0,0,0,0.7)';
+            ctx.lineWidth = 3;
+            ctx.lineJoin = 'round';
+            ctx.strokeText(labelText, px, labelY);
+            ctx.fillStyle = isCorrect ? '#6ee7b7' : isWrong ? '#fda4af' : '#f5deb3';
+            ctx.fillText(labelText, px, labelY);
+          }
+        }
+      }
+    }
+
+    ctx.restore();
+  }
+
+  function zoomToBounds(lons, lats, padding = 0.3, maxZoom = 500) {
+    if (!lons.length || !lats.length) return;
+
+    const minLon = Math.min(...lons) - padding * (Math.max(...lons) - Math.min(...lons) + 1);
+    const maxLon = Math.max(...lons) + padding * (Math.max(...lons) - Math.min(...lons) + 1);
+    const minLat = Math.min(...lats) - padding * (Math.max(...lats) - Math.min(...lats) + 1);
+    const maxLat = Math.max(...lats) + padding * (Math.max(...lats) - Math.min(...lats) + 1);
+
+    const [x0, y1] = proj([minLon, minLat]);
+    const [x1, y0] = proj([maxLon, maxLat]);
+
+    const featureW = x1 - x0;
+    const featureH = y1 - y0;
+
+    if (featureW <= 0 || featureH <= 0) return;
+
+    const zoomX = canvasDisplayWidth  / featureW;
+    const zoomY = canvasDisplayHeight / featureH;
+    const newZoom = Math.min(maxZoom, Math.max(minZoom, Math.min(zoomX, zoomY)));
+
+    const centerX = (x0 + x1) / 2;
+    const centerY = (y0 + y1) / 2;
+
+    zoom    = newZoom;
+    scrollX = centerX - canvasDisplayWidth  / (2 * zoom);
+    scrollY = Math.max(0, Math.min(MAP_H - canvasDisplayHeight / zoom,
+              centerY - canvasDisplayHeight / (2 * zoom)));
+
+    drawWorldMap();
+  }
+
+  // ── Bonus round API ───────────────────────────────────────────────────────
+
+  const bonusApi = {
+    startPeakMode(peaks) {
+      currentPeaks = peaks;
+      bonusHighlight = null;
+      bonusWrongPeak = null;
+      peakLabelsVisible = false;
+      // Re-expose hint button so player can reveal peak names
+      if (hintBtn) {
+        hintBtn.style.visibility = '';
+        hintBtn.style.opacity = '1';
+      }
+      zoomToBounds(peaks.map(p => p.lon), peaks.map(p => p.lat), 0.5, 60);
+    },
+    onPeakClick: null,
+    onEnd: null,
+    highlightPeak(name) {
+      bonusHighlight = name;
+      drawWorldMap();
+    },
+    markWrong(name) {
+      bonusWrongPeak = name;
+      drawWorldMap();
+    },
+    revealLabels() {
+      peakLabelsVisible = true;
+      if (hintBtn) hintBtn.style.opacity = '0.5';
+      drawWorldMap();
+    },
+    endBonusMode() {
+      currentPeaks = null;
+      bonusHighlight = null;
+      bonusWrongPeak = null;
+      peakLabelsVisible = false;
+      if (hintBtn) hintBtn.style.visibility = 'hidden';
+      // Reset viewport to initial full-world view
+      zoom    = minZoom;
+      scrollX = MAP_W / 2 - canvasDisplayWidth / (2 * minZoom);
+      scrollY = 0;
+      drawWorldMap();
+      if (bonusApi.onEnd) { bonusApi.onEnd(); bonusApi.onEnd = null; }
+    },
+  };
+
+  // ── Bonus click handler ───────────────────────────────────────────────────
+
+  function handleBonusClick(canvasX, canvasY) {
+    if (!currentPeaks) return;
+    const mapX = canvasX / zoom + scrollX;
+    const mapY = canvasY / zoom + scrollY;
+    const normalizedMapX = ((mapX % MAP_W) + MAP_W) % MAP_W;
+    const HIT_RADIUS = 14;
+    let hit = null, bestDist = Infinity;
+    for (const peak of currentPeaks) {
+      const [px, py] = proj([peak.lon, peak.lat]);
+      const dist = Math.sqrt((normalizedMapX - px) ** 2 + (mapY - py) ** 2) * zoom;
+      if (dist < HIT_RADIUS && dist < bestDist) { bestDist = dist; hit = peak; }
+    }
+    if (hit && bonusApi.onPeakClick) bonusApi.onPeakClick(hit);
+  }
+
   function drawWorldMap() {
     if (!countryPaths.length) return;
     ctx.clearRect(0, 0, canvasDisplayWidth, canvasDisplayHeight);
@@ -342,8 +548,13 @@ export async function createGeoFeaturesGame({
       }
     }
 
-    if (currentFeatureOverlay) {
+    // For mountains with peaks, skip the generic path dots — only peak markers are drawn
+    if (currentFeatureOverlay && !(featureType === 'mountain' && currentPeaks)) {
       drawFeatureOverlay(currentFeatureOverlay);
+    }
+
+    if (currentPeaks && featureType === 'mountain') {
+      drawPeakMarkers(currentPeaks, bonusPhase ? 'interactive' : 'subtle');
     }
   }
 
@@ -511,7 +722,7 @@ export async function createGeoFeaturesGame({
         }
         if (touches.length === 0) {
           isPointerDown = false;
-          if (!isDragging && !wasRecentlyPinching && roundActive && !submitted) {
+          if (!isDragging && !wasRecentlyPinching && (roundActive && !submitted || bonusPhase)) {
             const rect = canvas.getBoundingClientRect();
             handleMapClick(e.clientX - rect.left, e.clientY - rect.top);
           } else {
@@ -519,7 +730,7 @@ export async function createGeoFeaturesGame({
           }
         }
       } else {
-        if (!isDragging && roundActive && !submitted) {
+        if (!isDragging && (roundActive && !submitted || bonusPhase)) {
           const rect = canvas.getBoundingClientRect();
           handleMapClick(e.clientX - rect.left, e.clientY - rect.top);
         } else {
@@ -541,6 +752,7 @@ export async function createGeoFeaturesGame({
   // ── Map click handler ─────────────────────────────────────────────────────
 
   function handleMapClick(canvasX, canvasY) {
+    if (bonusPhase) { handleBonusClick(canvasX, canvasY); return; }
     if (!roundActive || submitted) return;
     const name = checkClickedCountry(canvasX, canvasY);
     if (!name) return;
@@ -598,8 +810,14 @@ export async function createGeoFeaturesGame({
     nextBtn.className = 'geo-next-btn';
     nextBtn.style.cssText = btnBase + `display: none;`;
 
+    bonusBtn = document.createElement('button');
+    bonusBtn.className = 'geo-bonus-btn';
+    bonusBtn.textContent = '🏔 Find the Peak!';
+    bonusBtn.style.cssText = btnBase + `display: none;`;
+
     bar.appendChild(submitBtn);
     bar.appendChild(nextBtn);
+    bar.appendChild(bonusBtn);
 
     // Hint panel — floating box inside mapwrap, same style as Find the Country
     hintPanel = document.createElement('div');
@@ -614,6 +832,16 @@ export async function createGeoFeaturesGame({
     });
 
     hintBtn.addEventListener('click', () => {
+      if (bonusPhase) {
+        // During bonus: reveal peak labels on the map
+        if (!peakLabelsVisible) {
+          peakLabelsVisible = true;
+          hintBtn.style.opacity = '0.5';
+          drawWorldMap();
+        }
+        return;
+      }
+      // Country-selection phase: show range hint text
       if (hintPanel.classList.contains('visible')) {
         hintPanel.classList.remove('visible');
         return;
@@ -633,13 +861,26 @@ export async function createGeoFeaturesGame({
     });
 
     nextBtn.addEventListener('click', () => {
-      doNextRound();
+      if (bonusNextResolve) {
+        bonusNextResolve();
+      } else {
+        doNextRound();
+      }
+    });
+
+    bonusBtn.addEventListener('click', () => {
+      if (!pendingBonusFeature) return;
+      const feature = pendingBonusFeature;
+      pendingBonusFeature = null;
+      bonusBtn.style.display = 'none';
+      nextBtn.style.display  = 'none';
+      startBonusRound(feature);
     });
   }
 
   // ── Round flow ────────────────────────────────────────────────────────────
 
-  function doSubmit() {
+  async function doSubmit() {
     submitted = true;
     roundActive = false;
 
@@ -661,18 +902,46 @@ export async function createGeoFeaturesGame({
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
     }
 
-    // Draw the feature path
+    // Show result on map; peaks appear as subtle markers (no path dots for mountains)
     currentFeatureOverlay = logic.current;
+    currentPeaks = (featureType === 'mountain') ? (logic.current?.peaks || null) : null;
     drawWorldMap();
 
     updateUI();
 
-    nextBtn.textContent     = logic.isComplete() ? 'Finish' : 'Next →';
-    nextBtn.style.display   = '';
+    nextBtn.textContent   = logic.isComplete() ? 'Finish' : 'Next →';
+    nextBtn.style.display = '';
+
+    // Show bonus button alongside Next so player can optionally play the peak challenge
+    if (onBonusRound && logic.current?.peaks?.length) {
+      pendingBonusFeature = logic.current;
+      bonusBtn.style.display = '';
+    }
+  }
+
+  async function startBonusRound(feature) {
+    nextBtn.style.display = 'none';
+    bonusPhase = true;
+    await onBonusRound(feature, bonusApi);
+
+    // Peak was clicked — stay zoomed in on the result; show Next while still in bonus view
+    nextBtn.textContent = logic.isComplete() ? 'Finish' : 'Next →';
+    nextBtn.style.display = '';
+
+    // Wait for user to click Next/Finish before zooming back out
+    await new Promise(resolve => { bonusNextResolve = resolve; });
+    bonusNextResolve = null;
+
+    // End bonus mode: resets zoom, hides hint button, fires onEnd cleanup
+    bonusPhase = false;
+    bonusApi.endBonusMode();
+    doNextRound();
   }
 
   function doNextRound() {
-    nextBtn.style.display = 'none';
+    nextBtn.style.display  = 'none';
+    bonusBtn.style.display = 'none';
+    pendingBonusFeature    = null;
 
     if (logic.isComplete()) {
       showFinish();
@@ -684,6 +953,8 @@ export async function createGeoFeaturesGame({
 
     highlights = new Map();
     currentFeatureOverlay = null;
+    currentPeaks = null;
+    peakLabelsVisible = false;
     submitted   = false;
     roundActive = true;
 
@@ -710,20 +981,27 @@ export async function createGeoFeaturesGame({
 
     const p        = logic.getProgress();
     const totalTime = logic.getTotalTime();
-    const accuracy = p.totalPossible > 0
-      ? Math.round((p.score / p.totalPossible) * 100)
+    const extra    = getExtraScore    ? getExtraScore()    : 0;
+    const extraMax = getExtraMaxScore ? getExtraMaxScore() : 0;
+    const accuracy = (p.totalPossible + extraMax) > 0
+      ? Math.round(((p.score + extra) / (p.totalPossible + extraMax)) * 100)
       : 0;
+
+    const stats = [
+      { label: 'countries identified', value: p.score },
+    ];
+    if (extraMax > 0) {
+      stats.push({ label: 'bonus peaks found', value: extra });
+    }
 
     renderFinishScreen(finalOverlay, {
       gameId,
-      score:       p.score,
+      score:       p.score + extra,
       scoreLabel:  'Points',
-      maxScore:    p.totalPossible,
+      maxScore:    p.totalPossible + extraMax,
       time:        totalTime,
       accuracy,
-      stats: [
-        { label: 'countries in play', value: p.totalPossible },
-      ],
+      stats,
       shareUrl: `geoquiz.info${location.pathname}${location.search}`,
       onPlayAgain: () => {
         finalOverlay.style.display = 'none';
@@ -735,12 +1013,22 @@ export async function createGeoFeaturesGame({
   // ── Start ─────────────────────────────────────────────────────────────────
 
   function startGame() {
+    onPlayAgainHook?.();
     logic.reset();
+    bonusPhase     = false;
+    bonusHighlight = null;
+    bonusWrongPeak = null;
+    currentPeaks   = null;
+    peakLabelsVisible = false;
+    pendingBonusFeature = null;
+    bonusNextResolve = null;
+
     const feature = logic.nextRound();
     if (!feature) return;
 
     highlights = new Map();
     currentFeatureOverlay = null;
+    currentPeaks = null;
     submitted   = false;
     roundActive = true;
 
@@ -751,8 +1039,9 @@ export async function createGeoFeaturesGame({
       hintBtn.style.opacity    = '1';
       hintBtn.style.visibility = '';
     }
-    if (submitBtn) submitBtn.style.display = '';
-    if (nextBtn)   nextBtn.style.display   = 'none';
+    if (submitBtn)  submitBtn.style.display  = '';
+    if (nextBtn)    nextBtn.style.display    = 'none';
+    if (bonusBtn)   bonusBtn.style.display   = 'none';
 
     updateUI();
     drawWorldMap();

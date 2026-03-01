@@ -15,11 +15,55 @@ if (initOverlay) {
   initOverlay.style.display = 'flex';
 }
 
+let bonusScore = 0;
+
+// Bonus overlay element — injected into the map container after load
+const bonusOverlay = document.createElement('div');
+bonusOverlay.className = 'geo-bonus-overlay';
+bonusOverlay.style.display = 'none';
+
+async function onBonusRound(feature, api) {
+  return new Promise((resolve) => {
+    const highest = feature.bonusPeaks.reduce((a, b) => b.elev > a.elev ? b : a);
+
+    bonusOverlay.className = 'geo-bonus-overlay';
+    bonusOverlay.textContent = '🏔 Click the highest peak!';
+    bonusOverlay.style.display = 'block';
+
+    // Hide the overlay when bonus mode ends (user clicked Next)
+    api.onEnd = () => { bonusOverlay.style.display = 'none'; };
+
+    api.onPeakClick = (clicked) => {
+      api.onPeakClick = null; // one click only
+
+      const correct = clicked.name === highest.name;
+      if (correct) bonusScore++;
+
+      // Reveal correct peak in green; wrong click in red; show all peak names
+      api.highlightPeak(highest.name);
+      if (!correct) api.markWrong(clicked.name);
+      api.revealLabels();
+
+      bonusOverlay.className = 'geo-bonus-overlay ' + (correct ? 'correct' : 'wrong');
+      bonusOverlay.textContent = correct
+        ? `✓ ${highest.name} — ${highest.elev} m`
+        : `✗ ${highest.name} was the highest — ${highest.elev} m`;
+
+      // Resolve immediately — startBonusRound will show Next and wait for user to click it
+      resolve();
+    };
+
+    api.startPeakMode(feature.bonusPeaks);
+  });
+}
+
 (async () => {
   try {
     const features = await fetch('data/mountains.json').then(r => r.json());
 
     const logic = new GeoFeaturesGameLogic({ features, maxRounds: Infinity });
+
+    canvas.parentElement.appendChild(bonusOverlay);
 
     await createGeoFeaturesGame({
       container:    canvas.parentElement,
@@ -32,6 +76,10 @@ if (initOverlay) {
       featureType:  'mountain',
       gameId,
       initOverlay,
+      onBonusRound,
+      getExtraScore:    () => bonusScore,
+      getExtraMaxScore: () => logic.getProgress().total,
+      onPlayAgainHook:  () => { bonusScore = 0; },
     });
   } catch (err) {
     console.error('Failed to initialize Mountains game:', err);

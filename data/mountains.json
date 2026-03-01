@@ -3,96 +3,371 @@
     "name": "Alps",
     "countries": ["France", "Switzerland", "Austria", "Italy", "Germany", "Liechtenstein", "Slovenia", "Monaco"],
     "hint": "Major mountain range in central Europe forming a natural barrier between north and south, home to Mont Blanc",
-    "path": [[6.0, 44.0], [7.5, 45.5], [9.5, 47.0], [11.0, 47.5], [13.0, 47.5], [14.5, 46.5]]
+    "path": [[6.0, 44.0], [7.5, 45.5], [9.5, 47.0], [11.0, 47.5], [13.0, 47.5], [14.5, 46.5]],
+    "peaks": [
+      { "name": "Mont Blanc",    "lon": 6.8651,  "lat": 45.8326, "elev": 4808 },
+      { "name": "Monte Rosa",    "lon": 7.8673,  "lat": 45.9366, "elev": 4634 },
+      { "name": "Dom",           "lon": 7.858,   "lat": 46.101,  "elev": 4545 },
+      { "name": "Weisshorn",     "lon": 7.717,   "lat": 46.103,  "elev": 4506 },
+      { "name": "Matterhorn",    "lon": 7.6587,  "lat": 45.9763, "elev": 4478 },
+      { "name": "Dent Blanche",  "lon": 7.714,   "lat": 45.972,  "elev": 4357 },
+      { "name": "Gran Paradiso", "lon": 7.242,   "lat": 45.517,  "elev": 4061 },
+      { "name": "Piz Bernina",   "lon": 10.020,  "lat": 46.380,  "elev": 4048 },
+      { "name": "Grossglockner", "lon": 12.6939, "lat": 47.0742, "elev": 3798 },
+      { "name": "Triglav",       "lon": 13.838,  "lat": 46.379,  "elev": 2864 }
+    ],
+    "bonusPeaks": [
+      { "name": "Mont Blanc",    "lon": 6.8651,  "lat": 45.8326, "elev": 4808 },
+      { "name": "Monte Rosa",    "lon": 7.8673,  "lat": 45.9366, "elev": 4634 },
+      { "name": "Matterhorn",    "lon": 7.6587,  "lat": 45.9763, "elev": 4478 },
+      { "name": "Piz Bernina",   "lon": 10.020,  "lat": 46.380,  "elev": 4048 },
+      { "name": "Grossglockner", "lon": 12.6939, "lat": 47.0742, "elev": 3798 }
+    ]
   },
   {
     "name": "Himalayas",
     "countries": ["India", "Nepal", "Bhutan", "China", "Pakistan"],
     "hint": "World's highest mountain range, containing all peaks over 8,000 m including Mount Everest",
-    "path": [[74.0, 36.0], [78.0, 34.0], [83.0, 29.5], [87.0, 28.0], [91.0, 27.5], [95.0, 27.0]]
+    "path": [[74.0, 36.0], [78.0, 34.0], [83.0, 29.5], [87.0, 28.0], [91.0, 27.5], [95.0, 27.0]],
+    "peaks": [
+      { "name": "Everest",       "lon": 86.9250, "lat": 27.9881, "elev": 8849 },
+      { "name": "Kangchenjunga", "lon": 88.1467, "lat": 27.7025, "elev": 8586 },
+      { "name": "Lhotse",        "lon": 86.9333, "lat": 27.9617, "elev": 8516 },
+      { "name": "Makalu",        "lon": 87.0886, "lat": 27.8897, "elev": 8485 },
+      { "name": "Cho Oyu",       "lon": 86.6619, "lat": 28.0942, "elev": 8188 },
+      { "name": "Dhaulagiri",    "lon": 83.487,  "lat": 28.698,  "elev": 8167 },
+      { "name": "Manaslu",       "lon": 84.559,  "lat": 28.550,  "elev": 8163 },
+      { "name": "Annapurna",     "lon": 83.820,  "lat": 28.596,  "elev": 8091 },
+      { "name": "Gyachung Kang", "lon": 86.745,  "lat": 28.099,  "elev": 7952 },
+      { "name": "Nuptse",        "lon": 86.886,  "lat": 27.967,  "elev": 7861 }
+    ],
+    "bonusPeaks": [
+      { "name": "Everest",       "lon": 86.9250, "lat": 27.9881, "elev": 8849 },
+      { "name": "Kangchenjunga", "lon": 88.1467, "lat": 27.7025, "elev": 8586 },
+      { "name": "Lhotse",        "lon": 86.9333, "lat": 27.9617, "elev": 8516 },
+      { "name": "Makalu",        "lon": 87.0886, "lat": 27.8897, "elev": 8485 },
+      { "name": "Cho Oyu",       "lon": 86.6619, "lat": 28.0942, "elev": 8188 }
+    ]
   },
   {
     "name": "Andes",
     "countries": ["Colombia", "Ecuador", "Peru", "Bolivia", "Chile", "Argentina", "Venezuela"],
     "hint": "World's longest continental mountain range, running along the entire western coast of South America",
-    "path": [[-73.0, 7.0], [-77.0, 0.0], [-75.0, -10.0], [-68.0, -20.0], [-67.5, -30.0], [-70.0, -40.0], [-71.0, -50.0]]
+    "path": [[-73.0, 7.0], [-77.0, 0.0], [-75.0, -10.0], [-68.0, -20.0], [-67.5, -30.0], [-70.0, -40.0], [-71.0, -50.0]],
+    "peaks": [
+      { "name": "Aconcagua",       "lon": -70.011, "lat": -32.653, "elev": 6961 },
+      { "name": "Ojos del Salado", "lon": -68.541, "lat": -27.109, "elev": 6893 },
+      { "name": "Monte Pissis",    "lon": -68.800, "lat": -27.750, "elev": 6793 },
+      { "name": "Huascarán",       "lon": -77.602, "lat": -9.122,  "elev": 6768 },
+      { "name": "Tupungato",       "lon": -69.792, "lat": -33.357, "elev": 6570 },
+      { "name": "Sajama",          "lon": -68.885, "lat": -18.106, "elev": 6542 },
+      { "name": "Chimborazo",      "lon": -78.817, "lat": -1.468,  "elev": 6263 },
+      { "name": "Cotopaxi",        "lon": -78.436, "lat": -0.685,  "elev": 5897 },
+      { "name": "Nevado del Ruiz", "lon": -75.325, "lat": 4.893,   "elev": 5321 },
+      { "name": "Lanín",           "lon": -71.503, "lat": -39.633, "elev": 3776 }
+    ],
+    "bonusPeaks": [
+      { "name": "Aconcagua",       "lon": -70.011, "lat": -32.653, "elev": 6961 },
+      { "name": "Ojos del Salado", "lon": -68.541, "lat": -27.109, "elev": 6893 },
+      { "name": "Monte Pissis",    "lon": -68.800, "lat": -27.750, "elev": 6793 },
+      { "name": "Huascarán",       "lon": -77.602, "lat": -9.122,  "elev": 6768 },
+      { "name": "Chimborazo",      "lon": -78.817, "lat": -1.468,  "elev": 6263 }
+    ]
   },
   {
     "name": "Pyrenees",
     "countries": ["France", "Spain", "Andorra"],
     "hint": "Mountain range forming a natural border between France and Spain on the Iberian Peninsula",
-    "path": [[-1.5, 43.5], [0.5, 42.5], [2.0, 42.5]]
+    "path": [[-1.5, 43.5], [0.5, 42.5], [2.0, 42.5]],
+    "peaks": [
+      { "name": "Aneto",         "lon": 0.6597,  "lat": 42.6314, "elev": 3404 },
+      { "name": "Pico Posets",   "lon": 0.4264,  "lat": 42.6497, "elev": 3375 },
+      { "name": "Mont Perdu",    "lon": 0.0333,  "lat": 42.6833, "elev": 3355 },
+      { "name": "Vignemale",     "lon": -0.148,  "lat": 42.773,  "elev": 3298 },
+      { "name": "Balaïtous",     "lon": -0.350,  "lat": 42.833,  "elev": 3144 },
+      { "name": "Pica d'Estats", "lon": 1.388,   "lat": 42.665,  "elev": 3143 },
+      { "name": "Canigou",       "lon": 2.457,   "lat": 42.519,  "elev": 2784 }
+    ],
+    "bonusPeaks": [
+      { "name": "Aneto",         "lon": 0.6597,  "lat": 42.6314, "elev": 3404 },
+      { "name": "Pico Posets",   "lon": 0.4264,  "lat": 42.6497, "elev": 3375 },
+      { "name": "Mont Perdu",    "lon": 0.0333,  "lat": 42.6833, "elev": 3355 },
+      { "name": "Vignemale",     "lon": -0.148,  "lat": 42.773,  "elev": 3298 },
+      { "name": "Pica d'Estats", "lon": 1.388,   "lat": 42.665,  "elev": 3143 }
+    ]
   },
   {
     "name": "Caucasus",
     "countries": ["Russia", "Georgia", "Armenia", "Azerbaijan"],
     "hint": "Mountain range stretching between the Black Sea and the Caspian Sea, with Mount Elbrus as its highest peak",
-    "path": [[39.0, 43.5], [43.0, 42.5], [46.0, 41.5], [49.0, 41.0]]
+    "path": [[39.0, 43.5], [43.0, 42.5], [46.0, 41.5], [49.0, 41.0]],
+    "peaks": [
+      { "name": "Elbrus",      "lon": 42.4358, "lat": 43.3550, "elev": 5642 },
+      { "name": "Dykh-Tau",    "lon": 43.130,  "lat": 43.047,  "elev": 5205 },
+      { "name": "Shkhara",     "lon": 43.698,  "lat": 43.060,  "elev": 5201 },
+      { "name": "Koshtan-Tau", "lon": 43.207,  "lat": 43.048,  "elev": 5151 },
+      { "name": "Kazbek",      "lon": 44.520,  "lat": 42.699,  "elev": 5054 },
+      { "name": "Tetnuldi",    "lon": 43.007,  "lat": 43.003,  "elev": 4974 },
+      { "name": "Ushba",       "lon": 42.658,  "lat": 43.138,  "elev": 4710 },
+      { "name": "Bazardüzü",   "lon": 47.847,  "lat": 41.215,  "elev": 4466 },
+      { "name": "Aragats",     "lon": 44.145,  "lat": 40.530,  "elev": 4090 }
+    ],
+    "bonusPeaks": [
+      { "name": "Elbrus",      "lon": 42.4358, "lat": 43.3550, "elev": 5642 },
+      { "name": "Dykh-Tau",    "lon": 43.130,  "lat": 43.047,  "elev": 5205 },
+      { "name": "Shkhara",     "lon": 43.698,  "lat": 43.060,  "elev": 5201 },
+      { "name": "Kazbek",      "lon": 44.520,  "lat": 42.699,  "elev": 5054 },
+      { "name": "Bazardüzü",   "lon": 47.847,  "lat": 41.215,  "elev": 4466 }
+    ]
   },
   {
     "name": "Carpathians",
     "countries": ["Czechia", "Slovakia", "Poland", "Ukraine", "Romania"],
     "hint": "Arc-shaped mountain range in Central and Eastern Europe forming a natural boundary across multiple countries",
-    "path": [[17.0, 49.5], [20.0, 49.5], [22.5, 50.0], [24.0, 49.0], [25.5, 47.5], [26.0, 45.5]]
+    "path": [[17.0, 49.5], [20.0, 49.5], [22.5, 50.0], [24.0, 49.0], [25.5, 47.5], [26.0, 45.5]],
+    "peaks": [
+      { "name": "Gerlachovský štít", "lon": 20.134,  "lat": 49.160,  "elev": 2654 },
+      { "name": "Lomnický štít",     "lon": 20.213,  "lat": 49.195,  "elev": 2634 },
+      { "name": "Moldoveanu",        "lon": 24.737,  "lat": 45.603,  "elev": 2544 },
+      { "name": "Negoiu",            "lon": 24.565,  "lat": 45.558,  "elev": 2535 },
+      { "name": "Rysy",              "lon": 20.088,  "lat": 49.179,  "elev": 2499 },
+      { "name": "Hoverla",           "lon": 24.503,  "lat": 48.160,  "elev": 2061 },
+      { "name": "Ceahlău",           "lon": 25.951,  "lat": 46.977,  "elev": 1907 },
+      { "name": "Pietrosul Rodnei",  "lon": 24.627,  "lat": 47.597,  "elev": 2303 }
+    ],
+    "bonusPeaks": [
+      { "name": "Gerlachovský štít", "lon": 20.134,  "lat": 49.160,  "elev": 2654 },
+      { "name": "Moldoveanu",        "lon": 24.737,  "lat": 45.603,  "elev": 2544 },
+      { "name": "Negoiu",            "lon": 24.565,  "lat": 45.558,  "elev": 2535 },
+      { "name": "Hoverla",           "lon": 24.503,  "lat": 48.160,  "elev": 2061 },
+      { "name": "Pietrosul Rodnei",  "lon": 24.627,  "lat": 47.597,  "elev": 2303 }
+    ]
   },
   {
     "name": "Atlas",
     "countries": ["Morocco", "Algeria", "Tunisia"],
     "hint": "Mountain range running through northwestern Africa, separating the Sahara Desert from the Mediterranean coast",
-    "path": [[-8.0, 33.5], [-3.0, 33.0], [3.0, 36.0], [8.5, 36.5]]
+    "path": [[-8.0, 33.5], [-3.0, 33.0], [3.0, 36.0], [8.5, 36.5]],
+    "peaks": [
+      { "name": "Toubkal",         "lon": -7.915,  "lat": 31.060,  "elev": 4167 },
+      { "name": "M'Goun",          "lon": -6.357,  "lat": 31.517,  "elev": 4071 },
+      { "name": "Jbel Ayachi",     "lon": -4.917,  "lat": 32.500,  "elev": 3737 },
+      { "name": "Jbel Bou Naceur", "lon": -3.970,  "lat": 33.553,  "elev": 3340 },
+      { "name": "Jbel Tidirhine",  "lon": -4.967,  "lat": 34.483,  "elev": 2456 },
+      { "name": "Djurdjura",       "lon": 3.850,   "lat": 36.500,  "elev": 2305 },
+      { "name": "Chelia",          "lon": 6.633,   "lat": 35.307,  "elev": 2328 },
+      { "name": "Djebel Chambi",   "lon": 8.690,   "lat": 35.193,  "elev": 1544 }
+    ],
+    "bonusPeaks": [
+      { "name": "Toubkal",         "lon": -7.915,  "lat": 31.060,  "elev": 4167 },
+      { "name": "M'Goun",          "lon": -6.357,  "lat": 31.517,  "elev": 4071 },
+      { "name": "Jbel Ayachi",     "lon": -4.917,  "lat": 32.500,  "elev": 3737 },
+      { "name": "Jbel Bou Naceur", "lon": -3.970,  "lat": 33.553,  "elev": 3340 },
+      { "name": "Chelia",          "lon": 6.633,   "lat": 35.307,  "elev": 2328 }
+    ]
   },
   {
     "name": "Rockies",
     "countries": ["United States", "Canada"],
     "hint": "Major mountain range in western North America stretching from Canada southward into the United States",
-    "path": [[-114.0, 60.0], [-115.0, 54.0], [-116.0, 50.0], [-106.0, 45.0], [-105.0, 38.0], [-107.0, 35.5]]
+    "path": [[-114.0, 60.0], [-115.0, 54.0], [-116.0, 50.0], [-106.0, 45.0], [-105.0, 38.0], [-107.0, 35.5]],
+    "peaks": [
+      { "name": "Mount Elbert",      "lon": -106.445, "lat": 39.118,  "elev": 4401 },
+      { "name": "Mount Massive",     "lon": -106.475, "lat": 39.188,  "elev": 4398 },
+      { "name": "Mount Harvard",     "lon": -106.321, "lat": 38.924,  "elev": 4395 },
+      { "name": "Snowmass Mountain", "lon": -107.067, "lat": 39.119,  "elev": 4293 },
+      { "name": "Pikes Peak",        "lon": -105.043, "lat": 38.840,  "elev": 4302 },
+      { "name": "Kings Peak",        "lon": -110.374, "lat": 40.776,  "elev": 4123 },
+      { "name": "Granite Peak",      "lon": -109.807, "lat": 45.163,  "elev": 3901 },
+      { "name": "Mount Robson",      "lon": -119.136, "lat": 53.119,  "elev": 3954 },
+      { "name": "Mount Columbia",    "lon": -117.441, "lat": 52.147,  "elev": 3747 }
+    ],
+    "bonusPeaks": [
+      { "name": "Mount Elbert",  "lon": -106.445, "lat": 39.118,  "elev": 4401 },
+      { "name": "Mount Massive", "lon": -106.475, "lat": 39.188,  "elev": 4398 },
+      { "name": "Pikes Peak",    "lon": -105.043, "lat": 38.840,  "elev": 4302 },
+      { "name": "Granite Peak",  "lon": -109.807, "lat": 45.163,  "elev": 3901 },
+      { "name": "Mount Robson",  "lon": -119.136, "lat": 53.119,  "elev": 3954 }
+    ]
   },
   {
     "name": "Urals",
     "countries": ["Russia", "Kazakhstan"],
     "hint": "Mountain range running north-south through Russia, traditionally marking the boundary between Europe and Asia",
-    "path": [[60.0, 69.0], [60.5, 65.0], [59.5, 60.0], [59.0, 55.0], [58.5, 52.0]]
+    "path": [[60.0, 69.0], [60.5, 65.0], [59.5, 60.0], [59.0, 55.0], [58.5, 52.0]],
+    "peaks": [
+      { "name": "Narodnaya",       "lon": 60.033,  "lat": 65.038,  "elev": 1895 },
+      { "name": "Tel'posiz",       "lon": 59.105,  "lat": 63.905,  "elev": 1617 },
+      { "name": "Konzhakovsky",    "lon": 59.135,  "lat": 59.632,  "elev": 1569 },
+      { "name": "Denezhkin Kamen", "lon": 59.165,  "lat": 60.462,  "elev": 1492 },
+      { "name": "Payer",           "lon": 64.855,  "lat": 68.238,  "elev": 1472 },
+      { "name": "Iremel",          "lon": 58.850,  "lat": 54.532,  "elev": 1582 },
+      { "name": "Yamantau",        "lon": 58.104,  "lat": 54.252,  "elev": 1640 }
+    ],
+    "bonusPeaks": [
+      { "name": "Narodnaya",    "lon": 60.033,  "lat": 65.038,  "elev": 1895 },
+      { "name": "Tel'posiz",    "lon": 59.105,  "lat": 63.905,  "elev": 1617 },
+      { "name": "Yamantau",     "lon": 58.104,  "lat": 54.252,  "elev": 1640 },
+      { "name": "Iremel",       "lon": 58.850,  "lat": 54.532,  "elev": 1582 },
+      { "name": "Konzhakovsky", "lon": 59.135,  "lat": 59.632,  "elev": 1569 }
+    ]
   },
   {
     "name": "Scandinavian Mountains",
     "countries": ["Norway", "Sweden"],
     "hint": "Mountain range forming the spine of the Scandinavian Peninsula, creating Norway's dramatic fjords on its western side",
-    "path": [[14.0, 70.0], [15.0, 66.0], [13.5, 63.0], [12.0, 61.5]]
+    "path": [[14.0, 70.0], [15.0, 66.0], [13.5, 63.0], [12.0, 61.5]],
+    "peaks": [
+      { "name": "Galdhøpiggen",         "lon": 8.313,   "lat": 61.636,  "elev": 2469 },
+      { "name": "Glittertind",          "lon": 8.546,   "lat": 61.652,  "elev": 2464 },
+      { "name": "Store Skagastølstind", "lon": 7.867,   "lat": 61.532,  "elev": 2405 },
+      { "name": "Snøhetta",             "lon": 9.290,   "lat": 62.341,  "elev": 2286 },
+      { "name": "Kebnekaise",           "lon": 18.557,  "lat": 67.901,  "elev": 2096 },
+      { "name": "Sarektjåkkå",          "lon": 17.720,  "lat": 67.419,  "elev": 2089 },
+      { "name": "Sylarna",              "lon": 12.540,  "lat": 63.079,  "elev": 1762 },
+      { "name": "Gaustatoppen",         "lon": 8.651,   "lat": 59.856,  "elev": 1883 }
+    ],
+    "bonusPeaks": [
+      { "name": "Galdhøpiggen",         "lon": 8.313,   "lat": 61.636,  "elev": 2469 },
+      { "name": "Glittertind",          "lon": 8.546,   "lat": 61.652,  "elev": 2464 },
+      { "name": "Store Skagastølstind", "lon": 7.867,   "lat": 61.532,  "elev": 2405 },
+      { "name": "Kebnekaise",           "lon": 18.557,  "lat": 67.901,  "elev": 2096 },
+      { "name": "Gaustatoppen",         "lon": 8.651,   "lat": 59.856,  "elev": 1883 }
+    ]
   },
   {
     "name": "Zagros",
     "countries": ["Turkey", "Iran", "Iraq"],
     "hint": "Extensive mountain range in the Middle East forming the geological border between the Arabian and Eurasian plates",
-    "path": [[45.0, 37.0], [47.0, 33.5], [50.0, 30.0], [54.0, 27.0]]
+    "path": [[45.0, 37.0], [47.0, 33.5], [50.0, 30.0], [54.0, 27.0]],
+    "peaks": [
+      { "name": "Zard-Kuh",      "lon": 50.067,  "lat": 32.367,  "elev": 4548 },
+      { "name": "Dena",          "lon": 51.117,  "lat": 30.967,  "elev": 4409 },
+      { "name": "Oshtoran Kouh", "lon": 49.388,  "lat": 33.460,  "elev": 4150 },
+      { "name": "Kuh-e Alvand",  "lon": 48.517,  "lat": 34.883,  "elev": 3574 },
+      { "name": "Shahu",         "lon": 46.567,  "lat": 34.567,  "elev": 3300 },
+      { "name": "Kuh-e Karkas",  "lon": 51.834,  "lat": 33.516,  "elev": 3899 },
+      { "name": "Bisotun",       "lon": 47.454,  "lat": 34.388,  "elev": 2251 }
+    ],
+    "bonusPeaks": [
+      { "name": "Zard-Kuh",      "lon": 50.067,  "lat": 32.367,  "elev": 4548 },
+      { "name": "Dena",          "lon": 51.117,  "lat": 30.967,  "elev": 4409 },
+      { "name": "Kuh-e Karkas",  "lon": 51.834,  "lat": 33.516,  "elev": 3899 },
+      { "name": "Kuh-e Alvand",  "lon": 48.517,  "lat": 34.883,  "elev": 3574 },
+      { "name": "Shahu",         "lon": 46.567,  "lat": 34.567,  "elev": 3300 }
+    ]
   },
   {
     "name": "Hindu Kush",
     "countries": ["Afghanistan", "Pakistan"],
     "hint": "Mountain range forming the western extension of the Himalayas, dividing Central and South Asia",
-    "path": [[67.0, 36.5], [69.5, 35.0], [72.0, 34.5], [74.5, 36.5]]
+    "path": [[67.0, 36.5], [69.5, 35.0], [72.0, 34.5], [74.5, 36.5]],
+    "peaks": [
+      { "name": "Tirich Mir",      "lon": 71.837,  "lat": 36.253,  "elev": 7708 },
+      { "name": "Noshaq",          "lon": 71.833,  "lat": 36.432,  "elev": 7492 },
+      { "name": "Istoro Nal",      "lon": 72.016,  "lat": 36.183,  "elev": 7403 },
+      { "name": "Saraghrar",       "lon": 72.411,  "lat": 36.527,  "elev": 7349 },
+      { "name": "Koh-e Bandaka",   "lon": 70.897,  "lat": 36.633,  "elev": 6843 },
+      { "name": "Koh-e Keshnikhan","lon": 71.980,  "lat": 36.773,  "elev": 7163 },
+      { "name": "Sakar Sar",       "lon": 71.687,  "lat": 36.357,  "elev": 7017 },
+      { "name": "Akher Tsagh",     "lon": 73.042,  "lat": 36.617,  "elev": 6596 }
+    ],
+    "bonusPeaks": [
+      { "name": "Tirich Mir",    "lon": 71.837,  "lat": 36.253,  "elev": 7708 },
+      { "name": "Noshaq",        "lon": 71.833,  "lat": 36.432,  "elev": 7492 },
+      { "name": "Istoro Nal",    "lon": 72.016,  "lat": 36.183,  "elev": 7403 },
+      { "name": "Saraghrar",     "lon": 72.411,  "lat": 36.527,  "elev": 7349 },
+      { "name": "Koh-e Bandaka", "lon": 70.897,  "lat": 36.633,  "elev": 6843 }
+    ]
   },
   {
     "name": "Tian Shan",
     "countries": ["China", "Kyrgyzstan", "Kazakhstan", "Tajikistan"],
     "hint": "Vast Central Asian mountain system extending from western China through multiple countries, with peaks over 7,000 m",
-    "path": [[76.0, 42.5], [79.0, 42.0], [82.0, 41.5], [86.0, 42.0], [88.0, 43.5]]
+    "path": [[76.0, 42.5], [79.0, 42.0], [82.0, 41.5], [86.0, 42.0], [88.0, 43.5]],
+    "peaks": [
+      { "name": "Jengish Chokusu", "lon": 80.183,  "lat": 42.033,  "elev": 7439 },
+      { "name": "Khan Tengri",     "lon": 80.176,  "lat": 42.217,  "elev": 6995 },
+      { "name": "Pik Talgar",      "lon": 77.341,  "lat": 43.143,  "elev": 4973 },
+      { "name": "Pik Semenova",    "lon": 78.800,  "lat": 42.400,  "elev": 4895 },
+      { "name": "Pik Korona",      "lon": 74.660,  "lat": 42.530,  "elev": 4860 },
+      { "name": "Bogda Peak",      "lon": 88.340,  "lat": 43.808,  "elev": 5445 },
+      { "name": "Pik Dankova",     "lon": 73.940,  "lat": 42.120,  "elev": 5982 }
+    ],
+    "bonusPeaks": [
+      { "name": "Jengish Chokusu", "lon": 80.183,  "lat": 42.033,  "elev": 7439 },
+      { "name": "Khan Tengri",     "lon": 80.176,  "lat": 42.217,  "elev": 6995 },
+      { "name": "Pik Talgar",      "lon": 77.341,  "lat": 43.143,  "elev": 4973 },
+      { "name": "Pik Semenova",    "lon": 78.800,  "lat": 42.400,  "elev": 4895 },
+      { "name": "Pik Korona",      "lon": 74.660,  "lat": 42.530,  "elev": 4860 }
+    ]
   },
   {
     "name": "Altai",
     "countries": ["Russia", "China", "Mongolia", "Kazakhstan"],
     "hint": "Mountain range at the convergence of four countries in the heart of Eurasia, source of the Irtysh and Ob rivers",
-    "path": [[85.0, 52.0], [87.5, 50.0], [90.0, 49.0], [92.0, 48.0], [87.0, 47.0], [83.0, 48.0]]
+    "path": [[85.0, 52.0], [87.5, 50.0], [90.0, 49.0], [92.0, 48.0], [87.0, 47.0], [83.0, 48.0]],
+    "peaks": [
+      { "name": "Belukha",      "lon": 86.591,  "lat": 49.807,  "elev": 4506 },
+      { "name": "Khuiten",      "lon": 87.075,  "lat": 49.148,  "elev": 4374 },
+      { "name": "Tsambagarav",  "lon": 90.864,  "lat": 48.661,  "elev": 4193 },
+      { "name": "Tavan Bogd",   "lon": 87.081,  "lat": 49.144,  "elev": 4082 },
+      { "name": "Aktru",        "lon": 87.757,  "lat": 50.072,  "elev": 4044 },
+      { "name": "Mönkh Khairkhan","lon": 91.814,"lat": 46.368,  "elev": 4204 },
+      { "name": "Munku-Sardyk",  "lon": 100.614, "lat": 51.740,  "elev": 3491 }
+    ],
+    "bonusPeaks": [
+      { "name": "Belukha",     "lon": 86.591,  "lat": 49.807,  "elev": 4506 },
+      { "name": "Khuiten",     "lon": 87.075,  "lat": 49.148,  "elev": 4374 },
+      { "name": "Tsambagarav", "lon": 90.864,  "lat": 48.661,  "elev": 4193 },
+      { "name": "Tavan Bogd",  "lon": 87.081,  "lat": 49.144,  "elev": 4082 },
+      { "name": "Aktru",       "lon": 87.757,  "lat": 50.072,  "elev": 4044 }
+    ]
   },
   {
     "name": "Drakensberg",
     "countries": ["South Africa", "Lesotho"],
     "hint": "Great escarpment and mountain range forming a dramatic wall along the eastern edge of the southern African plateau",
-    "path": [[27.0, -29.5], [29.0, -31.0], [29.5, -33.0]]
+    "path": [[27.0, -29.5], [29.0, -31.0], [29.5, -33.0]],
+    "peaks": [
+      { "name": "Thabana Ntlenyana", "lon": 29.466,  "lat": -29.467, "elev": 3482 },
+      { "name": "Mafadi",            "lon": 29.357,  "lat": -29.201, "elev": 3450 },
+      { "name": "Injasuthi",         "lon": 29.620,  "lat": -29.171, "elev": 3408 },
+      { "name": "Champagne Castle",  "lon": 29.374,  "lat": -29.068, "elev": 3377 },
+      { "name": "Giant's Castle",    "lon": 29.483,  "lat": -29.233, "elev": 3315 },
+      { "name": "Cathkin Peak",      "lon": 29.481,  "lat": -29.088, "elev": 3149 },
+      { "name": "Ben Macdhui",       "lon": 29.250,  "lat": -30.129, "elev": 3001 }
+    ],
+    "bonusPeaks": [
+      { "name": "Thabana Ntlenyana", "lon": 29.466,  "lat": -29.467, "elev": 3482 },
+      { "name": "Mafadi",            "lon": 29.357,  "lat": -29.201, "elev": 3450 },
+      { "name": "Injasuthi",         "lon": 29.620,  "lat": -29.171, "elev": 3408 },
+      { "name": "Champagne Castle",  "lon": 29.374,  "lat": -29.068, "elev": 3377 },
+      { "name": "Giant's Castle",    "lon": 29.483,  "lat": -29.233, "elev": 3315 }
+    ]
   },
   {
     "name": "Rwenzori",
     "countries": ["Uganda", "Democratic Republic of the Congo"],
     "hint": "Equatorial mountain range on the Uganda-DRC border, known as the 'Mountains of the Moon' with glaciers at the equator",
-    "path": [[30.0, -0.5], [29.8, 0.0], [29.5, 0.4]]
+    "path": [[30.0, -0.5], [29.8, 0.0], [29.5, 0.4]],
+    "peaks": [
+      { "name": "Margherita",        "lon": 29.862,  "lat": 0.383,   "elev": 5109 },
+      { "name": "Alexandra",         "lon": 29.870,  "lat": 0.375,   "elev": 5091 },
+      { "name": "Albert",            "lon": 29.861,  "lat": 0.373,   "elev": 5087 },
+      { "name": "Savoia",            "lon": 29.874,  "lat": 0.372,   "elev": 4977 },
+      { "name": "Elena",             "lon": 29.868,  "lat": 0.385,   "elev": 4968 },
+      { "name": "Vittorio Emanuele", "lon": 29.886,  "lat": 0.325,   "elev": 4890 },
+      { "name": "Edward",            "lon": 29.868,  "lat": 0.344,   "elev": 4844 },
+      { "name": "Emin",              "lon": 29.883,  "lat": 0.702,   "elev": 4798 },
+      { "name": "Gessi",             "lon": 29.909,  "lat": 0.732,   "elev": 4715 }
+    ],
+    "bonusPeaks": [
+      { "name": "Margherita",        "lon": 29.862,  "lat": 0.383,   "elev": 5109 },
+      { "name": "Vittorio Emanuele", "lon": 29.886,  "lat": 0.325,   "elev": 4890 },
+      { "name": "Edward",            "lon": 29.868,  "lat": 0.344,   "elev": 4844 },
+      { "name": "Emin",              "lon": 29.883,  "lat": 0.702,   "elev": 4798 },
+      { "name": "Gessi",             "lon": 29.909,  "lat": 0.732,   "elev": 4715 }
+    ]
   }
 ]

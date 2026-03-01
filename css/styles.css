@@ -1423,6 +1423,58 @@ html.light-mode .geo-next-btn {
   color: #047857;
 }
 
+.geo-bonus-btn {
+  background: rgba(180, 120, 60, 0.2);
+  border-color: rgba(180, 120, 60, 0.6);
+  color: #cd853f;
+}
+html.light-mode .geo-bonus-btn {
+  color: #92400e;
+}
+
+/* Mountains bonus round peak prompt */
+.geo-bonus-overlay {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 20;
+  pointer-events: none;
+  background: rgba(180, 120, 60, 0.25);
+  border: 1.5px solid rgba(180, 120, 60, 0.6);
+  border-radius: 12px;
+  padding: 10px 22px;
+  font-weight: 700;
+  font-size: 16px;
+  color: #cd853f;
+  white-space: nowrap;
+}
+html.light-mode .geo-bonus-overlay {
+  background: rgba(146, 64, 14, 0.12);
+  border-color: rgba(146, 64, 14, 0.5);
+  color: #92400e;
+}
+.geo-bonus-overlay.correct {
+  background: rgba(110, 231, 183, 0.28);
+  border-color: rgba(110, 231, 183, 0.8);
+  color: #6ee7b7;
+}
+.geo-bonus-overlay.wrong {
+  background: rgba(252, 165, 161, 0.28);
+  border-color: rgba(252, 165, 161, 0.8);
+  color: #fda4af;
+}
+html.light-mode .geo-bonus-overlay.correct {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.6);
+  color: #047857;
+}
+html.light-mode .geo-bonus-overlay.wrong {
+  background: rgba(239, 68, 68, 0.14);
+  border-color: rgba(239, 68, 68, 0.55);
+  color: #be123c;
+}
+
 /* ===============================================
    Picture Guess Game Styles
    =============================================== */
