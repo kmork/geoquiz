@@ -771,7 +771,6 @@ class DailyChallenge {
           <input type="text" id="dc-outlines-input" placeholder="Enter country name..." autocomplete="off">
           <button id="dc-outlines-submit" class="btn btn-primary">Guess</button>
         </div>
-        <div id="dc-outlines-status" class="status" style="display:none;"></div>
       </div>
     `;
 
@@ -788,7 +787,7 @@ class DailyChallenge {
         answerInput: container.querySelector('#dc-outlines-input'),
         submitBtn: container.querySelector('#dc-outlines-submit'),
         ui: {
-          statusEl: container.querySelector('#dc-outlines-status')
+          statusEl: null
         },
         confetti: this.confetti,
         singleRound: true,
