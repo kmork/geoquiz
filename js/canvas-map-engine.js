@@ -96,6 +96,36 @@ export function buildCountryPaths(worldFeatures) {
     country.bboxSize = Math.max(maxX - minX, maxY - minY);
     country.bboxCx = (minX + maxX) / 2;
     country.bboxCy = (minY + maxY) / 2;
+
+    // Label centroid: average of the largest polygon ring by vertex count.
+    // The bbox center is wrong for countries with scattered islands or those
+    // crossing the antimeridian (Russia, US, Kiribati, New Zealand) — the min/max
+    // spans the entire map and the midpoint lands in the wrong ocean.
+    // Using the centroid of the largest ring naturally picks the main landmass.
+    let bestRing = null, bestCount = 0;
+    for (const ring of country.paths) {
+      if (ring.length > bestCount) { bestCount = ring.length; bestRing = ring; }
+    }
+    if (bestRing) {
+      let sumX = 0, sumY = 0;
+      let minRX = Infinity, minRY = Infinity, maxRX = -Infinity, maxRY = -Infinity;
+      for (const [x, y] of bestRing) {
+        sumX += x; sumY += y;
+        if (x < minRX) minRX = x; if (x > maxRX) maxRX = x;
+        if (y < minRY) minRY = y; if (y > maxRY) maxRY = y;
+      }
+      country.labelCx = sumX / bestRing.length;
+      country.labelCy = sumY / bestRing.length;
+      // Size of just the label ring — used for font sizing in study mode.
+      // Prevents scattered island nations (France with overseas departments,
+      // US Minor Outlying Islands, etc.) from getting huge font sizes from
+      // their overall bbox which spans the globe.
+      country.labelRingSize = Math.max(maxRX - minRX, maxRY - minRY);
+    } else {
+      country.labelCx = country.bboxCx;
+      country.labelCy = country.bboxCy;
+      country.labelRingSize = country.bboxSize;
+    }
   }
 
   // Smallest-first → small enclosed countries (Monaco, San Marino) get priority

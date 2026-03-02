@@ -127,6 +127,47 @@
       word-break: break-word;
       hyphens: auto;
     }
+
+    /* ── Map toggle buttons ── */
+    .study-map-toggles {
+      position: absolute;
+      bottom: 12px;
+      right: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      z-index: 10;
+    }
+    .study-toggle-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(4px);
+      color: rgba(255,255,255,0.75);
+      font-size: 0.85rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+    }
+    .study-toggle-btn:hover {
+      background: rgba(0,0,0,0.75);
+      color: #fff;
+      transform: scale(1.08);
+    }
+    .study-toggle-btn.active {
+      background: rgba(99,102,241,0.75);
+      border-color: rgba(165,180,252,0.6);
+      color: #fff;
+    }
+    .study-toggle-btn.active:hover {
+      background: rgba(99,102,241,0.9);
+    }
   </style>
 </head>
 

@@ -30,6 +30,10 @@ const viewport = { scrollX: 0, scrollY: 0, zoom: 1, minZoom: 1, velocityX: 0, ve
 // Hovered/selected country (DATA name)
 let hoveredCountry = null;
 
+// Label toggle state
+let showCountryNames = false;
+let showCapitalNames = false;
+
 // ── Load data (parallel) ──────────────────────────────────────────────────────
 
 const [worldData, placesData, countriesFlags, neighborsData] = await Promise.all([
@@ -69,15 +73,29 @@ for (const feature of placesData.features) {
 
 // ── Drawing ───────────────────────────────────────────────────────────────────
 
+function drawLabel(text, x, y, fontSize, opts = {}) {
+  const { color = 'rgba(255,255,255,0.92)', shadowColor = 'rgba(0,0,0,0.7)', shadowWidth = 3 } = opts;
+  ctx.font = `${opts.bold ? '700' : '500'} ${fontSize}px "DM Sans", sans-serif`;
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.lineJoin = 'round';
+  ctx.strokeStyle = shadowColor;
+  ctx.lineWidth = shadowWidth;
+  ctx.strokeText(text, x, y);
+  ctx.fillStyle = color;
+  ctx.fillText(text, x, y);
+}
+
 function drawWorldMap() {
   ctx.clearRect(0, 0, canvasDisplayWidth, canvasDisplayHeight);
 
   const defaultFill   = getCSSVar('--map-country-fill')   || 'rgba(165,180,252,.08)';
   const defaultStroke = getCSSVar('--map-country-stroke') || 'rgba(232,236,255,.3)';
   const hoverFill     = getCSSVar('--map-country-fill-highlight') || 'rgba(165,180,252,.25)';
-  const hoverStroke   = getCSSVar('--map-country-stroke') || 'rgba(232,236,255,.3)';
 
   const offsets = visibleOffsets(viewport, canvasDisplayWidth);
+
+  // ── Countries ──────────────────────────────────────────────────────────────
 
   for (const country of countryPaths) {
     const dataName = geoToData[country.name] || resolveToDataName(country.name);
@@ -92,10 +110,43 @@ function drawWorldMap() {
     }
   }
 
-  // Draw capital dots (white circles)
+  // ── Country name labels ────────────────────────────────────────────────────
+
+  if (showCountryNames && viewport.zoom > 1.5) {
+    ctx.save();
+    // Only label countries whose rendered width is large enough to be readable
+    const MIN_PX = 18; // minimum rendered size of the main territory in CSS px
+    for (const country of countryPaths) {
+      // Use the largest-ring size (not overall bbox) so that countries whose
+      // bbox spans the globe due to scattered islands (France with overseas
+      // departments, US Minor Outlying Islands, etc.) get an appropriate size.
+      const renderedSize = country.labelRingSize * viewport.zoom;
+      if (renderedSize < MIN_PX) continue;
+
+      const dataName = geoToData[country.name] || resolveToDataName(country.name);
+      const label = dataName || country.name;
+
+      // Font size: scales with rendered size of the main territory, capped for readability
+      const fontSize = Math.max(9, Math.min(14, renderedSize * 0.11));
+
+      for (const offset of offsets) {
+        const cx = (country.labelCx + offset - viewport.scrollX) * viewport.zoom;
+        const cy = (country.labelCy - viewport.scrollY) * viewport.zoom;
+
+        // Skip if centroid is off-screen (with generous margin for labels)
+        if (cx < -80 || cx > canvasDisplayWidth + 80 || cy < -20 || cy > canvasDisplayHeight + 20) continue;
+
+        drawLabel(label, cx, cy, fontSize, { bold: renderedSize > 60 });
+      }
+    }
+    ctx.restore();
+  }
+
+  // ── Capital dots ───────────────────────────────────────────────────────────
+
   const dotR = Math.max(1.5, 2.5 / viewport.zoom);
   ctx.save();
-  for (const [dataName, cap] of capitalDots) {
+  for (const [, cap] of capitalDots) {
     const [mx, my] = proj([cap.lon, cap.lat]);
 
     for (const offset of offsets) {
@@ -114,29 +165,29 @@ function drawWorldMap() {
     }
   }
 
-  // Capital name labels at zoom ≥ 3
-  if (viewport.zoom >= 3) {
-    ctx.textAlign = 'left';
-    ctx.textBaseline = 'middle';
-    const fontSize = Math.max(9, Math.min(12, viewport.zoom * 2));
-    ctx.font = `${fontSize}px "DM Sans", sans-serif`;
+  // ── Capital name labels ────────────────────────────────────────────────────
 
-    for (const [dataName, cap] of capitalDots) {
+  if (showCapitalNames && viewport.zoom > 1.5) {
+    const fontSize = Math.max(9, Math.min(12, viewport.zoom * 2.5));
+    for (const [, cap] of capitalDots) {
       const [mx, my] = proj([cap.lon, cap.lat]);
 
       for (const offset of offsets) {
         const px = (mx + offset - viewport.scrollX) * viewport.zoom;
         const py = (my - viewport.scrollY) * viewport.zoom;
 
-        if (px < -40 || px > canvasDisplayWidth + 40 || py < -20 || py > canvasDisplayHeight + 20) continue;
+        if (px < -80 || px > canvasDisplayWidth + 80 || py < -20 || py > canvasDisplayHeight + 20) continue;
 
-        const labelX = px + dotR + 3;
-        ctx.strokeStyle = 'rgba(0,0,0,0.6)';
-        ctx.lineWidth = 3;
+        // Label to the right of the dot
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'middle';
+        ctx.font = `500 ${fontSize}px "DM Sans", sans-serif`;
         ctx.lineJoin = 'round';
-        ctx.strokeText(cap.name, labelX, py);
+        ctx.strokeStyle = 'rgba(0,0,0,0.65)';
+        ctx.lineWidth = 3;
+        ctx.strokeText(cap.name, px + dotR + 3, py);
         ctx.fillStyle = 'rgba(255,255,255,0.9)';
-        ctx.fillText(cap.name, labelX, py);
+        ctx.fillText(cap.name, px + dotR + 3, py);
       }
     }
   }
@@ -162,30 +213,15 @@ function updateInfoPanel(dataName) {
   const geoName = dataToGeo[dataName] || dataName;
   const props = geoPropsMap.get(norm(geoName));
 
-  // Flag
   const iso2 = countriesFlags[dataName] || (props?.ISO_A2 !== '-99' ? props?.ISO_A2?.toLowerCase() : props?.ISO_A2_EH?.toLowerCase());
   const flagSrc = iso2 ? `img/flags/${iso2}.svg` : '';
-
-  // Subregion / continent
   const subregion = props?.SUBREGION || props?.CONTINENT || '';
-
-  // Capital from window.DATA
   const entry = (window.DATA || []).find(d => d.country === dataName);
   const capital = entry?.capitals?.[0] || '—';
-
-  // Population
   const popStr = props?.POP_EST ? formatPop(props.POP_EST) : '—';
 
-  // Neighbors
   const nbrs = neighborsData?.[dataName];
-  let bordersStr;
-  if (nbrs == null) {
-    bordersStr = '—';
-  } else if (nbrs.length === 0) {
-    bordersStr = 'Island nation';
-  } else {
-    bordersStr = nbrs.join(', ');
-  }
+  const bordersStr = nbrs == null ? '—' : nbrs.length === 0 ? 'Island nation' : nbrs.join(', ');
 
   infoPanel.innerHTML = `
     <div class="study-info-header">
@@ -209,6 +245,42 @@ function hideInfoPanel() {
   infoPanel.style.display = 'none';
 }
 
+// ── Toggle buttons ────────────────────────────────────────────────────────────
+
+function createMapToggles() {
+  const mapwrap = canvas.parentElement;
+
+  const bar = document.createElement('div');
+  bar.className = 'study-map-toggles';
+
+  const btnCountry = document.createElement('button');
+  btnCountry.className = 'study-toggle-btn';
+  btnCountry.title = 'Toggle country names';
+  btnCountry.textContent = 'Aa';
+
+  const btnCapital = document.createElement('button');
+  btnCapital.className = 'study-toggle-btn';
+  btnCapital.title = 'Toggle capital names';
+  btnCapital.textContent = '★';
+
+  // Stack: capital on top, country on bottom
+  bar.appendChild(btnCapital);
+  bar.appendChild(btnCountry);
+  mapwrap.appendChild(bar);
+
+  btnCountry.addEventListener('click', () => {
+    showCountryNames = !showCountryNames;
+    btnCountry.classList.toggle('active', showCountryNames);
+    drawWorldMap();
+  });
+
+  btnCapital.addEventListener('click', () => {
+    showCapitalNames = !showCapitalNames;
+    btnCapital.classList.toggle('active', showCapitalNames);
+    drawWorldMap();
+  });
+}
+
 // ── Canvas resize ─────────────────────────────────────────────────────────────
 
 function resizeCanvas() {
@@ -220,13 +292,15 @@ function resizeCanvas() {
   drawWorldMap();
 }
 
-// ── Pan/zoom with hover + tap ─────────────────────────────────────────────────
+// ── Init ──────────────────────────────────────────────────────────────────────
 
 resizeCanvas();
 // Center on Greenwich meridian (Europe/Africa)
 viewport.scrollX = MAP_W / 2 - canvasDisplayWidth / (2 * viewport.zoom);
 window.addEventListener('resize', resizeCanvas);
 drawWorldMap();
+
+createMapToggles();
 
 createPanZoom(canvas, viewport, drawWorldMap, {
   onHover(cx, cy) {
@@ -261,12 +335,10 @@ createPanZoom(canvas, viewport, drawWorldMap, {
       dataToGeo,
     });
     if (name && name !== hoveredCountry) {
-      // New country tapped — show its panel
       hoveredCountry = name;
       updateInfoPanel(name);
       drawWorldMap();
     } else {
-      // Same country or ocean — toggle off
       hoveredCountry = null;
       hideInfoPanel();
       drawWorldMap();
