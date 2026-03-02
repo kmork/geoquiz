@@ -34,13 +34,21 @@ let hoveredCountry = null;
 let showCountryNames = false;
 let showCapitalNames = false;
 
+// Overlay toggle state
+let showRivers    = false;
+let showMountains = false;
+let showHeritage  = false;
+
 // ── Load data (parallel) ──────────────────────────────────────────────────────
 
-const [worldData, placesData, countriesFlags, neighborsData] = await Promise.all([
+const [worldData, placesData, countriesFlags, neighborsData, riversData, mountainsData, heritageSitesData] = await Promise.all([
   loadGeoJSON('data/ne_10m_admin_0_countries.geojson.gz'),
   fetch('data/places.geojson').then(r => r.json()),
   fetch('data/countries-flags.json').then(r => r.json()),
   fetch('data/countries-neighbors.json').then(r => r.json()),
+  fetch('data/rivers.json').then(r => r.json()),
+  fetch('data/mountains.json').then(r => r.json()),
+  fetch('data/heritage-sites.json').then(r => r.json()),
 ]);
 
 const WORLD = worldData.features;
@@ -103,6 +111,12 @@ function drawWorldMap() {
   const capColor    = isLight ? 'rgba(15,20,40,0.88)'    : 'rgba(255,255,255,0.9)';
   const capHalo     = isLight ? 'rgba(255,255,255,0.88)' : 'rgba(0,0,0,0.65)';
 
+  // Theme-aware overlay colors
+  const riverColor            = isLight ? 'rgba(37,99,235,0.8)'   : 'rgba(96,165,250,0.75)';
+  const mountainColor         = isLight ? 'rgba(146,64,14,0.85)'  : 'rgba(180,120,60,0.85)';
+  const heritageColorCultural = isLight ? 'rgba(161,98,7,0.9)'    : 'rgba(251,191,36,0.9)';
+  const heritageColorNatural  = isLight ? 'rgba(21,128,61,0.9)'   : 'rgba(52,211,153,0.9)';
+
   const offsets = visibleOffsets(viewport, canvasDisplayWidth);
 
   // ── Countries ──────────────────────────────────────────────────────────────
@@ -118,6 +132,77 @@ function drawWorldMap() {
     for (const offset of offsets) {
       drawCountry(ctx, viewport, country.paths, offset, fill, stroke, sw);
     }
+  }
+
+  // ── Rivers ─────────────────────────────────────────────────────────────────
+
+  if (showRivers) {
+    ctx.save();
+    ctx.strokeStyle = riverColor;
+    ctx.lineWidth = 1.5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    for (const river of riversData) {
+      const pts = river.path.map(([lon, lat]) => proj([lon, lat]));
+      for (const offset of offsets) {
+        ctx.beginPath();
+        let first = true;
+        for (const [x, y] of pts) {
+          const px = (x + offset - viewport.scrollX) * viewport.zoom;
+          const py = (y - viewport.scrollY) * viewport.zoom;
+          if (first) { ctx.moveTo(px, py); first = false; }
+          else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+      }
+    }
+    ctx.restore();
+  }
+
+  // ── Mountain ranges ────────────────────────────────────────────────────────
+
+  if (showMountains) {
+    ctx.save();
+    const r = Math.max(1.5, 2.5 / viewport.zoom);
+    ctx.fillStyle = mountainColor;
+    for (const range of mountainsData) {
+      const pts = range.path.map(([lon, lat]) => proj([lon, lat]));
+      for (const offset of offsets) {
+        for (const [x, y] of pts) {
+          const px = (x + offset - viewport.scrollX) * viewport.zoom;
+          const py = (y - viewport.scrollY) * viewport.zoom;
+          if (px < -10 || px > canvasDisplayWidth + 10 || py < -10 || py > canvasDisplayHeight + 10) continue;
+          ctx.beginPath();
+          ctx.arc(px, py, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+    ctx.restore();
+  }
+
+  // ── Heritage sites ─────────────────────────────────────────────────────────
+
+  if (showHeritage) {
+    ctx.save();
+    const s = 5;
+    for (const site of heritageSitesData) {
+      const [mx, my] = proj([site.lon, site.lat]);
+      for (const offset of offsets) {
+        const px = (mx + offset - viewport.scrollX) * viewport.zoom;
+        const py = (my - viewport.scrollY) * viewport.zoom;
+        if (px < -10 || px > canvasDisplayWidth + 10 || py < -10 || py > canvasDisplayHeight + 10) continue;
+        ctx.beginPath();
+        ctx.moveTo(px,     py - s);
+        ctx.lineTo(px + s, py);
+        ctx.lineTo(px,     py + s);
+        ctx.lineTo(px - s, py);
+        ctx.closePath();
+        ctx.fillStyle = site.type === 'natural' ? heritageColorNatural : heritageColorCultural;
+        ctx.fill();
+      }
+    }
+    ctx.restore();
   }
 
   // ── Country name labels ────────────────────────────────────────────────────
@@ -285,9 +370,27 @@ function createMapToggles() {
   btnCapital.textContent = '★';
   btnCapital.style.color = '#fbbf24';
 
-  // Stack: country on top, capital on bottom
+  const btnRivers = document.createElement('button');
+  btnRivers.className = 'study-toggle-btn';
+  btnRivers.title = 'Toggle rivers';
+  btnRivers.textContent = '〰️';
+
+  const btnMountains = document.createElement('button');
+  btnMountains.className = 'study-toggle-btn';
+  btnMountains.title = 'Toggle mountain ranges';
+  btnMountains.textContent = '⛰️';
+
+  const btnHeritage = document.createElement('button');
+  btnHeritage.className = 'study-toggle-btn';
+  btnHeritage.title = 'Toggle UNESCO heritage sites';
+  btnHeritage.textContent = '🏛️';
+
+  // Stack: 🏷️ ★ 〰️ ⛰️ 🏛️
   bar.appendChild(btnCountry);
   bar.appendChild(btnCapital);
+  bar.appendChild(btnRivers);
+  bar.appendChild(btnMountains);
+  bar.appendChild(btnHeritage);
   mapwrap.appendChild(bar);
 
   btnCountry.addEventListener('click', () => {
@@ -299,6 +402,24 @@ function createMapToggles() {
   btnCapital.addEventListener('click', () => {
     showCapitalNames = !showCapitalNames;
     btnCapital.classList.toggle('active', showCapitalNames);
+    drawWorldMap();
+  });
+
+  btnRivers.addEventListener('click', () => {
+    showRivers = !showRivers;
+    btnRivers.classList.toggle('active', showRivers);
+    drawWorldMap();
+  });
+
+  btnMountains.addEventListener('click', () => {
+    showMountains = !showMountains;
+    btnMountains.classList.toggle('active', showMountains);
+    drawWorldMap();
+  });
+
+  btnHeritage.addEventListener('click', () => {
+    showHeritage = !showHeritage;
+    btnHeritage.classList.toggle('active', showHeritage);
     drawWorldMap();
   });
 }

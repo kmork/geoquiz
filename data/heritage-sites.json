@@ -6,7 +6,9 @@
     "type": "cultural",
     "hint": "An ancient defensive fortification stretching thousands of kilometers",
     "year": 1987,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 40.43,
+    "lon": 116.57
   },
   {
     "siteName": "Taj Mahal",
@@ -15,7 +17,9 @@
     "type": "cultural",
     "hint": "A white marble mausoleum built by an emperor for his wife",
     "year": 1983,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 27.18,
+    "lon": 78.04
   },
   {
     "siteName": "Machu Picchu",
@@ -24,7 +28,9 @@
     "type": "cultural",
     "hint": "Ancient Incan citadel high in the Andes Mountains",
     "year": 1983,
-    "region": "South America"
+    "region": "South America",
+    "lat": -13.16,
+    "lon": -72.55
   },
   {
     "siteName": "Pyramids of Giza",
@@ -33,7 +39,9 @@
     "type": "cultural",
     "hint": "Ancient pyramids including one of the Seven Wonders of the Ancient World",
     "year": 1979,
-    "region": "Africa"
+    "region": "Africa",
+    "lat": 29.98,
+    "lon": 31.13
   },
   {
     "siteName": "Colosseum",
@@ -42,7 +50,9 @@
     "type": "cultural",
     "hint": "Ancient Roman amphitheater where gladiators once fought",
     "year": 1980,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 41.89,
+    "lon": 12.49
   },
   {
     "siteName": "Petra",
@@ -51,7 +61,9 @@
     "type": "cultural",
     "hint": "Ancient city carved into rose-red rock faces",
     "year": 1985,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 30.33,
+    "lon": 35.44
   },
   {
     "siteName": "Grand Canyon",
@@ -60,7 +72,9 @@
     "type": "natural",
     "hint": "Massive canyon carved by the Colorado River over millions of years",
     "year": 1979,
-    "region": "North America"
+    "region": "North America",
+    "lat": 36.11,
+    "lon": -112.11
   },
   {
     "siteName": "Great Barrier Reef",
@@ -69,7 +83,9 @@
     "type": "natural",
     "hint": "The world's largest coral reef system, visible from space",
     "year": 1981,
-    "region": "Oceania"
+    "region": "Oceania",
+    "lat": -18.29,
+    "lon": 147.70
   },
   {
     "siteName": "Galápagos Islands",
@@ -78,7 +94,9 @@
     "type": "natural",
     "hint": "Volcanic islands famous for unique wildlife and Darwin's evolution studies",
     "year": 1978,
-    "region": "South America"
+    "region": "South America",
+    "lat": -0.95,
+    "lon": -90.97
   },
   {
     "siteName": "Victoria Falls",
@@ -87,7 +105,9 @@
     "type": "natural",
     "hint": "One of the world's largest waterfalls, known locally as 'The Smoke That Thunders'",
     "year": 1989,
-    "region": "Africa"
+    "region": "Africa",
+    "lat": -17.92,
+    "lon": 25.86
   },
   {
     "siteName": "Stonehenge",
@@ -96,7 +116,9 @@
     "type": "cultural",
     "hint": "Prehistoric stone circle monument dating back thousands of years",
     "year": 1986,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 51.18,
+    "lon": -1.83
   },
   {
     "siteName": "Angkor Wat",
@@ -105,7 +127,9 @@
     "type": "cultural",
     "hint": "Massive temple complex and largest religious monument in the world",
     "year": 1992,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 13.41,
+    "lon": 103.87
   },
   {
     "siteName": "Acropolis of Athens",
@@ -114,7 +138,9 @@
     "type": "cultural",
     "hint": "Ancient citadel containing the Parthenon and other classical Greek temples",
     "year": 1987,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 37.97,
+    "lon": 23.73
   },
   {
     "siteName": "Iguazu Falls",
@@ -123,7 +149,9 @@
     "type": "natural",
     "hint": "Spectacular waterfalls system on the border between two countries",
     "year": 1984,
-    "region": "South America"
+    "region": "South America",
+    "lat": -25.70,
+    "lon": -54.44
   },
   {
     "siteName": "Ha Long Bay",
@@ -132,7 +160,9 @@
     "type": "natural",
     "hint": "Bay featuring thousands of limestone islands topped with rainforests",
     "year": 1994,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 20.91,
+    "lon": 107.18
   },
   {
     "siteName": "Yellowstone National Park",
@@ -141,7 +171,9 @@
     "type": "natural",
     "hint": "World's first national park, famous for geysers and hot springs",
     "year": 1978,
-    "region": "North America"
+    "region": "North America",
+    "lat": 44.43,
+    "lon": -110.59
   },
   {
     "siteName": "Sagrada Família",
@@ -150,7 +182,9 @@
     "type": "cultural",
     "hint": "Iconic unfinished basilica designed by Antoni Gaudí",
     "year": 2005,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 41.40,
+    "lon": 2.17
   },
   {
     "siteName": "Serengeti National Park",
@@ -159,7 +193,9 @@
     "type": "natural",
     "hint": "Vast savanna famous for the annual migration of millions of wildebeest",
     "year": 1981,
-    "region": "Africa"
+    "region": "Africa",
+    "lat": -2.33,
+    "lon": 34.83
   },
   {
     "siteName": "Easter Island",
@@ -168,7 +204,9 @@
     "type": "cultural",
     "hint": "Remote island famous for hundreds of massive stone statues called moai",
     "year": 1995,
-    "region": "South America"
+    "region": "South America",
+    "lat": -27.11,
+    "lon": -109.35
   },
   {
     "siteName": "Venice and its Lagoon",
@@ -177,7 +215,9 @@
     "type": "cultural",
     "hint": "City built on water with canals instead of streets",
     "year": 1987,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 45.44,
+    "lon": 12.32
   },
   {
     "siteName": "Mount Fuji",
@@ -186,7 +226,9 @@
     "type": "cultural",
     "hint": "Iconic symmetrical volcano and sacred mountain",
     "year": 2013,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 35.36,
+    "lon": 138.73
   },
   {
     "siteName": "Versailles Palace",
@@ -195,7 +237,9 @@
     "type": "cultural",
     "hint": "Opulent royal palace with famous Hall of Mirrors",
     "year": 1979,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 48.80,
+    "lon": 2.12
   },
   {
     "siteName": "Göreme National Park",
@@ -204,7 +248,9 @@
     "type": "natural",
     "hint": "Surreal landscape of fairy chimneys and rock-cut churches",
     "year": 1985,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 38.64,
+    "lon": 34.83
   },
   {
     "siteName": "Chichen Itza",
@@ -213,7 +259,9 @@
     "type": "cultural",
     "hint": "Ancient Mayan city with famous stepped pyramid",
     "year": 1988,
-    "region": "North America"
+    "region": "North America",
+    "lat": 20.68,
+    "lon": -88.57
   },
   {
     "siteName": "Plitvice Lakes",
@@ -222,7 +270,9 @@
     "type": "natural",
     "hint": "Cascading turquoise lakes connected by waterfalls",
     "year": 1979,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 44.87,
+    "lon": 15.58
   },
   {
     "siteName": "Borobudur Temple",
@@ -231,7 +281,9 @@
     "type": "cultural",
     "hint": "Massive Buddhist temple with intricate stone carvings and stupas",
     "year": 1991,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": -7.61,
+    "lon": 110.20
   },
   {
     "siteName": "Uluru (Ayers Rock)",
@@ -240,7 +292,9 @@
     "type": "natural",
     "hint": "Massive red sandstone monolith sacred to Aboriginal people",
     "year": 1987,
-    "region": "Oceania"
+    "region": "Oceania",
+    "lat": -25.34,
+    "lon": 131.04
   },
   {
     "siteName": "Forbidden City",
@@ -249,7 +303,9 @@
     "type": "cultural",
     "hint": "Vast imperial palace complex with nearly 1,000 buildings",
     "year": 1987,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 39.92,
+    "lon": 116.39
   },
   {
     "siteName": "Yosemite National Park",
@@ -258,7 +314,9 @@
     "type": "natural",
     "hint": "Dramatic granite cliffs, waterfalls, and giant sequoia trees",
     "year": 1984,
-    "region": "North America"
+    "region": "North America",
+    "lat": 37.87,
+    "lon": -119.54
   },
   {
     "siteName": "Alhambra",
@@ -267,7 +325,9 @@
     "type": "cultural",
     "hint": "Moorish palace and fortress complex with stunning Islamic architecture",
     "year": 1984,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 37.18,
+    "lon": -3.59
   },
   {
     "siteName": "Bagan",
@@ -276,7 +336,9 @@
     "type": "cultural",
     "hint": "Ancient city with over 2,000 Buddhist temples and pagodas",
     "year": 2019,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 21.17,
+    "lon": 94.86
   },
   {
     "siteName": "Pantanal",
@@ -285,7 +347,9 @@
     "type": "natural",
     "hint": "World's largest tropical wetland area with incredible biodiversity",
     "year": 2000,
-    "region": "South America"
+    "region": "South America",
+    "lat": -17.73,
+    "lon": -57.44
   },
   {
     "siteName": "Meteora",
@@ -294,7 +358,9 @@
     "type": "cultural",
     "hint": "Monasteries perched atop towering rock pillars",
     "year": 1988,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 39.72,
+    "lon": 21.63
   },
   {
     "siteName": "Banff National Park",
@@ -303,7 +369,9 @@
     "type": "natural",
     "hint": "Stunning Rocky Mountain park with turquoise glacial lakes",
     "year": 1984,
-    "region": "North America"
+    "region": "North America",
+    "lat": 51.50,
+    "lon": -115.93
   },
   {
     "siteName": "Dubrovnik Old City",
@@ -312,7 +380,9 @@
     "type": "cultural",
     "hint": "Medieval walled city on the Adriatic coast",
     "year": 1979,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 42.65,
+    "lon": 18.09
   },
   {
     "siteName": "Komodo National Park",
@@ -321,7 +391,9 @@
     "type": "natural",
     "hint": "Islands home to the world's largest living lizards",
     "year": 1991,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": -8.54,
+    "lon": 119.48
   },
   {
     "siteName": "Statue of Liberty",
@@ -330,7 +402,9 @@
     "type": "cultural",
     "hint": "Iconic copper statue symbolizing freedom and democracy",
     "year": 1984,
-    "region": "North America"
+    "region": "North America",
+    "lat": 40.69,
+    "lon": -74.04
   },
   {
     "siteName": "Jiuzhaigou Valley",
@@ -339,7 +413,9 @@
     "type": "natural",
     "hint": "Valley with colorful lakes, waterfalls, and snow-capped peaks",
     "year": 1992,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 33.25,
+    "lon": 103.92
   },
   {
     "siteName": "Mont-Saint-Michel",
@@ -348,7 +424,9 @@
     "type": "cultural",
     "hint": "Medieval abbey on a tidal island connected by a causeway",
     "year": 1979,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 48.64,
+    "lon": -1.51
   },
   {
     "siteName": "Kilimanjaro National Park",
@@ -357,7 +435,9 @@
     "type": "natural",
     "hint": "Africa's highest mountain with iconic snow-capped peak",
     "year": 1987,
-    "region": "Africa"
+    "region": "Africa",
+    "lat": -3.07,
+    "lon": 37.36
   },
   {
     "siteName": "Neuschwanstein Castle",
@@ -366,7 +446,9 @@
     "type": "cultural",
     "hint": "Fairy-tale castle that inspired Disney's Sleeping Beauty Castle",
     "year": 1987,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 47.56,
+    "lon": 10.75
   },
   {
     "siteName": "Tikal National Park",
@@ -375,7 +457,9 @@
     "type": "cultural",
     "hint": "Ancient Mayan ruins with towering temple pyramids in the jungle",
     "year": 1979,
-    "region": "North America"
+    "region": "North America",
+    "lat": 17.22,
+    "lon": -89.62
   },
   {
     "siteName": "Cinque Terre",
@@ -384,7 +468,9 @@
     "type": "cultural",
     "hint": "Five colorful coastal villages perched on cliffs",
     "year": 1997,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 44.15,
+    "lon": 9.64
   },
   {
     "siteName": "Fiordland National Park",
@@ -393,7 +479,9 @@
     "type": "natural",
     "hint": "Dramatic fjords, mountains, and rainforests in the South Island",
     "year": 1990,
-    "region": "Oceania"
+    "region": "Oceania",
+    "lat": -45.41,
+    "lon": 167.72
   },
   {
     "siteName": "Palmyra",
@@ -402,7 +490,9 @@
     "type": "cultural",
     "hint": "Ancient desert city with monumental Roman-era ruins",
     "year": 1980,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 34.55,
+    "lon": 38.27
   },
   {
     "siteName": "Los Glaciares National Park",
@@ -411,7 +501,9 @@
     "type": "natural",
     "hint": "Massive glaciers including the famous Perito Moreno",
     "year": 1981,
-    "region": "South America"
+    "region": "South America",
+    "lat": -50.33,
+    "lon": -72.99
   },
   {
     "siteName": "Hadrian's Wall",
@@ -420,7 +512,9 @@
     "type": "cultural",
     "hint": "Ancient Roman defensive wall stretching across northern England",
     "year": 1987,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 54.99,
+    "lon": -2.50
   },
   {
     "siteName": "Sigiriya",
@@ -429,7 +523,9 @@
     "type": "cultural",
     "hint": "Ancient rock fortress rising 200 metres above the jungle, with palace ruins and frescoes at the summit",
     "year": 1982,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 7.96,
+    "lon": 80.76
   },
   {
     "siteName": "Persepolis",
@@ -438,7 +534,9 @@
     "type": "cultural",
     "hint": "Ceremonial capital of the Persian Empire, with towering stone columns once topped by bull-headed capitals",
     "year": 1979,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 29.94,
+    "lon": 52.89
   },
   {
     "siteName": "Himeji Castle",
@@ -447,7 +545,9 @@
     "type": "cultural",
     "hint": "Gleaming white hilltop castle nicknamed the 'White Heron Castle', Japan's finest surviving feudal fortress",
     "year": 1993,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 34.84,
+    "lon": 134.69
   },
   {
     "siteName": "Hallstatt",
@@ -456,7 +556,9 @@
     "type": "cultural",
     "hint": "Tiny Alpine village of pastel houses reflected in a mountain lake, with prehistoric salt mines above",
     "year": 1997,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 47.56,
+    "lon": 13.65
   },
   {
     "siteName": "Abu Simbel Temples",
@@ -465,7 +567,9 @@
     "type": "cultural",
     "hint": "Two enormous rock temples built by Ramesses II, famously relocated piece by piece to save them from rising floodwaters",
     "year": 1979,
-    "region": "Africa"
+    "region": "Africa",
+    "lat": 22.34,
+    "lon": 31.63
   },
   {
     "siteName": "Bryggen",
@@ -474,7 +578,9 @@
     "type": "cultural",
     "hint": "Row of colorful medieval timber wharfhouses lining Bergen's harbour, once the hub of Hanseatic trade in northern Europe",
     "year": 1979,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 60.40,
+    "lon": 5.32
   },
   {
     "siteName": "Skellig Michael",
@@ -483,7 +589,9 @@
     "type": "cultural",
     "hint": "Craggy pyramid-shaped island off Ireland's coast with sixth-century stone beehive-shaped monks' cells",
     "year": 1996,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 51.78,
+    "lon": -10.54
   },
   {
     "siteName": "Old Havana",
@@ -492,7 +600,9 @@
     "type": "cultural",
     "hint": "Vibrant colonial city of colonnaded plazas, Baroque churches, and pastel-painted streets with vintage American cars",
     "year": 1982,
-    "region": "North America"
+    "region": "North America",
+    "lat": 23.14,
+    "lon": -82.36
   },
   {
     "siteName": "Luang Prabang",
@@ -501,7 +611,9 @@
     "type": "cultural",
     "hint": "Royal city of gilded Buddhist temples and French colonial villas at the confluence of the Mekong and Nam Khan rivers",
     "year": 1995,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 19.88,
+    "lon": 102.14
   },
   {
     "siteName": "Walled City of Cartagena",
@@ -510,7 +622,9 @@
     "type": "cultural",
     "hint": "16th-century Spanish colonial city enclosed by massive coral-stone ramparts on the Caribbean coast",
     "year": 1984,
-    "region": "South America"
+    "region": "South America",
+    "lat": 10.42,
+    "lon": -75.55
   },
   {
     "siteName": "Great Mosque of Djenné",
@@ -519,7 +633,9 @@
     "type": "cultural",
     "hint": "World's largest mud-brick building, rebuilt annually by the community using the same ancient design",
     "year": 1988,
-    "region": "Africa"
+    "region": "Africa",
+    "lat": 13.91,
+    "lon": -4.56
   },
   {
     "siteName": "Rock-Hewn Churches of Lalibela",
@@ -528,7 +644,9 @@
     "type": "cultural",
     "hint": "Eleven medieval Christian churches carved entirely downward into red volcanic rock, still used for worship today",
     "year": 1978,
-    "region": "Africa"
+    "region": "Africa",
+    "lat": 12.03,
+    "lon": 39.04
   },
   {
     "siteName": "Historic Centre of Prague",
@@ -537,7 +655,9 @@
     "type": "cultural",
     "hint": "Medieval city with a Gothic cathedral on a hill, an ancient astronomical clock, and a stone bridge lined with Baroque statues",
     "year": 1992,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 50.09,
+    "lon": 14.42
   },
   {
     "siteName": "Þingvellir National Park",
@@ -546,7 +666,9 @@
     "type": "cultural",
     "hint": "Dramatic rift valley where tectonic plates visibly diverge, and site of the world's oldest parliament founded in 930 AD",
     "year": 2004,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 64.26,
+    "lon": -20.92
   },
   {
     "siteName": "Island of Gorée",
@@ -555,7 +677,9 @@
     "type": "cultural",
     "hint": "Small island off Dakar that served as the largest slave-trading center on the African coast for three centuries",
     "year": 1978,
-    "region": "Africa"
+    "region": "Africa",
+    "lat": 14.67,
+    "lon": -17.40
   },
   {
     "siteName": "Medina of Marrakesh",
@@ -564,7 +688,9 @@
     "type": "cultural",
     "hint": "Ancient walled city with a legendary square filled with storytellers, snake charmers, and open-air food stalls",
     "year": 1985,
-    "region": "Africa"
+    "region": "Africa",
+    "lat": 31.63,
+    "lon": -7.98
   },
   {
     "siteName": "Hampi",
@@ -573,7 +699,9 @@
     "type": "cultural",
     "hint": "Vast ruined capital of the Vijayanagara Empire, with a famous stone chariot at an ornate riverside temple complex",
     "year": 1986,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 15.34,
+    "lon": 76.46
   },
   {
     "siteName": "Potala Palace",
@@ -582,7 +710,9 @@
     "type": "cultural",
     "hint": "Towering 13-storey red and white palace perched on a hill in Lhasa, the former winter residence of the Dalai Lama",
     "year": 1994,
-    "region": "Asia"
+    "region": "Asia",
+    "lat": 29.66,
+    "lon": 91.12
   },
   {
     "siteName": "Teotihuacán",
@@ -591,7 +721,9 @@
     "type": "cultural",
     "hint": "Ancient city with two colossal pyramids flanking the Avenue of the Dead, built by a civilization whose identity remains unknown",
     "year": 1987,
-    "region": "North America"
+    "region": "North America",
+    "lat": 19.69,
+    "lon": -98.84
   },
   {
     "siteName": "Old Bridge of Mostar",
@@ -600,6 +732,8 @@
     "type": "cultural",
     "hint": "16th-century Ottoman stone arch bridge spanning an emerald river, destroyed in war in 1993 and faithfully rebuilt",
     "year": 2005,
-    "region": "Europe"
+    "region": "Europe",
+    "lat": 43.34,
+    "lon": 17.82
   }
 ]
