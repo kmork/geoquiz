@@ -182,6 +182,8 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
     ui.showHintBtn.disabled = false;
     ui.statusEl.style.display = "none";
     ui.hintEl.style.display = "none";
+    if (ui.answerRow) ui.answerRow.style.display = "";
+    if (ui.endActions) ui.endActions.style.display = "none";
 
     if (deck.length === 0) {
       deck = createDeck();
@@ -385,6 +387,10 @@ export function createRouteGame({ ui, neighbors, confetti, drawCountries, getCou
     ui.answerInput.disabled = true;
     ui.submitBtn.disabled = true;
     ui.showHintBtn.disabled = true;
+
+    // Hide input row and show end-of-round actions (standalone only)
+    if (ui.answerRow) ui.answerRow.style.display = "none";
+    if (ui.endActions) ui.endActions.style.display = "";
 
     const pathLength = currentRound.currentPath.length - 2; // Countries in between
     const optimalLength = currentRound.optimalPath.length - 2;

@@ -24,6 +24,8 @@ const ui = {
   routeEl: document.getElementById("route"),
   statusEl: document.getElementById("status"),
   hintEl: document.getElementById("hint"),
+  answerRow: document.querySelector(".answerRow"),
+  endActions: document.getElementById("end-actions"),
 };
 
 const MAP_W = 600;
@@ -131,6 +133,15 @@ ui.answerInput?.addEventListener("keypress", (e) => {
 ui.undoBtn?.addEventListener("click", () => game.undo());
 ui.showHintBtn?.addEventListener("click", () => game.showHint());
 ui.giveUpBtn?.addEventListener("click", () => game.giveUp());
+
+document.getElementById("play-again")?.addEventListener("click", () => {
+  ui.answerRow.style.display = "";
+  ui.endActions.style.display = "none";
+  game.start();
+});
+document.getElementById("go-home")?.addEventListener("click", () => {
+  location.href = "index.html";
+});
 
 attachZoomPan(ui.map, () => baseViewBox);
 
