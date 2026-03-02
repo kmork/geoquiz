@@ -129,12 +129,12 @@
       z-index: 1;
       max-width: 1200px;
       margin: 0 auto;
-      padding: 60px 24px;
+      padding: 40px 24px;
     }
 
     .header {
       text-align: center;
-      margin-bottom: 60px;
+      margin-bottom: 36px;
     }
 
     .globe-container {
@@ -143,11 +143,11 @@
       align-items: center;
       justify-content: center;
       position: relative;
-      margin-bottom: 20px;
+      margin-bottom: 12px;
     }
 
     .globe-emoji {
-      font-size: 100px;
+      font-size: 72px;
       line-height: 1;
       display: block;
       position: relative;
@@ -164,8 +164,8 @@
       top: 50px;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 120px;
-      height: 120px;
+      width: 90px;
+      height: 90px;
       border: 2px solid var(--ring-color);
       border-radius: 50%;
       animation: pulse-ring 2s ease-in-out infinite;
@@ -178,9 +178,9 @@
     }
 
     h1 {
-      font-size: 52px;
+      font-size: 40px;
       font-weight: 800;
-      margin: 20px 0 10px;
+      margin: 12px 0 8px;
       background: linear-gradient(135deg, var(--globe-gradient-1) 0%, var(--globe-gradient-2) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -190,14 +190,14 @@
     .subtitle {
       font-size: 18px;
       color: var(--text-secondary);
-      margin-bottom: 30px;
+      margin-bottom: 16px;
     }
 
     .games-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 24px;
-      margin-top: 40px;
+      margin-top: 24px;
     }
 
     .glass-card {
@@ -206,7 +206,7 @@
       -webkit-backdrop-filter: blur(10px);
       border: 1px solid var(--card-border);
       border-radius: 24px;
-      padding: 32px;
+      padding: 24px;
       text-decoration: none;
       color: var(--text-primary);
       transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -252,7 +252,7 @@
     }
 
     .game-icon {
-      font-size: 64px;
+      font-size: 48px;
       line-height: 1;
       text-align: center;
       display: block;
@@ -270,7 +270,7 @@
     }
 
     .card-title {
-      font-size: 24px;
+      font-size: 20px;
       font-weight: 700;
       margin-bottom: 12px;
       color: var(--text-primary);
@@ -480,24 +480,24 @@
 
     @media (max-width: 640px) {
       .content {
-        padding: 30px 16px;
+        padding: 20px 14px;
       }
 
       .header {
-        margin-bottom: 30px;
+        margin-bottom: 16px;
       }
 
       .globe-container {
         margin-bottom: 0;
         position: relative;
-        height: 120px;
+        height: 72px;
         display: flex;
         align-items: center;
         justify-content: center;
       }
 
       .globe-emoji {
-        font-size: 100px;
+        font-size: 60px;
         opacity: 0.15;
         line-height: 1;
       }
@@ -507,13 +507,13 @@
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        width: 120px;
-        height: 120px;
+        width: 72px;
+        height: 72px;
         border-width: 1px;
       }
 
       .globe-container + h1 {
-        font-size: 32px;
+        font-size: 24px;
         margin: 0;
         position: absolute;
         top: 50%;
@@ -526,7 +526,7 @@
 
       /* Target h1 when inside globe-container on mobile */
       .globe-container h1 {
-        font-size: 32px;
+        font-size: 24px;
         margin: 0;
         position: absolute;
         top: 50%;
@@ -538,27 +538,27 @@
       }
 
       .subtitle {
-        font-size: 15px;
-        margin-bottom: 20px;
-        margin-top: 12px;
+        font-size: 13px;
+        margin-bottom: 12px;
+        margin-top: 6px;
       }
 
       .games-grid {
         grid-template-columns: 1fr;
-        gap: 16px;
-        margin-top: 20px;
+        gap: 10px;
+        margin-top: 12px;
       }
 
       .glass-card {
-        padding: 20px;
+        padding: 14px;
         border-radius: 16px;
       }
 
       .card-content {
         display: grid;
-        grid-template-columns: 60px 1fr;
+        grid-template-columns: 44px 1fr;
         grid-template-rows: auto auto auto;
-        gap: 12px 16px;
+        gap: 8px 12px;
         grid-template-areas:
           "icon title"
           "desc desc"
@@ -567,7 +567,7 @@
 
       .game-icon {
         grid-area: icon;
-        font-size: 48px;
+        font-size: 36px;
         line-height: 1;
         text-align: center;
         margin: 0;
@@ -576,14 +576,14 @@
 
       .card-title {
         grid-area: title;
-        font-size: 20px;
+        font-size: 16px;
         margin: 0;
         align-self: center;
       }
 
       .card-description {
         grid-area: desc;
-        font-size: 13px;
+        font-size: 12px;
         line-height: 1.5;
         margin: 0;
       }
@@ -591,8 +591,8 @@
       .play-button {
         grid-area: button;
         margin: 0;
-        padding: 8px 16px;
-        font-size: 13px;
+        padding: 6px 12px;
+        font-size: 12px;
         justify-self: start;
         width: auto;
       }
