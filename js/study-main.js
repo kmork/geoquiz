@@ -20,6 +20,10 @@ const canvas = document.getElementById('map');
 const ctx = canvas.getContext('2d');
 const dpr = window.devicePixelRatio || 1;
 const infoPanel = document.getElementById('study-info');
+const heritagePopup     = document.getElementById('heritage-popup');
+const heritagePopupImg  = document.getElementById('heritage-popup-img');
+const heritagePopupName = document.getElementById('heritage-popup-name');
+const heritagePopupMeta = document.getElementById('heritage-popup-meta');
 
 let canvasDisplayWidth = 600;
 let canvasDisplayHeight = 320;
@@ -29,6 +33,8 @@ const viewport = { scrollX: 0, scrollY: 0, zoom: 1, minZoom: 1, velocityX: 0, ve
 
 // Hovered/selected country (DATA name)
 let hoveredCountry = null;
+// Currently hovered overlay object (river/mountain/heritage site data object)
+let hoveredOverlay = null;
 
 // Label toggle state
 let showCountryNames = false;
@@ -163,6 +169,28 @@ function drawWorldMap() {
 
   if (showMountains) {
     ctx.save();
+
+    // Lines connecting path points (drawn first, under the dots)
+    ctx.strokeStyle = mountainColor;
+    ctx.lineWidth = 1.5;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    for (const range of mountainsData) {
+      const pts = range.path.map(([lon, lat]) => proj([lon, lat]));
+      for (const offset of offsets) {
+        ctx.beginPath();
+        let first = true;
+        for (const [x, y] of pts) {
+          const px = (x + offset - viewport.scrollX) * viewport.zoom;
+          const py = (y - viewport.scrollY) * viewport.zoom;
+          if (first) { ctx.moveTo(px, py); first = false; }
+          else ctx.lineTo(px, py);
+        }
+        ctx.stroke();
+      }
+    }
+
+    // Dots on top
     const r = Math.max(1.5, 2.5 / viewport.zoom);
     ctx.fillStyle = mountainColor;
     for (const range of mountainsData) {
@@ -178,6 +206,7 @@ function drawWorldMap() {
         }
       }
     }
+
     ctx.restore();
   }
 
@@ -351,6 +380,151 @@ function hideInfoPanel() {
   infoPanel.style.display = 'none';
 }
 
+// ── Overlay hit-testing ───────────────────────────────────────────────────────
+
+function distToSegment(px, py, ax, ay, bx, by) {
+  const dx = bx - ax, dy = by - ay;
+  const lenSq = dx * dx + dy * dy;
+  if (lenSq === 0) return Math.hypot(px - ax, py - ay);
+  const t = Math.max(0, Math.min(1, ((px - ax) * dx + (py - ay) * dy) / lenSq));
+  return Math.hypot(px - (ax + t * dx), py - (ay + t * dy));
+}
+
+function findRiverAtPoint(cx, cy) {
+  if (!showRivers) return null;
+  const offsets = visibleOffsets(viewport, canvasDisplayWidth);
+  const HIT = 6;
+  for (const river of riversData) {
+    const pts = river.path.map(([lon, lat]) => proj([lon, lat]));
+    for (const offset of offsets) {
+      const sp = pts.map(([x, y]) => [
+        (x + offset - viewport.scrollX) * viewport.zoom,
+        (y - viewport.scrollY) * viewport.zoom,
+      ]);
+      for (let i = 0; i < sp.length - 1; i++) {
+        if (distToSegment(cx, cy, sp[i][0], sp[i][1], sp[i+1][0], sp[i+1][1]) <= HIT) return river;
+      }
+    }
+  }
+  return null;
+}
+
+function findMountainAtPoint(cx, cy) {
+  if (!showMountains) return null;
+  const offsets = visibleOffsets(viewport, canvasDisplayWidth);
+  const HIT = 8;
+  for (const range of mountainsData) {
+    const pts = range.path.map(([lon, lat]) => proj([lon, lat]));
+    for (const offset of offsets) {
+      const sp = pts.map(([x, y]) => [
+        (x + offset - viewport.scrollX) * viewport.zoom,
+        (y - viewport.scrollY) * viewport.zoom,
+      ]);
+      for (let i = 0; i < sp.length; i++) {
+        if (Math.abs(cx - sp[i][0]) + Math.abs(cy - sp[i][1]) <= HIT) return range;
+        if (i < sp.length - 1 && distToSegment(cx, cy, sp[i][0], sp[i][1], sp[i+1][0], sp[i+1][1]) <= HIT) return range;
+      }
+    }
+  }
+  return null;
+}
+
+// ── Overlay info-panel renderers ──────────────────────────────────────────────
+
+function updateInfoPanelForHeritage(site) {
+  const typeLabel = site.type === 'natural' ? 'Natural' : 'Cultural';
+  const bg = site.type === 'natural' ? 'rgba(21,128,61,0.2)' : 'rgba(161,98,7,0.2)';
+  infoPanel.innerHTML = `
+    <div class="study-info-header">
+      <div class="study-info-overlay-icon" style="background:${bg}">🏛️</div>
+      <div>
+        <div class="study-info-name">${site.siteName}</div>
+        <div class="study-info-region">${site.country} · ${typeLabel}</div>
+      </div>
+    </div>
+    <div class="study-info-divider"></div>
+    <div class="study-info-rows">
+      <div class="study-info-row"><span>Inscribed</span><span>${site.year}</span></div>
+    </div>
+  `;
+  infoPanel.style.display = 'block';
+}
+
+function updateInfoPanelForRiver(river) {
+  infoPanel.innerHTML = `
+    <div class="study-info-header">
+      <div class="study-info-overlay-icon" style="background:rgba(37,99,235,0.15)">〰️</div>
+      <div>
+        <div class="study-info-name">${river.name}</div>
+        <div class="study-info-region">River</div>
+      </div>
+    </div>
+    <div class="study-info-divider"></div>
+    <div class="study-info-rows">
+      <div class="study-info-row study-info-borders"><span>Countries</span><span>${river.countries.join(', ')}</span></div>
+    </div>
+  `;
+  infoPanel.style.display = 'block';
+}
+
+function updateInfoPanelForMountain(range) {
+  const highest = range.peaks?.[0];
+  const highestStr = highest ? `${highest.name} (${highest.elev.toLocaleString()} m)` : '—';
+  infoPanel.innerHTML = `
+    <div class="study-info-header">
+      <div class="study-info-overlay-icon" style="background:rgba(146,64,14,0.15)">⛰️</div>
+      <div>
+        <div class="study-info-name">${range.name}</div>
+        <div class="study-info-region">Mountain range</div>
+      </div>
+    </div>
+    <div class="study-info-divider"></div>
+    <div class="study-info-rows">
+      <div class="study-info-row study-info-borders"><span>Countries</span><span>${range.countries.join(', ')}</span></div>
+      <div class="study-info-row"><span>Highest</span><span>${highestStr}</span></div>
+    </div>
+  `;
+  infoPanel.style.display = 'block';
+}
+
+// ── Heritage site popup ───────────────────────────────────────────────────────
+
+let heritagePopupVisible = false;
+
+function findHeritageAtPoint(cx, cy) {
+  if (!showHeritage) return null;
+  const offsets = visibleOffsets(viewport, canvasDisplayWidth);
+  const HIT = 10; // px hit radius (Manhattan distance matches diamond shape)
+  for (const site of heritageSitesData) {
+    const [mx, my] = proj([site.lon, site.lat]);
+    for (const offset of offsets) {
+      const px = (mx + offset - viewport.scrollX) * viewport.zoom;
+      const py = (my - viewport.scrollY) * viewport.zoom;
+      if (Math.abs(cx - px) + Math.abs(cy - py) <= HIT) return site;
+    }
+  }
+  return null;
+}
+
+function showHeritagePopup(site) {
+  heritagePopupImg.src = site.imageUrl;
+  heritagePopupImg.alt = site.siteName;
+  heritagePopupImg.style.height = Math.min(420, Math.max(200, canvasDisplayHeight * 0.55)) + 'px';
+  heritagePopup.style.width = Math.min(500, Math.max(320, canvasDisplayWidth * 0.36)) + 'px';
+  heritagePopupName.textContent = site.siteName;
+  const typeLabel = site.type === 'natural' ? 'Natural' : 'Cultural';
+  heritagePopupMeta.textContent = `${site.country} · ${typeLabel} · ${site.year}`;
+  heritagePopup.style.display = 'block';
+  heritagePopupVisible = true;
+}
+
+function hideHeritagePopup() {
+  heritagePopup.style.display = 'none';
+  heritagePopupVisible = false;
+}
+
+document.getElementById('heritage-popup-close').addEventListener('click', hideHeritagePopup);
+
 // ── Toggle buttons ────────────────────────────────────────────────────────────
 
 function createMapToggles() {
@@ -419,6 +593,7 @@ function createMapToggles() {
 
   btnHeritage.addEventListener('click', () => {
     showHeritage = !showHeritage;
+    if (!showHeritage && heritagePopupVisible) hideHeritagePopup();
     btnHeritage.classList.toggle('active', showHeritage);
     drawWorldMap();
   });
@@ -447,6 +622,26 @@ createMapToggles();
 
 createPanZoom(canvas, viewport, drawWorldMap, {
   onHover(cx, cy) {
+    // Overlay layers take priority: heritage > rivers > mountains > countries
+    const site     = findHeritageAtPoint(cx, cy);
+    const river    = !site     && findRiverAtPoint(cx, cy);
+    const mountain = !site && !river && findMountainAtPoint(cx, cy);
+    const overlay  = site || river || mountain;
+
+    if (overlay) {
+      if (overlay !== hoveredOverlay) {
+        hoveredOverlay = overlay;
+        if (site)     updateInfoPanelForHeritage(site);
+        else if (river)  updateInfoPanelForRiver(river);
+        else             updateInfoPanelForMountain(mountain);
+      }
+      if (hoveredCountry !== null) { hoveredCountry = null; drawWorldMap(); }
+      return;
+    }
+
+    const prevOverlay = hoveredOverlay;
+    hoveredOverlay = null;
+
     const name = checkClickedCountry(cx, cy, {
       scrollX: viewport.scrollX,
       scrollY: viewport.scrollY,
@@ -456,7 +651,8 @@ createPanZoom(canvas, viewport, drawWorldMap, {
       resolveToDataName,
       dataToGeo,
     });
-    if (name !== hoveredCountry) {
+    if (heritagePopupVisible && name) hideHeritagePopup();
+    if (name !== hoveredCountry || prevOverlay !== null) {
       hoveredCountry = name;
       updateInfoPanel(name);
       drawWorldMap();
@@ -464,10 +660,37 @@ createPanZoom(canvas, viewport, drawWorldMap, {
   },
   onLeave() {
     hoveredCountry = null;
+    hoveredOverlay = null;
     hideInfoPanel();
     drawWorldMap();
   },
   onTap(cx, cy) {
+    // Heritage site image popup
+    const site = findHeritageAtPoint(cx, cy);
+    if (site) {
+      hideInfoPanel();
+      showHeritagePopup(site);
+      return;
+    }
+    if (heritagePopupVisible) hideHeritagePopup();
+
+    // River / mountain tap — show info panel
+    const river = findRiverAtPoint(cx, cy);
+    if (river) {
+      hoveredCountry = null;
+      updateInfoPanelForRiver(river);
+      drawWorldMap();
+      return;
+    }
+    const mountain = findMountainAtPoint(cx, cy);
+    if (mountain) {
+      hoveredCountry = null;
+      updateInfoPanelForMountain(mountain);
+      drawWorldMap();
+      return;
+    }
+
+    // Country tap (existing logic)
     const name = checkClickedCountry(cx, cy, {
       scrollX: viewport.scrollX,
       scrollY: viewport.scrollY,
