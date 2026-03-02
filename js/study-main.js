@@ -125,13 +125,15 @@ function drawWorldMap() {
   if (showCountryNames && viewport.zoom > 1.5) {
     ctx.save();
     // Only label countries whose rendered width is large enough to be readable
-    const MIN_PX = 18; // minimum rendered size of the main territory in CSS px
+    const MIN_PX = 10; // minimum rendered size in CSS px
     for (const country of countryPaths) {
-      // Use the largest-ring size (not overall bbox) so that countries whose
-      // bbox spans the globe due to scattered islands (France with overseas
-      // departments, US Minor Outlying Islands, etc.) get an appropriate size.
+      // For the visibility threshold, use the smaller of:
+      //   - the overall bbox (good for compact island groups like Cabo Verde)
+      //   - labelRingSize × 8 (caps wildly scattered nations like US Minor Outlying Islands)
+      // Font sizing still uses labelRingSize alone to avoid inflated text.
+      const thresholdSize = Math.min(country.bboxSize, country.labelRingSize * 8);
+      if (thresholdSize * viewport.zoom < MIN_PX) continue;
       const renderedSize = country.labelRingSize * viewport.zoom;
-      if (renderedSize < MIN_PX) continue;
 
       const dataName = geoToData[country.name] || resolveToDataName(country.name);
       const label = dataName || country.name;
