@@ -20,6 +20,7 @@ const canvas = document.getElementById('map');
 const ctx = canvas.getContext('2d');
 const dpr = window.devicePixelRatio || 1;
 const infoPanel = document.getElementById('study-info');
+const studyPage = document.querySelector('.study-page');
 const heritagePopup     = document.getElementById('heritage-popup');
 const heritagePopupImg  = document.getElementById('heritage-popup-img');
 const heritagePopupName = document.getElementById('heritage-popup-name');
@@ -216,6 +217,7 @@ function drawWorldMap() {
     ctx.save();
     const s = 5;
     for (const site of heritageSitesData) {
+      if (site.lat == null || site.lon == null) continue;
       const [mx, my] = proj([site.lon, site.lat]);
       for (const offset of offsets) {
         const px = (mx + offset - viewport.scrollX) * viewport.zoom;
@@ -495,6 +497,7 @@ function findHeritageAtPoint(cx, cy) {
   const offsets = visibleOffsets(viewport, canvasDisplayWidth);
   const HIT = 10; // px hit radius (Manhattan distance matches diamond shape)
   for (const site of heritageSitesData) {
+    if (site.lat == null || site.lon == null) continue;
     const [mx, my] = proj([site.lon, site.lat]);
     for (const offset of offsets) {
       const px = (mx + offset - viewport.scrollX) * viewport.zoom;
@@ -524,6 +527,7 @@ function hideHeritagePopup() {
 
 document.getElementById('heritage-popup-close').addEventListener('click', hideHeritagePopup);
 
+
 // ── Toggle buttons ────────────────────────────────────────────────────────────
 
 function createMapToggles() {
@@ -541,7 +545,7 @@ function createMapToggles() {
   btnCapital.className = 'study-toggle-btn';
   btnCapital.title = 'Show capital dots';
   btnCapital.textContent = '★';
-  btnCapital.style.color = '#fbbf24';
+
   btnCapital.dataset.mode = '0';
 
   const btnRivers = document.createElement('button');
@@ -602,7 +606,7 @@ function createMapToggles() {
   });
 }
 
-// ── Canvas resize ─────────────────────────────────────────────────────────────
+// ── Canvas resize & height sync ───────────────────────────────────────────────
 
 function resizeCanvas() {
   const { w, h, minZoom } = setupCanvas(canvas, ctx, dpr, canvas.parentElement);
@@ -613,12 +617,29 @@ function resizeCanvas() {
   drawWorldMap();
 }
 
+// Sync the page height to the actual visible viewport height.
+// This fixes the extra-space-at-bottom bug on Android Chrome where
+// 100dvh is computed before the browser chrome (URL bar / nav bar) adjusts.
+function syncPageHeight() {
+  const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  studyPage.style.height = h + 'px';
+}
+
+function syncAndResize() {
+  syncPageHeight();
+  resizeCanvas();
+}
+
 // ── Init ──────────────────────────────────────────────────────────────────────
 
-resizeCanvas();
+syncAndResize();
 // Center on Greenwich meridian (Europe/Africa)
 viewport.scrollX = MAP_W / 2 - canvasDisplayWidth / (2 * viewport.zoom);
-window.addEventListener('resize', resizeCanvas);
+window.addEventListener('resize', syncAndResize);
+if (window.visualViewport) {
+  // Fires when URL bar shows/hides on mobile — more reliable than 'resize' alone
+  window.visualViewport.addEventListener('resize', syncAndResize);
+}
 drawWorldMap();
 
 createMapToggles();

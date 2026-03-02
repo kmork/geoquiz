@@ -759,14 +759,14 @@ select option {
   /* Fill the visual viewport so there is no gap below the game card when the
      keyboard is open. --vvh is set by JS (mobile-autocomplete.js) and tracks
      window.visualViewport.height, which shrinks when keyboard opens. */
-  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page) {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page) {
     height: var(--vvh, 100svh);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
   }
 
-  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page) > .card {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page) > .card {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -775,14 +775,14 @@ select option {
   }
 
   /* Map grows to fill space between header and input row */
-  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page) .mapwrap {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page) .mapwrap {
     flex: 1;
     height: auto;
     min-height: 150px;
     max-height: 350px;
   }
 
-  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page) #map {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page) #map {
     height: 100%;
     width: 100%;
   }

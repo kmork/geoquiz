@@ -25,9 +25,11 @@
     .study-page {
       max-width: 100%;
       height: 100vh;
+      height: 100dvh; /* adapts as Android URL bar shows/hides */
       display: flex;
       flex-direction: column;
       box-sizing: border-box;
+      overflow: hidden;
     }
     .study-page .card {
       flex: 1;
@@ -40,11 +42,13 @@
       flex: 1;
       margin: 6px 0 0;
       min-height: 0;
+      display: flex;
+      flex-direction: column;
     }
     .study-page #map {
-      display: block;
-      max-width: 100%;
-      max-height: 100%;
+      flex: 1;
+      min-height: 0;
+      min-width: 0;
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -246,6 +250,24 @@
     }
     .study-toggle-btn.active[data-mode="2"]:hover {
       background: rgba(145,100,0,0.9);
+    }
+
+    /* ── Mobile layout overrides ── */
+    @media (max-width: 600px) {
+      /* Toggle buttons: horizontal row at bottom-center */
+      .study-map-toggles {
+        flex-direction: row;
+        right: unset;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 10px;
+        gap: 10px;
+      }
+      /* Info panel: move to top-left so it doesn't overlap bottom buttons */
+      .study-info-panel {
+        bottom: unset;
+        top: 16px;
+      }
     }
   </style>
 </head>
