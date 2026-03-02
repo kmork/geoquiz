@@ -1226,6 +1226,7 @@ select option {
 .find-country-page {
   max-width: 1600px;
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box; /* Include padding in height calculation */
@@ -1354,6 +1355,7 @@ html.light-mode .find-country-page .country {
 .mountains-page {
   max-width: 1600px;
   height: 100vh;
+  height: 100dvh;
   display: flex;
   flex-direction: column;
   box-sizing: border-box;
@@ -1399,7 +1401,7 @@ html.light-mode .find-country-page .country {
 @media (max-width: 640px) {
   .rivers-page,
   .mountains-page {
-    height: 100svh;
+    height: 100dvh;
   }
 }
 
