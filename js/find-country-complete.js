@@ -7,8 +7,14 @@
 import { createFindCountryGame } from "./find-country-game.js";
 import { initConfetti } from "./confetti.js";
 import { norm } from "./utils.js";
-import { COUNTRY_ALIASES } from "./aliases.js";
 import { loadGeoJSON } from "./geojson-loader.js";
+import {
+  MAP_W, MAP_H, proj, getCSSVar,
+  buildCountryPaths, buildNameLookups,
+  checkClickedCountry as engineCheckClicked,
+  drawCountry, visibleOffsets,
+  setupCanvas, createPanZoom,
+} from "./canvas-map-engine.js";
 
 /**
  * Create a complete Find Country game instance
@@ -37,9 +43,6 @@ export async function createCompleteMap({
   continent = null,
 }) {
 
-  const MAP_W = 600;
-  const MAP_H = 320;
-
   // Canvas setup
   const ctx = canvas.getContext("2d");
   const dpr = window.devicePixelRatio || 1;
@@ -47,56 +50,17 @@ export async function createCompleteMap({
   let canvasDisplayWidth = 600;
   let canvasDisplayHeight = 320;
 
-  // Projection
-  const proj = ([lon, lat]) => [
-    ((lon + 180) / 360) * MAP_W,
-    ((90 - lat) / 180) * MAP_H
-  ];
-
-  // Convert GeoJSON feature to path coordinates
-  function coordsFromFeature(f) {
-    if (!f.geometry) return [];
-    const polys = f.geometry.type === "Polygon" ?
-      [f.geometry.coordinates] :
-      f.geometry.coordinates;
-    const paths = [];
-
-    for (const poly of polys) {
-      for (const ring of poly) {
-        const coords = ring.map(([lon, lat]) => proj([lon, lat]));
-        paths.push(coords);
-      }
-    }
-    return paths;
-  }
-
-  // Get CSS variable
-  function getCSSVar(name) {
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  }
-
-  // Viewport state
-  let scrollX = 0;
-  let scrollY = 0;
-  let zoom = 1;
-  let minZoom = 1;
-  let velocityX = 0;
-  let velocityY = 0;
+  // Viewport state — shared with pan/zoom engine
+  const viewport = { scrollX: 0, scrollY: 0, zoom: 1, minZoom: 1, velocityX: 0, velocityY: 0 };
 
   // Highlighted country state
   let highlightedCountry = null;
   let highlightType = null;
   let hoverCountry = null;
 
-  // Animation loop
-  let animationFrameId = null;
-
   // Load data
-  let WORLD = null;
-  let countryPaths = [];
-
   const worldData = await loadGeoJSON("data/ne_10m_admin_0_countries.geojson.gz");
-  WORLD = worldData.features;
+  const WORLD = worldData.features;
 
   // Build lookup: norm(GeoJSON ADMIN) → feature.properties (used for hints)
   const geoPropsMap = new Map();
@@ -105,82 +69,11 @@ export async function createCompleteMap({
     if (admin) geoPropsMap.set(norm(admin), feature.properties);
   }
 
-  // Pre-process country paths
-  const countryMap = new Map();
-  for (const feature of WORLD) {
-    const name = feature.properties.ADMIN || "";
-    if (!name) continue;
+  // Build preprocessed country paths
+  const { countryPaths, hitTestPaths, microCountries } = buildCountryPaths(WORLD);
 
-    const paths = coordsFromFeature(feature);
-    if (paths.length === 0) continue;
-
-    if (countryMap.has(name)) {
-      countryMap.get(name).paths.push(...paths);
-    } else {
-      countryMap.set(name, { name, paths });
-    }
-  }
-  countryPaths = Array.from(countryMap.values());
-
-  // Vatican's actual polygon is ~0.002 map units wide — sub-pixel at any game zoom.
-  // Scale it up from its centroid so the outline is visible and clickable
-  // while preserving the recognisable shape of the Vatican City boundary.
-  const vaticanEntry = countryPaths.find(c => norm(c.name) === 'vatican');
-  if (vaticanEntry && vaticanEntry.paths.length > 0) {
-    const VATICAN_SCALE = 90; // ×175 → polygon becomes ~0.35 map units wide (≈ San Marino)
-    vaticanEntry.paths = vaticanEntry.paths.map(ring => {
-      const cx = ring.reduce((s, [x]) => s + x, 0) / ring.length;
-      const cy = ring.reduce((s, [, y]) => s + y, 0) / ring.length;
-      return ring.map(([x, y]) => [cx + (x - cx) * VATICAN_SCALE,
-                                    cy + (y - cy) * VATICAN_SCALE]);
-    });
-  }
-
-  // Pre-compute bounding box size for hit-test ordering
-  for (const country of countryPaths) {
-    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    for (const polygon of country.paths) {
-      for (const [x, y] of polygon) {
-        if (x < minX) minX = x;
-        if (x > maxX) maxX = x;
-        if (y < minY) minY = y;
-        if (y > maxY) maxY = y;
-      }
-    }
-    country.bboxSize = Math.max(maxX - minX, maxY - minY);
-    country.bboxCx   = (minX + maxX) / 2;
-    country.bboxCy   = (minY + maxY) / 2;
-  }
-
-  // Sorted smallest-first for hit-testing:
-  // small enclosed countries (San Marino, Monaco, etc.) get priority over surrounding ones.
-  const hitTestPaths = [...countryPaths].sort((a, b) => a.bboxSize - b.bboxSize);
-
-  // Micro-countries: so tiny their polygon is sub-pixel (Vatican, etc.)
-  // Use centroid proximity instead of point-in-polygon.
-  // Only countries that are truly sub-pixel at normal zoom (Vatican ~0.018, Monaco ~0.045).
-  // San Marino (~0.37) is NOT micro — it has a visible polygon handled by sorted point-in-polygon.
-  const MICRO_SIZE = 0.1; // map units
-  const microCountries = hitTestPaths.filter(c => c.bboxSize < MICRO_SIZE);
-
-  // Build lookup: DATA name → GeoJSON ADMIN name.
-  // Aliases map alternative names → canonical DATA names, so we check
-  // each GeoJSON name to see if it's an alias key pointing to a DATA name.
-  const dataToGeo = {};
-  const geoNames = Array.from(countryMap.keys());
-  for (const geoName of geoNames) {
-    // Direct match with a DATA name
-    const directMatch = (window.DATA || []).find(d => norm(d.country) === norm(geoName));
-    if (directMatch) {
-      dataToGeo[directMatch.country] = geoName;
-      continue;
-    }
-    // GeoJSON name is an alias key → maps to a DATA name
-    const target = COUNTRY_ALIASES[geoName];
-    if (target) {
-      dataToGeo[target] = geoName;
-    }
-  }
+  // Build name lookups
+  const { dataToGeo, resolveToDataName } = buildNameLookups(countryPaths);
 
   // Neighbors data for hints (loaded non-blocking)
   let neighborsData = null;
@@ -205,62 +98,19 @@ export async function createCompleteMap({
     }
   }
 
-  // Point-in-polygon test
-  function pointInPolygon(x, y, polygon) {
-    let inside = false;
-    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-      const xi = polygon[i][0], yi = polygon[i][1];
-      const xj = polygon[j][0], yj = polygon[j][1];
-
-      const intersect = ((yi > y) !== (yj > y)) &&
-        (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-      if (intersect) inside = !inside;
-    }
-    return inside;
-  }
-
-  // Draw a country
-  function drawCountry(paths, offsetX, fillStyle, strokeStyle, strokeWidth) {
-    ctx.save();
-
-    for (const coords of paths) {
-      ctx.beginPath();
-      coords.forEach(([x, y], i) => {
-        const px = (x + offsetX - scrollX) * zoom;
-        const py = (y - scrollY) * zoom;
-        if (i === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
-      });
-      ctx.closePath();
-
-      ctx.fillStyle = fillStyle;
-      ctx.fill();
-      ctx.strokeStyle = strokeStyle;
-      ctx.lineWidth = strokeWidth;
-      ctx.stroke();
-    }
-
-    ctx.restore();
-  }
-
   // Draw entire world map
   function drawWorldMap() {
     if (!countryPaths.length) return;
 
     ctx.clearRect(0, 0, canvasDisplayWidth, canvasDisplayHeight);
 
-    const viewWidthInMapUnits = canvasDisplayWidth / zoom;
-    const viewHeightInMapUnits = canvasDisplayHeight / zoom;
-    const viewLeft = scrollX - viewWidthInMapUnits / 2;
-    const viewRight = scrollX + viewWidthInMapUnits / 2;
-    const viewTop = scrollY - viewHeightInMapUnits / 2;
-    const viewBottom = scrollY + viewHeightInMapUnits / 2;
-
     const defaultFill = getCSSVar('--map-country-fill') || "rgba(165,180,252,.08)";
     const defaultStroke = getCSSVar('--map-country-stroke') || "rgba(232,236,255,.3)";
     const hoverFill = getCSSVar('--map-country-fill-highlight') || "rgba(165,180,252,.25)";
     const dimFill = getCSSVar('--map-country-fill-dim') || 'rgba(165,180,252,.03)';
     const dimStroke = getCSSVar('--map-country-stroke-dim') || 'rgba(232,236,255,.10)';
+
+    const offsets = visibleOffsets(viewport, canvasDisplayWidth);
 
     for (const country of countryPaths) {
       let fillStyle = defaultFill;
@@ -291,35 +141,25 @@ export async function createCompleteMap({
         fillStyle = hoverFill;
       }
 
-      const normalizedScrollX = ((scrollX % MAP_W) + MAP_W) % MAP_W;
-      const baseOffset = scrollX - normalizedScrollX;
-
-      for (let i = -1; i <= 1; i++) {
-        const offset = baseOffset + (i * MAP_W);
-        const mapLeft = offset;
-        const mapRight = offset + MAP_W;
-        if (mapRight >= viewLeft && mapLeft <= viewRight) {
-          drawCountry(country.paths, offset, fillStyle, strokeStyle, strokeWidth);
-        }
+      for (const offset of offsets) {
+        drawCountry(ctx, viewport, country.paths, offset, fillStyle, strokeStyle, strokeWidth);
       }
     }
 
     // After a wrong answer, draw a small green ring around the correct country's centroid
     // if it's too small to be clearly visible at the current zoom level.
-    // Not drawn for "correct_self" (player found it themselves — no need to point it out).
     if (highlightType === 'correct' && highlightedCountry) {
       const hn = norm(highlightedCountry);
       const hc = countryPaths.find(c => norm(c.name) === hn);
-      // Only draw when the country is narrower than 30 canvas pixels at current zoom
-      if (hc && hc.bboxSize * zoom < 30) {
-        const normalizedScrollX = ((scrollX % MAP_W) + MAP_W) % MAP_W;
-        const baseOffset2 = scrollX - normalizedScrollX;
+      if (hc && hc.bboxSize * viewport.zoom < 30) {
+        const normalizedScrollX = ((viewport.scrollX % MAP_W) + MAP_W) % MAP_W;
+        const baseOffset2 = viewport.scrollX - normalizedScrollX;
         for (let i = -1; i <= 1; i++) {
-          const sx = (hc.bboxCx + baseOffset2 + i * MAP_W - scrollX) * zoom;
-          const sy = (hc.bboxCy - scrollY) * zoom;
+          const sx = (hc.bboxCx + baseOffset2 + i * MAP_W - viewport.scrollX) * viewport.zoom;
+          const sy = (hc.bboxCy - viewport.scrollY) * viewport.zoom;
           ctx.save();
           ctx.beginPath();
-          ctx.arc(sx, sy, 10, 0, Math.PI * 2); // fixed 10 canvas-px radius
+          ctx.arc(sx, sy, 10, 0, Math.PI * 2);
           ctx.strokeStyle = getCSSVar('--map-correct-stroke') || 'rgba(110,231,183,0.95)';
           ctx.lineWidth = 2.5;
           ctx.stroke();
@@ -329,75 +169,18 @@ export async function createCompleteMap({
     }
   }
 
-  // Check clicked country
-  // Resolve a GeoJSON ADMIN name to the matching DATA country name.
-  // Checks direct match and alias lookup (alias keys are alternative names
-  // that map TO canonical DATA names).
-  function resolveToDataName(geoName) {
-    const gn = norm(geoName);
-    // Check if the GeoJSON name is a known alias → canonical DATA name
-    const aliasTarget = COUNTRY_ALIASES[geoName];
-    const dataCountries = window.DATA.map(d => d.country);
-    for (const dc of dataCountries) {
-      if (norm(dc) === gn) return dc;                        // direct match
-      if (aliasTarget && norm(aliasTarget) === norm(dc)) return dc; // alias match
-    }
-    return null;
-  }
-
-  function checkClickedCountry(canvasX, canvasY, targetCountry = null) {
-    const mapX = (canvasX / zoom) + scrollX;
-    const mapY = (canvasY / zoom) + scrollY;
-    const normalizedMapX = ((mapX % MAP_W) + MAP_W) % MAP_W;
-
-    // Pre-pass: proximity for micro-countries (polygon too tiny for point-in-polygon).
-    // Only activates when the player is specifically seeking a micro-country, to avoid
-    // false positives on surrounding larger countries (e.g. Italy when near Vatican).
-    if (targetCountry && microCountries.length > 0) {
-      const targetGeoName = dataToGeo[targetCountry] || targetCountry;
-      const targetMicro = microCountries.find(c => norm(c.name) === norm(targetGeoName));
-      if (targetMicro) {
-        const MICRO_PROXIMITY = 3; // map units (~110 km); comfortable at typical Vatican zoom
-        const dx = normalizedMapX - targetMicro.bboxCx;
-        const dy = mapY - targetMicro.bboxCy;
-        if (Math.sqrt(dx * dx + dy * dy) < MICRO_PROXIMITY) {
-          return targetCountry;
-        }
-        // Click missed the micro-country; fall through so the player can still
-        // select the wrong country they actually clicked on.
-      }
-    }
-
-    // Main pass: point-in-polygon, smallest countries checked first
-    for (const country of hitTestPaths) {
-      // Skip non-continent countries in continent mode
-      if (continentGeoNames.size > 0 && !continentGeoNames.has(norm(country.name))) continue;
-      for (const polygon of country.paths) {
-        if (pointInPolygon(normalizedMapX, mapY, polygon)) {
-          return resolveToDataName(country.name) || country.name;
-        }
-      }
-    }
-
-    // Proximity fallback for small but non-micro countries that might be missed
-    const PROXIMITY_THRESHOLD = 30;
-    let nearestSmallCountry = null;
-    let nearestDistance = Infinity;
-
-    for (const country of hitTestPaths) {
-      if (country.bboxSize > 50) continue;
-      // Skip non-continent countries in continent mode
-      if (continentGeoNames.size > 0 && !continentGeoNames.has(norm(country.name))) continue;
-      const dx = normalizedMapX - country.bboxCx;
-      const dy = mapY - country.bboxCy;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      if (distance < nearestDistance && distance < PROXIMITY_THRESHOLD) {
-        nearestDistance = distance;
-        nearestSmallCountry = resolveToDataName(country.name) || country.name;
-      }
-    }
-
-    return nearestSmallCountry;
+  function checkClick(canvasX, canvasY, targetCountry = null) {
+    return engineCheckClicked(canvasX, canvasY, {
+      scrollX: viewport.scrollX,
+      scrollY: viewport.scrollY,
+      zoom: viewport.zoom,
+      hitTestPaths,
+      microCountries,
+      resolveToDataName,
+      targetCountry,
+      dataToGeo,
+      filteredNames: continentGeoNames.size > 0 ? continentGeoNames : null,
+    });
   }
 
   // Highlight country
@@ -489,10 +272,10 @@ export async function createCompleteMap({
 
     const zoomX = canvasDisplayWidth / width;
     const zoomY = canvasDisplayHeight / height;
-    zoom = Math.max(minZoom, Math.min(zoomX, zoomY, 500));
+    viewport.zoom = Math.max(viewport.minZoom, Math.min(zoomX, zoomY, 500));
 
-    scrollX = x1 + width / 2 - canvasDisplayWidth / 2 / zoom;
-    scrollY = y1 + height / 2 - canvasDisplayHeight / 2 / zoom;
+    viewport.scrollX = x1 + width / 2 - canvasDisplayWidth / 2 / viewport.zoom;
+    viewport.scrollY = y1 + height / 2 - canvasDisplayHeight / 2 / viewport.zoom;
 
     drawWorldMap();
   }
@@ -501,7 +284,6 @@ export async function createCompleteMap({
   function zoomToContinent() {
     if (!continentGeoNames.size) return;
 
-    // Collect the largest polygon ring per country (excludes overseas territories).
     const bestRings = [];
     for (const d of window.DATA) {
       const mapName = dataToGeo[d.country] || d.country;
@@ -516,7 +298,7 @@ export async function createCompleteMap({
           ? [feature.geometry.coordinates]
           : feature.geometry.coordinates;
         for (const poly of polys) {
-          const ring = poly[0]; // exterior ring
+          const ring = poly[0];
           if (ring.length > bestCount) { bestCount = ring.length; bestRing = ring; }
         }
       }
@@ -527,15 +309,11 @@ export async function createCompleteMap({
     }
     if (!bestRings.length) return;
 
-    // Circular mean of centroid longitudes — correctly handles continents that
-    // straddle the antimeridian (e.g. Oceania: most countries at 130–180°E but
-    // Samoa/Tonga at ~188° when expressed east of 180°).
     const toRad = d => d * Math.PI / 180;
     const sinSum = bestRings.reduce((s, r) => s + Math.sin(toRad(r.centroidLon)), 0);
     const cosSum = bestRings.reduce((s, r) => s + Math.cos(toRad(r.centroidLon)), 0);
     const meanLon = Math.atan2(sinSum, cosSum) * 180 / Math.PI;
 
-    // Normalise a longitude to within ±180° of the circular mean.
     function normLon(lon) {
       let d = lon - meanLon;
       while (d > 180) d -= 360;
@@ -543,10 +321,6 @@ export async function createCompleteMap({
       return meanLon + d;
     }
 
-    // IQR-based fence to clip outlier ring points (e.g. Russia in Europe extends
-    // to 190°E but all other European centroids cluster in -22° – 33°E).
-    // 3×IQR (wider than Tukey's standard 1.5×) keeps genuine outlier countries
-    // like Iceland fully visible while still clipping Russia near the Urals (~60°E).
     const normCentroids = bestRings
       .map(r => normLon(r.centroidLon))
       .sort((a, b) => a - b);
@@ -556,9 +330,6 @@ export async function createCompleteMap({
     const fenceLo = q1 - 3 * iqr;
     const fenceHi = q3 + 3 * iqr;
 
-    // Build combined bbox from normalised, clamped ring points.
-    // Normalised lons may exceed ±180°; the linear projection and horizontal
-    // map tiling handle this correctly — scrollX can point into the second copy.
     let minLon = Infinity, maxLon = -Infinity, minLat = Infinity, maxLat = -Infinity;
     for (const { ring } of bestRings) {
       for (const [lon, lat] of ring) {
@@ -578,7 +349,6 @@ export async function createCompleteMap({
     minLat = Math.max(-90, minLat - dLat * PAD);
     maxLat = Math.min(90, maxLat + dLat * PAD);
 
-    // Project directly (not via proj()) so normalised lons > 180° map correctly.
     const x1 = ((minLon + 180) / 360) * MAP_W;
     const x2 = ((maxLon + 180) / 360) * MAP_W;
     const y1 = ((90 - maxLat) / 180) * MAP_H;
@@ -587,10 +357,10 @@ export async function createCompleteMap({
     const height = y2 - y1;
     const zoomX = canvasDisplayWidth / width;
     const zoomY = canvasDisplayHeight / height;
-    zoom = Math.max(minZoom, Math.min(zoomX, zoomY, 500));
-    scrollX = x1 + width / 2 - canvasDisplayWidth / (2 * zoom);
-    scrollY = y1 + height / 2 - canvasDisplayHeight / (2 * zoom);
-    scrollY = Math.max(0, Math.min(scrollY, MAP_H - canvasDisplayHeight / zoom));
+    viewport.zoom = Math.max(viewport.minZoom, Math.min(zoomX, zoomY, 500));
+    viewport.scrollX = x1 + width / 2 - canvasDisplayWidth / (2 * viewport.zoom);
+    viewport.scrollY = y1 + height / 2 - canvasDisplayHeight / (2 * viewport.zoom);
+    viewport.scrollY = Math.max(0, Math.min(viewport.scrollY, MAP_H - canvasDisplayHeight / viewport.zoom));
   }
 
   function generateHints(countryDataName) {
@@ -598,20 +368,17 @@ export async function createCompleteMap({
     const geoName = dataToGeo[countryDataName] || countryDataName;
     const props = geoPropsMap.get(norm(geoName));
 
-    // Subregion / continent
     if (props?.SUBREGION) {
       hints.push(`Located in ${props.SUBREGION}`);
     } else if (props?.CONTINENT) {
       hints.push(`In ${props.CONTINENT}`);
     }
 
-    // Capital
     const entry = (window.DATA || []).find(d => d.country === countryDataName);
     if (entry?.capitals?.[0]) {
       hints.push(`Capital: ${entry.capitals[0]}`);
     }
 
-    // Population
     if (props?.POP_EST) {
       const pop = props.POP_EST;
       const popStr = pop >= 1e9 ? `${(pop / 1e9).toFixed(1)} billion`
@@ -621,7 +388,6 @@ export async function createCompleteMap({
       hints.push(`Population: ~${popStr}`);
     }
 
-    // Neighbors (from countries-neighbors.json)
     const nbrs = neighborsData?.[countryDataName];
     if (nbrs != null) {
       if (nbrs.length === 0) {
@@ -692,8 +458,8 @@ export async function createCompleteMap({
     highlightedCountry = null;
     highlightType = null;
     hoverCountry = null;
-    velocityX = 0;
-    velocityY = 0;
+    viewport.velocityX = 0;
+    viewport.velocityY = 0;
     hintUsed = false;
     hideHintPanel();
     drawWorldMap();
@@ -701,297 +467,12 @@ export async function createCompleteMap({
 
   // Resize canvas
   function resizeCanvas() {
-    const rect = canvas.parentElement.getBoundingClientRect();
-
-    canvasDisplayWidth = rect.width;
-    canvasDisplayHeight = rect.height;
-
-    minZoom = Math.max(canvasDisplayHeight / MAP_H, canvasDisplayWidth / MAP_W);
-
-    if (zoom < minZoom) {
-      zoom = minZoom;
-    }
-
-    canvas.style.width = `${canvasDisplayWidth}px`;
-    canvas.style.height = `${canvasDisplayHeight}px`;
-
-    canvas.width = canvasDisplayWidth * dpr;
-    canvas.height = canvasDisplayHeight * dpr;
-
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.scale(dpr, dpr);
-
+    const { w, h, minZoom } = setupCanvas(canvas, ctx, dpr, canvas.parentElement);
+    canvasDisplayWidth = w;
+    canvasDisplayHeight = h;
+    viewport.minZoom = minZoom;
+    if (viewport.zoom < minZoom) viewport.zoom = minZoom;
     drawWorldMap();
-  }
-
-  // Attach canvas interaction (pan/zoom/click)
-  function attachCanvasInteraction(game) {
-    const FRICTION = 0.95;
-    const MIN_VELOCITY = 0.1;
-
-    function animate() {
-      if (Math.abs(velocityX) > MIN_VELOCITY || Math.abs(velocityY) > MIN_VELOCITY) {
-        scrollX += velocityX;
-        scrollY += velocityY;
-
-        const minScrollY = 0;
-        const maxScrollY = Math.max(0, MAP_H - canvasDisplayHeight / zoom);
-        if (scrollY < minScrollY) {
-          scrollY = minScrollY;
-          velocityY = 0;
-        }
-        if (scrollY > maxScrollY) {
-          scrollY = maxScrollY;
-          velocityY = 0;
-        }
-
-        velocityX *= FRICTION;
-        velocityY *= FRICTION;
-
-        drawWorldMap();
-        animationFrameId = requestAnimationFrame(animate);
-      } else {
-        velocityX = 0;
-        velocityY = 0;
-        animationFrameId = null;
-      }
-    }
-
-    function startAnimation() {
-      if (!animationFrameId) {
-        animationFrameId = requestAnimationFrame(animate);
-      }
-    }
-
-    // Mouse wheel zoom
-    canvas.addEventListener('wheel', (e) => {
-      e.preventDefault();
-
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-
-      const factor = e.deltaY > 0 ? 0.9 : 1.1;
-      const newZoom = Math.max(minZoom, Math.min(500, zoom * factor));
-
-      const mapXBefore = mouseX / zoom + scrollX;
-      const mapYBefore = mouseY / zoom + scrollY;
-
-      zoom = newZoom;
-
-      scrollX = mapXBefore - mouseX / zoom;
-      scrollY = mapYBefore - mouseY / zoom;
-
-      scrollY = Math.max(0, Math.min(Math.max(0, MAP_H - canvasDisplayHeight / zoom), scrollY));
-
-      drawWorldMap();
-    }, { passive: false });
-
-    // Touch and mouse interaction
-    let isPointerDown = false;
-    let startX = 0, startY = 0;
-    let lastX = 0, lastY = 0;
-    let lastTime = 0;
-    let isDragging = false;
-
-    let touches = [];
-    let initialPinchDistance = 0;
-    let initialZoom = 1;
-    let wasRecentlyPinching = false;
-    let pinchCooldownTimer = null;
-    let hadPinch = false;
-    let previousTouchCount = 0;
-
-    function getDistance(t1, t2) {
-      const dx = t1.clientX - t2.clientX;
-      const dy = t1.clientY - t2.clientY;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    canvas.addEventListener('pointerdown', (e) => {
-      e.preventDefault();
-
-      if (e.pointerType === 'touch') {
-        touches.push(e);
-
-        if (touches.length === 2) {
-          initialPinchDistance = getDistance(touches[0], touches[1]);
-          initialZoom = zoom;
-          isDragging = false;
-          hadPinch = true;
-        } else if (touches.length === 1) {
-          hadPinch = false;
-          isPointerDown = true;
-          const rect = canvas.getBoundingClientRect();
-          startX = lastX = e.clientX - rect.left;
-          startY = lastY = e.clientY - rect.top;
-          lastTime = Date.now();
-          velocityX = 0;
-          velocityY = 0;
-          isDragging = false;
-        }
-      } else {
-        isPointerDown = true;
-        const rect = canvas.getBoundingClientRect();
-        startX = lastX = e.clientX - rect.left;
-        startY = lastY = e.clientY - rect.top;
-        lastTime = Date.now();
-        velocityX = 0;
-        velocityY = 0;
-        isDragging = false;
-      }
-    });
-
-    canvas.addEventListener('pointermove', (e) => {
-      e.preventDefault();
-
-      const rect = canvas.getBoundingClientRect();
-      const currentX = e.clientX - rect.left;
-      const currentY = e.clientY - rect.top;
-
-      // Update hover
-      if (game && game.getCurrent() !== "" && !isPointerDown) {
-        const clickedCountry = checkClickedCountry(currentX, currentY, game.getCurrent().country);
-        if (clickedCountry !== hoverCountry) {
-          hoverCountry = clickedCountry;
-          drawWorldMap();
-        }
-      }
-
-      if (e.pointerType === 'touch') {
-        const touchIndex = touches.findIndex(t => t.pointerId === e.pointerId);
-        if (touchIndex >= 0) {
-          touches[touchIndex] = e;
-        }
-
-        if (touches.length === 2) {
-          isDragging = false;
-          isPointerDown = false;
-          previousTouchCount = 2;
-
-          const midX = (touches[0].clientX + touches[1].clientX) / 2;
-          const midY = (touches[0].clientY + touches[1].clientY) / 2;
-          const rect = canvas.getBoundingClientRect();
-          const canvasMidX = midX - rect.left;
-          const canvasMidY = midY - rect.top;
-
-          const mapXBefore = canvasMidX / zoom + scrollX;
-          const mapYBefore = canvasMidY / zoom + scrollY;
-
-          const newDistance = getDistance(touches[0], touches[1]);
-          const scale = newDistance / initialPinchDistance;
-          const newZoom = Math.max(minZoom, Math.min(500, initialZoom * scale));
-
-          scrollX = mapXBefore - canvasMidX / newZoom;
-          scrollY = mapYBefore - canvasMidY / newZoom;
-
-          scrollY = Math.max(0, Math.min(Math.max(0, MAP_H - canvasDisplayHeight / newZoom), scrollY));
-
-          zoom = newZoom;
-          drawWorldMap();
-          return;
-        } else if (hadPinch && touches.length === 1) {
-          wasRecentlyPinching = true;
-          if (pinchCooldownTimer) clearTimeout(pinchCooldownTimer);
-          pinchCooldownTimer = setTimeout(() => {
-            wasRecentlyPinching = false;
-          }, 400);
-        }
-
-        previousTouchCount = touches.length;
-      }
-
-      if (isPointerDown) {
-        const dx = currentX - lastX;
-        const dy = currentY - lastY;
-        const dt = Date.now() - lastTime;
-
-        // Use total distance from start to detect drag (not per-frame delta)
-        const totalDx = currentX - startX;
-        const totalDy = currentY - startY;
-        if (Math.abs(totalDx) > 5 || Math.abs(totalDy) > 5) {
-          isDragging = true;
-        }
-
-        scrollX -= dx / zoom;
-        scrollY -= dy / zoom;
-
-        scrollY = Math.max(0, Math.min(Math.max(0, MAP_H - canvasDisplayHeight / zoom), scrollY));
-
-        if (dt > 0) {
-          velocityX = -dx / zoom * 1.0;
-          velocityY = -dy / zoom * 1.0;
-        }
-
-        lastX = currentX;
-        lastY = currentY;
-        lastTime = Date.now();
-
-        drawWorldMap();
-      }
-    });
-
-    canvas.addEventListener('pointerup', (e) => {
-      if (e.pointerType === 'touch') {
-        touches = touches.filter(t => t.pointerId !== e.pointerId);
-
-        if (hadPinch && touches.length === 0) {
-          wasRecentlyPinching = true;
-          hadPinch = false;
-          if (pinchCooldownTimer) clearTimeout(pinchCooldownTimer);
-          pinchCooldownTimer = setTimeout(() => {
-            wasRecentlyPinching = false;
-          }, 400);
-        }
-
-        previousTouchCount = touches.length;
-
-        if (touches.length === 0) {
-          isPointerDown = false;
-
-          if (!isDragging && !wasRecentlyPinching) {
-            const rect = canvas.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const clickY = e.clientY - rect.top;
-            const clickedCountry = checkClickedCountry(clickX, clickY, game ? game.getCurrent().country : null);
-
-            if (clickedCountry && game) {
-              game.handleMapClick(clickedCountry, hintUsed);
-            }
-          } else {
-            startAnimation();
-          }
-        }
-      } else {
-        if (!isDragging) {
-          const rect = canvas.getBoundingClientRect();
-          const clickX = e.clientX - rect.left;
-          const clickY = e.clientY - rect.top;
-          const clickedCountry = checkClickedCountry(clickX, clickY, game ? game.getCurrent().country : null);
-
-          if (clickedCountry && game) {
-            game.handleMapClick(clickedCountry, hintUsed);
-          }
-        } else {
-          startAnimation();
-        }
-
-        isPointerDown = false;
-      }
-    });
-
-    canvas.addEventListener('pointercancel', () => {
-      isPointerDown = false;
-      touches = [];
-    });
-
-    canvas.addEventListener('pointerleave', () => {
-      hoverCountry = null;
-      drawWorldMap();
-    });
-
-    canvas.style.touchAction = 'none';
-    canvas.style.cursor = 'pointer';
   }
 
   // Initialize canvas
@@ -1000,7 +481,7 @@ export async function createCompleteMap({
     zoomToContinent();
   } else {
     // Center on Europe/Africa (longitude 0°) rather than the date line
-    scrollX = MAP_W / 2 - canvasDisplayWidth / (2 * zoom);
+    viewport.scrollX = MAP_W / 2 - canvasDisplayWidth / (2 * viewport.zoom);
   }
   window.addEventListener('resize', resizeCanvas);
   drawWorldMap();
@@ -1016,11 +497,38 @@ export async function createCompleteMap({
     finalOverlay: ui.finalOverlay || null,
   };
 
+  // Create game instance (forward reference — assigned after createPanZoom)
+  let game = null;
+
+  // Attach pan/zoom and interaction
+  createPanZoom(canvas, viewport, drawWorldMap, {
+    onTap(clickX, clickY) {
+      const target = game ? game.getCurrent()?.country : null;
+      const clickedCountry = checkClick(clickX, clickY, target);
+      if (clickedCountry && game) {
+        game.handleMapClick(clickedCountry, hintUsed);
+      }
+    },
+    onHover(currentX, currentY) {
+      if (game && game.getCurrent() !== "") {
+        const clickedCountry = checkClick(currentX, currentY, game.getCurrent().country);
+        if (clickedCountry !== hoverCountry) {
+          hoverCountry = clickedCountry;
+          drawWorldMap();
+        }
+      }
+    },
+    onLeave() {
+      hoverCountry = null;
+      drawWorldMap();
+    },
+  });
+
   // Create game instance
-  const game = createFindCountryGame({
+  game = createFindCountryGame({
     ui: fullUI,
     confetti,
-    checkClickedCountry,
+    checkClickedCountry: checkClick,
     highlightCountry,
     zoomToCountries,
     resetMapView,
@@ -1032,9 +540,6 @@ export async function createCompleteMap({
       gameIdSuffix
     }
   });
-
-  // Attach canvas interactions
-  attachCanvasInteraction(game);
 
   // Create hint UI (only for standalone game — canvas.parentElement is .mapwrap)
   if (!singleRound) {

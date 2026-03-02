@@ -7,16 +7,19 @@
  *
  * Mountains additionally supports a bonus round: after submit the map zooms
  * into the range and the player clicks the highest named peak.
- *
- * Adapted from find-country-complete.js — same pan/zoom/world-wrap engine,
- * new multi-highlight map and feature-overlay rendering.
  */
 
 import { norm } from './utils.js';
-import { COUNTRY_ALIASES } from './aliases.js';
 import { loadGeoJSON } from './geojson-loader.js';
 import { renderFinishScreen } from './game-records.js';
 import { initConfetti } from './confetti.js';
+import {
+  MAP_W, MAP_H, proj, getCSSVar,
+  buildCountryPaths, buildNameLookups,
+  checkClickedCountry as engineCheckClicked,
+  drawCountry, visibleOffsets,
+  setupCanvas, createPanZoom,
+} from './canvas-map-engine.js';
 
 /**
  * @param {Object}  config
@@ -56,49 +59,14 @@ export async function createGeoFeaturesGame({
 }) {
   const confetti = initConfetti('confetti');
 
-  const MAP_W = 600;
-  const MAP_H = 320;
-
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
 
   let canvasDisplayWidth = 600;
   let canvasDisplayHeight = 320;
 
-  // ── Projection ────────────────────────────────────────────────────────────
-
-  const proj = ([lon, lat]) => [
-    ((lon + 180) / 360) * MAP_W,
-    ((90 - lat) / 180) * MAP_H,
-  ];
-
-  function coordsFromFeature(f) {
-    if (!f.geometry) return [];
-    const polys = f.geometry.type === 'Polygon'
-      ? [f.geometry.coordinates]
-      : f.geometry.coordinates;
-    const paths = [];
-    for (const poly of polys) {
-      for (const ring of poly) {
-        paths.push(ring.map(([lon, lat]) => proj([lon, lat])));
-      }
-    }
-    return paths;
-  }
-
-  function getCSSVar(name) {
-    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-  }
-
-  // ── Viewport state ────────────────────────────────────────────────────────
-
-  let scrollX = 0;
-  let scrollY = 0;
-  let zoom = 1;
-  let minZoom = 1;
-  let velocityX = 0;
-  let velocityY = 0;
-  let animationFrameId = null;
+  // Viewport state — shared with pan/zoom engine
+  const viewport = { scrollX: 0, scrollY: 0, zoom: 1, minZoom: 1, velocityX: 0, velocityY: 0 };
 
   // ── Game render state ─────────────────────────────────────────────────────
 
@@ -132,155 +100,32 @@ export async function createGeoFeaturesGame({
   const worldData = await loadGeoJSON('data/ne_10m_admin_0_countries.geojson.gz');
   const WORLD = worldData.features;
 
-  const countryMap = new Map();
-  for (const feature of WORLD) {
-    const name = feature.properties.ADMIN || '';
-    if (!name) continue;
-    const paths = coordsFromFeature(feature);
-    if (!paths.length) continue;
-    if (countryMap.has(name)) {
-      countryMap.get(name).paths.push(...paths);
-    } else {
-      countryMap.set(name, { name, paths });
-    }
-  }
-  const countryPaths = Array.from(countryMap.values());
+  const { countryPaths, hitTestPaths } = buildCountryPaths(WORLD);
+  const { geoToData, resolveToDataName } = buildNameLookups(countryPaths);
 
-  // Scale Vatican so it's clickable
-  const vaticanEntry = countryPaths.find(c => norm(c.name) === 'vatican');
-  if (vaticanEntry?.paths.length > 0) {
-    const S = 90;
-    vaticanEntry.paths = vaticanEntry.paths.map(ring => {
-      const cx = ring.reduce((s, [x]) => s + x, 0) / ring.length;
-      const cy = ring.reduce((s, [, y]) => s + y, 0) / ring.length;
-      return ring.map(([x, y]) => [cx + (x - cx) * S, cy + (y - cy) * S]);
+  // ── Hit detection ─────────────────────────────────────────────────────────
+
+  function checkClickedCountry(canvasX, canvasY) {
+    return engineCheckClicked(canvasX, canvasY, {
+      scrollX: viewport.scrollX,
+      scrollY: viewport.scrollY,
+      zoom: viewport.zoom,
+      hitTestPaths,
+      resolveToDataName,
     });
   }
 
-  // Pre-compute bounding boxes for hit-test ordering
-  for (const country of countryPaths) {
-    let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
-    for (const polygon of country.paths) {
-      for (const [x, y] of polygon) {
-        if (x < minX) minX = x;
-        if (x > maxX) maxX = x;
-        if (y < minY) minY = y;
-        if (y > maxY) maxY = y;
-      }
-    }
-    country.bboxSize = Math.max(maxX - minX, maxY - minY);
-    country.bboxCx   = (minX + maxX) / 2;
-    country.bboxCy   = (minY + maxY) / 2;
-  }
-
-  // Smallest first → small enclosed countries get priority in hit-testing
-  const hitTestPaths = [...countryPaths].sort((a, b) => a.bboxSize - b.bboxSize);
-
-  // ── Name-mapping lookups ──────────────────────────────────────────────────
-
-  // GeoJSON ADMIN name → window.DATA country name
-  const dataToGeo = {}; // dataName → geoName
-  const geoToData = {}; // geoName  → dataName
-
-  for (const geoName of countryMap.keys()) {
-    const directMatch = (window.DATA || []).find(d => norm(d.country) === norm(geoName));
-    if (directMatch) {
-      dataToGeo[directMatch.country] = geoName;
-      geoToData[geoName] = directMatch.country;
-      continue;
-    }
-    const target = COUNTRY_ALIASES[geoName];
-    if (target) {
-      dataToGeo[target] = geoName;
-      geoToData[geoName] = target;
-    }
-  }
-
-  // ── Point-in-polygon ──────────────────────────────────────────────────────
-
-  function pointInPolygon(x, y, polygon) {
-    let inside = false;
-    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
-      const xi = polygon[i][0], yi = polygon[i][1];
-      const xj = polygon[j][0], yj = polygon[j][1];
-      const intersect = ((yi > y) !== (yj > y)) &&
-        (x < (xj - xi) * (y - yi) / (yj - yi) + xi);
-      if (intersect) inside = !inside;
-    }
-    return inside;
-  }
-
-  function resolveToDataName(geoName) {
-    const gn = norm(geoName);
-    const aliasTarget = COUNTRY_ALIASES[geoName];
-    for (const d of (window.DATA || [])) {
-      if (norm(d.country) === gn) return d.country;
-      if (aliasTarget && norm(aliasTarget) === norm(d.country)) return d.country;
-    }
-    return null;
-  }
-
-  function checkClickedCountry(canvasX, canvasY) {
-    const mapX = canvasX / zoom + scrollX;
-    const mapY = canvasY / zoom + scrollY;
-    const normalizedMapX = ((mapX % MAP_W) + MAP_W) % MAP_W;
-
-    // Point-in-polygon, smallest first
-    for (const country of hitTestPaths) {
-      for (const polygon of country.paths) {
-        if (pointInPolygon(normalizedMapX, mapY, polygon)) {
-          return resolveToDataName(country.name) || country.name;
-        }
-      }
-    }
-
-    // Proximity fallback for tiny countries
-    let nearestName = null;
-    let nearestDist = Infinity;
-    for (const country of hitTestPaths) {
-      if (country.bboxSize > 50) continue;
-      const dx = normalizedMapX - country.bboxCx;
-      const dy = mapY - country.bboxCy;
-      const dist = Math.sqrt(dx * dx + dy * dy);
-      if (dist < nearestDist && dist < 30) {
-        nearestDist = dist;
-        nearestName = resolveToDataName(country.name) || country.name;
-      }
-    }
-    return nearestName;
-  }
-
   // ── Drawing ───────────────────────────────────────────────────────────────
-
-  function drawCountry(paths, offsetX, fillStyle, strokeStyle, strokeWidth) {
-    ctx.save();
-    for (const coords of paths) {
-      ctx.beginPath();
-      coords.forEach(([x, y], i) => {
-        const px = (x + offsetX - scrollX) * zoom;
-        const py = (y - scrollY) * zoom;
-        if (i === 0) ctx.moveTo(px, py);
-        else ctx.lineTo(px, py);
-      });
-      ctx.closePath();
-      ctx.fillStyle = fillStyle;
-      ctx.fill();
-      ctx.strokeStyle = strokeStyle;
-      ctx.lineWidth = strokeWidth;
-      ctx.stroke();
-    }
-    ctx.restore();
-  }
 
   function drawFeatureOverlay(feature) {
     if (!feature?.path?.length) return;
     const pts = feature.path.map(([lon, lat]) => proj([lon, lat]));
 
-    const normalizedScrollX = ((scrollX % MAP_W) + MAP_W) % MAP_W;
-    const baseOffset = scrollX - normalizedScrollX;
-    const viewWidthInMapUnits = canvasDisplayWidth / zoom;
-    const viewLeft  = scrollX - viewWidthInMapUnits / 2;
-    const viewRight = scrollX + viewWidthInMapUnits / 2;
+    const normalizedScrollX = ((viewport.scrollX % MAP_W) + MAP_W) % MAP_W;
+    const baseOffset = viewport.scrollX - normalizedScrollX;
+    const viewWidthInMapUnits = canvasDisplayWidth / viewport.zoom;
+    const viewLeft  = viewport.scrollX - viewWidthInMapUnits / 2;
+    const viewRight = viewport.scrollX + viewWidthInMapUnits / 2;
 
     ctx.save();
     for (let i = -1; i <= 1; i++) {
@@ -294,8 +139,8 @@ export async function createGeoFeaturesGame({
         ctx.lineCap     = 'round';
         ctx.beginPath();
         pts.forEach(([x, y], j) => {
-          const px = (x + offset - scrollX) * zoom;
-          const py = (y - scrollY) * zoom;
+          const px = (x + offset - viewport.scrollX) * viewport.zoom;
+          const py = (y - viewport.scrollY) * viewport.zoom;
           if (j === 0) ctx.moveTo(px, py);
           else ctx.lineTo(px, py);
         });
@@ -304,8 +149,8 @@ export async function createGeoFeaturesGame({
         // mountain dots
         ctx.fillStyle = 'rgba(180, 120, 60, 0.9)';
         for (const [x, y] of pts) {
-          const px = (x + offset - scrollX) * zoom;
-          const py = (y - scrollY) * zoom;
+          const px = (x + offset - viewport.scrollX) * viewport.zoom;
+          const py = (y - viewport.scrollY) * viewport.zoom;
           ctx.beginPath();
           ctx.arc(px, py, 3, 0, Math.PI * 2);
           ctx.fill();
@@ -318,11 +163,11 @@ export async function createGeoFeaturesGame({
   function drawPeakMarkers(peaks, mode) {
     if (!peaks?.length) return;
 
-    const normalizedScrollX = ((scrollX % MAP_W) + MAP_W) % MAP_W;
-    const baseOffset = scrollX - normalizedScrollX;
-    const viewWidthInMapUnits = canvasDisplayWidth / zoom;
-    const viewLeft  = scrollX - viewWidthInMapUnits / 2;
-    const viewRight = scrollX + viewWidthInMapUnits / 2;
+    const normalizedScrollX = ((viewport.scrollX % MAP_W) + MAP_W) % MAP_W;
+    const baseOffset = viewport.scrollX - normalizedScrollX;
+    const viewWidthInMapUnits = canvasDisplayWidth / viewport.zoom;
+    const viewLeft  = viewport.scrollX - viewWidthInMapUnits / 2;
+    const viewRight = viewport.scrollX + viewWidthInMapUnits / 2;
 
     ctx.save();
 
@@ -332,17 +177,15 @@ export async function createGeoFeaturesGame({
 
       for (const peak of peaks) {
         const [mx, my] = proj([peak.lon, peak.lat]);
-        const px = (mx + offset - scrollX) * zoom;
-        const py = (my - scrollY) * zoom;
+        const px = (mx + offset - viewport.scrollX) * viewport.zoom;
+        const py = (my - viewport.scrollY) * viewport.zoom;
 
-        // Skip if off screen
         if (px < -20 || px > canvasDisplayWidth + 20 || py < -20 || py > canvasDisplayHeight + 20) continue;
 
         const isCorrect = bonusHighlight  === peak.name;
         const isWrong   = bonusWrongPeak  === peak.name;
 
         if (mode === 'subtle') {
-          // Small upward triangle
           const s = 4;
           ctx.fillStyle = 'rgba(180, 120, 60, 0.85)';
           ctx.beginPath();
@@ -354,7 +197,7 @@ export async function createGeoFeaturesGame({
 
           if (peakLabelsVisible) {
             const labelY = py - s - 3;
-            ctx.font = `bold ${Math.max(9, Math.min(11, zoom * 1.2))}px sans-serif`;
+            ctx.font = `bold ${Math.max(9, Math.min(11, viewport.zoom * 1.2))}px sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
             ctx.strokeStyle = 'rgba(0,0,0,0.7)';
@@ -365,16 +208,13 @@ export async function createGeoFeaturesGame({
             ctx.fillText(peak.name, px, labelY);
           }
         } else {
-          // Interactive mode: prominent circle + outer ring, label only when revealed
           const radius = 10;
-          // Outer glow ring
           const glowColor = isCorrect ? 'rgba(110,231,183,0.45)' : isWrong ? 'rgba(252,165,161,0.45)' : 'rgba(180,120,60,0.35)';
           ctx.beginPath();
           ctx.arc(px, py, radius + 5, 0, Math.PI * 2);
           ctx.strokeStyle = glowColor;
           ctx.lineWidth = 3;
           ctx.stroke();
-          // Main filled circle
           const fillColor = isCorrect ? '#6ee7b7' : isWrong ? '#fda4af' : 'rgba(180, 120, 60, 0.92)';
           ctx.beginPath();
           ctx.arc(px, py, radius, 0, Math.PI * 2);
@@ -389,7 +229,7 @@ export async function createGeoFeaturesGame({
             const labelText = bonusHighlight !== null
               ? `${peak.name}  ${peak.elev} m`
               : peak.name;
-            ctx.font = `bold ${Math.max(9, Math.min(13, zoom * 1.5))}px sans-serif`;
+            ctx.font = `bold ${Math.max(9, Math.min(13, viewport.zoom * 1.5))}px sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'bottom';
             ctx.strokeStyle = 'rgba(0,0,0,0.7)';
@@ -424,15 +264,15 @@ export async function createGeoFeaturesGame({
 
     const zoomX = canvasDisplayWidth  / featureW;
     const zoomY = canvasDisplayHeight / featureH;
-    const newZoom = Math.min(maxZoom, Math.max(minZoom, Math.min(zoomX, zoomY)));
+    const newZoom = Math.min(maxZoom, Math.max(viewport.minZoom, Math.min(zoomX, zoomY)));
 
     const centerX = (x0 + x1) / 2;
     const centerY = (y0 + y1) / 2;
 
-    zoom    = newZoom;
-    scrollX = centerX - canvasDisplayWidth  / (2 * zoom);
-    scrollY = Math.max(0, Math.min(MAP_H - canvasDisplayHeight / zoom,
-              centerY - canvasDisplayHeight / (2 * zoom)));
+    viewport.zoom    = newZoom;
+    viewport.scrollX = centerX - canvasDisplayWidth  / (2 * viewport.zoom);
+    viewport.scrollY = Math.max(0, Math.min(MAP_H - canvasDisplayHeight / viewport.zoom,
+                      centerY - canvasDisplayHeight / (2 * viewport.zoom)));
 
     drawWorldMap();
   }
@@ -445,7 +285,6 @@ export async function createGeoFeaturesGame({
       bonusHighlight = null;
       bonusWrongPeak = null;
       peakLabelsVisible = false;
-      // Re-expose hint button so player can reveal peak names
       if (hintBtn) {
         hintBtn.style.visibility = '';
         hintBtn.style.opacity = '1';
@@ -474,9 +313,9 @@ export async function createGeoFeaturesGame({
       peakLabelsVisible = false;
       if (hintBtn) hintBtn.style.visibility = 'hidden';
       // Reset viewport to initial full-world view
-      zoom    = minZoom;
-      scrollX = MAP_W / 2 - canvasDisplayWidth / (2 * minZoom);
-      scrollY = 0;
+      viewport.zoom    = viewport.minZoom;
+      viewport.scrollX = MAP_W / 2 - canvasDisplayWidth / (2 * viewport.minZoom);
+      viewport.scrollY = 0;
       drawWorldMap();
       if (bonusApi.onEnd) { bonusApi.onEnd(); bonusApi.onEnd = null; }
     },
@@ -486,14 +325,14 @@ export async function createGeoFeaturesGame({
 
   function handleBonusClick(canvasX, canvasY) {
     if (!currentPeaks) return;
-    const mapX = canvasX / zoom + scrollX;
-    const mapY = canvasY / zoom + scrollY;
+    const mapX = canvasX / viewport.zoom + viewport.scrollX;
+    const mapY = canvasY / viewport.zoom + viewport.scrollY;
     const normalizedMapX = ((mapX % MAP_W) + MAP_W) % MAP_W;
     const HIT_RADIUS = 14;
     let hit = null, bestDist = Infinity;
     for (const peak of currentPeaks) {
       const [px, py] = proj([peak.lon, peak.lat]);
-      const dist = Math.sqrt((normalizedMapX - px) ** 2 + (mapY - py) ** 2) * zoom;
+      const dist = Math.sqrt((normalizedMapX - px) ** 2 + (mapY - py) ** 2) * viewport.zoom;
       if (dist < HIT_RADIUS && dist < bestDist) { bestDist = dist; hit = peak; }
     }
     if (hit && bonusApi.onPeakClick) bonusApi.onPeakClick(hit);
@@ -502,10 +341,6 @@ export async function createGeoFeaturesGame({
   function drawWorldMap() {
     if (!countryPaths.length) return;
     ctx.clearRect(0, 0, canvasDisplayWidth, canvasDisplayHeight);
-
-    const viewWidthInMapUnits = canvasDisplayWidth / zoom;
-    const viewLeft  = scrollX - viewWidthInMapUnits / 2;
-    const viewRight = scrollX + viewWidthInMapUnits / 2;
 
     const defaultFill   = getCSSVar('--map-country-fill')   || 'rgba(165,180,252,.08)';
     const defaultStroke = getCSSVar('--map-country-stroke') || 'rgba(232,236,255,.3)';
@@ -518,11 +353,9 @@ export async function createGeoFeaturesGame({
     const missedFill    = getCSSVar('--map-missed-fill')    || 'rgba(251,191,36,0.4)';
     const missedStroke  = getCSSVar('--map-missed-stroke')  || 'rgba(251,191,36,0.9)';
 
-    const normalizedScrollX = ((scrollX % MAP_W) + MAP_W) % MAP_W;
-    const baseOffset = scrollX - normalizedScrollX;
+    const offsets = visibleOffsets(viewport, canvasDisplayWidth);
 
     for (const country of countryPaths) {
-      // Resolve GeoJSON ADMIN name to window.DATA name for highlight lookup
       const dataName = geoToData[country.name] || resolveToDataName(country.name);
       const ht = dataName ? highlights.get(dataName) : null;
 
@@ -540,11 +373,8 @@ export async function createGeoFeaturesGame({
         fillStyle = missedFill;   strokeStyle = missedStroke;   strokeWidth = 1.2;
       }
 
-      for (let i = -1; i <= 1; i++) {
-        const offset = baseOffset + i * MAP_W;
-        if (offset + MAP_W >= viewLeft && offset <= viewRight) {
-          drawCountry(country.paths, offset, fillStyle, strokeStyle, strokeWidth);
-        }
+      for (const offset of offsets) {
+        drawCountry(ctx, viewport, country.paths, offset, fillStyle, strokeStyle, strokeWidth);
       }
     }
 
@@ -561,192 +391,12 @@ export async function createGeoFeaturesGame({
   // ── Canvas resize ─────────────────────────────────────────────────────────
 
   function resizeCanvas() {
-    const rect = canvas.parentElement.getBoundingClientRect();
-    canvasDisplayWidth  = rect.width;
-    canvasDisplayHeight = rect.height;
-
-    minZoom = Math.max(canvasDisplayHeight / MAP_H, canvasDisplayWidth / MAP_W);
-    if (zoom < minZoom) zoom = minZoom;
-
-    canvas.style.width  = `${canvasDisplayWidth}px`;
-    canvas.style.height = `${canvasDisplayHeight}px`;
-    canvas.width  = canvasDisplayWidth * dpr;
-    canvas.height = canvasDisplayHeight * dpr;
-
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-    ctx.scale(dpr, dpr);
+    const { w, h, minZoom } = setupCanvas(canvas, ctx, dpr, canvas.parentElement);
+    canvasDisplayWidth  = w;
+    canvasDisplayHeight = h;
+    viewport.minZoom = minZoom;
+    if (viewport.zoom < minZoom) viewport.zoom = minZoom;
     drawWorldMap();
-  }
-
-  // ── Pan / zoom interaction ────────────────────────────────────────────────
-
-  function attachCanvasInteraction() {
-    const FRICTION    = 0.95;
-    const MIN_VELOCITY = 0.1;
-
-    function animate() {
-      if (Math.abs(velocityX) > MIN_VELOCITY || Math.abs(velocityY) > MIN_VELOCITY) {
-        scrollX += velocityX;
-        scrollY += velocityY;
-        const maxScrollY = Math.max(0, MAP_H - canvasDisplayHeight / zoom);
-        if (scrollY < 0)          { scrollY = 0;          velocityY = 0; }
-        if (scrollY > maxScrollY) { scrollY = maxScrollY; velocityY = 0; }
-        velocityX *= FRICTION;
-        velocityY *= FRICTION;
-        drawWorldMap();
-        animationFrameId = requestAnimationFrame(animate);
-      } else {
-        velocityX = velocityY = 0;
-        animationFrameId = null;
-      }
-    }
-
-    function startAnimation() {
-      if (!animationFrameId) animationFrameId = requestAnimationFrame(animate);
-    }
-
-    canvas.addEventListener('wheel', (e) => {
-      e.preventDefault();
-      const rect = canvas.getBoundingClientRect();
-      const mouseX = e.clientX - rect.left;
-      const mouseY = e.clientY - rect.top;
-      const factor  = e.deltaY > 0 ? 0.9 : 1.1;
-      const newZoom = Math.max(minZoom, Math.min(500, zoom * factor));
-      const mapXBefore = mouseX / zoom + scrollX;
-      const mapYBefore = mouseY / zoom + scrollY;
-      zoom    = newZoom;
-      scrollX = mapXBefore - mouseX / zoom;
-      scrollY = Math.max(0, Math.min(Math.max(0, MAP_H - canvasDisplayHeight / zoom),
-                mapYBefore - mouseY / zoom));
-      drawWorldMap();
-    }, { passive: false });
-
-    let isPointerDown = false;
-    let startX = 0, startY = 0, lastX = 0, lastY = 0, lastTime = 0;
-    let isDragging = false;
-    let touches = [];
-    let initialPinchDist = 0, initialZoom = 1;
-    let wasRecentlyPinching = false, pinchTimer = null, hadPinch = false;
-
-    function getDistance(t1, t2) {
-      const dx = t1.clientX - t2.clientX;
-      const dy = t1.clientY - t2.clientY;
-      return Math.sqrt(dx * dx + dy * dy);
-    }
-
-    canvas.addEventListener('pointerdown', (e) => {
-      e.preventDefault();
-      if (e.pointerType === 'touch') {
-        touches.push(e);
-        if (touches.length === 2) {
-          initialPinchDist = getDistance(touches[0], touches[1]);
-          initialZoom = zoom;
-          isDragging = false;
-          hadPinch = true;
-        } else if (touches.length === 1) {
-          hadPinch = false;
-          isPointerDown = true;
-          const rect = canvas.getBoundingClientRect();
-          startX = lastX = e.clientX - rect.left;
-          startY = lastY = e.clientY - rect.top;
-          lastTime = Date.now();
-          velocityX = velocityY = 0;
-          isDragging = false;
-        }
-      } else {
-        isPointerDown = true;
-        const rect = canvas.getBoundingClientRect();
-        startX = lastX = e.clientX - rect.left;
-        startY = lastY = e.clientY - rect.top;
-        lastTime = Date.now();
-        velocityX = velocityY = 0;
-        isDragging = false;
-      }
-    });
-
-    canvas.addEventListener('pointermove', (e) => {
-      e.preventDefault();
-      const rect = canvas.getBoundingClientRect();
-      const currentX = e.clientX - rect.left;
-      const currentY = e.clientY - rect.top;
-
-      if (e.pointerType === 'touch') {
-        const idx = touches.findIndex(t => t.pointerId === e.pointerId);
-        if (idx >= 0) touches[idx] = e;
-
-        if (touches.length === 2) {
-          isDragging = isPointerDown = false;
-          const midX = (touches[0].clientX + touches[1].clientX) / 2 - rect.left;
-          const midY = (touches[0].clientY + touches[1].clientY) / 2 - rect.top;
-          const mapXB = midX / zoom + scrollX;
-          const mapYB = midY / zoom + scrollY;
-          const scale  = getDistance(touches[0], touches[1]) / initialPinchDist;
-          const newZoom = Math.max(minZoom, Math.min(500, initialZoom * scale));
-          scrollX = mapXB - midX / newZoom;
-          scrollY = Math.max(0, Math.min(Math.max(0, MAP_H - canvasDisplayHeight / newZoom),
-                    mapYB - midY / newZoom));
-          zoom = newZoom;
-          drawWorldMap();
-          return;
-        } else if (hadPinch && touches.length === 1) {
-          wasRecentlyPinching = true;
-          if (pinchTimer) clearTimeout(pinchTimer);
-          pinchTimer = setTimeout(() => { wasRecentlyPinching = false; }, 400);
-        }
-      }
-
-      if (isPointerDown) {
-        const dx = currentX - lastX;
-        const dy = currentY - lastY;
-        const dt = Date.now() - lastTime;
-        if (Math.abs(currentX - startX) > 5 || Math.abs(currentY - startY) > 5) {
-          isDragging = true;
-        }
-        scrollX -= dx / zoom;
-        scrollY  = Math.max(0, Math.min(Math.max(0, MAP_H - canvasDisplayHeight / zoom),
-                   scrollY - dy / zoom));
-        if (dt > 0) { velocityX = -dx / zoom; velocityY = -dy / zoom; }
-        lastX = currentX; lastY = currentY; lastTime = Date.now();
-        drawWorldMap();
-      }
-    });
-
-    canvas.addEventListener('pointerup', (e) => {
-      if (e.pointerType === 'touch') {
-        touches = touches.filter(t => t.pointerId !== e.pointerId);
-        if (hadPinch && touches.length === 0) {
-          wasRecentlyPinching = true;
-          hadPinch = false;
-          if (pinchTimer) clearTimeout(pinchTimer);
-          pinchTimer = setTimeout(() => { wasRecentlyPinching = false; }, 400);
-        }
-        if (touches.length === 0) {
-          isPointerDown = false;
-          if (!isDragging && !wasRecentlyPinching && (roundActive && !submitted || bonusPhase)) {
-            const rect = canvas.getBoundingClientRect();
-            handleMapClick(e.clientX - rect.left, e.clientY - rect.top);
-          } else {
-            startAnimation();
-          }
-        }
-      } else {
-        if (!isDragging && (roundActive && !submitted || bonusPhase)) {
-          const rect = canvas.getBoundingClientRect();
-          handleMapClick(e.clientX - rect.left, e.clientY - rect.top);
-        } else {
-          startAnimation();
-        }
-        isPointerDown = false;
-      }
-    });
-
-    canvas.addEventListener('pointercancel', () => {
-      isPointerDown = false;
-      touches = [];
-    });
-
-    canvas.style.touchAction = 'none';
-    canvas.style.cursor = 'pointer';
   }
 
   // ── Map click handler ─────────────────────────────────────────────────────
@@ -768,14 +418,12 @@ export async function createGeoFeaturesGame({
   // ── Button bar (absolute overlay inside mapwrap) ──────────────────────────
 
   function createButtons() {
-    // 💡 Hint button — bottom-right corner, styled like Heritage game
     hintBtn = document.createElement('button');
     hintBtn.className = 'picture-hint-btn';
     hintBtn.title = 'Show hint (−1 point)';
     hintBtn.textContent = '💡';
     container.appendChild(hintBtn);
 
-    // Submit / Next bar — centered at bottom
     const bar = document.createElement('div');
     bar.style.cssText = `
       position: absolute;
@@ -819,7 +467,6 @@ export async function createGeoFeaturesGame({
     bar.appendChild(nextBtn);
     bar.appendChild(bonusBtn);
 
-    // Hint panel — floating box inside mapwrap, same style as Find the Country
     hintPanel = document.createElement('div');
     hintPanel.className = 'find-hint-panel';
     hintPanel.innerHTML =
@@ -833,7 +480,6 @@ export async function createGeoFeaturesGame({
 
     hintBtn.addEventListener('click', () => {
       if (bonusPhase) {
-        // During bonus: reveal peak labels on the map
         if (!peakLabelsVisible) {
           peakLabelsVisible = true;
           hintBtn.style.opacity = '0.5';
@@ -841,7 +487,6 @@ export async function createGeoFeaturesGame({
         }
         return;
       }
-      // Country-selection phase: show range hint text
       if (hintPanel.classList.contains('visible')) {
         hintPanel.classList.remove('visible');
         return;
@@ -885,24 +530,21 @@ export async function createGeoFeaturesGame({
     roundActive = false;
 
     submitBtn.style.display  = 'none';
-    hintBtn.style.visibility = 'hidden'; // keep layout stable, just hide it
+    hintBtn.style.visibility = 'hidden';
     if (hintPanel) hintPanel.classList.remove('visible');
 
     const result = logic.submitAnswer();
     if (!result) return;
 
-    // Update map highlights
     highlights = new Map();
     for (const c of result.correct) highlights.set(c, 'correct');
     for (const c of result.wrong)   highlights.set(c, 'wrong');
     for (const c of result.missed)  highlights.set(c, 'missed');
 
-    // Celebrate a perfect round (no wrong clicks, no missed countries)
     if (result.wrong.size === 0 && result.missed.size === 0 && result.correct.size > 0) {
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
     }
 
-    // Show result on map; peaks appear as subtle markers (no path dots for mountains)
     currentFeatureOverlay = logic.current;
     currentPeaks = (featureType === 'mountain') ? (logic.current?.peaks || null) : null;
     drawWorldMap();
@@ -912,7 +554,6 @@ export async function createGeoFeaturesGame({
     nextBtn.textContent   = logic.isComplete() ? 'Finish' : 'Next →';
     nextBtn.style.display = '';
 
-    // Show bonus button alongside Next so player can optionally play the peak challenge
     if (onBonusRound && logic.current?.peaks?.length) {
       pendingBonusFeature = logic.current;
       bonusBtn.style.display = '';
@@ -924,15 +565,12 @@ export async function createGeoFeaturesGame({
     bonusPhase = true;
     await onBonusRound(feature, bonusApi);
 
-    // Peak was clicked — stay zoomed in on the result; show Next while still in bonus view
     nextBtn.textContent = logic.isComplete() ? 'Finish' : 'Next →';
     nextBtn.style.display = '';
 
-    // Wait for user to click Next/Finish before zooming back out
     await new Promise(resolve => { bonusNextResolve = resolve; });
     bonusNextResolve = null;
 
-    // End bonus mode: resets zoom, hides hint button, fires onEnd cleanup
     bonusPhase = false;
     bonusApi.endBonusMode();
     doNextRound();
@@ -1051,11 +689,16 @@ export async function createGeoFeaturesGame({
 
   resizeCanvas();
   // Center on Greenwich meridian
-  scrollX = MAP_W / 2 - canvasDisplayWidth / (2 * zoom);
+  viewport.scrollX = MAP_W / 2 - canvasDisplayWidth / (2 * viewport.zoom);
   window.addEventListener('resize', resizeCanvas);
 
   createButtons();
-  attachCanvasInteraction();
+
+  createPanZoom(canvas, viewport, drawWorldMap, {
+    onTap(canvasX, canvasY) {
+      handleMapClick(canvasX, canvasY);
+    },
+  });
 
   // Wikipedia link on the feature name
   if (featureNameEl) {
