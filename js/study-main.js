@@ -74,7 +74,7 @@ for (const feature of placesData.features) {
 // ── Drawing ───────────────────────────────────────────────────────────────────
 
 function drawLabel(text, x, y, fontSize, opts = {}) {
-  const { color = 'rgba(255,255,255,0.92)', shadowColor = 'rgba(0,0,0,0.7)', shadowWidth = 3 } = opts;
+  const { color, shadowColor, shadowWidth = opts.lightMode ? 4 : 3 } = opts;
   ctx.font = `${opts.bold ? '700' : '500'} ${fontSize}px "DM Sans", sans-serif`;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
@@ -89,9 +89,19 @@ function drawLabel(text, x, y, fontSize, opts = {}) {
 function drawWorldMap() {
   ctx.clearRect(0, 0, canvasDisplayWidth, canvasDisplayHeight);
 
+  const isLight = document.documentElement.classList.contains('light-mode');
+
   const defaultFill   = getCSSVar('--map-country-fill')   || 'rgba(165,180,252,.08)';
   const defaultStroke = getCSSVar('--map-country-stroke') || 'rgba(232,236,255,.3)';
   const hoverFill     = getCSSVar('--map-country-fill-highlight') || 'rgba(165,180,252,.25)';
+
+  // Theme-aware label and dot colors
+  const labelColor  = isLight ? 'rgba(15,20,40,0.88)'    : 'rgba(255,255,255,0.92)';
+  const labelHalo   = isLight ? 'rgba(255,255,255,0.88)' : 'rgba(0,0,0,0.7)';
+  const dotFill     = isLight ? 'rgba(220,38,38,1)'      : 'rgba(255,255,255,0.85)';
+  const dotStroke   = isLight ? null                     : 'rgba(0,0,0,0.4)';
+  const capColor    = isLight ? 'rgba(15,20,40,0.88)'    : 'rgba(255,255,255,0.9)';
+  const capHalo     = isLight ? 'rgba(255,255,255,0.88)' : 'rgba(0,0,0,0.65)';
 
   const offsets = visibleOffsets(viewport, canvasDisplayWidth);
 
@@ -136,7 +146,7 @@ function drawWorldMap() {
         // Skip if centroid is off-screen (with generous margin for labels)
         if (cx < -80 || cx > canvasDisplayWidth + 80 || cy < -20 || cy > canvasDisplayHeight + 20) continue;
 
-        drawLabel(label, cx, cy, fontSize, { bold: renderedSize > 60 });
+        drawLabel(label, cx, cy, fontSize, { bold: renderedSize > 60, color: labelColor, shadowColor: labelHalo, lightMode: isLight });
       }
     }
     ctx.restore();
@@ -155,13 +165,22 @@ function drawWorldMap() {
 
       if (px < -10 || px > canvasDisplayWidth + 10 || py < -10 || py > canvasDisplayHeight + 10) continue;
 
+      if (isLight) {
+        // White halo ring so the dot is visible against any map background
+        ctx.beginPath();
+        ctx.arc(px, py, dotR + 1.5, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.fill();
+      }
       ctx.beginPath();
       ctx.arc(px, py, dotR, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255,255,255,0.85)';
+      ctx.fillStyle = dotFill;
       ctx.fill();
-      ctx.strokeStyle = 'rgba(0,0,0,0.4)';
-      ctx.lineWidth = 0.5;
-      ctx.stroke();
+      if (dotStroke) {
+        ctx.strokeStyle = dotStroke;
+        ctx.lineWidth = 0.5;
+        ctx.stroke();
+      }
     }
   }
 
@@ -183,10 +202,10 @@ function drawWorldMap() {
         ctx.textBaseline = 'middle';
         ctx.font = `500 ${fontSize}px "DM Sans", sans-serif`;
         ctx.lineJoin = 'round';
-        ctx.strokeStyle = 'rgba(0,0,0,0.65)';
+        ctx.strokeStyle = capHalo;
         ctx.lineWidth = 3;
         ctx.strokeText(cap.name, px + dotR + 3, py);
-        ctx.fillStyle = 'rgba(255,255,255,0.9)';
+        ctx.fillStyle = capColor;
         ctx.fillText(cap.name, px + dotR + 3, py);
       }
     }
@@ -256,16 +275,17 @@ function createMapToggles() {
   const btnCountry = document.createElement('button');
   btnCountry.className = 'study-toggle-btn';
   btnCountry.title = 'Toggle country names';
-  btnCountry.textContent = 'Aa';
+  btnCountry.textContent = '🏷️';
 
   const btnCapital = document.createElement('button');
   btnCapital.className = 'study-toggle-btn';
   btnCapital.title = 'Toggle capital names';
   btnCapital.textContent = '★';
+  btnCapital.style.color = '#fbbf24';
 
-  // Stack: capital on top, country on bottom
-  bar.appendChild(btnCapital);
+  // Stack: country on top, capital on bottom
   bar.appendChild(btnCountry);
+  bar.appendChild(btnCapital);
   mapwrap.appendChild(bar);
 
   btnCountry.addEventListener('click', () => {
