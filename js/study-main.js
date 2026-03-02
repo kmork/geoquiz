@@ -38,7 +38,7 @@ let hoveredOverlay = null;
 
 // Label toggle state
 let showCountryNames = false;
-let showCapitalNames = false;
+let capitalMode = 0; // 0 = off, 1 = dots, 2 = dots + names
 
 // Overlay toggle state
 let showRivers    = false;
@@ -268,42 +268,12 @@ function drawWorldMap() {
     ctx.restore();
   }
 
-  // ── Capital dots ───────────────────────────────────────────────────────────
+  // ── Capital dots + names ───────────────────────────────────────────────────
 
-  const dotR = Math.max(1.5, 2.5 / viewport.zoom);
-  ctx.save();
-  for (const [, cap] of capitalDots) {
-    const [mx, my] = proj([cap.lon, cap.lat]);
+  if (capitalMode > 0) {
+    const dotR = Math.max(1.5, 2.5 / viewport.zoom);
+    ctx.save();
 
-    for (const offset of offsets) {
-      const px = (mx + offset - viewport.scrollX) * viewport.zoom;
-      const py = (my - viewport.scrollY) * viewport.zoom;
-
-      if (px < -10 || px > canvasDisplayWidth + 10 || py < -10 || py > canvasDisplayHeight + 10) continue;
-
-      if (isLight) {
-        // White halo ring so the dot is visible against any map background
-        ctx.beginPath();
-        ctx.arc(px, py, dotR + 1.5, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255,255,255,0.9)';
-        ctx.fill();
-      }
-      ctx.beginPath();
-      ctx.arc(px, py, dotR, 0, Math.PI * 2);
-      ctx.fillStyle = dotFill;
-      ctx.fill();
-      if (dotStroke) {
-        ctx.strokeStyle = dotStroke;
-        ctx.lineWidth = 0.5;
-        ctx.stroke();
-      }
-    }
-  }
-
-  // ── Capital name labels ────────────────────────────────────────────────────
-
-  if (showCapitalNames && viewport.zoom > 1.5) {
-    const fontSize = Math.max(9, Math.min(12, viewport.zoom * 2.5));
     for (const [, cap] of capitalDots) {
       const [mx, my] = proj([cap.lon, cap.lat]);
 
@@ -311,23 +281,52 @@ function drawWorldMap() {
         const px = (mx + offset - viewport.scrollX) * viewport.zoom;
         const py = (my - viewport.scrollY) * viewport.zoom;
 
-        if (px < -80 || px > canvasDisplayWidth + 80 || py < -20 || py > canvasDisplayHeight + 20) continue;
+        if (px < -10 || px > canvasDisplayWidth + 10 || py < -10 || py > canvasDisplayHeight + 10) continue;
 
-        // Label to the right of the dot
-        ctx.textAlign = 'left';
-        ctx.textBaseline = 'middle';
-        ctx.font = `500 ${fontSize}px "DM Sans", sans-serif`;
-        ctx.lineJoin = 'round';
-        ctx.strokeStyle = capHalo;
-        ctx.lineWidth = 3;
-        ctx.strokeText(cap.name, px + dotR + 3, py);
-        ctx.fillStyle = capColor;
-        ctx.fillText(cap.name, px + dotR + 3, py);
+        if (isLight) {
+          ctx.beginPath();
+          ctx.arc(px, py, dotR + 1.5, 0, Math.PI * 2);
+          ctx.fillStyle = 'rgba(255,255,255,0.9)';
+          ctx.fill();
+        }
+        ctx.beginPath();
+        ctx.arc(px, py, dotR, 0, Math.PI * 2);
+        ctx.fillStyle = dotFill;
+        ctx.fill();
+        if (dotStroke) {
+          ctx.strokeStyle = dotStroke;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
       }
     }
-  }
 
-  ctx.restore();
+    if (capitalMode === 2 && viewport.zoom > 1.5) {
+      const fontSize = Math.max(9, Math.min(12, viewport.zoom * 2.5));
+      for (const [, cap] of capitalDots) {
+        const [mx, my] = proj([cap.lon, cap.lat]);
+
+        for (const offset of offsets) {
+          const px = (mx + offset - viewport.scrollX) * viewport.zoom;
+          const py = (my - viewport.scrollY) * viewport.zoom;
+
+          if (px < -80 || px > canvasDisplayWidth + 80 || py < -20 || py > canvasDisplayHeight + 20) continue;
+
+          ctx.textAlign = 'left';
+          ctx.textBaseline = 'middle';
+          ctx.font = `500 ${fontSize}px "DM Sans", sans-serif`;
+          ctx.lineJoin = 'round';
+          ctx.strokeStyle = capHalo;
+          ctx.lineWidth = 3;
+          ctx.strokeText(cap.name, px + dotR + 3, py);
+          ctx.fillStyle = capColor;
+          ctx.fillText(cap.name, px + dotR + 3, py);
+        }
+      }
+    }
+
+    ctx.restore();
+  }
 }
 
 // ── Info panel ────────────────────────────────────────────────────────────────
@@ -349,7 +348,7 @@ function updateInfoPanel(dataName) {
   const props = geoPropsMap.get(norm(geoName));
 
   const iso2 = countriesFlags[dataName] || (props?.ISO_A2 !== '-99' ? props?.ISO_A2?.toLowerCase() : props?.ISO_A2_EH?.toLowerCase());
-  const flagSrc = iso2 ? `img/flags/${iso2}.svg` : '';
+  const flagSrc = (iso2 && iso2 !== '-99') ? `img/flags/${iso2}.svg` : '';
   const subregion = props?.SUBREGION || props?.CONTINENT || '';
   const entry = (window.DATA || []).find(d => d.country === dataName);
   const capital = entry?.capitals?.[0] || '—';
@@ -540,9 +539,10 @@ function createMapToggles() {
 
   const btnCapital = document.createElement('button');
   btnCapital.className = 'study-toggle-btn';
-  btnCapital.title = 'Toggle capital names';
+  btnCapital.title = 'Show capital dots';
   btnCapital.textContent = '★';
   btnCapital.style.color = '#fbbf24';
+  btnCapital.dataset.mode = '0';
 
   const btnRivers = document.createElement('button');
   btnRivers.className = 'study-toggle-btn';
@@ -574,8 +574,11 @@ function createMapToggles() {
   });
 
   btnCapital.addEventListener('click', () => {
-    showCapitalNames = !showCapitalNames;
-    btnCapital.classList.toggle('active', showCapitalNames);
+    capitalMode = (capitalMode + 1) % 3;
+    btnCapital.dataset.mode = capitalMode;
+    btnCapital.classList.toggle('active', capitalMode > 0);
+    const titles = ['Show capital dots', 'Show capital names', 'Hide capitals'];
+    btnCapital.title = titles[capitalMode];
     drawWorldMap();
   });
 
