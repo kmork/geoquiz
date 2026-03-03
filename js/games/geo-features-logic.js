@@ -18,9 +18,10 @@ export class GeoFeaturesGameLogic {
    * @param {Array}  config.features   - Array of feature objects from JSON
    * @param {number} [config.maxRounds=Infinity] - How many rounds to play
    */
-  constructor({ features, maxRounds = Infinity }) {
+  constructor({ features, maxRounds = Infinity, pickOne = false }) {
     this.allFeatures = features;
     this.maxRounds = maxRounds;
+    this.pickOne = pickOne;
 
     this.deck = [];
     this.current = null;
@@ -75,6 +76,9 @@ export class GeoFeaturesGameLogic {
       this.selectedCountries.delete(name);
       return 'removed';
     }
+    if (this.pickOne) {
+      this.selectedCountries.clear();
+    }
     this.selectedCountries.add(name);
     return 'added';
   }
@@ -104,10 +108,12 @@ export class GeoFeaturesGameLogic {
     const missed  = new Set([...correctSet].filter(c => !selected.has(c)));
 
     const hintPenalty = this.hintUsed ? 1 : 0;
-    const pointsThisRound = Math.max(0, correct.size - wrong.size - hintPenalty);
+    const pointsThisRound = this.pickOne
+      ? Math.max(0, (correct.size > 0 && wrong.size === 0 ? 2 : 0) - hintPenalty)
+      : Math.max(0, correct.size - wrong.size - hintPenalty);
 
     this.score += pointsThisRound;
-    this.totalPossible += correctSet.size;
+    this.totalPossible += this.pickOne ? 2 : correctSet.size;
 
     const time = this.startTime ? (Date.now() - this.startTime) / 1000 : 0;
     return { correct, wrong, missed, pointsThisRound, time };

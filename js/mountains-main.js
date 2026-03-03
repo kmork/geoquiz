@@ -1,8 +1,10 @@
 import { GeoFeaturesGameLogic } from './games/geo-features-logic.js';
 import { createGeoFeaturesGame } from './geo-features-complete.js';
 
-// Mountains always plays all 16 ranges
-const gameId = 'mountains-all';
+const params    = new URLSearchParams(location.search);
+const modeParam = params.get('mode');
+const pickOne   = modeParam === 'easy';
+const gameId    = pickOne ? 'mountains-easy-all' : 'mountains-all';
 
 const initOverlay   = document.getElementById('init-overlay');
 const canvas        = document.getElementById('map');
@@ -13,6 +15,10 @@ const finalOverlay  = document.getElementById('finalOverlay');
 
 if (initOverlay) {
   initOverlay.style.display = 'flex';
+}
+if (pickOne) {
+  const desc = document.getElementById('game-desc');
+  if (desc) desc.textContent = 'Click one country the mountain range spans, then submit your answer.';
 }
 
 let bonusScore = 0;
@@ -61,7 +67,7 @@ async function onBonusRound(feature, api) {
   try {
     const features = await fetch('data/mountains.json').then(r => r.json());
 
-    const logic = new GeoFeaturesGameLogic({ features, maxRounds: Infinity });
+    const logic = new GeoFeaturesGameLogic({ features, maxRounds: Infinity, pickOne });
 
     canvas.parentElement.appendChild(bonusOverlay);
 
@@ -75,10 +81,11 @@ async function onBonusRound(feature, api) {
       logic,
       featureType:  'mountain',
       gameId,
+      pickOne,
       initOverlay,
-      onBonusRound,
-      getExtraScore:    () => bonusScore,
-      getExtraMaxScore: () => logic.getProgress().total,
+      onBonusRound:     pickOne ? null : onBonusRound,
+      getExtraScore:    pickOne ? null : () => bonusScore,
+      getExtraMaxScore: pickOne ? null : () => logic.getProgress().total,
       onPlayAgainHook:  () => { bonusScore = 0; },
     });
   } catch (err) {

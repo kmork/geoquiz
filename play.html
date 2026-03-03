@@ -604,9 +604,11 @@
         icon: `<div class="game-icon-large">🌵</div>`,
         noContinent: true,
         customDifficulties: [
-          { key: 'rivers-short', url: 'rivers.html',    urlParam: 'rounds=10',  label: 'Rivers – Normal',    emoji: '🐟', desc: '10 rivers' },
-          { key: 'rivers-long',  url: 'rivers.html',    urlParam: 'rounds=all', label: 'Rivers – All',      emoji: '🐟', desc: 'All 22 rivers' },
-          { key: 'mountains-all',url: 'mountains.html', urlParam: '',           label: 'Mountain Ranges',   emoji: '⛰️', desc: 'All 16 ranges' },
+          { key: 'rivers-easy-short',  url: 'rivers.html',    urlParam: 'rounds=10&mode=easy', label: 'Rivers – Easy',     emoji: '🐟', desc: '10 rivers · pick one country' },
+          { key: 'rivers-short',       url: 'rivers.html',    urlParam: 'rounds=10',           label: 'Rivers – Hard',     emoji: '🐟', desc: '10 rivers · pick all countries' },
+          { key: 'rivers-long',        url: 'rivers.html',    urlParam: 'rounds=all',          label: 'Rivers – All',      emoji: '🐟', desc: 'All 22 rivers · pick all countries' },
+          { key: 'mountains-easy-all', url: 'mountains.html', urlParam: 'mode=easy',           label: 'Mountains – Easy',  emoji: '⛰️', desc: '16 ranges · pick one country' },
+          { key: 'mountains-all',      url: 'mountains.html', urlParam: '',                    label: 'Mountains – Hard',  emoji: '⛰️', desc: '16 ranges · pick all countries' },
         ],
       },
       'capital-pairs': {

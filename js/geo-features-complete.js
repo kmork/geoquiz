@@ -38,6 +38,7 @@ import {
  * @param {Function}           [config.getExtraScore]    - () => number
  * @param {Function}           [config.getExtraMaxScore] - () => number
  * @param {Function}           [config.onPlayAgainHook]  - Called at start of startGame()
+ * @param {boolean}            [config.pickOne=false]    - Easy mode: pick one country per feature
  * @returns {Promise<void>}
  */
 export async function createGeoFeaturesGame({
@@ -56,6 +57,7 @@ export async function createGeoFeaturesGame({
   getExtraScore = null,
   getExtraMaxScore = null,
   onPlayAgainHook = null,
+  pickOne = false,
 }) {
   const confetti = initConfetti('confetti');
 
@@ -408,6 +410,11 @@ export async function createGeoFeaturesGame({
     if (!name) return;
     const action = logic.toggleCountry(name);
     if (action === 'added') {
+      if (pickOne) {
+        for (const [k, v] of highlights) {
+          if (v === 'selected') highlights.delete(k);
+        }
+      }
       highlights.set(name, 'selected');
     } else {
       highlights.delete(name);
@@ -541,7 +548,7 @@ export async function createGeoFeaturesGame({
     for (const c of result.wrong)   highlights.set(c, 'wrong');
     for (const c of result.missed)  highlights.set(c, 'missed');
 
-    if (result.wrong.size === 0 && result.missed.size === 0 && result.correct.size > 0) {
+    if (result.wrong.size === 0 && result.correct.size > 0 && (pickOne || result.missed.size === 0)) {
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
     }
 
@@ -626,7 +633,7 @@ export async function createGeoFeaturesGame({
       : 0;
 
     const stats = [
-      { label: 'countries identified', value: p.score },
+      { label: pickOne ? 'correct answers' : 'countries identified', value: p.score },
     ];
     if (extraMax > 0) {
       stats.push({ label: 'bonus peaks found', value: extra });
