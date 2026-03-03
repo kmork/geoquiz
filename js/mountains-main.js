@@ -1,10 +1,13 @@
 import { GeoFeaturesGameLogic } from './games/geo-features-logic.js';
 import { createGeoFeaturesGame } from './geo-features-complete.js';
 
-const params    = new URLSearchParams(location.search);
-const modeParam = params.get('mode');
-const pickOne   = modeParam === 'easy';
-const gameId    = pickOne ? 'mountains-easy-all' : 'mountains-all';
+const params      = new URLSearchParams(location.search);
+const modeParam   = params.get('mode');
+const roundsParam = params.get('rounds') || 'all';
+const maxRounds   = roundsParam === 'all' ? Infinity : (parseInt(roundsParam) || 10);
+const pickOne     = modeParam === 'easy';
+const gameIdSuffix = roundsParam === 'all' ? 'all' : 'short';
+const gameId      = pickOne ? `mountains-easy-${gameIdSuffix}` : `mountains-${gameIdSuffix}`;
 
 const initOverlay   = document.getElementById('init-overlay');
 const canvas        = document.getElementById('map');
@@ -67,7 +70,7 @@ async function onBonusRound(feature, api) {
   try {
     const features = await fetch('data/mountains.json').then(r => r.json());
 
-    const logic = new GeoFeaturesGameLogic({ features, maxRounds: Infinity, pickOne });
+    const logic = new GeoFeaturesGameLogic({ features, maxRounds, pickOne });
 
     canvas.parentElement.appendChild(bonusOverlay);
 
