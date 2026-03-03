@@ -1,0 +1,688 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Geo Quiz - Choose Region</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <script>
+    (function() {
+      const saved = localStorage.getItem('geoquiz-theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const theme = saved || system;
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+    })();
+  </script>
+  <style>
+    * { box-sizing: border-box; }
+
+    :root {
+      --bg-primary: #0f172a;
+      --bg-gradient-1: rgba(59, 130, 246, 0.1);
+      --bg-gradient-2: rgba(139, 92, 246, 0.1);
+      --text-primary: #ffffff;
+      --text-secondary: #94a3b8;
+      --accent-color: #3b82f6;
+      --accent-color-rgb: 59, 130, 246;
+      --dot-color: rgba(59, 130, 246, 0.3);
+      --card-bg: rgba(255, 255, 255, 0.05);
+      --card-bg-hover: rgba(255, 255, 255, 0.1);
+      --card-border: rgba(255, 255, 255, 0.1);
+      --card-border-hover: rgba(59, 130, 246, 0.5);
+      --card-shadow: rgba(59, 130, 246, 0.3);
+      --button-bg: rgba(59, 130, 246, 0.2);
+      --button-bg-hover: rgba(59, 130, 246, 0.4);
+      --button-border: rgba(59, 130, 246, 0.4);
+      --button-border-hover: rgba(59, 130, 246, 0.6);
+      --button-text: #60a5fa;
+      --button-text-hover: #ffffff;
+      --globe-gradient-1: #3b82f6;
+      --globe-gradient-2: #8b5cf6;
+      --ring-color: rgba(59, 130, 246, 0.3);
+    }
+
+    html.light-mode,
+    body.light-mode {
+      --bg-primary: linear-gradient(to bottom, #f8fafc 0%, #e2e8f0 100%);
+      --bg-gradient-1: rgba(59, 130, 246, 0.05);
+      --bg-gradient-2: rgba(139, 92, 246, 0.05);
+      --text-primary: #0f172a;
+      --text-secondary: #64748b;
+      --accent-color: #2563eb;
+      --accent-color-rgb: 37, 99, 235;
+      --dot-color: rgba(100, 116, 139, 0.15);
+      --card-bg: rgba(255, 255, 255, 0.9);
+      --card-bg-hover: rgba(255, 255, 255, 1);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --card-border-hover: rgba(37, 99, 235, 0.4);
+      --card-shadow: rgba(0, 0, 0, 0.1);
+      --button-bg: rgba(37, 99, 235, 0.1);
+      --button-bg-hover: rgba(37, 99, 235, 0.2);
+      --button-border: rgba(37, 99, 235, 0.3);
+      --button-border-hover: rgba(37, 99, 235, 0.5);
+      --button-text: #2563eb;
+      --button-text-hover: #1e40af;
+      --globe-gradient-1: #1e3a8a;
+      --globe-gradient-2: #581c87;
+      --ring-color: rgba(59, 130, 246, 0.2);
+    }
+
+    body {
+      margin: 0;
+      font-family: "DM Sans", system-ui, -apple-system, sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .map-background {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background:
+        radial-gradient(circle at 20% 50%, var(--bg-gradient-1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 50%, var(--bg-gradient-2) 0%, transparent 50%);
+      z-index: 0;
+    }
+
+    .map-dots {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-image: radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
+      background-size: 50px 50px;
+      opacity: 0.3;
+      animation: map-float 20s ease-in-out infinite;
+    }
+
+    @keyframes map-float {
+      0%, 100% { transform: translate(0, 0); }
+      50% { transform: translate(-20px, -20px); }
+    }
+
+    .content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 40px 24px 32px;
+    }
+
+    .game-header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    .game-icon-large {
+      font-size: 48px;
+      line-height: 1;
+      display: block;
+      text-align: center;
+      margin: 0 auto 10px;
+    }
+
+    .game-title {
+      display: block;
+      font-size: 28px;
+      font-weight: 800;
+      margin: 0 0 10px;
+      background: linear-gradient(135deg, var(--globe-gradient-1) 0%, var(--globe-gradient-2) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      text-decoration: none;
+    }
+
+    .game-desc {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin: 0;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .diff-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      padding: 20px 16px;
+      text-decoration: none;
+      color: var(--text-primary);
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .diff-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: linear-gradient(135deg,
+        rgba(var(--accent-color-rgb), 0.15) 0%,
+        rgba(var(--accent-color-rgb), 0.05) 100%);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .diff-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--card-border-hover);
+      box-shadow: 0 16px 48px var(--card-shadow);
+    }
+
+    .diff-card:hover::before {
+      opacity: 1;
+    }
+
+    .diff-emoji {
+      font-size: 32px;
+      display: block;
+      margin-bottom: 12px;
+      line-height: 1;
+    }
+
+    .diff-name {
+      font-size: 17px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .diff-rounds {
+      font-size: 14px;
+      color: var(--text-secondary);
+      margin-bottom: 8px;
+    }
+
+    .diff-play {
+      display: inline-block;
+      padding: 8px 20px;
+      background: var(--button-bg);
+      border: 1px solid var(--button-border);
+      border-radius: 10px;
+      color: var(--button-text);
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+
+    .diff-card:hover .diff-play {
+      background: var(--button-bg-hover);
+      border-color: var(--button-border-hover);
+      color: var(--button-text-hover);
+    }
+
+    @media (max-width: 600px) {
+      .content {
+        padding: 24px 14px 24px;
+      }
+
+      .game-header {
+        margin-bottom: 20px;
+      }
+
+      .game-icon-large {
+        font-size: 36px;
+      }
+
+      .game-title {
+        font-size: 22px;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+
+      .diff-card {
+        padding: 14px 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-align: left;
+      }
+
+      .diff-emoji {
+        font-size: 24px;
+        margin: 0;
+        flex-shrink: 0;
+      }
+
+      .diff-info {
+        flex: 1;
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 1px 10px;
+        align-items: start;
+      }
+
+      .diff-name {
+        grid-column: 1;
+        grid-row: 1;
+        font-size: 15px;
+        margin-bottom: 0;
+      }
+
+      .diff-rounds {
+        grid-column: 1;
+        grid-row: 2;
+        font-size: 12px;
+        margin-bottom: 0;
+      }
+
+      .diff-play {
+        grid-column: 1 / 3;
+        grid-row: 3;
+        margin: 8px 0 0;
+        justify-self: start;
+      }
+    }
+
+    /* ── Hamburger button ── */
+    .menu-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      cursor: pointer;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px var(--card-shadow);
+      color: var(--text-primary);
+    }
+    .menu-btn:hover { transform: scale(1.1); background: var(--card-bg-hover); }
+
+    /* ── Full-screen overlay ── */
+    .menu-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      overflow-y: auto;
+      padding: 20px;
+    }
+    .menu-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+
+    /* ── Panel ── */
+    .menu-panel {
+      position: relative;
+      background: var(--bg-primary);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 32px;
+      width: 100%;
+      max-width: 480px;
+      margin: 60px auto 40px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    /* ── Close button ── */
+    .menu-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      cursor: pointer;
+      font-size: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-secondary);
+      transition: all 0.2s;
+    }
+    .menu-close:hover { background: var(--card-bg-hover); color: var(--text-primary); }
+
+    /* ── Sections ── */
+    .menu-section { margin-bottom: 32px; }
+    .menu-section:last-child { margin-bottom: 0; }
+    .menu-section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin: 0 0 16px;
+    }
+
+    /* ── About content ── */
+    .menu-about-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .menu-about-globe { font-size: 28px; }
+    .menu-about-name {
+      font-size: 22px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--globe-gradient-1), var(--globe-gradient-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .menu-about-text { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin: 0 0 12px; }
+    .menu-link { color: var(--accent-color); text-decoration: none; }
+    .menu-link:hover { text-decoration: underline; }
+
+    /* ── Preference rows ── */
+    .pref-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .pref-row:last-child { border-bottom: none; }
+    .pref-label { display: flex; flex-direction: column; gap: 3px; }
+    .pref-label-title { font-size: 15px; font-weight: 600; color: var(--text-primary); }
+    .pref-label-desc  { font-size: 12px; color: var(--text-secondary); }
+
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      cursor: pointer;
+      font-size: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s;
+    }
+    .theme-toggle:hover { background: var(--card-bg-hover); transform: scale(1.1); }
+
+    /* ── Toggle switch ── */
+    .pref-toggle {
+      flex-shrink: 0;
+      position: relative;
+      width: 48px;
+      height: 26px;
+      background: var(--card-border);
+      border-radius: 13px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      padding: 0;
+    }
+    .pref-toggle[aria-checked="true"] { background: var(--accent-color); }
+    .pref-toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transition: transform 0.2s;
+    }
+    .pref-toggle[aria-checked="true"]::after { transform: translateX(22px); }
+
+    /* ── Clear records button ── */
+    .clear-records-btn {
+      flex-shrink: 0;
+      padding: 8px 16px;
+      border-radius: 10px;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .clear-records-btn:hover { background: rgba(239, 68, 68, 0.2); border-color: rgba(239, 68, 68, 0.6); }
+
+    @media (max-width: 640px) {
+      .menu-btn { top: 16px; right: 16px; width: 44px; height: 44px; font-size: 20px; }
+      .menu-overlay { padding: 0; align-items: flex-end; }
+      .menu-panel { max-width: 100%; margin: 0; border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="map-background"></div>
+  <div class="map-dots"></div>
+
+  <button id="menu-btn" class="menu-btn" aria-label="Open menu">☰</button>
+
+  <div class="content">
+    <div class="game-header" id="game-header">
+      <!-- Filled by JS -->
+    </div>
+
+    <div id="region-cards">
+      <!-- Filled by JS -->
+    </div>
+  </div>
+
+  <script>
+    const GAMES = {
+      find: {
+        title: 'Find the Country',
+        desc: 'Locate and click on the correct country on the interactive world map.',
+        fullCount: 194,
+        icon: '🗺️'
+      },
+      outlines: {
+        title: 'Guess the Country',
+        desc: 'Identify countries from their unique outlines and geographical shapes.',
+        fullCount: 194,
+        icon: '🌍'
+      },
+      capitals: {
+        title: 'Capitals of the World',
+        desc: 'Guess the capitals and their locations on an interactive world map.',
+        fullCount: 194,
+        icon: '🏛️'
+      },
+      flags: {
+        title: 'Flags of the World',
+        desc: 'Match the flag to the country — nearby neighbors make it tricky.',
+        fullCount: 194,
+        icon: '🚩'
+      },
+      route: {
+        title: 'Connect the Countries',
+        desc: 'Find the land route between two countries through neighboring borders.',
+        fullCount: 194,
+        icon: '🔗',
+        continentSlugs: ['africa', 'americas', 'asia', 'europe'],
+      },
+      'capital-pairs': {
+        title: 'Capital Pairs',
+        desc: 'Match countries with their capitals — one wrong answer ends your streak.',
+        fullCount: 194,
+        icon: '🔗',
+      },
+    };
+
+    const CONTINENTS = [
+      { label: 'Africa',   slug: 'africa',   continent: 'Africa',   emoji: '🌍' },
+      { label: 'Americas', slug: 'americas', continent: 'Americas', emoji: '🌎' },
+      { label: 'Asia',     slug: 'asia',     continent: 'Asia',     emoji: '🌏' },
+      { label: 'Europe',   slug: 'europe',   continent: 'Europe',   emoji: '🌍' },
+      { label: 'Oceania',  slug: 'oceania',  continent: 'Oceania',  emoji: '🌏' },
+    ];
+
+    const params = new URLSearchParams(location.search);
+    const gameKey = params.get('game');
+    const game = GAMES[gameKey];
+
+    if (!game) {
+      // Unknown game or doesn't support continents — go straight to play.html
+      const fallback = gameKey ? `play.html?game=${encodeURIComponent(gameKey)}` : 'index.html';
+      location.href = fallback;
+    } else {
+      document.title = `Geo Quiz - ${game.title}`;
+
+      document.getElementById('game-header').innerHTML = `
+        <a href="index.html" style="text-decoration:none"><div class="game-icon-large">${game.icon}</div></a>
+        <a href="index.html" class="game-title">${game.title}</a>
+        <p class="game-desc">${game.desc}</p>
+      `;
+
+      function makeCard(href, emoji, name, subtitle) {
+        return `
+          <a class="diff-card" href="${href}">
+            <span class="diff-emoji">${emoji}</span>
+            <div class="diff-info">
+              <div class="diff-name">${name}</div>
+              <div class="diff-rounds">${subtitle}</div>
+              <span class="diff-play">Play →</span>
+            </div>
+          </a>`;
+      }
+
+      (async () => {
+        let continentsData = null;
+        try {
+          continentsData = await fetch('data/countries-continents.json').then(r => r.json());
+        } catch (e) {
+          console.warn('Could not load continents:', e);
+        }
+
+        function countFor(continent) {
+          if (!continentsData) return '…';
+          return Object.values(continentsData).filter(c => c === continent).length;
+        }
+
+        const totalCount = game.fullCount || '194';
+
+        // World card first
+        const worldHref = `play.html?game=${encodeURIComponent(gameKey)}`;
+        let cards = makeCard(worldHref, '🌐', 'World', `All ${totalCount} countries`);
+
+        // Continent cards — use game-specific list if defined
+        const contList = game.continentSlugs
+          ? CONTINENTS.filter(c => game.continentSlugs.includes(c.slug))
+          : CONTINENTS;
+
+        contList.forEach(c => {
+          const count = countFor(c.continent);
+          const href = `play.html?game=${encodeURIComponent(gameKey)}&continent=${encodeURIComponent(c.continent)}`;
+          cards += makeCard(href, c.emoji, c.label, `${count} countries`);
+        });
+
+        document.getElementById('region-cards').innerHTML = `<div class="card-grid">${cards}</div>`;
+      })();
+    }
+  </script>
+
+  <div id="menu-overlay" class="menu-overlay" role="dialog" aria-modal="true" aria-label="Menu">
+    <div class="menu-panel">
+      <button id="menu-close" class="menu-close" aria-label="Close menu">×</button>
+
+      <section class="menu-section">
+        <h2 class="menu-section-title">About</h2>
+        <div class="menu-about-header">
+          <span class="menu-about-globe">🌍</span>
+          <span class="menu-about-name">Geo Quiz</span>
+        </div>
+        <p class="menu-about-text">
+          A collection of interactive geography games — free for everyone, no ads, no cookies, just the fun of exploring the world.
+        </p>
+        <p class="menu-about-text">
+          Created by <strong>Knut Mork</strong>.<br>
+          Open source on <a class="menu-link" href="https://github.com/kmork/geoquiz" target="_blank" rel="noopener">GitHub</a>.
+        </p>
+        <p class="menu-about-text">
+          Have a suggestion, found a bug, or want to contribute?
+          <a class="menu-link" href="https://github.com/kmork/geoquiz/issues" target="_blank" rel="noopener">Open an issue on GitHub</a> — all feedback is welcome!
+        </p>
+      </section>
+
+      <section class="menu-section">
+        <h2 class="menu-section-title">Preferences</h2>
+
+        <div class="pref-row">
+          <div class="pref-label">
+            <span class="pref-label-title">Theme</span>
+            <span class="pref-label-desc">Dark or light mode</span>
+          </div>
+          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
+            <span class="theme-icon">☀️</span>
+          </button>
+        </div>
+
+        <div class="pref-row">
+          <div class="pref-label">
+            <span class="pref-label-title">Autocomplete</span>
+            <span class="pref-label-desc">Show suggestions while typing</span>
+          </div>
+          <button id="autocomplete-toggle" class="pref-toggle" role="switch" aria-checked="true" aria-label="Toggle autocomplete"></button>
+        </div>
+
+        <div class="pref-row">
+          <div class="pref-label">
+            <span class="pref-label-title">Game Records</span>
+            <span class="pref-label-desc">Clears all saved best scores and times</span>
+          </div>
+          <button id="clear-records-btn" class="clear-records-btn">Clear All</button>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script src="js/theme.js"></script>
+  <script>
+    (function() {
+      const overlay         = document.getElementById('menu-overlay');
+      const menuBtn         = document.getElementById('menu-btn');
+      const closeBtn        = document.getElementById('menu-close');
+      const clearBtn        = document.getElementById('clear-records-btn');
+      const autocompleteBtn = document.getElementById('autocomplete-toggle');
+
+      menuBtn.addEventListener('click', () => overlay.classList.add('open'));
+      closeBtn.addEventListener('click', () => overlay.classList.remove('open'));
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') overlay.classList.remove('open'); });
+
+      const autocompleteOn = localStorage.getItem('geoquiz-autocomplete') !== 'off';
+      autocompleteBtn.setAttribute('aria-checked', String(autocompleteOn));
+      autocompleteBtn.addEventListener('click', () => {
+        const next = autocompleteBtn.getAttribute('aria-checked') !== 'true';
+        autocompleteBtn.setAttribute('aria-checked', String(next));
+        localStorage.setItem('geoquiz-autocomplete', next ? 'on' : 'off');
+      });
+
+      clearBtn.addEventListener('click', () => {
+        Object.keys(localStorage).filter(k => k.startsWith('geoquiz-record-')).forEach(k => localStorage.removeItem(k));
+        clearBtn.textContent = 'Cleared!';
+        setTimeout(() => { clearBtn.textContent = 'Clear All'; }, 2000);
+      });
+    })();
+  </script>
+</body>
+</html>
