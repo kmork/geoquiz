@@ -682,6 +682,22 @@ button:disabled{opacity:.55;cursor:not-allowed}
   animation: shake 0.5s ease-out;
 }
 
+/* Continue button — shown after wrong answer in outlines game */
+button.continue-btn {
+  width: 100%;
+  padding: 14px 28px;
+  font-size: 16px;
+  font-weight: 700;
+  background: var(--button-bg);
+  border: 1px solid var(--button-border);
+  color: var(--button-color);
+  border-radius: 10px;
+  cursor: pointer;
+}
+button.continue-btn:hover {
+  background: var(--button-hover);
+}
+
 /* Input animations */
 .answerRow input {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;

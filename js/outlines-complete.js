@@ -49,20 +49,36 @@ export async function createCompleteOutlinesGame({
   });
 
   let baseViewBox = { x: 0, y: 0, w: 600, h: 320 };
+  let zoomMaxFactor = 15.0;
 
-  // Raw draw — renders countries; when neighbors are included, keeps the current
-  // viewBox so the map stays focused on the target country (neighbors appear
-  // at the edges as context without giving away the answer by zooming out).
-  function rawDrawCountries(targetCountry, neighborCountries) {
+  // Raw draw — renders countries; when keepViewBox is true (default), keeps the
+  // current viewBox so the map stays focused on the target country (neighbors
+  // appear at the edges as context without giving away the answer by zooming out).
+  // When keepViewBox is false, the viewBox expands to fit neighbors and zoom
+  // limits are relaxed so the player can freely explore the map.
+  function rawDrawCountries(targetCountry, neighborCountries, keepViewBox = true) {
     if (neighborCountries && neighborCountries.length > 0) {
-      const savedVB = svgMap.getAttribute('viewBox');
-      renderer.drawCountries(targetCountry, neighborCountries);
-      if (savedVB) svgMap.setAttribute('viewBox', savedVB);
-      // baseViewBox unchanged — pan/zoom stays bounded to target-only view
+      if (keepViewBox) {
+        const savedVB = svgMap.getAttribute('viewBox');
+        renderer.drawCountries(targetCountry, neighborCountries);
+        if (savedVB) svgMap.setAttribute('viewBox', savedVB);
+        // baseViewBox unchanged — pan/zoom stays bounded to target-only view
+      } else {
+        // Reveal mode: expand viewBox to fit target + neighbors, allow free zoom
+        renderer.drawCountries(targetCountry, neighborCountries);
+        baseViewBox = renderer.getViewBox();
+        zoomMaxFactor = 50;
+      }
     } else {
       renderer.drawCountries(targetCountry, neighborCountries);
       baseViewBox = renderer.getViewBox();
+      zoomMaxFactor = 15.0;
     }
+  }
+
+  // Reveal the correct answer on the map — zoom out to show country in context
+  function revealAnswer(targetCountry, neighborCountries) {
+    rawDrawCountries(targetCountry, neighborCountries, false);
   }
 
   // Hint UI state
@@ -117,17 +133,16 @@ export async function createCompleteOutlinesGame({
     });
     
     const ZOOM_MIN_FACTOR = 0.35;
-    const ZOOM_MAX_FACTOR = 15.0;
-    
+
     const getVB = () => {
       const vb = svgEl.viewBox.baseVal;
       return { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
     };
-    
+
     const clampToLimits = (candidate) => {
       const aspect = candidate.h / candidate.w;
       const minW = baseViewBox.w * ZOOM_MIN_FACTOR;
-      const maxW = baseViewBox.w * ZOOM_MAX_FACTOR;
+      const maxW = baseViewBox.w * zoomMaxFactor;
       
       let w = candidate.w;
       if (w < minW) w = minW;
@@ -346,6 +361,7 @@ export async function createCompleteOutlinesGame({
     neighbors: NEIGHBORS,
     confetti,
     drawCountries,
+    revealAnswer,
     config: {
       singleRound,
       hideScoreUI: singleRound,
