@@ -79,17 +79,6 @@ export class OutlinesRenderer {
     let vx = x1;
     let vy = y1;
 
-    // Enforce minimum viewBox for micro-countries (Vatican City, Monaco, etc.)
-    const MIN_VIEW_SIZE = 5;
-    if (w < MIN_VIEW_SIZE || h < MIN_VIEW_SIZE) {
-      const cx = vx + w / 2;
-      const cy = vy + h / 2;
-      w = Math.max(w, MIN_VIEW_SIZE);
-      h = Math.max(h, MIN_VIEW_SIZE);
-      vx = cx - w / 2;
-      vy = cy - h / 2;
-    }
-
     this.svg.setAttribute("viewBox", `${vx} ${vy} ${w} ${h}`);
     this.baseViewBox = { x: vx, y: vy, w, h };
 

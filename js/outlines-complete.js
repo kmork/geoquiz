@@ -36,12 +36,12 @@ export async function createCompleteOutlinesGame({
   gameIdSuffix = 'short'
 }) {
   
-  // Load world data only (neighbors are just country names, loaded separately)
-  const worldData = await loadGeoJSON('data/ne_10m_admin_0_countries.geojson.gz');
+  // Load world data (route variant — overseas territories pre-removed)
+  const worldData = await loadGeoJSON('data/ne_10m_admin_0_countries_route.geojson.gz');
   const WORLD = worldData.features;
-  
-  // Load neighbors data (JSON mapping of country -> neighbor names)
-  const NEIGHBORS = await fetch('data/countries-neighbors.json').then(r => r.json());
+
+  // Build neighbors lookup from unified window.DATA
+  const NEIGHBORS = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.neighbors]));
   
   // Create renderer
   const renderer = new OutlinesRenderer(svgMap, WORLD, {
@@ -78,6 +78,7 @@ export async function createCompleteOutlinesGame({
 
   // Reveal the correct answer on the map — zoom out to show country in context
   function revealAnswer(targetCountry, neighborCountries) {
+    hideHintPanel();
     rawDrawCountries(targetCountry, neighborCountries, false);
   }
 
@@ -110,10 +111,10 @@ export async function createCompleteOutlinesGame({
     }
   }
   
-  // Attach zoom/pan to SVG
+  // Attach zoom/pan to SVG (start-relative model, same as Capitals map)
   function attachZoomPan() {
     const svgEl = svgMap;
-    
+
     const clientToSvg = (clientX, clientY) => {
       const pt = svgEl.createSVGPoint();
       pt.x = clientX;
@@ -123,15 +124,15 @@ export async function createCompleteOutlinesGame({
       const p = pt.matrixTransform(ctm.inverse());
       return { x: p.x, y: p.y };
     };
-    
-    const setViewBox = (vb) => {
+
+    const setVB = (vb) => {
       svgEl.setAttribute("viewBox", `${vb.x} ${vb.y} ${vb.w} ${vb.h}`);
     };
-    
+
     ["gesturestart", "gesturechange", "gestureend"].forEach((t) => {
       svgEl.addEventListener(t, (e) => e.preventDefault(), { passive: false });
     });
-    
+
     const ZOOM_MIN_FACTOR = 0.35;
 
     const getVB = () => {
@@ -143,162 +144,137 @@ export async function createCompleteOutlinesGame({
       const aspect = candidate.h / candidate.w;
       const minW = baseViewBox.w * ZOOM_MIN_FACTOR;
       const maxW = baseViewBox.w * zoomMaxFactor;
-      
+
       let w = candidate.w;
       if (w < minW) w = minW;
       if (w > maxW) w = maxW;
-      
-      let h = w * aspect;
-      let x = candidate.x;
-      let y = candidate.y;
-      
-      // Also constrain position to keep content visible
+
+      const h = w * aspect;
+      let x = candidate.x + (candidate.w - w) / 2;
+      let y = candidate.y + (candidate.h - h) / 2;
+
       const minVisibleMargin = Math.min(w, h) * 0.2;
-      
-      // Left boundary
       const maxPanRight = baseViewBox.x + baseViewBox.w - minVisibleMargin;
       if (x > maxPanRight) x = maxPanRight;
-      
-      // Right boundary
       const minPanLeft = baseViewBox.x - w + minVisibleMargin;
       if (x < minPanLeft) x = minPanLeft;
-      
-      // Top boundary
       const maxPanDown = baseViewBox.y + baseViewBox.h - minVisibleMargin;
       if (y > maxPanDown) y = maxPanDown;
-      
-      // Bottom boundary
       const minPanUp = baseViewBox.y - h + minVisibleMargin;
       if (y < minPanUp) y = minPanUp;
-      
+
       return { x, y, w, h };
     };
-    
-    const panBy = (dx, dy) => {
-      const current = getVB();
-      let newX = current.x + dx;
-      let newY = current.y + dy;
-      
-      // Constrain panning so countries remain visible
-      // Ensure the viewBox always overlaps with the content area (baseViewBox)
-      // Allow panning until only a small margin of content remains visible
-      const minVisibleMargin = Math.min(current.w, current.h) * 0.2; // At least 20% of viewport must show content
-      
-      // Left boundary: can't pan so far right that content disappears off left edge
-      const maxPanRight = baseViewBox.x + baseViewBox.w - minVisibleMargin;
-      if (newX > maxPanRight) newX = maxPanRight;
-      
-      // Right boundary: can't pan so far left that content disappears off right edge  
-      const minPanLeft = baseViewBox.x - current.w + minVisibleMargin;
-      if (newX < minPanLeft) newX = minPanLeft;
-      
-      // Top boundary: can't pan so far down that content disappears off top edge
-      const maxPanDown = baseViewBox.y + baseViewBox.h - minVisibleMargin;
-      if (newY > maxPanDown) newY = maxPanDown;
-      
-      // Bottom boundary: can't pan so far up that content disappears off bottom edge
-      const minPanUp = baseViewBox.y - current.h + minVisibleMargin;
-      if (newY < minPanUp) newY = minPanUp;
-      
-      setViewBox({ x: newX, y: newY, w: current.w, h: current.h });
+
+    const zoomAt = (factor, clientX, clientY) => {
+      const vb = getVB();
+      const p = clientToSvg(clientX, clientY);
+      const rx = (p.x - vb.x) / vb.w;
+      const ry = (p.y - vb.y) / vb.h;
+      const nw = vb.w * factor;
+      const nh = vb.h * factor;
+      const cand = { x: p.x - rx * nw, y: p.y - ry * nh, w: nw, h: nh };
+      setVB(clampToLimits(cand));
     };
-    
-    const zoomAt = (factor, focusX, focusY) => {
-      const current = getVB();
-      const svgFocus = clientToSvg(focusX, focusY);
-      
-      const newW = current.w / factor;
-      const newH = current.h / factor;
-      const newX = svgFocus.x - (svgFocus.x - current.x) / factor;
-      const newY = svgFocus.y - (svgFocus.y - current.y) / factor;
-      
-      const clamped = clampToLimits({ x: newX, y: newY, w: newW, h: newH });
-      setViewBox(clamped);
-    };
-    
+
     // Wheel zoom
     svgEl.addEventListener("wheel", (e) => {
       e.preventDefault();
-      const factor = e.deltaY > 0 ? 0.95 : 1.05;
+      const factor = e.deltaY > 0 ? 1.15 : 0.87;
       zoomAt(factor, e.clientX, e.clientY);
     }, { passive: false });
-    
-    // Pan (single pointer) + pinch zoom (two pointers)
+
+    // Pointer pan + pinch zoom (start-relative)
     svgEl.style.touchAction = "none";
-    const touchPointers = new Map();
-    let panLastX = 0, panLastY = 0;
-    let pinchPrevDist = 0;
+    const pointers = new Map();
+    let startVB = null;
+    let panStart = null;
+    let startDist = 0;
+
+    const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
+    const mid = (a, b) => ({ x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 });
 
     svgEl.addEventListener("pointerdown", (e) => {
       svgEl.setPointerCapture(e.pointerId);
-      touchPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      startVB = getVB();
 
-      if (touchPointers.size === 1) {
-        panLastX = e.clientX;
-        panLastY = e.clientY;
-        pinchPrevDist = 0;
-      } else if (touchPointers.size === 2) {
-        const pts = [...touchPointers.values()];
-        pinchPrevDist = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y);
+      if (pointers.size === 1) {
+        panStart = { x: e.clientX, y: e.clientY };
+        startDist = 0;
+      } else if (pointers.size === 2) {
+        const pts = [...pointers.values()];
+        startDist = dist(pts[0], pts[1]);
+        panStart = null;
       }
       svgEl.style.cursor = "grabbing";
-    });
+    }, { passive: false });
 
     svgEl.addEventListener("pointermove", (e) => {
-      if (!touchPointers.has(e.pointerId)) return;
-      touchPointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
+      if (!pointers.has(e.pointerId) || !startVB) return;
+      pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
 
-      if (touchPointers.size === 2) {
-        // Pinch zoom – per-frame differential, centered at midpoint
-        const pts = [...touchPointers.values()];
-        const dNow = Math.hypot(pts[1].x - pts[0].x, pts[1].y - pts[0].y);
-        if (pinchPrevDist > 0) {
-          // dNow > pinchPrevDist = fingers spreading = zoom in → factor > 1
-          const factor = dNow / pinchPrevDist;
-          const midX = (pts[0].x + pts[1].x) / 2;
-          const midY = (pts[0].y + pts[1].y) / 2;
-          zoomAt(factor, midX, midY);
-        }
-        pinchPrevDist = dNow;
+      // One pointer: pan from start position
+      if (pointers.size === 1 && panStart) {
+        const p = [...pointers.values()][0];
+        const a = clientToSvg(panStart.x, panStart.y);
+        const b = clientToSvg(p.x, p.y);
+        let newX = startVB.x + (a.x - b.x);
+        let newY = startVB.y + (a.y - b.y);
+
+        const minVisibleMargin = Math.min(startVB.w, startVB.h) * 0.2;
+        const maxPanRight = baseViewBox.x + baseViewBox.w - minVisibleMargin;
+        if (newX > maxPanRight) newX = maxPanRight;
+        const minPanLeft = baseViewBox.x - startVB.w + minVisibleMargin;
+        if (newX < minPanLeft) newX = minPanLeft;
+        const maxPanDown = baseViewBox.y + baseViewBox.h - minVisibleMargin;
+        if (newY > maxPanDown) newY = maxPanDown;
+        const minPanUp = baseViewBox.y - startVB.h + minVisibleMargin;
+        if (newY < minPanUp) newY = minPanUp;
+
+        setVB({ x: newX, y: newY, w: startVB.w, h: startVB.h });
         return;
       }
 
-      // Single pointer pan
-      const dx = e.clientX - panLastX;
-      const dy = e.clientY - panLastY;
-      panLastX = e.clientX;
-      panLastY = e.clientY;
+      // Two pointers: pinch zoom from start snapshot
+      if (pointers.size === 2 && startDist) {
+        const pts = [...pointers.values()];
+        const dNow = dist(pts[0], pts[1]);
+        const scale = dNow / startDist;
+        const factor = 1 / scale;
+        const m = mid(pts[0], pts[1]);
+        const pMid = clientToSvg(m.x, m.y);
+        const rx = (pMid.x - startVB.x) / startVB.w;
+        const ry = (pMid.y - startVB.y) / startVB.h;
+        const nw = startVB.w * factor;
+        const nh = startVB.h * factor;
+        const cand = { x: pMid.x - rx * nw, y: pMid.y - ry * nh, w: nw, h: nh };
+        setVB(clampToLimits(cand));
+      }
+    }, { passive: false });
 
-      const current = getVB();
-      const scale = current.w / svgEl.clientWidth;
-      panBy(-dx * scale, -dy * scale);
-    });
-
-    svgEl.addEventListener("pointerup", (e) => {
-      touchPointers.delete(e.pointerId);
-      if (touchPointers.size === 1) {
-        // Went 2→1 finger: reset pan origin to avoid a position jump
-        const p = [...touchPointers.values()][0];
-        panLastX = p.x;
-        panLastY = p.y;
-        pinchPrevDist = 0;
-      } else if (touchPointers.size === 0) {
-        pinchPrevDist = 0;
+    const endPointer = (e) => {
+      pointers.delete(e.pointerId);
+      if (pointers.size === 1) {
+        const p = [...pointers.values()][0];
+        startVB = getVB();
+        panStart = { x: p.x, y: p.y };
+        startDist = 0;
+      } else if (pointers.size === 0) {
+        startVB = null;
+        panStart = null;
+        startDist = 0;
         svgEl.style.cursor = "grab";
       }
-    });
+    };
 
-    svgEl.addEventListener("pointercancel", (e) => {
-      touchPointers.delete(e.pointerId);
-      pinchPrevDist = 0;
-      if (touchPointers.size === 0) svgEl.style.cursor = "grab";
-    });
-
-    svgEl.addEventListener("pointerleave", (e) => {
-      if (e.pointerType !== "touch") {
-        touchPointers.delete(e.pointerId);
-        svgEl.style.cursor = "grab";
-      }
+    svgEl.addEventListener("pointerup", endPointer);
+    svgEl.addEventListener("pointercancel", () => {
+      pointers.clear();
+      startVB = null;
+      panStart = null;
+      startDist = 0;
+      svgEl.style.cursor = "grab";
     });
 
     svgEl.style.cursor = "grab";
@@ -335,6 +311,7 @@ export async function createCompleteOutlinesGame({
         const nbrs = NEIGHBORS[currentCountry] || [];
         if (nbrs.length > 0) rawDrawCountries(currentCountry, nbrs);
         hintUsed = true;
+        game?.markHintUsed?.();
         hintBtn.style.opacity = '0.5';
       }
       showHintPanel(currentCountry);
@@ -368,12 +345,6 @@ export async function createCompleteOutlinesGame({
       onComplete: onComplete,
       maxRounds,
       gameIdSuffix,
-      onHintUsed: singleRound ? undefined : () => {
-        // Wrong answer: neighbors drawn on map (via drawCountries in outlines-game.js).
-        // Mark hint as used so 💡 can reopen the panel, but don't auto-show it.
-        hintUsed = true;
-        if (hintBtn) hintBtn.style.opacity = '0.5';
-      },
     }
   });
 
@@ -383,8 +354,9 @@ export async function createCompleteOutlinesGame({
   if (window.DATA && Array.isArray(window.DATA)) {
     console.log('Setting up autocomplete with', window.DATA.length, 'countries');
     const countryNames = window.DATA.map(c => c.country).filter(Boolean);
-    Object.keys(COUNTRY_ALIASES).forEach(alias => {
-      if (!countryNames.includes(alias)) countryNames.push(alias);
+    const countrySet = new Set(countryNames);
+    Object.entries(COUNTRY_ALIASES).forEach(([alias, target]) => {
+      if (countrySet.has(target) && !countrySet.has(alias)) countryNames.push(alias);
     });
     countryNames.sort();
     
@@ -408,19 +380,6 @@ export async function createCompleteOutlinesGame({
   } else {
     console.warn('window.DATA not available for autocomplete');
   }
-  
-  // Wire up input
-  answerInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      e.stopPropagation(); // Prevent event from bubbling to button
-      game.handleSubmit();
-    }
-  });
-  
-  submitBtn.addEventListener("click", () => {
-    game.handleSubmit();
-  });
   
   return {
     game,

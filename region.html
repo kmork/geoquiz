@@ -566,16 +566,16 @@
       }
 
       (async () => {
-        let continentsData = null;
+        let countriesData = null;
         try {
-          continentsData = await fetch('data/countries-continents.json').then(r => r.json());
+          countriesData = await fetch('data/countries.json').then(r => r.json());
         } catch (e) {
-          console.warn('Could not load continents:', e);
+          console.warn('Could not load countries:', e);
         }
 
         function countFor(continent) {
-          if (!continentsData) return '…';
-          return Object.values(continentsData).filter(c => c === continent).length;
+          if (!countriesData) return '…';
+          return countriesData.filter(c => c.un && c.continent === continent).length;
         }
 
         const totalCount = game.fullCount || '194';

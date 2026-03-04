@@ -16,8 +16,9 @@ const STORAGE_KEY_STATS = 'geoquiz-daily-stats';
  * - Outlines: 4★ max (hard - shape recognition)
  * - Capitals: 4★ max (hard - knowledge test)
  * - Find: 3★ max (1 base + 2 time bonus)
+ * - Flags: 3★ max (1 base + 2 time bonus)
  * - Connect: 5★ max (very hard - path optimization)
- * Total: 21★
+ * Total: 24★
  *
  * @param {object} result - Game result
  * @param {boolean} result.correct - Whether answer was correct

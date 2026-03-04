@@ -48,11 +48,13 @@ let showHeritage  = false;
 
 // ── Load data (parallel) ──────────────────────────────────────────────────────
 
-const [worldData, placesData, countriesFlags, neighborsData, riversData, mountainsData, heritageSitesData] = await Promise.all([
+// Build lookups from unified window.DATA
+const countriesFlags = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.flagCode]));
+const neighborsData = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.neighbors]));
+
+const [worldData, placesData, riversData, mountainsData, heritageSitesData] = await Promise.all([
   loadGeoJSON('data/ne_10m_admin_0_countries.geojson.gz'),
   fetch('data/places.geojson').then(r => r.json()),
-  fetch('data/countries-flags.json').then(r => r.json()),
-  fetch('data/countries-neighbors.json').then(r => r.json()),
   fetch('data/rivers.json').then(r => r.json()),
   fetch('data/mountains.json').then(r => r.json()),
   fetch('data/heritage-sites.json').then(r => r.json()),

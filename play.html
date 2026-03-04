@@ -684,10 +684,10 @@
         let fullCount = game.fullCount;
         if (continent) {
           try {
-            const data = await fetch('data/countries-continents.json').then(r => r.json());
-            fullCount = Object.values(data).filter(c => c === continent).length;
+            const all = await fetch('data/countries.json').then(r => r.json());
+            fullCount = all.filter(c => c.un && c.continent === continent).length;
           } catch (e) {
-            console.warn('Could not load continents:', e);
+            console.warn('Could not load countries:', e);
           }
         }
 

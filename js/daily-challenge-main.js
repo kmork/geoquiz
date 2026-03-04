@@ -143,11 +143,13 @@ class DailyChallenge {
   async generateChallenges() {
     // Load required data
     // Note: window.DATA is set by data.js (loaded in HTML)
-    const [triviaData, heritageData, neighborsData, flagsData, geoData] = await Promise.all([
+    // Build lookups from unified window.DATA
+    const flagsData = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.flagCode]));
+    const neighborsData = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.neighbors]));
+
+    const [triviaData, heritageData, geoData] = await Promise.all([
       fetch('data/trivia.json').then(r => r.json()),
       fetch('data/heritage-sites.json').then(r => r.json()),
-      fetch('data/countries-neighbors.json').then(r => r.json()),
-      fetch('data/countries-flags.json').then(r => r.json()),
       (async () => {
         const { loadGeoJSON } = await import('./geojson-loader.js');
         return await loadGeoJSON('data/ne_10m_admin_0_countries.geojson.gz');
@@ -793,7 +795,7 @@ class DailyChallenge {
           if (hasResolved) return;
           hasResolved = true;
           resolve({
-            correct: finalResult.correctFirstTry > 0 || finalResult.correctAny > 0,
+            correct: finalResult.correct > 0,
             time: finalResult.time || 0,
             timeLimit: challenge.timeLimit,
             hintPenalty: finalResult.usedHint ? 2 : 0

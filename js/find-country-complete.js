@@ -75,12 +75,8 @@ export async function createCompleteMap({
   // Build name lookups
   const { dataToGeo, resolveToDataName } = buildNameLookups(countryPaths);
 
-  // Neighbors data for hints (loaded non-blocking)
-  let neighborsData = null;
-  fetch('data/countries-neighbors.json')
-    .then(r => r.json())
-    .then(d => { neighborsData = d; })
-    .catch(() => {});
+  // Build neighbors lookup from unified window.DATA
+  const neighborsData = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.neighbors]));
 
   // Hint UI state
   let hintPanel = null;

@@ -1,0 +1,3128 @@
+[
+  {
+    "country": "Afghanistan",
+    "capitals": [
+      "Kabul"
+    ],
+    "continent": "Asia",
+    "flagCode": "af",
+    "neighbors": [
+      "Pakistan",
+      "Iran",
+      "Turkmenistan",
+      "Uzbekistan",
+      "Tajikistan",
+      "China"
+    ],
+    "un": true
+  },
+  {
+    "country": "Aland",
+    "capitals": [
+      "Mariehamn"
+    ],
+    "continent": "Europe",
+    "flagCode": "ax",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Albania",
+    "capitals": [
+      "Tirana"
+    ],
+    "continent": "Europe",
+    "flagCode": "al",
+    "neighbors": [
+      "Montenegro",
+      "Kosovo",
+      "North Macedonia",
+      "Greece"
+    ],
+    "un": true
+  },
+  {
+    "country": "Algeria",
+    "capitals": [
+      "Algiers"
+    ],
+    "continent": "Africa",
+    "flagCode": "dz",
+    "neighbors": [
+      "Tunisia",
+      "Libya",
+      "Niger",
+      "Mali",
+      "Mauritania",
+      "Morocco"
+    ],
+    "un": true
+  },
+  {
+    "country": "American Samoa",
+    "capitals": [
+      "Pago Pago"
+    ],
+    "continent": "Oceania",
+    "flagCode": "as",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Andorra",
+    "capitals": [
+      "Andorra la Vella"
+    ],
+    "continent": "Europe",
+    "flagCode": "ad",
+    "neighbors": [
+      "France",
+      "Spain"
+    ],
+    "un": true
+  },
+  {
+    "country": "Angola",
+    "capitals": [
+      "Luanda"
+    ],
+    "continent": "Africa",
+    "flagCode": "ao",
+    "neighbors": [
+      "Democratic Republic of the Congo",
+      "Congo",
+      "Namibia",
+      "Zambia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Anguilla",
+    "capitals": [
+      "The Valley"
+    ],
+    "continent": "Americas",
+    "flagCode": "ai",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Antigua and Barbuda",
+    "capitals": [
+      "Saint John's"
+    ],
+    "continent": "Americas",
+    "flagCode": "ag",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Argentina",
+    "capitals": [
+      "Buenos Aires"
+    ],
+    "continent": "Americas",
+    "flagCode": "ar",
+    "neighbors": [
+      "Chile",
+      "Bolivia",
+      "Paraguay",
+      "Brazil",
+      "Uruguay"
+    ],
+    "un": true
+  },
+  {
+    "country": "Armenia",
+    "capitals": [
+      "Yerevan"
+    ],
+    "continent": "Asia",
+    "flagCode": "am",
+    "neighbors": [
+      "Turkey",
+      "Georgia",
+      "Azerbaijan",
+      "Iran"
+    ],
+    "un": true
+  },
+  {
+    "country": "Aruba",
+    "capitals": [
+      "Oranjestad"
+    ],
+    "continent": "Americas",
+    "flagCode": "aw",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Australia",
+    "capitals": [
+      "Canberra"
+    ],
+    "continent": "Oceania",
+    "flagCode": "au",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Austria",
+    "capitals": [
+      "Vienna"
+    ],
+    "continent": "Europe",
+    "flagCode": "at",
+    "neighbors": [
+      "Germany",
+      "Czechia",
+      "Slovakia",
+      "Hungary",
+      "Slovenia",
+      "Italy",
+      "Switzerland",
+      "Liechtenstein"
+    ],
+    "un": true
+  },
+  {
+    "country": "Azerbaijan",
+    "capitals": [
+      "Baku"
+    ],
+    "continent": "Asia",
+    "flagCode": "az",
+    "neighbors": [
+      "Russia",
+      "Georgia",
+      "Armenia",
+      "Iran",
+      "Turkey"
+    ],
+    "un": true
+  },
+  {
+    "country": "Bahamas",
+    "capitals": [
+      "Nassau"
+    ],
+    "continent": "Americas",
+    "flagCode": "bs",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Bahrain",
+    "capitals": [
+      "Manama"
+    ],
+    "continent": "Asia",
+    "flagCode": "bh",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Bangladesh",
+    "capitals": [
+      "Dhaka"
+    ],
+    "continent": "Asia",
+    "flagCode": "bd",
+    "neighbors": [
+      "India",
+      "Myanmar"
+    ],
+    "un": true
+  },
+  {
+    "country": "Barbados",
+    "capitals": [
+      "Bridgetown"
+    ],
+    "continent": "Americas",
+    "flagCode": "bb",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Belarus",
+    "capitals": [
+      "Minsk"
+    ],
+    "continent": "Europe",
+    "flagCode": "by",
+    "neighbors": [
+      "Latvia",
+      "Lithuania",
+      "Poland",
+      "Ukraine",
+      "Russia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Belgium",
+    "capitals": [
+      "Brussels"
+    ],
+    "continent": "Europe",
+    "flagCode": "be",
+    "neighbors": [
+      "France",
+      "Luxembourg",
+      "Germany",
+      "Netherlands"
+    ],
+    "un": true
+  },
+  {
+    "country": "Belize",
+    "capitals": [
+      "Belmopan"
+    ],
+    "continent": "Americas",
+    "flagCode": "bz",
+    "neighbors": [
+      "Mexico",
+      "Guatemala"
+    ],
+    "un": true
+  },
+  {
+    "country": "Benin",
+    "capitals": [
+      "Porto-Novo"
+    ],
+    "continent": "Africa",
+    "flagCode": "bj",
+    "neighbors": [
+      "Burkina Faso",
+      "Niger",
+      "Nigeria",
+      "Togo"
+    ],
+    "un": true
+  },
+  {
+    "country": "Bermuda",
+    "capitals": [
+      "Hamilton"
+    ],
+    "continent": "Americas",
+    "flagCode": "bm",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Bhutan",
+    "capitals": [
+      "Thimphu"
+    ],
+    "continent": "Asia",
+    "flagCode": "bt",
+    "neighbors": [
+      "China",
+      "India"
+    ],
+    "un": true
+  },
+  {
+    "country": "Bolivia",
+    "capitals": [
+      "Sucre",
+      "La Paz"
+    ],
+    "continent": "Americas",
+    "flagCode": "bo",
+    "neighbors": [
+      "Peru",
+      "Brazil",
+      "Paraguay",
+      "Argentina",
+      "Chile"
+    ],
+    "un": true
+  },
+  {
+    "country": "Bosnia and Herzegovina",
+    "capitals": [
+      "Sarajevo"
+    ],
+    "continent": "Europe",
+    "flagCode": "ba",
+    "neighbors": [
+      "Croatia",
+      "Serbia",
+      "Montenegro"
+    ],
+    "un": true
+  },
+  {
+    "country": "Botswana",
+    "capitals": [
+      "Gaborone"
+    ],
+    "continent": "Africa",
+    "flagCode": "bw",
+    "neighbors": [
+      "Namibia",
+      "Zambia",
+      "Zimbabwe",
+      "South Africa"
+    ],
+    "un": true
+  },
+  {
+    "country": "Brazil",
+    "capitals": [
+      "Brasília"
+    ],
+    "continent": "Americas",
+    "flagCode": "br",
+    "neighbors": [
+      "Suriname",
+      "Guyana",
+      "Venezuela",
+      "Colombia",
+      "Peru",
+      "Bolivia",
+      "Paraguay",
+      "Argentina",
+      "Uruguay"
+    ],
+    "un": true
+  },
+  {
+    "country": "British Indian Ocean Territory",
+    "capitals": [
+      "Diego Garcia"
+    ],
+    "continent": "Africa",
+    "flagCode": "io",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "British Virgin Islands",
+    "capitals": [
+      "Road Town"
+    ],
+    "continent": "Americas",
+    "flagCode": "vg",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Brunei",
+    "capitals": [
+      "Bandar Seri Begawan"
+    ],
+    "continent": "Asia",
+    "flagCode": "bn",
+    "neighbors": [
+      "Malaysia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Bulgaria",
+    "capitals": [
+      "Sofia"
+    ],
+    "continent": "Europe",
+    "flagCode": "bg",
+    "neighbors": [
+      "Romania",
+      "Serbia",
+      "North Macedonia",
+      "Greece",
+      "Turkey"
+    ],
+    "un": true
+  },
+  {
+    "country": "Burkina Faso",
+    "capitals": [
+      "Ouagadougou"
+    ],
+    "continent": "Africa",
+    "flagCode": "bf",
+    "neighbors": [
+      "Mali",
+      "Niger",
+      "Benin",
+      "Togo",
+      "Ghana",
+      "Côte d'Ivoire"
+    ],
+    "un": true
+  },
+  {
+    "country": "Burundi",
+    "capitals": [
+      "Gitega"
+    ],
+    "continent": "Africa",
+    "flagCode": "bi",
+    "neighbors": [
+      "Rwanda",
+      "Tanzania",
+      "Democratic Republic of the Congo"
+    ],
+    "un": true
+  },
+  {
+    "country": "Cabo Verde",
+    "capitals": [
+      "Praia"
+    ],
+    "continent": "Africa",
+    "flagCode": "cv",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Cambodia",
+    "capitals": [
+      "Phnom Penh"
+    ],
+    "continent": "Asia",
+    "flagCode": "kh",
+    "neighbors": [
+      "Thailand",
+      "Laos",
+      "Vietnam"
+    ],
+    "un": true
+  },
+  {
+    "country": "Cameroon",
+    "capitals": [
+      "Yaoundé"
+    ],
+    "continent": "Africa",
+    "flagCode": "cm",
+    "neighbors": [
+      "Nigeria",
+      "Chad",
+      "Central African Republic",
+      "Congo",
+      "Gabon",
+      "Equatorial Guinea"
+    ],
+    "un": true
+  },
+  {
+    "country": "Canada",
+    "capitals": [
+      "Ottawa"
+    ],
+    "continent": "Americas",
+    "flagCode": "ca",
+    "neighbors": [
+      "United States"
+    ],
+    "un": true
+  },
+  {
+    "country": "Cayman Islands",
+    "capitals": [
+      "George Town"
+    ],
+    "continent": "Americas",
+    "flagCode": "ky",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Central African Republic",
+    "capitals": [
+      "Bangui"
+    ],
+    "continent": "Africa",
+    "flagCode": "cf",
+    "neighbors": [
+      "Chad",
+      "Sudan",
+      "South Sudan",
+      "Democratic Republic of the Congo",
+      "Congo",
+      "Cameroon"
+    ],
+    "un": true
+  },
+  {
+    "country": "Chad",
+    "capitals": [
+      "N'Djamena"
+    ],
+    "continent": "Africa",
+    "flagCode": "td",
+    "neighbors": [
+      "Libya",
+      "Sudan",
+      "Central African Republic",
+      "Cameroon",
+      "Nigeria",
+      "Niger"
+    ],
+    "un": true
+  },
+  {
+    "country": "Chile",
+    "capitals": [
+      "Santiago"
+    ],
+    "continent": "Americas",
+    "flagCode": "cl",
+    "neighbors": [
+      "Peru",
+      "Bolivia",
+      "Argentina"
+    ],
+    "un": true
+  },
+  {
+    "country": "China",
+    "capitals": [
+      "Beijing"
+    ],
+    "continent": "Asia",
+    "flagCode": "cn",
+    "neighbors": [
+      "North Korea",
+      "Russia",
+      "Mongolia",
+      "Kazakhstan",
+      "Kyrgyzstan",
+      "Tajikistan",
+      "Afghanistan",
+      "Pakistan",
+      "India",
+      "Nepal",
+      "Bhutan",
+      "Myanmar",
+      "Laos",
+      "Vietnam"
+    ],
+    "un": true
+  },
+  {
+    "country": "Colombia",
+    "capitals": [
+      "Bogotá"
+    ],
+    "continent": "Americas",
+    "flagCode": "co",
+    "neighbors": [
+      "Panama",
+      "Venezuela",
+      "Brazil",
+      "Peru",
+      "Ecuador"
+    ],
+    "un": true
+  },
+  {
+    "country": "Comoros",
+    "capitals": [
+      "Moroni"
+    ],
+    "continent": "Africa",
+    "flagCode": "km",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Congo",
+    "capitals": [
+      "Brazzaville"
+    ],
+    "continent": "Africa",
+    "flagCode": "cg",
+    "neighbors": [
+      "Gabon",
+      "Cameroon",
+      "Central African Republic",
+      "Democratic Republic of the Congo",
+      "Angola"
+    ],
+    "un": true
+  },
+  {
+    "country": "Cook Islands",
+    "capitals": [
+      "Avarua"
+    ],
+    "continent": "Oceania",
+    "flagCode": "ck",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Costa Rica",
+    "capitals": [
+      "San José"
+    ],
+    "continent": "Americas",
+    "flagCode": "cr",
+    "neighbors": [
+      "Nicaragua",
+      "Panama"
+    ],
+    "un": true
+  },
+  {
+    "country": "Côte d'Ivoire",
+    "capitals": [
+      "Yamoussoukro"
+    ],
+    "continent": "Africa",
+    "flagCode": "ci",
+    "neighbors": [
+      "Liberia",
+      "Guinea",
+      "Mali",
+      "Burkina Faso",
+      "Ghana"
+    ],
+    "un": true
+  },
+  {
+    "country": "Croatia",
+    "capitals": [
+      "Zagreb"
+    ],
+    "continent": "Europe",
+    "flagCode": "hr",
+    "neighbors": [
+      "Slovenia",
+      "Hungary",
+      "Serbia",
+      "Bosnia and Herzegovina",
+      "Montenegro"
+    ],
+    "un": true
+  },
+  {
+    "country": "Cuba",
+    "capitals": [
+      "Havana"
+    ],
+    "continent": "Americas",
+    "flagCode": "cu",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Curaçao",
+    "capitals": [
+      "Willemstad"
+    ],
+    "continent": "Americas",
+    "flagCode": "cw",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Cyprus",
+    "capitals": [
+      "Nicosia"
+    ],
+    "continent": "Asia",
+    "flagCode": "cy",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Czechia",
+    "capitals": [
+      "Prague"
+    ],
+    "continent": "Europe",
+    "flagCode": "cz",
+    "neighbors": [
+      "Germany",
+      "Poland",
+      "Slovakia",
+      "Austria"
+    ],
+    "un": true
+  },
+  {
+    "country": "Democratic Republic of the Congo",
+    "capitals": [
+      "Kinshasa"
+    ],
+    "continent": "Africa",
+    "flagCode": "cd",
+    "neighbors": [
+      "Congo",
+      "Central African Republic",
+      "South Sudan",
+      "Uganda",
+      "Rwanda",
+      "Burundi",
+      "Tanzania",
+      "Zambia",
+      "Angola"
+    ],
+    "un": true
+  },
+  {
+    "country": "Denmark",
+    "capitals": [
+      "Copenhagen"
+    ],
+    "continent": "Europe",
+    "flagCode": "dk",
+    "neighbors": [
+      "Germany"
+    ],
+    "un": true
+  },
+  {
+    "country": "Djibouti",
+    "capitals": [
+      "Djibouti"
+    ],
+    "continent": "Africa",
+    "flagCode": "dj",
+    "neighbors": [
+      "Eritrea",
+      "Ethiopia",
+      "Somalia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Dominica",
+    "capitals": [
+      "Roseau"
+    ],
+    "continent": "Americas",
+    "flagCode": "dm",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Dominican Republic",
+    "capitals": [
+      "Santo Domingo"
+    ],
+    "continent": "Americas",
+    "flagCode": "do",
+    "neighbors": [
+      "Haiti"
+    ],
+    "un": true
+  },
+  {
+    "country": "Ecuador",
+    "capitals": [
+      "Quito"
+    ],
+    "continent": "Americas",
+    "flagCode": "ec",
+    "neighbors": [
+      "Colombia",
+      "Peru"
+    ],
+    "un": true
+  },
+  {
+    "country": "Egypt",
+    "capitals": [
+      "Cairo"
+    ],
+    "continent": "Africa",
+    "flagCode": "eg",
+    "neighbors": [
+      "Libya",
+      "Sudan",
+      "Israel",
+      "Palestine"
+    ],
+    "un": true
+  },
+  {
+    "country": "El Salvador",
+    "capitals": [
+      "San Salvador"
+    ],
+    "continent": "Americas",
+    "flagCode": "sv",
+    "neighbors": [
+      "Guatemala",
+      "Honduras"
+    ],
+    "un": true
+  },
+  {
+    "country": "Equatorial Guinea",
+    "capitals": [
+      "Malabo"
+    ],
+    "continent": "Africa",
+    "flagCode": "gq",
+    "neighbors": [
+      "Cameroon",
+      "Gabon"
+    ],
+    "un": true
+  },
+  {
+    "country": "Eritrea",
+    "capitals": [
+      "Asmara"
+    ],
+    "continent": "Africa",
+    "flagCode": "er",
+    "neighbors": [
+      "Sudan",
+      "Ethiopia",
+      "Djibouti"
+    ],
+    "un": true
+  },
+  {
+    "country": "Estonia",
+    "capitals": [
+      "Tallinn"
+    ],
+    "continent": "Europe",
+    "flagCode": "ee",
+    "neighbors": [
+      "Russia",
+      "Latvia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Eswatini",
+    "capitals": [
+      "Mbabane"
+    ],
+    "continent": "Africa",
+    "flagCode": "sz",
+    "neighbors": [
+      "South Africa",
+      "Mozambique"
+    ],
+    "un": true
+  },
+  {
+    "country": "Ethiopia",
+    "capitals": [
+      "Addis Ababa"
+    ],
+    "continent": "Africa",
+    "flagCode": "et",
+    "neighbors": [
+      "Eritrea",
+      "Djibouti",
+      "Somalia",
+      "Kenya",
+      "South Sudan",
+      "Sudan"
+    ],
+    "un": true
+  },
+  {
+    "country": "Falkland Islands",
+    "capitals": [
+      "Stanley"
+    ],
+    "continent": "Americas",
+    "flagCode": "fk",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Faroe Islands",
+    "capitals": [
+      "Tórshavn"
+    ],
+    "continent": "Europe",
+    "flagCode": "fo",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Fiji",
+    "capitals": [
+      "Suva"
+    ],
+    "continent": "Oceania",
+    "flagCode": "fj",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Finland",
+    "capitals": [
+      "Helsinki"
+    ],
+    "continent": "Europe",
+    "flagCode": "fi",
+    "neighbors": [
+      "Sweden",
+      "Norway",
+      "Russia"
+    ],
+    "un": true
+  },
+  {
+    "country": "France",
+    "capitals": [
+      "Paris"
+    ],
+    "continent": "Europe",
+    "flagCode": "fr",
+    "neighbors": [
+      "Belgium",
+      "Luxembourg",
+      "Germany",
+      "Switzerland",
+      "Italy",
+      "Monaco",
+      "Andorra",
+      "Spain"
+    ],
+    "un": true
+  },
+  {
+    "country": "French Polynesia",
+    "capitals": [
+      "Papeete"
+    ],
+    "continent": "Oceania",
+    "flagCode": "pf",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Gabon",
+    "capitals": [
+      "Libreville"
+    ],
+    "continent": "Africa",
+    "flagCode": "ga",
+    "neighbors": [
+      "Equatorial Guinea",
+      "Cameroon",
+      "Congo"
+    ],
+    "un": true
+  },
+  {
+    "country": "Gambia",
+    "capitals": [
+      "Banjul"
+    ],
+    "continent": "Africa",
+    "flagCode": "gm",
+    "neighbors": [
+      "Senegal"
+    ],
+    "un": true
+  },
+  {
+    "country": "Georgia",
+    "capitals": [
+      "Tbilisi"
+    ],
+    "continent": "Asia",
+    "flagCode": "ge",
+    "neighbors": [
+      "Russia",
+      "Azerbaijan",
+      "Armenia",
+      "Turkey"
+    ],
+    "un": true
+  },
+  {
+    "country": "Germany",
+    "capitals": [
+      "Berlin"
+    ],
+    "continent": "Europe",
+    "flagCode": "de",
+    "neighbors": [
+      "Denmark",
+      "Poland",
+      "Czechia",
+      "Austria",
+      "Switzerland",
+      "France",
+      "Luxembourg",
+      "Belgium",
+      "Netherlands"
+    ],
+    "un": true
+  },
+  {
+    "country": "Ghana",
+    "capitals": [
+      "Accra"
+    ],
+    "continent": "Africa",
+    "flagCode": "gh",
+    "neighbors": [
+      "Côte d'Ivoire",
+      "Burkina Faso",
+      "Togo"
+    ],
+    "un": true
+  },
+  {
+    "country": "Gibraltar",
+    "capitals": [
+      "Gibraltar"
+    ],
+    "continent": "Europe",
+    "flagCode": "gi",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Greece",
+    "capitals": [
+      "Athens"
+    ],
+    "continent": "Europe",
+    "flagCode": "gr",
+    "neighbors": [
+      "Albania",
+      "North Macedonia",
+      "Bulgaria",
+      "Turkey"
+    ],
+    "un": true
+  },
+  {
+    "country": "Greenland",
+    "capitals": [
+      "Nuuk"
+    ],
+    "continent": "Americas",
+    "flagCode": "gl",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Grenada",
+    "capitals": [
+      "St. George's"
+    ],
+    "continent": "Americas",
+    "flagCode": "gd",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Guam",
+    "capitals": [
+      "Hagåtña"
+    ],
+    "continent": "Oceania",
+    "flagCode": "gu",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Guatemala",
+    "capitals": [
+      "Guatemala City"
+    ],
+    "continent": "Americas",
+    "flagCode": "gt",
+    "neighbors": [
+      "Mexico",
+      "Belize",
+      "Honduras",
+      "El Salvador"
+    ],
+    "un": true
+  },
+  {
+    "country": "Guernsey",
+    "capitals": [
+      "Saint Peter Port"
+    ],
+    "continent": "Europe",
+    "flagCode": "gg",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Guinea",
+    "capitals": [
+      "Conakry"
+    ],
+    "continent": "Africa",
+    "flagCode": "gn",
+    "neighbors": [
+      "Guinea-Bissau",
+      "Senegal",
+      "Mali",
+      "Côte d'Ivoire",
+      "Liberia",
+      "Sierra Leone"
+    ],
+    "un": true
+  },
+  {
+    "country": "Guinea-Bissau",
+    "capitals": [
+      "Bissau"
+    ],
+    "continent": "Africa",
+    "flagCode": "gw",
+    "neighbors": [
+      "Senegal",
+      "Guinea"
+    ],
+    "un": true
+  },
+  {
+    "country": "Guyana",
+    "capitals": [
+      "Georgetown"
+    ],
+    "continent": "Americas",
+    "flagCode": "gy",
+    "neighbors": [
+      "Venezuela",
+      "Brazil",
+      "Suriname"
+    ],
+    "un": true
+  },
+  {
+    "country": "Haiti",
+    "capitals": [
+      "Port-au-Prince"
+    ],
+    "continent": "Americas",
+    "flagCode": "ht",
+    "neighbors": [
+      "Dominican Republic"
+    ],
+    "un": true
+  },
+  {
+    "country": "Honduras",
+    "capitals": [
+      "Tegucigalpa"
+    ],
+    "continent": "Americas",
+    "flagCode": "hn",
+    "neighbors": [
+      "Guatemala",
+      "El Salvador",
+      "Nicaragua"
+    ],
+    "un": true
+  },
+  {
+    "country": "Hong Kong",
+    "capitals": [
+      "Hong Kong"
+    ],
+    "continent": "Asia",
+    "flagCode": "hk",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Hungary",
+    "capitals": [
+      "Budapest"
+    ],
+    "continent": "Europe",
+    "flagCode": "hu",
+    "neighbors": [
+      "Austria",
+      "Slovakia",
+      "Ukraine",
+      "Romania",
+      "Serbia",
+      "Croatia",
+      "Slovenia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Iceland",
+    "capitals": [
+      "Reykjavík"
+    ],
+    "continent": "Europe",
+    "flagCode": "is",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "India",
+    "capitals": [
+      "New Delhi"
+    ],
+    "continent": "Asia",
+    "flagCode": "in",
+    "neighbors": [
+      "Pakistan",
+      "China",
+      "Nepal",
+      "Bhutan",
+      "Bangladesh",
+      "Myanmar"
+    ],
+    "un": true
+  },
+  {
+    "country": "Indonesia",
+    "capitals": [
+      "Jakarta"
+    ],
+    "continent": "Asia",
+    "flagCode": "id",
+    "neighbors": [
+      "Papua New Guinea",
+      "Timor-Leste",
+      "Malaysia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Iran",
+    "capitals": [
+      "Tehran"
+    ],
+    "continent": "Asia",
+    "flagCode": "ir",
+    "neighbors": [
+      "Turkey",
+      "Iraq",
+      "Kuwait",
+      "Saudi Arabia",
+      "United Arab Emirates",
+      "Oman",
+      "Pakistan",
+      "Afghanistan",
+      "Turkmenistan",
+      "Azerbaijan",
+      "Armenia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Iraq",
+    "capitals": [
+      "Baghdad"
+    ],
+    "continent": "Asia",
+    "flagCode": "iq",
+    "neighbors": [
+      "Turkey",
+      "Syria",
+      "Jordan",
+      "Saudi Arabia",
+      "Kuwait",
+      "Iran"
+    ],
+    "un": true
+  },
+  {
+    "country": "Ireland",
+    "capitals": [
+      "Dublin"
+    ],
+    "continent": "Europe",
+    "flagCode": "ie",
+    "neighbors": [
+      "United Kingdom"
+    ],
+    "un": true
+  },
+  {
+    "country": "Isle of Man",
+    "capitals": [
+      "Douglas"
+    ],
+    "continent": "Europe",
+    "flagCode": "im",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Israel",
+    "capitals": [
+      "Jerusalem"
+    ],
+    "continent": "Asia",
+    "flagCode": "il",
+    "neighbors": [
+      "Lebanon",
+      "Syria",
+      "Jordan",
+      "Egypt",
+      "Palestine"
+    ],
+    "un": true
+  },
+  {
+    "country": "Italy",
+    "capitals": [
+      "Rome"
+    ],
+    "continent": "Europe",
+    "flagCode": "it",
+    "neighbors": [
+      "France",
+      "Switzerland",
+      "Austria",
+      "Slovenia",
+      "San Marino",
+      "Vatican City"
+    ],
+    "un": true
+  },
+  {
+    "country": "Jamaica",
+    "capitals": [
+      "Kingston"
+    ],
+    "continent": "Americas",
+    "flagCode": "jm",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Japan",
+    "capitals": [
+      "Tokyo"
+    ],
+    "continent": "Asia",
+    "flagCode": "jp",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Jersey",
+    "capitals": [
+      "Saint Helier"
+    ],
+    "continent": "Europe",
+    "flagCode": "je",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Jordan",
+    "capitals": [
+      "Amman"
+    ],
+    "continent": "Asia",
+    "flagCode": "jo",
+    "neighbors": [
+      "Israel",
+      "Palestine",
+      "Syria",
+      "Iraq",
+      "Saudi Arabia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Kazakhstan",
+    "capitals": [
+      "Astana"
+    ],
+    "continent": "Asia",
+    "flagCode": "kz",
+    "neighbors": [
+      "Russia",
+      "China",
+      "Kyrgyzstan",
+      "Uzbekistan",
+      "Turkmenistan"
+    ],
+    "un": true
+  },
+  {
+    "country": "Kenya",
+    "capitals": [
+      "Nairobi"
+    ],
+    "continent": "Africa",
+    "flagCode": "ke",
+    "neighbors": [
+      "Somalia",
+      "Ethiopia",
+      "South Sudan",
+      "Uganda",
+      "Tanzania"
+    ],
+    "un": true
+  },
+  {
+    "country": "Kiribati",
+    "capitals": [
+      "South Tarawa"
+    ],
+    "continent": "Oceania",
+    "flagCode": "ki",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Kosovo",
+    "capitals": [
+      "Pristina"
+    ],
+    "continent": "Europe",
+    "flagCode": "xk",
+    "neighbors": [
+      "Serbia",
+      "North Macedonia",
+      "Albania",
+      "Montenegro"
+    ],
+    "un": false
+  },
+  {
+    "country": "Kuwait",
+    "capitals": [
+      "Kuwait City"
+    ],
+    "continent": "Asia",
+    "flagCode": "kw",
+    "neighbors": [
+      "Iraq",
+      "Saudi Arabia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Kyrgyzstan",
+    "capitals": [
+      "Bishkek"
+    ],
+    "continent": "Asia",
+    "flagCode": "kg",
+    "neighbors": [
+      "Kazakhstan",
+      "Uzbekistan",
+      "Tajikistan",
+      "China"
+    ],
+    "un": true
+  },
+  {
+    "country": "Laos",
+    "capitals": [
+      "Vientiane"
+    ],
+    "continent": "Asia",
+    "flagCode": "la",
+    "neighbors": [
+      "China",
+      "Myanmar",
+      "Thailand",
+      "Cambodia",
+      "Vietnam"
+    ],
+    "un": true
+  },
+  {
+    "country": "Latvia",
+    "capitals": [
+      "Riga"
+    ],
+    "continent": "Europe",
+    "flagCode": "lv",
+    "neighbors": [
+      "Estonia",
+      "Russia",
+      "Belarus",
+      "Lithuania"
+    ],
+    "un": true
+  },
+  {
+    "country": "Lebanon",
+    "capitals": [
+      "Beirut"
+    ],
+    "continent": "Asia",
+    "flagCode": "lb",
+    "neighbors": [
+      "Syria",
+      "Israel"
+    ],
+    "un": true
+  },
+  {
+    "country": "Lesotho",
+    "capitals": [
+      "Maseru"
+    ],
+    "continent": "Africa",
+    "flagCode": "ls",
+    "neighbors": [
+      "South Africa"
+    ],
+    "un": true
+  },
+  {
+    "country": "Liberia",
+    "capitals": [
+      "Monrovia"
+    ],
+    "continent": "Africa",
+    "flagCode": "lr",
+    "neighbors": [
+      "Sierra Leone",
+      "Guinea",
+      "Côte d'Ivoire"
+    ],
+    "un": true
+  },
+  {
+    "country": "Libya",
+    "capitals": [
+      "Tripoli"
+    ],
+    "continent": "Africa",
+    "flagCode": "ly",
+    "neighbors": [
+      "Tunisia",
+      "Algeria",
+      "Niger",
+      "Chad",
+      "Sudan",
+      "Egypt"
+    ],
+    "un": true
+  },
+  {
+    "country": "Liechtenstein",
+    "capitals": [
+      "Vaduz"
+    ],
+    "continent": "Europe",
+    "flagCode": "li",
+    "neighbors": [
+      "Switzerland",
+      "Austria"
+    ],
+    "un": true
+  },
+  {
+    "country": "Lithuania",
+    "capitals": [
+      "Vilnius"
+    ],
+    "continent": "Europe",
+    "flagCode": "lt",
+    "neighbors": [
+      "Latvia",
+      "Belarus",
+      "Poland",
+      "Russia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Luxembourg",
+    "capitals": [
+      "Luxembourg"
+    ],
+    "continent": "Europe",
+    "flagCode": "lu",
+    "neighbors": [
+      "Belgium",
+      "Germany",
+      "France"
+    ],
+    "un": true
+  },
+  {
+    "country": "Macao",
+    "capitals": [
+      "Macao"
+    ],
+    "continent": "Asia",
+    "flagCode": "mo",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Madagascar",
+    "capitals": [
+      "Antananarivo"
+    ],
+    "continent": "Africa",
+    "flagCode": "mg",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Malawi",
+    "capitals": [
+      "Lilongwe"
+    ],
+    "continent": "Africa",
+    "flagCode": "mw",
+    "neighbors": [
+      "Zambia",
+      "Tanzania",
+      "Mozambique"
+    ],
+    "un": true
+  },
+  {
+    "country": "Malaysia",
+    "capitals": [
+      "Kuala Lumpur"
+    ],
+    "continent": "Asia",
+    "flagCode": "my",
+    "neighbors": [
+      "Thailand",
+      "Indonesia",
+      "Brunei"
+    ],
+    "un": true
+  },
+  {
+    "country": "Maldives",
+    "capitals": [
+      "Malé"
+    ],
+    "continent": "Asia",
+    "flagCode": "mv",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Mali",
+    "capitals": [
+      "Bamako"
+    ],
+    "continent": "Africa",
+    "flagCode": "ml",
+    "neighbors": [
+      "Senegal",
+      "Mauritania",
+      "Algeria",
+      "Niger",
+      "Burkina Faso",
+      "Côte d'Ivoire",
+      "Guinea"
+    ],
+    "un": true
+  },
+  {
+    "country": "Malta",
+    "capitals": [
+      "Valletta"
+    ],
+    "continent": "Europe",
+    "flagCode": "mt",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Marshall Islands",
+    "capitals": [
+      "Majuro"
+    ],
+    "continent": "Oceania",
+    "flagCode": "mh",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Mauritania",
+    "capitals": [
+      "Nouakchott"
+    ],
+    "continent": "Africa",
+    "flagCode": "mr",
+    "neighbors": [
+      "Morocco",
+      "Algeria",
+      "Mali",
+      "Senegal"
+    ],
+    "un": true
+  },
+  {
+    "country": "Mauritius",
+    "capitals": [
+      "Port Louis"
+    ],
+    "continent": "Africa",
+    "flagCode": "mu",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Mexico",
+    "capitals": [
+      "Mexico City"
+    ],
+    "continent": "Americas",
+    "flagCode": "mx",
+    "neighbors": [
+      "United States",
+      "Guatemala",
+      "Belize"
+    ],
+    "un": true
+  },
+  {
+    "country": "Micronesia",
+    "capitals": [
+      "Palikir"
+    ],
+    "continent": "Oceania",
+    "flagCode": "fm",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Moldova",
+    "capitals": [
+      "Chișinău"
+    ],
+    "continent": "Europe",
+    "flagCode": "md",
+    "neighbors": [
+      "Ukraine",
+      "Romania"
+    ],
+    "un": true
+  },
+  {
+    "country": "Monaco",
+    "capitals": [
+      "Monaco"
+    ],
+    "continent": "Europe",
+    "flagCode": "mc",
+    "neighbors": [
+      "France"
+    ],
+    "un": true
+  },
+  {
+    "country": "Mongolia",
+    "capitals": [
+      "Ulaanbaatar"
+    ],
+    "continent": "Asia",
+    "flagCode": "mn",
+    "neighbors": [
+      "Russia",
+      "China"
+    ],
+    "un": true
+  },
+  {
+    "country": "Montenegro",
+    "capitals": [
+      "Podgorica"
+    ],
+    "continent": "Europe",
+    "flagCode": "me",
+    "neighbors": [
+      "Croatia",
+      "Bosnia and Herzegovina",
+      "Serbia",
+      "Kosovo",
+      "Albania"
+    ],
+    "un": true
+  },
+  {
+    "country": "Montserrat",
+    "capitals": [
+      "Brades"
+    ],
+    "continent": "Americas",
+    "flagCode": "ms",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Morocco",
+    "capitals": [
+      "Rabat"
+    ],
+    "continent": "Africa",
+    "flagCode": "ma",
+    "neighbors": [
+      "Spain",
+      "Algeria",
+      "Mauritania"
+    ],
+    "un": true
+  },
+  {
+    "country": "Mozambique",
+    "capitals": [
+      "Maputo"
+    ],
+    "continent": "Africa",
+    "flagCode": "mz",
+    "neighbors": [
+      "Tanzania",
+      "Malawi",
+      "Zambia",
+      "Zimbabwe",
+      "South Africa",
+      "Eswatini"
+    ],
+    "un": true
+  },
+  {
+    "country": "Myanmar",
+    "capitals": [
+      "Naypyidaw"
+    ],
+    "continent": "Asia",
+    "flagCode": "mm",
+    "neighbors": [
+      "Bangladesh",
+      "India",
+      "China",
+      "Laos",
+      "Thailand"
+    ],
+    "un": true
+  },
+  {
+    "country": "Namibia",
+    "capitals": [
+      "Windhoek"
+    ],
+    "continent": "Africa",
+    "flagCode": "na",
+    "neighbors": [
+      "Angola",
+      "Zambia",
+      "Botswana",
+      "South Africa"
+    ],
+    "un": true
+  },
+  {
+    "country": "Nauru",
+    "capitals": [
+      "Yaren"
+    ],
+    "continent": "Oceania",
+    "flagCode": "nr",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Nepal",
+    "capitals": [
+      "Kathmandu"
+    ],
+    "continent": "Asia",
+    "flagCode": "np",
+    "neighbors": [
+      "China",
+      "India"
+    ],
+    "un": true
+  },
+  {
+    "country": "Netherlands",
+    "capitals": [
+      "Amsterdam"
+    ],
+    "continent": "Europe",
+    "flagCode": "nl",
+    "neighbors": [
+      "Germany",
+      "Belgium"
+    ],
+    "un": true
+  },
+  {
+    "country": "New Caledonia",
+    "capitals": [
+      "Nouméa"
+    ],
+    "continent": "Oceania",
+    "flagCode": "nc",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "New Zealand",
+    "capitals": [
+      "Wellington"
+    ],
+    "continent": "Oceania",
+    "flagCode": "nz",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Nicaragua",
+    "capitals": [
+      "Managua"
+    ],
+    "continent": "Americas",
+    "flagCode": "ni",
+    "neighbors": [
+      "Honduras",
+      "Costa Rica"
+    ],
+    "un": true
+  },
+  {
+    "country": "Niger",
+    "capitals": [
+      "Niamey"
+    ],
+    "continent": "Africa",
+    "flagCode": "ne",
+    "neighbors": [
+      "Libya",
+      "Chad",
+      "Nigeria",
+      "Benin",
+      "Burkina Faso",
+      "Mali",
+      "Algeria"
+    ],
+    "un": true
+  },
+  {
+    "country": "Nigeria",
+    "capitals": [
+      "Abuja"
+    ],
+    "continent": "Africa",
+    "flagCode": "ng",
+    "neighbors": [
+      "Benin",
+      "Niger",
+      "Chad",
+      "Cameroon"
+    ],
+    "un": true
+  },
+  {
+    "country": "Niue",
+    "capitals": [
+      "Alofi"
+    ],
+    "continent": "Oceania",
+    "flagCode": "nu",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Norfolk Island",
+    "capitals": [
+      "Kingston"
+    ],
+    "continent": "Oceania",
+    "flagCode": "nf",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "North Korea",
+    "capitals": [
+      "Pyongyang"
+    ],
+    "continent": "Asia",
+    "flagCode": "kp",
+    "neighbors": [
+      "China",
+      "Russia",
+      "South Korea"
+    ],
+    "un": true
+  },
+  {
+    "country": "North Macedonia",
+    "capitals": [
+      "Skopje"
+    ],
+    "continent": "Europe",
+    "flagCode": "mk",
+    "neighbors": [
+      "Kosovo",
+      "Serbia",
+      "Bulgaria",
+      "Greece",
+      "Albania"
+    ],
+    "un": true
+  },
+  {
+    "country": "Northern Mariana Islands",
+    "capitals": [
+      "Saipan"
+    ],
+    "continent": "Oceania",
+    "flagCode": "mp",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Norway",
+    "capitals": [
+      "Oslo"
+    ],
+    "continent": "Europe",
+    "flagCode": "no",
+    "neighbors": [
+      "Finland",
+      "Sweden",
+      "Russia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Oman",
+    "capitals": [
+      "Muscat"
+    ],
+    "continent": "Asia",
+    "flagCode": "om",
+    "neighbors": [
+      "United Arab Emirates",
+      "Saudi Arabia",
+      "Yemen"
+    ],
+    "un": true
+  },
+  {
+    "country": "Pakistan",
+    "capitals": [
+      "Islamabad"
+    ],
+    "continent": "Asia",
+    "flagCode": "pk",
+    "neighbors": [
+      "Iran",
+      "Afghanistan",
+      "China",
+      "India"
+    ],
+    "un": true
+  },
+  {
+    "country": "Palau",
+    "capitals": [
+      "Ngerulmud"
+    ],
+    "continent": "Oceania",
+    "flagCode": "pw",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Palestine",
+    "capitals": [
+      "Ramallah"
+    ],
+    "continent": "Asia",
+    "flagCode": "ps",
+    "neighbors": [
+      "Israel",
+      "Jordan",
+      "Egypt"
+    ],
+    "un": false
+  },
+  {
+    "country": "Panama",
+    "capitals": [
+      "Panama City"
+    ],
+    "continent": "Americas",
+    "flagCode": "pa",
+    "neighbors": [
+      "Costa Rica",
+      "Colombia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Papua New Guinea",
+    "capitals": [
+      "Port Moresby"
+    ],
+    "continent": "Oceania",
+    "flagCode": "pg",
+    "neighbors": [
+      "Indonesia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Paraguay",
+    "capitals": [
+      "Asunción"
+    ],
+    "continent": "Americas",
+    "flagCode": "py",
+    "neighbors": [
+      "Bolivia",
+      "Brazil",
+      "Argentina"
+    ],
+    "un": true
+  },
+  {
+    "country": "Peru",
+    "capitals": [
+      "Lima"
+    ],
+    "continent": "Americas",
+    "flagCode": "pe",
+    "neighbors": [
+      "Ecuador",
+      "Colombia",
+      "Brazil",
+      "Bolivia",
+      "Chile"
+    ],
+    "un": true
+  },
+  {
+    "country": "Philippines",
+    "capitals": [
+      "Manila"
+    ],
+    "continent": "Asia",
+    "flagCode": "ph",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Poland",
+    "capitals": [
+      "Warsaw"
+    ],
+    "continent": "Europe",
+    "flagCode": "pl",
+    "neighbors": [
+      "Germany",
+      "Czechia",
+      "Slovakia",
+      "Ukraine",
+      "Belarus",
+      "Lithuania",
+      "Russia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Portugal",
+    "capitals": [
+      "Lisbon"
+    ],
+    "continent": "Europe",
+    "flagCode": "pt",
+    "neighbors": [
+      "Spain"
+    ],
+    "un": true
+  },
+  {
+    "country": "Puerto Rico",
+    "capitals": [
+      "San Juan"
+    ],
+    "continent": "Americas",
+    "flagCode": "pr",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Qatar",
+    "capitals": [
+      "Doha"
+    ],
+    "continent": "Asia",
+    "flagCode": "qa",
+    "neighbors": [
+      "Saudi Arabia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Romania",
+    "capitals": [
+      "Bucharest"
+    ],
+    "continent": "Europe",
+    "flagCode": "ro",
+    "neighbors": [
+      "Ukraine",
+      "Moldova",
+      "Hungary",
+      "Serbia",
+      "Bulgaria"
+    ],
+    "un": true
+  },
+  {
+    "country": "Russia",
+    "capitals": [
+      "Moscow"
+    ],
+    "continent": "Europe",
+    "flagCode": "ru",
+    "neighbors": [
+      "Norway",
+      "Finland",
+      "Estonia",
+      "Latvia",
+      "Lithuania",
+      "Poland",
+      "Belarus",
+      "Ukraine",
+      "Georgia",
+      "Azerbaijan",
+      "Kazakhstan",
+      "China",
+      "Mongolia",
+      "North Korea"
+    ],
+    "un": true
+  },
+  {
+    "country": "Rwanda",
+    "capitals": [
+      "Kigali"
+    ],
+    "continent": "Africa",
+    "flagCode": "rw",
+    "neighbors": [
+      "Uganda",
+      "Tanzania",
+      "Burundi",
+      "Democratic Republic of the Congo"
+    ],
+    "un": true
+  },
+  {
+    "country": "Saint Barthelemy",
+    "capitals": [
+      "Gustavia"
+    ],
+    "continent": "Americas",
+    "flagCode": "bl",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Saint Helena",
+    "capitals": [
+      "Jamestown"
+    ],
+    "continent": "Africa",
+    "flagCode": "sh",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Saint Kitts and Nevis",
+    "capitals": [
+      "Basseterre"
+    ],
+    "continent": "Americas",
+    "flagCode": "kn",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Saint Lucia",
+    "capitals": [
+      "Castries"
+    ],
+    "continent": "Americas",
+    "flagCode": "lc",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Saint Martin",
+    "capitals": [
+      "Marigot"
+    ],
+    "continent": "Americas",
+    "flagCode": "mf",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Saint Pierre and Miquelon",
+    "capitals": [
+      "Saint-Pierre"
+    ],
+    "continent": "Americas",
+    "flagCode": "pm",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Saint Vincent and the Grenadines",
+    "capitals": [
+      "Kingstown"
+    ],
+    "continent": "Americas",
+    "flagCode": "vc",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Samoa",
+    "capitals": [
+      "Apia"
+    ],
+    "continent": "Oceania",
+    "flagCode": "ws",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "San Marino",
+    "capitals": [
+      "San Marino"
+    ],
+    "continent": "Europe",
+    "flagCode": "sm",
+    "neighbors": [
+      "Italy"
+    ],
+    "un": true
+  },
+  {
+    "country": "Sao Tome and Principe",
+    "capitals": [
+      "São Tomé"
+    ],
+    "continent": "Africa",
+    "flagCode": "st",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Saudi Arabia",
+    "capitals": [
+      "Riyadh"
+    ],
+    "continent": "Asia",
+    "flagCode": "sa",
+    "neighbors": [
+      "Jordan",
+      "Iraq",
+      "Kuwait",
+      "Qatar",
+      "United Arab Emirates",
+      "Oman",
+      "Yemen"
+    ],
+    "un": true
+  },
+  {
+    "country": "Senegal",
+    "capitals": [
+      "Dakar"
+    ],
+    "continent": "Africa",
+    "flagCode": "sn",
+    "neighbors": [
+      "Mauritania",
+      "Mali",
+      "Guinea",
+      "Guinea-Bissau",
+      "Gambia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Serbia",
+    "capitals": [
+      "Belgrade"
+    ],
+    "continent": "Europe",
+    "flagCode": "rs",
+    "neighbors": [
+      "Hungary",
+      "Romania",
+      "Bulgaria",
+      "North Macedonia",
+      "Kosovo",
+      "Montenegro",
+      "Bosnia and Herzegovina",
+      "Croatia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Seychelles",
+    "capitals": [
+      "Victoria"
+    ],
+    "continent": "Africa",
+    "flagCode": "sc",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Sierra Leone",
+    "capitals": [
+      "Freetown"
+    ],
+    "continent": "Africa",
+    "flagCode": "sl",
+    "neighbors": [
+      "Guinea",
+      "Liberia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Singapore",
+    "capitals": [
+      "Singapore"
+    ],
+    "continent": "Asia",
+    "flagCode": "sg",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Sint Maarten",
+    "capitals": [
+      "Philipsburg"
+    ],
+    "continent": "Americas",
+    "flagCode": "sx",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Slovakia",
+    "capitals": [
+      "Bratislava"
+    ],
+    "continent": "Europe",
+    "flagCode": "sk",
+    "neighbors": [
+      "Poland",
+      "Ukraine",
+      "Hungary",
+      "Austria",
+      "Czechia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Slovenia",
+    "capitals": [
+      "Ljubljana"
+    ],
+    "continent": "Europe",
+    "flagCode": "si",
+    "neighbors": [
+      "Italy",
+      "Austria",
+      "Hungary",
+      "Croatia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Solomon Islands",
+    "capitals": [
+      "Honiara"
+    ],
+    "continent": "Oceania",
+    "flagCode": "sb",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Somalia",
+    "capitals": [
+      "Mogadishu"
+    ],
+    "continent": "Africa",
+    "flagCode": "so",
+    "neighbors": [
+      "Djibouti",
+      "Ethiopia",
+      "Kenya"
+    ],
+    "un": true
+  },
+  {
+    "country": "South Africa",
+    "capitals": [
+      "Pretoria",
+      "Cape Town",
+      "Bloemfontein"
+    ],
+    "continent": "Africa",
+    "flagCode": "za",
+    "neighbors": [
+      "Namibia",
+      "Botswana",
+      "Zimbabwe",
+      "Mozambique",
+      "Eswatini",
+      "Lesotho"
+    ],
+    "un": true
+  },
+  {
+    "country": "South Korea",
+    "capitals": [
+      "Seoul"
+    ],
+    "continent": "Asia",
+    "flagCode": "kr",
+    "neighbors": [
+      "North Korea"
+    ],
+    "un": true
+  },
+  {
+    "country": "South Sudan",
+    "capitals": [
+      "Juba"
+    ],
+    "continent": "Africa",
+    "flagCode": "ss",
+    "neighbors": [
+      "Central African Republic",
+      "Democratic Republic of the Congo",
+      "Uganda",
+      "Kenya",
+      "Ethiopia",
+      "Sudan"
+    ],
+    "un": true
+  },
+  {
+    "country": "Spain",
+    "capitals": [
+      "Madrid"
+    ],
+    "continent": "Europe",
+    "flagCode": "es",
+    "neighbors": [
+      "Portugal",
+      "France",
+      "Andorra",
+      "Morocco"
+    ],
+    "un": true
+  },
+  {
+    "country": "Sri Lanka",
+    "capitals": [
+      "Sri Jayawardenepura Kotte"
+    ],
+    "continent": "Asia",
+    "flagCode": "lk",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Sudan",
+    "capitals": [
+      "Khartoum"
+    ],
+    "continent": "Africa",
+    "flagCode": "sd",
+    "neighbors": [
+      "Egypt",
+      "Libya",
+      "Chad",
+      "Central African Republic",
+      "South Sudan",
+      "Ethiopia",
+      "Eritrea"
+    ],
+    "un": true
+  },
+  {
+    "country": "Suriname",
+    "capitals": [
+      "Paramaribo"
+    ],
+    "continent": "Americas",
+    "flagCode": "sr",
+    "neighbors": [
+      "Guyana",
+      "Brazil"
+    ],
+    "un": true
+  },
+  {
+    "country": "Sweden",
+    "capitals": [
+      "Stockholm"
+    ],
+    "continent": "Europe",
+    "flagCode": "se",
+    "neighbors": [
+      "Norway",
+      "Finland"
+    ],
+    "un": true
+  },
+  {
+    "country": "Switzerland",
+    "capitals": [
+      "Bern"
+    ],
+    "continent": "Europe",
+    "flagCode": "ch",
+    "neighbors": [
+      "France",
+      "Germany",
+      "Austria",
+      "Liechtenstein",
+      "Italy"
+    ],
+    "un": true
+  },
+  {
+    "country": "Syria",
+    "capitals": [
+      "Damascus"
+    ],
+    "continent": "Asia",
+    "flagCode": "sy",
+    "neighbors": [
+      "Turkey",
+      "Iraq",
+      "Jordan",
+      "Israel",
+      "Lebanon"
+    ],
+    "un": true
+  },
+  {
+    "country": "Taiwan",
+    "capitals": [
+      "Taipei"
+    ],
+    "continent": "Asia",
+    "flagCode": "tw",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Tajikistan",
+    "capitals": [
+      "Dushanbe"
+    ],
+    "continent": "Asia",
+    "flagCode": "tj",
+    "neighbors": [
+      "Afghanistan",
+      "Uzbekistan",
+      "Kyrgyzstan",
+      "China"
+    ],
+    "un": true
+  },
+  {
+    "country": "Tanzania",
+    "capitals": [
+      "Dodoma"
+    ],
+    "continent": "Africa",
+    "flagCode": "tz",
+    "neighbors": [
+      "Kenya",
+      "Uganda",
+      "Rwanda",
+      "Burundi",
+      "Democratic Republic of the Congo",
+      "Zambia",
+      "Malawi",
+      "Mozambique"
+    ],
+    "un": true
+  },
+  {
+    "country": "Thailand",
+    "capitals": [
+      "Bangkok"
+    ],
+    "continent": "Asia",
+    "flagCode": "th",
+    "neighbors": [
+      "Myanmar",
+      "Laos",
+      "Cambodia",
+      "Malaysia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Timor-Leste",
+    "capitals": [
+      "Dili"
+    ],
+    "continent": "Asia",
+    "flagCode": "tl",
+    "neighbors": [
+      "Indonesia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Togo",
+    "capitals": [
+      "Lomé"
+    ],
+    "continent": "Africa",
+    "flagCode": "tg",
+    "neighbors": [
+      "Ghana",
+      "Burkina Faso",
+      "Benin"
+    ],
+    "un": true
+  },
+  {
+    "country": "Tonga",
+    "capitals": [
+      "Nukuʻalofa"
+    ],
+    "continent": "Oceania",
+    "flagCode": "to",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Trinidad and Tobago",
+    "capitals": [
+      "Port of Spain"
+    ],
+    "continent": "Americas",
+    "flagCode": "tt",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Tunisia",
+    "capitals": [
+      "Tunis"
+    ],
+    "continent": "Africa",
+    "flagCode": "tn",
+    "neighbors": [
+      "Algeria",
+      "Libya"
+    ],
+    "un": true
+  },
+  {
+    "country": "Turkey",
+    "capitals": [
+      "Ankara"
+    ],
+    "continent": "Asia",
+    "flagCode": "tr",
+    "neighbors": [
+      "Greece",
+      "Bulgaria",
+      "Georgia",
+      "Armenia",
+      "Azerbaijan",
+      "Iran",
+      "Iraq",
+      "Syria"
+    ],
+    "un": true
+  },
+  {
+    "country": "Turkmenistan",
+    "capitals": [
+      "Ashgabat"
+    ],
+    "continent": "Asia",
+    "flagCode": "tm",
+    "neighbors": [
+      "Kazakhstan",
+      "Uzbekistan",
+      "Afghanistan",
+      "Iran"
+    ],
+    "un": true
+  },
+  {
+    "country": "Turks and Caicos Islands",
+    "capitals": [
+      "Cockburn Town"
+    ],
+    "continent": "Americas",
+    "flagCode": "tc",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Tuvalu",
+    "capitals": [
+      "Funafuti"
+    ],
+    "continent": "Oceania",
+    "flagCode": "tv",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Uganda",
+    "capitals": [
+      "Kampala"
+    ],
+    "continent": "Africa",
+    "flagCode": "ug",
+    "neighbors": [
+      "South Sudan",
+      "Kenya",
+      "Tanzania",
+      "Rwanda",
+      "Democratic Republic of the Congo"
+    ],
+    "un": true
+  },
+  {
+    "country": "Ukraine",
+    "capitals": [
+      "Kyiv"
+    ],
+    "continent": "Europe",
+    "flagCode": "ua",
+    "neighbors": [
+      "Belarus",
+      "Russia",
+      "Poland",
+      "Slovakia",
+      "Hungary",
+      "Romania",
+      "Moldova"
+    ],
+    "un": true
+  },
+  {
+    "country": "United Arab Emirates",
+    "capitals": [
+      "Abu Dhabi"
+    ],
+    "continent": "Asia",
+    "flagCode": "ae",
+    "neighbors": [
+      "Saudi Arabia",
+      "Oman"
+    ],
+    "un": true
+  },
+  {
+    "country": "United Kingdom",
+    "capitals": [
+      "London"
+    ],
+    "continent": "Europe",
+    "flagCode": "gb",
+    "neighbors": [
+      "Ireland"
+    ],
+    "un": true
+  },
+  {
+    "country": "United States",
+    "capitals": [
+      "Washington, D.C."
+    ],
+    "continent": "Americas",
+    "flagCode": "us",
+    "neighbors": [
+      "Canada",
+      "Mexico"
+    ],
+    "un": true
+  },
+  {
+    "country": "United States Virgin Islands",
+    "capitals": [
+      "Charlotte Amalie"
+    ],
+    "continent": "Americas",
+    "flagCode": "vi",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Uruguay",
+    "capitals": [
+      "Montevideo"
+    ],
+    "continent": "Americas",
+    "flagCode": "uy",
+    "neighbors": [
+      "Brazil",
+      "Argentina"
+    ],
+    "un": true
+  },
+  {
+    "country": "Uzbekistan",
+    "capitals": [
+      "Tashkent"
+    ],
+    "continent": "Asia",
+    "flagCode": "uz",
+    "neighbors": [
+      "Kazakhstan",
+      "Kyrgyzstan",
+      "Tajikistan",
+      "Afghanistan",
+      "Turkmenistan"
+    ],
+    "un": true
+  },
+  {
+    "country": "Vanuatu",
+    "capitals": [
+      "Port Vila"
+    ],
+    "continent": "Oceania",
+    "flagCode": "vu",
+    "neighbors": [],
+    "un": true
+  },
+  {
+    "country": "Vatican City",
+    "capitals": [
+      "Vatican City"
+    ],
+    "continent": "Europe",
+    "flagCode": "va",
+    "neighbors": [
+      "Italy"
+    ],
+    "un": true
+  },
+  {
+    "country": "Venezuela",
+    "capitals": [
+      "Caracas"
+    ],
+    "continent": "Americas",
+    "flagCode": "ve",
+    "neighbors": [
+      "Colombia",
+      "Brazil",
+      "Guyana"
+    ],
+    "un": true
+  },
+  {
+    "country": "Vietnam",
+    "capitals": [
+      "Hanoi"
+    ],
+    "continent": "Asia",
+    "flagCode": "vn",
+    "neighbors": [
+      "China",
+      "Laos",
+      "Cambodia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Wallis and Futuna",
+    "capitals": [
+      "Mata-Utu"
+    ],
+    "continent": "Oceania",
+    "flagCode": "wf",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Western Sahara",
+    "capitals": [
+      "Laayoune"
+    ],
+    "continent": "Africa",
+    "flagCode": "eh",
+    "neighbors": [],
+    "un": false
+  },
+  {
+    "country": "Yemen",
+    "capitals": [
+      "Sana'a"
+    ],
+    "continent": "Asia",
+    "flagCode": "ye",
+    "neighbors": [
+      "Saudi Arabia",
+      "Oman"
+    ],
+    "un": true
+  },
+  {
+    "country": "Zambia",
+    "capitals": [
+      "Lusaka"
+    ],
+    "continent": "Africa",
+    "flagCode": "zm",
+    "neighbors": [
+      "Angola",
+      "Democratic Republic of the Congo",
+      "Tanzania",
+      "Malawi",
+      "Mozambique",
+      "Zimbabwe",
+      "Botswana",
+      "Namibia"
+    ],
+    "un": true
+  },
+  {
+    "country": "Zimbabwe",
+    "capitals": [
+      "Harare"
+    ],
+    "continent": "Africa",
+    "flagCode": "zw",
+    "neighbors": [
+      "Zambia",
+      "Mozambique",
+      "South Africa",
+      "Botswana"
+    ],
+    "un": true
+  }
+]

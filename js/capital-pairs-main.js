@@ -31,13 +31,8 @@ async function init() {
   if (initOverlay) initOverlay.style.display = 'flex';
 
   if (continentParam) {
-    try {
-      const continentsData = await fetch('data/countries-continents.json').then(r => r.json());
-      const filtered = window.DATA.filter(c => continentsData[c.country] === continentParam);
-      if (filtered.length > 0) window.DATA = filtered;
-    } catch (e) {
-      console.warn('Could not load continent filter:', e);
-    }
+    const filtered = window.DATA.filter(c => c.continent === continentParam);
+    if (filtered.length > 0) window.DATA = filtered;
   }
 
   logic = new CapitalPairsLogic({ data: window.DATA, maxPairs });

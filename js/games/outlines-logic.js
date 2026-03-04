@@ -1,8 +1,12 @@
 /**
  * Outlines Game - Pure Logic Module
- * 
+ *
  * Handles outlines game logic without any DOM/SVG dependencies.
  * Can be used by both standalone game and Daily Challenge.
+ *
+ * One attempt per round. The player can optionally use the hint button
+ * (which shows neighbors) before guessing — using the hint halves the
+ * points awarded for a correct answer.
  */
 
 import { norm } from "../utils.js";
@@ -10,25 +14,22 @@ import { shuffleInPlace } from "../game-utils.js";
 import { resolveAlias } from "../aliases.js";
 
 export class OutlinesGameLogic {
-  constructor({ onAnswer, onComplete, onHintUsed, singleRound = false, neighbors = {}, maxRounds = 10 }) {
+  constructor({ onAnswer, onComplete, singleRound = false, maxRounds = 10 }) {
     this.DATA = window.DATA;
-    this.neighbors = neighbors;
     this._configMaxRounds = singleRound ? 1 : maxRounds;
     this.maxRounds = this._configMaxRounds;
     this.singleRound = singleRound;
     this.onAnswer = onAnswer;
     this.onComplete = onComplete;
-    this.onHintUsed = onHintUsed; // Called when hint (neighbors) is shown
-    
+
     this.deck = [];
     this.current = null;
     this.score = 0;
-    this.correctFirstTry = 0;
-    this.correctAny = 0;
-    this.attempt = 0; // 0 = not started, 1 = first attempt, 2 = second attempt
+    this.correct = 0;
     this.roundEnded = false;
     this.usedHint = false;
     this.startTime = null;
+    this.gameStartTime = null;
   }
 
   reset() {
@@ -36,9 +37,7 @@ export class OutlinesGameLogic {
     this.maxRounds = this.deck.length;
     this.current = null;
     this.score = 0;
-    this.correctFirstTry = 0;
-    this.correctAny = 0;
-    this.attempt = 0;
+    this.correct = 0;
     this.roundEnded = false;
     this.usedHint = false;
     this.gameStartTime = null;
@@ -60,8 +59,7 @@ export class OutlinesGameLogic {
         this.onComplete({
           score: this.score,
           total: this.maxRounds,
-          correctFirstTry: this.correctFirstTry,
-          correctAny: this.correctAny,
+          correct: this.correct,
           accuracy: this.getAccuracy(),
           time: totalTime,
           usedHint: this.usedHint
@@ -71,16 +69,14 @@ export class OutlinesGameLogic {
     }
 
     this.current = this.deck.pop();
-    this.attempt = 0;
     this.roundEnded = false;
     this.usedHint = false;
     this.startTime = Date.now();
-    
-    // Track game start time on first round
+
     if (!this.gameStartTime) {
       this.gameStartTime = Date.now();
     }
-    
+
     return this.current;
   }
 
@@ -88,94 +84,58 @@ export class OutlinesGameLogic {
     return this.current;
   }
 
+  /** Called by the UI when the player activates the hint button. */
+  markHintUsed() {
+    this.usedHint = true;
+  }
+
   /**
-   * Check if an answer is correct
+   * Check if an answer is correct (single attempt).
    * Returns object with:
+   * - action: 'correct' | 'wrong' | 'skip' | 'ignore'
    * - isCorrect: boolean
-   * - action: 'correct_first' | 'correct_second' | 'wrong_first' | 'wrong_second' | 'empty'
-   * - points: number (2 for first try, 1 for second try)
-   * - showNeighbors: boolean (true if should show neighbors after this attempt)
+   * - points: number (2 without hint, 1 with hint)
    * - message: string
+   * - correctAnswer: string
    * - time: number (seconds elapsed)
    */
   checkAnswer(userAnswer) {
-    if (this.roundEnded || this.attempt >= 2) {
+    if (this.roundEnded) {
       return { action: 'ignore' };
     }
 
     const trimmed = userAnswer.trim();
-    this.attempt++;
     const timeTaken = (Date.now() - this.startTime) / 1000;
+    this.roundEnded = true;
 
-    const hasNeighbors = this.current && (this.neighbors[this.current.country] || []).length > 0;
-
-    // Empty answer is treated as skip/wrong
+    // Empty answer = skip
     if (!trimmed) {
-      if (this.attempt === 1) {
-        // First attempt - show neighbors as hint
-        if (!this.usedHint && this.onHintUsed) {
-          this.usedHint = true;
-          this.onHintUsed();
-        }
-        return {
-          action: 'empty',
-          isCorrect: false,
-          showNeighbors: true,
-          message: hasNeighbors
-            ? "❌ Try again with neighbor hints!"
-            : "❌ Try again, this country has no land borders!",
-          time: timeTaken
-        };
-      } else {
-        // Second attempt - end round
-        this.roundEnded = true;
-        const result = {
-          action: 'wrong_second',
-          isCorrect: false,
-          showNeighbors: true,
-          correctAnswer: this.current.country,
-          message: `❌ Skipped. The answer was: ${this.current.country}`,
-          time: timeTaken,
-          usedHint: this.usedHint
-        };
-        
-        if (this.onAnswer) {
-          this.onAnswer(result);
-        }
-        
-        return result;
-      }
+      const result = {
+        action: 'skip',
+        isCorrect: false,
+        correctAnswer: this.current.country,
+        message: `❌ Skipped. The answer was: ${this.current.country}`,
+        time: timeTaken,
+        usedHint: this.usedHint
+      };
+      if (this.onAnswer) this.onAnswer(result);
+      return result;
     }
 
     // Check answer (handle aliases)
-    const normCountry = norm(this.current.country);
-    const searchName = resolveAlias(trimmed);
-    const isCorrect = norm(searchName) === normCountry;
+    const isCorrect = norm(resolveAlias(trimmed)) === norm(this.current.country);
 
     if (isCorrect) {
-      this.roundEnded = true;
-      
-      let points = 0;
-      let action = '';
-      let message = '';
-      
-      if (this.attempt === 1) {
-        points = 2;
-        action = 'correct_first';
-        message = this.singleRound ? '✅ Correct!' : '✅ Correct! +2 points';
-        this.score += 2;
-        this.correctFirstTry++;
-        this.correctAny++;
-      } else {
-        points = 1;
-        action = 'correct_second';
-        message = this.singleRound ? '✅ Correct!' : '✅ Correct! +1 point';
-        this.score += 1;
-        this.correctAny++;
-      }
-      
+      const points = this.usedHint ? 1 : 2;
+      this.score += points;
+      this.correct++;
+
+      const message = this.singleRound
+        ? '✅ Correct!'
+        : `✅ Correct! +${points} point${points > 1 ? 's' : ''}`;
+
       const result = {
-        action,
+        action: 'correct',
         isCorrect: true,
         points,
         message,
@@ -184,59 +144,28 @@ export class OutlinesGameLogic {
         usedHint: this.usedHint,
         score: this.score
       };
-      
-      if (this.onAnswer) {
-        this.onAnswer(result);
-      }
-      
+      if (this.onAnswer) this.onAnswer(result);
       return result;
-    } else {
-      // Wrong answer
-      if (this.attempt === 1) {
-        // First wrong attempt - show neighbors
-        if (!this.usedHint && this.onHintUsed) {
-          this.usedHint = true;
-          this.onHintUsed();
-        }
-        return {
-          action: 'wrong_first',
-          isCorrect: false,
-          showNeighbors: true,
-          message: hasNeighbors
-            ? "❌ Not quite. Try again with neighbor hints!"
-            : "❌ Not quite. Try again, this country has no land borders!",
-          time: timeTaken
-        };
-      } else {
-        // Second wrong attempt - end round
-        this.roundEnded = true;
-        const result = {
-          action: 'wrong_second',
-          isCorrect: false,
-          showNeighbors: true,
-          correctAnswer: this.current.country,
-          message: `❌ Wrong. The answer was: ${this.current.country}`,
-          time: timeTaken,
-          usedHint: this.usedHint
-        };
-        
-        if (this.onAnswer) {
-          this.onAnswer(result);
-        }
-        
-        return result;
-      }
     }
+
+    // Wrong answer
+    const result = {
+      action: 'wrong',
+      isCorrect: false,
+      correctAnswer: this.current.country,
+      message: `❌ Wrong. The answer was: ${this.current.country}`,
+      time: timeTaken,
+      usedHint: this.usedHint
+    };
+    if (this.onAnswer) this.onAnswer(result);
+    return result;
   }
 
   handleTimeout() {
-    if (this.roundEnded) {
-      return null;
-    }
-
+    if (this.roundEnded) return null;
     this.roundEnded = true;
     const timeTaken = (Date.now() - this.startTime) / 1000;
-    
+
     const result = {
       action: 'timeout',
       isCorrect: false,
@@ -245,11 +174,7 @@ export class OutlinesGameLogic {
       time: timeTaken,
       usedHint: this.usedHint
     };
-    
-    if (this.onAnswer) {
-      this.onAnswer(result);
-    }
-    
+    if (this.onAnswer) this.onAnswer(result);
     return result;
   }
 
@@ -262,8 +187,8 @@ export class OutlinesGameLogic {
   }
 
   getAccuracy() {
-    return this.maxRounds > 0 
-      ? Math.round((this.correctAny / this.maxRounds) * 100) 
+    return this.maxRounds > 0
+      ? Math.round((this.correct / this.maxRounds) * 100)
       : 0;
   }
 }

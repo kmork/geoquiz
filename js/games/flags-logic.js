@@ -29,19 +29,17 @@ export class FlagsGameLogic {
   }
 
   async loadData() {
-    const [flagsData, neighborsData] = await Promise.all([
-      fetch('data/countries-flags.json').then(r => r.json()),
-      fetch('data/countries-neighbors.json').then(r => r.json())
-    ]);
-    this.flagsData = flagsData;
-    this.neighborsData = neighborsData;
+    // Build lookups from unified window.DATA (or window.ALL_COUNTRIES)
+    const all = window.ALL_COUNTRIES || window.DATA;
+    this.flagsData = this.flagsData || Object.fromEntries(all.map(c => [c.country, c.flagCode]));
+    this.neighborsData = this.neighborsData || Object.fromEntries(all.map(c => [c.country, c.neighbors]));
     this._buildFilteredData();
   }
 
   _buildFilteredData() {
     if (!this.flagsData) return;
     const src = this.rawData || window.DATA;
-    this.DATA = src.filter(c => this.flagsData[c.country]);
+    this.DATA = src.filter(c => c.flagCode || this.flagsData[c.country]);
   }
 
   reset() {
@@ -109,10 +107,11 @@ export class FlagsGameLogic {
         const found = Object.keys(this.neighborsData).find(k => normKey(k) === correctKey);
         nbrs = found ? this.neighborsData[found] : [];
       }
-      // Keep only neighbors that have valid flags and different ISO (avoid near-identical)
+      // Keep only neighbors that have valid flags, different ISO, and in the active pool
+      const poolSet = new Set(this.DATA.map(c => c.country));
       neighborNames = (nbrs || []).filter(n => {
         const iso = this.flagsData[n];
-        return iso && iso !== correctISO;
+        return iso && iso !== correctISO && poolSet.has(n);
       });
     }
 
