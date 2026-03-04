@@ -4,8 +4,8 @@
  * Used by both standalone Outlines game and Daily Challenge
  */
 
-import { norm } from "../utils.js";
 import { MAP_W, MAP_H, proj, pathFromFeature, bboxOfFeatureLonLat, padBBox, getCSSVar } from "../map-utils.js";
+import { findGeoFeatures } from "../aliases.js";
 
 /**
  * Outlines Renderer Class
@@ -15,7 +15,6 @@ export class OutlinesRenderer {
   constructor(svgElement, worldData, options = {}) {
     this.svg = svgElement;
     this.worldData = worldData;
-    this.countryAliases = options.aliases || {};
     this.baseViewBox = { x: 0, y: 0, w: MAP_W, h: MAP_H };
   }
   
@@ -30,11 +29,7 @@ export class OutlinesRenderer {
     if (!this.worldData) return;
     
     // Find target country features
-    const mapName = this.countryAliases[targetCountry] || targetCountry;
-    const n = norm(mapName);
-    const targetFeatures = this.worldData.filter(f =>
-      norm(f.properties.ADMIN || '') === n || norm(f.properties.NAME || '') === n
-    );
+    const targetFeatures = findGeoFeatures(this.worldData, targetCountry);
     
     if (targetFeatures.length === 0) {
       this.svg.setAttribute("viewBox", `0 0 ${MAP_W} ${MAP_H}`);
@@ -56,11 +51,7 @@ export class OutlinesRenderer {
     // Include neighbor countries in bounding box
     const neighborFeatures = [];
     for (const neighborCountry of neighborCountries) {
-      const neighborMapName = this.countryAliases[neighborCountry] || neighborCountry;
-      const nn = norm(neighborMapName);
-      const features = this.worldData.filter(f =>
-        norm(f.properties.ADMIN || '') === nn || norm(f.properties.NAME || '') === nn
-      );
+      const features = findGeoFeatures(this.worldData, neighborCountry);
       neighborFeatures.push(...features);
       
       for (const f of features) {

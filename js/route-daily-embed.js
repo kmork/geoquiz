@@ -1,5 +1,5 @@
 import { createRouteGame } from "./route-game.js";
-import { COUNTRY_ALIASES } from "./aliases.js";
+import { COUNTRY_ALIASES, findGeoFeature } from "./aliases.js";
 import { loadGeoJSON } from "./geojson-loader.js";
 import { RouteRenderer } from "./ui-components/route-renderer.js";
 import { attachZoomPan } from "./map-zoom-pan.js";
@@ -73,8 +73,7 @@ export async function runEmbeddedRouteGame(container, { fixedRound, neighbors, c
 
   const WORLD = worldData.features || [];
   function getCountryFeature(countryName) {
-    const n = norm(countryName);
-    return WORLD.find((f) => norm(f.properties.ADMIN || "") === n || norm(f.properties.NAME || "") === n);
+    return findGeoFeature(WORLD, countryName);
   }
 
   // Populate desktop datalist (optional; mobile autocomplete usually replaces it)

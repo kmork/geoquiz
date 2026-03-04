@@ -10,6 +10,7 @@ import { handleShare } from './daily-challenge-share.js';
 import { hapticFeedback } from './game-utils.js';
 import { initConfetti } from './confetti.js';
 import { norm } from './utils.js';
+import { findGeoFeature } from './aliases.js';
 import { runEmbeddedRouteGame } from "./route-daily-embed.js";
 
 // Import game logic modules
@@ -155,10 +156,7 @@ class DailyChallenge {
 
     // ✅ RESTORE: Build country data with regions from GeoJSON (used by games 1,3,5)
     const data = window.DATA.map(countryData => {
-      const n = norm(countryData.country);
-      const feature = geoData.features.find(f =>
-        norm(f.properties.ADMIN || '') === n || norm(f.properties.NAME || '') === n
-      );
+      const feature = findGeoFeature(geoData.features, countryData.country);
       return {
         ...countryData,
         region: feature ? (feature.properties.REGION_UN || feature.properties.CONTINENT) : 'Unknown',

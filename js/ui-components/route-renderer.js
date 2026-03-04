@@ -3,15 +3,13 @@
  * Renders countries along a route with highlighting and auto-zoom
  */
 
-import { norm } from '../utils.js';
 import { padBBox } from '../map-utils.js';
+import { findGeoFeatures } from '../aliases.js';
 
 export class RouteRenderer {
   constructor(svgElement, worldData, options = {}) {
     this.svg = svgElement;
     this.worldFeatures = worldData.features || worldData;
-    this.aliases = options.aliases || {};
-    
     this.MAP_W = 600;
     this.MAP_H = 320;
     
@@ -197,13 +195,7 @@ export class RouteRenderer {
     const highlightedFeatures = [];
     const featureBboxes = [];
     for (const item of countryList) {
-      const n = norm(item.country);
-      const features = this.worldFeatures.filter(f => {
-        const admin = f.properties.ADMIN || "";
-        if (norm(admin) === n || norm(f.properties.NAME || "") === n) return true;
-        // aliases maps GeoJSON name → DATA name (e.g. "United States of America" → "United States")
-        return norm(this.aliases[admin] || "") === n;
-      });
+      const features = findGeoFeatures(this.worldFeatures, item.country);
 
       for (const feature of features) {
         highlightedFeatures.push({ feature, color: item.color });

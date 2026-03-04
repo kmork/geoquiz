@@ -1,5 +1,5 @@
 import { norm } from "./utils.js";
-import { COUNTRY_ALIASES } from "./aliases.js";
+import { findGeoFeatures } from "./aliases.js";
 import { loadGeoJSON } from "./geojson-loader.js";
 import { MAP_W, MAP_H, proj, pathFromFeature, bboxOfFeatureLonLat, padBBox, getCSSVar } from "./map-utils.js";
 
@@ -79,9 +79,7 @@ export function createMap({ svgEl, worldUrl, placesUrl }) {
       svgEl.appendChild(p);
     }
 
-    const mapName = COUNTRY_ALIASES[country] || country;
-    const n = norm(mapName);
-    const hits = WORLD.filter((f) => norm(f.properties.ADMIN || "") === n || norm(f.properties.NAME || "") === n);
+    const hits = findGeoFeatures(WORLD, country);
 
     if (!hits.length) {
       baseViewBox = { x: 0, y: 0, w: MAP_W, h: MAP_H };

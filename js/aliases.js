@@ -111,6 +111,28 @@ export const COUNTRY_ALIASES = {
 };
 
 /**
+ * Find all GeoJSON features matching a canonical DATA country name.
+ * Checks ADMIN and NAME fields directly, then falls back to alias resolution.
+ */
+export function findGeoFeatures(worldFeatures, dataCountryName) {
+  const n = norm(dataCountryName);
+  return worldFeatures.filter(f => {
+    const admin = f.properties.ADMIN || '';
+    const name  = f.properties.NAME || '';
+    if (norm(admin) === n || norm(name) === n) return true;
+    const resolved = COUNTRY_ALIASES[admin];
+    return resolved ? norm(resolved) === n : false;
+  });
+}
+
+/**
+ * Find the first GeoJSON feature matching a canonical DATA country name.
+ */
+export function findGeoFeature(worldFeatures, dataCountryName) {
+  return findGeoFeatures(worldFeatures, dataCountryName)[0] || null;
+}
+
+/**
  * Resolve user-typed input to its canonical game data name.
  * Returns the official name if an alias matches, otherwise returns the input unchanged.
  */

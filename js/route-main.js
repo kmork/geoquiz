@@ -1,6 +1,6 @@
 import { createRouteGame } from "./route-game.js";
 import { initConfetti } from "./confetti.js";
-import { COUNTRY_ALIASES } from "./aliases.js";
+import { COUNTRY_ALIASES, findGeoFeature } from "./aliases.js";
 import { loadGeoJSON } from "./geojson-loader.js";
 import { RouteRenderer } from "./ui-components/route-renderer.js";
 import { attachZoomPan } from "./map-zoom-pan.js";
@@ -106,16 +106,7 @@ const game = createRouteGame({
   difficulty: difficultyParam,
   confetti,
   drawCountries: drawCountriesWithZoom,
-  getCountryFeature: (countryName) => {
-    const n = norm(countryName);
-    return WORLD.find((f) => {
-      const admin = f.properties.ADMIN || "";
-      if (norm(admin) === n || norm(f.properties.NAME || "") === n) return true;
-      // COUNTRY_ALIASES maps GeoJSON names like "United States of America" → "United States"
-      const resolved = COUNTRY_ALIASES[admin];
-      return resolved ? norm(resolved) === n : false;
-    });
-  },
+  getCountryFeature: (countryName) => findGeoFeature(WORLD, countryName),
 });
 
 ui.submitBtn?.addEventListener("click", () => {
