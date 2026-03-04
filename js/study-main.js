@@ -511,8 +511,8 @@ function findHeritageAtPoint(cx, cy) {
 function showHeritagePopup(site) {
   heritagePopupImg.src = site.imageUrl;
   heritagePopupImg.alt = site.siteName;
-  heritagePopupImg.style.height = Math.min(420, Math.max(200, canvasDisplayHeight * 0.55)) + 'px';
-  heritagePopup.style.width = Math.min(500, Math.max(320, canvasDisplayWidth * 0.36)) + 'px';
+  heritagePopupImg.style.height = Math.max(200, canvasDisplayHeight * 0.7) + 'px';
+  heritagePopup.style.width = Math.max(320, canvasDisplayWidth * 0.75) + 'px';
   heritagePopupName.textContent = site.siteName;
   const typeLabel = site.type === 'natural' ? 'Natural' : 'Cultural';
   heritagePopupMeta.textContent = `${site.country} · ${typeLabel} · ${site.year}`;
