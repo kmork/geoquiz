@@ -14,7 +14,10 @@
       "Tajikistan",
       "China"
     ],
-    "un": true
+    "un": true,
+    "area": 652230,
+    "population": 43844000,
+    "landlocked": true
   },
   {
     "country": "Aland",
@@ -24,7 +27,10 @@
     "continent": "Europe",
     "flagCode": "ax",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 1580,
+    "population": 30654,
+    "landlocked": false
   },
   {
     "country": "Albania",
@@ -39,7 +45,10 @@
       "North Macedonia",
       "Greece"
     ],
-    "un": true
+    "un": true,
+    "area": 28748,
+    "population": 2363314,
+    "landlocked": false
   },
   {
     "country": "Algeria",
@@ -56,7 +65,10 @@
       "Mauritania",
       "Morocco"
     ],
-    "un": true
+    "un": true,
+    "area": 2381741,
+    "population": 47400000,
+    "landlocked": false
   },
   {
     "country": "American Samoa",
@@ -66,7 +78,10 @@
     "continent": "Oceania",
     "flagCode": "as",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 199,
+    "population": 49710,
+    "landlocked": false
   },
   {
     "country": "Andorra",
@@ -79,7 +94,10 @@
       "France",
       "Spain"
     ],
-    "un": true
+    "un": true,
+    "area": 468,
+    "population": 88406,
+    "landlocked": true
   },
   {
     "country": "Angola",
@@ -94,7 +112,10 @@
       "Namibia",
       "Zambia"
     ],
-    "un": true
+    "un": true,
+    "area": 1246700,
+    "population": 36170961,
+    "landlocked": false
   },
   {
     "country": "Anguilla",
@@ -104,7 +125,10 @@
     "continent": "Americas",
     "flagCode": "ai",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 91,
+    "population": 16010,
+    "landlocked": false
   },
   {
     "country": "Antigua and Barbuda",
@@ -114,7 +138,10 @@
     "continent": "Americas",
     "flagCode": "ag",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 442,
+    "population": 103603,
+    "landlocked": false
   },
   {
     "country": "Argentina",
@@ -130,7 +157,10 @@
       "Brazil",
       "Uruguay"
     ],
-    "un": true
+    "un": true,
+    "area": 2780400,
+    "population": 46735004,
+    "landlocked": false
   },
   {
     "country": "Armenia",
@@ -145,7 +175,10 @@
       "Azerbaijan",
       "Iran"
     ],
-    "un": true
+    "un": true,
+    "area": 29743,
+    "population": 3076200,
+    "landlocked": true
   },
   {
     "country": "Aruba",
@@ -155,7 +188,10 @@
     "continent": "Americas",
     "flagCode": "aw",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 180,
+    "population": 107566,
+    "landlocked": false
   },
   {
     "country": "Australia",
@@ -165,7 +201,10 @@
     "continent": "Oceania",
     "flagCode": "au",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 7692024,
+    "population": 27536874,
+    "landlocked": false
   },
   {
     "country": "Austria",
@@ -184,7 +223,10 @@
       "Switzerland",
       "Liechtenstein"
     ],
-    "un": true
+    "un": true,
+    "area": 83871,
+    "population": 9200931,
+    "landlocked": true
   },
   {
     "country": "Azerbaijan",
@@ -200,7 +242,10 @@
       "Iran",
       "Turkey"
     ],
-    "un": true
+    "un": true,
+    "area": 86600,
+    "population": 10241722,
+    "landlocked": true
   },
   {
     "country": "Bahamas",
@@ -210,7 +255,10 @@
     "continent": "Americas",
     "flagCode": "bs",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 13943,
+    "population": 398165,
+    "landlocked": false
   },
   {
     "country": "Bahrain",
@@ -220,7 +268,10 @@
     "continent": "Asia",
     "flagCode": "bh",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 765,
+    "population": 1594654,
+    "landlocked": false
   },
   {
     "country": "Bangladesh",
@@ -233,7 +284,10 @@
       "India",
       "Myanmar"
     ],
-    "un": true
+    "un": true,
+    "area": 147570,
+    "population": 169828911,
+    "landlocked": false
   },
   {
     "country": "Barbados",
@@ -243,7 +297,10 @@
     "continent": "Americas",
     "flagCode": "bb",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 430,
+    "population": 267800,
+    "landlocked": false
   },
   {
     "country": "Belarus",
@@ -259,7 +316,10 @@
       "Ukraine",
       "Russia"
     ],
-    "un": true
+    "un": true,
+    "area": 207600,
+    "population": 9109280,
+    "landlocked": true
   },
   {
     "country": "Belgium",
@@ -274,7 +334,10 @@
       "Germany",
       "Netherlands"
     ],
-    "un": true
+    "un": true,
+    "area": 30528,
+    "population": 11825551,
+    "landlocked": false
   },
   {
     "country": "Belize",
@@ -287,7 +350,10 @@
       "Mexico",
       "Guatemala"
     ],
-    "un": true
+    "un": true,
+    "area": 22966,
+    "population": 417634,
+    "landlocked": false
   },
   {
     "country": "Benin",
@@ -302,7 +368,10 @@
       "Nigeria",
       "Togo"
     ],
-    "un": true
+    "un": true,
+    "area": 112622,
+    "population": 13224860,
+    "landlocked": false
   },
   {
     "country": "Bermuda",
@@ -312,7 +381,10 @@
     "continent": "Americas",
     "flagCode": "bm",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 54,
+    "population": 64055,
+    "landlocked": false
   },
   {
     "country": "Bhutan",
@@ -325,7 +397,10 @@
       "China",
       "India"
     ],
-    "un": true
+    "un": true,
+    "area": 38394,
+    "population": 784043,
+    "landlocked": true
   },
   {
     "country": "Bolivia",
@@ -342,7 +417,10 @@
       "Argentina",
       "Chile"
     ],
-    "un": true
+    "un": true,
+    "area": 1098581,
+    "population": 11365333,
+    "landlocked": true
   },
   {
     "country": "Bosnia and Herzegovina",
@@ -356,7 +434,10 @@
       "Serbia",
       "Montenegro"
     ],
-    "un": true
+    "un": true,
+    "area": 51209,
+    "population": 3422000,
+    "landlocked": false
   },
   {
     "country": "Botswana",
@@ -371,7 +452,10 @@
       "Zimbabwe",
       "South Africa"
     ],
-    "un": true
+    "un": true,
+    "area": 582000,
+    "population": 2359609,
+    "landlocked": true
   },
   {
     "country": "Brazil",
@@ -391,7 +475,10 @@
       "Argentina",
       "Uruguay"
     ],
-    "un": true
+    "un": true,
+    "area": 8515767,
+    "population": 213421037,
+    "landlocked": false
   },
   {
     "country": "British Indian Ocean Territory",
@@ -401,7 +488,10 @@
     "continent": "Africa",
     "flagCode": "io",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 60,
+    "population": 0,
+    "landlocked": false
   },
   {
     "country": "British Virgin Islands",
@@ -411,7 +501,10 @@
     "continent": "Americas",
     "flagCode": "vg",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 151,
+    "population": 39471,
+    "landlocked": false
   },
   {
     "country": "Brunei",
@@ -423,7 +516,10 @@
     "neighbors": [
       "Malaysia"
     ],
-    "un": true
+    "un": true,
+    "area": 5765,
+    "population": 455500,
+    "landlocked": false
   },
   {
     "country": "Bulgaria",
@@ -439,7 +535,10 @@
       "Greece",
       "Turkey"
     ],
-    "un": true
+    "un": true,
+    "area": 110879,
+    "population": 6437360,
+    "landlocked": false
   },
   {
     "country": "Burkina Faso",
@@ -456,7 +555,10 @@
       "Ghana",
       "Côte d'Ivoire"
     ],
-    "un": true
+    "un": true,
+    "area": 272967,
+    "population": 24070553,
+    "landlocked": true
   },
   {
     "country": "Burundi",
@@ -470,7 +572,10 @@
       "Tanzania",
       "Democratic Republic of the Congo"
     ],
-    "un": true
+    "un": true,
+    "area": 27834,
+    "population": 12332788,
+    "landlocked": true
   },
   {
     "country": "Cabo Verde",
@@ -480,7 +585,10 @@
     "continent": "Africa",
     "flagCode": "cv",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 4033,
+    "population": 491233,
+    "landlocked": false
   },
   {
     "country": "Cambodia",
@@ -494,7 +602,10 @@
       "Laos",
       "Vietnam"
     ],
-    "un": true
+    "un": true,
+    "area": 181035,
+    "population": 17577760,
+    "landlocked": false
   },
   {
     "country": "Cameroon",
@@ -511,7 +622,10 @@
       "Gabon",
       "Equatorial Guinea"
     ],
-    "un": true
+    "un": true,
+    "area": 475442,
+    "population": 29442327,
+    "landlocked": false
   },
   {
     "country": "Canada",
@@ -523,7 +637,10 @@
     "neighbors": [
       "United States"
     ],
-    "un": true
+    "un": true,
+    "area": 9984670,
+    "population": 41651653,
+    "landlocked": false
   },
   {
     "country": "Cayman Islands",
@@ -533,7 +650,10 @@
     "continent": "Americas",
     "flagCode": "ky",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 264,
+    "population": 84738,
+    "landlocked": false
   },
   {
     "country": "Central African Republic",
@@ -550,7 +670,10 @@
       "Congo",
       "Cameroon"
     ],
-    "un": true
+    "un": true,
+    "area": 622984,
+    "population": 6470307,
+    "landlocked": true
   },
   {
     "country": "Chad",
@@ -567,7 +690,10 @@
       "Nigeria",
       "Niger"
     ],
-    "un": true
+    "un": true,
+    "area": 1284000,
+    "population": 19340757,
+    "landlocked": true
   },
   {
     "country": "Chile",
@@ -581,7 +707,10 @@
       "Bolivia",
       "Argentina"
     ],
-    "un": true
+    "un": true,
+    "area": 756102,
+    "population": 20206953,
+    "landlocked": false
   },
   {
     "country": "China",
@@ -606,7 +735,10 @@
       "Laos",
       "Vietnam"
     ],
-    "un": true
+    "un": true,
+    "area": 9706961,
+    "population": 1408280000,
+    "landlocked": false
   },
   {
     "country": "Colombia",
@@ -622,7 +754,10 @@
       "Peru",
       "Ecuador"
     ],
-    "un": true
+    "un": true,
+    "area": 1141748,
+    "population": 53057212,
+    "landlocked": false
   },
   {
     "country": "Comoros",
@@ -632,7 +767,10 @@
     "continent": "Africa",
     "flagCode": "km",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 1862,
+    "population": 919901,
+    "landlocked": false
   },
   {
     "country": "Congo",
@@ -648,7 +786,10 @@
       "Democratic Republic of the Congo",
       "Angola"
     ],
-    "un": true
+    "un": true,
+    "area": 342000,
+    "population": 6142180,
+    "landlocked": false
   },
   {
     "country": "Cook Islands",
@@ -658,7 +799,10 @@
     "continent": "Oceania",
     "flagCode": "ck",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 236,
+    "population": 15040,
+    "landlocked": false
   },
   {
     "country": "Costa Rica",
@@ -671,7 +815,10 @@
       "Nicaragua",
       "Panama"
     ],
-    "un": true
+    "un": true,
+    "area": 51100,
+    "population": 5309625,
+    "landlocked": false
   },
   {
     "country": "Côte d'Ivoire",
@@ -687,7 +834,10 @@
       "Burkina Faso",
       "Ghana"
     ],
-    "un": true
+    "un": true,
+    "area": 322463,
+    "population": 31719275,
+    "landlocked": false
   },
   {
     "country": "Croatia",
@@ -703,7 +853,10 @@
       "Bosnia and Herzegovina",
       "Montenegro"
     ],
-    "un": true
+    "un": true,
+    "area": 56594,
+    "population": 3866233,
+    "landlocked": false
   },
   {
     "country": "Cuba",
@@ -713,7 +866,10 @@
     "continent": "Americas",
     "flagCode": "cu",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 109884,
+    "population": 9748007,
+    "landlocked": false
   },
   {
     "country": "Curaçao",
@@ -723,7 +879,10 @@
     "continent": "Americas",
     "flagCode": "cw",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 444,
+    "population": 156115,
+    "landlocked": false
   },
   {
     "country": "Cyprus",
@@ -733,7 +892,10 @@
     "continent": "Asia",
     "flagCode": "cy",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 9251,
+    "population": 1442614,
+    "landlocked": false
   },
   {
     "country": "Czechia",
@@ -748,7 +910,10 @@
       "Slovakia",
       "Austria"
     ],
-    "un": true
+    "un": true,
+    "area": 78865,
+    "population": 10882341,
+    "landlocked": true
   },
   {
     "country": "Democratic Republic of the Congo",
@@ -768,7 +933,10 @@
       "Zambia",
       "Angola"
     ],
-    "un": true
+    "un": true,
+    "area": 2344858,
+    "population": 112832000,
+    "landlocked": false
   },
   {
     "country": "Denmark",
@@ -780,7 +948,10 @@
     "neighbors": [
       "Germany"
     ],
-    "un": true
+    "un": true,
+    "area": 43094,
+    "population": 6011488,
+    "landlocked": false
   },
   {
     "country": "Djibouti",
@@ -794,7 +965,10 @@
       "Ethiopia",
       "Somalia"
     ],
-    "un": true
+    "un": true,
+    "area": 23200,
+    "population": 1066809,
+    "landlocked": false
   },
   {
     "country": "Dominica",
@@ -804,7 +978,10 @@
     "continent": "Americas",
     "flagCode": "dm",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 751,
+    "population": 67408,
+    "landlocked": false
   },
   {
     "country": "Dominican Republic",
@@ -816,7 +993,10 @@
     "neighbors": [
       "Haiti"
     ],
-    "un": true
+    "un": true,
+    "area": 48671,
+    "population": 10771504,
+    "landlocked": false
   },
   {
     "country": "Ecuador",
@@ -829,7 +1009,10 @@
       "Colombia",
       "Peru"
     ],
-    "un": true
+    "un": true,
+    "area": 276841,
+    "population": 18103660,
+    "landlocked": false
   },
   {
     "country": "Egypt",
@@ -844,7 +1027,10 @@
       "Israel",
       "Palestine"
     ],
-    "un": true
+    "un": true,
+    "area": 1002450,
+    "population": 107271260,
+    "landlocked": false
   },
   {
     "country": "El Salvador",
@@ -857,7 +1043,10 @@
       "Guatemala",
       "Honduras"
     ],
-    "un": true
+    "un": true,
+    "area": 21041,
+    "population": 6029976,
+    "landlocked": false
   },
   {
     "country": "Equatorial Guinea",
@@ -870,7 +1059,10 @@
       "Cameroon",
       "Gabon"
     ],
-    "un": true
+    "un": true,
+    "area": 28051,
+    "population": 1668768,
+    "landlocked": false
   },
   {
     "country": "Eritrea",
@@ -884,7 +1076,10 @@
       "Ethiopia",
       "Djibouti"
     ],
-    "un": true
+    "un": true,
+    "area": 117600,
+    "population": 3607000,
+    "landlocked": false
   },
   {
     "country": "Estonia",
@@ -897,7 +1092,10 @@
       "Russia",
       "Latvia"
     ],
-    "un": true
+    "un": true,
+    "area": 45227,
+    "population": 1369995,
+    "landlocked": false
   },
   {
     "country": "Eswatini",
@@ -910,7 +1108,10 @@
       "South Africa",
       "Mozambique"
     ],
-    "un": true
+    "un": true,
+    "area": 17364,
+    "population": 1235549,
+    "landlocked": true
   },
   {
     "country": "Ethiopia",
@@ -927,7 +1128,10 @@
       "South Sudan",
       "Sudan"
     ],
-    "un": true
+    "un": true,
+    "area": 1104300,
+    "population": 111652998,
+    "landlocked": true
   },
   {
     "country": "Falkland Islands",
@@ -937,7 +1141,10 @@
     "continent": "Americas",
     "flagCode": "fk",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 12173,
+    "population": 3662,
+    "landlocked": false
   },
   {
     "country": "Faroe Islands",
@@ -947,7 +1154,10 @@
     "continent": "Europe",
     "flagCode": "fo",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 1393,
+    "population": 54885,
+    "landlocked": false
   },
   {
     "country": "Fiji",
@@ -957,7 +1167,10 @@
     "continent": "Oceania",
     "flagCode": "fj",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 18272,
+    "population": 900869,
+    "landlocked": false
   },
   {
     "country": "Finland",
@@ -971,7 +1184,10 @@
       "Norway",
       "Russia"
     ],
-    "un": true
+    "un": true,
+    "area": 338455,
+    "population": 5650325,
+    "landlocked": false
   },
   {
     "country": "France",
@@ -990,7 +1206,10 @@
       "Andorra",
       "Spain"
     ],
-    "un": true
+    "un": true,
+    "area": 543908,
+    "population": 66351959,
+    "landlocked": false
   },
   {
     "country": "French Polynesia",
@@ -1000,7 +1219,10 @@
     "continent": "Oceania",
     "flagCode": "pf",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 4167,
+    "population": 279500,
+    "landlocked": false
   },
   {
     "country": "Gabon",
@@ -1014,7 +1236,10 @@
       "Cameroon",
       "Congo"
     ],
-    "un": true
+    "un": true,
+    "area": 267668,
+    "population": 2469296,
+    "landlocked": false
   },
   {
     "country": "Gambia",
@@ -1026,7 +1251,10 @@
     "neighbors": [
       "Senegal"
     ],
-    "un": true
+    "un": true,
+    "area": 10689,
+    "population": 2422712,
+    "landlocked": false
   },
   {
     "country": "Georgia",
@@ -1041,7 +1269,10 @@
       "Armenia",
       "Turkey"
     ],
-    "un": true
+    "un": true,
+    "area": 69700,
+    "population": 4000921,
+    "landlocked": false
   },
   {
     "country": "Germany",
@@ -1061,7 +1292,10 @@
       "Belgium",
       "Netherlands"
     ],
-    "un": true
+    "un": true,
+    "area": 357114,
+    "population": 83491249,
+    "landlocked": false
   },
   {
     "country": "Ghana",
@@ -1075,7 +1309,10 @@
       "Burkina Faso",
       "Togo"
     ],
-    "un": true
+    "un": true,
+    "area": 238533,
+    "population": 33742380,
+    "landlocked": false
   },
   {
     "country": "Gibraltar",
@@ -1085,7 +1322,10 @@
     "continent": "Europe",
     "flagCode": "gi",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 6,
+    "population": 38000,
+    "landlocked": false
   },
   {
     "country": "Greece",
@@ -1100,7 +1340,10 @@
       "Bulgaria",
       "Turkey"
     ],
-    "un": true
+    "un": true,
+    "area": 131990,
+    "population": 10400720,
+    "landlocked": false
   },
   {
     "country": "Greenland",
@@ -1110,7 +1353,10 @@
     "continent": "Americas",
     "flagCode": "gl",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 2166086,
+    "population": 56542,
+    "landlocked": false
   },
   {
     "country": "Grenada",
@@ -1120,7 +1366,10 @@
     "continent": "Americas",
     "flagCode": "gd",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 344,
+    "population": 109021,
+    "landlocked": false
   },
   {
     "country": "Guam",
@@ -1130,7 +1379,10 @@
     "continent": "Oceania",
     "flagCode": "gu",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 549,
+    "population": 153836,
+    "landlocked": false
   },
   {
     "country": "Guatemala",
@@ -1145,7 +1397,10 @@
       "Honduras",
       "El Salvador"
     ],
-    "un": true
+    "un": true,
+    "area": 108889,
+    "population": 18079810,
+    "landlocked": false
   },
   {
     "country": "Guernsey",
@@ -1155,7 +1410,10 @@
     "continent": "Europe",
     "flagCode": "gg",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 78,
+    "population": 64781,
+    "landlocked": false
   },
   {
     "country": "Guinea",
@@ -1172,7 +1430,10 @@
       "Liberia",
       "Sierra Leone"
     ],
-    "un": true
+    "un": true,
+    "area": 245857,
+    "population": 14363931,
+    "landlocked": false
   },
   {
     "country": "Guinea-Bissau",
@@ -1185,7 +1446,10 @@
       "Senegal",
       "Guinea"
     ],
-    "un": true
+    "un": true,
+    "area": 36125,
+    "population": 1781308,
+    "landlocked": false
   },
   {
     "country": "Guyana",
@@ -1199,7 +1463,10 @@
       "Brazil",
       "Suriname"
     ],
-    "un": true
+    "un": true,
+    "area": 214969,
+    "population": 772975,
+    "landlocked": false
   },
   {
     "country": "Haiti",
@@ -1211,7 +1478,10 @@
     "neighbors": [
       "Dominican Republic"
     ],
-    "un": true
+    "un": true,
+    "area": 27750,
+    "population": 11867032,
+    "landlocked": false
   },
   {
     "country": "Honduras",
@@ -1225,7 +1495,10 @@
       "El Salvador",
       "Nicaragua"
     ],
-    "un": true
+    "un": true,
+    "area": 112492,
+    "population": 9892632,
+    "landlocked": false
   },
   {
     "country": "Hong Kong",
@@ -1235,7 +1508,10 @@
     "continent": "Asia",
     "flagCode": "hk",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 1104,
+    "population": 7527500,
+    "landlocked": false
   },
   {
     "country": "Hungary",
@@ -1253,7 +1529,10 @@
       "Croatia",
       "Slovenia"
     ],
-    "un": true
+    "un": true,
+    "area": 93028,
+    "population": 9539502,
+    "landlocked": true
   },
   {
     "country": "Iceland",
@@ -1263,7 +1542,10 @@
     "continent": "Europe",
     "flagCode": "is",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 103000,
+    "population": 391810,
+    "landlocked": false
   },
   {
     "country": "India",
@@ -1280,7 +1562,10 @@
       "Bangladesh",
       "Myanmar"
     ],
-    "un": true
+    "un": true,
+    "area": 3287263,
+    "population": 1417492000,
+    "landlocked": false
   },
   {
     "country": "Indonesia",
@@ -1294,7 +1579,10 @@
       "Timor-Leste",
       "Malaysia"
     ],
-    "un": true
+    "un": true,
+    "area": 1904569,
+    "population": 284438782,
+    "landlocked": false
   },
   {
     "country": "Iran",
@@ -1316,7 +1604,10 @@
       "Azerbaijan",
       "Armenia"
     ],
-    "un": true
+    "un": true,
+    "area": 1648195,
+    "population": 85961000,
+    "landlocked": false
   },
   {
     "country": "Iraq",
@@ -1333,7 +1624,10 @@
       "Kuwait",
       "Iran"
     ],
-    "un": true
+    "un": true,
+    "area": 438317,
+    "population": 46118793,
+    "landlocked": false
   },
   {
     "country": "Ireland",
@@ -1345,7 +1639,10 @@
     "neighbors": [
       "United Kingdom"
     ],
-    "un": true
+    "un": true,
+    "area": 70273,
+    "population": 5458600,
+    "landlocked": false
   },
   {
     "country": "Isle of Man",
@@ -1355,7 +1652,10 @@
     "continent": "Europe",
     "flagCode": "im",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 572,
+    "population": 84530,
+    "landlocked": false
   },
   {
     "country": "Israel",
@@ -1371,7 +1671,10 @@
       "Egypt",
       "Palestine"
     ],
-    "un": true
+    "un": true,
+    "area": 21937,
+    "population": 10134800,
+    "landlocked": false
   },
   {
     "country": "Italy",
@@ -1388,7 +1691,10 @@
       "San Marino",
       "Vatican City"
     ],
-    "un": true
+    "un": true,
+    "area": 301336,
+    "population": 58927633,
+    "landlocked": false
   },
   {
     "country": "Jamaica",
@@ -1398,7 +1704,10 @@
     "continent": "Americas",
     "flagCode": "jm",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 10991,
+    "population": 2825544,
+    "landlocked": false
   },
   {
     "country": "Japan",
@@ -1408,7 +1717,10 @@
     "continent": "Asia",
     "flagCode": "jp",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 377930,
+    "population": 123210000,
+    "landlocked": false
   },
   {
     "country": "Jersey",
@@ -1418,7 +1730,10 @@
     "continent": "Europe",
     "flagCode": "je",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 116,
+    "population": 103267,
+    "landlocked": false
   },
   {
     "country": "Jordan",
@@ -1434,7 +1749,10 @@
       "Iraq",
       "Saudi Arabia"
     ],
-    "un": true
+    "un": true,
+    "area": 89342,
+    "population": 11734000,
+    "landlocked": false
   },
   {
     "country": "Kazakhstan",
@@ -1450,7 +1768,10 @@
       "Uzbekistan",
       "Turkmenistan"
     ],
-    "un": true
+    "un": true,
+    "area": 2724900,
+    "population": 20426568,
+    "landlocked": true
   },
   {
     "country": "Kenya",
@@ -1466,7 +1787,10 @@
       "Uganda",
       "Tanzania"
     ],
-    "un": true
+    "un": true,
+    "area": 580367,
+    "population": 53330978,
+    "landlocked": false
   },
   {
     "country": "Kiribati",
@@ -1476,7 +1800,10 @@
     "continent": "Oceania",
     "flagCode": "ki",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 811,
+    "population": 120740,
+    "landlocked": false
   },
   {
     "country": "Kosovo",
@@ -1491,7 +1818,10 @@
       "Albania",
       "Montenegro"
     ],
-    "un": false
+    "un": false,
+    "area": 10908,
+    "population": 1585566,
+    "landlocked": true
   },
   {
     "country": "Kuwait",
@@ -1504,7 +1834,10 @@
       "Iraq",
       "Saudi Arabia"
     ],
-    "un": true
+    "un": true,
+    "area": 17818,
+    "population": 4881254,
+    "landlocked": false
   },
   {
     "country": "Kyrgyzstan",
@@ -1519,7 +1852,10 @@
       "Tajikistan",
       "China"
     ],
-    "un": true
+    "un": true,
+    "area": 199951,
+    "population": 7281800,
+    "landlocked": true
   },
   {
     "country": "Laos",
@@ -1535,7 +1871,10 @@
       "Cambodia",
       "Vietnam"
     ],
-    "un": true
+    "un": true,
+    "area": 236800,
+    "population": 7647000,
+    "landlocked": true
   },
   {
     "country": "Latvia",
@@ -1550,7 +1889,10 @@
       "Belarus",
       "Lithuania"
     ],
-    "un": true
+    "un": true,
+    "area": 64559,
+    "population": 1829000,
+    "landlocked": false
   },
   {
     "country": "Lebanon",
@@ -1563,7 +1905,10 @@
       "Syria",
       "Israel"
     ],
-    "un": true
+    "un": true,
+    "area": 10452,
+    "population": 5490000,
+    "landlocked": false
   },
   {
     "country": "Lesotho",
@@ -1575,7 +1920,10 @@
     "neighbors": [
       "South Africa"
     ],
-    "un": true
+    "un": true,
+    "area": 30355,
+    "population": 2116427,
+    "landlocked": true
   },
   {
     "country": "Liberia",
@@ -1589,7 +1937,10 @@
       "Guinea",
       "Côte d'Ivoire"
     ],
-    "un": true
+    "un": true,
+    "area": 111369,
+    "population": 5248621,
+    "landlocked": false
   },
   {
     "country": "Libya",
@@ -1606,7 +1957,10 @@
       "Sudan",
       "Egypt"
     ],
-    "un": true
+    "un": true,
+    "area": 1759540,
+    "population": 7459000,
+    "landlocked": false
   },
   {
     "country": "Liechtenstein",
@@ -1619,7 +1973,10 @@
       "Switzerland",
       "Austria"
     ],
-    "un": true
+    "un": true,
+    "area": 160,
+    "population": 40900,
+    "landlocked": true
   },
   {
     "country": "Lithuania",
@@ -1634,7 +1991,10 @@
       "Poland",
       "Russia"
     ],
-    "un": true
+    "un": true,
+    "area": 65300,
+    "population": 2894886,
+    "landlocked": false
   },
   {
     "country": "Luxembourg",
@@ -1648,7 +2008,10 @@
       "Germany",
       "France"
     ],
-    "un": true
+    "un": true,
+    "area": 2586,
+    "population": 681973,
+    "landlocked": true
   },
   {
     "country": "Macao",
@@ -1658,7 +2021,10 @@
     "continent": "Asia",
     "flagCode": "mo",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 30,
+    "population": 685900,
+    "landlocked": false
   },
   {
     "country": "Madagascar",
@@ -1668,7 +2034,10 @@
     "continent": "Africa",
     "flagCode": "mg",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 587041,
+    "population": 31727042,
+    "landlocked": false
   },
   {
     "country": "Malawi",
@@ -1682,7 +2051,10 @@
       "Tanzania",
       "Mozambique"
     ],
-    "un": true
+    "un": true,
+    "area": 118484,
+    "population": 20734262,
+    "landlocked": true
   },
   {
     "country": "Malaysia",
@@ -1696,7 +2068,10 @@
       "Indonesia",
       "Brunei"
     ],
-    "un": true
+    "un": true,
+    "area": 330803,
+    "population": 34231700,
+    "landlocked": false
   },
   {
     "country": "Maldives",
@@ -1706,7 +2081,10 @@
     "continent": "Asia",
     "flagCode": "mv",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 300,
+    "population": 515132,
+    "landlocked": false
   },
   {
     "country": "Mali",
@@ -1724,7 +2102,10 @@
       "Côte d'Ivoire",
       "Guinea"
     ],
-    "un": true
+    "un": true,
+    "area": 1240192,
+    "population": 22395489,
+    "landlocked": true
   },
   {
     "country": "Malta",
@@ -1734,7 +2115,10 @@
     "continent": "Europe",
     "flagCode": "mt",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 316,
+    "population": 574250,
+    "landlocked": false
   },
   {
     "country": "Marshall Islands",
@@ -1744,7 +2128,10 @@
     "continent": "Oceania",
     "flagCode": "mh",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 181,
+    "population": 42418,
+    "landlocked": false
   },
   {
     "country": "Mauritania",
@@ -1759,7 +2146,10 @@
       "Mali",
       "Senegal"
     ],
-    "un": true
+    "un": true,
+    "area": 1030700,
+    "population": 4927532,
+    "landlocked": false
   },
   {
     "country": "Mauritius",
@@ -1769,7 +2159,10 @@
     "continent": "Africa",
     "flagCode": "mu",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 2040,
+    "population": 1243741,
+    "landlocked": false
   },
   {
     "country": "Mexico",
@@ -1783,7 +2176,10 @@
       "Guatemala",
       "Belize"
     ],
-    "un": true
+    "un": true,
+    "area": 1964375,
+    "population": 130575786,
+    "landlocked": false
   },
   {
     "country": "Micronesia",
@@ -1793,7 +2189,10 @@
     "continent": "Oceania",
     "flagCode": "fm",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 702,
+    "population": 105564,
+    "landlocked": false
   },
   {
     "country": "Moldova",
@@ -1806,7 +2205,10 @@
       "Ukraine",
       "Romania"
     ],
-    "un": true
+    "un": true,
+    "area": 33847,
+    "population": 2749076,
+    "landlocked": true
   },
   {
     "country": "Monaco",
@@ -1818,7 +2220,10 @@
     "neighbors": [
       "France"
     ],
-    "un": true
+    "un": true,
+    "area": 2.02,
+    "population": 38423,
+    "landlocked": false
   },
   {
     "country": "Mongolia",
@@ -1831,7 +2236,10 @@
       "Russia",
       "China"
     ],
-    "un": true
+    "un": true,
+    "area": 1564110,
+    "population": 3544835,
+    "landlocked": true
   },
   {
     "country": "Montenegro",
@@ -1847,7 +2255,10 @@
       "Kosovo",
       "Albania"
     ],
-    "un": true
+    "un": true,
+    "area": 13812,
+    "population": 623327,
+    "landlocked": false
   },
   {
     "country": "Montserrat",
@@ -1857,7 +2268,10 @@
     "continent": "Americas",
     "flagCode": "ms",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 102,
+    "population": 4386,
+    "landlocked": false
   },
   {
     "country": "Morocco",
@@ -1871,7 +2285,10 @@
       "Algeria",
       "Mauritania"
     ],
-    "un": true
+    "un": true,
+    "area": 446550,
+    "population": 36828330,
+    "landlocked": false
   },
   {
     "country": "Mozambique",
@@ -1888,7 +2305,10 @@
       "South Africa",
       "Eswatini"
     ],
-    "un": true
+    "un": true,
+    "area": 801590,
+    "population": 34090466,
+    "landlocked": false
   },
   {
     "country": "Myanmar",
@@ -1904,7 +2324,10 @@
       "Laos",
       "Thailand"
     ],
-    "un": true
+    "un": true,
+    "area": 676578,
+    "population": 51316756,
+    "landlocked": false
   },
   {
     "country": "Namibia",
@@ -1919,7 +2342,10 @@
       "Botswana",
       "South Africa"
     ],
-    "un": true
+    "un": true,
+    "area": 825615,
+    "population": 3022401,
+    "landlocked": false
   },
   {
     "country": "Nauru",
@@ -1929,7 +2355,10 @@
     "continent": "Oceania",
     "flagCode": "nr",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 21,
+    "population": 11680,
+    "landlocked": false
   },
   {
     "country": "Nepal",
@@ -1942,7 +2371,10 @@
       "China",
       "India"
     ],
-    "un": true
+    "un": true,
+    "area": 147181,
+    "population": 29911840,
+    "landlocked": true
   },
   {
     "country": "Netherlands",
@@ -1955,7 +2387,10 @@
       "Germany",
       "Belgium"
     ],
-    "un": true
+    "un": true,
+    "area": 41865,
+    "population": 18100436,
+    "landlocked": false
   },
   {
     "country": "New Caledonia",
@@ -1965,7 +2400,10 @@
     "continent": "Oceania",
     "flagCode": "nc",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 18575,
+    "population": 264596,
+    "landlocked": false
   },
   {
     "country": "New Zealand",
@@ -1975,7 +2413,10 @@
     "continent": "Oceania",
     "flagCode": "nz",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 268838,
+    "population": 5324700,
+    "landlocked": false
   },
   {
     "country": "Nicaragua",
@@ -1988,7 +2429,10 @@
       "Honduras",
       "Costa Rica"
     ],
-    "un": true
+    "un": true,
+    "area": 130373,
+    "population": 6803886,
+    "landlocked": false
   },
   {
     "country": "Niger",
@@ -2006,7 +2450,10 @@
       "Mali",
       "Algeria"
     ],
-    "un": true
+    "un": true,
+    "area": 1267000,
+    "population": 26312034,
+    "landlocked": true
   },
   {
     "country": "Nigeria",
@@ -2021,7 +2468,10 @@
       "Chad",
       "Cameroon"
     ],
-    "un": true
+    "un": true,
+    "area": 923768,
+    "population": 223800000,
+    "landlocked": false
   },
   {
     "country": "Niue",
@@ -2031,7 +2481,10 @@
     "continent": "Oceania",
     "flagCode": "nu",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 260,
+    "population": 1681,
+    "landlocked": false
   },
   {
     "country": "Norfolk Island",
@@ -2041,7 +2494,10 @@
     "continent": "Oceania",
     "flagCode": "nf",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 36,
+    "population": 2188,
+    "landlocked": false
   },
   {
     "country": "North Korea",
@@ -2055,7 +2511,10 @@
       "Russia",
       "South Korea"
     ],
-    "un": true
+    "un": true,
+    "area": 120538,
+    "population": 25950000,
+    "landlocked": false
   },
   {
     "country": "North Macedonia",
@@ -2071,7 +2530,10 @@
       "Greece",
       "Albania"
     ],
-    "un": true
+    "un": true,
+    "area": 25713,
+    "population": 1822612,
+    "landlocked": true
   },
   {
     "country": "Northern Mariana Islands",
@@ -2081,7 +2543,10 @@
     "continent": "Oceania",
     "flagCode": "mp",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 464,
+    "population": 47329,
+    "landlocked": false
   },
   {
     "country": "Norway",
@@ -2095,7 +2560,10 @@
       "Sweden",
       "Russia"
     ],
-    "un": true
+    "un": true,
+    "area": 386224,
+    "population": 5606944,
+    "landlocked": false
   },
   {
     "country": "Oman",
@@ -2109,7 +2577,10 @@
       "Saudi Arabia",
       "Yemen"
     ],
-    "un": true
+    "un": true,
+    "area": 309500,
+    "population": 5343630,
+    "landlocked": false
   },
   {
     "country": "Pakistan",
@@ -2124,7 +2595,10 @@
       "China",
       "India"
     ],
-    "un": true
+    "un": true,
+    "area": 796095,
+    "population": 241499431,
+    "landlocked": false
   },
   {
     "country": "Palau",
@@ -2134,7 +2608,10 @@
     "continent": "Oceania",
     "flagCode": "pw",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 459,
+    "population": 16733,
+    "landlocked": false
   },
   {
     "country": "Palestine",
@@ -2148,7 +2625,10 @@
       "Jordan",
       "Egypt"
     ],
-    "un": false
+    "un": false,
+    "area": 6220,
+    "population": 5483450,
+    "landlocked": false
   },
   {
     "country": "Panama",
@@ -2161,7 +2641,10 @@
       "Costa Rica",
       "Colombia"
     ],
-    "un": true
+    "un": true,
+    "area": 75417,
+    "population": 4064780,
+    "landlocked": false
   },
   {
     "country": "Papua New Guinea",
@@ -2173,7 +2656,10 @@
     "neighbors": [
       "Indonesia"
     ],
-    "un": true
+    "un": true,
+    "area": 462840,
+    "population": 11781559,
+    "landlocked": false
   },
   {
     "country": "Paraguay",
@@ -2187,7 +2673,10 @@
       "Brazil",
       "Argentina"
     ],
-    "un": true
+    "un": true,
+    "area": 406752,
+    "population": 6109644,
+    "landlocked": true
   },
   {
     "country": "Peru",
@@ -2203,7 +2692,10 @@
       "Bolivia",
       "Chile"
     ],
-    "un": true
+    "un": true,
+    "area": 1285216,
+    "population": 34350244,
+    "landlocked": false
   },
   {
     "country": "Philippines",
@@ -2213,7 +2705,10 @@
     "continent": "Asia",
     "flagCode": "ph",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 342353,
+    "population": 114123600,
+    "landlocked": false
   },
   {
     "country": "Poland",
@@ -2231,7 +2726,10 @@
       "Lithuania",
       "Russia"
     ],
-    "un": true
+    "un": true,
+    "area": 312679,
+    "population": 37392000,
+    "landlocked": false
   },
   {
     "country": "Portugal",
@@ -2243,7 +2741,10 @@
     "neighbors": [
       "Spain"
     ],
-    "un": true
+    "un": true,
+    "area": 92090,
+    "population": 10749635,
+    "landlocked": false
   },
   {
     "country": "Puerto Rico",
@@ -2253,7 +2754,10 @@
     "continent": "Americas",
     "flagCode": "pr",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 8870,
+    "population": 3203295,
+    "landlocked": false
   },
   {
     "country": "Qatar",
@@ -2265,7 +2769,10 @@
     "neighbors": [
       "Saudi Arabia"
     ],
-    "un": true
+    "un": true,
+    "area": 11586,
+    "population": 3173024,
+    "landlocked": false
   },
   {
     "country": "Romania",
@@ -2281,7 +2788,10 @@
       "Serbia",
       "Bulgaria"
     ],
-    "un": true
+    "un": true,
+    "area": 238391,
+    "population": 19036031,
+    "landlocked": false
   },
   {
     "country": "Russia",
@@ -2306,7 +2816,10 @@
       "Mongolia",
       "North Korea"
     ],
-    "un": true
+    "un": true,
+    "area": 17098246,
+    "population": 146028325,
+    "landlocked": false
   },
   {
     "country": "Rwanda",
@@ -2321,7 +2834,10 @@
       "Burundi",
       "Democratic Republic of the Congo"
     ],
-    "un": true
+    "un": true,
+    "area": 26338,
+    "population": 14104969,
+    "landlocked": true
   },
   {
     "country": "Saint Barthelemy",
@@ -2331,7 +2847,10 @@
     "continent": "Americas",
     "flagCode": "bl",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 21,
+    "population": 10562,
+    "landlocked": false
   },
   {
     "country": "Saint Helena",
@@ -2341,7 +2860,10 @@
     "continent": "Africa",
     "flagCode": "sh",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 394,
+    "population": 5651,
+    "landlocked": false
   },
   {
     "country": "Saint Kitts and Nevis",
@@ -2351,7 +2873,10 @@
     "continent": "Americas",
     "flagCode": "kn",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 261,
+    "population": 51320,
+    "landlocked": false
   },
   {
     "country": "Saint Lucia",
@@ -2361,7 +2886,10 @@
     "continent": "Americas",
     "flagCode": "lc",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 616,
+    "population": 184100,
+    "landlocked": false
   },
   {
     "country": "Saint Martin",
@@ -2371,7 +2899,10 @@
     "continent": "Americas",
     "flagCode": "mf",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 53,
+    "population": 31496,
+    "landlocked": false
   },
   {
     "country": "Saint Pierre and Miquelon",
@@ -2381,7 +2912,10 @@
     "continent": "Americas",
     "flagCode": "pm",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 242,
+    "population": 5819,
+    "landlocked": false
   },
   {
     "country": "Saint Vincent and the Grenadines",
@@ -2391,7 +2925,10 @@
     "continent": "Americas",
     "flagCode": "vc",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 389,
+    "population": 110872,
+    "landlocked": false
   },
   {
     "country": "Samoa",
@@ -2401,7 +2938,10 @@
     "continent": "Oceania",
     "flagCode": "ws",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 2842,
+    "population": 205557,
+    "landlocked": false
   },
   {
     "country": "San Marino",
@@ -2413,7 +2953,10 @@
     "neighbors": [
       "Italy"
     ],
-    "un": true
+    "un": true,
+    "area": 61,
+    "population": 34132,
+    "landlocked": true
   },
   {
     "country": "Sao Tome and Principe",
@@ -2423,7 +2966,10 @@
     "continent": "Africa",
     "flagCode": "st",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 964,
+    "population": 209607,
+    "landlocked": false
   },
   {
     "country": "Saudi Arabia",
@@ -2441,7 +2987,10 @@
       "Oman",
       "Yemen"
     ],
-    "un": true
+    "un": true,
+    "area": 2149690,
+    "population": 35300280,
+    "landlocked": false
   },
   {
     "country": "Senegal",
@@ -2457,7 +3006,10 @@
       "Guinea-Bissau",
       "Gambia"
     ],
-    "un": true
+    "un": true,
+    "area": 196722,
+    "population": 18593258,
+    "landlocked": false
   },
   {
     "country": "Serbia",
@@ -2476,7 +3028,10 @@
       "Bosnia and Herzegovina",
       "Croatia"
     ],
-    "un": true
+    "un": true,
+    "area": 77589,
+    "population": 6567783,
+    "landlocked": true
   },
   {
     "country": "Seychelles",
@@ -2486,7 +3041,10 @@
     "continent": "Africa",
     "flagCode": "sc",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 452,
+    "population": 122729,
+    "landlocked": false
   },
   {
     "country": "Sierra Leone",
@@ -2499,7 +3057,10 @@
       "Guinea",
       "Liberia"
     ],
-    "un": true
+    "un": true,
+    "area": 71740,
+    "population": 9077691,
+    "landlocked": false
   },
   {
     "country": "Singapore",
@@ -2509,7 +3070,10 @@
     "continent": "Asia",
     "flagCode": "sg",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 710,
+    "population": 6110200,
+    "landlocked": false
   },
   {
     "country": "Sint Maarten",
@@ -2519,7 +3083,10 @@
     "continent": "Americas",
     "flagCode": "sx",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 34,
+    "population": 41349,
+    "landlocked": false
   },
   {
     "country": "Slovakia",
@@ -2535,7 +3102,10 @@
       "Austria",
       "Czechia"
     ],
-    "un": true
+    "un": true,
+    "area": 49037,
+    "population": 5413813,
+    "landlocked": true
   },
   {
     "country": "Slovenia",
@@ -2550,7 +3120,10 @@
       "Hungary",
       "Croatia"
     ],
-    "un": true
+    "un": true,
+    "area": 20273,
+    "population": 2130638,
+    "landlocked": false
   },
   {
     "country": "Solomon Islands",
@@ -2560,7 +3133,10 @@
     "continent": "Oceania",
     "flagCode": "sb",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 28896,
+    "population": 750325,
+    "landlocked": false
   },
   {
     "country": "Somalia",
@@ -2574,7 +3150,10 @@
       "Ethiopia",
       "Kenya"
     ],
-    "un": true
+    "un": true,
+    "area": 637657,
+    "population": 19655000,
+    "landlocked": false
   },
   {
     "country": "South Africa",
@@ -2593,7 +3172,10 @@
       "Eswatini",
       "Lesotho"
     ],
-    "un": true
+    "un": true,
+    "area": 1221037,
+    "population": 63100945,
+    "landlocked": false
   },
   {
     "country": "South Korea",
@@ -2605,7 +3187,10 @@
     "neighbors": [
       "North Korea"
     ],
-    "un": true
+    "un": true,
+    "area": 100210,
+    "population": 51159889,
+    "landlocked": false
   },
   {
     "country": "South Sudan",
@@ -2622,7 +3207,10 @@
       "Ethiopia",
       "Sudan"
     ],
-    "un": true
+    "un": true,
+    "area": 619745,
+    "population": 15786898,
+    "landlocked": true
   },
   {
     "country": "Spain",
@@ -2637,7 +3225,10 @@
       "Andorra",
       "Morocco"
     ],
-    "un": true
+    "un": true,
+    "area": 505992,
+    "population": 49315949,
+    "landlocked": false
   },
   {
     "country": "Sri Lanka",
@@ -2647,7 +3238,10 @@
     "continent": "Asia",
     "flagCode": "lk",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 65610,
+    "population": 21763170,
+    "landlocked": false
   },
   {
     "country": "Sudan",
@@ -2665,7 +3259,10 @@
       "Ethiopia",
       "Eritrea"
     ],
-    "un": true
+    "un": true,
+    "area": 1886068,
+    "population": 51662000,
+    "landlocked": false
   },
   {
     "country": "Suriname",
@@ -2678,7 +3275,10 @@
       "Guyana",
       "Brazil"
     ],
-    "un": true
+    "un": true,
+    "area": 163820,
+    "population": 616500,
+    "landlocked": false
   },
   {
     "country": "Sweden",
@@ -2691,7 +3291,10 @@
       "Norway",
       "Finland"
     ],
-    "un": true
+    "un": true,
+    "area": 450295,
+    "population": 10605098,
+    "landlocked": false
   },
   {
     "country": "Switzerland",
@@ -2707,7 +3310,10 @@
       "Liechtenstein",
       "Italy"
     ],
-    "un": true
+    "un": true,
+    "area": 41284,
+    "population": 9082848,
+    "landlocked": true
   },
   {
     "country": "Syria",
@@ -2723,7 +3329,10 @@
       "Israel",
       "Lebanon"
     ],
-    "un": true
+    "un": true,
+    "area": 185180,
+    "population": 25620000,
+    "landlocked": false
   },
   {
     "country": "Taiwan",
@@ -2733,7 +3342,10 @@
     "continent": "Asia",
     "flagCode": "tw",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 36197,
+    "population": 23317031,
+    "landlocked": false
   },
   {
     "country": "Tajikistan",
@@ -2748,7 +3360,10 @@
       "Kyrgyzstan",
       "China"
     ],
-    "un": true
+    "un": true,
+    "area": 143100,
+    "population": 10499000,
+    "landlocked": true
   },
   {
     "country": "Tanzania",
@@ -2767,7 +3382,10 @@
       "Malawi",
       "Mozambique"
     ],
-    "un": true
+    "un": true,
+    "area": 947303,
+    "population": 68153004,
+    "landlocked": false
   },
   {
     "country": "Thailand",
@@ -2782,7 +3400,10 @@
       "Cambodia",
       "Malaysia"
     ],
-    "un": true
+    "un": true,
+    "area": 513120,
+    "population": 65859640,
+    "landlocked": false
   },
   {
     "country": "Timor-Leste",
@@ -2794,7 +3415,10 @@
     "neighbors": [
       "Indonesia"
     ],
-    "un": true
+    "un": true,
+    "area": 14874,
+    "population": 1391221,
+    "landlocked": false
   },
   {
     "country": "Togo",
@@ -2808,7 +3432,10 @@
       "Burkina Faso",
       "Benin"
     ],
-    "un": true
+    "un": true,
+    "area": 56785,
+    "population": 8095498,
+    "landlocked": false
   },
   {
     "country": "Tonga",
@@ -2818,7 +3445,10 @@
     "continent": "Oceania",
     "flagCode": "to",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 747,
+    "population": 100179,
+    "landlocked": false
   },
   {
     "country": "Trinidad and Tobago",
@@ -2828,7 +3458,10 @@
     "continent": "Americas",
     "flagCode": "tt",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 5130,
+    "population": 1367764,
+    "landlocked": false
   },
   {
     "country": "Tunisia",
@@ -2841,7 +3474,10 @@
       "Algeria",
       "Libya"
     ],
-    "un": true
+    "un": true,
+    "area": 163610,
+    "population": 11972169,
+    "landlocked": false
   },
   {
     "country": "Turkey",
@@ -2860,7 +3496,10 @@
       "Iraq",
       "Syria"
     ],
-    "un": true
+    "un": true,
+    "area": 783562,
+    "population": 85664944,
+    "landlocked": false
   },
   {
     "country": "Turkmenistan",
@@ -2875,7 +3514,10 @@
       "Afghanistan",
       "Iran"
     ],
-    "un": true
+    "un": true,
+    "area": 488100,
+    "population": 7057841,
+    "landlocked": true
   },
   {
     "country": "Turks and Caicos Islands",
@@ -2885,7 +3527,10 @@
     "continent": "Americas",
     "flagCode": "tc",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 948,
+    "population": 50828,
+    "landlocked": false
   },
   {
     "country": "Tuvalu",
@@ -2895,7 +3540,10 @@
     "continent": "Oceania",
     "flagCode": "tv",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 26,
+    "population": 10643,
+    "landlocked": false
   },
   {
     "country": "Uganda",
@@ -2911,7 +3559,10 @@
       "Rwanda",
       "Democratic Republic of the Congo"
     ],
-    "un": true
+    "un": true,
+    "area": 241550,
+    "population": 45905417,
+    "landlocked": true
   },
   {
     "country": "Ukraine",
@@ -2929,7 +3580,10 @@
       "Romania",
       "Moldova"
     ],
-    "un": true
+    "un": true,
+    "area": 603550,
+    "population": 32862000,
+    "landlocked": false
   },
   {
     "country": "United Arab Emirates",
@@ -2942,7 +3596,10 @@
       "Saudi Arabia",
       "Oman"
     ],
-    "un": true
+    "un": true,
+    "area": 83600,
+    "population": 11294243,
+    "landlocked": false
   },
   {
     "country": "United Kingdom",
@@ -2954,7 +3611,10 @@
     "neighbors": [
       "Ireland"
     ],
-    "un": true
+    "un": true,
+    "area": 244376,
+    "population": 69281437,
+    "landlocked": false
   },
   {
     "country": "United States",
@@ -2967,7 +3627,10 @@
       "Canada",
       "Mexico"
     ],
-    "un": true
+    "un": true,
+    "area": 9525067,
+    "population": 340110988,
+    "landlocked": false
   },
   {
     "country": "United States Virgin Islands",
@@ -2977,7 +3640,10 @@
     "continent": "Americas",
     "flagCode": "vi",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 347,
+    "population": 87146,
+    "landlocked": false
   },
   {
     "country": "Uruguay",
@@ -2990,7 +3656,10 @@
       "Brazil",
       "Argentina"
     ],
-    "un": true
+    "un": true,
+    "area": 181034,
+    "population": 3499451,
+    "landlocked": false
   },
   {
     "country": "Uzbekistan",
@@ -3006,7 +3675,10 @@
       "Afghanistan",
       "Turkmenistan"
     ],
-    "un": true
+    "un": true,
+    "area": 447400,
+    "population": 37859698,
+    "landlocked": true
   },
   {
     "country": "Vanuatu",
@@ -3016,7 +3688,10 @@
     "continent": "Oceania",
     "flagCode": "vu",
     "neighbors": [],
-    "un": true
+    "un": true,
+    "area": 12189,
+    "population": 321409,
+    "landlocked": false
   },
   {
     "country": "Vatican City",
@@ -3028,7 +3703,10 @@
     "neighbors": [
       "Italy"
     ],
-    "un": true
+    "un": true,
+    "area": 0.49,
+    "population": 882,
+    "landlocked": true
   },
   {
     "country": "Venezuela",
@@ -3042,7 +3720,10 @@
       "Brazil",
       "Guyana"
     ],
-    "un": true
+    "un": true,
+    "area": 916445,
+    "population": 28517000,
+    "landlocked": false
   },
   {
     "country": "Vietnam",
@@ -3056,7 +3737,10 @@
       "Laos",
       "Cambodia"
     ],
-    "un": true
+    "un": true,
+    "area": 331212,
+    "population": 101343800,
+    "landlocked": false
   },
   {
     "country": "Wallis and Futuna",
@@ -3066,7 +3750,10 @@
     "continent": "Oceania",
     "flagCode": "wf",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 142,
+    "population": 11620,
+    "landlocked": false
   },
   {
     "country": "Western Sahara",
@@ -3076,7 +3763,10 @@
     "continent": "Africa",
     "flagCode": "eh",
     "neighbors": [],
-    "un": false
+    "un": false,
+    "area": 266000,
+    "population": 600904,
+    "landlocked": false
   },
   {
     "country": "Yemen",
@@ -3089,7 +3779,10 @@
       "Saudi Arabia",
       "Oman"
     ],
-    "un": true
+    "un": true,
+    "area": 527968,
+    "population": 32684503,
+    "landlocked": false
   },
   {
     "country": "Zambia",
@@ -3108,7 +3801,10 @@
       "Botswana",
       "Namibia"
     ],
-    "un": true
+    "un": true,
+    "area": 752612,
+    "population": 19693423,
+    "landlocked": true
   },
   {
     "country": "Zimbabwe",
@@ -3123,6 +3819,9 @@
       "South Africa",
       "Botswana"
     ],
-    "un": true
+    "un": true,
+    "area": 390757,
+    "population": 17073087,
+    "landlocked": true
   }
 ]
