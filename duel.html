@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Country Duel - GeoQuiz</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/duel.css">
+  <script>
+    (function() {
+      const saved = localStorage.getItem('geoquiz-theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const theme = saved || system;
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+    })();
+  </script>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="card">
+
+    <div class="row row-space-between">
+      <div>
+        <h1>
+          <a href="index.html" style="text-decoration: none; color: inherit;">
+            <span class="game-header-icon">🆚</span>
+            Country Duel
+          </a>
+        </h1>
+        <div class="muted">Pick the correct country. One wrong answer ends the game!</div>
+      </div>
+      <div class="row">
+        <div class="pill">Streak: <b id="streak">0</b></div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div id="game-content">
+      <!-- Filled by JS each round -->
+    </div>
+
+  </div>
+</div>
+
+<!-- Final score screen -->
+<div class="overlay" id="finalOverlay" role="dialog" aria-modal="true"></div>
+
+<canvas id="confetti"></canvas>
+
+<script src="js/pako.min.js"></script>
+<script src="js/theme.js"></script>
+<script type="module" src="js/data.js"></script>
+<script type="module" src="js/duel-main.js"></script>
+
+</body>
+</html>

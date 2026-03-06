@@ -22,6 +22,7 @@ const GAME_NAMES = {
   rivers:          'Rivers of the World',
   mountains:       'Mountain Ranges',
   'capital-pairs': 'Capital Pairs',
+  duel:            'Country Duel',
 };
 
 const DIFFICULTY_LABELS = {
@@ -65,22 +66,58 @@ export function formatGameTime(seconds) {
 
 /* ── Share text ─────────────────────────────────────────────── */
 
+function resolveGameName(gameId) {
+  // Try full id first, then strip last segment
+  if (GAME_NAMES[gameId]) return { gameName: GAME_NAMES[gameId], diff: null };
+  const dash = gameId.lastIndexOf('-');
+  if (dash < 0) return { gameName: GAME_NAMES[gameId] || gameId, diff: null };
+  const gameKey = gameId.slice(0, dash);
+  const suffix = gameId.slice(dash + 1);
+  // Check if suffix is a difficulty label
+  if (DIFFICULTY_LABELS[suffix]) {
+    return { gameName: GAME_NAMES[gameKey] || gameKey, diff: DIFFICULTY_LABELS[suffix] };
+  }
+  // Otherwise it's a continent slug — try the base key
+  return { gameName: GAME_NAMES[gameKey] || gameKey, diff: null };
+}
+
 function buildShareText({ gameId, score, maxScore, time, accuracy, shareUrl = 'geoquiz.info' }) {
-  const dash     = gameId.lastIndexOf('-');
-  const gameKey  = dash >= 0 ? gameId.slice(0, dash) : gameId;
-  const suffix   = dash >= 0 ? gameId.slice(dash + 1) : '';
-  const gameName = GAME_NAMES[gameKey] || gameId;
-  const diff     = DIFFICULTY_LABELS[suffix];
+  const { gameName, diff } = resolveGameName(gameId);
+  const isSurvival = maxScore == null;
 
   let text = `🌍 GeoQuiz – ${gameName}`;
   if (diff) text += ` (${diff})`;
-  text += `\nScore: ${score}/${maxScore} · ${formatGameTime(time)} ⏱️`;
-  text += `\n${ratingEmoji(accuracy)} ${ratingSubtitle(accuracy)}`;
+  if (isSurvival) {
+    text += `\nStreak: ${score} · ${formatGameTime(time)} ⏱️`;
+  } else {
+    text += `\nScore: ${score}/${maxScore} · ${formatGameTime(time)} ⏱️`;
+  }
+  if (isSurvival) {
+    text += `\n${streakEmoji(score)} ${streakSubtitle(score)}`;
+  } else {
+    text += `\n${ratingEmoji(accuracy)} ${ratingSubtitle(accuracy)}`;
+  }
   text += `\n\n${shareUrl}`;
   return text;
 }
 
 /* ── Emoji / subtitle helpers ───────────────────────────────── */
+
+function streakEmoji(streak) {
+  if (streak >= 20) return '🏆';
+  if (streak >= 15) return '🔥';
+  if (streak >= 10) return '🌟';
+  if (streak >= 5)  return '🎯';
+  return '💪';
+}
+
+function streakSubtitle(streak) {
+  if (streak >= 20) return 'Legendary streak!';
+  if (streak >= 15) return 'On fire!';
+  if (streak >= 10) return 'Impressive run!';
+  if (streak >= 5)  return 'Good streak!';
+  return 'Keep trying!';
+}
 
 function ratingEmoji(accuracy) {
   if (accuracy === 100) return '🏆';
@@ -121,13 +158,15 @@ export function renderFinishScreen(overlayEl, data) {
     onPlayAgain,
   } = data;
 
+  const isSurvival = maxScore == null;
+
   // Check for existing record before saving
   const hadPrevious = !!getGameRecord(gameId);
   const { isNewScore, isNewTime } = saveGameRecord(gameId, score, time);
   const prev = getGameRecord(gameId);
 
-  const emoji    = ratingEmoji(accuracy);
-  const subtitle = ratingSubtitle(accuracy);
+  const emoji    = isSurvival ? streakEmoji(score) : ratingEmoji(accuracy);
+  const subtitle = isSurvival ? streakSubtitle(score) : ratingSubtitle(accuracy);
 
   // Build HTML
   let html = `<div class="panel finish-panel">`;
@@ -136,7 +175,7 @@ export function renderFinishScreen(overlayEl, data) {
   html += `
     <div class="finish-header">
       <div class="finish-emoji">${emoji}</div>
-      <h2 class="finish-title">Game Complete!</h2>
+      <h2 class="finish-title">${isSurvival ? 'Game Over!' : 'Game Complete!'}</h2>
       <p class="finish-subtitle">${subtitle}</p>
     </div>`;
 
@@ -144,13 +183,15 @@ export function renderFinishScreen(overlayEl, data) {
   html += `<div class="finish-stats">`;
 
   // Score column
+  const scoreDisplay = isSurvival ? `${score}` : `${score}/${maxScore}`;
   html += `<div class="finish-stat">
-      <div class="finish-stat-value">${score}/${maxScore}</div>
+      <div class="finish-stat-value">${scoreDisplay}</div>
       <div class="finish-stat-label">${scoreLabel}</div>`;
   if (hadPrevious && isNewScore) {
     html += `<div class="finish-record">New record!</div>`;
   } else if (hadPrevious) {
-    html += `<div class="finish-best">Best: ${prev.bestScore}/${maxScore}</div>`;
+    const bestDisplay = isSurvival ? `Best: ${prev.bestScore}` : `Best: ${prev.bestScore}/${maxScore}`;
+    html += `<div class="finish-best">${bestDisplay}</div>`;
   }
   html += `</div>`;
 

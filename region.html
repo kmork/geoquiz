@@ -526,6 +526,13 @@
         fullCount: 194,
         icon: '🔗',
       },
+      duel: {
+        title: 'Country Duel',
+        desc: 'Two countries face off — pick the right answer to keep your streak alive!',
+        fullCount: 194,
+        icon: '🆚',
+        directUrl: 'duel.html',
+      },
     };
 
     const CONTINENTS = [
@@ -581,7 +588,7 @@
         const totalCount = game.fullCount || '194';
 
         // World card first
-        const worldHref = `play.html?game=${encodeURIComponent(gameKey)}`;
+        const worldHref = game.directUrl || `play.html?game=${encodeURIComponent(gameKey)}`;
         let cards = makeCard(worldHref, '🌐', 'World', `All ${totalCount} countries`);
 
         // Continent cards — use game-specific list if defined
@@ -591,7 +598,9 @@
 
         contList.forEach(c => {
           const count = countFor(c.continent);
-          const href = `play.html?game=${encodeURIComponent(gameKey)}&continent=${encodeURIComponent(c.continent)}`;
+          const href = game.directUrl
+            ? `${game.directUrl}?continent=${encodeURIComponent(c.continent)}`
+            : `play.html?game=${encodeURIComponent(gameKey)}&continent=${encodeURIComponent(c.continent)}`;
           cards += makeCard(href, c.emoji, c.label, `${count} countries`);
         });
 
