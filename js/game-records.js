@@ -155,6 +155,7 @@ export function renderFinishScreen(overlayEl, data) {
     time, accuracy = 0,
     stats = [],
     shareUrl,
+    explanation,
     onPlayAgain,
   } = data;
 
@@ -215,6 +216,15 @@ export function renderFinishScreen(overlayEl, data) {
       html += `<div class="finish-extra"><span class="finish-extra-value">${s.value}</span> <span class="finish-extra-label">${s.label}</span></div>`;
     }
     html += `</div>`;
+  }
+
+  // Explanation card (optional)
+  if (explanation) {
+    html += `
+    <div class="finish-explanation">
+      <div class="finish-explanation-label">Did you know?</div>
+      <div class="finish-explanation-text">${explanation}</div>
+    </div>`;
   }
 
   // Action buttons

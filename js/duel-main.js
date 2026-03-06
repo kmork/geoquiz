@@ -91,6 +91,8 @@ function showFinal() {
 
   const elapsed = logic.getElapsedTime();
 
+  const explanation = logic.getExplanation(logic.currentQuestion);
+
   renderFinishScreen(finalOverlay, {
     gameId,
     score: logic.streak,
@@ -98,6 +100,7 @@ function showFinal() {
     maxScore: null,
     time: elapsed,
     accuracy: 0,
+    explanation,
     shareUrl: `geoquiz.info${location.pathname}${location.search}`,
     onPlayAgain: () => {
       startGame();

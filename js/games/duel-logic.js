@@ -7,6 +7,16 @@
 
 import { shuffleArray } from '../game-utils.js';
 
+function formatPopulation(n) {
+  if (n >= 1e9) return `${(n / 1e9).toFixed(1)} billion`;
+  if (n >= 1e6) return `${(n / 1e6).toFixed(1)} million`;
+  return n.toLocaleString('en-US');
+}
+
+function formatArea(n) {
+  return n.toLocaleString('en-US');
+}
+
 const QUESTION_TYPES = [
   'area', 'population', 'landlocked', 'neighbors_count',
   'borders', 'continent', 'capital'
@@ -211,6 +221,42 @@ export class DuelGameLogic {
     }
 
     return { countryA: a, countryB: b, questionText, correctAnswer, questionType: type };
+  }
+
+  getExplanation(q) {
+    if (!q) return '';
+    const a = q.countryA, b = q.countryB;
+    const correct = q.correctAnswer === 'A' ? a : b;
+    const other = q.correctAnswer === 'A' ? b : a;
+
+    switch (q.questionType) {
+      case 'area':
+        return `${correct.country} covers ${formatArea(correct.area)} km², while ${other.country} covers ${formatArea(other.area)} km².`;
+      case 'population':
+        return `${correct.country} has ${formatPopulation(correct.population)} people, while ${other.country} has ${formatPopulation(other.population)}.`;
+      case 'landlocked': {
+        const ll = a.landlocked ? a : b;
+        const coast = a.landlocked ? b : a;
+        return `${ll.country} is landlocked — ${coast.country} has a coastline!`;
+      }
+      case 'neighbors_count': {
+        const aN = (a.neighbors || []).length;
+        const bN = (b.neighbors || []).length;
+        return `${a.country} borders ${aN} countries, while ${b.country} borders ${bN}.`;
+      }
+      case 'borders': {
+        const neighbor = q.questionText.match(/borders (.+)\?/)?.[1] || '';
+        return `${correct.country}'s neighbors include ${neighbor}!`;
+      }
+      case 'continent':
+        return `${correct.country} is in ${correct.continent}, while ${other.country} is in ${other.continent}.`;
+      case 'capital': {
+        const cap = q.questionText.match(/capital is (.+)\?/)?.[1] || correct.capitals[0];
+        return `${cap} is the capital of ${correct.country}!`;
+      }
+      default:
+        return '';
+    }
   }
 
   nextRound() {
