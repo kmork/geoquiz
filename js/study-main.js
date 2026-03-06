@@ -48,6 +48,11 @@ let showHeritage  = false;
 
 // ── Load data (parallel) ──────────────────────────────────────────────────────
 
+// Wait for data.js to finish loading
+while (!window.DATA) {
+  await new Promise(r => setTimeout(r, 50));
+}
+
 // Build lookups from unified window.DATA
 const countriesFlags = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.flagCode]));
 const neighborsData = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.neighbors]));
