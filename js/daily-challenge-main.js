@@ -557,7 +557,7 @@ class DailyChallenge {
           📋 Share Results
         </button>
         <a href="daily.html" class="btn btn-secondary">
-          🏠 Back to Daily Challenge
+          <img class="btn-icon" src="img/icon-logo-small.svg" alt=""> Back to Daily Challenge
         </a>
       </div>
     `;
@@ -645,7 +645,7 @@ class DailyChallenge {
 
       <div class="results-actions">
         <a href="daily.html" class="btn btn-primary btn-large">
-          🏠 Back to Daily Challenge
+          <img class="btn-icon" src="img/icon-logo-small.svg" alt=""> Back to Daily Challenge
         </a>
       </div>
     `;

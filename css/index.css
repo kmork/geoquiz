@@ -124,22 +124,16 @@ html {
   margin-bottom: 12px;
 }
 
-.globe-emoji {
-  font-size: 72px;
-  line-height: 1;
+.globe-icon {
+  width: 80px;
+  height: 80px;
   display: block;
   position: relative;
-  animation: rotate-globe 10s linear infinite;
-}
-
-@keyframes rotate-globe {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
 }
 
 .globe-ring {
   position: absolute;
-  top: 50px;
+  top: 40px;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 90px;
@@ -370,7 +364,7 @@ h1 {
 
 /* -- About content -- */
 .menu-about-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
-.menu-about-globe { font-size: 28px; }
+.menu-about-globe { width: 28px; height: 28px; }
 .menu-about-name {
   font-size: 22px;
   font-weight: 800;
@@ -474,10 +468,10 @@ h1 {
     justify-content: center;
   }
 
-  .globe-emoji {
-    font-size: 60px;
+  .globe-icon {
+    width: 60px;
+    height: 60px;
     opacity: 0.15;
-    line-height: 1;
   }
 
   .globe-ring {

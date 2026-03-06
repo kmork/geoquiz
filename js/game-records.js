@@ -249,7 +249,7 @@ export function renderFinishScreen(overlayEl, data) {
     <div class="finish-actions">
       <button class="finish-btn finish-btn-primary" data-action="again">🔄 Play Again</button>
       <button class="finish-btn finish-btn-share" data-action="share">📋 Share</button>
-      <button class="finish-btn finish-btn-secondary" data-action="home">🏠 Home</button>
+      <button class="finish-btn finish-btn-secondary" data-action="home"><img class="btn-icon" src="img/icon-logo-small.svg" alt=""> Home</button>
     </div>`;
 
   html += `</div>`; // .panel

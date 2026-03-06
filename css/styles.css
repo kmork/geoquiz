@@ -142,11 +142,18 @@ body{
 
 /* Game page header with icon */
 .game-header-icon {
-  font-size: 44px;
+  width: 36px;
+  height: 36px;
   display: inline-block;
   vertical-align: middle;
   margin-right: 10px;
-  line-height: 1;
+}
+
+/* Inline icon for buttons */
+.btn-icon {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
 }
 
 h1{margin:0 0 6px;font-size:22px}
