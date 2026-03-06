@@ -9,6 +9,7 @@
  */
 
 import { copyToClipboard, showNotification, showCopyModal } from './daily-challenge-share.js';
+import { initConfetti } from './confetti.js';
 
 const STORAGE_PREFIX = 'geoquiz-record-';
 
@@ -185,9 +186,25 @@ export function renderFinishScreen(overlayEl, data) {
 
   // Score column
   const scoreDisplay = isSurvival ? `${score}` : `${score}/${maxScore}`;
-  html += `<div class="finish-stat">
-      <div class="finish-stat-value">${scoreDisplay}</div>
-      <div class="finish-stat-label">${scoreLabel}</div>`;
+  const ringColor = accuracy >= 80 ? 'ring-green' : accuracy >= 60 ? 'ring-gold' : 'ring-muted';
+  const circumference = Math.round(2 * Math.PI * 38); // ~239
+  const ringOffset = Math.round(circumference * (1 - accuracy / 100));
+
+  html += `<div class="finish-stat">`;
+  if (!isSurvival) {
+    html += `
+      <div class="finish-ring-wrap">
+        <svg class="finish-ring" viewBox="0 0 90 90">
+          <circle class="finish-ring-bg" cx="45" cy="45" r="38"/>
+          <circle class="finish-ring-fill ${ringColor}" cx="45" cy="45" r="38"
+            stroke-dasharray="${circumference}" stroke-dashoffset="${circumference}"/>
+        </svg>
+        <div class="finish-ring-text">${scoreDisplay}</div>
+      </div>`;
+  } else {
+    html += `<div class="finish-stat-value">${scoreDisplay}</div>`;
+  }
+  html += `<div class="finish-stat-label">${scoreLabel}</div>`;
   if (hadPrevious && isNewScore) {
     html += `<div class="finish-record">New record!</div>`;
   } else if (hadPrevious) {
@@ -238,6 +255,32 @@ export function renderFinishScreen(overlayEl, data) {
   html += `</div>`; // .panel
 
   overlayEl.innerHTML = html;
+
+  // Animate score ring
+  if (!isSurvival) {
+    const ringFill = overlayEl.querySelector('.finish-ring-fill');
+    if (ringFill) {
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          ringFill.style.strokeDashoffset = ringOffset;
+        });
+      });
+    }
+  }
+
+  // Confetti for good performance
+  const worthy = isSurvival ? score >= 5 : accuracy >= 60;
+  if (worthy) {
+    const confetti = initConfetti('confetti');
+    const emojiEl = overlayEl.querySelector('.finish-emoji');
+    if (emojiEl) {
+      const rect = emojiEl.getBoundingClientRect();
+      const count = isSurvival
+        ? Math.min(60 + score * 5, 120)
+        : Math.round(60 + (accuracy - 60) * 1.5);
+      confetti.burst({ x: rect.left + rect.width / 2, y: rect.top, count });
+    }
+  }
 
   // Wire buttons
   overlayEl.querySelector('[data-action="again"]').addEventListener('click', () => {
