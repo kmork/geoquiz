@@ -5,14 +5,13 @@ import { initConfetti } from './confetti.js';
 import { renderFinishScreen } from './game-records.js';
 
 const params         = new URLSearchParams(location.search);
-const roundsParam    = params.get('rounds') || '10';
+const roundsParam    = params.get('rounds') || 'all';
 const maxPairs       = roundsParam === 'all' ? Infinity : (parseInt(roundsParam) || 10);
-const gameIdSuffix   = roundsParam === 'all' ? 'long' : (roundsParam === '25' ? 'medium' : 'short');
 const continentParam = params.get('continent');
 const continentSlug  = continentParam ? continentParam.toLowerCase().replace(/\s+/g, '-') : null;
 const gameId         = continentSlug
-  ? `capital-pairs-${continentSlug}-${gameIdSuffix}`
-  : `capital-pairs-${gameIdSuffix}`;
+  ? `capital-pairs-${continentSlug}`
+  : 'capital-pairs';
 
 const initOverlay  = document.getElementById('init-overlay');
 const gameContent  = document.getElementById('game-content');
@@ -27,15 +26,24 @@ let ui;
 let displayCountries = []; // current visual order — persisted across re-renders
 let displayCapitals  = [];
 
+async function waitForData() {
+  while (!window.DATA) {
+    await new Promise(r => setTimeout(r, 50));
+  }
+}
+
 async function init() {
   if (initOverlay) initOverlay.style.display = 'flex';
 
+  await waitForData();
+
+  let data = window.DATA;
   if (continentParam) {
-    const filtered = window.DATA.filter(c => c.continent === continentParam);
-    if (filtered.length > 0) window.DATA = filtered;
+    const filtered = data.filter(c => c.continent === continentParam);
+    if (filtered.length > 0) data = filtered;
   }
 
-  logic = new CapitalPairsLogic({ data: window.DATA, maxPairs });
+  logic = new CapitalPairsLogic({ data, maxPairs });
   logic.reset();
 
   if (initOverlay) initOverlay.style.display = 'none';
