@@ -17,7 +17,7 @@ import {
   MAP_W, MAP_H, proj, getCSSVar,
   buildCountryPaths, buildNameLookups,
   checkClickedCountry as engineCheckClicked,
-  drawCountry, visibleOffsets,
+  drawCountriesBatch, visibleOffsets,
   setupCanvas, createPanZoom,
 } from './canvas-map-engine.js';
 
@@ -357,6 +357,7 @@ export async function createGeoFeaturesGame({
 
     const offsets = visibleOffsets(viewport, canvasDisplayWidth);
 
+    const items = [];
     for (const country of countryPaths) {
       const dataName = geoToData[country.name] || resolveToDataName(country.name);
       const ht = dataName ? highlights.get(dataName) : null;
@@ -375,10 +376,14 @@ export async function createGeoFeaturesGame({
         fillStyle = missedFill;   strokeStyle = missedStroke;   strokeWidth = 1.2;
       }
 
-      for (const offset of offsets) {
-        drawCountry(ctx, viewport, country.paths, offset, fillStyle, strokeStyle, strokeWidth);
-      }
+      items.push({
+        path2d: country.path2d, fill: fillStyle, stroke: strokeStyle, strokeWidth,
+        bboxMinX: country.bboxMinX, bboxMaxX: country.bboxMaxX,
+        bboxMinY: country.bboxMinY, bboxMaxY: country.bboxMaxY,
+      });
     }
+
+    drawCountriesBatch(ctx, viewport, items, offsets, canvasDisplayWidth, canvasDisplayHeight);
 
     // For mountains with peaks, skip the generic path dots — only peak markers are drawn
     if (currentFeatureOverlay && !(featureType === 'mountain' && currentPeaks)) {

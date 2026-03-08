@@ -12,7 +12,7 @@ import {
   MAP_W, MAP_H, proj, getCSSVar,
   buildCountryPaths, buildNameLookups,
   checkClickedCountry as engineCheckClicked,
-  drawCountry, visibleOffsets,
+  drawCountriesBatch, visibleOffsets,
   setupCanvas, createPanZoom,
 } from "./canvas-map-engine.js";
 
@@ -108,18 +108,22 @@ export async function createCompleteMap({
 
     const offsets = visibleOffsets(viewport, canvasDisplayWidth);
 
+    const highlightNorm = highlightedCountry ? norm(highlightedCountry) : null;
+    const hoverNorm = hoverCountry ? norm(hoverCountry) : null;
+
+    const items = [];
     for (const country of countryPaths) {
       let fillStyle = defaultFill;
       let strokeStyle = defaultStroke;
       let strokeWidth = 0.5;
 
-      const isDimmed = continentGeoNames.size > 0 && !continentGeoNames.has(norm(country.name));
+      const isDimmed = continentGeoNames.size > 0 && !continentGeoNames.has(country.normName);
 
       if (isDimmed) {
         fillStyle = dimFill;
         strokeStyle = dimStroke;
         strokeWidth = 0.3;
-      } else if (highlightedCountry && norm(country.name) === norm(highlightedCountry)) {
+      } else if (highlightNorm && country.normName === highlightNorm) {
         if (highlightType === "selected") {
           fillStyle = getCSSVar('--map-selected-fill') || "rgba(165, 180, 252, 0.35)";
           strokeStyle = getCSSVar('--map-selected-stroke') || "rgba(165, 180, 252, 0.95)";
@@ -133,20 +137,23 @@ export async function createCompleteMap({
           strokeStyle = getCSSVar('--map-wrong-stroke') || "rgba(252, 165, 161, 0.95)";
           strokeWidth = 1.2;
         }
-      } else if (hoverCountry && norm(country.name) === norm(hoverCountry)) {
+      } else if (hoverNorm && country.normName === hoverNorm) {
         fillStyle = hoverFill;
       }
 
-      for (const offset of offsets) {
-        drawCountry(ctx, viewport, country.paths, offset, fillStyle, strokeStyle, strokeWidth);
-      }
+      items.push({
+        path2d: country.path2d, fill: fillStyle, stroke: strokeStyle, strokeWidth,
+        bboxMinX: country.bboxMinX, bboxMaxX: country.bboxMaxX,
+        bboxMinY: country.bboxMinY, bboxMaxY: country.bboxMaxY,
+      });
     }
+
+    drawCountriesBatch(ctx, viewport, items, offsets, canvasDisplayWidth, canvasDisplayHeight);
 
     // After a wrong answer, draw a small green ring around the correct country's centroid
     // if it's too small to be clearly visible at the current zoom level.
-    if (highlightType === 'correct' && highlightedCountry) {
-      const hn = norm(highlightedCountry);
-      const hc = countryPaths.find(c => norm(c.name) === hn);
+    if (highlightType === 'correct' && highlightNorm) {
+      const hc = countryPaths.find(c => c.normName === highlightNorm);
       if (hc && hc.bboxSize * viewport.zoom < 30) {
         const normalizedScrollX = ((viewport.scrollX % MAP_W) + MAP_W) % MAP_W;
         const baseOffset2 = viewport.scrollX - normalizedScrollX;

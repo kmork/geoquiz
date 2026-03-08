@@ -20,10 +20,25 @@ export const proj = ([lon, lat]) => [
   ((90 - lat) / 180) * MAP_H,
 ];
 
-/** Read a CSS custom property from :root */
+// ── CSS color cache (auto-clears on theme toggle) ────────────────────────────
+
+let _colorCache = null;
+
+/** Read a CSS custom property from :root (cached per theme) */
 export function getCSSVar(name) {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  if (!_colorCache) _colorCache = {};
+  if (!(name in _colorCache)) {
+    _colorCache[name] = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+  return _colorCache[name];
 }
+
+/** Force-clear the CSS color cache */
+export function clearColorCache() { _colorCache = null; }
+
+// Auto-clear when theme class changes on <html>
+new MutationObserver(() => { _colorCache = null; })
+  .observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
 
 /**
  * Convert a GeoJSON feature to canvas path arrays.
@@ -96,6 +111,10 @@ export function buildCountryPaths(worldFeatures) {
     country.bboxSize = Math.max(maxX - minX, maxY - minY);
     country.bboxCx = (minX + maxX) / 2;
     country.bboxCy = (minY + maxY) / 2;
+    country.bboxMinX = minX;
+    country.bboxMinY = minY;
+    country.bboxMaxX = maxX;
+    country.bboxMaxY = maxY;
 
     // Label centroid: average of the largest polygon ring by vertex count.
     // The bbox center is wrong for countries with scattered islands or those
@@ -126,6 +145,21 @@ export function buildCountryPaths(worldFeatures) {
       country.labelCy = country.bboxCy;
       country.labelRingSize = country.bboxSize;
     }
+
+    // Pre-build Path2D for GPU-accelerated rendering
+    const path = new Path2D();
+    for (const ring of country.paths) {
+      if (ring.length === 0) continue;
+      path.moveTo(ring[0][0], ring[0][1]);
+      for (let k = 1; k < ring.length; k++) {
+        path.lineTo(ring[k][0], ring[k][1]);
+      }
+      path.closePath();
+    }
+    country.path2d = path;
+
+    // Pre-normalize name for fast lookups
+    country.normName = norm(country.name);
   }
 
   // Smallest-first → small enclosed countries (Monaco, San Marino) get priority
@@ -305,6 +339,62 @@ export function drawCountry(ctx, viewport, paths, offsetX, fill, stroke, strokeW
     ctx.stroke();
   }
   ctx.restore();
+}
+
+/**
+ * Draw countries in batched mode using cached Path2D objects and canvas transforms.
+ *
+ * Uses canvas transform + Path2D for GPU-accelerated rendering, viewport culling
+ * to skip off-screen countries, and groups countries by fill/stroke style
+ * to minimize draw calls (~5 instead of ~200).
+ *
+ * @param {CanvasRenderingContext2D} ctx
+ * @param {Object} viewport - { scrollX, scrollY, zoom }
+ * @param {Array} items - [{ path2d, fill, stroke, strokeWidth, bboxMinX, bboxMaxX, bboxMinY, bboxMaxY }]
+ * @param {number[]} offsets - World-copy offsets from visibleOffsets()
+ * @param {number} canvasW - Canvas display width in CSS pixels
+ * @param {number} canvasH - Canvas display height in CSS pixels
+ */
+export function drawCountriesBatch(ctx, viewport, items, offsets, canvasW, canvasH) {
+  const { scrollX, scrollY, zoom } = viewport;
+  const viewTop = scrollY;
+  const viewBottom = scrollY + canvasH / zoom;
+
+  for (const offset of offsets) {
+    const localViewLeft = scrollX - offset;
+    const localViewRight = localViewLeft + canvasW / zoom;
+
+    ctx.save();
+    ctx.translate((offset - scrollX) * zoom, -scrollY * zoom);
+    ctx.scale(zoom, zoom);
+
+    // Group visible countries by style for batched draw calls
+    const groups = new Map();
+    for (const item of items) {
+      // Viewport culling — skip countries entirely off-screen
+      if (item.bboxMaxX < localViewLeft || item.bboxMinX > localViewRight ||
+          item.bboxMaxY < viewTop || item.bboxMinY > viewBottom) continue;
+
+      const key = item.fill + '|' + item.stroke + '|' + item.strokeWidth;
+      let group = groups.get(key);
+      if (!group) {
+        group = { fill: item.fill, stroke: item.stroke, strokeWidth: item.strokeWidth, combined: new Path2D() };
+        groups.set(key, group);
+      }
+      group.combined.addPath(item.path2d);
+    }
+
+    // Draw each group in a single fill + stroke call
+    for (const group of groups.values()) {
+      ctx.fillStyle = group.fill;
+      ctx.fill(group.combined);
+      ctx.strokeStyle = group.stroke;
+      ctx.lineWidth = group.strokeWidth / zoom;
+      ctx.stroke(group.combined);
+    }
+
+    ctx.restore();
+  }
 }
 
 /**

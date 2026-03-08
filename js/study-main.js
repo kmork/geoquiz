@@ -10,7 +10,7 @@ import { loadGeoJSON } from './geojson-loader.js';
 import {
   MAP_W, MAP_H, proj, getCSSVar,
   buildCountryPaths, buildNameLookups,
-  checkClickedCountry, drawCountry, visibleOffsets,
+  checkClickedCountry, drawCountriesBatch, visibleOffsets,
   setupCanvas, createPanZoom,
 } from './canvas-map-engine.js';
 
@@ -135,18 +135,23 @@ function drawWorldMap() {
 
   // ── Countries ──────────────────────────────────────────────────────────────
 
+  const hoverStroke = getCSSVar('--map-selected-stroke') || 'rgba(165,180,252,0.95)';
+  const items = [];
   for (const country of countryPaths) {
     const dataName = geoToData[country.name] || resolveToDataName(country.name);
     const isHovered = dataName && dataName === hoveredCountry;
 
-    const fill   = isHovered ? hoverFill : defaultFill;
-    const stroke = isHovered ? (getCSSVar('--map-selected-stroke') || 'rgba(165,180,252,0.95)') : defaultStroke;
-    const sw     = isHovered ? 1.2 : 0.5;
-
-    for (const offset of offsets) {
-      drawCountry(ctx, viewport, country.paths, offset, fill, stroke, sw);
-    }
+    items.push({
+      path2d: country.path2d,
+      fill:   isHovered ? hoverFill : defaultFill,
+      stroke: isHovered ? hoverStroke : defaultStroke,
+      strokeWidth: isHovered ? 1.2 : 0.5,
+      bboxMinX: country.bboxMinX, bboxMaxX: country.bboxMaxX,
+      bboxMinY: country.bboxMinY, bboxMaxY: country.bboxMaxY,
+    });
   }
+
+  drawCountriesBatch(ctx, viewport, items, offsets, canvasDisplayWidth, canvasDisplayHeight);
 
   // ── Rivers ─────────────────────────────────────────────────────────────────
 
@@ -533,6 +538,9 @@ function hideHeritagePopup() {
 }
 
 document.getElementById('heritage-popup-close').addEventListener('click', hideHeritagePopup);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && heritagePopupVisible) hideHeritagePopup();
+});
 
 
 // ── Toggle buttons ────────────────────────────────────────────────────────────
