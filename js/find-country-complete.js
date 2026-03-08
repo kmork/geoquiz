@@ -151,8 +151,10 @@ export async function createCompleteMap({
         const normalizedScrollX = ((viewport.scrollX % MAP_W) + MAP_W) % MAP_W;
         const baseOffset2 = viewport.scrollX - normalizedScrollX;
         for (let i = -1; i <= 1; i++) {
-          const sx = (hc.bboxCx + baseOffset2 + i * MAP_W - viewport.scrollX) * viewport.zoom;
-          const sy = (hc.bboxCy - viewport.scrollY) * viewport.zoom;
+          const cx = hc.labelCx ?? hc.bboxCx;
+          const cy = hc.labelCy ?? hc.bboxCy;
+          const sx = (cx + baseOffset2 + i * MAP_W - viewport.scrollX) * viewport.zoom;
+          const sy = (cy - viewport.scrollY) * viewport.zoom;
           ctx.save();
           ctx.beginPath();
           ctx.arc(sx, sy, 10, 0, Math.PI * 2);
@@ -197,16 +199,36 @@ export async function createCompleteMap({
 
     let minLon = Infinity, minLat = Infinity, maxLon = -Infinity, maxLat = -Infinity;
 
+    const allRings = [];
     for (const f of features) {
-      const rings = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
-      for (const poly of rings) {
+      const polys = f.geometry.type === "Polygon" ? [f.geometry.coordinates] : f.geometry.coordinates;
+      for (const poly of polys) {
         for (const ring of poly) {
+          allRings.push(ring);
           for (const [lon, lat] of ring) {
             if (lon < minLon) minLon = lon;
             if (lat < minLat) minLat = lat;
             if (lon > maxLon) maxLon = lon;
             if (lat > maxLat) maxLat = lat;
           }
+        }
+      }
+    }
+
+    // If bbox spans > 180° longitude, country crosses the antimeridian.
+    // Use only the largest ring (main landmass) for the bbox.
+    if (maxLon - minLon > 180) {
+      let bestRing = null, bestCount = 0;
+      for (const ring of allRings) {
+        if (ring.length > bestCount) { bestCount = ring.length; bestRing = ring; }
+      }
+      if (bestRing) {
+        minLon = Infinity; minLat = Infinity; maxLon = -Infinity; maxLat = -Infinity;
+        for (const [lon, lat] of bestRing) {
+          if (lon < minLon) minLon = lon;
+          if (lat < minLat) minLat = lat;
+          if (lon > maxLon) maxLon = lon;
+          if (lat > maxLat) maxLat = lat;
         }
       }
     }
