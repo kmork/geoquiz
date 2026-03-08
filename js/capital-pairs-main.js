@@ -109,11 +109,10 @@ function showFinal() {
   renderFinishScreen(finalOverlay, {
     gameId,
     score:      progress.score,
-    scoreLabel: 'Pairs matched',
-    maxScore:   progress.total,
+    scoreLabel: 'Streak',
+    maxScore:   null,
     time:       logic.getElapsedTime(),
-    accuracy:   logic.getAccuracy(),
-    stats:      [{ label: 'Wrong guesses', value: logic.wrongGuesses }],
+    accuracy:   0,
     shareUrl:   `geoquiz.info${location.pathname}${location.search}`,
     onPlayAgain: () => {
       logic.reset();
