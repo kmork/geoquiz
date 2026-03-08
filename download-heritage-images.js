@@ -12,6 +12,7 @@ const outputDir = path.join(__dirname, 'img', 'heritage');
 
 // Wikipedia article title → local filename
 const sites = [
+  // Previous batch
   { title: 'Sigiriya',                       filename: 'sigiriya.jpg' },
   { title: 'Persepolis',                     filename: 'persepolis.jpg' },
   { title: 'Himeji Castle',                  filename: 'himeji-castle.jpg' },
@@ -32,6 +33,61 @@ const sites = [
   { title: 'Potala Palace',                  filename: 'potala-palace.jpg' },
   { title: 'Teotihuacan',                    filename: 'teotihuacan.jpg' },
   { title: 'Old Bridge, Mostar',             filename: 'mostar-bridge.jpg' },
+  // New batch — Africa
+  { title: 'Table Mountain',                 filename: 'table-mountain.jpg' },
+  { title: 'Ngorongoro Conservation Area',   filename: 'ngorongoro-crater.jpg' },
+  { title: 'Stone Town',                     filename: 'stone-town-zanzibar.jpg' },
+  { title: 'Great Zimbabwe',                 filename: 'great-zimbabwe.jpg' },
+  { title: 'Okavango Delta',                 filename: 'okavango-delta.jpg' },
+  { title: 'Cairo',                          filename: 'historic-cairo.jpg' },
+  // New batch — Asia
+  { title: 'Terracotta Army',               filename: 'terracotta-army.jpg' },
+  { title: 'Hagia Sophia',                  filename: 'istanbul.jpg' },
+  { title: 'Ayutthaya Historical Park',     filename: 'ayutthaya.jpg' },
+  { title: 'Banaue Rice Terraces',          filename: 'rice-terraces-philippines.jpg' },
+  { title: 'Registan',                      filename: 'samarkand.jpg' },
+  { title: 'Prambanan',                     filename: 'prambanan-temple.jpg' },
+  { title: 'Itsukushima Shrine',            filename: 'itsukushima-shrine.jpg' },
+  { title: 'Bulguksa',                      filename: 'gyeongju.jpg' },
+  { title: 'Boudhanath',                    filename: 'kathmandu-valley.jpg' },
+  { title: 'Baalbek',                       filename: 'baalbek.jpg' },
+  { title: 'Dome of the Rock',              filename: 'jerusalem-old-city.jpg' },
+  { title: 'Wadi Rum',                      filename: 'wadi-rum.jpg' },
+  { title: 'Naqsh-e Jahan Square',          filename: 'meidan-emam-isfahan.jpg' },
+  { title: "Sana'a",                         filename: 'sanaa-old-city.jpg' },
+  { title: 'Ellora Caves',                    filename: 'ellora-caves.jpg' },
+  { title: 'Kinkaku-ji',                    filename: 'kyoto.jpg' },
+  // New batch — Europe
+  { title: 'Pompeii',                       filename: 'pompeii.jpg' },
+  { title: 'Bruges',                        filename: 'bruges.jpg' },
+  { title: 'Aletsch Glacier',               filename: 'jungfrau-aletsch.jpg' },
+  { title: "Giant's Causeway",              filename: 'giants-causeway.jpg' },
+  { title: 'Rila Monastery',               filename: 'rila-monastery.jpg' },
+  { title: "Saint Basil's Cathedral",       filename: 'kremlin-red-square.jpg' },
+  { title: 'Auschwitz concentration camp',  filename: 'auschwitz-birkenau.jpg' },
+  { title: 'Delphi',                        filename: 'delphi.jpg' },
+  { title: 'Cologne Cathedral',             filename: 'cologne-cathedral.jpg' },
+  { title: 'Tower of London',               filename: 'tower-of-london.jpg' },
+  { title: 'Suomenlinna',                   filename: 'suomenlinna.jpg' },
+  { title: 'Tallinn',                       filename: 'tallinn.jpg' },
+  { title: 'Bârsana',                        filename: 'maramures-churches.jpg' },
+  // New batch — Americas
+  { title: 'Independence Hall',             filename: 'independence-hall.jpg' },
+  { title: 'Oaxaca',                        filename: 'oaxaca.jpg' },
+  { title: 'Old Quebec',                    filename: 'old-quebec.jpg' },
+  { title: 'Antigua Guatemala',             filename: 'antigua-guatemala.jpg' },
+  { title: 'Plaza Mayor, Lima',             filename: 'lima.jpg' },
+  { title: 'Nazca Lines',                   filename: 'nazca-lines.jpg' },
+  { title: 'Valparaíso',                    filename: 'valparaiso.jpg' },
+  { title: 'Tiwanaku',                      filename: 'tiwanaku.jpg' },
+  { title: 'Angel Falls',                   filename: 'canaima-angel-falls.jpg' },
+  { title: 'Colonia del Sacramento',        filename: 'colonia-del-sacramento.jpg' },
+  { title: 'Christ the Redeemer (statue)',  filename: 'rio-de-janeiro.jpg' },
+  // New batch — Oceania
+  { title: 'Tongariro National Park',       filename: 'tongariro.jpg' },
+  { title: 'Sydney Opera House',            filename: 'sydney-opera-house.jpg' },
+  // New batch — Caribbean
+  { title: 'Pitons (Saint Lucia)',          filename: 'pitons-saint-lucia.jpg' },
 ];
 
 const HEADERS = { 'User-Agent': 'GeoQuiz/1.0 (heritage image downloader; geoquiz.info)' };
@@ -129,7 +185,7 @@ async function main() {
       success = await processSite(site);
     }
     if (success) ok++; else fail++;
-    await sleep(3000);
+    await sleep(8000);
   }
 
   console.log(`\nDone! OK: ${ok}  Failed: ${fail}`);
