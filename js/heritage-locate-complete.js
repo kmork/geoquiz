@@ -497,6 +497,7 @@ export async function createHeritageLocateGame({
       time,
       accuracy,
       stats: [{ label: 'avg. distance', value: avgKm.toLocaleString() + ' km' }],
+      shareUrl: `geoquiz.info${location.pathname}${location.search}`,
       onPlayAgain: async () => {
         await logic.reset();
         if (scoreEl) scoreEl.textContent = '0';
