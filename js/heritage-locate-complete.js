@@ -126,22 +126,6 @@ export async function createHeritageLocateGame({
   resultBanner.style.display = 'none';
   mapwrap.appendChild(resultBanner);
 
-  // ── Canvas resize ───────────────────────────────────────────────────────
-
-  function resizeCanvas() {
-    const { w, h, minZoom } = setupCanvas(canvas, ctx, dpr, mapwrap);
-    canvasW = w;
-    canvasH = h;
-    viewport.minZoom = minZoom;
-    if (viewport.zoom < minZoom) viewport.zoom = minZoom;
-    drawWorldMap();
-  }
-
-  resizeCanvas();
-  // Center on Europe
-  viewport.scrollX = MAP_W / 2 - canvasW / (2 * viewport.zoom);
-  window.addEventListener('resize', resizeCanvas);
-
   // ── Drawing ─────────────────────────────────────────────────────────────
 
   // Cache items array — heritage-locate uses uniform country styling,
@@ -271,6 +255,22 @@ export async function createHeritageLocateGame({
     if (km < 1) return '< 1 km';
     return km.toLocaleString() + ' km';
   }
+
+  // ── Canvas resize ───────────────────────────────────────────────────────
+
+  function resizeCanvas() {
+    const { w, h, minZoom } = setupCanvas(canvas, ctx, dpr, mapwrap);
+    canvasW = w;
+    canvasH = h;
+    viewport.minZoom = minZoom;
+    if (viewport.zoom < minZoom) viewport.zoom = minZoom;
+    drawWorldMap();
+  }
+
+  resizeCanvas();
+  // Center on Europe
+  viewport.scrollX = MAP_W / 2 - canvasW / (2 * viewport.zoom);
+  window.addEventListener('resize', resizeCanvas);
 
   // ── Pan/zoom + tap handler ──────────────────────────────────────────────
 
