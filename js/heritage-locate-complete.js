@@ -233,9 +233,8 @@ export async function createHeritageLocateGame({
     ctx.beginPath();
     ctx.moveTo(sx1, sy1);
     ctx.lineTo(sx2, sy2);
-    ctx.strokeStyle = '#fff';
-    ctx.lineWidth = 2;
-    ctx.globalAlpha = 0.7;
+    ctx.strokeStyle = '#f97316';
+    ctx.lineWidth = 2.5;
     ctx.stroke();
     ctx.restore();
 
