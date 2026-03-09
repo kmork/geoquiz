@@ -1413,30 +1413,7 @@ html.light-mode .find-country-page .country {
   .heritage-locate-page { max-width: 980px; }
 }
 
-/* Image toggle button */
-.heritage-locate-image-btn {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 10;
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 1px solid var(--card-border);
-  background: var(--card-bg);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  cursor: pointer;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-  transition: transform 0.2s;
-}
-.heritage-locate-image-btn:hover { transform: scale(1.1); }
-
-/* Image overlay panel */
+/* Image overlay panel — clickable, toggles between expanded and collapsed */
 .heritage-locate-image-panel {
   position: absolute;
   top: 10px;
@@ -1450,6 +1427,8 @@ html.light-mode .find-country-page .country {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  cursor: pointer;
+  transition: max-width 0.25s ease, border-radius 0.25s ease;
 }
 .heritage-locate-image-panel img {
   display: block;
@@ -1457,6 +1436,7 @@ html.light-mode .find-country-page .country {
   height: auto;
   max-height: 170px;
   object-fit: cover;
+  transition: max-height 0.25s ease;
 }
 .heritage-locate-image-name {
   padding: 6px 10px;
@@ -1467,28 +1447,31 @@ html.light-mode .find-country-page .country {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  transition: padding 0.25s ease, font-size 0.25s ease;
 }
 
-/* Guess / Next button */
-.heritage-locate-confirm {
-  position: absolute;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  padding: 10px 32px;
-  border-radius: 12px;
-  border: 1px solid var(--accent-color);
-  background: var(--accent-color);
-  color: #fff;
-  font-family: inherit;
-  font-size: 15px;
-  font-weight: 700;
-  cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
-  transition: transform 0.15s, opacity 0.15s;
+/* Expanded state — larger image */
+.heritage-locate-image-panel.expanded {
+  max-width: 800px;
 }
-.heritage-locate-confirm:hover { transform: translateX(-50%) scale(1.05); }
+.heritage-locate-image-panel.expanded img {
+  max-height: 600px;
+}
+
+/* Collapsed state — small thumbnail button */
+.heritage-locate-image-panel.collapsed {
+  max-width: 48px;
+  border-radius: 50%;
+}
+.heritage-locate-image-panel.collapsed img {
+  max-height: 48px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+.heritage-locate-image-panel.collapsed .heritage-locate-image-name {
+  display: none;
+}
 
 /* Result banner */
 .heritage-locate-result {
@@ -1512,7 +1495,7 @@ html.light-mode .find-country-page .country {
 
 @media (max-width: 600px) {
   .heritage-locate-image-panel {
-    max-width: 160px;
+    max-width: 170px;
   }
   .heritage-locate-image-panel img {
     max-height: 110px;
@@ -1520,6 +1503,20 @@ html.light-mode .find-country-page .country {
   .heritage-locate-image-name {
     font-size: 11px;
     padding: 4px 6px;
+  }
+  .heritage-locate-image-panel.expanded {
+    max-width: 280px;
+  }
+  .heritage-locate-image-panel.expanded img {
+    max-height: 200px;
+  }
+  .heritage-locate-image-panel.collapsed {
+    max-width: 40px;
+  }
+  .heritage-locate-image-panel.collapsed img {
+    max-height: 40px;
+    width: 40px;
+    height: 40px;
   }
 }
 

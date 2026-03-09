@@ -8,6 +8,7 @@
 
 import { loadGeoJSON } from './geojson-loader.js';
 import { renderFinishScreen } from './game-records.js';
+import { initConfetti } from './confetti.js';
 import { HeritageLocateLogic } from './games/heritage-locate-logic.js';
 import {
   MAP_W, MAP_H, proj, getCSSVar,
@@ -42,6 +43,7 @@ export async function createHeritageLocateGame({
 
   let canvasW = 600, canvasH = 320;
   const viewport = { scrollX: 0, scrollY: 0, zoom: 1, minZoom: 1, velocityX: 0, velocityY: 0 };
+  const confetti = initConfetti('confetti');
 
   // ── Load GeoJSON + build paths ──────────────────────────────────────────
   const worldData = await loadGeoJSON('data/ne_10m_admin_0_countries.geojson.gz');
@@ -55,48 +57,74 @@ export async function createHeritageLocateGame({
   let currentPin = null;   // { lat, lon }
   let roundResult = null;  // from logic.confirmGuess
   let confirmed = false;
+  let revealProgress = 0;  // 0 = hidden, 0→1 = animating line/pin, 1 = fully revealed
+  let animFrameId = null;
 
   // ── UI elements (created dynamically inside mapwrap) ────────────────────
 
-  // Image toggle button
-  const imageBtn = document.createElement('button');
-  imageBtn.className = 'heritage-locate-image-btn';
-  imageBtn.textContent = '🖼️';
-  imageBtn.title = 'Toggle site image';
-  mapwrap.appendChild(imageBtn);
-
-  // Image overlay panel
+  // Image overlay panel — clickable: expanded ↔ collapsed thumbnail
   const imagePanel = document.createElement('div');
   imagePanel.className = 'heritage-locate-image-panel';
   imagePanel.innerHTML = '<img alt=""><div class="heritage-locate-image-name"></div>';
   mapwrap.appendChild(imagePanel);
 
-  // Guess button
+  // Three states: 'normal' → 'expanded' → 'collapsed' → 'normal' → …
+  let imageState = 'normal';
+
+  imagePanel.addEventListener('click', () => {
+    if (imageState === 'normal') {
+      imageState = 'expanded';
+    } else if (imageState === 'expanded') {
+      imageState = 'collapsed';
+    } else {
+      imageState = 'normal';
+    }
+    imagePanel.classList.toggle('expanded', imageState === 'expanded');
+    imagePanel.classList.toggle('collapsed', imageState === 'collapsed');
+  });
+
+  // Button bar (same pattern as geo-features-complete.js)
+  const btnBar = document.createElement('div');
+  btnBar.style.cssText = `
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 10px;
+    z-index: 10;
+    pointer-events: none;
+  `;
+  mapwrap.appendChild(btnBar);
+
+  const btnBase = `
+    pointer-events: auto;
+    padding: 8px 20px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid;
+    transition: all 0.2s;
+    white-space: nowrap;
+  `;
+
   const guessBtn = document.createElement('button');
-  guessBtn.className = 'heritage-locate-confirm';
   guessBtn.textContent = 'Guess';
-  guessBtn.style.display = 'none';
-  mapwrap.appendChild(guessBtn);
+  guessBtn.className = 'geo-submit-btn';
+  guessBtn.style.cssText = btnBase + 'display: none;';
+  btnBar.appendChild(guessBtn);
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'geo-next-btn';
+  nextBtn.style.cssText = btnBase + 'display: none;';
+  btnBar.appendChild(nextBtn);
 
   // Result banner
   const resultBanner = document.createElement('div');
   resultBanner.className = 'heritage-locate-result';
   resultBanner.style.display = 'none';
   mapwrap.appendChild(resultBanner);
-
-  // Next button
-  const nextBtn = document.createElement('button');
-  nextBtn.className = 'heritage-locate-confirm heritage-locate-next';
-  nextBtn.textContent = 'Next';
-  nextBtn.style.display = 'none';
-  mapwrap.appendChild(nextBtn);
-
-  let imagePanelVisible = true;
-
-  imageBtn.addEventListener('click', () => {
-    imagePanelVisible = !imagePanelVisible;
-    imagePanel.style.display = imagePanelVisible ? '' : 'none';
-  });
 
   // ── Canvas resize ───────────────────────────────────────────────────────
 
@@ -144,15 +172,20 @@ export async function createHeritageLocateGame({
       }
     }
 
-    if (roundResult) {
+    if (roundResult && revealProgress > 0) {
       const [ax, ay] = proj([roundResult.actualLon, roundResult.actualLat]);
       const [gx, gy] = proj([currentPin.lon, currentPin.lat]);
+      // Line grows from guess toward actual based on revealProgress
+      const t = Math.min(revealProgress * 1.5, 1); // line completes at ~67% of animation
+      const lx = gx + (ax - gx) * t;
+      const ly = gy + (ay - gy) * t;
 
       for (const off of offsets) {
-        // Dotted line from guess to actual
-        drawDottedLine(ctx, gx + off, gy, ax + off, ay);
-        // Actual pin (green)
-        drawPin(ctx, ax + off, ay, '#22c55e');
+        drawDottedLine(ctx, gx + off, gy, lx + off, ly);
+        // Show actual pin only after line reaches it
+        if (t >= 1) {
+          drawPin(ctx, ax + off, ay, '#22c55e');
+        }
       }
     }
   }
@@ -206,8 +239,8 @@ export async function createHeritageLocateGame({
     ctx.stroke();
     ctx.restore();
 
-    // Distance label at midpoint
-    if (roundResult) {
+    // Distance label at midpoint — only when fully revealed
+    if (roundResult && revealProgress >= 1) {
       const mx = (sx1 + sx2) / 2;
       const my = (sy1 + sy2) / 2;
       const label = formatDistance(roundResult.distKm);
@@ -261,26 +294,39 @@ export async function createHeritageLocateGame({
 
     const result = logic.confirmGuess(currentPin.lat, currentPin.lon);
     roundResult = result;
+    revealProgress = 0;
 
     guessBtn.style.display = 'none';
-    nextBtn.style.display = '';
-
-    // Result banner
-    const color = result.distKm <= 150 ? '#22c55e'
-      : result.distKm <= 1500 ? '#f59e0b'
-      : '#ef4444';
-    resultBanner.style.display = '';
-    resultBanner.style.borderLeftColor = color;
-    resultBanner.innerHTML = `<span style="color:${color}">📍 ${formatDistance(result.distKm)}</span> — <b>${result.score.toLocaleString()} pts</b>`;
 
     // Update score/progress
     const prog = logic.getProgress();
     if (scoreEl) scoreEl.textContent = prog.totalScore.toLocaleString();
 
-    // Zoom to fit both pins
-    zoomToFitPins(currentPin, { lat: result.actualLat, lon: result.actualLon });
+    // Animated reveal: zoom to fit both pins, then animate line + pin
+    animateZoomToFit(
+      currentPin,
+      { lat: result.actualLat, lon: result.actualLon },
+      () => {
+        // After zoom completes, animate the line/pin reveal
+        animateReveal(() => {
+          // After reveal, show result banner + next button
+          const color = result.distKm <= 150 ? '#22c55e'
+            : result.distKm <= 1500 ? '#f59e0b'
+            : '#ef4444';
+          resultBanner.style.display = '';
+          resultBanner.style.borderLeftColor = color;
+          resultBanner.innerHTML = `<span style="color:${color}">📍 ${formatDistance(result.distKm)}</span> — <b>${result.score.toLocaleString()} pts</b>`;
+          nextBtn.textContent = logic.isComplete() ? 'Finish' : 'Next \u2192';
+          nextBtn.style.display = '';
 
-    drawWorldMap();
+          // Perfect guess — celebrate!
+          if (result.score === 5000) {
+            const rect = canvas.getBoundingClientRect();
+            confetti.burst({ x: rect.left + rect.width / 2, y: rect.top + rect.height / 2, count: 80 });
+          }
+        });
+      }
+    );
   });
 
   // ── Next button ─────────────────────────────────────────────────────────
@@ -302,17 +348,20 @@ export async function createHeritageLocateGame({
     currentPin = null;
     roundResult = null;
     confirmed = false;
+    revealProgress = 0;
+    if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
 
     guessBtn.style.display = 'none';
     nextBtn.style.display = 'none';
     resultBanner.style.display = 'none';
 
-    // Update image panel
+    // Update image panel — expanded by default each round
     const img = imagePanel.querySelector('img');
     img.src = site.imageUrl;
     img.alt = site.siteName;
     imagePanel.querySelector('.heritage-locate-image-name').textContent = site.siteName;
-    imagePanelVisible = true;
+    imageState = 'normal';
+    imagePanel.classList.remove('expanded', 'collapsed');
     imagePanel.style.display = '';
 
     // Update progress
@@ -322,9 +371,9 @@ export async function createHeritageLocateGame({
     drawWorldMap();
   }
 
-  // ── Zoom to fit two pins ────────────────────────────────────────────────
+  // ── Animated zoom to fit two pins ───────────────────────────────────────
 
-  function zoomToFitPins(pin1, pin2) {
+  function computeFitView(pin1, pin2) {
     const [x1, y1] = proj([pin1.lon, pin1.lat]);
     const [x2, y2] = proj([pin2.lon, pin2.lat]);
 
@@ -333,9 +382,9 @@ export async function createHeritageLocateGame({
     const minY = Math.min(y1, y2);
     const maxY = Math.max(y1, y2);
 
-    const PAD = 0.3;
-    const w = (maxX - minX) || 20;
-    const h = (maxY - minY) || 20;
+    const PAD = 0.6; // generous padding so it's not too tight
+    const w = (maxX - minX) || 30;
+    const h = (maxY - minY) || 30;
     const cx = (minX + maxX) / 2;
     const cy = (minY + maxY) / 2;
 
@@ -344,11 +393,90 @@ export async function createHeritageLocateGame({
 
     const zoomX = canvasW / paddedW;
     const zoomY = canvasH / paddedH;
-    const newZoom = Math.max(viewport.minZoom, Math.min(zoomX, zoomY, 500));
+    const zoom = Math.max(viewport.minZoom, Math.min(zoomX, zoomY, 500));
 
-    viewport.zoom = newZoom;
-    viewport.scrollX = cx - canvasW / (2 * newZoom);
-    viewport.scrollY = Math.max(0, Math.min(cy - canvasH / (2 * newZoom), MAP_H - canvasH / newZoom));
+    const scrollX = cx - canvasW / (2 * zoom);
+    const scrollY = Math.max(0, Math.min(cy - canvasH / (2 * zoom), MAP_H - canvasH / zoom));
+    return { zoom, scrollX, scrollY };
+  }
+
+  /** Ease-in-out cubic */
+  function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2; }
+
+  /**
+   * Animate from the current viewport to one that fits both pins.
+   *
+   * Interpolates the view CENTER and zoom independently so the camera
+   * smoothly zooms out while panning — no wild jumps even when the
+   * user was zoomed in close to their guess.
+   */
+  function animateZoomToFit(pin1, pin2, onDone) {
+    if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+
+    const target = computeFitView(pin1, pin2);
+
+    // Convert from/to into center-point + zoom so we can interpolate stably
+    const fromZoom = viewport.zoom;
+    const fromCx = viewport.scrollX + canvasW / (2 * fromZoom);
+    const fromCy = viewport.scrollY + canvasH / (2 * fromZoom);
+
+    const toZoom = target.zoom;
+    const toCx = target.scrollX + canvasW / (2 * toZoom);
+    const toCy = target.scrollY + canvasH / (2 * toZoom);
+
+    // Interpolate zoom in log-space for perceptually even speed
+    const fromLogZ = Math.log(fromZoom);
+    const toLogZ = Math.log(toZoom);
+
+    // Longer duration when the camera has more ground to cover
+    const dist = Math.hypot(
+      (toCx - fromCx) * fromZoom,
+      (toCy - fromCy) * fromZoom,
+      (toLogZ - fromLogZ) * 200,
+    );
+    const duration = Math.max(500, Math.min(1000, dist * 1.2));
+    const start = performance.now();
+
+    function step(now) {
+      const t = easeInOut(Math.min((now - start) / duration, 1));
+
+      const z = Math.exp(fromLogZ + (toLogZ - fromLogZ) * t);
+      const cx = fromCx + (toCx - fromCx) * t;
+      const cy = fromCy + (toCy - fromCy) * t;
+
+      viewport.zoom = z;
+      viewport.scrollX = cx - canvasW / (2 * z);
+      viewport.scrollY = Math.max(0, Math.min(cy - canvasH / (2 * z), MAP_H - canvasH / z));
+      drawWorldMap();
+
+      if (t < 1) {
+        animFrameId = requestAnimationFrame(step);
+      } else {
+        animFrameId = null;
+        if (onDone) onDone();
+      }
+    }
+    animFrameId = requestAnimationFrame(step);
+  }
+
+  function animateReveal(onDone) {
+    if (animFrameId) { cancelAnimationFrame(animFrameId); animFrameId = null; }
+
+    const duration = 500; // ms
+    const start = performance.now();
+
+    function step(now) {
+      revealProgress = Math.min((now - start) / duration, 1);
+      drawWorldMap();
+
+      if (revealProgress < 1) {
+        animFrameId = requestAnimationFrame(step);
+      } else {
+        animFrameId = null;
+        if (onDone) onDone();
+      }
+    }
+    animFrameId = requestAnimationFrame(step);
   }
 
   // ── Finish screen ──────────────────────────────────────────────────────
