@@ -144,25 +144,33 @@ export async function createHeritageLocateGame({
 
   // ── Drawing ─────────────────────────────────────────────────────────────
 
-  function drawWorldMap() {
-    if (!countryPaths.length) return;
-    ctx.clearRect(0, 0, canvasW, canvasH);
+  // Cache items array — heritage-locate uses uniform country styling,
+  // so we only rebuild when the theme changes (CSS color cache clears).
+  let cachedItems = null;
+  let cachedFill = null;
 
-    const defaultFill = getCSSVar('--map-country-fill') || 'rgba(165,180,252,.08)';
-    const defaultStroke = getCSSVar('--map-country-stroke') || 'rgba(232,236,255,.3)';
-    const offsets = visibleOffsets(viewport, canvasW);
-
-    // Build items for batch draw
-    const items = countryPaths.map(c => ({
+  function getItems() {
+    const fill = getCSSVar('--map-country-fill') || 'rgba(165,180,252,.08)';
+    if (cachedItems && fill === cachedFill) return cachedItems;
+    cachedFill = fill;
+    const stroke = getCSSVar('--map-country-stroke') || 'rgba(232,236,255,.3)';
+    cachedItems = countryPaths.map(c => ({
       path2d: c.path2d,
-      fill: defaultFill,
-      stroke: defaultStroke,
+      fill,
+      stroke,
       strokeWidth: 0.5,
       bboxMinX: c.bboxMinX, bboxMaxX: c.bboxMaxX,
       bboxMinY: c.bboxMinY, bboxMaxY: c.bboxMaxY,
     }));
+    return cachedItems;
+  }
 
-    drawCountriesBatch(ctx, viewport, items, offsets, canvasW, canvasH);
+  function drawWorldMap() {
+    if (!countryPaths.length) return;
+    ctx.clearRect(0, 0, canvasW, canvasH);
+
+    const offsets = visibleOffsets(viewport, canvasW);
+    drawCountriesBatch(ctx, viewport, getItems(), offsets, canvasW, canvasH);
 
     // Draw pins and connecting line
     if (currentPin) {

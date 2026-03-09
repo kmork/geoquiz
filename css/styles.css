@@ -1403,6 +1403,7 @@ html.light-mode .find-country-page .country {
   flex: 1;
   max-width: 100%;
   min-height: 0;
+  -webkit-tap-highlight-color: transparent;
 }
 
 @media (max-width: 1400px) {
