@@ -462,7 +462,7 @@ export async function createGeoFeaturesGame({
     `;
 
     submitBtn = document.createElement('button');
-    submitBtn.textContent = 'Submit';
+    submitBtn.textContent = 'Guess';
     submitBtn.className = 'geo-submit-btn';
     submitBtn.style.cssText = btnBase;
 
