@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Heritage Locate - GeoQuiz</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <script>
+    (function() {
+      const saved = localStorage.getItem('geoquiz-theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const theme = saved || system;
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+    })();
+  </script>
+</head>
+
+<body>
+<div class="wrap heritage-locate-page">
+  <div class="card">
+
+    <div id="init-overlay">
+      <div class="spinner"></div>
+      <div>Loading Heritage Sites...</div>
+    </div>
+
+    <div class="row row-space-between">
+      <div>
+        <h1>
+          <a href="index.html" style="text-decoration: none; color: inherit;">
+            <span class="game-header-icon">📍</span>
+            Heritage Locate
+          </a>
+        </h1>
+        <div class="muted">Pinpoint UNESCO Heritage Sites on the map.</div>
+      </div>
+      <div class="row">
+        <div class="pill">Score: <b id="score">0</b></div>
+        <div class="pill">Round: <b id="progress">0 / 10</b></div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="mapwrap">
+      <canvas id="map"></canvas>
+    </div>
+
+  </div>
+</div>
+
+<div class="overlay" id="finalOverlay" role="dialog" aria-modal="true"></div>
+
+<canvas id="confetti"></canvas>
+
+<script src="js/pako.min.js"></script>
+<script src="js/theme.js"></script>
+<script type="module" src="js/data.js"></script>
+<script type="module" src="js/heritage-locate-main.js"></script>
+
+</body>
+</html>

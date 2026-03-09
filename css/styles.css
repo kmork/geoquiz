@@ -830,14 +830,14 @@ select option {
   /* Fill the visual viewport so there is no gap below the game card when the
      keyboard is open. --vvh is set by JS (mobile-autocomplete.js) and tracks
      window.visualViewport.height, which shrinks when keyboard opens. */
-  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page) {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page):not(.heritage-locate-page) {
     height: var(--vvh, 100svh);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
   }
 
-  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page) > .card {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page):not(.heritage-locate-page) > .card {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -846,14 +846,14 @@ select option {
   }
 
   /* Map grows to fill space between header and input row */
-  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page) .mapwrap {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page):not(.heritage-locate-page) .mapwrap {
     flex: 1;
     height: auto;
     min-height: 150px;
     max-height: 350px;
   }
 
-  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page) #map {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page):not(.heritage-locate-page) #map {
     height: 100%;
     width: 100%;
   }
@@ -1366,6 +1366,161 @@ select option {
 html.light-mode .find-country-page .country {
   color: #1a1a1a;
   text-shadow: 0 0 4px #fff, 0 0 8px #fff, 0 0 12px #fff, 0 0 16px #fff, 0 0 20px #fff;
+}
+
+/* ── Heritage Locate page — full-height flex layout (same as find-country) ── */
+
+.heritage-locate-page {
+  max-width: 1600px;
+  height: 100vh;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.heritage-locate-page .card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.heritage-locate-page .mapwrap {
+  position: relative;
+  flex: 1;
+  margin: 10px 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.heritage-locate-page #map {
+  flex: 1;
+  max-width: 100%;
+  min-height: 0;
+}
+
+@media (max-width: 1400px) {
+  .heritage-locate-page { max-width: 1200px; }
+}
+
+@media (max-width: 1024px) {
+  .heritage-locate-page { max-width: 980px; }
+}
+
+/* Image toggle button */
+.heritage-locate-image-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 10;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+.heritage-locate-image-btn:hover { transform: scale(1.1); }
+
+/* Image overlay panel */
+.heritage-locate-image-panel {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 10;
+  max-width: 250px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+.heritage-locate-image-panel img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: 170px;
+  object-fit: cover;
+}
+.heritage-locate-image-name {
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Guess / Next button */
+.heritage-locate-confirm {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 10px 32px;
+  border-radius: 12px;
+  border: 1px solid var(--accent-color);
+  background: var(--accent-color);
+  color: #fff;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+  transition: transform 0.15s, opacity 0.15s;
+}
+.heritage-locate-confirm:hover { transform: translateX(-50%) scale(1.05); }
+
+/* Result banner */
+.heritage-locate-result {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  padding: 8px 16px;
+  border-radius: 10px;
+  border-left: 4px solid #22c55e;
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  white-space: nowrap;
+}
+
+@media (max-width: 600px) {
+  .heritage-locate-image-panel {
+    max-width: 160px;
+  }
+  .heritage-locate-image-panel img {
+    max-height: 110px;
+  }
+  .heritage-locate-image-name {
+    font-size: 11px;
+    padding: 4px 6px;
+  }
 }
 
 /* Find country hint panel */

@@ -24,6 +24,7 @@ const GAME_NAMES = {
   mountains:       'Mountain Ranges',
   'capital-pairs': 'Capital Pairs',
   duel:            'Country Duel',
+  'heritage-locate': 'Heritage Locate',
 };
 
 const DIFFICULTY_LABELS = {
