@@ -521,7 +521,10 @@ export function createPanZoom(canvas, viewport, redrawFn, opts = {}) {
     const rect = canvas.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
     const mouseY = e.clientY - rect.top;
-    const factor = e.deltaY > 0 ? 0.9 : 1.1;
+    let dy = e.deltaY;
+    if (e.deltaMode === 1) dy *= 16;
+    const strength = Math.sqrt(Math.min(Math.abs(dy), 200) / 200) * 0.28;
+    const factor = dy > 0 ? 1 - strength : 1 + strength;
     const newZoom = Math.max(viewport.minZoom, Math.min(maxZoom, viewport.zoom * factor));
     const mapXBefore = mouseX / viewport.zoom + viewport.scrollX;
     const mapYBefore = mouseY / viewport.zoom + viewport.scrollY;
