@@ -718,6 +718,70 @@ new MutationObserver(() => drawWorldMap()).observe(
 
 createMapToggles();
 
+// ── Zoom to country (desktop click) ──────────────────────────────────────────
+
+let zoomAnimId = null;
+
+function easeInOut(t) { return t < 0.5 ? 4 * t * t * t : 1 - (-2 * t + 2) ** 3 / 2; }
+
+function zoomToCountry(dataName) {
+  const geoName = dataToGeo[dataName] || dataName;
+  const country = countryPaths.find(c => c.name === geoName);
+  if (!country) return;
+  if (zoomAnimId) { cancelAnimationFrame(zoomAnimId); zoomAnimId = null; }
+
+  const bboxW = country.bboxMaxX - country.bboxMinX;
+  const bboxH = country.bboxMaxY - country.bboxMinY;
+
+  // Target: fit country with padding
+  const pad = 0.3;
+  const toZoom = Math.max(viewport.minZoom, Math.min(
+    canvasDisplayWidth / (bboxW * (1 + pad)),
+    canvasDisplayHeight / (bboxH * (1 + pad)),
+    500
+  ));
+  const toCx = (country.bboxMinX + country.bboxMaxX) / 2;
+  const toCy = (country.bboxMinY + country.bboxMaxY) / 2;
+
+  // Current center
+  const fromZoom = viewport.zoom;
+  const fromCx = viewport.scrollX + canvasDisplayWidth / (2 * fromZoom);
+  const fromCy = viewport.scrollY + canvasDisplayHeight / (2 * fromZoom);
+
+  // Log-space zoom interpolation (perceptually even)
+  const fromLogZ = Math.log(fromZoom);
+  const toLogZ = Math.log(toZoom);
+
+  // Dynamic duration based on distance
+  const dist = Math.hypot(
+    (toCx - fromCx) * fromZoom,
+    (toCy - fromCy) * fromZoom,
+    (toLogZ - fromLogZ) * 200,
+  );
+  const duration = Math.max(500, Math.min(1000, dist * 1.2));
+  const start = performance.now();
+
+  function step(now) {
+    const t = easeInOut(Math.min((now - start) / duration, 1));
+
+    const z = Math.exp(fromLogZ + (toLogZ - fromLogZ) * t);
+    const cx = fromCx + (toCx - fromCx) * t;
+    const cy = fromCy + (toCy - fromCy) * t;
+
+    viewport.zoom = z;
+    viewport.scrollX = cx - canvasDisplayWidth / (2 * z);
+    viewport.scrollY = Math.max(0, Math.min(cy - canvasDisplayHeight / (2 * z), MAP_H - canvasDisplayHeight / z));
+    drawWorldMap();
+
+    if (t < 1) {
+      zoomAnimId = requestAnimationFrame(step);
+    } else {
+      zoomAnimId = null;
+    }
+  }
+  zoomAnimId = requestAnimationFrame(step);
+}
+
 createPanZoom(canvas, viewport, drawWorldMap, {
   onHover(cx, cy) {
     // Overlay layers take priority: heritage > rivers > mountains > countries
@@ -762,7 +826,7 @@ createPanZoom(canvas, viewport, drawWorldMap, {
     hideInfoPanel();
     drawWorldMap();
   },
-  onTap(cx, cy) {
+  onTap(cx, cy, e) {
     // Heritage site image popup
     const site = findHeritageAtPoint(cx, cy);
     if (site) {
@@ -798,10 +862,22 @@ createPanZoom(canvas, viewport, drawWorldMap, {
       resolveToDataName,
       dataToGeo,
     });
-    if (name && name !== hoveredCountry) {
-      hoveredCountry = name;
-      updateInfoPanel(name);
-      drawWorldMap();
+    if (name) {
+      // Desktop click: zoom into the country
+      if (e.pointerType !== 'touch') {
+        hoveredCountry = name;
+        updateInfoPanel(name);
+        drawWorldMap();
+        zoomToCountry(name);
+      } else if (name !== hoveredCountry) {
+        hoveredCountry = name;
+        updateInfoPanel(name);
+        drawWorldMap();
+      } else {
+        hoveredCountry = null;
+        hideInfoPanel();
+        drawWorldMap();
+      }
     } else {
       hoveredCountry = null;
       hideInfoPanel();
