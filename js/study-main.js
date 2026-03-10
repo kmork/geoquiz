@@ -39,7 +39,7 @@ let hoveredOverlay = null;
 
 // Label toggle state
 let showCountryNames = false;
-let capitalMode = 0; // 0 = off, 1 = dots, 2 = dots + names
+let capitalMode = 0; // 0 = off, 1 = dots, 2 = dots + names, 3 = dots + names + cities
 
 // Overlay toggle state
 let showRivers    = false;
@@ -90,6 +90,15 @@ for (const feature of placesData.features) {
   const dataName = geoToData[geoCountry] || resolveToDataName(geoCountry);
   if (dataName) {
     capitalDots.set(dataName, { name: p.NAME, lon, lat });
+  }
+}
+
+// City data from countries.json (major cities per country)
+// Key: DATA country name → [{name, lon, lat}, ...]
+const cityDots = new Map();
+for (const entry of window.DATA) {
+  if (entry.cities && entry.cities.length > 0) {
+    cityDots.set(entry.country, entry.cities);
   }
 }
 
@@ -315,7 +324,7 @@ function drawWorldMap() {
       }
     }
 
-    if (capitalMode === 2 && viewport.zoom > 1.5) {
+    if (capitalMode >= 2 && viewport.zoom > 1.5) {
       const fontSize = Math.max(9, Math.min(12, viewport.zoom * 2.5));
       for (const [, cap] of capitalDots) {
         const [mx, my] = proj([cap.lon, cap.lat]);
@@ -335,6 +344,51 @@ function drawWorldMap() {
           ctx.strokeText(cap.name, px + dotR + 3, py);
           ctx.fillStyle = capColor;
           ctx.fillText(cap.name, px + dotR + 3, py);
+        }
+      }
+    }
+
+    // ── City dots + names (mode 3, zoom > 6) ───────────────────────────────
+    if (capitalMode === 3 && viewport.zoom > 6) {
+      const cityDotFill   = isLight ? 'rgba(37,99,235,0.8)'  : 'rgba(180,180,255,0.7)';
+      const cityLabelCol  = isLight ? 'rgba(37,99,235,0.85)' : 'rgba(180,180,255,0.8)';
+      const cityLabelHalo = isLight ? 'rgba(255,255,255,0.88)' : 'rgba(0,0,0,0.65)';
+      const cityR = Math.max(1.2, 2.0 / viewport.zoom);
+      const cityFontSize = Math.max(8, Math.min(11, viewport.zoom * 2.5 - 1));
+
+      for (const [, cities] of cityDots) {
+        for (const city of cities) {
+          const [mx, my] = proj([city.lon, city.lat]);
+
+          for (const offset of offsets) {
+            const px = (mx + offset - viewport.scrollX) * viewport.zoom;
+            const py = (my - viewport.scrollY) * viewport.zoom;
+
+            if (px < -10 || px > canvasDisplayWidth + 10 || py < -10 || py > canvasDisplayHeight + 10) continue;
+
+            // Dot
+            if (isLight) {
+              ctx.beginPath();
+              ctx.arc(px, py, cityR + 1.2, 0, Math.PI * 2);
+              ctx.fillStyle = 'rgba(255,255,255,0.85)';
+              ctx.fill();
+            }
+            ctx.beginPath();
+            ctx.arc(px, py, cityR, 0, Math.PI * 2);
+            ctx.fillStyle = cityDotFill;
+            ctx.fill();
+
+            // Label
+            ctx.textAlign = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.font = `400 ${cityFontSize}px "DM Sans", sans-serif`;
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = cityLabelHalo;
+            ctx.lineWidth = 2.5;
+            ctx.strokeText(city.name, px + cityR + 3, py);
+            ctx.fillStyle = cityLabelCol;
+            ctx.fillText(city.name, px + cityR + 3, py);
+          }
         }
       }
     }
@@ -593,10 +647,10 @@ function createMapToggles() {
   });
 
   btnCapital.addEventListener('click', () => {
-    capitalMode = (capitalMode + 1) % 3;
+    capitalMode = (capitalMode + 1) % 4;
     btnCapital.dataset.mode = capitalMode;
     btnCapital.classList.toggle('active', capitalMode > 0);
-    const titles = ['Show capital dots', 'Show capital names', 'Hide capitals'];
+    const titles = ['Show capital dots', 'Show capital names', 'Show cities', 'Hide capitals'];
     btnCapital.title = titles[capitalMode];
     drawWorldMap();
   });
@@ -656,6 +710,11 @@ if (window.visualViewport) {
   window.visualViewport.addEventListener('resize', syncAndResize);
 }
 drawWorldMap();
+
+// Redraw when light/dark mode changes (theme toggle in menu)
+new MutationObserver(() => drawWorldMap()).observe(
+  document.documentElement, { attributes: true, attributeFilter: ['class'] }
+);
 
 createMapToggles();
 
