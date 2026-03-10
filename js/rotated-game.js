@@ -16,10 +16,12 @@ export function createRotatedGame({ ui, confetti, drawCountry, setRotation, anim
 
   const countryLabel = document.getElementById('country-label');
 
-  // In rotate-only mode, hide the text input and show country name label
+  // In rotate-only mode, hide the text input, center the button, show country name label
   if (rotateOnly) {
     ui.answerInput.style.display = 'none';
-    ui.submitBtn.textContent = 'Submit';
+    ui.submitBtn.textContent = 'Guess';
+    const answerRow = ui.submitBtn.closest('.answerRow');
+    if (answerRow) answerRow.style.justifyContent = 'center';
     if (countryLabel) countryLabel.style.display = '';
   }
 
@@ -73,7 +75,7 @@ export function createRotatedGame({ ui, confetti, drawCountry, setRotation, anim
   function exitContinueMode() {
     continueMode = false;
     if (!rotateOnly) ui.answerInput.style.display = "";
-    ui.submitBtn.textContent = rotateOnly ? "Submit" : "Guess";
+    ui.submitBtn.textContent = "Guess";
     ui.submitBtn.classList.remove("continue-btn");
   }
 

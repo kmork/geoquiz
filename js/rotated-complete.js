@@ -68,8 +68,16 @@ export async function createCompleteRotatedGame({
   function animateToCorrect() {
     if (!rotationGroup) return;
     const { cx, cy } = getViewBoxCenter();
+    // Normalize to [0, 360) and pick shortest path to 0°
+    let norm = ((currentRotation % 360) + 360) % 360;
+    const target = norm <= 180 ? 0 : 360;
+    // Set current position explicitly so the transition starts from here
+    rotationGroup.style.transition = 'none';
+    rotationGroup.setAttribute('transform', `rotate(${norm}, ${cx}, ${cy})`);
+    // Force reflow, then animate to target
+    rotationGroup.getBoundingClientRect();
     rotationGroup.style.transition = 'transform 0.5s ease-out';
-    rotationGroup.setAttribute('transform', `rotate(0, ${cx}, ${cy})`);
+    rotationGroup.setAttribute('transform', `rotate(${target}, ${cx}, ${cy})`);
     currentRotation = 0;
   }
 
