@@ -1,0 +1,279 @@
+/* ── Study Mode ── */
+
+/* ── Full-window layout ── */
+.study-page {
+  max-width: 100%;
+  height: 100vh;
+  height: 100dvh; /* adapts as Android URL bar shows/hides */
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+.study-page .card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  box-sizing: border-box;
+}
+.study-page .mapwrap {
+  flex: 1;
+  margin: 6px 0 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+.study-page #map {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Menu button sits inside the header row as a flex child */
+.study-page .menu-btn {
+  position: static;
+  width: 40px;
+  height: 40px;
+  font-size: 18px;
+  flex-shrink: 0;
+  box-shadow: none;
+}
+
+/* ── Study info panel ── */
+.study-info-panel {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  z-index: 20;
+  background: var(--panel-bg, rgba(15,20,40,.96));
+  border: 1px solid var(--panel-border, rgba(255,255,255,.14));
+  border-radius: 14px;
+  padding: 14px 16px 12px;
+  min-width: 210px;
+  max-width: 280px;
+  box-shadow: 0 4px 24px rgba(0,0,0,.35);
+  pointer-events: none;
+}
+.study-info-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 0;
+}
+.study-info-flag {
+  width: 44px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 1px solid var(--panel-border, rgba(255,255,255,.14));
+  flex-shrink: 0;
+}
+.study-info-flag-placeholder {
+  width: 44px;
+  height: 30px;
+  border-radius: 4px;
+  background: var(--card-border, rgba(255,255,255,.12));
+  flex-shrink: 0;
+}
+.study-info-name {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+.study-info-region {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+  line-height: 1.2;
+}
+.study-info-divider {
+  height: 1px;
+  background: var(--hr-color, rgba(255,255,255,.12));
+  margin: 10px 0 8px;
+}
+.study-info-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.study-info-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+}
+.study-info-row > span:first-child {
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+.study-info-row > span:last-child {
+  color: var(--text-primary);
+  text-align: right;
+  font-weight: 500;
+}
+.study-info-borders > span:last-child {
+  text-align: right;
+  max-width: 170px;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+/* ── Heritage site popup ── */
+.heritage-popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+  background: var(--panel-bg, rgba(15,20,40,.96));
+  border: 1px solid var(--panel-border, rgba(255,255,255,.14));
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0,0,0,.5);
+  width: 75%;
+  max-height: 85%;
+  pointer-events: all;
+  display: flex;
+  flex-direction: column;
+}
+.heritage-popup-img {
+  display: block;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  object-fit: cover;
+}
+.heritage-popup-footer {
+  padding: 10px 14px 12px;
+}
+.heritage-popup-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.heritage-popup-meta {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 3px;
+}
+.heritage-popup-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.55);
+  color: rgba(255,255,255,0.85);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  z-index: 1;
+}
+.heritage-popup-close:hover {
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+}
+
+/* ── Overlay icon (replaces flag in info panel for rivers/mountains/heritage) ── */
+.study-info-overlay-icon {
+  width: 44px;
+  height: 30px;
+  border-radius: 4px;
+  border: 1px solid var(--panel-border, rgba(255,255,255,.14));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+/* ── Map toggle buttons ── */
+.study-map-toggles {
+  position: absolute;
+  bottom: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 10;
+}
+.study-toggle-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  color: rgba(255,255,255,0.75);
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-family: inherit;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+.study-toggle-btn:hover {
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  transform: scale(1.08);
+}
+.study-toggle-btn.active {
+  background: rgba(99,102,241,0.75);
+  border-color: rgba(165,180,252,0.6);
+  color: #fff;
+}
+.study-toggle-btn.active:hover {
+  background: rgba(99,102,241,0.9);
+}
+.study-toggle-btn.active[data-mode="2"] {
+  background: rgba(120,80,0,0.8);
+  border-color: rgba(251,191,36,0.5);
+  color: #fbbf24;
+}
+.study-toggle-btn.active[data-mode="2"]:hover {
+  background: rgba(145,100,0,0.9);
+}
+.study-toggle-btn.active[data-mode="3"] {
+  background: rgba(0,100,80,0.8);
+  border-color: rgba(52,211,153,0.5);
+  color: #34d399;
+}
+.study-toggle-btn.active[data-mode="3"]:hover {
+  background: rgba(0,120,100,0.9);
+}
+
+/* ── Mobile ── */
+@media (max-width: 600px) {
+  /* Hide hamburger on mobile */
+  .study-page .menu-btn { display: none; }
+
+  /* Toggle buttons: horizontal row at bottom-center */
+  .study-map-toggles {
+    flex-direction: row;
+    right: unset;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 10px;
+    gap: 10px;
+  }
+  /* Info panel: move to top-left so it doesn't overlap bottom buttons */
+  .study-info-panel {
+    bottom: unset;
+    top: 16px;
+  }
+  /* Heritage popup: fill more of the screen on mobile */
+  .heritage-popup {
+    width: 90%;
+  }
+}

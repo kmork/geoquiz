@@ -20,12 +20,11 @@
     })();
   </script>
   <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="css/menu.css">
 </head>
 <body>
   <div class="map-background"></div>
   <div class="map-dots"></div>
-
-  <button id="menu-btn" class="menu-btn" aria-label="Open menu">☰</button>
 
   <div class="content">
     <div class="header">
@@ -167,106 +166,7 @@
     </div>
   </div>
 
-  <div id="menu-overlay" class="menu-overlay" role="dialog" aria-modal="true" aria-label="Menu">
-    <div class="menu-panel">
-
-      <button id="menu-close" class="menu-close" aria-label="Close menu">×</button>
-
-      <!-- About -->
-      <section class="menu-section">
-        <h2 class="menu-section-title">About</h2>
-        <div class="menu-about-header">
-          <img class="menu-about-globe" src="img/icon-logo-small.svg" alt="" width="28" height="28">
-          <span class="menu-about-name">Geo Quiz</span>
-        </div>
-        <p class="menu-about-text">
-          A collection of interactive geography games — free for everyone, no ads, no cookies, just the fun of exploring the world.
-        </p>
-        <p class="menu-about-text">
-          Created by <strong>Knut Mork</strong>.<br>
-          Open source on
-          <a class="menu-link" href="https://github.com/kmork/geoquiz" target="_blank" rel="noopener">GitHub</a>.
-        </p>
-        <p class="menu-about-text">
-          Have a suggestion, found a bug, or want to contribute?
-          <a class="menu-link" href="https://github.com/kmork/geoquiz/issues" target="_blank" rel="noopener">Open an issue on GitHub</a> — all feedback is welcome!
-        </p>
-      </section>
-
-      <!-- Preferences -->
-      <section class="menu-section">
-        <h2 class="menu-section-title">Preferences</h2>
-
-        <div class="pref-row">
-          <div class="pref-label">
-            <span class="pref-label-title">Theme</span>
-            <span class="pref-label-desc">Dark or light mode</span>
-          </div>
-          <!-- Moved here from top-right; theme.js still finds it by id -->
-          <button id="theme-toggle" class="theme-toggle" aria-label="Toggle dark/light mode">
-            <span class="theme-icon">☀️</span>
-          </button>
-        </div>
-
-        <div class="pref-row">
-          <div class="pref-label">
-            <span class="pref-label-title">Autocomplete</span>
-            <span class="pref-label-desc">Show suggestions while typing</span>
-          </div>
-          <button id="autocomplete-toggle" class="pref-toggle" role="switch" aria-checked="true" aria-label="Toggle autocomplete"></button>
-        </div>
-
-        <div class="pref-row">
-          <div class="pref-label">
-            <span class="pref-label-title">Game Records</span>
-            <span class="pref-label-desc">Clears all saved best scores and times</span>
-          </div>
-          <button id="clear-records-btn" class="clear-records-btn">Clear All</button>
-        </div>
-      </section>
-
-    </div>
-  </div>
-
+  <script src="js/menu.js"></script>
   <script src="js/theme.js"></script>
-  <script>
-    (function() {
-      const overlay         = document.getElementById('menu-overlay');
-      const menuBtn         = document.getElementById('menu-btn');
-      const closeBtn        = document.getElementById('menu-close');
-      const clearBtn        = document.getElementById('clear-records-btn');
-      const autocompleteBtn = document.getElementById('autocomplete-toggle');
-
-      menuBtn.addEventListener('click', () => overlay.classList.add('open'));
-      closeBtn.addEventListener('click', () => overlay.classList.remove('open'));
-
-      // Click outside panel to close
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) overlay.classList.remove('open');
-      });
-
-      // Escape key to close
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') overlay.classList.remove('open');
-      });
-
-      // Autocomplete toggle
-      const autocompleteOn = localStorage.getItem('geoquiz-autocomplete') !== 'off';
-      autocompleteBtn.setAttribute('aria-checked', String(autocompleteOn));
-      autocompleteBtn.addEventListener('click', () => {
-        const next = autocompleteBtn.getAttribute('aria-checked') !== 'true';
-        autocompleteBtn.setAttribute('aria-checked', String(next));
-        localStorage.setItem('geoquiz-autocomplete', next ? 'on' : 'off');
-      });
-
-      // Clear all game records from localStorage
-      clearBtn.addEventListener('click', () => {
-        const keys = Object.keys(localStorage).filter(k => k.startsWith('geoquiz-record-'));
-        keys.forEach(k => localStorage.removeItem(k));
-        clearBtn.textContent = 'Cleared!';
-        setTimeout(() => { clearBtn.textContent = 'Clear All'; }, 2000);
-      });
-    })();
-  </script>
 </body>
 </html>
