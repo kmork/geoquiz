@@ -348,8 +348,8 @@ function drawWorldMap() {
       }
     }
 
-    // ── City dots + names (mode 3, zoom > 6) ───────────────────────────────
-    if (capitalMode === 3 && viewport.zoom > 6) {
+    // ── City dots + names (mode 3, zoom > 10) ──────────────────────────────
+    if (capitalMode === 3 && viewport.zoom > 11) {
       const cityDotFill   = isLight ? 'rgba(37,99,235,0.8)'  : 'rgba(180,180,255,0.7)';
       const cityLabelCol  = isLight ? 'rgba(37,99,235,0.85)' : 'rgba(180,180,255,0.8)';
       const cityLabelHalo = isLight ? 'rgba(255,255,255,0.88)' : 'rgba(0,0,0,0.65)';
