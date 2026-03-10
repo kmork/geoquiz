@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Guess the Country Quiz</title>
+  <title>Country Outline Quiz</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -36,10 +36,10 @@
         <h1>
           <a href="index.html" style="text-decoration: none; color: inherit;">
             <img class="game-header-icon" src="img/icon-logo-small.svg" alt="">
-            Guess the Country
+            <span id="game-title">Country Outline</span>
           </a>
         </h1>
-        <div class="muted">Identify the country from its outline.</div>
+        <div class="muted" id="game-subtitle">Identify the country from its outline.</div>
       </div>
       <div class="row">
         <div class="pill">Score: <b id="score">0</b></div>
@@ -52,6 +52,8 @@
     <div class="mapwrap">
       <svg id="map" viewBox="0 0 600 320" width="100%"></svg>
     </div>
+
+    <div id="country-label" style="display:none; text-align:center; font-size:1.3rem; font-weight:700; margin:0.5rem 0"></div>
 
     <div id="status" class="status" style="display:none"></div>
 
@@ -75,7 +77,22 @@
 <script src="js/mobile-autocomplete.js"></script>
 <script src="js/theme.js"></script>
 <script type="module" src="js/data.js"></script>
-<script type="module" src="js/outlines-main.js"></script>
+<script type="module">
+  const params = new URLSearchParams(location.search);
+  const mode = params.get('mode');
+  if (mode === 'rotated' || mode === 'rotate-only') {
+    if (mode === 'rotated') {
+      document.getElementById('game-title').textContent = 'Rotate and Guess';
+      document.getElementById('game-subtitle').textContent = 'Rotate the outline back to its correct orientation and name the country.';
+    } else {
+      document.getElementById('game-title').textContent = 'Rotate the Outline';
+      document.getElementById('game-subtitle').textContent = 'Rotate the outline back to its correct orientation.';
+    }
+    import('./js/rotated-main.js');
+  } else {
+    import('./js/outlines-main.js');
+  }
+</script>
 
 </body>
 </html>

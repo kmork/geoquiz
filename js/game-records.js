@@ -15,7 +15,7 @@ const STORAGE_PREFIX = 'geoquiz-record-';
 
 const GAME_NAMES = {
   find:            'Find the Country',
-  outlines:        'Guess the Country',
+  outlines:        'Country Outline',
   trivia:          'Geography Trivia',
   heritage:        'UNESCO Heritage',
   capitals:        'Capitals Quiz',
@@ -25,6 +25,8 @@ const GAME_NAMES = {
   'capital-pairs': 'Capital Pairs',
   duel:            'Country Duel',
   'heritage-locate': 'Heritage Locate',
+  rotated:         'Rotate & Guess',
+  'rotate-only':   'Rotate Only',
 };
 
 const DIFFICULTY_LABELS = {
