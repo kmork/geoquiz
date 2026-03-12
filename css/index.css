@@ -292,6 +292,17 @@ h1 {
   color: var(--button-text-hover);
 }
 
+@media (max-width: 1000px) and (min-width: 641px) {
+  .subtitle {
+    position: static;
+    transform: none;
+    flex: 1;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.4;
+  }
+}
+
 @media (max-width: 640px) {
   .content {
     padding: 20px 14px;
@@ -320,10 +331,10 @@ h1 {
   .subtitle {
     position: static;
     transform: none;
-    font-size: 12px;
-    line-height: 1.4;
     flex: 1;
-    text-align: right;
+    text-align: center;
+    font-size: 11px;
+    line-height: 1.3;
   }
 
   .header .menu-btn {
