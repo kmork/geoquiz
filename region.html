@@ -152,6 +152,7 @@
     }
 
     #region-cards {
+      flex: 1;
       display: flex;
       flex-direction: column;
     }
@@ -159,10 +160,12 @@
     .card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      grid-auto-rows: 1fr;
       gap: 24px;
       max-width: 900px;
       margin: 0 auto;
       width: 100%;
+      flex: 1;
     }
 
     .world-card {
@@ -372,15 +375,9 @@
       }
     }
 
-    /* Dynamic card height via CSS custom property set by JS */
+    /* Cards stretch to fill but cap at a max height */
     .diff-card {
-      padding-top: var(--card-vpad, 28px);
-      padding-bottom: var(--card-vpad, 28px);
-    }
-
-    .world-card {
-      padding-top: var(--world-vpad, 28px);
-      padding-bottom: var(--world-vpad, 28px);
+      max-height: 220px;
     }
 
   </style>
@@ -552,47 +549,6 @@
 
         document.getElementById('region-cards').innerHTML =
           worldCard + `<div class="card-grid">${continentCards}</div>`;
-
-        // Dynamically adjust card vertical padding to fill available height
-        function adjustCardHeight() {
-          const content = document.querySelector('.content');
-          const header = document.getElementById('game-header');
-          const cards = document.getElementById('region-cards');
-          if (!content || !header || !cards) return;
-
-          const viewH = window.innerHeight;
-          const contentPad = 40 + 32; // top + bottom padding
-          const headerH = header.offsetHeight + 28; // + margin-bottom
-          const available = viewH - contentPad - headerH;
-
-          // Measure cards at minimum padding to get base height
-          const root = document.documentElement;
-          root.style.setProperty('--card-vpad', '12px');
-          root.style.setProperty('--world-vpad', '12px');
-          const minCardsH = cards.scrollHeight;
-
-          const extra = available - minCardsH;
-          if (extra > 0) {
-            // Distribute extra space as vertical padding, capped
-            const grid = cards.querySelector('.card-grid');
-            const worldEl = cards.querySelector('.world-card');
-            const cardCount = grid ? grid.children.length : 1;
-            const rows = grid ? Math.ceil(cardCount / Math.max(1, Math.round(grid.offsetWidth / 280))) : 1;
-            const totalCards = rows + (worldEl ? 1 : 0);
-            const perCard = Math.min(extra / (totalCards * 2), 40); // max 40px each side
-            const cardPad = Math.max(12, Math.round(perCard));
-            const worldPad = Math.max(12, Math.round(perCard * 1.2));
-            root.style.setProperty('--card-vpad', cardPad + 'px');
-            root.style.setProperty('--world-vpad', worldPad + 'px');
-          } else {
-            root.style.setProperty('--card-vpad', '12px');
-            root.style.setProperty('--world-vpad', '12px');
-          }
-        }
-
-        // Run after layout settles
-        requestAnimationFrame(() => requestAnimationFrame(adjustCardHeight));
-        window.addEventListener('resize', adjustCardHeight);
       })();
     }
   </script>
