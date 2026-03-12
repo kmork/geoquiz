@@ -110,9 +110,21 @@
     .content {
       position: relative;
       z-index: 1;
-      max-width: 800px;
+      max-width: 1500px;
       margin: 0 auto;
       padding: 40px 24px 32px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+    }
+
+
+    /* Dynamic card height via CSS custom property set by JS */
+    .diff-card {
+      padding-top: var(--card-vpad, 28px);
+      padding-bottom: var(--card-vpad, 28px);
     }
 
     .game-header {
@@ -148,14 +160,19 @@
 
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
     }
 
     .card-grid.two-cards {
       grid-template-columns: repeat(2, 1fr);
-      max-width: 66.666%;
-      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    .card-grid.three-cols {
+      grid-template-columns: repeat(3, 1fr);
     }
 
     .section-label {
@@ -173,7 +190,7 @@
       -webkit-backdrop-filter: blur(10px);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 20px 16px;
+      padding: 28px 24px;
       text-decoration: none;
       color: var(--text-primary);
       text-align: center;
@@ -249,6 +266,27 @@
       color: var(--button-text-hover);
     }
 
+    @media (min-width: 601px) {
+      .diff-card {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        gap: 20px;
+        text-align: left;
+      }
+
+      .diff-emoji {
+        margin-bottom: 0;
+        flex-shrink: 0;
+        font-size: 36px;
+      }
+
+      .diff-info {
+        flex: 1;
+        min-width: 0;
+      }
+    }
+
     @media (max-width: 600px) {
       .content {
         padding: 24px 14px 24px;
@@ -266,18 +304,16 @@
         font-size: 22px;
       }
 
-      .card-grid {
+      .card-grid,
+      .card-grid.two-cards,
+      .card-grid.three-cols {
         grid-template-columns: 1fr;
         gap: 10px;
-      }
-
-      .card-grid.two-cards {
-        grid-template-columns: 1fr;
         max-width: 100%;
       }
 
       .diff-card {
-        padding: 14px 12px;
+        padding: 14px 12px !important;
         display: flex;
         align-items: center;
         gap: 12px;
@@ -368,24 +404,24 @@
         url: 'find-country.html',
         fullCount: 194,
         pointsPerRound: 1,
-        icon: `<div class="game-icon-large">🗺️</div>`
+        icon: '🗺️'
       },
       outlines: {
         title: 'Country Outline',
         desc: 'Identify countries from their unique outlines and geographical shapes.',
         url: 'outlines.html',
         pointsPerRound: null,
-        icon: `<img class="game-icon-large" src="img/icon-logo.svg" alt="" style="width:64px;height:64px">`,
+        icon: `<img src="img/icon-logo-small.svg" alt="" style="width:1.2em;height:1.2em;vertical-align:-0.15em">`,
         customDifficulties: [
-          { key: 'outlines-short',       url: 'outlines.html', urlParam: 'rounds=10',  label: 'Guess – Short',         emoji: '⚡', desc: '10 rounds · name the country' },
-          { key: 'outlines-medium',      url: 'outlines.html', urlParam: 'rounds=25',  label: 'Guess – Medium',        emoji: '🎯', desc: '25 rounds · name the country' },
-          { key: 'outlines-long',        url: 'outlines.html', urlParam: 'rounds=all', label: 'Guess – All',           emoji: '🏆', desc: 'All countries · name the country' },
-          { key: 'rotated-short',        url: 'outlines.html', urlParam: 'rounds=10&mode=rotated',       label: 'Rotate & Guess – Short',  emoji: '🔄', desc: '10 rounds · rotate & guess' },
-          { key: 'rotated-medium',       url: 'outlines.html', urlParam: 'rounds=25&mode=rotated',       label: 'Rotate & Guess – Medium', emoji: '🔄', desc: '25 rounds · rotate & guess' },
-          { key: 'rotated-long',         url: 'outlines.html', urlParam: 'rounds=all&mode=rotated',      label: 'Rotate & Guess – All',    emoji: '🔄', desc: 'All countries · rotate & guess' },
-          { key: 'rotate-only-short',    url: 'outlines.html', urlParam: 'rounds=10&mode=rotate-only',   label: 'Rotate Only – Short',     emoji: '🧭', desc: '10 rounds · name shown' },
-          { key: 'rotate-only-medium',   url: 'outlines.html', urlParam: 'rounds=25&mode=rotate-only',   label: 'Rotate Only – Medium',    emoji: '🧭', desc: '25 rounds · name shown' },
-          { key: 'rotate-only-long',     url: 'outlines.html', urlParam: 'rounds=all&mode=rotate-only',  label: 'Rotate Only – All',       emoji: '🧭', desc: 'All countries · name shown' },
+          { key: 'outlines-short',       url: 'outlines.html', urlParam: 'rounds=10',  label: 'Guess – Short',           emoji: '❓', desc: '10 rounds · name the country' },
+          { key: 'outlines-medium',      url: 'outlines.html', urlParam: 'rounds=25',  label: 'Guess – Medium',          emoji: '❓', desc: '25 rounds · name the country' },
+          { key: 'outlines-long',        url: 'outlines.html', urlParam: 'rounds=all', label: 'Guess – All',             emoji: '❓', desc: 'All countries · name the country' },
+          { key: 'rotate-only-short',    url: 'outlines.html', urlParam: 'rounds=10&mode=rotate-only',   label: 'Rotate – Short',  emoji: 'rotate-svg', desc: '10 rounds · name shown' },
+          { key: 'rotate-only-medium',   url: 'outlines.html', urlParam: 'rounds=25&mode=rotate-only',   label: 'Rotate – Medium', emoji: 'rotate-svg', desc: '25 rounds · name shown' },
+          { key: 'rotate-only-long',     url: 'outlines.html', urlParam: 'rounds=all&mode=rotate-only',  label: 'Rotate – All',    emoji: 'rotate-svg', desc: 'All countries · name shown' },
+          { key: 'rotated-short',        url: 'outlines.html', urlParam: 'rounds=10&mode=rotated',       label: 'Rotate & Guess – Short',  emoji: '⚡', desc: '10 rounds · rotate & guess' },
+          { key: 'rotated-medium',       url: 'outlines.html', urlParam: 'rounds=25&mode=rotated',       label: 'Rotate & Guess – Medium', emoji: '🎯', desc: '25 rounds · rotate & guess' },
+          { key: 'rotated-long',         url: 'outlines.html', urlParam: 'rounds=all&mode=rotated',      label: 'Rotate & Guess – All',    emoji: '🏆', desc: 'All countries · rotate & guess' },
         ],
       },
       capitals: {
@@ -394,7 +430,7 @@
         url: 'capitals.html',
         fullCount: 194,
         pointsPerRound: 2,
-        icon: `<div class="game-icon-large">🏛️</div>`
+        icon: '🏛️'
       },
       trivia: {
         title: 'Geography Trivia',
@@ -402,14 +438,14 @@
         url: 'trivia.html',
         fullCount: 124,
         pointsPerRound: 1,
-        icon: `<div class="game-icon-large">📚</div>`
+        icon: '📚'
       },
       heritage: {
         title: 'UNESCO Heritage',
         desc: 'Identify countries from stunning UNESCO World Heritage Sites.',
         url: 'heritage.html',
         pointsPerRound: null,
-        icon: `<div class="game-icon-large">🖼️</div>`,
+        icon: '🖼️',
         noContinent: true,
         customDifficulties: [
           { key: 'heritage-short',  url: 'heritage.html', urlParam: 'rounds=10',  label: 'Guess – Short',  emoji: '🖼️', desc: '10 sites · guess the country' },
@@ -426,7 +462,7 @@
         url: 'flags.html',
         fullCount: 194,
         pointsPerRound: 1,
-        icon: `<div class="game-icon-large">🚩</div>`
+        icon: '🚩'
       },
       route: {
         title: 'Connect the Countries',
@@ -434,7 +470,7 @@
         url: 'route.html',
         fullCount: 194,
         pointsPerRound: null,
-        icon: `<div class="game-icon-large">🔗</div>`,
+        icon: '🔗',
         customDifficulties: [
           { key: 'easy',   urlParam: 'difficulty=easy',   label: 'Easy',   emoji: '⚡', desc: '1–2 countries between' },
           { key: 'normal', urlParam: 'difficulty=normal', label: 'Normal', emoji: '🎯', desc: '3–6 countries between' },
@@ -443,11 +479,11 @@
         continentSlugs: ['africa', 'americas', 'asia', 'europe'], // Oceania excluded (no land borders)
       },
       rivers: {
-        title: 'Rivers & Mountain Ranges',
+        title: 'Rivers & Mountains',
         desc: 'Click every country a river flows through or a mountain range spans.',
         url: 'rivers.html',
         pointsPerRound: null,
-        icon: `<div class="game-icon-large">🌵</div>`,
+        icon: '🌵',
         noContinent: true,
         customDifficulties: [
           { key: 'rivers-easy-short',  url: 'rivers.html',    urlParam: 'rounds=10&mode=easy', label: 'Rivers – Easy',     emoji: '🐟', desc: '10 rivers · pick one country' },
@@ -482,27 +518,27 @@
     if (!game) {
       location.href = 'index.html';
     } else {
-      document.title = `Geo Quiz - ${game.title}`;
-
-      const continentLabel = continent && CONTINENT_LABELS[continent] ? CONTINENT_LABELS[continent] : '';
-      const continentSubtitle = continentLabel
-        ? `<p class="game-desc" style="margin-top:6px;font-weight:600;color:var(--text-primary)">${continentLabel}</p>`
-        : '';
+      const showRegion = !game.noContinent;
+      const regionLabel = continent && CONTINENT_LABELS[continent] ? CONTINENT_LABELS[continent] : 'World';
+      const titleText = showRegion ? `${game.title} – ${regionLabel}` : game.title;
+      document.title = `Geo Quiz - ${titleText}`;
 
       document.getElementById('game-header').innerHTML = `
-        <a href="index.html" style="text-decoration:none">${game.icon}</a>
-        <a href="index.html" class="game-title">${game.title}</a>
+        <a href="index.html" style="text-decoration:none"><div class="game-icon-large">${game.icon}</div></a>
+        <a href="index.html" class="game-title">${titleText}</a>
         <p class="game-desc">${game.desc}</p>
-        ${continentSubtitle}
       `;
 
       // Compute continent slug for record keys
       const continentSlug = continent ? continent.toLowerCase() : '';
 
+      const ROTATE_SVG = `<svg style="width:1em;height:1em;vertical-align:-0.1em" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M1 4v6h6"/><path d="M23 20v-6h-6"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10"/><path d="M3.51 15A9 9 0 0 0 18.36 18.36L23 14"/></svg>`;
+
       function makeCard(href, emoji, name, rounds, recordHtml) {
+        const icon = emoji === 'rotate-svg' ? ROTATE_SVG : emoji;
         return `
           <a class="diff-card" href="${href}">
-            <span class="diff-emoji">${emoji}</span>
+            <span class="diff-emoji">${icon}</span>
             <div class="diff-info">
               <div class="diff-name">${name}</div>
               <div class="diff-rounds">${rounds}</div>
@@ -559,8 +595,42 @@
           return makeCard(href, d.emoji, d.label, roundsLabel, recHtml);
         }).join('');
 
-        const gridClass = diffs.length === 2 ? 'card-grid two-cards' : 'card-grid';
+        const gridClass = diffs.length === 2 ? 'card-grid two-cards'
+          : diffs.length === 9 ? 'card-grid three-cols' : 'card-grid';
         document.getElementById('game-cards').innerHTML = `<div class="${gridClass}">${diffCards}</div>`;
+
+        // Dynamically adjust card vertical padding to fill available height
+        function adjustCardHeight() {
+          const content = document.querySelector('.content');
+          const header = document.getElementById('game-header');
+          const cards = document.getElementById('game-cards');
+          if (!content || !header || !cards) return;
+
+          const viewH = window.innerHeight;
+          const contentPad = 40 + 32;
+          const headerH = header.offsetHeight + 28;
+          const available = viewH - contentPad - headerH;
+
+          const root = document.documentElement;
+          root.style.setProperty('--card-vpad', '10px');
+          const minCardsH = cards.scrollHeight;
+
+          const extra = available - minCardsH;
+          if (extra > 0) {
+            const grid = cards.querySelector('.card-grid');
+            const cardCount = grid ? grid.children.length : 1;
+            const cols = grid ? Math.max(1, Math.round(grid.offsetWidth / 280)) : 1;
+            const rows = Math.ceil(cardCount / cols);
+            const perCard = Math.min(extra / (rows * 2), 40);
+            const cardPad = Math.max(10, Math.round(perCard));
+            root.style.setProperty('--card-vpad', cardPad + 'px');
+          } else {
+            root.style.setProperty('--card-vpad', '10px');
+          }
+        }
+
+        requestAnimationFrame(() => requestAnimationFrame(adjustCardHeight));
+        window.addEventListener('resize', adjustCardHeight);
       })();
     }
   </script>

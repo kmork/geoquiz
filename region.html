@@ -110,9 +110,14 @@
     .content {
       position: relative;
       z-index: 1;
-      max-width: 800px;
+      max-width: 1500px;
       margin: 0 auto;
       padding: 40px 24px 32px;
+      min-height: 100vh;
+      min-height: 100dvh;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
     }
 
     .game-header {
@@ -146,10 +151,57 @@
       margin: 0;
     }
 
+    #region-cards {
+      display: flex;
+      flex-direction: column;
+    }
+
     .card-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .world-card {
+      max-width: 900px;
+      margin: 0 auto 28px;
+      width: 100%;
+      border-left: 4px solid var(--accent-color);
+      text-align: center;
+      padding: 28px 24px;
+    }
+
+    .world-card .diff-emoji {
+      font-size: 56px;
+    }
+
+    .world-card .diff-name {
+      font-size: 22px;
+    }
+
+    .world-card .diff-rounds {
+      font-size: 16px;
+    }
+
+    .laurel {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 80px;
+      height: 100%;
+      max-height: 18ON 0px;
+      pointer-events: none;
+    }
+
+    .laurel-left {
+      left: 18%;
+    }
+
+    .laurel-right {
+      right: 18%;
     }
 
     .diff-card {
@@ -158,7 +210,7 @@
       -webkit-backdrop-filter: blur(10px);
       border: 1px solid var(--card-border);
       border-radius: 20px;
-      padding: 20px 16px;
+      padding: 28px 20px;
       text-decoration: none;
       color: var(--text-primary);
       text-align: center;
@@ -191,33 +243,33 @@
     }
 
     .diff-emoji {
-      font-size: 32px;
+      font-size: 44px;
       display: block;
       margin-bottom: 12px;
       line-height: 1;
     }
 
     .diff-name {
-      font-size: 17px;
+      font-size: 20px;
       font-weight: 700;
       margin-bottom: 6px;
     }
 
     .diff-rounds {
-      font-size: 14px;
+      font-size: 15px;
       color: var(--text-secondary);
       margin-bottom: 8px;
     }
 
     .diff-play {
       display: inline-block;
-      padding: 8px 20px;
+      padding: 10px 24px;
       background: var(--button-bg);
       border: 1px solid var(--button-border);
       border-radius: 10px;
       color: var(--button-text);
       font-weight: 600;
-      font-size: 13px;
+      font-size: 14px;
       transition: all 0.2s;
     }
 
@@ -291,6 +343,44 @@
         margin: 8px 0 0;
         justify-self: start;
       }
+
+      .world-card {
+        margin-bottom: 10px;
+        padding: 14px 12px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        text-align: left;
+      }
+
+      .world-card .diff-emoji {
+        font-size: 24px;
+        margin: 0;
+        flex-shrink: 0;
+      }
+
+      .world-card .diff-name {
+        font-size: 15px;
+      }
+
+      .world-card .diff-rounds {
+        font-size: 12px;
+      }
+
+      .laurel {
+        display: none;
+      }
+    }
+
+    /* Dynamic card height via CSS custom property set by JS */
+    .diff-card {
+      padding-top: var(--card-vpad, 28px);
+      padding-bottom: var(--card-vpad, 28px);
+    }
+
+    .world-card {
+      padding-top: var(--world-vpad, 28px);
+      padding-bottom: var(--world-vpad, 28px);
     }
 
   </style>
@@ -411,24 +501,98 @@
 
         const totalCount = game.fullCount || '194';
 
-        // World card first
+        // World card — separate hero element
         const worldHref = game.directUrl || `play.html?game=${encodeURIComponent(gameKey)}`;
-        let cards = makeCard(worldHref, '🌐', 'World', `All ${totalCount} countries`);
+        const laurelLeft = `<svg class="laurel laurel-left" viewBox="0 0 60 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M48 115C48 115 44 90 36 72C28 54 14 38 14 38" stroke="var(--accent-color)" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+              <ellipse cx="24" cy="28" rx="10" ry="5.5" transform="rotate(-35 24 28)" fill="var(--accent-color)" opacity="0.18"/>
+              <ellipse cx="16" cy="42" rx="10" ry="5.5" transform="rotate(-22 16 42)" fill="var(--accent-color)" opacity="0.18"/>
+              <ellipse cx="14" cy="56" rx="10" ry="5.5" transform="rotate(-10 14 56)" fill="var(--accent-color)" opacity="0.18"/>
+              <ellipse cx="18" cy="70" rx="10" ry="5.5" transform="rotate(5 18 70)" fill="var(--accent-color)" opacity="0.18"/>
+              <ellipse cx="26" cy="82" rx="10" ry="5.5" transform="rotate(15 26 82)" fill="var(--accent-color)" opacity="0.18"/>
+              <ellipse cx="34" cy="93" rx="10" ry="5.5" transform="rotate(25 34 93)" fill="var(--accent-color)" opacity="0.18"/>
+              <ellipse cx="42" cy="103" rx="9" ry="5" transform="rotate(32 42 103)" fill="var(--accent-color)" opacity="0.18"/>
+            </svg>`;
+        const laurelRight = `<svg class="laurel laurel-right" viewBox="0 0 60 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 115C12 115 16 90 24 72C32 54 46 38 46 38" stroke="var(--accent-color)" stroke-width="2.5" stroke-linecap="round" opacity="0.4"/>
+              <ellipse cx="36" cy="28" rx="10" ry="5.5" transform="rotate(35 36 28)" fill="var(--accent-color)" opacity="0.18"/>
+              <ellipse cx="44" cy="42" rx="10" ry="5.5" transform="rotate(22 44 42)" fill="var(--accent-color)" opacity="0.18"/>
+              <ellipse cx="46" cy="56" rx="10" ry="5.5" transform="rotate(10 46 56)" fill="var(--accent-color)" opacity="0.18"/>
+              <ellipse cx="42" cy="70" rx="10" ry="5.5" transform="rotate(-5 42 70)" fill="var(--accent-color)" opacity="0.18"/>
+              <ellipse cx="34" cy="82" rx="10" ry="5.5" transform="rotate(-15 34 82)" fill="var(--accent-color)" opacity="0.18"/>
+              <ellipse cx="26" cy="93" rx="10" ry="5.5" transform="rotate(-25 26 93)" fill="var(--accent-color)" opacity="0.18"/>
+              <ellipse cx="18" cy="103" rx="9" ry="5" transform="rotate(-32 18 103)" fill="var(--accent-color)" opacity="0.18"/>
+            </svg>`;
 
-        // Continent cards — use game-specific list if defined
+        const worldCard = `
+          <a class="world-card diff-card" href="${worldHref}">
+            ${laurelLeft}
+            <span class="diff-emoji">🌐</span>
+            <div class="diff-info">
+              <div class="diff-name">World</div>
+              <div class="diff-rounds">All ${totalCount} countries</div>
+              <span class="diff-play">Play →</span>
+            </div>
+            ${laurelRight}
+          </a>`;
+
+        // Continent cards in grid
         const contList = game.continentSlugs
           ? CONTINENTS.filter(c => game.continentSlugs.includes(c.slug))
           : CONTINENTS;
 
+        let continentCards = '';
         contList.forEach(c => {
           const count = countFor(c.continent);
           const href = game.directUrl
             ? `${game.directUrl}?continent=${encodeURIComponent(c.continent)}`
             : `play.html?game=${encodeURIComponent(gameKey)}&continent=${encodeURIComponent(c.continent)}`;
-          cards += makeCard(href, c.emoji, c.label, `${count} countries`);
+          continentCards += makeCard(href, c.emoji, c.label, `${count} countries`);
         });
 
-        document.getElementById('region-cards').innerHTML = `<div class="card-grid">${cards}</div>`;
+        document.getElementById('region-cards').innerHTML =
+          worldCard + `<div class="card-grid">${continentCards}</div>`;
+
+        // Dynamically adjust card vertical padding to fill available height
+        function adjustCardHeight() {
+          const content = document.querySelector('.content');
+          const header = document.getElementById('game-header');
+          const cards = document.getElementById('region-cards');
+          if (!content || !header || !cards) return;
+
+          const viewH = window.innerHeight;
+          const contentPad = 40 + 32; // top + bottom padding
+          const headerH = header.offsetHeight + 28; // + margin-bottom
+          const available = viewH - contentPad - headerH;
+
+          // Measure cards at minimum padding to get base height
+          const root = document.documentElement;
+          root.style.setProperty('--card-vpad', '12px');
+          root.style.setProperty('--world-vpad', '12px');
+          const minCardsH = cards.scrollHeight;
+
+          const extra = available - minCardsH;
+          if (extra > 0) {
+            // Distribute extra space as vertical padding, capped
+            const grid = cards.querySelector('.card-grid');
+            const worldEl = cards.querySelector('.world-card');
+            const cardCount = grid ? grid.children.length : 1;
+            const rows = grid ? Math.ceil(cardCount / Math.max(1, Math.round(grid.offsetWidth / 280))) : 1;
+            const totalCards = rows + (worldEl ? 1 : 0);
+            const perCard = Math.min(extra / (totalCards * 2), 40); // max 40px each side
+            const cardPad = Math.max(12, Math.round(perCard));
+            const worldPad = Math.max(12, Math.round(perCard * 1.2));
+            root.style.setProperty('--card-vpad', cardPad + 'px');
+            root.style.setProperty('--world-vpad', worldPad + 'px');
+          } else {
+            root.style.setProperty('--card-vpad', '12px');
+            root.style.setProperty('--world-vpad', '12px');
+          }
+        }
+
+        // Run after layout settles
+        requestAnimationFrame(() => requestAnimationFrame(adjustCardHeight));
+        window.addEventListener('resize', adjustCardHeight);
       })();
     }
   </script>

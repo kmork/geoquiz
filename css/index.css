@@ -111,33 +111,32 @@ html {
 }
 
 .header {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 16px;
   margin-bottom: 36px;
+  position: relative;
 }
 
 .globe-container {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
   position: relative;
-  margin-bottom: 12px;
+  flex-shrink: 0;
 }
 
 .globe-icon {
-  width: 80px;
-  height: 80px;
+  width: 88px;
+  height: 88px;
   display: block;
   position: relative;
 }
 
 .globe-ring {
   position: absolute;
-  top: 40px;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 90px;
-  height: 90px;
+  width: 100px;
+  height: 100px;
   border: 2px solid var(--ring-color);
   border-radius: 50%;
   animation: pulse-ring 2s ease-in-out infinite;
@@ -150,19 +149,37 @@ html {
 }
 
 h1 {
-  font-size: 40px;
+  font-size: 42px;
   font-weight: 800;
-  margin: 12px 0 8px;
+  margin: 0;
   background: linear-gradient(135deg, var(--globe-gradient-1) 0%, var(--globe-gradient-2) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  line-height: 1.1;
+  white-space: nowrap;
 }
 
 .subtitle {
-  font-size: 18px;
-  color: var(--text-secondary);
-  margin-bottom: 16px;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 17px;
+  color: var(--text-primary);
+  opacity: 0.75;
+  line-height: 1.5;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  text-align: center;
+  pointer-events: none;
+  font-style: italic;
+}
+
+/* Menu button flows inside header on index page */
+.header .menu-btn {
+  position: static;
+  flex-shrink: 0;
+  margin-left: auto;
 }
 
 .games-grid {
@@ -281,63 +298,38 @@ h1 {
   }
 
   .header {
+    gap: 10px;
     margin-bottom: 16px;
   }
 
-  .globe-container {
-    margin-bottom: 0;
-    position: relative;
-    height: 72px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
   .globe-icon {
-    width: 60px;
-    height: 60px;
-    opacity: 0.15;
+    width: 48px;
+    height: 48px;
   }
 
   .globe-ring {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 72px;
-    height: 72px;
-    border-width: 1px;
+    width: 56px;
+    height: 56px;
+    border-width: 1.5px;
   }
 
-  .globe-container + h1 {
+  h1 {
     font-size: 24px;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    z-index: 10;
-    line-height: 1.2;
-  }
-
-  /* Target h1 when inside globe-container on mobile */
-  .globe-container h1 {
-    font-size: 24px;
-    margin: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 90%;
-    z-index: 10;
-    line-height: 1.2;
   }
 
   .subtitle {
-    font-size: 13px;
-    margin-bottom: 12px;
-    margin-top: 6px;
+    position: static;
+    transform: none;
+    font-size: 12px;
+    line-height: 1.4;
+    flex: 1;
+    text-align: right;
+  }
+
+  .header .menu-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
   }
 
   .games-grid {
