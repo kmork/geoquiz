@@ -1,0 +1,113 @@
+/* ── Play page specific styles ── */
+
+#game-cards {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Override shared card-grid for play page */
+.card-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.card-grid.two-cards {
+  grid-template-columns: repeat(2, 1fr);
+  max-width: 600px;
+}
+
+.card-grid.three-cols {
+  grid-template-columns: repeat(3, 1fr);
+  max-width: 1200px;
+}
+
+.section-label {
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  margin: 24px 0 12px;
+}
+
+/* Play cards: slightly different base sizes */
+.diff-card {
+  padding: 28px 24px;
+  max-height: 200px;
+}
+
+.diff-emoji {
+  font-size: 32px;
+}
+
+.diff-name {
+  font-size: 17px;
+}
+
+.diff-rounds {
+  font-size: 14px;
+}
+
+.diff-play {
+  padding: 8px 20px;
+  font-size: 13px;
+}
+
+.diff-record {
+  font-size: 12px;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+
+/* Desktop: icon on right */
+@media (min-width: 601px) {
+  .diff-card {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 20px;
+    text-align: left;
+  }
+
+  .diff-emoji {
+    margin-bottom: 0;
+    flex-shrink: 0;
+    font-size: 36px;
+  }
+
+  .diff-info {
+    flex: 1;
+    min-width: 0;
+  }
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 600px) {
+  .card-grid,
+  .card-grid.two-cards,
+  .card-grid.three-cols {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    max-width: 100%;
+  }
+
+  .diff-card {
+    flex-direction: row;
+    max-height: none;
+    border-radius: 16px;
+  }
+
+  .diff-record {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    align-self: center;
+    text-align: right;
+    margin: 0;
+  }
+
+  .section-label {
+    margin: 16px 0 10px;
+  }
+}

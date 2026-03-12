@@ -1,0 +1,85 @@
+/* ── Region page specific styles ── */
+
+#region-cards {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── World card ── */
+
+.world-card {
+  max-width: 900px;
+  margin: 0 auto 28px;
+  width: 100%;
+  text-align: center;
+  padding: 28px 24px;
+}
+
+.world-card .diff-emoji {
+  font-size: 56px;
+}
+
+.world-card .diff-name {
+  font-size: 22px;
+}
+
+.world-card .diff-rounds {
+  font-size: 16px;
+}
+
+/* ── Laurel wreath ── */
+
+.laurel {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 80px;
+  height: 100%;
+  max-height: 180px;
+  pointer-events: none;
+}
+
+.laurel-left {
+  left: 18%;
+}
+
+.laurel-right {
+  right: 18%;
+}
+
+/* Cards stretch to fill but cap at a max height */
+.diff-card {
+  max-height: 220px;
+}
+
+/* ── Mobile ── */
+
+@media (max-width: 600px) {
+  .world-card {
+    margin-bottom: 10px;
+    padding: 14px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-align: left;
+  }
+
+  .world-card .diff-emoji {
+    font-size: 24px;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  .world-card .diff-name {
+    font-size: 15px;
+  }
+
+  .world-card .diff-rounds {
+    font-size: 12px;
+  }
+
+  .laurel {
+    display: none;
+  }
+}
