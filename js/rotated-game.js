@@ -141,7 +141,7 @@ export function createRotatedGame({ ui, confetti, drawCountry, setRotation, anim
       ui.submitBtn.disabled = true;
 
       showStatus(result.message, true);
-      confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
+      if (!rotateOnly || result.angularError <= 5) confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
       hapticFeedback('correct');
       updateUI();
 
