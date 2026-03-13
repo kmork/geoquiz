@@ -67,20 +67,60 @@ export async function createCompleteRotatedGame({
     aliases: COUNTRY_ALIASES
   });
 
+  // Build neighbors lookup from unified window.DATA
+  const NEIGHBORS = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.neighbors]));
+
   // Rotation state
   let currentRotation = 0;
   let rotationGroup = null;
 
   function drawCountry(targetCountry) {
     renderer.drawCountries(targetCountry, []);
+    wrapPathsInRotationGroup();
+    // Reset hint state for new round
+    hideHintPanel();
+    hintUsed = false;
+    if (hintBtn) hintBtn.style.opacity = '1';
+  }
 
-    // Wrap all paths in a <g> for rotation
+  function wrapPathsInRotationGroup() {
     const paths = Array.from(svgMap.querySelectorAll('path'));
     rotationGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
     rotationGroup.style.transition = 'none';
-
     paths.forEach(p => rotationGroup.appendChild(p));
     svgMap.appendChild(rotationGroup);
+  }
+
+  // Reveal correct answer with neighbors (rotate & guess mode)
+  function revealAnswer(targetCountry, neighborCountries) {
+    hideHintPanel();
+    // Save current viewBox so neighbors don't shift the map
+    const savedVB = svgMap.getAttribute('viewBox');
+    renderer.drawCountries(targetCountry, neighborCountries);
+    if (savedVB) svgMap.setAttribute('viewBox', savedVB);
+    wrapPathsInRotationGroup();
+    // Set rotation to 0 (correct orientation) with no transition
+    const { cx, cy } = getViewBoxCenter();
+    rotationGroup.setAttribute('transform', `rotate(0, ${cx}, ${cy})`);
+  }
+
+  // Hint UI state
+  let hintBtn = null;
+  let hintPanel = null;
+  let hintUsed = false;
+
+  function hideHintPanel() {
+    if (hintPanel) hintPanel.classList.remove('visible');
+  }
+
+  function showHintPanel(currentCountryName) {
+    if (!hintPanel) return;
+    const nbrs = NEIGHBORS[currentCountryName] || [];
+    const text = nbrs.length === 0
+      ? 'Island nation — no land borders'
+      : 'Neighboring countries are now shown on the map';
+    hintPanel.querySelector('.find-hint-list').innerHTML = `<li>${text}</li>`;
+    hintPanel.classList.add('visible');
   }
 
   function getViewBoxCenter() {
@@ -207,6 +247,8 @@ export async function createCompleteRotatedGame({
     setRotation,
     getRotation,
     animateToCorrect,
+    revealAnswer: rotateOnly ? null : revealAnswer,
+    neighbors: NEIGHBORS,
     config: {
       maxRounds,
       gameIdSuffix,
@@ -214,6 +256,51 @@ export async function createCompleteRotatedGame({
       gamePrefix,
     }
   });
+
+  // Hint UI (only for rotate & guess mode)
+  if (!rotateOnly) {
+    const mapwrap = svgMap.parentElement;
+
+    hintBtn = document.createElement('button');
+    hintBtn.className = 'picture-hint-btn';
+    hintBtn.textContent = '💡';
+    hintBtn.title = 'Show hint';
+    mapwrap.appendChild(hintBtn);
+
+    hintPanel = document.createElement('div');
+    hintPanel.className = 'find-hint-panel';
+    hintPanel.innerHTML =
+      '<div class="find-hint-panel-header"><span>💡 Hint</span></div>' +
+      '<ul class="find-hint-list"></ul>';
+    mapwrap.appendChild(hintPanel);
+
+    hintPanel.addEventListener('click', () => hideHintPanel());
+
+    hintBtn.addEventListener('click', () => {
+      if (hintPanel.classList.contains('visible')) {
+        hideHintPanel();
+        return;
+      }
+      const currentCountry = game?.getCurrent?.();
+      if (!currentCountry) return;
+      if (!hintUsed) {
+        const nbrs = NEIGHBORS[currentCountry] || [];
+        if (nbrs.length > 0) {
+          const savedVB = svgMap.getAttribute('viewBox');
+          renderer.drawCountries(currentCountry, nbrs);
+          if (savedVB) svgMap.setAttribute('viewBox', savedVB);
+          wrapPathsInRotationGroup();
+          // Re-apply current rotation
+          const { cx, cy } = getViewBoxCenter();
+          rotationGroup.setAttribute('transform', `rotate(${currentRotation}, ${cx}, ${cy})`);
+        }
+        hintUsed = true;
+        game?.markHintUsed?.();
+        hintBtn.style.opacity = '0.5';
+      }
+      showHintPanel(currentCountry);
+    });
+  }
 
   // Setup autocomplete (only for rotate & guess mode)
   if (!rotateOnly && window.DATA && Array.isArray(window.DATA)) {

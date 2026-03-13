@@ -27,6 +27,7 @@ export class RotatedGameLogic {
     this.correct = 0;
     this.roundEnded = false;
     this.randomAngle = 0;
+    this.usedHint = false;
     this.startTime = null;
     this.gameStartTime = null;
   }
@@ -39,6 +40,7 @@ export class RotatedGameLogic {
     this.correct = 0;
     this.roundEnded = false;
     this.randomAngle = 0;
+    this.usedHint = false;
     this.gameStartTime = null;
   }
 
@@ -63,6 +65,7 @@ export class RotatedGameLogic {
 
     this.current = this.deck.pop();
     this.roundEnded = false;
+    this.usedHint = false;
     // Random angle between 30° and 330° (avoids near-0° so it's clearly rotated)
     this.randomAngle = 30 + Math.random() * 300;
     this.startTime = Date.now();
@@ -80,6 +83,10 @@ export class RotatedGameLogic {
 
   getRandomAngle() {
     return this.randomAngle;
+  }
+
+  markHintUsed() {
+    this.usedHint = true;
   }
 
   /**
@@ -118,7 +125,8 @@ export class RotatedGameLogic {
     const isCorrect = norm(resolveAlias(trimmed)) === norm(this.current.country);
 
     if (isCorrect) {
-      const points = Math.max(0, Math.round(180 - angularError));
+      let points = Math.max(0, Math.round(180 - angularError));
+      if (this.usedHint) points = Math.round(points / 2);
       this.score += points;
       this.correct++;
 

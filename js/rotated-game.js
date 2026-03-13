@@ -2,7 +2,7 @@ import { RotatedGameLogic } from "./games/rotated-logic.js";
 import { isMobileDevice, hapticFeedback, shakeWrong } from "./game-utils.js";
 import { renderFinishScreen } from "./game-records.js";
 
-export function createRotatedGame({ ui, confetti, drawCountry, setRotation, animateToCorrect, getRotation, config = {} }) {
+export function createRotatedGame({ ui, confetti, drawCountry, setRotation, animateToCorrect, getRotation, revealAnswer, neighbors, config = {} }) {
   let continueTimer = null;
   let isProcessing = false;
   let continueMode = false;
@@ -160,6 +160,13 @@ export function createRotatedGame({ ui, confetti, drawCountry, setRotation, anim
 
       animateToCorrect();
 
+      if (!rotateOnly && revealAnswer) {
+        const current = gameLogic.getCurrentCountry();
+        const countryNeighbors = neighbors[current.country] || [];
+        // Wait for rotation animation to finish before revealing neighbors
+        setTimeout(() => revealAnswer(current.country, countryNeighbors), 550);
+      }
+
       enterContinueMode();
       isProcessing = false;
     }
@@ -205,5 +212,7 @@ export function createRotatedGame({ ui, confetti, drawCountry, setRotation, anim
   return {
     reset,
     nextQ,
+    getCurrent: () => gameLogic.getCurrentCountry()?.country || "",
+    markHintUsed: () => gameLogic.markHintUsed(),
   };
 }
