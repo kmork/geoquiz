@@ -1959,3 +1959,103 @@ html.light-mode .geo-bonus-overlay.wrong {
     flex-shrink: 0; /* Don't shrink button */
   }
 }
+
+/* ── Place the Cities ──────────────────────────────────────── */
+
+.city-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 0;
+  justify-content: center;
+}
+
+.city-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: var(--button-bg);
+  border: 1px solid var(--button-border);
+  color: var(--button-color);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: opacity .15s, background .15s, border-color .15s;
+}
+
+.city-label:active { cursor: grabbing; }
+
+.city-label.dragging {
+  opacity: 0.35;
+}
+
+.city-label.placed {
+  background: var(--pill-bg);
+  border-color: var(--map-selected-stroke);
+  opacity: 0.7;
+}
+
+.city-label.label-correct {
+  border-color: var(--good-color);
+  background: var(--correct-bg);
+  opacity: 1;
+}
+
+.city-label.label-wrong {
+  border-color: var(--bad-color);
+  background: var(--wrong-bg);
+  opacity: 1;
+}
+
+.city-label-ghost {
+  position: fixed;
+  z-index: 9999;
+  padding: 8px 14px;
+  border-radius: 20px;
+  background: var(--panel-bg);
+  border: 2px solid var(--map-selected-stroke);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-weight: 500;
+  pointer-events: none;
+  box-shadow: 0 4px 16px rgba(0,0,0,.3);
+  white-space: nowrap;
+}
+
+.city-dot {
+  fill: var(--map-dot-fill);
+  stroke: var(--map-dot-stroke);
+  transition: fill .2s;
+}
+
+.city-dot-capital {
+  fill: var(--star-color);
+}
+
+.city-dot.assigned {
+  fill: var(--map-selected-fill);
+  stroke: var(--map-selected-stroke);
+}
+
+.city-dot.nearest {
+  fill: #fff;
+  stroke: var(--map-selected-stroke);
+  stroke-width: 2;
+  filter: drop-shadow(0 0 4px var(--map-selected-stroke));
+}
+
+.city-dot.correct {
+  fill: var(--map-correct-fill);
+  stroke: var(--map-correct-stroke);
+  stroke-width: 1;
+}
+
+.city-dot.wrong {
+  fill: var(--map-wrong-fill);
+  stroke: var(--map-wrong-stroke);
+  stroke-width: 1;
+}

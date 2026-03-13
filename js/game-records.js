@@ -27,6 +27,7 @@ const GAME_NAMES = {
   'heritage-locate': 'Heritage Locate',
   rotated:         'Rotate & Guess',
   'rotate-only':   'Rotate Only',
+  'place-cities':  'Place the Cities',
 };
 
 const DIFFICULTY_LABELS = {
