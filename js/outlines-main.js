@@ -8,6 +8,10 @@ const _continentParam = _params.get('continent');
 const _continentSlug = _continentParam ? _continentParam.toLowerCase().replace(/\s+/g, '-') : null;
 const _gameIdSuffix = _continentSlug ? `${_continentSlug}-${_diffSuffix}` : _diffSuffix;
 
+while (!window.DATA) {
+  await new Promise(r => setTimeout(r, 50));
+}
+
 if (_continentParam) {
   const filtered = window.DATA.filter(c => c.continent === _continentParam);
   if (filtered.length > 0) window.DATA = filtered;
