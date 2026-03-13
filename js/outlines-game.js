@@ -55,6 +55,7 @@ export function createOutlinesGame({ ui, confetti, drawCountries, revealAnswer, 
 
   function showStatus(msg, isCorrect) {
     if (!ui.statusEl) return;
+    if (ui.answerInput) ui.answerInput.style.display = "none";
     ui.statusEl.textContent = msg;
     ui.statusEl.className = "status " + (isCorrect ? "correct" : "wrong");
     ui.statusEl.style.display = "block";

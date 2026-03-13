@@ -58,6 +58,7 @@ export function createRotatedGame({ ui, confetti, drawCountry, setRotation, anim
 
   function showStatus(msg, isCorrect) {
     if (!ui.statusEl) return;
+    if (!rotateOnly && ui.answerInput) ui.answerInput.style.display = "none";
     ui.statusEl.textContent = msg;
     ui.statusEl.className = "status " + (isCorrect ? "correct" : "wrong");
     ui.statusEl.style.display = "block";
