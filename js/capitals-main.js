@@ -12,6 +12,9 @@ const _continentParam = _params.get('continent');
 const _continentSlug = _continentParam ? _continentParam.toLowerCase().replace(/\s+/g, '-') : null;
 const _gameIdSuffix = _continentSlug ? `${_continentSlug}-${_diffSuffix}` : _diffSuffix;
 
+// Wait for data.js to finish loading (top-level await in separate module doesn't block us)
+while (!window.DATA) await new Promise(r => setTimeout(r, 10));
+
 if (_continentParam) {
   const filtered = window.DATA.filter(c => c.continent === _continentParam);
   if (filtered.length > 0) window.DATA = filtered;

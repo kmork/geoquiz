@@ -76,12 +76,17 @@
         ],
       },
       capitals: {
-        title: 'Capitals of the World',
+        title: 'Cities',
         desc: 'Guess the capitals and their locations on an interactive world map.',
         url: 'capitals.html',
         fullCount: 194,
         pointsPerRound: 2,
-        icon: '🏛️'
+        icon: '🏛️',
+        customDifficulties: [
+          { key: 'capitals-short',  url: 'capitals.html', urlParam: 'rounds=10',  label: 'Capitals – Short',  emoji: '⚡', desc: '10 rounds' },
+          { key: 'capitals-medium', url: 'capitals.html', urlParam: 'rounds=25',  label: 'Capitals – Medium', emoji: '🎯', desc: '25 rounds' },
+          { key: 'capitals-long',   url: 'capitals.html', urlParam: 'rounds=all', label: 'Capitals – All',    emoji: '🏆', desc: 'All countries' },
+        ],
       },
       trivia: {
         title: 'Geography Trivia',
