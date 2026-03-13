@@ -247,7 +247,7 @@ export async function createCompleteRotatedGame({
     setRotation,
     getRotation,
     animateToCorrect,
-    revealAnswer: rotateOnly ? null : revealAnswer,
+    revealAnswer,
     neighbors: NEIGHBORS,
     config: {
       maxRounds,
@@ -257,8 +257,8 @@ export async function createCompleteRotatedGame({
     }
   });
 
-  // Hint UI (only for rotate & guess mode)
-  if (!rotateOnly) {
+  // Hint UI
+  {
     const mapwrap = svgMap.parentElement;
 
     hintBtn = document.createElement('button');

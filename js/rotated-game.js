@@ -160,7 +160,7 @@ export function createRotatedGame({ ui, confetti, drawCountry, setRotation, anim
 
       animateToCorrect();
 
-      if (!rotateOnly && revealAnswer) {
+      if (revealAnswer) {
         const current = gameLogic.getCurrentCountry();
         const countryNeighbors = neighbors[current.country] || [];
         // Wait for rotation animation to finish before revealing neighbors
