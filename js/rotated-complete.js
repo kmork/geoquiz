@@ -12,6 +12,41 @@ import { OutlinesRenderer } from "./ui-components/outlines-renderer.js";
 import { COUNTRY_ALIASES } from "./aliases.js";
 import { loadGeoJSON } from "./geojson-loader.js";
 
+// Safe-dial click sound via Web Audio API
+function createClickSound() {
+  let audioCtx = null;
+  let clickBuffer = null;
+
+  function init() {
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    // Pre-generate a short noise-burst click buffer
+    const sampleRate = audioCtx.sampleRate;
+    const length = Math.floor(sampleRate * 0.008); // 8ms
+    clickBuffer = audioCtx.createBuffer(1, length, sampleRate);
+    const data = clickBuffer.getChannelData(0);
+    for (let i = 0; i < length; i++) {
+      // Sharp attack, fast decay — mimics a mechanical detent
+      const envelope = Math.exp(-i / (length * 0.15));
+      data[i] = (Math.random() * 2 - 1) * envelope;
+    }
+  }
+
+  function play() {
+    if (!audioCtx || !clickBuffer) init();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    const source = audioCtx.createBufferSource();
+    const gain = audioCtx.createGain();
+    source.buffer = clickBuffer;
+    source.connect(gain);
+    gain.connect(audioCtx.destination);
+    gain.gain.value = 0.1;
+    source.start();
+  }
+
+  return { play, init };
+}
+
 export async function createCompleteRotatedGame({
   container,
   svgMap,
@@ -81,7 +116,9 @@ export async function createCompleteRotatedGame({
     currentRotation = 0;
   }
 
-  // Drag-to-rotate
+  // Drag-to-rotate with safe-dial click sound
+  const clickSound = createClickSound();
+
   function attachDragRotate() {
     const svgEl = svgMap;
     svgEl.style.touchAction = 'none';
@@ -90,6 +127,7 @@ export async function createCompleteRotatedGame({
     let isDragging = false;
     let startPointerAngle = 0;
     let baseRotation = 0;
+    let lastClickDeg = null;
 
     function getSvgCenter() {
       const rect = svgEl.getBoundingClientRect();
@@ -103,10 +141,12 @@ export async function createCompleteRotatedGame({
 
     svgEl.addEventListener('pointerdown', (e) => {
       if (!rotationGroup) return;
+      clickSound.init(); // ensure AudioContext is created on user gesture
       isDragging = true;
       svgEl.setPointerCapture(e.pointerId);
       startPointerAngle = pointerAngle(e.clientX, e.clientY);
       baseRotation = currentRotation;
+      lastClickDeg = Math.round(currentRotation);
       svgEl.style.cursor = 'grabbing';
       rotationGroup.style.transition = 'none';
     });
@@ -118,6 +158,13 @@ export async function createCompleteRotatedGame({
       currentRotation = baseRotation + delta;
       const { cx, cy } = getViewBoxCenter();
       rotationGroup.setAttribute('transform', `rotate(${currentRotation}, ${cx}, ${cy})`);
+
+      // Play click for each degree crossed
+      const deg = Math.round(currentRotation);
+      if (lastClickDeg !== null && deg !== lastClickDeg) {
+        clickSound.play();
+        lastClickDeg = deg;
+      }
     });
 
     const endDrag = () => {
