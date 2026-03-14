@@ -47,8 +47,7 @@ export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, countr
 
     submitted = false;
     assignments.clear();
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Submit';
+    submitBtn.style.display = 'none';
     // Update UI
     countryNameEl.textContent = round.countryName;
     const prog = logic.getProgress();
@@ -280,7 +279,9 @@ export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, countr
   }
 
   function updateSubmitButton() {
-    submitBtn.disabled = assignments.size < currentPlaces.length;
+    if (!submitted && assignments.size >= currentPlaces.length) {
+      handleSubmit();
+    }
   }
 
   function handleSubmit() {
@@ -290,7 +291,6 @@ export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, countr
       return;
     }
     submitted = true;
-    submitBtn.disabled = true;
 
     const assignmentArray = Array.from(assignments.entries()).map(([dotIndex, placeName]) => ({
       dotIndex,
@@ -346,6 +346,7 @@ export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, countr
     } else {
       // Show score and Continue button so user can review mistakes
       submitBtn.textContent = 'Continue';
+      submitBtn.style.display = '';
       submitBtn.disabled = false;
     }
   }
