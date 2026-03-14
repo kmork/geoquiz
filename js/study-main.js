@@ -46,6 +46,11 @@ let showRivers    = false;
 let showMountains = false;
 let showHeritage  = false;
 
+// Empire timeline state
+let empiresData = [];
+let activeEmpire = null;
+let showTimeline = false;
+
 // ── Load data (parallel) ──────────────────────────────────────────────────────
 
 // Wait for data.js to finish loading
@@ -57,12 +62,13 @@ while (!window.DATA) {
 const countriesFlags = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.flagCode]));
 const neighborsData = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.neighbors]));
 
-const [worldData, placesData, riversData, mountainsData, heritageSitesData] = await Promise.all([
+const [worldData, placesData, riversData, mountainsData, heritageSitesData, empiresRaw] = await Promise.all([
   loadGeoJSON('data/ne_10m_admin_0_countries.geojson.gz'),
   fetch('data/places.geojson').then(r => r.json()),
   fetch('data/rivers.json').then(r => r.json()),
   fetch('data/mountains.json').then(r => r.json()),
   fetch('data/heritage-sites.json').then(r => r.json()),
+  fetch('data/empires.json').then(r => r.json()),
 ]);
 
 const WORLD = worldData.features;
@@ -71,6 +77,12 @@ const WORLD = worldData.features;
 
 const { countryPaths, hitTestPaths, microCountries } = buildCountryPaths(WORLD);
 const { dataToGeo, geoToData, resolveToDataName } = buildNameLookups(countryPaths);
+
+// Pre-compute geo names for empires (for renderer matching)
+empiresData = empiresRaw.sort((a, b) => a.year - b.year);
+for (const empire of empiresData) {
+  empire._geoNames = new Set(empire.countries.map(c => dataToGeo[c] || c));
+}
 
 // GeoJSON properties map: norm(geoAdminName) → feature.properties
 const geoPropsMap = new Map();
@@ -161,6 +173,24 @@ function drawWorldMap() {
   }
 
   drawCountriesBatch(ctx, viewport, items, offsets, canvasDisplayWidth, canvasDisplayHeight);
+
+  // ── Empire overlay ──────────────────────────────────────────────────────────
+
+  if (activeEmpire) {
+    const empireItems = [];
+    for (const country of countryPaths) {
+      if (!activeEmpire._geoNames.has(country.name)) continue;
+      empireItems.push({
+        path2d: country.path2d,
+        fill: activeEmpire.color + '40',
+        stroke: activeEmpire.color + '90',
+        strokeWidth: 1.0,
+        bboxMinX: country.bboxMinX, bboxMaxX: country.bboxMaxX,
+        bboxMinY: country.bboxMinY, bboxMaxY: country.bboxMaxY,
+      });
+    }
+    drawCountriesBatch(ctx, viewport, empireItems, offsets, canvasDisplayWidth, canvasDisplayHeight);
+  }
 
   // ── Rivers ─────────────────────────────────────────────────────────────────
 
@@ -554,6 +584,24 @@ function updateInfoPanelForMountain(range) {
   infoPanel.style.display = 'block';
 }
 
+function updateInfoPanelForEmpire(empire) {
+  infoPanel.innerHTML = `
+    <div class="study-info-header">
+      <div class="study-info-overlay-icon" style="background:${empire.color}25">⏳</div>
+      <div>
+        <div class="study-info-name">${empire.name}</div>
+        <div class="study-info-region">${empire.yearLabel}</div>
+      </div>
+    </div>
+    <div class="study-info-divider"></div>
+    <div class="study-info-rows">
+      <div class="study-info-row study-info-borders"><span>Description</span><span>${empire.description}</span></div>
+      <div class="study-info-row"><span>Countries</span><span>${empire.countries.length} modern nations</span></div>
+    </div>
+  `;
+  infoPanel.style.display = 'block';
+}
+
 // ── Heritage site popup ───────────────────────────────────────────────────────
 
 let heritagePopupVisible = false;
@@ -632,12 +680,18 @@ function createMapToggles() {
   btnHeritage.title = 'Toggle UNESCO heritage sites';
   btnHeritage.textContent = '🏛️';
 
-  // Stack: 🏷️ ★ 〰️ ⛰️ 🏛️
+  const btnHistory = document.createElement('button');
+  btnHistory.className = 'study-toggle-btn';
+  btnHistory.title = 'Toggle historical empires';
+  btnHistory.textContent = '⏳';
+
+  // Stack: 🏷️ ★ 〰️ ⛰️ 🏛️ ⏳
   bar.appendChild(btnCountry);
   bar.appendChild(btnCapital);
   bar.appendChild(btnRivers);
   bar.appendChild(btnMountains);
   bar.appendChild(btnHeritage);
+  bar.appendChild(btnHistory);
   mapwrap.appendChild(bar);
 
   btnCountry.addEventListener('click', () => {
@@ -673,6 +727,74 @@ function createMapToggles() {
     btnHeritage.classList.toggle('active', showHeritage);
     drawWorldMap();
   });
+
+  btnHistory.addEventListener('click', () => {
+    showTimeline = !showTimeline;
+    btnHistory.classList.toggle('active', showTimeline);
+    const bar = document.querySelector('.study-timeline-bar');
+    if (bar) bar.classList.toggle('visible', showTimeline);
+    if (!showTimeline) {
+      activeEmpire = null;
+      const chips = document.querySelectorAll('.study-timeline-chip');
+      chips.forEach(c => c.classList.remove('active'));
+      hideInfoPanel();
+    }
+    resizeCanvas();
+  });
+}
+
+function createTimelineBar() {
+  const mapwrap = canvas.parentElement;
+  const bar = document.createElement('div');
+  bar.className = 'study-timeline-bar';
+
+  const track = document.createElement('div');
+  track.className = 'study-timeline-track';
+
+  for (const empire of empiresData) {
+    const chip = document.createElement('button');
+    chip.className = 'study-timeline-chip';
+    chip.style.setProperty('--empire-color', empire.color);
+    chip.textContent = `${empire.name} (${empire.yearLabel})`;
+    chip.addEventListener('click', () => {
+      const wasActive = activeEmpire === empire;
+      activeEmpire = wasActive ? null : empire;
+
+      track.querySelectorAll('.study-timeline-chip').forEach(c => c.classList.remove('active'));
+      if (!wasActive) chip.classList.add('active');
+
+      if (activeEmpire) {
+        updateInfoPanelForEmpire(activeEmpire);
+      } else {
+        hideInfoPanel();
+      }
+      drawWorldMap();
+    });
+    track.appendChild(chip);
+  }
+
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'study-timeline-close';
+  closeBtn.textContent = '✕';
+  closeBtn.title = 'Close timeline';
+  closeBtn.addEventListener('click', () => {
+    showTimeline = false;
+    activeEmpire = null;
+    bar.classList.remove('visible');
+    const toggleBtn = document.querySelector('.study-toggle-btn.active[title="Toggle historical empires"]');
+    if (toggleBtn) toggleBtn.classList.remove('active');
+    // Also deactivate by finding the ⏳ button
+    document.querySelectorAll('.study-toggle-btn').forEach(b => {
+      if (b.textContent.trim() === '⏳') b.classList.remove('active');
+    });
+    hideInfoPanel();
+    resizeCanvas();
+  });
+
+  bar.appendChild(track);
+  bar.appendChild(closeBtn);
+  // Insert before canvas so it appears above the map
+  mapwrap.insertBefore(bar, canvas);
 }
 
 // ── Canvas resize & height sync ───────────────────────────────────────────────
@@ -717,6 +839,7 @@ new MutationObserver(() => drawWorldMap()).observe(
 );
 
 createMapToggles();
+createTimelineBar();
 
 // ── Zoom to country (desktop click) ──────────────────────────────────────────
 
@@ -823,7 +946,11 @@ createPanZoom(canvas, viewport, drawWorldMap, {
   onLeave() {
     hoveredCountry = null;
     hoveredOverlay = null;
-    hideInfoPanel();
+    if (activeEmpire) {
+      updateInfoPanelForEmpire(activeEmpire);
+    } else {
+      hideInfoPanel();
+    }
     drawWorldMap();
   },
   onTap(cx, cy, e) {

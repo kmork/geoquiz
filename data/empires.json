@@ -1,0 +1,164 @@
+[
+  {
+    "id": "persian-empire",
+    "name": "Persian Empire",
+    "year": -500,
+    "yearLabel": "500 BC",
+    "color": "#7c3aed",
+    "countries": ["Iran", "Iraq", "Turkey", "Egypt", "Libya", "Afghanistan", "Pakistan", "Turkmenistan", "Uzbekistan", "Tajikistan", "Syria", "Lebanon", "Israel", "Jordan", "Cyprus", "Greece", "Bulgaria", "Armenia", "Georgia", "Azerbaijan", "Kuwait", "Bahrain", "India"],
+    "description": "At its height under Darius I, the Achaemenid Empire was the largest empire the world had yet seen"
+  },
+  {
+    "id": "alexanders-empire",
+    "name": "Alexander's Empire",
+    "year": -323,
+    "yearLabel": "323 BC",
+    "color": "#c026d3",
+    "countries": ["Greece", "North Macedonia", "Bulgaria", "Turkey", "Egypt", "Libya", "Syria", "Lebanon", "Israel", "Jordan", "Iraq", "Iran", "Afghanistan", "Pakistan", "Turkmenistan", "Uzbekistan", "Tajikistan", "Cyprus", "Armenia", "Georgia", "Azerbaijan", "Kuwait", "India"],
+    "description": "The Macedonian empire of Alexander the Great stretched from Greece to northwestern India"
+  },
+  {
+    "id": "roman-empire",
+    "name": "Roman Empire",
+    "year": 117,
+    "yearLabel": "117 AD",
+    "color": "#dc2626",
+    "countries": ["Italy", "Spain", "Portugal", "France", "United Kingdom", "Belgium", "Netherlands", "Luxembourg", "Switzerland", "Austria", "Germany", "Romania", "Bulgaria", "Greece", "Turkey", "Syria", "Lebanon", "Israel", "Jordan", "Iraq", "Egypt", "Libya", "Tunisia", "Algeria", "Morocco", "Croatia", "Bosnia and Herzegovina", "Serbia", "North Macedonia", "Albania", "Montenegro", "Slovenia", "Hungary", "Cyprus", "Malta", "San Marino", "Monaco", "Andorra", "Armenia", "Georgia", "Azerbaijan"],
+    "description": "At its greatest extent under Emperor Trajan, Rome controlled the entire Mediterranean world"
+  },
+  {
+    "id": "byzantine-empire",
+    "name": "Byzantine Empire",
+    "year": 555,
+    "yearLabel": "555 AD",
+    "color": "#9333ea",
+    "countries": ["Turkey", "Greece", "Bulgaria", "Romania", "Serbia", "North Macedonia", "Albania", "Montenegro", "Bosnia and Herzegovina", "Croatia", "Italy", "Egypt", "Libya", "Tunisia", "Syria", "Lebanon", "Israel", "Jordan", "Cyprus", "Malta", "Spain"],
+    "description": "The Eastern Roman Empire under Justinian I reconquered much of the western Mediterranean"
+  },
+  {
+    "id": "umayyad-caliphate",
+    "name": "Umayyad Caliphate",
+    "year": 750,
+    "yearLabel": "750 AD",
+    "color": "#059669",
+    "countries": ["Saudi Arabia", "Yemen", "Oman", "United Arab Emirates", "Qatar", "Bahrain", "Kuwait", "Iraq", "Syria", "Lebanon", "Israel", "Jordan", "Egypt", "Libya", "Tunisia", "Algeria", "Morocco", "Spain", "Portugal", "Iran", "Afghanistan", "Pakistan", "Turkmenistan", "Uzbekistan", "Tajikistan", "Turkey", "Armenia", "Georgia", "Azerbaijan", "Cyprus"],
+    "description": "The largest Arab empire in history, stretching from Spain and Morocco to Central Asia and India"
+  },
+  {
+    "id": "mongol-empire",
+    "name": "Mongol Empire",
+    "year": 1279,
+    "yearLabel": "1279 AD",
+    "color": "#b45309",
+    "countries": ["Mongolia", "China", "Russia", "Kazakhstan", "Uzbekistan", "Turkmenistan", "Tajikistan", "Kyrgyzstan", "Afghanistan", "Iran", "Iraq", "Syria", "Turkey", "Georgia", "Armenia", "Azerbaijan", "Pakistan", "India", "South Korea", "North Korea", "Myanmar", "Vietnam", "Hungary", "Poland", "Ukraine", "Belarus"],
+    "description": "The largest contiguous land empire in history, founded by Genghis Khan"
+  },
+  {
+    "id": "mali-empire",
+    "name": "Mali Empire",
+    "year": 1350,
+    "yearLabel": "1350 AD",
+    "color": "#eab308",
+    "countries": ["Mali", "Senegal", "Gambia", "Guinea", "Guinea-Bissau", "Sierra Leone", "Burkina Faso", "Niger", "Mauritania", "Côte d'Ivoire", "Ghana", "Nigeria"],
+    "description": "West African empire famous for Mansa Musa, possibly the richest person in history"
+  },
+  {
+    "id": "inca-empire",
+    "name": "Inca Empire",
+    "year": 1500,
+    "yearLabel": "1500 AD",
+    "color": "#f59e0b",
+    "countries": ["Peru", "Ecuador", "Bolivia", "Colombia", "Chile", "Argentina"],
+    "description": "The largest empire in pre-Columbian America, centered in the Andes mountains"
+  },
+  {
+    "id": "aztec-empire",
+    "name": "Aztec Empire",
+    "year": 1520,
+    "yearLabel": "1520 AD",
+    "color": "#e11d48",
+    "countries": ["Mexico", "Guatemala", "Belize", "Honduras", "El Salvador"],
+    "description": "Mesoamerican empire with its capital at Tenochtitlan, modern-day Mexico City"
+  },
+  {
+    "id": "ottoman-empire",
+    "name": "Ottoman Empire",
+    "year": 1683,
+    "yearLabel": "1683 AD",
+    "color": "#15803d",
+    "countries": ["Turkey", "Greece", "Bulgaria", "Romania", "Serbia", "North Macedonia", "Albania", "Montenegro", "Bosnia and Herzegovina", "Hungary", "Iraq", "Syria", "Lebanon", "Israel", "Jordan", "Egypt", "Libya", "Tunisia", "Algeria", "Saudi Arabia", "Yemen", "Cyprus", "Moldova", "Ukraine", "Georgia", "Armenia", "Kuwait", "Qatar", "Bahrain", "United Arab Emirates"],
+    "description": "At its peak after the siege of Vienna, the Ottoman Empire controlled Southeast Europe, Western Asia, and North Africa"
+  },
+  {
+    "id": "spanish-empire",
+    "name": "Spanish Empire",
+    "year": 1790,
+    "yearLabel": "1790 AD",
+    "color": "#ea580c",
+    "countries": ["Spain", "Mexico", "Guatemala", "Honduras", "El Salvador", "Nicaragua", "Costa Rica", "Panama", "Cuba", "Dominican Republic", "Colombia", "Venezuela", "Ecuador", "Peru", "Bolivia", "Chile", "Argentina", "Uruguay", "Paraguay", "Philippines", "Morocco"],
+    "description": "One of the largest empires in history, spanning the Americas, Pacific, and parts of Europe and Africa"
+  },
+  {
+    "id": "napoleonic-empire",
+    "name": "Napoleonic Empire",
+    "year": 1812,
+    "yearLabel": "1812 AD",
+    "color": "#2563eb",
+    "countries": ["France", "Belgium", "Netherlands", "Luxembourg", "Germany", "Italy", "Switzerland", "Spain", "Portugal", "Poland", "Croatia", "Slovenia", "Austria", "Czechia"],
+    "description": "Napoleon Bonaparte's empire at its zenith controlled most of continental Western Europe"
+  },
+  {
+    "id": "qing-dynasty",
+    "name": "Qing Dynasty",
+    "year": 1820,
+    "yearLabel": "1820 AD",
+    "color": "#0891b2",
+    "countries": ["China", "Mongolia", "Taiwan"],
+    "description": "The last imperial dynasty of China, ruling over one of the most populous empires in world history"
+  },
+  {
+    "id": "portuguese-empire",
+    "name": "Portuguese Empire",
+    "year": 1820,
+    "yearLabel": "1820 AD",
+    "color": "#16a34a",
+    "countries": ["Portugal", "Brazil", "Angola", "Mozambique", "Guinea-Bissau", "Cabo Verde", "Sao Tome and Principe", "Timor-Leste", "India"],
+    "description": "The first global maritime empire, with colonies across South America, Africa, and Asia"
+  },
+  {
+    "id": "russian-empire",
+    "name": "Russian Empire",
+    "year": 1866,
+    "yearLabel": "1866 AD",
+    "color": "#1d4ed8",
+    "countries": ["Russia", "Ukraine", "Belarus", "Poland", "Finland", "Estonia", "Latvia", "Lithuania", "Moldova", "Georgia", "Armenia", "Azerbaijan", "Kazakhstan", "Uzbekistan", "Turkmenistan", "Tajikistan", "Kyrgyzstan"],
+    "description": "One of the largest empires in world history, stretching from Eastern Europe to the Pacific Ocean"
+  },
+  {
+    "id": "british-empire",
+    "name": "British Empire",
+    "year": 1920,
+    "yearLabel": "1920 AD",
+    "color": "#be185d",
+    "countries": ["United Kingdom", "Ireland", "Canada", "Australia", "New Zealand", "India", "Pakistan", "Bangladesh", "Myanmar", "Sri Lanka", "Malaysia", "Singapore", "South Africa", "Nigeria", "Ghana", "Kenya", "Uganda", "Tanzania", "Sudan", "Egypt", "Iraq", "Jordan", "Israel", "Cyprus", "Malta", "Jamaica", "Trinidad and Tobago", "Guyana", "Barbados", "Sierra Leone", "Gambia", "Zambia", "Zimbabwe", "Malawi", "Botswana", "Fiji", "Papua New Guinea", "Solomon Islands", "Tonga", "Samoa"],
+    "description": "The largest empire in history, covering about a quarter of the world's land area"
+  },
+  {
+    "id": "japanese-empire",
+    "name": "Japanese Empire",
+    "year": 1942,
+    "yearLabel": "1942 AD",
+    "color": "#f43f5e",
+    "countries": ["Japan", "South Korea", "North Korea", "China", "Philippines", "Vietnam", "Laos", "Cambodia", "Thailand", "Myanmar", "Malaysia", "Singapore", "Indonesia", "Timor-Leste", "Papua New Guinea", "Palau", "Micronesia", "Marshall Islands"],
+    "description": "At its maximum extent during World War II, Japan controlled much of East and Southeast Asia and the Pacific"
+  },
+  {
+    "id": "soviet-union",
+    "name": "Soviet Union",
+    "year": 1960,
+    "yearLabel": "1960 AD",
+    "color": "#b91c1c",
+    "countries": ["Russia", "Ukraine", "Belarus", "Estonia", "Latvia", "Lithuania", "Moldova", "Georgia", "Armenia", "Azerbaijan", "Kazakhstan", "Uzbekistan", "Turkmenistan", "Tajikistan", "Kyrgyzstan"],
+    "description": "The world's first constitutionally socialist state, and a superpower during the Cold War"
+  }
+]

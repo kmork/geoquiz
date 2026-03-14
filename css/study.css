@@ -253,6 +253,73 @@
   background: rgba(0,120,100,0.9);
 }
 
+/* ── Timeline bar ── */
+.study-timeline-bar {
+  display: none;
+  padding: 8px 10px 6px;
+  border-bottom: 1px solid var(--panel-border, rgba(255,255,255,.12));
+  position: relative;
+}
+.study-timeline-bar.visible {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.study-timeline-track {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  flex: 1;
+  min-width: 0;
+  padding: 2px 0;
+}
+.study-timeline-track::-webkit-scrollbar { display: none; }
+.study-timeline-chip {
+  flex-shrink: 0;
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--panel-border, rgba(255,255,255,.14));
+  background: var(--card-bg, rgba(15,20,40,.6));
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, border-color 0.2s, transform 0.12s;
+  border-left: 3px solid var(--empire-color, rgba(255,255,255,.3));
+}
+.study-timeline-chip:hover {
+  background: var(--card-bg-hover, rgba(30,35,60,.8));
+  transform: scale(1.04);
+}
+.study-timeline-chip.active {
+  background: color-mix(in srgb, var(--empire-color) 25%, transparent);
+  border-color: var(--empire-color);
+  border-left-color: var(--empire-color);
+}
+.study-timeline-close {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.08);
+  color: var(--text-muted);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.study-timeline-close:hover {
+  background: rgba(255,255,255,0.15);
+  color: var(--text-primary);
+}
+
 /* ── Mobile ── */
 @media (max-width: 600px) {
   /* Hide hamburger on mobile */
@@ -275,5 +342,13 @@
   /* Heritage popup: fill more of the screen on mobile */
   .heritage-popup {
     width: 90%;
+  }
+  /* Timeline chips: smaller on mobile */
+  .study-timeline-chip {
+    padding: 4px 9px;
+    font-size: 11px;
+  }
+  .study-timeline-bar.visible {
+    padding: 6px 8px 4px;
   }
 }
