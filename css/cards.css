@@ -226,6 +226,35 @@ body {
   color: var(--button-text-hover);
 }
 
+/* ── Short viewport ── */
+
+@media (min-width: 601px) and (max-height: 750px) {
+  .content {
+    padding: 24px 24px 20px;
+  }
+
+  .game-header {
+    margin-bottom: 16px;
+  }
+
+  .game-icon-large {
+    font-size: 36px;
+    margin-bottom: 6px;
+  }
+
+  .card-grid {
+    gap: 14px;
+  }
+
+  .diff-card {
+    padding: 16px 18px;
+  }
+
+  .diff-rounds {
+    margin-bottom: 4px;
+  }
+}
+
 /* ── Mobile ── */
 
 @media (max-width: 600px) {

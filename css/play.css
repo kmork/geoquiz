@@ -82,6 +82,27 @@
   }
 }
 
+/* ── Short viewport ── */
+
+@media (min-width: 601px) and (max-height: 750px) {
+  .diff-card {
+    padding: 16px 20px;
+    gap: 14px;
+  }
+
+  .diff-emoji {
+    font-size: 28px;
+  }
+
+  .diff-play {
+    padding: 6px 16px;
+  }
+
+  .diff-record {
+    margin-bottom: 6px;
+  }
+}
+
 /* ── Mobile ── */
 
 @media (max-width: 600px) {
