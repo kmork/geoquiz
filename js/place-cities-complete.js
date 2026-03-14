@@ -114,14 +114,15 @@ export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, status
     }
   }
 
-  // Keep dot radii at a fixed screen size regardless of zoom
+  // Keep dot radii at a fixed screen size regardless of zoom/viewBox aspect ratio.
+  // getScreenCTM() gives the true SVG-units-per-pixel scale, accounting for
+  // preserveAspectRatio (meet/slice) which viewBox.width/svgRect.width ignores.
   function updateDotSizes() {
-    const svgRect = svgEl.getBoundingClientRect();
-    const pxWidth = svgRect.width || 600;
-    const vb = svgEl.viewBox.baseVal;
-    const currentW = vb.width || 600;
-    const r = (currentW / pxWidth) * 7;
-    const strokeW = (currentW / pxWidth) * 1.5;
+    const ctm = svgEl.getScreenCTM();
+    if (!ctm) return;
+    const svgUnitsPerPx = 1 / ctm.a;  // ctm.a == ctm.d when aspect ratio preserved
+    const r = svgUnitsPerPx * 7;
+    const strokeW = svgUnitsPerPx * 1.5;
     for (const dot of dotElements) {
       dot.setAttribute('r', r);
       dot.setAttribute('stroke-width', strokeW);
@@ -309,10 +310,10 @@ export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, status
 
       // Show correct name next to wrong dots
       if (!res.correct) {
-        const curVB = svgEl.viewBox.baseVal;
-        const pxWidth = svgEl.getBoundingClientRect().width || 600;
-        const corrFontSize = (curVB.width / pxWidth) * 11;
-        const corrOffset = (curVB.width / pxWidth) * 14;
+        const ctm = svgEl.getScreenCTM();
+        const svgPx = ctm ? 1 / ctm.a : 1;
+        const corrFontSize = svgPx * 11;
+        const corrOffset = svgPx * 14;
         const text = document.createElementNS(SVG_NS, 'text');
         text.setAttribute('x', dotPositions[i].x);
         text.setAttribute('y', dotPositions[i].y - corrOffset);

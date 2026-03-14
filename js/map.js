@@ -124,9 +124,8 @@ export function createMap({ svgEl, worldUrl, placesUrl }) {
       if (c) {
         const [x, y] = proj([c.lon, c.lat]);
 
-        const vb = svgEl.viewBox.baseVal;
-        const pxW = svgEl.clientWidth || 1;
-        const upp = vb.width / pxW;
+        const ctm = svgEl.getScreenCTM();
+        const upp = ctm ? 1 / ctm.a : 1;
 
         const dot = document.createElementNS("http://www.w3.org/2000/svg", "circle");
         dot.setAttribute("cx", x);

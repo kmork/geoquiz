@@ -190,10 +190,9 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
       c.setAttribute("cx", p.x);
       c.setAttribute("cy", p.y);
 
-      // small marker ~3.5px regardless of zoom
-      const vbNow = svg.viewBox.baseVal;
-      const pxW = svg.clientWidth || 1;
-      const upp = vbNow.width / pxW;
+      // fixed 7px marker regardless of zoom/aspect ratio
+      const ctm = svg.getScreenCTM();
+      const upp = ctm ? 1 / ctm.a : 1;
       c.setAttribute("r", String(7 * upp));
 
       c.setAttribute("fill", getCSSVar('--star-color') || "#ffd54a");
