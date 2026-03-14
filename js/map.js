@@ -212,12 +212,15 @@ export function createMap({ svgEl, worldUrl, placesUrl }) {
       setVB(clampToLimits(cand));
     };
 
-    // --- Wheel zoom (desktop) ---
+    // --- Wheel zoom (desktop, smooth progressive) ---
     svgEl.addEventListener(
       "wheel",
       (e) => {
         e.preventDefault();
-        const factor = e.deltaY > 0 ? 1.15 : 0.87;
+        let dy = e.deltaY;
+        if (e.deltaMode === 1) dy *= 16;
+        const strength = Math.sqrt(Math.min(Math.abs(dy), 200) / 200) * 0.28;
+        const factor = dy > 0 ? 1 + strength : 1 - strength;
         zoomAt(factor, e.clientX, e.clientY);
       },
       { passive: false }
