@@ -27,7 +27,6 @@ const game = await createPlaceCitiesGame({
   svgEl: document.getElementById('map'),
   labelsEl: document.getElementById('city-labels'),
   submitBtn: document.getElementById('submit'),
-  statusEl: document.getElementById('status'),
   countryNameEl: document.getElementById('countryName'),
   scoreEl: document.getElementById('score'),
   progressEl: document.getElementById('progress'),

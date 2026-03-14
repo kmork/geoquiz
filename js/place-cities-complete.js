@@ -14,7 +14,7 @@ import { attachZoomPan } from './map-zoom-pan.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
-export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, statusEl, countryNameEl, scoreEl, progressEl, overlayEl, maxRounds, gameIdSuffix }) {
+export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, countryNameEl, scoreEl, progressEl, overlayEl, maxRounds, gameIdSuffix }) {
   // Load world GeoJSON + places
   const [worldData, placesData] = await Promise.all([
     loadGeoJSON('data/ne_10m_admin_0_countries.geojson.gz'),
@@ -49,8 +49,6 @@ export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, status
     assignments.clear();
     submitBtn.disabled = true;
     submitBtn.textContent = 'Submit';
-    statusEl.textContent = '';
-
     // Update UI
     countryNameEl.textContent = round.countryName;
     const prog = logic.getProgress();
@@ -287,12 +285,12 @@ export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, status
 
   function handleSubmit() {
     if (submitted) {
-      // "Continue" was clicked
+      // "Continue" after reviewing mistakes
       nextRound();
       return;
     }
-
     submitted = true;
+    submitBtn.disabled = true;
 
     const assignmentArray = Array.from(assignments.entries()).map(([dotIndex, placeName]) => ({
       dotIndex,
@@ -340,16 +338,13 @@ export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, status
       }
     }
 
-    statusEl.textContent = `${result.correct}/${result.total} correct`;
-
     if (result.correct === result.total) {
-      submitBtn.textContent = 'Continue';
-      submitBtn.disabled = false;
-      // Auto-advance after short delay on perfect round
+      // All correct — auto-advance, no status needed
       setTimeout(() => {
         if (submitted) nextRound();
       }, 1200);
     } else {
+      // Show score and Continue button so user can review mistakes
       submitBtn.textContent = 'Continue';
       submitBtn.disabled = false;
     }
