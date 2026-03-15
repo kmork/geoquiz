@@ -137,6 +137,21 @@
         ],
         continentSlugs: ['africa', 'americas', 'asia', 'europe'], // Oceania excluded (no land borders)
       },
+      spelling: {
+        title: 'Spelling',
+        desc: 'Unscramble country and city names.',
+        url: 'spelling.html',
+        pointsPerRound: 1,
+        icon: '🔤',
+        customDifficulties: [
+          { key: 'spelling-countries-short',  url: 'spelling.html', urlParam: 'mode=countries&rounds=10',  label: 'Countries – Short',  emoji: '⚡', desc: '10 country names' },
+          { key: 'spelling-countries-medium', url: 'spelling.html', urlParam: 'mode=countries&rounds=25',  label: 'Countries – Medium', emoji: '🎯', desc: '25 country names' },
+          { key: 'spelling-countries-long',   url: 'spelling.html', urlParam: 'mode=countries&rounds=all', label: 'Countries – All',    emoji: '🏆', desc: 'All countries' },
+          { key: 'spelling-cities-short',     url: 'spelling.html', urlParam: 'mode=cities&rounds=10',     label: 'Cities – Short',     emoji: '⚡', desc: '10 city names' },
+          { key: 'spelling-cities-medium',    url: 'spelling.html', urlParam: 'mode=cities&rounds=25',     label: 'Cities – Medium',    emoji: '🎯', desc: '25 city names' },
+          { key: 'spelling-cities-long',      url: 'spelling.html', urlParam: 'mode=cities&rounds=all',    label: 'Cities – All',       emoji: '🏆', desc: 'All cities' },
+        ],
+      },
       rivers: {
         title: 'Rivers & Mountains',
         desc: 'Click every country a river flows through or a mountain range spans.',

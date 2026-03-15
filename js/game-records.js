@@ -28,6 +28,8 @@ const GAME_NAMES = {
   rotated:         'Rotate & Guess',
   'rotate-only':   'Rotate Only',
   'place-cities':  'Place the Cities',
+  'spelling-countries': 'Spell the Country',
+  'spelling-cities': 'Spell the City',
 };
 
 const DIFFICULTY_LABELS = {

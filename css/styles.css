@@ -2059,3 +2059,128 @@ html.light-mode .geo-bonus-overlay.wrong {
   stroke: var(--map-wrong-stroke);
   stroke-width: 1;
 }
+
+/* ── Spelling Game ── */
+
+.spelling-hint {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.spelling-hint-flag {
+  width: 120px;
+  aspect-ratio: 3/2;
+  object-fit: cover;
+  border-radius: 6px;
+  border: 1px solid rgba(128,128,128,0.25);
+}
+
+.spelling-hint-country {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.spelling-slots {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin-bottom: 1.5rem;
+}
+
+.spelling-slot {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: 600;
+  border-radius: 8px;
+  transition: background 0.2s, border-color 0.2s;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+.spelling-slot.filled {
+  border: 2px solid var(--button-border);
+  background: var(--button-bg);
+  cursor: grab;
+}
+
+.spelling-slot.filled:hover {
+  background: var(--button-hover);
+}
+
+.spelling-slot.dragging {
+  opacity: 0.3;
+}
+
+.spelling-slot.drop-target {
+  border-color: var(--star-color);
+  background: rgba(255,213,74,.15);
+  transform: scale(1.08);
+}
+
+.spelling-ghost {
+  position: fixed;
+  transform: translate(-50%, -50%) scale(1.15);
+  z-index: 1000;
+  pointer-events: none;
+  box-shadow: 0 6px 20px rgba(0,0,0,.35);
+  opacity: 0.95;
+}
+
+.spelling-slot.fixed {
+  border: none;
+  background: none;
+  color: var(--text-muted);
+  font-size: 1.3rem;
+  width: 20px;
+  pointer-events: none;
+}
+
+.spelling-slot.correct {
+  border-color: var(--good-color);
+  background: var(--correct-bg);
+  color: var(--good-color);
+}
+
+.spelling-slot.wrong {
+  border-color: var(--bad-color);
+  background: var(--wrong-bg);
+  animation: shake-wrong 500ms ease-in-out;
+}
+
+.spelling-submit {
+  padding: 10px 32px;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 1px solid var(--button-border);
+  border-radius: 10px;
+  background: var(--button-bg);
+  color: var(--button-color);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.spelling-submit:hover {
+  background: var(--button-hover);
+}
+
+@media (max-width: 640px) {
+  .spelling-slot {
+    width: 36px;
+    height: 36px;
+    font-size: 1rem;
+  }
+
+  .spelling-slot.fixed {
+    width: 14px;
+  }
+
+  .spelling-hint-flag {
+    width: 90px;
+  }
+}
