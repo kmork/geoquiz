@@ -152,13 +152,24 @@ h1 {
   font-size: 42px;
   font-weight: 800;
   margin: 0;
-  background: linear-gradient(135deg, var(--globe-gradient-1) 0%, var(--globe-gradient-2) 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1.1;
   white-space: nowrap;
 }
+
+html.light-mode h1 {
+  background: linear-gradient(135deg, #1e3a8a 0%, #581c87 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Globe SVG gradient — light mode override */
+html.light-mode #globe-grad stop:first-child { stop-color: #1e3a8a; }
+html.light-mode #globe-grad stop:last-child { stop-color: #581c87; }
 
 .subtitle {
   position: absolute;
