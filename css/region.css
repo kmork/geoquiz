@@ -63,6 +63,7 @@
     align-items: center;
     gap: 12px;
     text-align: left;
+    border-radius: 16px;
   }
 
   .world-card .diff-emoji {
@@ -71,12 +72,33 @@
     flex-shrink: 0;
   }
 
+  .world-card .diff-info {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 1px 10px;
+    align-items: start;
+  }
+
   .world-card .diff-name {
     font-size: 15px;
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: 0;
   }
 
   .world-card .diff-rounds {
     font-size: 12px;
+    grid-column: 1;
+    grid-row: 2;
+    margin-bottom: 0;
+  }
+
+  .world-card .diff-play {
+    grid-column: 1 / 3;
+    grid-row: 3;
+    margin: 8px 0 0;
+    justify-self: start;
   }
 
   .laurel {
