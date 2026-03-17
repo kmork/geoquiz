@@ -55,7 +55,15 @@
         url: 'find-country.html',
         fullCount: 194,
         pointsPerRound: 1,
-        icon: '🗺️'
+        icon: '🗺️',
+        customDifficulties: [
+          { key: 'find-short',  url: 'find-country.html', urlParam: 'rounds=10',  label: 'Find – Short',  emoji: '⚡', desc: '10 rounds' },
+          { key: 'find-medium', url: 'find-country.html', urlParam: 'rounds=25',  label: 'Find – Medium', emoji: '🎯', desc: '25 rounds' },
+          { key: 'find-long',   url: 'find-country.html', urlParam: 'rounds=all', label: 'Find – All',    emoji: '🏆', desc: 'All countries' },
+          { key: 'spelling-countries-short',  url: 'spelling.html', urlParam: 'mode=countries&rounds=10',  label: 'Spelling – Short',  emoji: '🔤', desc: '10 country names' },
+          { key: 'spelling-countries-medium', url: 'spelling.html', urlParam: 'mode=countries&rounds=25',  label: 'Spelling – Medium', emoji: '🔤', desc: '25 country names' },
+          { key: 'spelling-countries-long',   url: 'spelling.html', urlParam: 'mode=countries&rounds=all', label: 'Spelling – All',    emoji: '🔤', desc: 'All countries' },
+        ],
       },
       outlines: {
         title: 'Country Outline',
@@ -89,6 +97,9 @@
           { key: 'place-cities-short',  url: 'cities.html', urlParam: 'rounds=5',   label: 'Place Cities – Short',  emoji: '📍', desc: '5 rounds' },
           { key: 'place-cities-medium', url: 'cities.html', urlParam: 'rounds=10',  label: 'Place Cities – Medium', emoji: '📍', desc: '10 rounds' },
           { key: 'place-cities-long',   url: 'cities.html', urlParam: 'rounds=all', label: 'Place Cities – All',    emoji: '📍', desc: 'All countries' },
+          { key: 'spelling-cities-short',  url: 'spelling.html', urlParam: 'mode=cities&rounds=10',  label: 'Spelling – Short',  emoji: '🔤', desc: '10 city names' },
+          { key: 'spelling-cities-medium', url: 'spelling.html', urlParam: 'mode=cities&rounds=25',  label: 'Spelling – Medium', emoji: '🔤', desc: '25 city names' },
+          { key: 'spelling-cities-long',   url: 'spelling.html', urlParam: 'mode=cities&rounds=all', label: 'Spelling – All',    emoji: '🔤', desc: 'All cities' },
         ],
       },
       trivia: {
@@ -136,21 +147,6 @@
           { key: 'hard',   urlParam: 'difficulty=hard',   label: 'Hard',   emoji: '🏆', desc: '7+ countries between' },
         ],
         continentSlugs: ['africa', 'americas', 'asia', 'europe'], // Oceania excluded (no land borders)
-      },
-      spelling: {
-        title: 'Spelling',
-        desc: 'Unscramble country and city names.',
-        url: 'spelling.html',
-        pointsPerRound: 1,
-        icon: '🔤',
-        customDifficulties: [
-          { key: 'spelling-countries-short',  url: 'spelling.html', urlParam: 'mode=countries&rounds=10',  label: 'Countries – Short',  emoji: '⚡', desc: '10 country names' },
-          { key: 'spelling-countries-medium', url: 'spelling.html', urlParam: 'mode=countries&rounds=25',  label: 'Countries – Medium', emoji: '🎯', desc: '25 country names' },
-          { key: 'spelling-countries-long',   url: 'spelling.html', urlParam: 'mode=countries&rounds=all', label: 'Countries – All',    emoji: '🏆', desc: 'All countries' },
-          { key: 'spelling-cities-short',     url: 'spelling.html', urlParam: 'mode=cities&rounds=10',     label: 'Cities – Short',     emoji: '⚡', desc: '10 city names' },
-          { key: 'spelling-cities-medium',    url: 'spelling.html', urlParam: 'mode=cities&rounds=25',     label: 'Cities – Medium',    emoji: '🎯', desc: '25 city names' },
-          { key: 'spelling-cities-long',      url: 'spelling.html', urlParam: 'mode=cities&rounds=all',    label: 'Cities – All',       emoji: '🏆', desc: 'All cities' },
-        ],
       },
       rivers: {
         title: 'Rivers & Mountains',

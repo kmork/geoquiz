@@ -141,8 +141,9 @@ class DailyChallenge {
    * Generate challenge data for all 7 games using seeded RNG
    */
   async generateChallenges() {
-    // Load required data
-    // Note: window.DATA is set by data.js (loaded in HTML)
+    // Wait for data.js to finish loading
+    while (!window.DATA) await new Promise(r => setTimeout(r, 50));
+
     // Build lookups from unified window.DATA
     const flagsData = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.flagCode]));
     const neighborsData = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.neighbors]));

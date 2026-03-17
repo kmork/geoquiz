@@ -32,9 +32,16 @@ document.title = `${titleText} - GeoQuiz`;
 
 let logic;
 
+async function waitForData() {
+  while (!window.DATA) {
+    await new Promise(r => setTimeout(r, 50));
+  }
+}
+
 async function init() {
   if (initOverlay) initOverlay.style.display = 'flex';
 
+  await waitForData();
   let data = window.DATA;
   if (continentParam) {
     const filtered = data.filter(c => c.continent === continentParam);

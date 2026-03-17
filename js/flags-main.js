@@ -26,6 +26,8 @@ let gameStartTime;
 async function init() {
   if (initOverlay) initOverlay.style.display = 'flex';
 
+  while (!window.DATA) await new Promise(r => setTimeout(r, 50));
+
   if (continentParam) {
     const filtered = window.DATA.filter(c => c.continent === continentParam);
     if (filtered.length > 0) window.DATA = filtered;

@@ -30,6 +30,8 @@ let gameInstance = null;
 
 (async () => {
   try {
+    while (!window.DATA) await new Promise(r => setTimeout(r, 50));
+
     if (_continentParam) {
       const filtered = window.DATA.filter(c => c.continent === _continentParam);
       if (filtered.length > 0) window.DATA = filtered;

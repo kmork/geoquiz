@@ -37,6 +37,9 @@ const params = new URLSearchParams(location.search);
 const continentParam = params.get('continent');
 const difficultyParam = params.get('difficulty'); // 'easy' | 'normal' | 'hard' | null
 
+// Wait for data.js to finish loading
+while (!window.DATA) await new Promise(r => setTimeout(r, 50));
+
 // Load GeoJSON + build neighbors from window.DATA
 const worldData = await loadGeoJSON("data/ne_10m_admin_0_countries_route.geojson.gz");
 const NEIGHBORS = Object.fromEntries(window.DATA.map(c => [c.country, c.neighbors]));
