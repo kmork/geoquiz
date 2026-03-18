@@ -43,7 +43,7 @@ let capitalMode = 0; // 0 = off, 1 = dots, 2 = dots + names, 3 = dots + names + 
 
 // Overlay toggle state
 let showRivers    = false;
-let showMountains = false;
+let mountainMode  = 0; // 0 = off, 1 = mountain ranges, 2 = highest peaks
 let showHeritage  = false;
 
 // Empire timeline state
@@ -111,6 +111,14 @@ const cityDots = new Map();
 for (const entry of window.DATA) {
   if (entry.cities && entry.cities.length > 0) {
     cityDots.set(entry.country, entry.cities);
+  }
+}
+
+// Highest-peak data from countries.json (for mountainMode 2)
+const peaksData = [];
+for (const entry of (window.ALL_COUNTRIES || window.DATA)) {
+  if (entry.highestPeak) {
+    peaksData.push({ country: entry.country, ...entry.highestPeak });
   }
 }
 
@@ -217,9 +225,9 @@ function drawWorldMap() {
     ctx.restore();
   }
 
-  // ── Mountain ranges ────────────────────────────────────────────────────────
+  // ── Mountain ranges (mode 1) ───────────────────────────────────────────────
 
-  if (showMountains) {
+  if (mountainMode === 1) {
     ctx.save();
 
     // Lines connecting path points (drawn first, under the dots)
@@ -255,6 +263,52 @@ function drawWorldMap() {
           ctx.beginPath();
           ctx.arc(px, py, r, 0, Math.PI * 2);
           ctx.fill();
+        }
+      }
+    }
+
+    ctx.restore();
+  }
+
+  // ── Highest peaks (mode 2) ───────────────────────────────────────────────
+
+  if (mountainMode === 2) {
+    ctx.save();
+    const peakColor = isLight ? 'rgba(146,64,14,0.9)' : 'rgba(210,140,60,0.9)';
+    const peakLabelColor = isLight ? 'rgba(100,50,10,0.95)' : 'rgba(220,160,80,0.95)';
+    const peakLabelHalo  = isLight ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.7)';
+
+    // Draw triangle markers
+    const s = Math.max(3, 4.5 / viewport.zoom);
+    ctx.fillStyle = peakColor;
+    for (const peak of peaksData) {
+      const [mx, my] = proj([peak.lon, peak.lat]);
+      for (const offset of offsets) {
+        const px = (mx + offset - viewport.scrollX) * viewport.zoom;
+        const py = (my - viewport.scrollY) * viewport.zoom;
+        if (px < -10 || px > canvasDisplayWidth + 10 || py < -10 || py > canvasDisplayHeight + 10) continue;
+        ctx.beginPath();
+        ctx.moveTo(px, py - s);
+        ctx.lineTo(px + s * 0.87, py + s * 0.5);
+        ctx.lineTo(px - s * 0.87, py + s * 0.5);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+
+    // Labels at higher zoom
+    if (viewport.zoom > 3) {
+      const fontSize = Math.max(8, Math.min(11, viewport.zoom * 1.8));
+      for (const peak of peaksData) {
+        const [mx, my] = proj([peak.lon, peak.lat]);
+        for (const offset of offsets) {
+          const px = (mx + offset - viewport.scrollX) * viewport.zoom;
+          const py = (my - viewport.scrollY) * viewport.zoom;
+          if (px < -80 || px > canvasDisplayWidth + 80 || py < -20 || py > canvasDisplayHeight + 20) continue;
+          const label = `${peak.name} (${peak.elev.toLocaleString()} m)`;
+          drawLabel(label, px, py - s - fontSize * 0.7, fontSize, {
+            color: peakLabelColor, shadowColor: peakLabelHalo, lightMode: isLight
+          });
         }
       }
     }
@@ -507,7 +561,7 @@ function findRiverAtPoint(cx, cy) {
 }
 
 function findMountainAtPoint(cx, cy) {
-  if (!showMountains) return null;
+  if (mountainMode !== 1) return null;
   const offsets = visibleOffsets(viewport, canvasDisplayWidth);
   const HIT = 8;
   for (const range of mountainsData) {
@@ -521,6 +575,21 @@ function findMountainAtPoint(cx, cy) {
         if (Math.abs(cx - sp[i][0]) + Math.abs(cy - sp[i][1]) <= HIT) return range;
         if (i < sp.length - 1 && distToSegment(cx, cy, sp[i][0], sp[i][1], sp[i+1][0], sp[i+1][1]) <= HIT) return range;
       }
+    }
+  }
+  return null;
+}
+
+function findPeakAtPoint(cx, cy) {
+  if (mountainMode !== 2) return null;
+  const offsets = visibleOffsets(viewport, canvasDisplayWidth);
+  const HIT = 10;
+  for (const peak of peaksData) {
+    const [mx, my] = proj([peak.lon, peak.lat]);
+    for (const offset of offsets) {
+      const px = (mx + offset - viewport.scrollX) * viewport.zoom;
+      const py = (my - viewport.scrollY) * viewport.zoom;
+      if (Math.abs(cx - px) + Math.abs(cy - py) <= HIT) return peak;
     }
   }
   return null;
@@ -579,6 +648,27 @@ function updateInfoPanelForMountain(range) {
     <div class="study-info-rows">
       <div class="study-info-row study-info-borders"><span>Countries</span><span>${range.countries.join(', ')}</span></div>
       <div class="study-info-row"><span>Highest</span><span>${highestStr}</span></div>
+    </div>
+  `;
+  infoPanel.style.display = 'block';
+}
+
+function updateInfoPanelForPeak(peak) {
+  const iso2 = countriesFlags[peak.country];
+  const flagSrc = iso2 ? `img/flags/${iso2}.svg` : '';
+  infoPanel.innerHTML = `
+    <div class="study-info-header">
+      <div class="study-info-overlay-icon" style="background:rgba(146,64,14,0.15)">▲</div>
+      <div>
+        <div class="study-info-name">${peak.name}</div>
+        <div class="study-info-region">Highest point · ${peak.country}</div>
+      </div>
+    </div>
+    <div class="study-info-divider"></div>
+    <div class="study-info-rows">
+      <div class="study-info-row"><span>Elevation</span><span>${peak.elev.toLocaleString()} m</span></div>
+      <div class="study-info-row"><span>Coordinates</span><span>${Math.abs(peak.lat).toFixed(2)}°${peak.lat >= 0 ? 'N' : 'S'}, ${Math.abs(peak.lon).toFixed(2)}°${peak.lon >= 0 ? 'E' : 'W'}</span></div>
+      ${flagSrc ? `<div class="study-info-row"><span>Flag</span><span><img src="${flagSrc}" alt="${peak.country}" style="height:16px;vertical-align:middle;border-radius:2px"></span></div>` : ''}
     </div>
   `;
   infoPanel.style.display = 'block';
@@ -716,8 +806,11 @@ function createMapToggles() {
   });
 
   btnMountains.addEventListener('click', () => {
-    showMountains = !showMountains;
-    btnMountains.classList.toggle('active', showMountains);
+    mountainMode = (mountainMode + 1) % 3;
+    btnMountains.classList.toggle('active', mountainMode > 0);
+    btnMountains.dataset.mode = mountainMode;
+    const titles = ['Toggle mountain ranges', 'Show highest peaks', 'Hide mountains'];
+    btnMountains.title = titles[mountainMode];
     drawWorldMap();
   });
 
@@ -907,18 +1000,20 @@ function zoomToCountry(dataName) {
 
 createPanZoom(canvas, viewport, drawWorldMap, {
   onHover(cx, cy) {
-    // Overlay layers take priority: heritage > rivers > mountains > countries
+    // Overlay layers take priority: heritage > rivers > mountains/peaks > countries
     const site     = findHeritageAtPoint(cx, cy);
     const river    = !site     && findRiverAtPoint(cx, cy);
     const mountain = !site && !river && findMountainAtPoint(cx, cy);
-    const overlay  = site || river || mountain;
+    const peak     = !site && !river && !mountain && findPeakAtPoint(cx, cy);
+    const overlay  = site || river || mountain || peak;
 
     if (overlay) {
       if (overlay !== hoveredOverlay) {
         hoveredOverlay = overlay;
-        if (site)     updateInfoPanelForHeritage(site);
-        else if (river)  updateInfoPanelForRiver(river);
-        else             updateInfoPanelForMountain(mountain);
+        if (site)          updateInfoPanelForHeritage(site);
+        else if (river)    updateInfoPanelForRiver(river);
+        else if (mountain) updateInfoPanelForMountain(mountain);
+        else               updateInfoPanelForPeak(peak);
       }
       if (hoveredCountry !== null) { hoveredCountry = null; drawWorldMap(); }
       return;
@@ -975,6 +1070,13 @@ createPanZoom(canvas, viewport, drawWorldMap, {
     if (mountain) {
       hoveredCountry = null;
       updateInfoPanelForMountain(mountain);
+      drawWorldMap();
+      return;
+    }
+    const peak = findPeakAtPoint(cx, cy);
+    if (peak) {
+      hoveredCountry = null;
+      updateInfoPanelForPeak(peak);
       drawWorldMap();
       return;
     }
