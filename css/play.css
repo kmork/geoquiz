@@ -47,6 +47,14 @@
     padding: 6px 12px;
     font-size: 13px;
   }
+
+  .region-emoji {
+    display: none;
+  }
+
+  .menu-btn.menu-btn {
+    display: none;
+  }
 }
 
 /* ── Play page specific styles ── */
@@ -161,14 +169,33 @@
   .card-grid.two-cards,
   .card-grid.three-cols {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
     max-width: 100%;
   }
 
   .diff-card {
     flex-direction: row;
     max-height: none;
-    border-radius: 16px;
+    border-radius: 14px;
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .diff-emoji {
+    font-size: 22px;
+  }
+
+  .diff-name {
+    font-size: 14px;
+  }
+
+  .diff-rounds {
+    font-size: 11px;
+  }
+
+  .diff-play {
+    padding: 4px 12px;
+    font-size: 11px;
   }
 
   .diff-record {
@@ -177,6 +204,7 @@
     align-self: center;
     text-align: right;
     margin: 0;
+    font-size: 11px;
   }
 
   .section-label {

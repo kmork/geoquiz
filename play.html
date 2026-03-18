@@ -239,7 +239,7 @@
 
         // World button
         const worldActive = !continent;
-        let btns = `<button class="region-btn${worldActive ? ' active' : ''}" onclick="location.href='${regionUrl(null)}'">🌐 World</button>`;
+        let btns = `<button class="region-btn${worldActive ? ' active' : ''}" onclick="location.href='${regionUrl(null)}'"><span class="region-emoji">🌐 </span>World</button>`;
 
         CONTINENTS.forEach(c => {
           const slug = c.continent.toLowerCase();
@@ -251,7 +251,7 @@
 
           const cls = `region-btn${isActive ? ' active' : ''}${isDisabled ? ' disabled' : ''}`;
           const click = isDisabled ? '' : `onclick="location.href='${regionUrl(c.continent)}'"`;
-          btns += `<button class="${cls}" ${click}>${c.emoji} ${c.label}</button>`;
+          btns += `<button class="${cls}" ${click}><span class="region-emoji">${c.emoji} </span>${c.label}</button>`;
         });
 
         bar.innerHTML = `<div class="region-bar">${btns}</div>`;
