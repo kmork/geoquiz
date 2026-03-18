@@ -19,7 +19,7 @@ const GAME_NAMES = {
   trivia:          'Geography Trivia',
   heritage:        'UNESCO Heritage',
   capitals:        'Capitals Quiz',
-  flags:           'Flags of the World',
+  flags:           'Flags',
   rivers:          'Rivers of the World',
   mountains:       'Mountain Ranges',
   'capital-pairs': 'Capital Pairs',

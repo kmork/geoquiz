@@ -68,7 +68,7 @@ const GAMES = [
   },
   {
     id: 'flags',
-    name: 'Flags of the World',
+    name: 'Flags',
     emoji: '🚩',
     timeLimit: 20
   },
