@@ -19,7 +19,7 @@ function formatArea(n) {
 
 const QUESTION_TYPES = [
   'area', 'population', 'landlocked', 'neighbors_count',
-  'borders', 'continent', 'capital'
+  'borders', 'continent', 'capital', 'highest_peak'
 ];
 
 export class DuelGameLogic {
@@ -106,6 +106,10 @@ export class DuelGameLogic {
       types.push('continent');
     }
 
+    if (a.highestPeak && b.highestPeak && a.highestPeak.elev !== b.highestPeak.elev) {
+      types.push('highest_peak');
+    }
+
     // capital is always eligible
     types.push('capital');
 
@@ -118,7 +122,7 @@ export class DuelGameLogic {
 
     // Weight: early streak favors area/population; later favors borders/capital/landlocked
     const early = ['area', 'population'];
-    const late = ['borders', 'capital', 'landlocked', 'neighbors_count', 'continent'];
+    const late = ['borders', 'capital', 'landlocked', 'neighbors_count', 'continent', 'highest_peak'];
 
     let weighted = [...eligible];
     if (this.streak < 5) {
@@ -218,6 +222,17 @@ export class DuelGameLogic {
         }
         break;
       }
+      case 'highest_peak': {
+        const higher = Math.random() < 0.5;
+        if (higher) {
+          questionText = 'Which country has a higher peak?';
+          correctAnswer = a.highestPeak.elev > b.highestPeak.elev ? 'A' : 'B';
+        } else {
+          questionText = 'Which country has a lower highest point?';
+          correctAnswer = a.highestPeak.elev < b.highestPeak.elev ? 'A' : 'B';
+        }
+        break;
+      }
     }
 
     return { countryA: a, countryB: b, questionText, correctAnswer, questionType: type };
@@ -254,6 +269,8 @@ export class DuelGameLogic {
         const cap = q.questionText.match(/capital is (.+)\?/)?.[1] || correct.capitals[0];
         return `${cap} is the capital of ${correct.country}!`;
       }
+      case 'highest_peak':
+        return `${a.country}'s highest point is ${a.highestPeak.name} (${a.highestPeak.elev.toLocaleString()} m), while ${b.country}'s is ${b.highestPeak.name} (${b.highestPeak.elev.toLocaleString()} m).`;
       default:
         return '';
     }
