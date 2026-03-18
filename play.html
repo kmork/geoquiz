@@ -31,6 +31,10 @@
       <!-- Filled by JS -->
     </div>
 
+    <div id="region-bar">
+      <!-- Filled by JS -->
+    </div>
+
     <div id="game-cards">
       <!-- Filled by JS -->
     </div>
@@ -108,7 +112,8 @@
         url: 'trivia.html',
         fullCount: 124,
         pointsPerRound: 1,
-        icon: '📚'
+        icon: '📚',
+        noContinent: true,
       },
       heritage: {
         title: 'UNESCO Heritage',
@@ -164,6 +169,26 @@
           { key: 'mountains-all',        url: 'mountains.html', urlParam: '',                    label: 'Mountains – All',   emoji: '⛰️', desc: 'All 16 ranges · pick all countries' },
         ],
       },
+      'capital-pairs': {
+        title: 'Capital Pairs',
+        desc: 'Match countries with their capitals — one wrong answer ends your streak.',
+        url: 'capital-pairs.html',
+        pointsPerRound: null,
+        icon: '🔗',
+        customDifficulties: [
+          { key: 'capital-pairs', url: 'capital-pairs.html', urlParam: '', label: 'Play', emoji: '🔗', desc: 'Match countries with capitals' },
+        ],
+      },
+      duel: {
+        title: 'Country Duel',
+        desc: 'Two countries face off — pick the right answer to keep your streak alive!',
+        url: 'duel.html',
+        pointsPerRound: null,
+        icon: '🆚',
+        customDifficulties: [
+          { key: 'duel', url: 'duel.html', urlParam: '', label: 'Play', emoji: '🆚', desc: 'Pick the right country' },
+        ],
+      },
     };
 
     const DIFFICULTIES = [
@@ -172,13 +197,13 @@
       { key: 'long',   rounds: 'all', label: 'Long',   emoji: '🏆', desc: null /* filled per game */ }
     ];
 
-    const CONTINENT_LABELS = {
-      'Africa': 'Africa',
-      'Americas': 'Americas',
-      'Asia': 'Asia',
-      'Europe': 'Europe',
-      'Oceania': 'Oceania',
-    };
+    const CONTINENTS = [
+      { label: 'Africa',   continent: 'Africa',   emoji: '🌍' },
+      { label: 'Americas', continent: 'Americas', emoji: '🌎' },
+      { label: 'Asia',     continent: 'Asia',     emoji: '🌏' },
+      { label: 'Europe',   continent: 'Europe',   emoji: '🌍' },
+      { label: 'Oceania',  continent: 'Oceania',  emoji: '🌏' },
+    ];
 
     const params = new URLSearchParams(location.search);
     const gameKey = params.get('game');
@@ -188,16 +213,49 @@
     if (!game) {
       location.href = 'index.html';
     } else {
-      const showRegion = !game.noContinent;
-      const regionLabel = continent && CONTINENT_LABELS[continent] ? CONTINENT_LABELS[continent] : 'World';
-      const titleText = showRegion ? `${game.title} – ${regionLabel}` : game.title;
-      document.title = `Geo Quiz - ${titleText}`;
+      document.title = `Geo Quiz - ${game.title}`;
 
       document.getElementById('game-header').innerHTML = `
         <a href="index.html" style="text-decoration:none"><div class="game-icon-large">${game.icon}</div></a>
-        <a href="index.html" class="game-title">${titleText}</a>
+        <a href="index.html" class="game-title">${game.title}</a>
         <p class="game-desc">${game.desc}</p>
       `;
+
+      // Region toggle bar
+      {
+        const bar = document.getElementById('region-bar');
+        const isNoContinent = game.noContinent;
+        const allowedSlugs = game.continentSlugs || null;
+
+        function regionUrl(cont) {
+          const p = new URLSearchParams(location.search);
+          if (cont) {
+            p.set('continent', cont);
+          } else {
+            p.delete('continent');
+          }
+          return `play.html?${p.toString()}`;
+        }
+
+        // World button
+        const worldActive = !continent;
+        let btns = `<button class="region-btn${worldActive ? ' active' : ''}" onclick="location.href='${regionUrl(null)}'">🌐 World</button>`;
+
+        CONTINENTS.forEach(c => {
+          const slug = c.continent.toLowerCase();
+          const isActive = continent === c.continent;
+          const isExcluded = allowedSlugs && !allowedSlugs.includes(slug);
+          const isDisabled = isNoContinent || isExcluded;
+
+          if (isExcluded) return; // Don't render excluded continents (e.g., Oceania for route)
+
+          const cls = `region-btn${isActive ? ' active' : ''}${isDisabled ? ' disabled' : ''}`;
+          const click = isDisabled ? '' : `onclick="location.href='${regionUrl(c.continent)}'"`;
+          btns += `<button class="${cls}" ${click}>${c.emoji} ${c.label}</button>`;
+        });
+
+        bar.innerHTML = `<div class="region-bar">${btns}</div>`;
+      }
 
       // Compute continent slug for record keys
       const continentSlug = continent ? continent.toLowerCase() : '';
@@ -244,7 +302,8 @@
           let href, roundsLabel, recHtml = '';
           if (game.customDifficulties) {
             const base = d.url || game.url;
-            href = d.urlParam ? `${base}?${d.urlParam}${continentParam}` : `${base}?${continentParam.slice(1)}`;
+            const qParts = [d.urlParam, continentParam.slice(1)].filter(Boolean).join('&');
+            href = qParts ? `${base}?${qParts}` : base;
             roundsLabel = d.desc;
             if (d.key) {
               const recKey = continentSlug ? `${d.key}-${continentSlug}` : d.key;
@@ -265,7 +324,7 @@
           return makeCard(href, d.emoji, d.label, roundsLabel, recHtml);
         }).join('');
 
-        const gridClass = diffs.length === 2 ? 'card-grid two-cards'
+        const gridClass = diffs.length <= 2 ? 'card-grid two-cards'
           : diffs.length === 9 ? 'card-grid three-cols' : 'card-grid';
         document.getElementById('game-cards').innerHTML = `<div class="${gridClass}">${diffCards}</div>`;
       })();
