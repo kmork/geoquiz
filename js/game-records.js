@@ -30,6 +30,7 @@ const GAME_NAMES = {
   'place-cities':  'Place the Cities',
   'spelling-countries': 'Spell the Country',
   'spelling-cities': 'Spell the City',
+  peaks:             'Mountain Peaks',
 };
 
 const DIFFICULTY_LABELS = {

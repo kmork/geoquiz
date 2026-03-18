@@ -826,14 +826,14 @@ select option {
   /* Fill the visual viewport so there is no gap below the game card when the
      keyboard is open. --vvh is set by JS (mobile-autocomplete.js) and tracks
      window.visualViewport.height, which shrinks when keyboard opens. */
-  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page):not(.heritage-locate-page) {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.peaks-page):not(.study-page):not(.heritage-locate-page) {
     height: var(--vvh, 100svh);
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
   }
 
-  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page):not(.heritage-locate-page) > .card {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.peaks-page):not(.study-page):not(.heritage-locate-page) > .card {
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -842,14 +842,14 @@ select option {
   }
 
   /* Map grows to fill space between header and input row */
-  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page):not(.heritage-locate-page) .mapwrap {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.peaks-page):not(.study-page):not(.heritage-locate-page) .mapwrap {
     flex: 1;
     height: auto;
     min-height: 150px;
     max-height: 350px;
   }
 
-  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.study-page):not(.heritage-locate-page) #map {
+  .wrap:not(.find-country-page):not(.rivers-page):not(.mountains-page):not(.peaks-page):not(.study-page):not(.heritage-locate-page) #map {
     height: 100%;
     width: 100%;
   }
@@ -1557,7 +1557,8 @@ html.light-mode .find-country-page .country {
 
 /* Rivers / Mountains games - same expanded layout as Find the Country */
 .rivers-page,
-.mountains-page {
+.mountains-page,
+.peaks-page {
   max-width: 100%;
   height: 100vh;
   height: 100dvh;
@@ -1567,7 +1568,8 @@ html.light-mode .find-country-page .country {
 }
 
 .rivers-page .card,
-.mountains-page .card {
+.mountains-page .card,
+.peaks-page .card {
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -1576,7 +1578,8 @@ html.light-mode .find-country-page .country {
 }
 
 .rivers-page .mapwrap,
-.mountains-page .mapwrap {
+.mountains-page .mapwrap,
+.peaks-page .mapwrap {
   position: relative;
   flex: 1;
   margin: 10px 0;
@@ -1588,7 +1591,8 @@ html.light-mode .find-country-page .country {
 }
 
 .rivers-page #map,
-.mountains-page #map {
+.mountains-page #map,
+.peaks-page #map {
   flex: 1;
   max-width: 100%;
   max-height: 100%;
@@ -1598,7 +1602,8 @@ html.light-mode .find-country-page .country {
 
 @media (max-width: 640px) {
   .rivers-page,
-  .mountains-page {
+  .mountains-page,
+  .peaks-page {
     height: 100dvh;
   }
 }

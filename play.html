@@ -159,14 +159,16 @@
         url: 'rivers.html',
         pointsPerRound: null,
         icon: '🌵',
-        noContinent: true,
         customDifficulties: [
-          { key: 'rivers-easy-short',  url: 'rivers.html',    urlParam: 'rounds=10&mode=easy', label: 'Rivers – Easy',     emoji: '🐟', desc: '10 rivers · pick one country' },
-          { key: 'rivers-short',       url: 'rivers.html',    urlParam: 'rounds=10',           label: 'Rivers – Hard',     emoji: '🐟', desc: '10 rivers · pick all countries' },
-          { key: 'rivers-long',        url: 'rivers.html',    urlParam: 'rounds=all',          label: 'Rivers – All',      emoji: '🐟', desc: 'All 22 rivers · pick all countries' },
-          { key: 'mountains-easy-short', url: 'mountains.html', urlParam: 'rounds=10&mode=easy', label: 'Mountains – Easy',  emoji: '⛰️', desc: '10 ranges · pick one country' },
-          { key: 'mountains-short',      url: 'mountains.html', urlParam: 'rounds=10',           label: 'Mountains – Hard',  emoji: '⛰️', desc: '10 ranges · pick all countries' },
-          { key: 'mountains-all',        url: 'mountains.html', urlParam: '',                    label: 'Mountains – All',   emoji: '⛰️', desc: 'All 16 ranges · pick all countries' },
+          { key: 'rivers-easy-short',  url: 'rivers.html',    urlParam: 'rounds=10&mode=easy', label: 'Rivers – Easy',     emoji: '🐟', desc: '10 rivers · pick one country', worldOnly: true },
+          { key: 'rivers-short',       url: 'rivers.html',    urlParam: 'rounds=10',           label: 'Rivers – Hard',     emoji: '🐟', desc: '10 rivers · pick all countries', worldOnly: true },
+          { key: 'rivers-long',        url: 'rivers.html',    urlParam: 'rounds=all',          label: 'Rivers – All',      emoji: '🐟', desc: 'All 22 rivers · pick all countries', worldOnly: true },
+          { key: 'mountains-easy-short', url: 'mountains.html', urlParam: 'rounds=10&mode=easy', label: 'Mountains – Easy',  emoji: '⛰️', desc: '10 ranges · pick one country', worldOnly: true },
+          { key: 'mountains-short',      url: 'mountains.html', urlParam: 'rounds=10',           label: 'Mountains – Hard',  emoji: '⛰️', desc: '10 ranges · pick all countries', worldOnly: true },
+          { key: 'mountains-all',        url: 'mountains.html', urlParam: '',                    label: 'Mountains – All',   emoji: '⛰️', desc: 'All 16 ranges · pick all countries', worldOnly: true },
+          { key: 'peaks-short',  url: 'peaks.html', urlParam: 'rounds=10',  label: 'Peaks – Short',  emoji: '▲', desc: '10 peaks · click the location' },
+          { key: 'peaks-medium', url: 'peaks.html', urlParam: 'rounds=25',  label: 'Peaks – Medium', emoji: '▲', desc: '25 peaks · click the location' },
+          { key: 'peaks-long',   url: 'peaks.html', urlParam: 'rounds=all', label: 'Peaks – All',    emoji: '▲', desc: 'All peaks · click the location' },
         ],
       },
       'capital-pairs': {
@@ -291,6 +293,7 @@
         // Filter out difficulties whose fixed round count exceeds the region size
         const baseDiffs = game.customDifficulties || DIFFICULTIES;
         const diffs = baseDiffs.filter(d => {
+          if (continent && d.worldOnly) return false;
           if (game.customDifficulties) return true;
           if (d.rounds === 'all') return true;
           return parseInt(d.rounds) < fullCount;
