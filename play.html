@@ -308,7 +308,7 @@
             if (d.key) {
               const recKey = continentSlug ? `${d.key}-${continentSlug}` : d.key;
               const rec = getRecord(recKey);
-              if (rec) recHtml = `<div class="diff-record">Best: ${rec.bestScore}pts · ${fmtTime(rec.bestTime)}</div>`;
+              if (rec) recHtml = `<div class="diff-record"><span class="rec-label">Best:</span> <span class="rec-value">${rec.bestScore}pts</span><span class="rec-sep"> · </span><span class="rec-label">Time:</span> <span class="rec-value">${fmtTime(rec.bestTime)}</span></div>`;
             }
           } else {
             const count = d.rounds === 'all' ? fullCount : parseInt(d.rounds);
@@ -317,7 +317,7 @@
             const rec = getRecord(recKey);
             roundsLabel = d.rounds === 'all' ? `All ${fullCount} rounds` : d.desc;
             recHtml = rec
-              ? `<div class="diff-record">Best: ${rec.bestScore}/${maxScore} · ${fmtTime(rec.bestTime)}</div>`
+              ? `<div class="diff-record"><span class="rec-label">Best:</span> <span class="rec-value">${rec.bestScore}/${maxScore}</span><span class="rec-sep"> · </span><span class="rec-label">Time:</span> <span class="rec-value">${fmtTime(rec.bestTime)}</span></div>`
               : '';
             href = `${game.url}?rounds=${d.rounds}${continentParam}`;
           }

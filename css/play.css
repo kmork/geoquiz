@@ -177,7 +177,7 @@
     flex-direction: row;
     max-height: none;
     border-radius: 14px;
-    padding: 10px 12px;
+    padding: 10px 20px 10px 12px;
     gap: 10px;
   }
 
@@ -200,11 +200,22 @@
 
   .diff-record {
     grid-column: 2;
-    grid-row: 1 / 3;
+    grid-row: 1 / 4;
     align-self: center;
-    text-align: right;
-    margin: 0;
+    justify-self: center;
+    margin: 0 12px 0 0;
     font-size: 11px;
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: 0 4px;
+  }
+
+  .diff-record .rec-sep {
+    display: none;
+  }
+
+  .diff-record .rec-label {
+    text-align: right;
   }
 
   .section-label {
