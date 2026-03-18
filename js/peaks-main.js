@@ -296,6 +296,48 @@ function waitForData() {
     return hit;
   }
 
+  // ── Zoom to show two peaks ───────────────────────────────────────────
+
+  function zoomToShowPeaks(peak1, peak2) {
+    const PAD = 0.3;
+    const MIN_SPAN = 10; // minimum degrees visible
+
+    let minLon = Math.min(peak1.lon, peak2.lon);
+    let maxLon = Math.max(peak1.lon, peak2.lon);
+    let minLat = Math.min(peak1.lat, peak2.lat);
+    let maxLat = Math.max(peak1.lat, peak2.lat);
+
+    const dLon = maxLon - minLon;
+    const dLat = maxLat - minLat;
+    minLon -= dLon * PAD; maxLon += dLon * PAD;
+    minLat -= dLat * PAD; maxLat += dLat * PAD;
+
+    // Enforce minimum span so nearby peaks don't over-zoom
+    const lonSpan = maxLon - minLon;
+    const latSpan = maxLat - minLat;
+    if (lonSpan < MIN_SPAN) {
+      const center = (minLon + maxLon) / 2;
+      minLon = center - MIN_SPAN / 2;
+      maxLon = center + MIN_SPAN / 2;
+    }
+    if (latSpan < MIN_SPAN) {
+      const center = (minLat + maxLat) / 2;
+      minLat = center - MIN_SPAN / 2;
+      maxLat = center + MIN_SPAN / 2;
+    }
+
+    const [x1, y1] = proj([minLon, maxLat]);
+    const [x2, y2] = proj([maxLon, minLat]);
+    const width = x2 - x1;
+    const height = y2 - y1;
+
+    const zoomX = canvasDisplayWidth / width;
+    const zoomY = canvasDisplayHeight / height;
+    viewport.zoom = Math.max(viewport.minZoom, Math.min(zoomX, zoomY, 500));
+    viewport.scrollX = x1 + width / 2 - canvasDisplayWidth / (2 * viewport.zoom);
+    viewport.scrollY = y1 + height / 2 - canvasDisplayHeight / (2 * viewport.zoom);
+  }
+
   // ── Map click handler ──────────────────────────────────────────────────
 
   function handleMapClick(canvasX, canvasY) {
@@ -316,6 +358,8 @@ function waitForData() {
     } else {
       highlightCorrect = correct;
       highlightWrong = hit;
+      // Zoom out to show both the wrong click and the correct peak
+      zoomToShowPeaks(hit, correct);
     }
 
     drawWorldMap();
@@ -383,7 +427,7 @@ function waitForData() {
     if (continentParam) {
       gameIdSuffix += `-${continentParam.toLowerCase().replace(/\s+/g, '-')}`;
     }
-    if (roundsParam === 'all') gameIdSuffix += '-all';
+    if (roundsParam === 'all') gameIdSuffix += '-long';
     else if (roundsParam === '25') gameIdSuffix += '-medium';
     else gameIdSuffix += '-short';
 
@@ -398,7 +442,7 @@ function waitForData() {
       onPlayAgain: startGame,
     });
 
-    finalOverlay.style.display = '';
+    finalOverlay.style.display = 'flex';
   }
 
   // ── Pan/zoom ───────────────────────────────────────────────────────────
