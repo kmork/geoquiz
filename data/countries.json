@@ -34,7 +34,13 @@
         "lat": 36.71,
         "lon": 67.11
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Noshak",
+      "elev": 7492,
+      "lat": 36.4,
+      "lon": 71.83
+    }
   },
   {
     "country": "Aland",
@@ -47,7 +53,13 @@
     "un": false,
     "area": 1580,
     "population": 30654,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Orrdalsklint",
+      "elev": 129,
+      "lat": 60.35,
+      "lon": 19.99
+    }
   },
   {
     "country": "Albania",
@@ -65,7 +77,13 @@
     "un": true,
     "area": 28748,
     "population": 2363314,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Korab",
+      "elev": 2764,
+      "lat": 41.79,
+      "lon": 20.55
+    }
   },
   {
     "country": "Algeria",
@@ -97,7 +115,13 @@
         "lat": 36.37,
         "lon": 6.61
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Tahat",
+      "elev": 3003,
+      "lat": 23.28,
+      "lon": 5.53
+    }
   },
   {
     "country": "American Samoa",
@@ -110,7 +134,13 @@
     "un": false,
     "area": 199,
     "population": 49710,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Lata Mountain",
+      "elev": 964,
+      "lat": -14.26,
+      "lon": -170.73
+    }
   },
   {
     "country": "Andorra",
@@ -126,7 +156,13 @@
     "un": true,
     "area": 468,
     "population": 88406,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Coma Pedrosa",
+      "elev": 2942,
+      "lat": 42.59,
+      "lon": 1.44
+    }
   },
   {
     "country": "Angola",
@@ -144,7 +180,13 @@
     "un": true,
     "area": 1246700,
     "population": 36170961,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Moco",
+      "elev": 2620,
+      "lat": -12.47,
+      "lon": 15.18
+    }
   },
   {
     "country": "Anguilla",
@@ -157,7 +199,13 @@
     "un": false,
     "area": 91,
     "population": 16010,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Crocus Hill",
+      "elev": 73,
+      "lat": 18.22,
+      "lon": -63.06
+    }
   },
   {
     "country": "Antigua and Barbuda",
@@ -170,7 +218,13 @@
     "un": true,
     "area": 442,
     "population": 103603,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Obama",
+      "elev": 402,
+      "lat": 17.08,
+      "lon": -61.84
+    }
   },
   {
     "country": "Argentina",
@@ -216,7 +270,13 @@
         "lat": -38,
         "lon": -57.56
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Aconcagua",
+      "elev": 6961,
+      "lat": -32.65,
+      "lon": -70.01
+    }
   },
   {
     "country": "Armenia",
@@ -234,7 +294,13 @@
     "un": true,
     "area": 29743,
     "population": 3076200,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Mount Aragats",
+      "elev": 4090,
+      "lat": 40.53,
+      "lon": 44.2
+    }
   },
   {
     "country": "Aruba",
@@ -247,7 +313,13 @@
     "un": false,
     "area": 180,
     "population": 107566,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Jamanota",
+      "elev": 188,
+      "lat": 12.46,
+      "lon": -69.94
+    }
   },
   {
     "country": "Australia",
@@ -297,7 +369,13 @@
         "lat": -16.92,
         "lon": 145.77
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Kosciuszko",
+      "elev": 2228,
+      "lat": -36.46,
+      "lon": 148.26
+    }
   },
   {
     "country": "Austria",
@@ -336,7 +414,13 @@
         "lat": 47.07,
         "lon": 15.44
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Grossglockner",
+      "elev": 3798,
+      "lat": 47.07,
+      "lon": 12.69
+    }
   },
   {
     "country": "Azerbaijan",
@@ -355,7 +439,13 @@
     "un": true,
     "area": 86600,
     "population": 10241722,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Bazardüzü",
+      "elev": 4466,
+      "lat": 41.22,
+      "lon": 47.86
+    }
   },
   {
     "country": "Bahamas",
@@ -368,7 +458,13 @@
     "un": true,
     "area": 13943,
     "population": 398165,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Alvernia",
+      "elev": 63,
+      "lat": 24.11,
+      "lon": -76.05
+    }
   },
   {
     "country": "Bahrain",
@@ -381,7 +477,13 @@
     "un": true,
     "area": 765,
     "population": 1594654,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mountain of Smoke",
+      "elev": 134,
+      "lat": 26.09,
+      "lon": 50.5
+    }
   },
   {
     "country": "Bangladesh",
@@ -409,7 +511,13 @@
         "lat": 24.9,
         "lon": 91.87
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Saka Haphong",
+      "elev": 1052,
+      "lat": 21.47,
+      "lon": 92.58
+    }
   },
   {
     "country": "Barbados",
@@ -422,7 +530,13 @@
     "un": true,
     "area": 430,
     "population": 267800,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Hillaby",
+      "elev": 336,
+      "lat": 13.21,
+      "lon": -59.58
+    }
   },
   {
     "country": "Belarus",
@@ -441,7 +555,13 @@
     "un": true,
     "area": 207600,
     "population": 9109280,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Dzyarzhynskaya Hara",
+      "elev": 345,
+      "lat": 53.85,
+      "lon": 27.99
+    }
   },
   {
     "country": "Belgium",
@@ -481,7 +601,13 @@
         "lat": 50.63,
         "lon": 5.57
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Signal de Botrange",
+      "elev": 694,
+      "lat": 50.5,
+      "lon": 6.09
+    }
   },
   {
     "country": "Belize",
@@ -497,7 +623,13 @@
     "un": true,
     "area": 22966,
     "population": 417634,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Doyle's Delight",
+      "elev": 1124,
+      "lat": 16.56,
+      "lon": -88.99
+    }
   },
   {
     "country": "Benin",
@@ -515,7 +647,13 @@
     "un": true,
     "area": 112622,
     "population": 13224860,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mont Sokbaro",
+      "elev": 658,
+      "lat": 9.83,
+      "lon": 1.52
+    }
   },
   {
     "country": "Bermuda",
@@ -528,7 +666,13 @@
     "un": false,
     "area": 54,
     "population": 64055,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Town Hill",
+      "elev": 76,
+      "lat": 32.31,
+      "lon": -64.77
+    }
   },
   {
     "country": "Bhutan",
@@ -544,7 +688,13 @@
     "un": true,
     "area": 38394,
     "population": 784043,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Gangkhar Puensum",
+      "elev": 7570,
+      "lat": 28.04,
+      "lon": 90.45
+    }
   },
   {
     "country": "Bolivia",
@@ -576,7 +726,13 @@
         "lat": -17.39,
         "lon": -66.16
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Nevado Sajama",
+      "elev": 6542,
+      "lat": -18.1,
+      "lon": -68.88
+    }
   },
   {
     "country": "Bosnia and Herzegovina",
@@ -593,7 +749,13 @@
     "un": true,
     "area": 51209,
     "population": 3422000,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Maglić",
+      "elev": 2386,
+      "lat": 43.3,
+      "lon": 18.74
+    }
   },
   {
     "country": "Botswana",
@@ -611,7 +773,13 @@
     "un": true,
     "area": 582000,
     "population": 2359609,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Otse Hill",
+      "elev": 1491,
+      "lat": -24.73,
+      "lon": 25.97
+    }
   },
   {
     "country": "Brazil",
@@ -671,7 +839,13 @@
         "lat": -19.92,
         "lon": -43.94
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Pico da Neblina",
+      "elev": 2994,
+      "lat": 0.8,
+      "lon": -66.01
+    }
   },
   {
     "country": "British Indian Ocean Territory",
@@ -684,7 +858,13 @@
     "un": false,
     "area": 60,
     "population": 0,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Unnamed point",
+      "elev": 15,
+      "lat": -7.31,
+      "lon": 72.42
+    }
   },
   {
     "country": "British Virgin Islands",
@@ -697,7 +877,13 @@
     "un": false,
     "area": 151,
     "population": 39471,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Sage",
+      "elev": 521,
+      "lat": 18.42,
+      "lon": -64.68
+    }
   },
   {
     "country": "Brunei",
@@ -712,7 +898,13 @@
     "un": true,
     "area": 5765,
     "population": 455500,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Bukit Pagon",
+      "elev": 1850,
+      "lat": 4.59,
+      "lon": 115.31
+    }
   },
   {
     "country": "Bulgaria",
@@ -731,7 +923,13 @@
     "un": true,
     "area": 110879,
     "population": 6437360,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Musala",
+      "elev": 2925,
+      "lat": 42.18,
+      "lon": 23.59
+    }
   },
   {
     "country": "Burkina Faso",
@@ -751,7 +949,13 @@
     "un": true,
     "area": 272967,
     "population": 24070553,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Ténakourou",
+      "elev": 749,
+      "lat": 10.97,
+      "lon": -4.95
+    }
   },
   {
     "country": "Burundi",
@@ -768,7 +972,13 @@
     "un": true,
     "area": 27834,
     "population": 12332788,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Mount Heha",
+      "elev": 2670,
+      "lat": -3.44,
+      "lon": 29.5
+    }
   },
   {
     "country": "Cabo Verde",
@@ -781,7 +991,13 @@
     "un": true,
     "area": 4033,
     "population": 491233,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Pico do Fogo",
+      "elev": 2829,
+      "lat": 14.95,
+      "lon": -24.34
+    }
   },
   {
     "country": "Cambodia",
@@ -810,7 +1026,13 @@
         "lat": 10.63,
         "lon": 103.5
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Phnum Aoral",
+      "elev": 1810,
+      "lat": 12.06,
+      "lon": 104.15
+    }
   },
   {
     "country": "Cameroon",
@@ -830,7 +1052,13 @@
     "un": true,
     "area": 475442,
     "population": 29442327,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Cameroon",
+      "elev": 4040,
+      "lat": 4.22,
+      "lon": 9.17
+    }
   },
   {
     "country": "Canada",
@@ -882,7 +1110,13 @@
         "lat": 49.9,
         "lon": -97.14
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Logan",
+      "elev": 5959,
+      "lat": 60.57,
+      "lon": -140.41
+    }
   },
   {
     "country": "Cayman Islands",
@@ -895,7 +1129,13 @@
     "un": false,
     "area": 264,
     "population": 84738,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "The Bluff",
+      "elev": 43,
+      "lat": 19.72,
+      "lon": -79.8
+    }
   },
   {
     "country": "Central African Republic",
@@ -915,7 +1155,13 @@
     "un": true,
     "area": 622984,
     "population": 6470307,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Mont Ngaoui",
+      "elev": 1410,
+      "lat": 6.77,
+      "lon": 14.42
+    }
   },
   {
     "country": "Chad",
@@ -935,7 +1181,13 @@
     "un": true,
     "area": 1284000,
     "population": 19340757,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Emi Koussi",
+      "elev": 3445,
+      "lat": 19.8,
+      "lon": 18.53
+    }
   },
   {
     "country": "Chile",
@@ -969,7 +1221,13 @@
         "lat": -53.15,
         "lon": -70.92
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Ojos del Salado",
+      "elev": 6893,
+      "lat": -27.11,
+      "lon": -68.54
+    }
   },
   {
     "country": "China",
@@ -1049,7 +1307,13 @@
         "lat": 29.65,
         "lon": 91.13
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Everest",
+      "elev": 8849,
+      "lat": 27.99,
+      "lon": 86.93
+    }
   },
   {
     "country": "Colombia",
@@ -1090,7 +1354,13 @@
         "lat": 10.96,
         "lon": -74.78
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Pico Cristóbal Colón",
+      "elev": 5700,
+      "lat": 10.84,
+      "lon": -73.69
+    }
   },
   {
     "country": "Comoros",
@@ -1103,7 +1373,13 @@
     "un": true,
     "area": 1862,
     "population": 919901,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Karthala",
+      "elev": 2361,
+      "lat": -11.75,
+      "lon": 43.35
+    }
   },
   {
     "country": "Congo",
@@ -1122,7 +1398,13 @@
     "un": true,
     "area": 342000,
     "population": 6142180,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mont Nabeba",
+      "elev": 1020,
+      "lat": 2.37,
+      "lon": 16.28
+    }
   },
   {
     "country": "Cook Islands",
@@ -1135,7 +1417,13 @@
     "un": false,
     "area": 236,
     "population": 15040,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Te Manga",
+      "elev": 652,
+      "lat": -21.23,
+      "lon": -159.79
+    }
   },
   {
     "country": "Costa Rica",
@@ -1158,7 +1446,13 @@
         "lat": 10,
         "lon": -83.03
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Cerro Chirripó",
+      "elev": 3821,
+      "lat": 9.49,
+      "lon": -83.49
+    }
   },
   {
     "country": "Côte d'Ivoire",
@@ -1177,7 +1471,13 @@
     "un": true,
     "area": 322463,
     "population": 31719275,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Nimba",
+      "elev": 1752,
+      "lat": 7.62,
+      "lon": -8.39
+    }
   },
   {
     "country": "Croatia",
@@ -1208,7 +1508,13 @@
         "lat": 43.51,
         "lon": 16.44
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Dinara",
+      "elev": 1831,
+      "lat": 44.06,
+      "lon": 16.38
+    }
   },
   {
     "country": "Cuba",
@@ -1238,7 +1544,13 @@
         "lat": 23.15,
         "lon": -81.25
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Pico Turquino",
+      "elev": 1974,
+      "lat": 19.99,
+      "lon": -76.84
+    }
   },
   {
     "country": "Curaçao",
@@ -1251,7 +1563,13 @@
     "un": false,
     "area": 444,
     "population": 156115,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Sint Christoffelberg",
+      "elev": 372,
+      "lat": 12.34,
+      "lon": -69.1
+    }
   },
   {
     "country": "Cyprus",
@@ -1264,7 +1582,13 @@
     "un": true,
     "area": 9251,
     "population": 1442614,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Olympus",
+      "elev": 1952,
+      "lat": 34.94,
+      "lon": 32.87
+    }
   },
   {
     "country": "Czechia",
@@ -1294,7 +1618,13 @@
         "lat": 50.23,
         "lon": 12.87
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Sněžka",
+      "elev": 1603,
+      "lat": 50.74,
+      "lon": 15.74
+    }
   },
   {
     "country": "Democratic Republic of the Congo",
@@ -1329,7 +1659,13 @@
         "lat": -1.68,
         "lon": 29.23
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Margherita Peak",
+      "elev": 5109,
+      "lat": 0.39,
+      "lon": 29.87
+    }
   },
   {
     "country": "Denmark",
@@ -1356,7 +1692,13 @@
         "lat": 55.4,
         "lon": 10.39
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Møllehøj",
+      "elev": 171,
+      "lat": 56.13,
+      "lon": 9.85
+    }
   },
   {
     "country": "Djibouti",
@@ -1373,7 +1715,13 @@
     "un": true,
     "area": 23200,
     "population": 1066809,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Moussa Ali",
+      "elev": 2028,
+      "lat": 11.47,
+      "lon": 43.17
+    }
   },
   {
     "country": "Dominica",
@@ -1386,7 +1734,13 @@
     "un": true,
     "area": 751,
     "population": 67408,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Morne Diablatins",
+      "elev": 1447,
+      "lat": 15.46,
+      "lon": -61.4
+    }
   },
   {
     "country": "Dominican Republic",
@@ -1413,7 +1767,13 @@
         "lat": 19.45,
         "lon": -70.7
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Pico Duarte",
+      "elev": 3098,
+      "lat": 19.02,
+      "lon": -70.99
+    }
   },
   {
     "country": "Ecuador",
@@ -1441,7 +1801,13 @@
         "lat": -2.9,
         "lon": -79
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Chimborazo",
+      "elev": 6263,
+      "lat": -1.47,
+      "lon": -78.82
+    }
   },
   {
     "country": "Egypt",
@@ -1491,7 +1857,13 @@
         "lat": 30.01,
         "lon": 31.21
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Catherine",
+      "elev": 2629,
+      "lat": 28.51,
+      "lon": 33.95
+    }
   },
   {
     "country": "El Salvador",
@@ -1507,7 +1879,13 @@
     "un": true,
     "area": 21041,
     "population": 6029976,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Cerro El Pital",
+      "elev": 2730,
+      "lat": 14.39,
+      "lon": -89.11
+    }
   },
   {
     "country": "Equatorial Guinea",
@@ -1523,7 +1901,13 @@
     "un": true,
     "area": 28051,
     "population": 1668768,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Pico Basilé",
+      "elev": 3011,
+      "lat": 3.59,
+      "lon": 8.77
+    }
   },
   {
     "country": "Eritrea",
@@ -1540,7 +1924,13 @@
     "un": true,
     "area": 117600,
     "population": 3607000,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Emba Soira",
+      "elev": 3018,
+      "lat": 14.95,
+      "lon": 38.87
+    }
   },
   {
     "country": "Estonia",
@@ -1556,7 +1946,13 @@
     "un": true,
     "area": 45227,
     "population": 1369995,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Suur Munamägi",
+      "elev": 318,
+      "lat": 57.69,
+      "lon": 27.06
+    }
   },
   {
     "country": "Eswatini",
@@ -1572,7 +1968,13 @@
     "un": true,
     "area": 17364,
     "population": 1235549,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Emlembe",
+      "elev": 1862,
+      "lat": -25.97,
+      "lon": 31.13
+    }
   },
   {
     "country": "Ethiopia",
@@ -1604,7 +2006,13 @@
         "lat": 12.03,
         "lon": 39.04
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Ras Dashen",
+      "elev": 4550,
+      "lat": 13.24,
+      "lon": 38.37
+    }
   },
   {
     "country": "Falkland Islands",
@@ -1617,7 +2025,13 @@
     "un": false,
     "area": 12173,
     "population": 3662,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Usborne",
+      "elev": 705,
+      "lat": -51.97,
+      "lon": -59.16
+    }
   },
   {
     "country": "Faroe Islands",
@@ -1630,7 +2044,13 @@
     "un": false,
     "area": 1393,
     "population": 54885,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Slættaratindur",
+      "elev": 882,
+      "lat": 62.1,
+      "lon": -6.82
+    }
   },
   {
     "country": "Fiji",
@@ -1643,7 +2063,13 @@
     "un": true,
     "area": 18272,
     "population": 900869,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Tomanivi",
+      "elev": 1324,
+      "lat": -17.62,
+      "lon": 177.97
+    }
   },
   {
     "country": "Finland",
@@ -1677,7 +2103,13 @@
         "lat": 66.5,
         "lon": 25.73
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Halti",
+      "elev": 1324,
+      "lat": 69.25,
+      "lon": 20.56
+    }
   },
   {
     "country": "France",
@@ -1736,7 +2168,13 @@
         "lat": 43.6,
         "lon": 1.44
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mont Blanc",
+      "elev": 4808,
+      "lat": 45.83,
+      "lon": 6.87
+    }
   },
   {
     "country": "French Polynesia",
@@ -1749,7 +2187,13 @@
     "un": false,
     "area": 4167,
     "population": 279500,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mont Orohena",
+      "elev": 2241,
+      "lat": -17.62,
+      "lon": -149.49
+    }
   },
   {
     "country": "Gabon",
@@ -1766,7 +2210,13 @@
     "un": true,
     "area": 267668,
     "population": 2469296,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mont Iboundji",
+      "elev": 1575,
+      "lat": -1.62,
+      "lon": 11.78
+    }
   },
   {
     "country": "Gambia",
@@ -1781,7 +2231,13 @@
     "un": true,
     "area": 10689,
     "population": 2422712,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Red Rock",
+      "elev": 53,
+      "lat": 13.68,
+      "lon": -14.73
+    }
   },
   {
     "country": "Georgia",
@@ -1799,7 +2255,13 @@
     "un": true,
     "area": 69700,
     "population": 4000921,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Shkhara",
+      "elev": 5193,
+      "lat": 42.99,
+      "lon": 43.11
+    }
   },
   {
     "country": "Germany",
@@ -1859,7 +2321,13 @@
         "lat": 51.23,
         "lon": 6.78
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Zugspitze",
+      "elev": 2962,
+      "lat": 47.42,
+      "lon": 10.99
+    }
   },
   {
     "country": "Ghana",
@@ -1888,7 +2356,13 @@
         "lat": 5.1,
         "lon": -1.25
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Afadja",
+      "elev": 885,
+      "lat": 6.96,
+      "lon": 0.56
+    }
   },
   {
     "country": "Gibraltar",
@@ -1901,7 +2375,13 @@
     "un": false,
     "area": 6,
     "population": 38000,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Rock of Gibraltar",
+      "elev": 426,
+      "lat": 36.12,
+      "lon": -5.34
+    }
   },
   {
     "country": "Greece",
@@ -1946,7 +2426,13 @@
         "lat": 35.34,
         "lon": 25.13
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Olympus",
+      "elev": 2917,
+      "lat": 40.09,
+      "lon": 22.35
+    }
   },
   {
     "country": "Greenland",
@@ -1959,7 +2445,13 @@
     "un": false,
     "area": 2166086,
     "population": 56542,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Gunnbjørn Fjeld",
+      "elev": 3694,
+      "lat": 68.92,
+      "lon": -29.9
+    }
   },
   {
     "country": "Grenada",
@@ -1972,7 +2464,13 @@
     "un": true,
     "area": 344,
     "population": 109021,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Saint Catherine",
+      "elev": 840,
+      "lat": 12.15,
+      "lon": -61.7
+    }
   },
   {
     "country": "Guam",
@@ -1985,7 +2483,13 @@
     "un": false,
     "area": 549,
     "population": 153836,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Lamlam",
+      "elev": 406,
+      "lat": 13.34,
+      "lon": 144.66
+    }
   },
   {
     "country": "Guatemala",
@@ -2003,7 +2507,13 @@
     "un": true,
     "area": 108889,
     "population": 18079810,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Volcán Tajumulco",
+      "elev": 4220,
+      "lat": 15.04,
+      "lon": -91.9
+    }
   },
   {
     "country": "Guernsey",
@@ -2016,7 +2526,13 @@
     "un": false,
     "area": 78,
     "population": 64781,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Hautnez",
+      "elev": 114,
+      "lat": 49.44,
+      "lon": -2.6
+    }
   },
   {
     "country": "Guinea",
@@ -2036,7 +2552,13 @@
     "un": true,
     "area": 245857,
     "population": 14363931,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Nimba",
+      "elev": 1752,
+      "lat": 7.62,
+      "lon": -8.39
+    }
   },
   {
     "country": "Guinea-Bissau",
@@ -2052,7 +2574,13 @@
     "un": true,
     "area": 36125,
     "population": 1781308,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Unnamed point in east",
+      "elev": 300,
+      "lat": 12.3,
+      "lon": -13.72
+    }
   },
   {
     "country": "Guyana",
@@ -2069,7 +2597,13 @@
     "un": true,
     "area": 214969,
     "population": 772975,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Roraima",
+      "elev": 2772,
+      "lat": 5.14,
+      "lon": -60.76
+    }
   },
   {
     "country": "Haiti",
@@ -2084,7 +2618,13 @@
     "un": true,
     "area": 27750,
     "population": 11867032,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Pic la Selle",
+      "elev": 2680,
+      "lat": 18.34,
+      "lon": -71.98
+    }
   },
   {
     "country": "Honduras",
@@ -2101,7 +2641,13 @@
     "un": true,
     "area": 112492,
     "population": 9892632,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Cerro Las Minas",
+      "elev": 2870,
+      "lat": 14.71,
+      "lon": -88.62
+    }
   },
   {
     "country": "Hong Kong",
@@ -2114,7 +2660,13 @@
     "un": false,
     "area": 1104,
     "population": 7527500,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Tai Mo Shan",
+      "elev": 957,
+      "lat": 22.41,
+      "lon": 114.12
+    }
   },
   {
     "country": "Hungary",
@@ -2147,7 +2699,13 @@
         "lat": 46.25,
         "lon": 20.15
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Kékes",
+      "elev": 1014,
+      "lat": 47.87,
+      "lon": 20.01
+    }
   },
   {
     "country": "Iceland",
@@ -2167,7 +2725,13 @@
         "lat": 65.68,
         "lon": -18.09
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Hvannadalshnjúkur",
+      "elev": 2110,
+      "lat": 64.01,
+      "lon": -16.65
+    }
   },
   {
     "country": "India",
@@ -2234,7 +2798,13 @@
         "lat": 15.5,
         "lon": 73.83
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Kangchenjunga",
+      "elev": 8586,
+      "lat": 27.7,
+      "lon": 88.15
+    }
   },
   {
     "country": "Indonesia",
@@ -2278,7 +2848,13 @@
         "lat": 3.59,
         "lon": 98.67
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Puncak Jaya",
+      "elev": 4884,
+      "lat": -4.08,
+      "lon": 137.16
+    }
   },
   {
     "country": "Iran",
@@ -2325,7 +2901,13 @@
         "lat": 36.3,
         "lon": 59.6
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Damavand",
+      "elev": 5610,
+      "lat": 35.95,
+      "lon": 52.11
+    }
   },
   {
     "country": "Iraq",
@@ -2362,7 +2944,13 @@
         "lat": 36.34,
         "lon": 43.14
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Cheekha Dar",
+      "elev": 3611,
+      "lat": 36.59,
+      "lon": 44.98
+    }
   },
   {
     "country": "Ireland",
@@ -2389,7 +2977,13 @@
         "lat": 53.27,
         "lon": -9.06
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Carrauntoohil",
+      "elev": 1039,
+      "lat": 51.8,
+      "lon": -9.74
+    }
   },
   {
     "country": "Isle of Man",
@@ -2402,7 +2996,13 @@
     "un": false,
     "area": 572,
     "population": 84530,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Snaefell",
+      "elev": 621,
+      "lat": 54.26,
+      "lon": -4.46
+    }
   },
   {
     "country": "Israel",
@@ -2438,7 +3038,13 @@
         "lat": 29.56,
         "lon": 34.95
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Meron",
+      "elev": 1208,
+      "lat": 33,
+      "lon": 35.41
+    }
   },
   {
     "country": "Italy",
@@ -2500,7 +3106,13 @@
         "lat": 45.44,
         "lon": 10.99
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mont Blanc de Courmayeur",
+      "elev": 4748,
+      "lat": 45.83,
+      "lon": 6.86
+    }
   },
   {
     "country": "Jamaica",
@@ -2520,7 +3132,13 @@
         "lat": 18.47,
         "lon": -77.92
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Blue Mountain Peak",
+      "elev": 2256,
+      "lat": 18.05,
+      "lon": -76.58
+    }
   },
   {
     "country": "Japan",
@@ -2575,7 +3193,13 @@
         "lat": 33.59,
         "lon": 130.4
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Fuji",
+      "elev": 3776,
+      "lat": 35.36,
+      "lon": 138.73
+    }
   },
   {
     "country": "Jersey",
@@ -2588,7 +3212,13 @@
     "un": false,
     "area": 116,
     "population": 103267,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Les Platons",
+      "elev": 143,
+      "lat": 49.22,
+      "lon": -2.13
+    }
   },
   {
     "country": "Jordan",
@@ -2619,7 +3249,13 @@
         "lat": 30.33,
         "lon": 35.44
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Jabal Umm ad Dami",
+      "elev": 1854,
+      "lat": 29.32,
+      "lon": 35.42
+    }
   },
   {
     "country": "Kazakhstan",
@@ -2645,7 +3281,13 @@
         "lat": 43.24,
         "lon": 76.95
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Khan Tengri",
+      "elev": 7010,
+      "lat": 42.21,
+      "lon": 80.18
+    }
   },
   {
     "country": "Kenya",
@@ -2676,7 +3318,13 @@
         "lat": -0.09,
         "lon": 34.77
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Kenya",
+      "elev": 5199,
+      "lat": -0.15,
+      "lon": 37.31
+    }
   },
   {
     "country": "Kiribati",
@@ -2689,7 +3337,13 @@
     "un": true,
     "area": 811,
     "population": 120740,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Banaba High Point",
+      "elev": 81,
+      "lat": -0.86,
+      "lon": 169.54
+    }
   },
   {
     "country": "Kosovo",
@@ -2707,7 +3361,13 @@
     "un": false,
     "area": 10908,
     "population": 1585566,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Đeravica",
+      "elev": 2656,
+      "lat": 42.55,
+      "lon": 20.14
+    }
   },
   {
     "country": "Kuwait",
@@ -2723,7 +3383,13 @@
     "un": true,
     "area": 17818,
     "population": 4881254,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mutla Ridge",
+      "elev": 306,
+      "lat": 29.6,
+      "lon": 47.64
+    }
   },
   {
     "country": "Kyrgyzstan",
@@ -2741,7 +3407,13 @@
     "un": true,
     "area": 199951,
     "population": 7281800,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Jengish Chokusu",
+      "elev": 7439,
+      "lat": 42.04,
+      "lon": 79.53
+    }
   },
   {
     "country": "Laos",
@@ -2767,7 +3439,13 @@
         "lat": 19.89,
         "lon": 102.13
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Phou Bia",
+      "elev": 2817,
+      "lat": 19.63,
+      "lon": 103.17
+    }
   },
   {
     "country": "Latvia",
@@ -2785,7 +3463,13 @@
     "un": true,
     "area": 64559,
     "population": 1829000,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Gaiziņkalns",
+      "elev": 312,
+      "lat": 57.07,
+      "lon": 25.89
+    }
   },
   {
     "country": "Lebanon",
@@ -2813,7 +3497,13 @@
         "lat": 34.12,
         "lon": 35.65
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Qurnat as Sawda'",
+      "elev": 3088,
+      "lat": 34.27,
+      "lon": 36.09
+    }
   },
   {
     "country": "Lesotho",
@@ -2828,7 +3518,13 @@
     "un": true,
     "area": 30355,
     "population": 2116427,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Thabana Ntlenyana",
+      "elev": 3482,
+      "lat": -29.47,
+      "lon": 29.27
+    }
   },
   {
     "country": "Liberia",
@@ -2845,7 +3541,13 @@
     "un": true,
     "area": 111369,
     "population": 5248621,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Wuteve",
+      "elev": 1440,
+      "lat": 7.39,
+      "lon": -9.1
+    }
   },
   {
     "country": "Libya",
@@ -2872,7 +3574,13 @@
         "lat": 32.12,
         "lon": 20.09
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Bikku Bitti",
+      "elev": 2267,
+      "lat": 23.31,
+      "lon": 17.32
+    }
   },
   {
     "country": "Liechtenstein",
@@ -2888,7 +3596,13 @@
     "un": true,
     "area": 160,
     "population": 40900,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Grauspitz",
+      "elev": 2599,
+      "lat": 47.08,
+      "lon": 9.57
+    }
   },
   {
     "country": "Lithuania",
@@ -2906,7 +3620,13 @@
     "un": true,
     "area": 65300,
     "population": 2894886,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Aukštojas Hill",
+      "elev": 294,
+      "lat": 54.37,
+      "lon": 25.55
+    }
   },
   {
     "country": "Luxembourg",
@@ -2923,7 +3643,13 @@
     "un": true,
     "area": 2586,
     "population": 681973,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Kneiff",
+      "elev": 560,
+      "lat": 50.18,
+      "lon": 6.03
+    }
   },
   {
     "country": "Macao",
@@ -2936,7 +3662,13 @@
     "un": false,
     "area": 30,
     "population": 685900,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Coloane Alto",
+      "elev": 172,
+      "lat": 22.12,
+      "lon": 113.56
+    }
   },
   {
     "country": "Madagascar",
@@ -2949,7 +3681,13 @@
     "un": true,
     "area": 587041,
     "population": 31727042,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Maromokotro",
+      "elev": 2876,
+      "lat": -13.88,
+      "lon": 49.04
+    }
   },
   {
     "country": "Malawi",
@@ -2966,7 +3704,13 @@
     "un": true,
     "area": 118484,
     "population": 20734262,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Sapitwa",
+      "elev": 3002,
+      "lat": -15.94,
+      "lon": 35.66
+    }
   },
   {
     "country": "Malaysia",
@@ -3000,7 +3744,13 @@
         "lat": 5.98,
         "lon": 116.07
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Kinabalu",
+      "elev": 4095,
+      "lat": 6.08,
+      "lon": 116.56
+    }
   },
   {
     "country": "Maldives",
@@ -3013,7 +3763,13 @@
     "un": true,
     "area": 300,
     "population": 515132,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Villingili",
+      "elev": 5,
+      "lat": 0.59,
+      "lon": 73.43
+    }
   },
   {
     "country": "Mali",
@@ -3034,7 +3790,13 @@
     "un": true,
     "area": 1240192,
     "population": 22395489,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Hombori Tondo",
+      "elev": 1155,
+      "lat": 15.27,
+      "lon": -1.69
+    }
   },
   {
     "country": "Malta",
@@ -3047,7 +3809,13 @@
     "un": true,
     "area": 316,
     "population": 574250,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Ta' Dmejrek",
+      "elev": 253,
+      "lat": 35.85,
+      "lon": 14.39
+    }
   },
   {
     "country": "Marshall Islands",
@@ -3060,7 +3828,13 @@
     "un": true,
     "area": 181,
     "population": 42418,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Unnamed point on Likiep",
+      "elev": 10,
+      "lat": 9.82,
+      "lon": 169.31
+    }
   },
   {
     "country": "Mauritania",
@@ -3078,7 +3852,13 @@
     "un": true,
     "area": 1030700,
     "population": 4927532,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Kediet ej Jill",
+      "elev": 915,
+      "lat": 22.4,
+      "lon": -12.62
+    }
   },
   {
     "country": "Mauritius",
@@ -3091,7 +3871,13 @@
     "un": true,
     "area": 2040,
     "population": 1243741,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Piton de la Petite Rivière Noire",
+      "elev": 828,
+      "lat": -20.42,
+      "lon": 57.4
+    }
   },
   {
     "country": "Mexico",
@@ -3145,7 +3931,13 @@
         "lat": 17.07,
         "lon": -96.73
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Pico de Orizaba",
+      "elev": 5636,
+      "lat": 19.03,
+      "lon": -97.27
+    }
   },
   {
     "country": "Micronesia",
@@ -3158,7 +3950,13 @@
     "un": true,
     "area": 702,
     "population": 105564,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Nanlaud",
+      "elev": 782,
+      "lat": 6.9,
+      "lon": 158.22
+    }
   },
   {
     "country": "Moldova",
@@ -3174,7 +3972,13 @@
     "un": true,
     "area": 33847,
     "population": 2749076,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Bălănești Hill",
+      "elev": 430,
+      "lat": 47.18,
+      "lon": 28.52
+    }
   },
   {
     "country": "Monaco",
@@ -3189,7 +3993,13 @@
     "un": true,
     "area": 2.02,
     "population": 38423,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Chemin des Révoires",
+      "elev": 162,
+      "lat": 43.73,
+      "lon": 7.41
+    }
   },
   {
     "country": "Mongolia",
@@ -3212,7 +4022,13 @@
         "lat": 49.05,
         "lon": 104.15
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Khüiten Peak",
+      "elev": 4374,
+      "lat": 49.15,
+      "lon": 87.81
+    }
   },
   {
     "country": "Montenegro",
@@ -3231,7 +4047,13 @@
     "un": true,
     "area": 13812,
     "population": 623327,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Bobotov Kuk",
+      "elev": 2522,
+      "lat": 43.12,
+      "lon": 19.02
+    }
   },
   {
     "country": "Montserrat",
@@ -3244,7 +4066,13 @@
     "un": false,
     "area": 102,
     "population": 4386,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Soufrière Hills",
+      "elev": 915,
+      "lat": 16.72,
+      "lon": -62.18
+    }
   },
   {
     "country": "Morocco",
@@ -3288,7 +4116,13 @@
         "lat": 35.17,
         "lon": -5.26
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Toubkal",
+      "elev": 4167,
+      "lat": 31.06,
+      "lon": -7.92
+    }
   },
   {
     "country": "Mozambique",
@@ -3315,7 +4149,13 @@
         "lat": -19.84,
         "lon": 34.87
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Monte Binga",
+      "elev": 2436,
+      "lat": -19.8,
+      "lon": 33.54
+    }
   },
   {
     "country": "Myanmar",
@@ -3351,7 +4191,13 @@
         "lat": 21.17,
         "lon": 94.86
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Hkakabo Razi",
+      "elev": 5881,
+      "lat": 28.31,
+      "lon": 97.36
+    }
   },
   {
     "country": "Namibia",
@@ -3369,7 +4215,13 @@
     "un": true,
     "area": 825615,
     "population": 3022401,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Brandberg Mountain",
+      "elev": 2573,
+      "lat": -21.15,
+      "lon": 14.59
+    }
   },
   {
     "country": "Nauru",
@@ -3382,7 +4234,13 @@
     "un": true,
     "area": 21,
     "population": 11680,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Command Ridge",
+      "elev": 65,
+      "lat": -0.55,
+      "lon": 166.92
+    }
   },
   {
     "country": "Nepal",
@@ -3410,7 +4268,13 @@
         "lat": 27.47,
         "lon": 83.28
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Everest",
+      "elev": 8849,
+      "lat": 27.99,
+      "lon": 86.93
+    }
   },
   {
     "country": "Netherlands",
@@ -3448,7 +4312,13 @@
         "lat": 51.44,
         "lon": 5.47
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Vaalserberg",
+      "elev": 323,
+      "lat": 50.75,
+      "lon": 6.02
+    }
   },
   {
     "country": "New Caledonia",
@@ -3461,7 +4331,13 @@
     "un": false,
     "area": 18575,
     "population": 264596,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mont Panié",
+      "elev": 1628,
+      "lat": -20.57,
+      "lon": 164.77
+    }
   },
   {
     "country": "New Zealand",
@@ -3491,7 +4367,13 @@
         "lat": -43.53,
         "lon": 172.64
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Aoraki / Mount Cook",
+      "elev": 3724,
+      "lat": -43.59,
+      "lon": 170.14
+    }
   },
   {
     "country": "Nicaragua",
@@ -3507,7 +4389,13 @@
     "un": true,
     "area": 130373,
     "population": 6803886,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mogotón",
+      "elev": 2107,
+      "lat": 13.73,
+      "lon": -86.07
+    }
   },
   {
     "country": "Niger",
@@ -3528,7 +4416,13 @@
     "un": true,
     "area": 1267000,
     "population": 26312034,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Mont Idoukal-n-Taghès",
+      "elev": 2022,
+      "lat": 18.01,
+      "lon": 8.55
+    }
   },
   {
     "country": "Nigeria",
@@ -3563,7 +4457,13 @@
         "lat": 4.78,
         "lon": 7.01
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Chappal Waddi",
+      "elev": 2419,
+      "lat": 6.77,
+      "lon": 11.1
+    }
   },
   {
     "country": "Niue",
@@ -3576,7 +4476,13 @@
     "un": false,
     "area": 260,
     "population": 1681,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Unnamed point near Mutalau",
+      "elev": 68,
+      "lat": -19.07,
+      "lon": -169.9
+    }
   },
   {
     "country": "Norfolk Island",
@@ -3589,7 +4495,13 @@
     "un": false,
     "area": 36,
     "population": 2188,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Bates",
+      "elev": 319,
+      "lat": -29.01,
+      "lon": 167.93
+    }
   },
   {
     "country": "North Korea",
@@ -3613,7 +4525,13 @@
         "lat": 37.97,
         "lon": 126.56
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Paektu Mountain",
+      "elev": 2744,
+      "lat": 42,
+      "lon": 128.07
+    }
   },
   {
     "country": "North Macedonia",
@@ -3632,7 +4550,13 @@
     "un": true,
     "area": 25713,
     "population": 1822612,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Korab",
+      "elev": 2764,
+      "lat": 41.79,
+      "lon": 20.55
+    }
   },
   {
     "country": "Northern Mariana Islands",
@@ -3645,7 +4569,13 @@
     "un": false,
     "area": 464,
     "population": 47329,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Agrihan",
+      "elev": 965,
+      "lat": 18.77,
+      "lon": 145.67
+    }
   },
   {
     "country": "Norway",
@@ -3684,7 +4614,13 @@
         "lat": 58.97,
         "lon": 5.73
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Galdhøpiggen",
+      "elev": 2469,
+      "lat": 61.64,
+      "lon": 8.31
+    }
   },
   {
     "country": "Oman",
@@ -3708,7 +4644,13 @@
         "lat": 17.02,
         "lon": 54.09
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Jebel Shams",
+      "elev": 3004,
+      "lat": 23.24,
+      "lon": 57.27
+    }
   },
   {
     "country": "Pakistan",
@@ -3748,7 +4690,13 @@
         "lat": 31.42,
         "lon": 73.08
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "K2",
+      "elev": 8611,
+      "lat": 35.88,
+      "lon": 76.51
+    }
   },
   {
     "country": "Palau",
@@ -3761,7 +4709,13 @@
     "un": true,
     "area": 459,
     "population": 16733,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Ngerchelchuus",
+      "elev": 242,
+      "lat": 7.34,
+      "lon": 134.5
+    }
   },
   {
     "country": "Palestine",
@@ -3778,7 +4732,13 @@
     "un": false,
     "area": 6220,
     "population": 5483450,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Nabi Yunis",
+      "elev": 1030,
+      "lat": 31.56,
+      "lon": 35.08
+    }
   },
   {
     "country": "Panama",
@@ -3801,7 +4761,13 @@
         "lat": 9.36,
         "lon": -79.9
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Volcán Barú",
+      "elev": 3475,
+      "lat": 8.81,
+      "lon": -82.54
+    }
   },
   {
     "country": "Papua New Guinea",
@@ -3816,7 +4782,13 @@
     "un": true,
     "area": 462840,
     "population": 11781559,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Wilhelm",
+      "elev": 4509,
+      "lat": -5.78,
+      "lon": 145.03
+    }
   },
   {
     "country": "Paraguay",
@@ -3833,7 +4805,13 @@
     "un": true,
     "area": 406752,
     "population": 6109644,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Cerro Peró",
+      "elev": 842,
+      "lat": -22.55,
+      "lon": -55.71
+    }
   },
   {
     "country": "Peru",
@@ -3869,7 +4847,13 @@
         "lat": -13.16,
         "lon": -72.55
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Huascarán",
+      "elev": 6768,
+      "lat": -9.12,
+      "lon": -77.6
+    }
   },
   {
     "country": "Philippines",
@@ -3899,7 +4883,13 @@
         "lat": 11.97,
         "lon": 121.93
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Apo",
+      "elev": 2954,
+      "lat": 6.99,
+      "lon": 125.27
+    }
   },
   {
     "country": "Poland",
@@ -3942,7 +4932,13 @@
         "lat": 52.41,
         "lon": 16.93
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Rysy",
+      "elev": 2499,
+      "lat": 49.18,
+      "lon": 20.09
+    }
   },
   {
     "country": "Portugal",
@@ -3974,7 +4970,13 @@
         "lat": 32.65,
         "lon": -16.91
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Pico",
+      "elev": 2351,
+      "lat": 38.47,
+      "lon": -28.4
+    }
   },
   {
     "country": "Puerto Rico",
@@ -3987,7 +4989,13 @@
     "un": false,
     "area": 8870,
     "population": 3203295,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Cerro de Punta",
+      "elev": 1338,
+      "lat": 18.17,
+      "lon": -66.59
+    }
   },
   {
     "country": "Qatar",
@@ -4009,7 +5017,13 @@
         "lat": 25.17,
         "lon": 51.6
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Tuwayyir al Hamir",
+      "elev": 103,
+      "lat": 25.21,
+      "lon": 51.1
+    }
   },
   {
     "country": "Romania",
@@ -4045,7 +5059,13 @@
         "lat": 45.66,
         "lon": 25.61
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Moldoveanu Peak",
+      "elev": 2544,
+      "lat": 45.6,
+      "lon": 24.74
+    }
   },
   {
     "country": "Russia",
@@ -4105,7 +5125,13 @@
         "lat": 55.8,
         "lon": 49.11
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Elbrus",
+      "elev": 5642,
+      "lat": 43.35,
+      "lon": 42.44
+    }
   },
   {
     "country": "Rwanda",
@@ -4123,7 +5149,13 @@
     "un": true,
     "area": 26338,
     "population": 14104969,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Mount Karisimbi",
+      "elev": 4507,
+      "lat": -1.51,
+      "lon": 29.45
+    }
   },
   {
     "country": "Saint Barthelemy",
@@ -4136,7 +5168,13 @@
     "un": false,
     "area": 21,
     "population": 10562,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Morne du Vitet",
+      "elev": 286,
+      "lat": 17.9,
+      "lon": -62.83
+    }
   },
   {
     "country": "Saint Helena",
@@ -4149,7 +5187,13 @@
     "un": false,
     "area": 394,
     "population": 5651,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Diana's Peak",
+      "elev": 818,
+      "lat": -15.96,
+      "lon": -5.72
+    }
   },
   {
     "country": "Saint Kitts and Nevis",
@@ -4162,7 +5206,13 @@
     "un": true,
     "area": 261,
     "population": 51320,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Liamuiga",
+      "elev": 1156,
+      "lat": 17.37,
+      "lon": -62.8
+    }
   },
   {
     "country": "Saint Lucia",
@@ -4175,7 +5225,13 @@
     "un": true,
     "area": 616,
     "population": 184100,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Gimie",
+      "elev": 950,
+      "lat": 13.86,
+      "lon": -61.05
+    }
   },
   {
     "country": "Saint Martin",
@@ -4188,7 +5244,13 @@
     "un": false,
     "area": 53,
     "population": 31496,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Pic Paradis",
+      "elev": 424,
+      "lat": 18.08,
+      "lon": -63.06
+    }
   },
   {
     "country": "Saint Pierre and Miquelon",
@@ -4201,7 +5263,13 @@
     "un": false,
     "area": 242,
     "population": 5819,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Morne de la Grande Montagne",
+      "elev": 240,
+      "lat": 47.06,
+      "lon": -56.35
+    }
   },
   {
     "country": "Saint Vincent and the Grenadines",
@@ -4214,7 +5282,13 @@
     "un": true,
     "area": 389,
     "population": 110872,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "La Soufrière",
+      "elev": 1234,
+      "lat": 13.33,
+      "lon": -61.18
+    }
   },
   {
     "country": "Samoa",
@@ -4227,7 +5301,13 @@
     "un": true,
     "area": 2842,
     "population": 205557,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Silisili",
+      "elev": 1858,
+      "lat": -13.74,
+      "lon": -172.42
+    }
   },
   {
     "country": "San Marino",
@@ -4242,7 +5322,13 @@
     "un": true,
     "area": 61,
     "population": 34132,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Monte Titano",
+      "elev": 739,
+      "lat": 43.94,
+      "lon": 12.45
+    }
   },
   {
     "country": "Sao Tome and Principe",
@@ -4255,7 +5341,13 @@
     "un": true,
     "area": 964,
     "population": 209607,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Pico de São Tomé",
+      "elev": 2024,
+      "lat": 0.28,
+      "lon": 6.62
+    }
   },
   {
     "country": "Saudi Arabia",
@@ -4293,7 +5385,13 @@
         "lat": 24.47,
         "lon": 39.61
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Jabal Sawda",
+      "elev": 3000,
+      "lat": 20.02,
+      "lon": 41.64
+    }
   },
   {
     "country": "Senegal",
@@ -4319,7 +5417,13 @@
         "lat": 16.02,
         "lon": -16.5
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Unnamed peak near Nepen Diakha",
+      "elev": 648,
+      "lat": 12.37,
+      "lon": -12.33
+    }
   },
   {
     "country": "Serbia",
@@ -4341,7 +5445,13 @@
     "un": true,
     "area": 77589,
     "population": 6567783,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Midžor",
+      "elev": 2169,
+      "lat": 43.4,
+      "lon": 22.68
+    }
   },
   {
     "country": "Seychelles",
@@ -4354,7 +5464,13 @@
     "un": true,
     "area": 452,
     "population": 122729,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Morne Seychellois",
+      "elev": 905,
+      "lat": -4.66,
+      "lon": 55.44
+    }
   },
   {
     "country": "Sierra Leone",
@@ -4370,7 +5486,13 @@
     "un": true,
     "area": 71740,
     "population": 9077691,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Bintumani",
+      "elev": 1948,
+      "lat": 9.11,
+      "lon": -11.02
+    }
   },
   {
     "country": "Singapore",
@@ -4383,7 +5505,13 @@
     "un": true,
     "area": 710,
     "population": 6110200,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Bukit Timah Hill",
+      "elev": 164,
+      "lat": 1.35,
+      "lon": 103.78
+    }
   },
   {
     "country": "Sint Maarten",
@@ -4396,7 +5524,13 @@
     "un": false,
     "area": 34,
     "population": 41349,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Sentry Hill",
+      "elev": 344,
+      "lat": 18.05,
+      "lon": -63.06
+    }
   },
   {
     "country": "Slovakia",
@@ -4415,7 +5549,13 @@
     "un": true,
     "area": 49037,
     "population": 5413813,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Gerlachovský štít",
+      "elev": 2655,
+      "lat": 49.16,
+      "lon": 20.13
+    }
   },
   {
     "country": "Slovenia",
@@ -4433,7 +5573,13 @@
     "un": true,
     "area": 20273,
     "population": 2130638,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Triglav",
+      "elev": 2864,
+      "lat": 46.38,
+      "lon": 13.84
+    }
   },
   {
     "country": "Solomon Islands",
@@ -4446,7 +5592,13 @@
     "un": true,
     "area": 28896,
     "population": 750325,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Popomanaseu",
+      "elev": 2335,
+      "lat": -9.62,
+      "lon": 160.05
+    }
   },
   {
     "country": "Somalia",
@@ -4463,7 +5615,13 @@
     "un": true,
     "area": 637657,
     "population": 19655000,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Shimbiris",
+      "elev": 2460,
+      "lat": 10.72,
+      "lon": 47.21
+    }
   },
   {
     "country": "South Africa",
@@ -4502,7 +5660,13 @@
         "lat": -33.96,
         "lon": 25.6
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mafadi",
+      "elev": 3450,
+      "lat": -29.2,
+      "lon": 29.35
+    }
   },
   {
     "country": "South Korea",
@@ -4539,7 +5703,13 @@
         "lat": 35.86,
         "lon": 129.22
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Hallasan",
+      "elev": 1950,
+      "lat": 33.36,
+      "lon": 126.53
+    }
   },
   {
     "country": "South Sudan",
@@ -4559,7 +5729,13 @@
     "un": true,
     "area": 619745,
     "population": 15786898,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Kinyeti",
+      "elev": 3187,
+      "lat": 4.05,
+      "lon": 32.88
+    }
   },
   {
     "country": "Spain",
@@ -4614,7 +5790,13 @@
         "lat": 43.32,
         "lon": -1.98
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Teide",
+      "elev": 3718,
+      "lat": 28.27,
+      "lon": -16.64
+    }
   },
   {
     "country": "Sri Lanka",
@@ -4639,7 +5821,13 @@
         "lat": 6.04,
         "lon": 80.22
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Pidurutalagala",
+      "elev": 2524,
+      "lat": 7,
+      "lon": 80.77
+    }
   },
   {
     "country": "Sudan",
@@ -4660,7 +5848,13 @@
     "un": true,
     "area": 1886068,
     "population": 51662000,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Deriba Caldera",
+      "elev": 3042,
+      "lat": 12.95,
+      "lon": 24.26
+    }
   },
   {
     "country": "Suriname",
@@ -4676,7 +5870,13 @@
     "un": true,
     "area": 163820,
     "population": 616500,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Juliana Top",
+      "elev": 1230,
+      "lat": 3.27,
+      "lon": -54.05
+    }
   },
   {
     "country": "Sweden",
@@ -4709,7 +5909,13 @@
         "lat": 67.86,
         "lon": 20.23
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Kebnekaise",
+      "elev": 2097,
+      "lat": 67.9,
+      "lon": 18.55
+    }
   },
   {
     "country": "Switzerland",
@@ -4755,7 +5961,13 @@
         "lat": 46.69,
         "lon": 7.86
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Dufourspitze",
+      "elev": 4634,
+      "lat": 45.94,
+      "lon": 7.87
+    }
   },
   {
     "country": "Syria",
@@ -4786,7 +5998,13 @@
         "lat": 34.55,
         "lon": 38.27
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Hermon",
+      "elev": 2814,
+      "lat": 33.42,
+      "lon": 35.86
+    }
   },
   {
     "country": "Taiwan",
@@ -4799,7 +6017,13 @@
     "un": false,
     "area": 36197,
     "population": 23317031,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Yu Shan",
+      "elev": 3952,
+      "lat": 23.47,
+      "lon": 120.96
+    }
   },
   {
     "country": "Tajikistan",
@@ -4817,7 +6041,13 @@
     "un": true,
     "area": 143100,
     "population": 10499000,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Ismoil Somoni Peak",
+      "elev": 7495,
+      "lat": 38.94,
+      "lon": 72.01
+    }
   },
   {
     "country": "Tanzania",
@@ -4856,7 +6086,13 @@
         "lat": -3.37,
         "lon": 36.68
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Kilimanjaro",
+      "elev": 5895,
+      "lat": -3.07,
+      "lon": 37.35
+    }
   },
   {
     "country": "Thailand",
@@ -4896,7 +6132,13 @@
         "lat": 8.07,
         "lon": 98.91
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Doi Inthanon",
+      "elev": 2565,
+      "lat": 18.59,
+      "lon": 98.49
+    }
   },
   {
     "country": "Timor-Leste",
@@ -4911,7 +6153,13 @@
     "un": true,
     "area": 14874,
     "population": 1391221,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Tatamailau",
+      "elev": 2963,
+      "lat": -8.89,
+      "lon": 125.52
+    }
   },
   {
     "country": "Togo",
@@ -4928,7 +6176,13 @@
     "un": true,
     "area": 56785,
     "population": 8095498,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mont Agou",
+      "elev": 986,
+      "lat": 6.85,
+      "lon": 0.74
+    }
   },
   {
     "country": "Tonga",
@@ -4941,7 +6195,13 @@
     "un": true,
     "area": 747,
     "population": 100179,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Unnamed point on Kao",
+      "elev": 1033,
+      "lat": -19.67,
+      "lon": -175.03
+    }
   },
   {
     "country": "Trinidad and Tobago",
@@ -4954,7 +6214,13 @@
     "un": true,
     "area": 5130,
     "population": 1367764,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "El Cerro del Aripo",
+      "elev": 940,
+      "lat": 10.73,
+      "lon": -61.26
+    }
   },
   {
     "country": "Tunisia",
@@ -4982,7 +6248,13 @@
         "lat": 35.83,
         "lon": 10.6
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Jebel ech Chambi",
+      "elev": 1544,
+      "lat": 35.18,
+      "lon": 8.68
+    }
   },
   {
     "country": "Turkey",
@@ -5036,7 +6308,13 @@
         "lat": 37.94,
         "lon": 27.34
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Ararat",
+      "elev": 5137,
+      "lat": 39.7,
+      "lon": 44.3
+    }
   },
   {
     "country": "Turkmenistan",
@@ -5054,7 +6332,13 @@
     "un": true,
     "area": 488100,
     "population": 7057841,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Ayrybaba",
+      "elev": 3139,
+      "lat": 38.51,
+      "lon": 66.6
+    }
   },
   {
     "country": "Turks and Caicos Islands",
@@ -5067,7 +6351,13 @@
     "un": false,
     "area": 948,
     "population": 50828,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Flamingo Hill",
+      "elev": 48,
+      "lat": 21.77,
+      "lon": -72.17
+    }
   },
   {
     "country": "Tuvalu",
@@ -5080,7 +6370,13 @@
     "un": true,
     "area": 26,
     "population": 10643,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Unnamed point on Niulakita",
+      "elev": 5,
+      "lat": -10.79,
+      "lon": 179.47
+    }
   },
   {
     "country": "Uganda",
@@ -5106,7 +6402,13 @@
         "lat": 0.06,
         "lon": 32.46
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Margherita Peak",
+      "elev": 5109,
+      "lat": 0.39,
+      "lon": 29.87
+    }
   },
   {
     "country": "Ukraine",
@@ -5149,7 +6451,13 @@
         "lat": 51.28,
         "lon": 30.22
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Hoverla",
+      "elev": 2061,
+      "lat": 48.16,
+      "lon": 24.5
+    }
   },
   {
     "country": "United Arab Emirates",
@@ -5177,7 +6485,13 @@
         "lat": 25.34,
         "lon": 55.41
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Jebel Jais",
+      "elev": 1934,
+      "lat": 25.78,
+      "lon": 56.07
+    }
   },
   {
     "country": "United Kingdom",
@@ -5234,7 +6548,13 @@
         "lat": 51.38,
         "lon": -2.36
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Ben Nevis",
+      "elev": 1345,
+      "lat": 56.8,
+      "lon": -5
+    }
   },
   {
     "country": "United States",
@@ -5302,7 +6622,13 @@
         "lat": 29.95,
         "lon": -90.07
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Denali",
+      "elev": 6190,
+      "lat": 63.07,
+      "lon": -151.01
+    }
   },
   {
     "country": "United States Virgin Islands",
@@ -5315,7 +6641,13 @@
     "un": false,
     "area": 347,
     "population": 87146,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Crown Mountain",
+      "elev": 474,
+      "lat": 18.37,
+      "lon": -64.97
+    }
   },
   {
     "country": "Uruguay",
@@ -5331,7 +6663,13 @@
     "un": true,
     "area": 181034,
     "population": 3499451,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Cerro Catedral",
+      "elev": 514,
+      "lat": -34.37,
+      "lon": -54.72
+    }
   },
   {
     "country": "Uzbekistan",
@@ -5362,7 +6700,13 @@
         "lat": 39.77,
         "lon": 64.42
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Khazret Sultan",
+      "elev": 4643,
+      "lat": 39.19,
+      "lon": 67.96
+    }
   },
   {
     "country": "Vanuatu",
@@ -5375,7 +6719,13 @@
     "un": true,
     "area": 12189,
     "population": 321409,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mount Tabwemasana",
+      "elev": 1877,
+      "lat": -15.39,
+      "lon": 166.83
+    }
   },
   {
     "country": "Vatican City",
@@ -5390,7 +6740,13 @@
     "un": true,
     "area": 0.49,
     "population": 882,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Vatican Hill",
+      "elev": 77,
+      "lat": 41.9,
+      "lon": 12.45
+    }
   },
   {
     "country": "Venezuela",
@@ -5419,7 +6775,13 @@
         "lat": 10.18,
         "lon": -67.98
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Pico Bolívar",
+      "elev": 4978,
+      "lat": 8.54,
+      "lon": -71.05
+    }
   },
   {
     "country": "Vietnam",
@@ -5463,7 +6825,13 @@
         "lat": 20.95,
         "lon": 107.07
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Fansipan",
+      "elev": 3147,
+      "lat": 22.3,
+      "lon": 103.77
+    }
   },
   {
     "country": "Wallis and Futuna",
@@ -5476,7 +6844,13 @@
     "un": false,
     "area": 142,
     "population": 11620,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Mont Singavi",
+      "elev": 524,
+      "lat": -14.29,
+      "lon": -178.12
+    }
   },
   {
     "country": "Western Sahara",
@@ -5489,7 +6863,13 @@
     "un": false,
     "area": 266000,
     "population": 600904,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Unnamed point",
+      "elev": 463,
+      "lat": 25.99,
+      "lon": -12.2
+    }
   },
   {
     "country": "Yemen",
@@ -5505,7 +6885,13 @@
     "un": true,
     "area": 527968,
     "population": 32684503,
-    "landlocked": false
+    "landlocked": false,
+    "highestPeak": {
+      "name": "Jabal an-Nabī Shu'ayb",
+      "elev": 3666,
+      "lat": 15.28,
+      "lon": 43.97
+    }
   },
   {
     "country": "Zambia",
@@ -5527,7 +6913,13 @@
     "un": true,
     "area": 752612,
     "population": 19693423,
-    "landlocked": true
+    "landlocked": true,
+    "highestPeak": {
+      "name": "Mafinga Central",
+      "elev": 2339,
+      "lat": -9.93,
+      "lon": 33.49
+    }
   },
   {
     "country": "Zimbabwe",
@@ -5557,6 +6949,12 @@
         "lat": -17.93,
         "lon": 25.86
       }
-    ]
+    ],
+    "highestPeak": {
+      "name": "Mount Nyangani",
+      "elev": 2592,
+      "lat": -18.3,
+      "lon": 32.85
+    }
   }
 ]
