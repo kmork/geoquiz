@@ -45,6 +45,7 @@ let capitalMode = 0; // 0 = off, 1 = dots, 2 = dots + names, 3 = dots + names + 
 let showRivers    = false;
 let mountainMode  = 0; // 0 = off, 1 = mountain ranges, 2 = highest peaks
 let showHeritage  = false;
+let showGrid      = false;
 
 // Empire timeline state
 let empiresData = [];
@@ -198,6 +199,131 @@ function drawWorldMap() {
       });
     }
     drawCountriesBatch(ctx, viewport, empireItems, offsets, canvasDisplayWidth, canvasDisplayHeight);
+  }
+
+  // ── Grid lines (graticule) ─────────────────────────────────────────────────
+
+  if (showGrid) {
+    ctx.save();
+    const gridColor = isLight ? 'rgba(120,150,180,0.3)' : 'rgba(200,210,230,0.15)';
+    const gridColorFine = isLight ? 'rgba(120,150,180,0.15)' : 'rgba(200,210,230,0.08)';
+    const gridRefColor = isLight ? 'rgba(220,60,60,0.35)' : 'rgba(255,120,120,0.25)';
+    const gridLabelColor = isLight ? 'rgba(80,100,120,0.7)' : 'rgba(200,210,230,0.5)';
+    const gridRefLabelColor = isLight ? 'rgba(200,50,50,0.7)' : 'rgba(255,140,140,0.55)';
+    const tropicColor = isLight ? 'rgba(200,150,30,0.3)' : 'rgba(230,190,80,0.2)';
+
+    const drawFine = viewport.zoom > 3;
+    const intervals = drawFine ? [10, 30] : [30];
+
+    // Named reference latitudes
+    const refLatitudes = new Set([0]); // equator
+    const tropicLatitudes = new Set([23.4364, -23.4364, 66.5636, -66.5636]); // tropics & arctic/antarctic circles
+
+    for (const interval of intervals) {
+      const isMajor = interval === 30;
+
+      // Longitude lines (vertical)
+      for (let lon = -180; lon <= 180; lon += interval) {
+        const isRef = lon === 0; // prime meridian
+        ctx.strokeStyle = isRef ? gridRefColor : (isMajor ? gridColor : gridColorFine);
+        ctx.lineWidth = isRef ? 1.2 : (isMajor ? 0.8 : 0.4);
+        const [x0] = proj([lon, 0]);
+        const [, y0] = proj([0, -90]);
+        const [, y1] = proj([0, 90]);
+        for (const offset of offsets) {
+          const px = (x0 + offset - viewport.scrollX) * viewport.zoom;
+          ctx.beginPath();
+          ctx.moveTo(px, (y1 - viewport.scrollY) * viewport.zoom);
+          ctx.lineTo(px, (y0 - viewport.scrollY) * viewport.zoom);
+          ctx.stroke();
+        }
+      }
+
+      // Latitude lines (horizontal)
+      for (let lat = -90; lat <= 90; lat += interval) {
+        const isRef = lat === 0; // equator
+        ctx.strokeStyle = isRef ? gridRefColor : (isMajor ? gridColor : gridColorFine);
+        ctx.lineWidth = isRef ? 1.2 : (isMajor ? 0.8 : 0.4);
+        const [x0] = proj([-180, 0]);
+        const [x1] = proj([180, 0]);
+        const [, py] = proj([0, lat]);
+        for (const offset of offsets) {
+          ctx.beginPath();
+          ctx.moveTo((x0 + offset - viewport.scrollX) * viewport.zoom, (py - viewport.scrollY) * viewport.zoom);
+          ctx.lineTo((x1 + offset - viewport.scrollX) * viewport.zoom, (py - viewport.scrollY) * viewport.zoom);
+          ctx.stroke();
+        }
+      }
+    }
+
+    // Tropics & circles (always drawn as dashed lines)
+    ctx.strokeStyle = tropicColor;
+    ctx.lineWidth = 0.8;
+    ctx.setLineDash([6, 4]);
+    for (const lat of tropicLatitudes) {
+      const [x0] = proj([-180, 0]);
+      const [x1] = proj([180, 0]);
+      const [, py] = proj([0, lat]);
+      for (const offset of offsets) {
+        ctx.beginPath();
+        ctx.moveTo((x0 + offset - viewport.scrollX) * viewport.zoom, (py - viewport.scrollY) * viewport.zoom);
+        ctx.lineTo((x1 + offset - viewport.scrollX) * viewport.zoom, (py - viewport.scrollY) * viewport.zoom);
+        ctx.stroke();
+      }
+    }
+    ctx.setLineDash([]);
+
+    // Labels
+    if (viewport.zoom > 2) {
+      const fontSize = Math.max(8, Math.min(11, viewport.zoom * 2));
+
+      // Latitude labels (along left visible edge)
+      const latLabels = [
+        { lat: 0, text: 'Equator', ref: true },
+        { lat: 30, text: '30°N', ref: false },
+        { lat: 60, text: '60°N', ref: false },
+        { lat: -30, text: '30°S', ref: false },
+        { lat: -60, text: '60°S', ref: false },
+        { lat: 23.4364, text: 'Tropic of Cancer', ref: true },
+        { lat: -23.4364, text: 'Tropic of Capricorn', ref: true },
+        { lat: 66.5636, text: 'Arctic Circle', ref: true },
+        { lat: -66.5636, text: 'Antarctic Circle', ref: true },
+      ];
+      for (const { lat, text, ref } of latLabels) {
+        const [, my] = proj([0, lat]);
+        const py = (my - viewport.scrollY) * viewport.zoom;
+        if (py < 0 || py > canvasDisplayHeight) continue;
+        ctx.font = `${ref ? '500' : '400'} ${fontSize}px "DM Sans", sans-serif`;
+        ctx.fillStyle = ref ? gridRefLabelColor : gridLabelColor;
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(text, 4, py - 2);
+      }
+
+      // Longitude labels (along top visible edge)
+      const lonLabels = [];
+      for (let lon = -180; lon <= 180; lon += 30) {
+        lonLabels.push({
+          lon,
+          text: lon === 0 ? 'Prime Meridian' : `${Math.abs(lon)}°${lon > 0 ? 'E' : 'W'}`,
+          ref: lon === 0,
+        });
+      }
+      for (const { lon, text, ref } of lonLabels) {
+        const [mx] = proj([lon, 0]);
+        ctx.font = `${ref ? '500' : '400'} ${fontSize}px "DM Sans", sans-serif`;
+        ctx.fillStyle = ref ? gridRefLabelColor : gridLabelColor;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        for (const offset of offsets) {
+          const px = (mx + offset - viewport.scrollX) * viewport.zoom;
+          if (px < 0 || px > canvasDisplayWidth) continue;
+          ctx.fillText(text, px, 4);
+        }
+      }
+    }
+
+    ctx.restore();
   }
 
   // ── Rivers ─────────────────────────────────────────────────────────────────
@@ -770,17 +896,23 @@ function createMapToggles() {
   btnHeritage.title = 'Toggle UNESCO heritage sites';
   btnHeritage.textContent = '🏛️';
 
+  const btnGrid = document.createElement('button');
+  btnGrid.className = 'study-toggle-btn';
+  btnGrid.title = 'Toggle grid lines';
+  btnGrid.textContent = '#';
+
   const btnHistory = document.createElement('button');
   btnHistory.className = 'study-toggle-btn';
   btnHistory.title = 'Toggle historical empires';
   btnHistory.textContent = '⏳';
 
-  // Stack: 🏷️ ★ 〰️ ⛰️ 🏛️ ⏳
+  // Stack: 🏷️ ★ 〰️ ⛰️ 🏛️ # ⏳
   bar.appendChild(btnCountry);
   bar.appendChild(btnCapital);
   bar.appendChild(btnRivers);
   bar.appendChild(btnMountains);
   bar.appendChild(btnHeritage);
+  bar.appendChild(btnGrid);
   bar.appendChild(btnHistory);
   mapwrap.appendChild(bar);
 
@@ -811,6 +943,12 @@ function createMapToggles() {
     btnMountains.dataset.mode = mountainMode;
     const titles = ['Toggle mountain ranges', 'Show highest peaks', 'Hide mountains'];
     btnMountains.title = titles[mountainMode];
+    drawWorldMap();
+  });
+
+  btnGrid.addEventListener('click', () => {
+    showGrid = !showGrid;
+    btnGrid.classList.toggle('active', showGrid);
     drawWorldMap();
   });
 
