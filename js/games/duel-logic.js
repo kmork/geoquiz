@@ -19,7 +19,7 @@ function formatArea(n) {
 
 const QUESTION_TYPES = [
   'area', 'population', 'landlocked', 'neighbors_count',
-  'borders', 'continent', 'capital', 'highest_peak'
+  'borders', 'continent', 'capital', 'highest_peak', 'equator'
 ];
 
 export class DuelGameLogic {
@@ -110,6 +110,13 @@ export class DuelGameLogic {
       types.push('highest_peak');
     }
 
+    // equator: both must have closestLat, different distances, and not both on equator
+    if (a.closestLat != null && b.closestLat != null
+        && Math.abs(a.closestLat) !== Math.abs(b.closestLat)
+        && !(Math.abs(a.closestLat) < 1 && Math.abs(b.closestLat) < 1)) {
+      types.push('equator');
+    }
+
     // capital is always eligible
     types.push('capital');
 
@@ -122,7 +129,7 @@ export class DuelGameLogic {
 
     // Weight: early streak favors area/population; later favors borders/capital/landlocked
     const early = ['area', 'population'];
-    const late = ['borders', 'capital', 'landlocked', 'neighbors_count', 'continent', 'highest_peak'];
+    const late = ['borders', 'capital', 'landlocked', 'neighbors_count', 'continent', 'highest_peak', 'equator'];
 
     let weighted = [...eligible];
     if (this.streak < 5) {
@@ -233,6 +240,17 @@ export class DuelGameLogic {
         }
         break;
       }
+      case 'equator': {
+        const closer = Math.random() < 0.5;
+        if (closer) {
+          questionText = 'Which country is closer to the equator?';
+          correctAnswer = Math.abs(a.closestLat) < Math.abs(b.closestLat) ? 'A' : 'B';
+        } else {
+          questionText = 'Which country is farther from the equator?';
+          correctAnswer = Math.abs(a.closestLat) > Math.abs(b.closestLat) ? 'A' : 'B';
+        }
+        break;
+      }
     }
 
     return { countryA: a, countryB: b, questionText, correctAnswer, questionType: type };
@@ -271,6 +289,10 @@ export class DuelGameLogic {
       }
       case 'highest_peak':
         return `${a.country}'s highest point is ${a.highestPeak.name} (${a.highestPeak.elev.toLocaleString()} m), while ${b.country}'s is ${b.highestPeak.name} (${b.highestPeak.elev.toLocaleString()} m).`;
+      case 'equator': {
+        const fmtLat = (lat) => Math.abs(lat) < 1 ? 'on the equator' : `${Math.abs(lat).toFixed(1)}° from the equator`;
+        return `${a.country} reaches ${fmtLat(a.closestLat)}, while ${b.country} reaches ${fmtLat(b.closestLat)}.`;
+      }
       default:
         return '';
     }

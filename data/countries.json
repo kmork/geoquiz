@@ -40,7 +40,8 @@
       "elev": 7492,
       "lat": 36.4,
       "lon": 71.83
-    }
+    },
+    "closestLat": 29.39
   },
   {
     "country": "Aland",
@@ -59,7 +60,8 @@
       "elev": 129,
       "lat": 60.35,
       "lon": 19.99
-    }
+    },
+    "closestLat": 59.9
   },
   {
     "country": "Albania",
@@ -83,7 +85,8 @@
       "elev": 2764,
       "lat": 41.79,
       "lon": 20.55
-    }
+    },
+    "closestLat": 39.64
   },
   {
     "country": "Algeria",
@@ -121,7 +124,8 @@
       "elev": 3003,
       "lat": 23.28,
       "lon": 5.53
-    }
+    },
+    "closestLat": 18.98
   },
   {
     "country": "American Samoa",
@@ -140,7 +144,8 @@
       "elev": 964,
       "lat": -14.26,
       "lon": -170.73
-    }
+    },
+    "closestLat": -11.05
   },
   {
     "country": "Andorra",
@@ -162,7 +167,8 @@
       "elev": 2942,
       "lat": 42.59,
       "lon": 1.44
-    }
+    },
+    "closestLat": 42.43
   },
   {
     "country": "Angola",
@@ -186,7 +192,8 @@
       "elev": 2620,
       "lat": -12.47,
       "lon": 15.18
-    }
+    },
+    "closestLat": -4.39
   },
   {
     "country": "Anguilla",
@@ -205,7 +212,8 @@
       "elev": 73,
       "lat": 18.22,
       "lon": -63.06
-    }
+    },
+    "closestLat": 18.17
   },
   {
     "country": "Antigua and Barbuda",
@@ -224,7 +232,8 @@
       "elev": 402,
       "lat": 17.08,
       "lon": -61.84
-    }
+    },
+    "closestLat": 16.93
   },
   {
     "country": "Argentina",
@@ -276,7 +285,8 @@
       "elev": 6961,
       "lat": -32.65,
       "lon": -70.01
-    }
+    },
+    "closestLat": -21.79
   },
   {
     "country": "Armenia",
@@ -300,7 +310,8 @@
       "elev": 4090,
       "lat": 40.53,
       "lon": 44.2
-    }
+    },
+    "closestLat": 38.86
   },
   {
     "country": "Aruba",
@@ -319,7 +330,8 @@
       "elev": 188,
       "lat": 12.46,
       "lon": -69.94
-    }
+    },
+    "closestLat": 12.42
   },
   {
     "country": "Australia",
@@ -375,7 +387,8 @@
       "elev": 2228,
       "lat": -36.46,
       "lon": 148.26
-    }
+    },
+    "closestLat": -9.24
   },
   {
     "country": "Austria",
@@ -420,7 +433,8 @@
       "elev": 3798,
       "lat": 47.07,
       "lon": 12.69
-    }
+    },
+    "closestLat": 46.38
   },
   {
     "country": "Azerbaijan",
@@ -445,7 +459,8 @@
       "elev": 4466,
       "lat": 41.22,
       "lon": 47.86
-    }
+    },
+    "closestLat": 38.39
   },
   {
     "country": "Bahamas",
@@ -464,7 +479,8 @@
       "elev": 63,
       "lat": 24.11,
       "lon": -76.05
-    }
+    },
+    "closestLat": 20.91
   },
   {
     "country": "Bahrain",
@@ -483,7 +499,8 @@
       "elev": 134,
       "lat": 26.09,
       "lon": 50.5
-    }
+    },
+    "closestLat": 25.58
   },
   {
     "country": "Bangladesh",
@@ -517,7 +534,8 @@
       "elev": 1052,
       "lat": 21.47,
       "lon": 92.58
-    }
+    },
+    "closestLat": 20.74
   },
   {
     "country": "Barbados",
@@ -536,7 +554,8 @@
       "elev": 336,
       "lat": 13.21,
       "lon": -59.58
-    }
+    },
+    "closestLat": 13.05
   },
   {
     "country": "Belarus",
@@ -561,7 +580,8 @@
       "elev": 345,
       "lat": 53.85,
       "lon": 27.99
-    }
+    },
+    "closestLat": 51.24
   },
   {
     "country": "Belgium",
@@ -607,7 +627,8 @@
       "elev": 694,
       "lat": 50.5,
       "lon": 6.09
-    }
+    },
+    "closestLat": 49.5
   },
   {
     "country": "Belize",
@@ -629,7 +650,8 @@
       "elev": 1124,
       "lat": 16.56,
       "lon": -88.99
-    }
+    },
+    "closestLat": 15.88
   },
   {
     "country": "Benin",
@@ -653,7 +675,8 @@
       "elev": 658,
       "lat": 9.83,
       "lon": 1.52
-    }
+    },
+    "closestLat": 6.21
   },
   {
     "country": "Bermuda",
@@ -672,7 +695,8 @@
       "elev": 76,
       "lat": 32.31,
       "lon": -64.77
-    }
+    },
+    "closestLat": 32.25
   },
   {
     "country": "Bhutan",
@@ -694,7 +718,8 @@
       "elev": 7570,
       "lat": 28.04,
       "lon": 90.45
-    }
+    },
+    "closestLat": 26.7
   },
   {
     "country": "Bolivia",
@@ -732,7 +757,8 @@
       "elev": 6542,
       "lat": -18.1,
       "lon": -68.88
-    }
+    },
+    "closestLat": -9.68
   },
   {
     "country": "Bosnia and Herzegovina",
@@ -755,7 +781,8 @@
       "elev": 2386,
       "lat": 43.3,
       "lon": 18.74
-    }
+    },
+    "closestLat": 42.56
   },
   {
     "country": "Botswana",
@@ -779,7 +806,8 @@
       "elev": 1491,
       "lat": -24.73,
       "lon": 25.97
-    }
+    },
+    "closestLat": -17.78
   },
   {
     "country": "Brazil",
@@ -845,7 +873,8 @@
       "elev": 2994,
       "lat": 0.8,
       "lon": -66.01
-    }
+    },
+    "closestLat": 0
   },
   {
     "country": "British Indian Ocean Territory",
@@ -864,7 +893,8 @@
       "elev": 15,
       "lat": -7.31,
       "lon": 72.42
-    }
+    },
+    "closestLat": -5.23
   },
   {
     "country": "British Virgin Islands",
@@ -883,7 +913,8 @@
       "elev": 521,
       "lat": 18.42,
       "lon": -64.68
-    }
+    },
+    "closestLat": 18.33
   },
   {
     "country": "Brunei",
@@ -904,7 +935,8 @@
       "elev": 1850,
       "lat": 4.59,
       "lon": 115.31
-    }
+    },
+    "closestLat": 4.02
   },
   {
     "country": "Bulgaria",
@@ -929,7 +961,8 @@
       "elev": 2925,
       "lat": 42.18,
       "lon": 23.59
-    }
+    },
+    "closestLat": 41.24
   },
   {
     "country": "Burkina Faso",
@@ -955,7 +988,8 @@
       "elev": 749,
       "lat": 10.97,
       "lon": -4.95
-    }
+    },
+    "closestLat": 9.39
   },
   {
     "country": "Burundi",
@@ -978,7 +1012,8 @@
       "elev": 2670,
       "lat": -3.44,
       "lon": 29.5
-    }
+    },
+    "closestLat": -2.3
   },
   {
     "country": "Cabo Verde",
@@ -997,7 +1032,8 @@
       "elev": 2829,
       "lat": 14.95,
       "lon": -24.34
-    }
+    },
+    "closestLat": 14.8
   },
   {
     "country": "Cambodia",
@@ -1032,7 +1068,8 @@
       "elev": 1810,
       "lat": 12.06,
       "lon": 104.15
-    }
+    },
+    "closestLat": 10.42
   },
   {
     "country": "Cameroon",
@@ -1058,7 +1095,8 @@
       "elev": 4040,
       "lat": 4.22,
       "lon": 9.17
-    }
+    },
+    "closestLat": 1.65
   },
   {
     "country": "Canada",
@@ -1116,7 +1154,8 @@
       "elev": 5959,
       "lat": 60.57,
       "lon": -140.41
-    }
+    },
+    "closestLat": 41.67
   },
   {
     "country": "Cayman Islands",
@@ -1135,7 +1174,8 @@
       "elev": 43,
       "lat": 19.72,
       "lon": -79.8
-    }
+    },
+    "closestLat": 19.26
   },
   {
     "country": "Central African Republic",
@@ -1161,7 +1201,8 @@
       "elev": 1410,
       "lat": 6.77,
       "lon": 14.42
-    }
+    },
+    "closestLat": 2.24
   },
   {
     "country": "Chad",
@@ -1187,7 +1228,8 @@
       "elev": 3445,
       "lat": 19.8,
       "lon": 18.53
-    }
+    },
+    "closestLat": 7.46
   },
   {
     "country": "Chile",
@@ -1227,7 +1269,8 @@
       "elev": 6893,
       "lat": -27.11,
       "lon": -68.54
-    }
+    },
+    "closestLat": -17.51
   },
   {
     "country": "China",
@@ -1313,7 +1356,8 @@
       "elev": 8849,
       "lat": 27.99,
       "lon": 86.93
-    }
+    },
+    "closestLat": 15.78
   },
   {
     "country": "Colombia",
@@ -1360,7 +1404,8 @@
       "elev": 5700,
       "lat": 10.84,
       "lon": -73.69
-    }
+    },
+    "closestLat": 0
   },
   {
     "country": "Comoros",
@@ -1379,7 +1424,8 @@
       "elev": 2361,
       "lat": -11.75,
       "lon": 43.35
-    }
+    },
+    "closestLat": -11.36
   },
   {
     "country": "Congo",
@@ -1404,7 +1450,8 @@
       "elev": 1020,
       "lat": 2.37,
       "lon": 16.28
-    }
+    },
+    "closestLat": -0.01
   },
   {
     "country": "Cook Islands",
@@ -1423,7 +1470,8 @@
       "elev": 652,
       "lat": -21.23,
       "lon": -159.79
-    }
+    },
+    "closestLat": -8.95
   },
   {
     "country": "Costa Rica",
@@ -1452,7 +1500,8 @@
       "elev": 3821,
       "lat": 9.49,
       "lon": -83.49
-    }
+    },
+    "closestLat": 5.52
   },
   {
     "country": "Côte d'Ivoire",
@@ -1477,7 +1526,8 @@
       "elev": 1752,
       "lat": 7.62,
       "lon": -8.39
-    }
+    },
+    "closestLat": 4.34
   },
   {
     "country": "Croatia",
@@ -1514,7 +1564,8 @@
       "elev": 1831,
       "lat": 44.06,
       "lon": 16.38
-    }
+    },
+    "closestLat": 42.42
   },
   {
     "country": "Cuba",
@@ -1550,7 +1601,8 @@
       "elev": 1974,
       "lat": 19.99,
       "lon": -76.84
-    }
+    },
+    "closestLat": 19.83
   },
   {
     "country": "Curaçao",
@@ -1569,7 +1621,8 @@
       "elev": 372,
       "lat": 12.34,
       "lon": -69.1
-    }
+    },
+    "closestLat": 12.04
   },
   {
     "country": "Cyprus",
@@ -1588,7 +1641,8 @@
       "elev": 1952,
       "lat": 34.94,
       "lon": 32.87
-    }
+    },
+    "closestLat": 34.63
   },
   {
     "country": "Czechia",
@@ -1624,7 +1678,8 @@
       "elev": 1603,
       "lat": 50.74,
       "lon": 15.74
-    }
+    },
+    "closestLat": 48.56
   },
   {
     "country": "Democratic Republic of the Congo",
@@ -1665,7 +1720,8 @@
       "elev": 5109,
       "lat": 0.39,
       "lon": 29.87
-    }
+    },
+    "closestLat": -0.01
   },
   {
     "country": "Denmark",
@@ -1698,7 +1754,8 @@
       "elev": 171,
       "lat": 56.13,
       "lon": 9.85
-    }
+    },
+    "closestLat": 54.57
   },
   {
     "country": "Djibouti",
@@ -1721,7 +1778,8 @@
       "elev": 2028,
       "lat": 11.47,
       "lon": 43.17
-    }
+    },
+    "closestLat": 10.93
   },
   {
     "country": "Dominica",
@@ -1740,7 +1798,8 @@
       "elev": 1447,
       "lat": 15.46,
       "lon": -61.4
-    }
+    },
+    "closestLat": 15.2
   },
   {
     "country": "Dominican Republic",
@@ -1773,7 +1832,8 @@
       "elev": 3098,
       "lat": 19.02,
       "lon": -70.99
-    }
+    },
+    "closestLat": 17.55
   },
   {
     "country": "Ecuador",
@@ -1807,7 +1867,8 @@
       "elev": 6263,
       "lat": -1.47,
       "lon": -78.82
-    }
+    },
+    "closestLat": 0
   },
   {
     "country": "Egypt",
@@ -1863,7 +1924,8 @@
       "elev": 2629,
       "lat": 28.51,
       "lon": 33.95
-    }
+    },
+    "closestLat": 21.99
   },
   {
     "country": "El Salvador",
@@ -1885,7 +1947,8 @@
       "elev": 2730,
       "lat": 14.39,
       "lon": -89.11
-    }
+    },
+    "closestLat": 13.16
   },
   {
     "country": "Equatorial Guinea",
@@ -1907,7 +1970,8 @@
       "elev": 3011,
       "lat": 3.59,
       "lon": 8.77
-    }
+    },
+    "closestLat": 0.92
   },
   {
     "country": "Eritrea",
@@ -1930,7 +1994,8 @@
       "elev": 3018,
       "lat": 14.95,
       "lon": 38.87
-    }
+    },
+    "closestLat": 12.36
   },
   {
     "country": "Estonia",
@@ -1952,7 +2017,8 @@
       "elev": 318,
       "lat": 57.69,
       "lon": 27.06
-    }
+    },
+    "closestLat": 57.52
   },
   {
     "country": "Eswatini",
@@ -1974,7 +2040,8 @@
       "elev": 1862,
       "lat": -25.97,
       "lon": 31.13
-    }
+    },
+    "closestLat": -25.74
   },
   {
     "country": "Ethiopia",
@@ -2012,7 +2079,8 @@
       "elev": 4550,
       "lat": 13.24,
       "lon": 38.37
-    }
+    },
+    "closestLat": 3.4
   },
   {
     "country": "Falkland Islands",
@@ -2031,7 +2099,8 @@
       "elev": 705,
       "lat": -51.97,
       "lon": -59.16
-    }
+    },
+    "closestLat": -51.03
   },
   {
     "country": "Faroe Islands",
@@ -2050,7 +2119,8 @@
       "elev": 882,
       "lat": 62.1,
       "lon": -6.82
-    }
+    },
+    "closestLat": 61.39
   },
   {
     "country": "Fiji",
@@ -2069,7 +2139,8 @@
       "elev": 1324,
       "lat": -17.62,
       "lon": 177.97
-    }
+    },
+    "closestLat": -12.48
   },
   {
     "country": "Finland",
@@ -2109,7 +2180,8 @@
       "elev": 1324,
       "lat": 69.25,
       "lon": 20.56
-    }
+    },
+    "closestLat": 59.81
   },
   {
     "country": "France",
@@ -2174,7 +2246,8 @@
       "elev": 4808,
       "lat": 45.83,
       "lon": 6.87
-    }
+    },
+    "closestLat": 2.11
   },
   {
     "country": "French Polynesia",
@@ -2193,7 +2266,8 @@
       "elev": 2241,
       "lat": -17.62,
       "lon": -149.49
-    }
+    },
+    "closestLat": -7.95
   },
   {
     "country": "Gabon",
@@ -2216,7 +2290,8 @@
       "elev": 1575,
       "lat": -1.62,
       "lon": 11.78
-    }
+    },
+    "closestLat": 0
   },
   {
     "country": "Gambia",
@@ -2237,7 +2312,8 @@
       "elev": 53,
       "lat": 13.68,
       "lon": -14.73
-    }
+    },
+    "closestLat": 13.07
   },
   {
     "country": "Georgia",
@@ -2261,7 +2337,8 @@
       "elev": 5193,
       "lat": 42.99,
       "lon": 43.11
-    }
+    },
+    "closestLat": 41.04
   },
   {
     "country": "Germany",
@@ -2327,7 +2404,8 @@
       "elev": 2962,
       "lat": 47.42,
       "lon": 10.99
-    }
+    },
+    "closestLat": 47.27
   },
   {
     "country": "Ghana",
@@ -2362,7 +2440,8 @@
       "elev": 885,
       "lat": 6.96,
       "lon": 0.56
-    }
+    },
+    "closestLat": 4.74
   },
   {
     "country": "Gibraltar",
@@ -2381,7 +2460,8 @@
       "elev": 426,
       "lat": 36.12,
       "lon": -5.34
-    }
+    },
+    "closestLat": 36.11
   },
   {
     "country": "Greece",
@@ -2432,7 +2512,8 @@
       "elev": 2917,
       "lat": 40.09,
       "lon": 22.35
-    }
+    },
+    "closestLat": 34.82
   },
   {
     "country": "Greenland",
@@ -2451,7 +2532,8 @@
       "elev": 3694,
       "lat": 68.92,
       "lon": -29.9
-    }
+    },
+    "closestLat": 59.79
   },
   {
     "country": "Grenada",
@@ -2470,7 +2552,8 @@
       "elev": 840,
       "lat": 12.15,
       "lon": -61.7
-    }
+    },
+    "closestLat": 12
   },
   {
     "country": "Guam",
@@ -2489,7 +2572,8 @@
       "elev": 406,
       "lat": 13.34,
       "lon": 144.66
-    }
+    },
+    "closestLat": 13.24
   },
   {
     "country": "Guatemala",
@@ -2513,7 +2597,8 @@
       "elev": 4220,
       "lat": 15.04,
       "lon": -91.9
-    }
+    },
+    "closestLat": 13.73
   },
   {
     "country": "Guernsey",
@@ -2532,7 +2617,8 @@
       "elev": 114,
       "lat": 49.44,
       "lon": -2.6
-    }
+    },
+    "closestLat": 49.41
   },
   {
     "country": "Guinea",
@@ -2558,7 +2644,8 @@
       "elev": 1752,
       "lat": 7.62,
       "lon": -8.39
-    }
+    },
+    "closestLat": 7.19
   },
   {
     "country": "Guinea-Bissau",
@@ -2580,7 +2667,8 @@
       "elev": 300,
       "lat": 12.3,
       "lon": -13.72
-    }
+    },
+    "closestLat": 10.93
   },
   {
     "country": "Guyana",
@@ -2603,7 +2691,8 @@
       "elev": 2772,
       "lat": 5.14,
       "lon": -60.76
-    }
+    },
+    "closestLat": 1.19
   },
   {
     "country": "Haiti",
@@ -2624,7 +2713,8 @@
       "elev": 2680,
       "lat": 18.34,
       "lon": -71.98
-    }
+    },
+    "closestLat": 18.03
   },
   {
     "country": "Honduras",
@@ -2647,7 +2737,8 @@
       "elev": 2870,
       "lat": 14.71,
       "lon": -88.62
-    }
+    },
+    "closestLat": 12.98
   },
   {
     "country": "Hong Kong",
@@ -2705,7 +2796,8 @@
       "elev": 1014,
       "lat": 47.87,
       "lon": 20.01
-    }
+    },
+    "closestLat": 45.74
   },
   {
     "country": "Iceland",
@@ -2731,7 +2823,8 @@
       "elev": 2110,
       "lat": 64.01,
       "lon": -16.65
-    }
+    },
+    "closestLat": 63.4
   },
   {
     "country": "India",
@@ -2804,7 +2897,8 @@
       "elev": 8586,
       "lat": 27.7,
       "lon": 88.15
-    }
+    },
+    "closestLat": 6.75
   },
   {
     "country": "Indonesia",
@@ -2854,7 +2948,8 @@
       "elev": 4884,
       "lat": -4.08,
       "lon": 137.16
-    }
+    },
+    "closestLat": 0
   },
   {
     "country": "Iran",
@@ -2907,7 +3002,8 @@
       "elev": 5610,
       "lat": 35.95,
       "lon": 52.11
-    }
+    },
+    "closestLat": 25.06
   },
   {
     "country": "Iraq",
@@ -2950,7 +3046,8 @@
       "elev": 3611,
       "lat": 36.59,
       "lon": 44.98
-    }
+    },
+    "closestLat": 29.06
   },
   {
     "country": "Ireland",
@@ -2983,7 +3080,8 @@
       "elev": 1039,
       "lat": 51.8,
       "lon": -9.74
-    }
+    },
+    "closestLat": 51.45
   },
   {
     "country": "Isle of Man",
@@ -3002,7 +3100,8 @@
       "elev": 621,
       "lat": 54.26,
       "lon": -4.46
-    }
+    },
+    "closestLat": 54.06
   },
   {
     "country": "Israel",
@@ -3044,7 +3143,8 @@
       "elev": 1208,
       "lat": 33,
       "lon": 35.41
-    }
+    },
+    "closestLat": 29.49
   },
   {
     "country": "Italy",
@@ -3112,7 +3212,8 @@
       "elev": 4748,
       "lat": 45.83,
       "lon": 6.86
-    }
+    },
+    "closestLat": 35.49
   },
   {
     "country": "Jamaica",
@@ -3138,7 +3239,8 @@
       "elev": 2256,
       "lat": 18.05,
       "lon": -76.58
-    }
+    },
+    "closestLat": 17.7
   },
   {
     "country": "Japan",
@@ -3199,7 +3301,8 @@
       "elev": 3776,
       "lat": 35.36,
       "lon": 138.73
-    }
+    },
+    "closestLat": 24.21
   },
   {
     "country": "Jersey",
@@ -3218,7 +3321,8 @@
       "elev": 143,
       "lat": 49.22,
       "lon": -2.13
-    }
+    },
+    "closestLat": 49.17
   },
   {
     "country": "Jordan",
@@ -3255,7 +3359,8 @@
       "elev": 1854,
       "lat": 29.32,
       "lon": 35.42
-    }
+    },
+    "closestLat": 29.19
   },
   {
     "country": "Kazakhstan",
@@ -3287,7 +3392,8 @@
       "elev": 7010,
       "lat": 42.21,
       "lon": 80.18
-    }
+    },
+    "closestLat": 40.58
   },
   {
     "country": "Kenya",
@@ -3324,7 +3430,8 @@
       "elev": 5199,
       "lat": -0.15,
       "lon": 37.31
-    }
+    },
+    "closestLat": 0
   },
   {
     "country": "Kiribati",
@@ -3343,7 +3450,8 @@
       "elev": 81,
       "lat": -0.86,
       "lon": 169.54
-    }
+    },
+    "closestLat": 0.13
   },
   {
     "country": "Kosovo",
@@ -3367,7 +3475,8 @@
       "elev": 2656,
       "lat": 42.55,
       "lon": 20.14
-    }
+    },
+    "closestLat": 41.84
   },
   {
     "country": "Kuwait",
@@ -3389,7 +3498,8 @@
       "elev": 306,
       "lat": 29.6,
       "lon": 47.64
-    }
+    },
+    "closestLat": 28.53
   },
   {
     "country": "Kyrgyzstan",
@@ -3413,7 +3523,8 @@
       "elev": 7439,
       "lat": 42.04,
       "lon": 79.53
-    }
+    },
+    "closestLat": 39.19
   },
   {
     "country": "Laos",
@@ -3445,7 +3556,8 @@
       "elev": 2817,
       "lat": 19.63,
       "lon": 103.17
-    }
+    },
+    "closestLat": 13.92
   },
   {
     "country": "Latvia",
@@ -3469,7 +3581,8 @@
       "elev": 312,
       "lat": 57.07,
       "lon": 25.89
-    }
+    },
+    "closestLat": 55.67
   },
   {
     "country": "Lebanon",
@@ -3503,7 +3616,8 @@
       "elev": 3088,
       "lat": 34.27,
       "lon": 36.09
-    }
+    },
+    "closestLat": 33.06
   },
   {
     "country": "Lesotho",
@@ -3524,7 +3638,8 @@
       "elev": 3482,
       "lat": -29.47,
       "lon": 29.27
-    }
+    },
+    "closestLat": -28.57
   },
   {
     "country": "Liberia",
@@ -3547,7 +3662,8 @@
       "elev": 1440,
       "lat": 7.39,
       "lon": -9.1
-    }
+    },
+    "closestLat": 4.35
   },
   {
     "country": "Libya",
@@ -3580,7 +3696,8 @@
       "elev": 2267,
       "lat": 23.31,
       "lon": 17.32
-    }
+    },
+    "closestLat": 19.5
   },
   {
     "country": "Liechtenstein",
@@ -3602,7 +3719,8 @@
       "elev": 2599,
       "lat": 47.08,
       "lon": 9.57
-    }
+    },
+    "closestLat": 47.05
   },
   {
     "country": "Lithuania",
@@ -3626,7 +3744,8 @@
       "elev": 294,
       "lat": 54.37,
       "lon": 25.55
-    }
+    },
+    "closestLat": 53.89
   },
   {
     "country": "Luxembourg",
@@ -3649,7 +3768,8 @@
       "elev": 560,
       "lat": 50.18,
       "lon": 6.03
-    }
+    },
+    "closestLat": 49.44
   },
   {
     "country": "Macao",
@@ -3687,7 +3807,8 @@
       "elev": 2876,
       "lat": -13.88,
       "lon": 49.04
-    }
+    },
+    "closestLat": -11.94
   },
   {
     "country": "Malawi",
@@ -3710,7 +3831,8 @@
       "elev": 3002,
       "lat": -15.94,
       "lon": 35.66
-    }
+    },
+    "closestLat": -9.38
   },
   {
     "country": "Malaysia",
@@ -3750,7 +3872,8 @@
       "elev": 4095,
       "lat": 6.08,
       "lon": 116.56
-    }
+    },
+    "closestLat": 0.85
   },
   {
     "country": "Maldives",
@@ -3769,7 +3892,8 @@
       "elev": 5,
       "lat": 0.59,
       "lon": 73.43
-    }
+    },
+    "closestLat": 0.21
   },
   {
     "country": "Mali",
@@ -3796,7 +3920,8 @@
       "elev": 1155,
       "lat": 15.27,
       "lon": -1.69
-    }
+    },
+    "closestLat": 10.14
   },
   {
     "country": "Malta",
@@ -3815,7 +3940,8 @@
       "elev": 253,
       "lat": 35.85,
       "lon": 14.39
-    }
+    },
+    "closestLat": 35.8
   },
   {
     "country": "Marshall Islands",
@@ -3834,7 +3960,8 @@
       "elev": 10,
       "lat": 9.82,
       "lon": 169.31
-    }
+    },
+    "closestLat": 4.57
   },
   {
     "country": "Mauritania",
@@ -3858,7 +3985,8 @@
       "elev": 915,
       "lat": 22.4,
       "lon": -12.62
-    }
+    },
+    "closestLat": 14.73
   },
   {
     "country": "Mauritius",
@@ -3877,7 +4005,8 @@
       "elev": 828,
       "lat": -20.42,
       "lon": 57.4
-    }
+    },
+    "closestLat": -10.32
   },
   {
     "country": "Mexico",
@@ -3937,7 +4066,8 @@
       "elev": 5636,
       "lat": 19.03,
       "lon": -97.27
-    }
+    },
+    "closestLat": 14.55
   },
   {
     "country": "Micronesia",
@@ -3956,7 +4086,8 @@
       "elev": 782,
       "lat": 6.9,
       "lon": 158.22
-    }
+    },
+    "closestLat": 0.92
   },
   {
     "country": "Moldova",
@@ -3978,7 +4109,8 @@
       "elev": 430,
       "lat": 47.18,
       "lon": 28.52
-    }
+    },
+    "closestLat": 45.46
   },
   {
     "country": "Monaco",
@@ -3999,7 +4131,8 @@
       "elev": 162,
       "lat": 43.73,
       "lon": 7.41
-    }
+    },
+    "closestLat": 43.72
   },
   {
     "country": "Mongolia",
@@ -4028,7 +4161,8 @@
       "elev": 4374,
       "lat": 49.15,
       "lon": 87.81
-    }
+    },
+    "closestLat": 41.59
   },
   {
     "country": "Montenegro",
@@ -4053,7 +4187,8 @@
       "elev": 2522,
       "lat": 43.12,
       "lon": 19.02
-    }
+    },
+    "closestLat": 41.85
   },
   {
     "country": "Montserrat",
@@ -4072,7 +4207,8 @@
       "elev": 915,
       "lat": 16.72,
       "lon": -62.18
-    }
+    },
+    "closestLat": 16.68
   },
   {
     "country": "Morocco",
@@ -4122,7 +4258,8 @@
       "elev": 4167,
       "lat": 31.06,
       "lon": -7.92
-    }
+    },
+    "closestLat": 21.42
   },
   {
     "country": "Mozambique",
@@ -4155,7 +4292,8 @@
       "elev": 2436,
       "lat": -19.8,
       "lon": 33.54
-    }
+    },
+    "closestLat": -10.47
   },
   {
     "country": "Myanmar",
@@ -4197,7 +4335,8 @@
       "elev": 5881,
       "lat": 28.31,
       "lon": 97.36
-    }
+    },
+    "closestLat": 9.79
   },
   {
     "country": "Namibia",
@@ -4221,7 +4360,8 @@
       "elev": 2573,
       "lat": -21.15,
       "lon": 14.59
-    }
+    },
+    "closestLat": -16.95
   },
   {
     "country": "Nauru",
@@ -4240,7 +4380,8 @@
       "elev": 65,
       "lat": -0.55,
       "lon": 166.92
-    }
+    },
+    "closestLat": -0.49
   },
   {
     "country": "Nepal",
@@ -4274,7 +4415,8 @@
       "elev": 8849,
       "lat": 27.99,
       "lon": 86.93
-    }
+    },
+    "closestLat": 26.34
   },
   {
     "country": "Netherlands",
@@ -4318,7 +4460,8 @@
       "elev": 323,
       "lat": 50.75,
       "lon": 6.02
-    }
+    },
+    "closestLat": 12.02
   },
   {
     "country": "New Caledonia",
@@ -4337,7 +4480,8 @@
       "elev": 1628,
       "lat": -20.57,
       "lon": 164.77
-    }
+    },
+    "closestLat": -19.62
   },
   {
     "country": "New Zealand",
@@ -4373,7 +4517,8 @@
       "elev": 3724,
       "lat": -43.59,
       "lon": 170.14
-    }
+    },
+    "closestLat": -8.54
   },
   {
     "country": "Nicaragua",
@@ -4395,7 +4540,8 @@
       "elev": 2107,
       "lat": 13.73,
       "lon": -86.07
-    }
+    },
+    "closestLat": 10.71
   },
   {
     "country": "Niger",
@@ -4422,7 +4568,8 @@
       "elev": 2022,
       "lat": 18.01,
       "lon": 8.55
-    }
+    },
+    "closestLat": 11.7
   },
   {
     "country": "Nigeria",
@@ -4463,7 +4610,8 @@
       "elev": 2419,
       "lat": 6.77,
       "lon": 11.1
-    }
+    },
+    "closestLat": 4.27
   },
   {
     "country": "Niue",
@@ -4482,7 +4630,8 @@
       "elev": 68,
       "lat": -19.07,
       "lon": -169.9
-    }
+    },
+    "closestLat": -18.96
   },
   {
     "country": "Norfolk Island",
@@ -4501,7 +4650,8 @@
       "elev": 319,
       "lat": -29.01,
       "lon": 167.93
-    }
+    },
+    "closestLat": -29
   },
   {
     "country": "North Korea",
@@ -4531,7 +4681,8 @@
       "elev": 2744,
       "lat": 42,
       "lon": 128.07
-    }
+    },
+    "closestLat": 37.68
   },
   {
     "country": "North Macedonia",
@@ -4556,7 +4707,8 @@
       "elev": 2764,
       "lat": 41.79,
       "lon": 20.55
-    }
+    },
+    "closestLat": 40.85
   },
   {
     "country": "Northern Mariana Islands",
@@ -4575,7 +4727,8 @@
       "elev": 965,
       "lat": 18.77,
       "lon": 145.67
-    }
+    },
+    "closestLat": 14.11
   },
   {
     "country": "Norway",
@@ -4620,7 +4773,8 @@
       "elev": 2469,
       "lat": 61.64,
       "lon": 8.31
-    }
+    },
+    "closestLat": -54.38
   },
   {
     "country": "Oman",
@@ -4650,7 +4804,8 @@
       "elev": 3004,
       "lat": 23.24,
       "lon": 57.27
-    }
+    },
+    "closestLat": 16.64
   },
   {
     "country": "Pakistan",
@@ -4696,7 +4851,8 @@
       "elev": 8611,
       "lat": 35.88,
       "lon": 76.51
-    }
+    },
+    "closestLat": 23.69
   },
   {
     "country": "Palau",
@@ -4715,7 +4871,8 @@
       "elev": 242,
       "lat": 7.34,
       "lon": 134.5
-    }
+    },
+    "closestLat": 2.95
   },
   {
     "country": "Palestine",
@@ -4738,7 +4895,8 @@
       "elev": 1030,
       "lat": 31.56,
       "lon": 35.08
-    }
+    },
+    "closestLat": 31.21
   },
   {
     "country": "Panama",
@@ -4767,7 +4925,8 @@
       "elev": 3475,
       "lat": 8.81,
       "lon": -82.54
-    }
+    },
+    "closestLat": 7.21
   },
   {
     "country": "Papua New Guinea",
@@ -4788,7 +4947,8 @@
       "elev": 4509,
       "lat": -5.78,
       "lon": 145.03
-    }
+    },
+    "closestLat": -1.35
   },
   {
     "country": "Paraguay",
@@ -4811,7 +4971,8 @@
       "elev": 842,
       "lat": -22.55,
       "lon": -55.71
-    }
+    },
+    "closestLat": -19.29
   },
   {
     "country": "Peru",
@@ -4853,7 +5014,8 @@
       "elev": 6768,
       "lat": -9.12,
       "lon": -77.6
-    }
+    },
+    "closestLat": -0.03
   },
   {
     "country": "Philippines",
@@ -4889,7 +5051,8 @@
       "elev": 2954,
       "lat": 6.99,
       "lon": 125.27
-    }
+    },
+    "closestLat": 4.66
   },
   {
     "country": "Poland",
@@ -4938,7 +5101,8 @@
       "elev": 2499,
       "lat": 49.18,
       "lon": 20.09
-    }
+    },
+    "closestLat": 48.99
   },
   {
     "country": "Portugal",
@@ -4976,7 +5140,8 @@
       "elev": 2351,
       "lat": 38.47,
       "lon": -28.4
-    }
+    },
+    "closestLat": 30.03
   },
   {
     "country": "Puerto Rico",
@@ -4995,7 +5160,8 @@
       "elev": 1338,
       "lat": 18.17,
       "lon": -66.59
-    }
+    },
+    "closestLat": 17.92
   },
   {
     "country": "Qatar",
@@ -5023,7 +5189,8 @@
       "elev": 103,
       "lat": 25.21,
       "lon": 51.1
-    }
+    },
+    "closestLat": 24.56
   },
   {
     "country": "Romania",
@@ -5065,7 +5232,8 @@
       "elev": 2544,
       "lat": 45.6,
       "lon": 24.74
-    }
+    },
+    "closestLat": 43.65
   },
   {
     "country": "Russia",
@@ -5131,7 +5299,8 @@
       "elev": 5642,
       "lat": 43.35,
       "lon": 42.44
-    }
+    },
+    "closestLat": 41.19
   },
   {
     "country": "Rwanda",
@@ -5155,7 +5324,8 @@
       "elev": 4507,
       "lat": -1.51,
       "lon": 29.45
-    }
+    },
+    "closestLat": -1.06
   },
   {
     "country": "Saint Barthelemy",
@@ -5174,7 +5344,8 @@
       "elev": 286,
       "lat": 17.9,
       "lon": -62.83
-    }
+    },
+    "closestLat": 17.88
   },
   {
     "country": "Saint Helena",
@@ -5193,7 +5364,8 @@
       "elev": 818,
       "lat": -15.96,
       "lon": -5.72
-    }
+    },
+    "closestLat": -7.88
   },
   {
     "country": "Saint Kitts and Nevis",
@@ -5212,7 +5384,8 @@
       "elev": 1156,
       "lat": 17.37,
       "lon": -62.8
-    }
+    },
+    "closestLat": 17.1
   },
   {
     "country": "Saint Lucia",
@@ -5231,7 +5404,8 @@
       "elev": 950,
       "lat": 13.86,
       "lon": -61.05
-    }
+    },
+    "closestLat": 13.71
   },
   {
     "country": "Saint Martin",
@@ -5250,7 +5424,8 @@
       "elev": 424,
       "lat": 18.08,
       "lon": -63.06
-    }
+    },
+    "closestLat": 18.03
   },
   {
     "country": "Saint Pierre and Miquelon",
@@ -5269,7 +5444,8 @@
       "elev": 240,
       "lat": 47.06,
       "lon": -56.35
-    }
+    },
+    "closestLat": 46.75
   },
   {
     "country": "Saint Vincent and the Grenadines",
@@ -5288,7 +5464,8 @@
       "elev": 1234,
       "lat": 13.33,
       "lon": -61.18
-    }
+    },
+    "closestLat": 12.59
   },
   {
     "country": "Samoa",
@@ -5307,7 +5484,8 @@
       "elev": 1858,
       "lat": -13.74,
       "lon": -172.42
-    }
+    },
+    "closestLat": -13.46
   },
   {
     "country": "San Marino",
@@ -5328,7 +5506,8 @@
       "elev": 739,
       "lat": 43.94,
       "lon": 12.45
-    }
+    },
+    "closestLat": 43.89
   },
   {
     "country": "Sao Tome and Principe",
@@ -5347,7 +5526,8 @@
       "elev": 2024,
       "lat": 0.28,
       "lon": 6.62
-    }
+    },
+    "closestLat": 0.02
   },
   {
     "country": "Saudi Arabia",
@@ -5391,7 +5571,8 @@
       "elev": 3000,
       "lat": 20.02,
       "lon": 41.64
-    }
+    },
+    "closestLat": 16.37
   },
   {
     "country": "Senegal",
@@ -5423,7 +5604,8 @@
       "elev": 648,
       "lat": 12.37,
       "lon": -12.33
-    }
+    },
+    "closestLat": 12.31
   },
   {
     "country": "Serbia",
@@ -5451,7 +5633,8 @@
       "elev": 2169,
       "lat": 43.4,
       "lon": 22.68
-    }
+    },
+    "closestLat": 42.23
   },
   {
     "country": "Seychelles",
@@ -5470,7 +5653,8 @@
       "elev": 905,
       "lat": -4.66,
       "lon": 55.44
-    }
+    },
+    "closestLat": -3.79
   },
   {
     "country": "Sierra Leone",
@@ -5492,7 +5676,8 @@
       "elev": 1948,
       "lat": 9.11,
       "lon": -11.02
-    }
+    },
+    "closestLat": 6.92
   },
   {
     "country": "Singapore",
@@ -5511,7 +5696,8 @@
       "elev": 164,
       "lat": 1.35,
       "lon": 103.78
-    }
+    },
+    "closestLat": 1.26
   },
   {
     "country": "Sint Maarten",
@@ -5530,7 +5716,8 @@
       "elev": 344,
       "lat": 18.05,
       "lon": -63.06
-    }
+    },
+    "closestLat": 18.02
   },
   {
     "country": "Slovakia",
@@ -5555,7 +5742,8 @@
       "elev": 2655,
       "lat": 49.16,
       "lon": 20.13
-    }
+    },
+    "closestLat": 47.75
   },
   {
     "country": "Slovenia",
@@ -5579,7 +5767,8 @@
       "elev": 2864,
       "lat": 46.38,
       "lon": 13.84
-    }
+    },
+    "closestLat": 45.42
   },
   {
     "country": "Solomon Islands",
@@ -5598,7 +5787,8 @@
       "elev": 2335,
       "lat": -9.62,
       "lon": 160.05
-    }
+    },
+    "closestLat": -6.6
   },
   {
     "country": "Somalia",
@@ -5621,7 +5811,8 @@
       "elev": 2460,
       "lat": 10.72,
       "lon": 47.21
-    }
+    },
+    "closestLat": 0
   },
   {
     "country": "South Africa",
@@ -5666,7 +5857,8 @@
       "elev": 3450,
       "lat": -29.2,
       "lon": 29.35
-    }
+    },
+    "closestLat": -22.13
   },
   {
     "country": "South Korea",
@@ -5709,7 +5901,8 @@
       "elev": 1950,
       "lat": 33.36,
       "lon": 126.53
-    }
+    },
+    "closestLat": 33.2
   },
   {
     "country": "South Sudan",
@@ -5735,7 +5928,8 @@
       "elev": 3187,
       "lat": 4.05,
       "lon": 32.88
-    }
+    },
+    "closestLat": 3.49
   },
   {
     "country": "Spain",
@@ -5796,7 +5990,8 @@
       "elev": 3718,
       "lat": 28.27,
       "lon": -16.64
-    }
+    },
+    "closestLat": 27.64
   },
   {
     "country": "Sri Lanka",
@@ -5827,7 +6022,8 @@
       "elev": 2524,
       "lat": 7,
       "lon": 80.77
-    }
+    },
+    "closestLat": 5.92
   },
   {
     "country": "Sudan",
@@ -5854,7 +6050,8 @@
       "elev": 3042,
       "lat": 12.95,
       "lon": 24.26
-    }
+    },
+    "closestLat": 8.68
   },
   {
     "country": "Suriname",
@@ -5876,7 +6073,8 @@
       "elev": 1230,
       "lat": 3.27,
       "lon": -54.05
-    }
+    },
+    "closestLat": 1.83
   },
   {
     "country": "Sweden",
@@ -5915,7 +6113,8 @@
       "elev": 2097,
       "lat": 67.9,
       "lon": 18.55
-    }
+    },
+    "closestLat": 55.34
   },
   {
     "country": "Switzerland",
@@ -5967,7 +6166,8 @@
       "elev": 4634,
       "lat": 45.94,
       "lon": 7.87
-    }
+    },
+    "closestLat": 45.82
   },
   {
     "country": "Syria",
@@ -6004,7 +6204,8 @@
       "elev": 2814,
       "lat": 33.42,
       "lon": 35.86
-    }
+    },
+    "closestLat": 32.31
   },
   {
     "country": "Taiwan",
@@ -6023,7 +6224,8 @@
       "elev": 3952,
       "lat": 23.47,
       "lon": 120.96
-    }
+    },
+    "closestLat": 21.9
   },
   {
     "country": "Tajikistan",
@@ -6047,7 +6249,8 @@
       "elev": 7495,
       "lat": 38.94,
       "lon": 72.01
-    }
+    },
+    "closestLat": 36.68
   },
   {
     "country": "Tanzania",
@@ -6092,7 +6295,8 @@
       "elev": 5895,
       "lat": -3.07,
       "lon": 37.35
-    }
+    },
+    "closestLat": -0.99
   },
   {
     "country": "Thailand",
@@ -6138,7 +6342,8 @@
       "elev": 2565,
       "lat": 18.59,
       "lon": 98.49
-    }
+    },
+    "closestLat": 5.63
   },
   {
     "country": "Timor-Leste",
@@ -6159,7 +6364,8 @@
       "elev": 2963,
       "lat": -8.89,
       "lon": 125.52
-    }
+    },
+    "closestLat": -8.14
   },
   {
     "country": "Togo",
@@ -6182,7 +6388,8 @@
       "elev": 986,
       "lat": 6.85,
       "lon": 0.74
-    }
+    },
+    "closestLat": 6.1
   },
   {
     "country": "Tonga",
@@ -6201,7 +6408,8 @@
       "elev": 1033,
       "lat": -19.67,
       "lon": -175.03
-    }
+    },
+    "closestLat": -15.56
   },
   {
     "country": "Trinidad and Tobago",
@@ -6220,7 +6428,8 @@
       "elev": 940,
       "lat": 10.73,
       "lon": -61.26
-    }
+    },
+    "closestLat": 10.04
   },
   {
     "country": "Tunisia",
@@ -6254,7 +6463,8 @@
       "elev": 1544,
       "lat": 35.18,
       "lon": 8.68
-    }
+    },
+    "closestLat": 30.23
   },
   {
     "country": "Turkey",
@@ -6314,7 +6524,8 @@
       "elev": 5137,
       "lat": 39.7,
       "lon": 44.3
-    }
+    },
+    "closestLat": 35.82
   },
   {
     "country": "Turkmenistan",
@@ -6338,7 +6549,8 @@
       "elev": 3139,
       "lat": 38.51,
       "lon": 66.6
-    }
+    },
+    "closestLat": 35.14
   },
   {
     "country": "Turks and Caicos Islands",
@@ -6357,7 +6569,8 @@
       "elev": 48,
       "lat": 21.77,
       "lon": -72.17
-    }
+    },
+    "closestLat": 21.29
   },
   {
     "country": "Tuvalu",
@@ -6376,7 +6589,8 @@
       "elev": 5,
       "lat": -10.79,
       "lon": 179.47
-    }
+    },
+    "closestLat": -5.68
   },
   {
     "country": "Uganda",
@@ -6408,7 +6622,8 @@
       "elev": 5109,
       "lat": 0.39,
       "lon": 29.87
-    }
+    },
+    "closestLat": -0.01
   },
   {
     "country": "Ukraine",
@@ -6457,7 +6672,8 @@
       "elev": 2061,
       "lat": 48.16,
       "lon": 24.5
-    }
+    },
+    "closestLat": 45.21
   },
   {
     "country": "United Arab Emirates",
@@ -6491,7 +6707,8 @@
       "elev": 1934,
       "lat": 25.78,
       "lon": 56.07
-    }
+    },
+    "closestLat": 22.62
   },
   {
     "country": "United Kingdom",
@@ -6554,7 +6771,8 @@
       "elev": 1345,
       "lat": 56.8,
       "lon": -5
-    }
+    },
+    "closestLat": 49.91
   },
   {
     "country": "United States",
@@ -6628,7 +6846,8 @@
       "elev": 6190,
       "lat": 63.07,
       "lon": -151.01
-    }
+    },
+    "closestLat": 18.91
   },
   {
     "country": "United States Virgin Islands",
@@ -6647,7 +6866,8 @@
       "elev": 474,
       "lat": 18.37,
       "lon": -64.97
-    }
+    },
+    "closestLat": 17.68
   },
   {
     "country": "Uruguay",
@@ -6669,7 +6889,8 @@
       "elev": 514,
       "lat": -34.37,
       "lon": -54.72
-    }
+    },
+    "closestLat": -30.1
   },
   {
     "country": "Uzbekistan",
@@ -6706,7 +6927,8 @@
       "elev": 4643,
       "lat": 39.19,
       "lon": 67.96
-    }
+    },
+    "closestLat": 37.19
   },
   {
     "country": "Vanuatu",
@@ -6725,7 +6947,8 @@
       "elev": 1877,
       "lat": -15.39,
       "lon": 166.83
-    }
+    },
+    "closestLat": -13.06
   },
   {
     "country": "Vatican City",
@@ -6746,7 +6969,8 @@
       "elev": 77,
       "lat": 41.9,
       "lon": 12.45
-    }
+    },
+    "closestLat": 41.9
   },
   {
     "country": "Venezuela",
@@ -6781,7 +7005,8 @@
       "elev": 4978,
       "lat": 8.54,
       "lon": -71.05
-    }
+    },
+    "closestLat": 0.65
   },
   {
     "country": "Vietnam",
@@ -6831,7 +7056,8 @@
       "elev": 3147,
       "lat": 22.3,
       "lon": 103.77
-    }
+    },
+    "closestLat": 8.57
   },
   {
     "country": "Wallis and Futuna",
@@ -6850,7 +7076,8 @@
       "elev": 524,
       "lat": -14.29,
       "lon": -178.12
-    }
+    },
+    "closestLat": -13.21
   },
   {
     "country": "Western Sahara",
@@ -6869,7 +7096,8 @@
       "elev": 463,
       "lat": 25.99,
       "lon": -12.2
-    }
+    },
+    "closestLat": 20.77
   },
   {
     "country": "Yemen",
@@ -6891,7 +7119,8 @@
       "elev": 3666,
       "lat": 15.28,
       "lon": 43.97
-    }
+    },
+    "closestLat": 12.11
   },
   {
     "country": "Zambia",
@@ -6919,7 +7148,8 @@
       "elev": 2339,
       "lat": -9.93,
       "lon": 33.49
-    }
+    },
+    "closestLat": -8.19
   },
   {
     "country": "Zimbabwe",
@@ -6955,6 +7185,7 @@
       "elev": 2592,
       "lat": -18.3,
       "lon": 32.85
-    }
+    },
+    "closestLat": -15.61
   }
 ]
