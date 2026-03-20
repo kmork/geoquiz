@@ -67,7 +67,7 @@ const [worldData, placesData, riversData, mountainsData, heritageSitesData, empi
   loadGeoJSON('data/ne_10m_admin_0_countries.geojson.gz'),
   fetch('data/places.geojson').then(r => r.json()),
   fetch('data/rivers.json').then(r => r.json()),
-  fetch('data/mountains.json').then(r => r.json()),
+  fetch('data/mountain-ranges.json').then(r => r.json()),
   fetch('data/heritage-sites.json').then(r => r.json()),
   fetch('data/empires.json').then(r => r.json()),
   fetch('data/country-facts.json').then(r => r.json()),

@@ -68,7 +68,7 @@ async function onBonusRound(feature, api) {
 
 (async () => {
   try {
-    const features = await fetch('data/mountains.json').then(r => r.json());
+    const features = await fetch('data/mountain-ranges.json').then(r => r.json());
 
     const logic = new GeoFeaturesGameLogic({ features, maxRounds, pickOne });
 
