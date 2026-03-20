@@ -24,6 +24,7 @@ const GAME_NAMES = {
   mountains:       'Mountain Ranges',
   'pairs': 'Pairs — Capitals',
   'pairs-peaks': 'Pairs — Peaks',
+  'pairs-cities': 'Pairs — Cities',
   duel:            'Country Duel',
   'heritage-locate': 'Heritage Locate',
   rotated:         'Rotate & Guess',

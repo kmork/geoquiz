@@ -32,6 +32,19 @@ const MODES = {
         .map(c => ({ left: c.country, right: c.highestPeak.name }));
     },
   },
+  cities: {
+    leftLabel: 'Countries',
+    rightLabel: 'Cities',
+    subtitle: 'Match each country with one of its cities. One wrong guess ends the game.',
+    buildPairs(data) {
+      return data
+        .filter(c => c.cities && c.cities.length > 0)
+        .map(c => {
+          const city = c.cities[Math.floor(Math.random() * c.cities.length)];
+          return { left: c.country, right: city.name };
+        });
+    },
+  },
 };
 
 const modeConfig = MODES[mode] || MODES.capitals;
