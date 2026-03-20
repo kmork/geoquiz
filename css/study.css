@@ -253,6 +253,35 @@
   background: rgba(0,120,100,0.9);
 }
 
+/* ── OSM attribution ── */
+.osm-attribution {
+  position: absolute;
+  bottom: 4px;
+  left: 4px;
+  z-index: 10;
+  font-size: 10px;
+  line-height: 1.2;
+  color: rgba(255,255,255,0.6);
+  background: rgba(0,0,0,0.45);
+  padding: 2px 6px;
+  border-radius: 4px;
+  pointer-events: all;
+}
+.osm-attribution a {
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+}
+.osm-attribution a:hover {
+  text-decoration: underline;
+}
+html.light-mode .osm-attribution {
+  color: rgba(0,0,0,0.55);
+  background: rgba(255,255,255,0.65);
+}
+html.light-mode .osm-attribution a {
+  color: rgba(0,0,0,0.7);
+}
+
 /* ── Timeline bar ── */
 .study-timeline-bar {
   display: none;
@@ -420,11 +449,14 @@
   /* Toggle buttons: horizontal row at bottom-center */
   .study-map-toggles {
     flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
     right: unset;
     left: 50%;
     transform: translateX(-50%);
     bottom: 10px;
-    gap: 10px;
+    gap: 8px;
+    max-width: 90vw;
   }
   /* Info panel: move to top-left so it doesn't overlap bottom buttons */
   .study-info-panel {

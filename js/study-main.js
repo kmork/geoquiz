@@ -8,11 +8,12 @@
 import { norm } from './utils.js';
 import { loadGeoJSON } from './geojson-loader.js';
 import {
-  MAP_W, MAP_H, proj, getCSSVar,
+  MAP_W, MAP_H, MAP_H_MERC, proj, getMapH, setProjection, getCSSVar,
   buildCountryPaths, buildNameLookups,
   checkClickedCountry, drawCountriesBatch, visibleOffsets,
   setupCanvas, createPanZoom,
 } from './canvas-map-engine.js';
+import { drawOSMTiles } from './osm-tiles.js';
 
 // ── DOM references ────────────────────────────────────────────────────────────
 
@@ -47,6 +48,10 @@ let mountainMode  = 0; // 0 = off, 1 = mountain ranges, 2 = highest peaks
 let showHeritage  = false;
 let showGrid      = false;
 
+// OSM tile layer state
+let showOSMTiles = false;
+let osmRedrawTimer = null;
+
 // Empire timeline state
 let empiresData = [];
 let activeEmpire = null;
@@ -77,8 +82,8 @@ const WORLD = worldData.features;
 
 // ── Build map data ────────────────────────────────────────────────────────────
 
-const { countryPaths, hitTestPaths, microCountries } = buildCountryPaths(WORLD);
-const { dataToGeo, geoToData, resolveToDataName } = buildNameLookups(countryPaths);
+let { countryPaths, hitTestPaths, microCountries } = buildCountryPaths(WORLD);
+let { dataToGeo, geoToData, resolveToDataName } = buildNameLookups(countryPaths);
 
 // Pre-compute geo names for empires (for renderer matching)
 empiresData = empiresRaw.sort((a, b) => a.year - b.year);
@@ -124,6 +129,19 @@ for (const entry of (window.ALL_COUNTRIES || window.DATA)) {
   }
 }
 
+// ── Projection switching ─────────────────────────────────────────────────────
+
+function rebuildMapData() {
+  ({ countryPaths, hitTestPaths, microCountries } = buildCountryPaths(WORLD));
+  ({ dataToGeo, geoToData, resolveToDataName } = buildNameLookups(countryPaths));
+  // Re-map empire geo names
+  for (const empire of empiresData) {
+    empire._geoNames = new Set(empire.countries.map(c => dataToGeo[c] || c));
+  }
+  // Rebuild capitalDots projection (lon/lat stay the same, proj() will re-project)
+  // — dots are projected at draw time via proj(), so no rebuild needed.
+}
+
 // ── Drawing ───────────────────────────────────────────────────────────────────
 
 function drawLabel(text, x, y, fontSize, opts = {}) {
@@ -144,9 +162,20 @@ function drawWorldMap() {
 
   const isLight = document.documentElement.classList.contains('light-mode');
 
-  const defaultFill   = getCSSVar('--map-country-fill')   || 'rgba(165,180,252,.08)';
+  // ── OSM tile background ─────────────────────────────────────────────────
+  if (showOSMTiles) {
+    drawOSMTiles(ctx, viewport, MAP_W, MAP_H_MERC, canvasDisplayWidth, canvasDisplayHeight,
+      isLight ? 'light' : 'dark', () => {
+        // Debounce redraws from tile loads
+        if (osmRedrawTimer) return;
+        osmRedrawTimer = setTimeout(() => { osmRedrawTimer = null; drawWorldMap(); }, 50);
+      });
+  }
+
+  const osmActive = showOSMTiles;
+  const defaultFill   = osmActive ? 'transparent' : (getCSSVar('--map-country-fill') || 'rgba(165,180,252,.08)');
   const defaultStroke = getCSSVar('--map-country-stroke') || 'rgba(232,236,255,.3)';
-  const hoverFill     = getCSSVar('--map-country-fill-highlight') || 'rgba(165,180,252,.25)';
+  const hoverFill     = osmActive ? 'rgba(165,180,252,.15)' : (getCSSVar('--map-country-fill-highlight') || 'rgba(165,180,252,.25)');
 
   // Theme-aware label and dot colors
   const labelColor  = isLight ? 'rgba(15,20,40,0.88)'    : 'rgba(255,255,255,0.92)';
@@ -176,7 +205,7 @@ function drawWorldMap() {
       path2d: country.path2d,
       fill:   isHovered ? hoverFill : defaultFill,
       stroke: isHovered ? hoverStroke : defaultStroke,
-      strokeWidth: isHovered ? 1.2 : 0.5,
+      strokeWidth: isHovered ? 1.2 : (osmActive ? 0.8 : 0.5),
       bboxMinX: country.bboxMinX, bboxMaxX: country.bboxMaxX,
       bboxMinY: country.bboxMinY, bboxMaxY: country.bboxMaxY,
     });
@@ -968,7 +997,12 @@ function createMapToggles() {
   btnHistory.title = 'Toggle historical empires';
   btnHistory.textContent = '⏳';
 
-  // Stack: 🏷️ ★ 〰️ ⛰️ 🏛️ # ⏳
+  const btnOSM = document.createElement('button');
+  btnOSM.className = 'study-toggle-btn';
+  btnOSM.title = 'Toggle street map tiles';
+  btnOSM.textContent = '🗺️';
+
+  // Stack: 🏷️ ★ 〰️ ⛰️ 🏛️ # ⏳ 🗺️
   bar.appendChild(btnCountry);
   bar.appendChild(btnCapital);
   bar.appendChild(btnRivers);
@@ -976,7 +1010,15 @@ function createMapToggles() {
   bar.appendChild(btnHeritage);
   bar.appendChild(btnGrid);
   bar.appendChild(btnHistory);
+  bar.appendChild(btnOSM);
   mapwrap.appendChild(bar);
+
+  // OSM attribution overlay
+  const attrib = document.createElement('div');
+  attrib.className = 'osm-attribution';
+  attrib.innerHTML = '© <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors, © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>';
+  attrib.style.display = 'none';
+  mapwrap.appendChild(attrib);
 
   btnCountry.addEventListener('click', () => {
     showCountryNames = !showCountryNames;
@@ -1033,6 +1075,50 @@ function createMapToggles() {
       hideInfoPanel();
     }
     resizeCanvas();
+  });
+
+  btnOSM.addEventListener('click', () => {
+    showOSMTiles = !showOSMTiles;
+    btnOSM.classList.toggle('active', showOSMTiles);
+    attrib.style.display = showOSMTiles ? '' : 'none';
+
+    // Compute current geographic center (inverse-project before switching)
+    const oldCx = viewport.scrollX + canvasDisplayWidth / (2 * viewport.zoom);
+    const oldCy = viewport.scrollY + canvasDisplayHeight / (2 * viewport.zoom);
+    const oldMapH = getMapH();
+    // Approximate inverse: map-space → lon/lat
+    const lon = (oldCx / MAP_W) * 360 - 180;
+    let lat;
+    if (!showOSMTiles) {
+      // Was mercator, switching to equirect
+      const mercNorm = 1 - (2 * oldCy / MAP_H_MERC);
+      lat = (2 * Math.atan(Math.exp(mercNorm * Math.PI)) - Math.PI / 2) * 180 / Math.PI;
+    } else {
+      // Was equirect, switching to mercator
+      lat = 90 - (oldCy / MAP_H) * 180;
+    }
+
+    // Switch projection
+    setProjection(showOSMTiles ? 'mercator' : 'equirect');
+
+    // Rebuild all country paths + lookups with new projection
+    rebuildMapData();
+
+    // Re-project center to new map space
+    const [newCx, newCy] = proj([lon, lat]);
+    const newMapH = getMapH();
+
+    // Update viewport for new map dimensions
+    viewport.minZoom = Math.max(canvasDisplayHeight / newMapH, canvasDisplayWidth / MAP_W);
+    if (viewport.zoom < viewport.minZoom) viewport.zoom = viewport.minZoom;
+
+    viewport.scrollX = newCx - canvasDisplayWidth / (2 * viewport.zoom);
+    viewport.scrollY = Math.max(0, Math.min(
+      newCy - canvasDisplayHeight / (2 * viewport.zoom),
+      newMapH - canvasDisplayHeight / viewport.zoom
+    ));
+
+    drawWorldMap();
   });
 }
 
@@ -1186,7 +1272,7 @@ function zoomToCountry(dataName) {
 
     viewport.zoom = z;
     viewport.scrollX = cx - canvasDisplayWidth / (2 * z);
-    viewport.scrollY = Math.max(0, Math.min(cy - canvasDisplayHeight / (2 * z), MAP_H - canvasDisplayHeight / z));
+    viewport.scrollY = Math.max(0, Math.min(cy - canvasDisplayHeight / (2 * z), getMapH() - canvasDisplayHeight / z));
     drawWorldMap();
 
     if (t < 1) {

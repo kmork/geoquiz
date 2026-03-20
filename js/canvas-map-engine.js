@@ -14,11 +14,52 @@ import { COUNTRY_ALIASES } from './aliases.js';
 export const MAP_W = 600;
 export const MAP_H = 320;
 
+/** Mercator map height — square aspect, clipped at ±85.05° */
+export const MAP_H_MERC = 600;
+
 /** Equirectangular projection: [lon, lat] → [mapX, mapY] */
-export const proj = ([lon, lat]) => [
-  ((lon + 180) / 360) * MAP_W,
-  ((90 - lat) / 180) * MAP_H,
-];
+export function projEquirect([lon, lat]) {
+  return [
+    ((lon + 180) / 360) * MAP_W,
+    ((90 - lat) / 180) * MAP_H,
+  ];
+}
+
+/** Web Mercator projection: [lon, lat] → [mapX, mapY] */
+export function projMercator([lon, lat]) {
+  const x = ((lon + 180) / 360) * MAP_W;
+  const latRad = lat * Math.PI / 180;
+  const mercY = Math.log(Math.tan(Math.PI / 4 + latRad / 2));
+  // Normalize mercY from [-π, π] to [0, MAP_H_MERC]
+  const y = (1 - mercY / Math.PI) * MAP_H_MERC / 2;
+  return [x, y];
+}
+
+// Switchable projection — defaults to equirectangular
+let _projFn = projEquirect;
+let _currentMapH = MAP_H;
+
+/** Current projection function (delegates to active projection) */
+export const proj = (coord) => _projFn(coord);
+
+/** Get the current effective map height (depends on active projection) */
+export function getMapH() { return _currentMapH; }
+
+/**
+ * Switch the active projection.
+ * @param {'equirect'|'mercator'} mode
+ * @returns {{ w: number, h: number }} new map dimensions
+ */
+export function setProjection(mode) {
+  if (mode === 'mercator') {
+    _projFn = projMercator;
+    _currentMapH = MAP_H_MERC;
+  } else {
+    _projFn = projEquirect;
+    _currentMapH = MAP_H;
+  }
+  return { w: MAP_W, h: _currentMapH };
+}
 
 // ── CSS color cache (auto-clears on theme toggle) ────────────────────────────
 
@@ -438,7 +479,7 @@ export function setupCanvas(canvas, ctx, dpr, parentEl) {
   const rect = parentEl.getBoundingClientRect();
   const w = rect.width;
   const h = rect.height;
-  const minZoom = Math.max(h / MAP_H, w / MAP_W);
+  const minZoom = Math.max(h / getMapH(), w / MAP_W);
 
   canvas.style.width = `${w}px`;
   canvas.style.height = `${h}px`;
@@ -483,7 +524,7 @@ export function createPanZoom(canvas, viewport, redrawFn, opts = {}) {
   let animationFrameId = null;
 
   function clampScrollY(sy, canvasH) {
-    return Math.max(0, Math.min(Math.max(0, MAP_H - canvasH / viewport.zoom), sy));
+    return Math.max(0, Math.min(Math.max(0, getMapH() - canvasH / viewport.zoom), sy));
   }
 
   function animate() {
@@ -492,7 +533,7 @@ export function createPanZoom(canvas, viewport, redrawFn, opts = {}) {
       viewport.scrollY += viewport.velocityY;
 
       const canvasH = canvas.getBoundingClientRect().height;
-      const maxSY = Math.max(0, MAP_H - canvasH / viewport.zoom);
+      const maxSY = Math.max(0, getMapH() - canvasH / viewport.zoom);
       if (viewport.scrollY < 0) { viewport.scrollY = 0; viewport.velocityY = 0; }
       if (viewport.scrollY > maxSY) { viewport.scrollY = maxSY; viewport.velocityY = 0; }
 
