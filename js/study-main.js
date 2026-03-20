@@ -63,13 +63,14 @@ while (!window.DATA) {
 const countriesFlags = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.flagCode]));
 const neighborsData = Object.fromEntries((window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.neighbors]));
 
-const [worldData, placesData, riversData, mountainsData, heritageSitesData, empiresRaw] = await Promise.all([
+const [worldData, placesData, riversData, mountainsData, heritageSitesData, empiresRaw, countryFactsData] = await Promise.all([
   loadGeoJSON('data/ne_10m_admin_0_countries.geojson.gz'),
   fetch('data/places.geojson').then(r => r.json()),
   fetch('data/rivers.json').then(r => r.json()),
   fetch('data/mountains.json').then(r => r.json()),
   fetch('data/heritage-sites.json').then(r => r.json()),
   fetch('data/empires.json').then(r => r.json()),
+  fetch('data/country-facts.json').then(r => r.json()),
 ]);
 
 const WORLD = worldData.features;
@@ -860,6 +861,67 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Escape' && heritagePopupVisible) hideHeritagePopup();
 });
 
+// ── Fact overlay (desktop only) ──────────────────────────────────────────────
+
+const factOverlay = document.getElementById('fact-overlay');
+const factOverlayText = document.getElementById('fact-overlay-text');
+const factOverlayCategory = document.getElementById('fact-overlay-category');
+const factOverlayNav = document.getElementById('fact-overlay-nav');
+
+let currentFactCountry = null;
+let currentFactIndex = 0;
+let currentFacts = [];
+
+function updateFactDisplay() {
+  const f = currentFacts[currentFactIndex];
+  factOverlayText.textContent = f.fact;
+  factOverlayCategory.textContent = f.category;
+  if (currentFacts.length > 1) {
+    factOverlayNav.innerHTML = '';
+    const prev = document.createElement('button');
+    prev.textContent = '\u25C0';
+    prev.setAttribute('aria-label', 'Previous fact');
+    prev.addEventListener('click', () => {
+      currentFactIndex = (currentFactIndex - 1 + currentFacts.length) % currentFacts.length;
+      updateFactDisplay();
+    });
+    const next = document.createElement('button');
+    next.textContent = '\u25B6';
+    next.setAttribute('aria-label', 'Next fact');
+    next.addEventListener('click', () => {
+      currentFactIndex = (currentFactIndex + 1) % currentFacts.length;
+      updateFactDisplay();
+    });
+    const counter = document.createElement('span');
+    counter.textContent = `${currentFactIndex + 1} / ${currentFacts.length}`;
+    factOverlayNav.appendChild(prev);
+    factOverlayNav.appendChild(counter);
+    factOverlayNav.appendChild(next);
+  } else {
+    factOverlayNav.innerHTML = '';
+  }
+}
+
+function showFactOverlay(dataName) {
+  if (window.innerWidth <= 600) return;
+  const facts = countryFactsData[dataName];
+  if (!facts || facts.length === 0) {
+    hideFactOverlay();
+    return;
+  }
+  currentFactCountry = dataName;
+  currentFacts = facts;
+  currentFactIndex = Math.floor(Math.random() * facts.length);
+  updateFactDisplay();
+  factOverlay.style.display = '';
+}
+
+function hideFactOverlay() {
+  factOverlay.style.display = 'none';
+  currentFactCountry = null;
+}
+
+document.getElementById('fact-overlay-close').addEventListener('click', hideFactOverlay);
 
 // ── Toggle buttons ────────────────────────────────────────────────────────────
 
@@ -1191,6 +1253,7 @@ createPanZoom(canvas, viewport, drawWorldMap, {
     const site = findHeritageAtPoint(cx, cy);
     if (site) {
       hideInfoPanel();
+      hideFactOverlay();
       showHeritagePopup(site);
       return;
     }
@@ -1200,6 +1263,7 @@ createPanZoom(canvas, viewport, drawWorldMap, {
     const river = findRiverAtPoint(cx, cy);
     if (river) {
       hoveredCountry = null;
+      hideFactOverlay();
       updateInfoPanelForRiver(river);
       drawWorldMap();
       return;
@@ -1207,6 +1271,7 @@ createPanZoom(canvas, viewport, drawWorldMap, {
     const mountain = findMountainAtPoint(cx, cy);
     if (mountain) {
       hoveredCountry = null;
+      hideFactOverlay();
       updateInfoPanelForMountain(mountain);
       drawWorldMap();
       return;
@@ -1214,6 +1279,7 @@ createPanZoom(canvas, viewport, drawWorldMap, {
     const peak = findPeakAtPoint(cx, cy);
     if (peak) {
       hoveredCountry = null;
+      hideFactOverlay();
       updateInfoPanelForPeak(peak);
       drawWorldMap();
       return;
@@ -1234,6 +1300,7 @@ createPanZoom(canvas, viewport, drawWorldMap, {
       if (e.pointerType !== 'touch') {
         hoveredCountry = name;
         updateInfoPanel(name);
+        showFactOverlay(name);
         drawWorldMap();
         zoomToCountry(name);
       } else if (name !== hoveredCountry) {
@@ -1243,11 +1310,13 @@ createPanZoom(canvas, viewport, drawWorldMap, {
       } else {
         hoveredCountry = null;
         hideInfoPanel();
+        hideFactOverlay();
         drawWorldMap();
       }
     } else {
       hoveredCountry = null;
       hideInfoPanel();
+      hideFactOverlay();
       drawWorldMap();
     }
   },
