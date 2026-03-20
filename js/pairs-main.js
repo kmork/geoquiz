@@ -1,5 +1,5 @@
-import { CapitalPairsLogic } from './games/capital-pairs-logic.js';
-import { renderCapitalPairsUI } from './ui-components/capital-pairs-ui.js';
+import { PairsLogic } from './games/pairs-logic.js';
+import { renderPairsUI } from './ui-components/pairs-ui.js';
 import { shuffleArray, hapticFeedback } from './game-utils.js';
 import { initConfetti } from './confetti.js';
 import { renderFinishScreen } from './game-records.js';
@@ -9,9 +9,35 @@ const roundsParam    = params.get('rounds') || 'all';
 const maxPairs       = roundsParam === 'all' ? Infinity : (parseInt(roundsParam) || 10);
 const continentParam = params.get('continent');
 const continentSlug  = continentParam ? continentParam.toLowerCase().replace(/\s+/g, '-') : null;
-const gameId         = continentSlug
-  ? `capital-pairs-${continentSlug}`
-  : 'capital-pairs';
+const mode           = params.get('mode') || 'capitals';
+
+const MODES = {
+  capitals: {
+    leftLabel: 'Countries',
+    rightLabel: 'Capitals',
+    subtitle: 'Match each country with its capital. One wrong guess ends the game.',
+    buildPairs(data) {
+      return data
+        .filter(c => c.capitals && c.capitals.length > 0)
+        .map(c => ({ left: c.country, right: c.capitals[0] }));
+    },
+  },
+  peaks: {
+    leftLabel: 'Countries',
+    rightLabel: 'Peaks',
+    subtitle: 'Match each country with its highest peak. One wrong guess ends the game.',
+    buildPairs(data) {
+      return data
+        .filter(c => c.highestPeak && c.highestPeak.name)
+        .map(c => ({ left: c.country, right: c.highestPeak.name }));
+    },
+  },
+};
+
+const modeConfig = MODES[mode] || MODES.capitals;
+
+const baseGameId = mode === 'capitals' ? 'pairs' : `pairs-${mode}`;
+const gameId     = continentSlug ? `${baseGameId}-${continentSlug}` : baseGameId;
 
 const initOverlay  = document.getElementById('init-overlay');
 const gameContent  = document.getElementById('game-content');
@@ -23,8 +49,8 @@ const confetti = initConfetti('confetti');
 
 let logic;
 let ui;
-let displayCountries = []; // current visual order — persisted across re-renders
-let displayCapitals  = [];
+let displayLeft  = [];
+let displayRight = [];
 
 async function waitForData() {
   while (!window.DATA) {
@@ -35,6 +61,9 @@ async function waitForData() {
 async function init() {
   if (initOverlay) initOverlay.style.display = 'flex';
 
+  const subtitleEl = document.getElementById('game-subtitle');
+  if (subtitleEl) subtitleEl.textContent = modeConfig.subtitle;
+
   await waitForData();
 
   let data = window.DATA;
@@ -43,7 +72,8 @@ async function init() {
     if (filtered.length > 0) data = filtered;
   }
 
-  logic = new CapitalPairsLogic({ data, maxPairs });
+  const pairs = modeConfig.buildPairs(data);
+  logic = new PairsLogic({ pairs, maxPairs });
   logic.reset();
 
   if (initOverlay) initOverlay.style.display = 'none';
@@ -51,46 +81,48 @@ async function init() {
   render();
 }
 
-function render(countries = null, capitals = null) {
-  // Accept an explicit order (after a match) or shuffle fresh (initial / play-again)
-  displayCountries = countries ?? shuffleArray(logic.getVisibleCountries());
-  displayCapitals  = capitals  ?? shuffleArray(logic.getVisibleCapitals());
+function render(left = null, right = null) {
+  displayLeft  = left  ?? shuffleArray(logic.getVisibleLeft());
+  displayRight = right ?? shuffleArray(logic.getVisibleRight());
 
-  ui = renderCapitalPairsUI(gameContent, { countries: displayCountries, capitals: displayCapitals });
+  ui = renderPairsUI(gameContent, {
+    leftItems:  displayLeft,
+    rightItems: displayRight,
+    leftLabel:  modeConfig.leftLabel,
+    rightLabel: modeConfig.rightLabel,
+  });
   ui.setupEvents({ onAttempt: handleAttempt });
   updateUI();
 }
 
-function handleAttempt(country, capital) {
-  const result = logic.checkPair(country, capital);
+function handleAttempt(left, right) {
+  const result = logic.checkPair(left, right);
 
   if (result.correct) {
     hapticFeedback('correct');
     confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
 
-    ui.markCorrect(country, capital, () => {
+    ui.markCorrect(left, right, () => {
       if (result.isDone) { showFinal(); return; }
 
-      const newCountries = logic.getVisibleCountries();
-      const newCapitals  = logic.getVisibleCapitals();
+      const newLeft  = logic.getVisibleLeft();
+      const newRight = logic.getVisibleRight();
 
-      // Find the one card added to each column (undefined if deck is exhausted)
-      const addedCountry = newCountries.find(c => !displayCountries.includes(c));
-      const addedCapital = newCapitals.find(c => !displayCapitals.includes(c));
+      const addedLeft  = newLeft.find(c => !displayLeft.includes(c));
+      const addedRight = newRight.find(c => !displayRight.includes(c));
 
-      // Replace the matched slot with the new card, preserving all other positions
-      const nextCountries = displayCountries
-        .map(c => c === country  ? addedCountry : c)
+      const nextLeft = displayLeft
+        .map(c => c === left  ? addedLeft  : c)
         .filter(c => c !== undefined);
-      const nextCapitals = displayCapitals
-        .map(c => c === capital ? addedCapital : c)
+      const nextRight = displayRight
+        .map(c => c === right ? addedRight : c)
         .filter(c => c !== undefined);
 
-      render(nextCountries, nextCapitals);
+      render(nextLeft, nextRight);
     });
   } else {
     hapticFeedback('wrong');
-    ui.markWrong(country, capital, () => showFinal());
+    ui.markWrong(left, right, () => showFinal());
   }
 }
 

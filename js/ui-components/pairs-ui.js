@@ -1,7 +1,7 @@
 /**
- * Capital Pairs UI Component
+ * Pairs UI Component
  *
- * Renders two columns of buttons (countries | capitals) and manages
+ * Renders two columns of buttons (left | right) and manages
  * selection state. Pure renderer — no game logic.
  */
 
@@ -14,9 +14,9 @@ function escapeHtml(str) {
 }
 
 function injectStyles() {
-  if (document.getElementById('capital-pairs-styles')) return;
+  if (document.getElementById('pairs-styles')) return;
   const style = document.createElement('style');
-  style.id = 'capital-pairs-styles';
+  style.id = 'pairs-styles';
   style.textContent = `
     .pairs-grid { display: flex; flex-direction: column; gap: 8px; }
     .pairs-col-header {
@@ -62,24 +62,24 @@ function injectStyles() {
 
 /**
  * @param {HTMLElement} container
- * @param {{ countries: string[], capitals: string[] }} param1
+ * @param {{ leftItems: string[], rightItems: string[], leftLabel?: string, rightLabel?: string }} opts
  * @returns {{ setupEvents, markCorrect, markWrong }}
  */
-export function renderCapitalPairsUI(container, { countries, capitals }) {
+export function renderPairsUI(container, { leftItems, rightItems, leftLabel = 'Countries', rightLabel = 'Capitals' }) {
   injectStyles();
 
   container.innerHTML = `
     <div class="pairs-grid">
       <div class="pairs-col-header">
-        <span class="muted">Countries</span>
-        <span class="muted">Capitals</span>
+        <span class="muted">${escapeHtml(leftLabel)}</span>
+        <span class="muted">${escapeHtml(rightLabel)}</span>
       </div>
       <div class="pairs-columns">
-        <div class="pairs-column" id="pairs-countries">
-          ${countries.map(c => `<button class="pair-card" data-type="country" data-value="${escapeAttr(c)}">${escapeHtml(c)}</button>`).join('')}
+        <div class="pairs-column" id="pairs-left">
+          ${leftItems.map(c => `<button class="pair-card" data-type="left" data-value="${escapeAttr(c)}">${escapeHtml(c)}</button>`).join('')}
         </div>
-        <div class="pairs-column" id="pairs-capitals">
-          ${capitals.map(c => `<button class="pair-card" data-type="capital" data-value="${escapeAttr(c)}">${escapeHtml(c)}</button>`).join('')}
+        <div class="pairs-column" id="pairs-right">
+          ${rightItems.map(c => `<button class="pair-card" data-type="right" data-value="${escapeAttr(c)}">${escapeHtml(c)}</button>`).join('')}
         </div>
       </div>
     </div>
@@ -88,7 +88,7 @@ export function renderCapitalPairsUI(container, { countries, capitals }) {
   let selected = null; // { type, value }
 
   function getCard(type, value) {
-    const colId = type === 'country' ? 'pairs-countries' : 'pairs-capitals';
+    const colId = type === 'left' ? 'pairs-left' : 'pairs-right';
     const col = document.getElementById(colId);
     if (!col) return null;
     return Array.from(col.querySelectorAll('.pair-card')).find(b => b.dataset.value === value) || null;
@@ -132,28 +132,28 @@ export function renderCapitalPairsUI(container, { countries, capitals }) {
         btn.classList.add('selected');
       } else {
         // Opposite column → submit attempt
-        const countryVal = type === 'country' ? value : selected.value;
-        const capitalVal = type === 'capital' ? value : selected.value;
+        const leftVal  = type === 'left' ? value : selected.value;
+        const rightVal = type === 'right' ? value : selected.value;
         clearSelection();
-        onAttempt(countryVal, capitalVal);
+        onAttempt(leftVal, rightVal);
       }
     });
   }
 
-  function markCorrect(country, capital, cb) {
-    const cc = getCard('country', country);
-    const cp = getCard('capital', capital);
-    if (cc) cc.classList.add('correct');
-    if (cp) cp.classList.add('correct');
+  function markCorrect(left, right, cb) {
+    const lc = getCard('left', left);
+    const rc = getCard('right', right);
+    if (lc) lc.classList.add('correct');
+    if (rc) rc.classList.add('correct');
     disableAll();
     setTimeout(cb, 450);
   }
 
-  function markWrong(country, capital, cb) {
-    const cc = getCard('country', country);
-    const cp = getCard('capital', capital);
-    if (cc) { cc.classList.add('wrong', 'shake-wrong'); }
-    if (cp) { cp.classList.add('wrong', 'shake-wrong'); }
+  function markWrong(left, right, cb) {
+    const lc = getCard('left', left);
+    const rc = getCard('right', right);
+    if (lc) { lc.classList.add('wrong', 'shake-wrong'); }
+    if (rc) { rc.classList.add('wrong', 'shake-wrong'); }
     disableAll();
     setTimeout(cb, 700);
   }

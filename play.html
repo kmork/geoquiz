@@ -171,14 +171,15 @@
           { key: 'peaks-long',   url: 'peaks.html', urlParam: 'rounds=all', label: 'Peaks – All',    emoji: '▲', desc: 'All peaks · click the location' },
         ],
       },
-      'capital-pairs': {
-        title: 'Capital Pairs',
-        desc: 'Match countries with their capitals — one wrong answer ends your streak.',
-        url: 'capital-pairs.html',
+      'pairs': {
+        title: 'Pairs',
+        desc: 'Match countries with their pair — one wrong answer ends your streak.',
+        url: 'pairs.html',
         pointsPerRound: null,
         icon: '🔗',
         customDifficulties: [
-          { key: 'capital-pairs', url: 'capital-pairs.html', urlParam: '', label: 'Play', emoji: '🔗', desc: 'Match countries with capitals' },
+          { key: 'pairs', url: 'pairs.html', urlParam: 'mode=capitals', label: 'Capitals', emoji: '🏛️', desc: 'Match countries with capitals' },
+          { key: 'pairs-peaks', url: 'pairs.html', urlParam: 'mode=peaks', label: 'Peaks', emoji: '⛰️', desc: 'Match countries with highest peaks' },
         ],
       },
       duel: {
