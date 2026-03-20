@@ -49,9 +49,9 @@
   },
   {
     "question": "Which country has land borders with the most other countries?",
-    "options": ["China", "Russia", "Brazil", "Germany"],
+    "options": ["China", "Kazakhstan", "Brazil", "Germany"],
     "answer": 0,
-    "explanation": "China shares borders with 14 countries, more than any other nation."
+    "explanation": "China shares borders with 14 countries, equal to Russia."
   },
   {
     "question": "Which city lies closest to the Equator?",
