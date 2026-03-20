@@ -80,8 +80,8 @@ const GAMES = [
   },
   {
     id: 'connect',
-    name: 'Connect the Countries',
-    emoji: '🔗',
+    name: 'Route',
+    emoji: '🧭',
     timeLimit: null // No time limit
   }
 ];
@@ -216,7 +216,7 @@ class DailyChallenge {
         allData: data // Need for wrong answers
       },
 
-      // 7. Connect the Countries
+      // 7. Route
       {
         ...GAMES[6],
         data: (() => {

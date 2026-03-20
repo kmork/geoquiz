@@ -64,7 +64,7 @@ This separation allows games to be reused inside the Daily Challenge without UI 
 ### Data Files
 
 - `data/ne_10m_admin_0_countries*.geojson.gz` - Compressed Natural Earth country geometries
-- `data/countries-neighbors.json` - Pre-computed adjacency graph for Connect the Countries
+- `data/countries-neighbors.json` - Pre-computed adjacency graph for Route
 - `data/countries-continents.json` - 194-entry country → continent mapping (Africa/Americas/Asia/Europe/Oceania)
 - `data/countries-flags.json` - Country → ISO_A2 mapping for flag images
 - `data/heritage-sites.json` - 47 UNESCO sites with metadata

@@ -16,7 +16,7 @@ A collection of engaging geography quiz games to test and improve your knowledge
 
 Seven mini-games in sequence, same puzzle for everyone each day. Up to 24 stars per day.
 
-- 🎮 Find · Trivia · Outlines · Heritage · Flags · Capitals · Connect
+- 🎮 Find · Trivia · Outlines · Heritage · Flags · Capitals · Route
 - ⭐ 24 stars maximum (3+2+4+3+3+4+5)
 - 📋 Shareable results
 - 🔥 Daily streak tracking
@@ -62,7 +62,7 @@ Seven mini-games in sequence, same puzzle for everyone each day. Up to 24 stars 
 
 ---
 
-### 🔗 Connect the Countries
+### 🧭 Route
 **Find the land route between two countries through neighboring borders.**
 
 Navigate from one country to another by typing neighboring countries. Can you find the optimal path?
@@ -72,7 +72,7 @@ Navigate from one country to another by typing neighboring countries. Can you fi
 - ⌨️ Autocomplete suggestions with keyboard navigation
 - 🚀 Cleaned map data (no distant overseas territories)
 
-[**Play Connect the Countries →**](play.html?game=route)
+[**Play Route →**](play.html?game=route)
 
 ---
 
@@ -241,7 +241,7 @@ GeoQuiz/
 ├── capitals.html               # Capitals of the World
 ├── cities.html                 # Place the Cities
 ├── spelling.html               # Spelling (countries or cities)
-├── route.html                  # Connect the Countries
+├── route.html                  # Route
 ├── heritage.html               # UNESCO Heritage (guess)
 ├── heritage-locate.html        # UNESCO Heritage (locate on map)
 ├── flags.html                  # Flags of the World

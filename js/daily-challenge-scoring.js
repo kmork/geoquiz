@@ -17,7 +17,7 @@ const STORAGE_KEY_STATS = 'geoquiz-daily-stats';
  * - Capitals: 4★ max (hard - knowledge test)
  * - Find: 3★ max (1 base + 2 time bonus)
  * - Flags: 3★ max (1 base + 2 time bonus)
- * - Connect: 5★ max (very hard - path optimization)
+ * - Route: 5★ max (very hard - path optimization)
  * Total: 24★
  *
  * @param {object} result - Game result
@@ -25,7 +25,7 @@ const STORAGE_KEY_STATS = 'geoquiz-daily-stats';
  * @param {number} result.time - Time taken in seconds
  * @param {number} result.timeLimit - Time limit in seconds
  * @param {boolean} result.usedHint - Whether hint was used
- * @param {number} result.parDiff - For Connect game: difference from par (optional)
+ * @param {number} result.parDiff - For Route game: difference from par (optional)
  * @param {string} gameId - Game identifier
  * @returns {number} Stars earned (0-5)
  */
@@ -42,7 +42,7 @@ export function calculateStars(result, gameId) {
     return stars;
   }
 
-  // Connect the Countries (5★ max): Par-based scoring
+  // Route (5★ max): Par-based scoring
   if (result.parDiff !== undefined) {
     if (result.parDiff === 0) return 5; // Optimal route
     if (result.parDiff === 1) return 4;

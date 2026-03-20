@@ -41,7 +41,7 @@ Complete Analysis Report
        2. Find the Country → region.html?game=find (uses region.html for continent filtering)
        3. Guess the Country → region.html?game=outlines
        4. Capitals of the World → region.html?game=capitals
-       5. Connect the Countries → region.html?game=route
+       5. Route → region.html?game=route
        6. Geography Trivia → play.html?game=trivia (no continent filtering)
        7. UNESCO Heritage → play.html?game=heritage (no continent filtering)
        8. Flags of the World → region.html?game=flags

@@ -37,7 +37,7 @@ export function generateShareText(date, totalStars, totalTime, breakdown, stats)
     picture: '🖼️',
     flags: '🚩',
     capitals: '🏛️',
-    connect: '🔗'
+    connect: '🧭'
   };
 
   const gameNames = {
@@ -47,7 +47,7 @@ export function generateShareText(date, totalStars, totalTime, breakdown, stats)
     picture: 'Heritage',
     flags: 'Flags',
     capitals: 'Capitals',
-    connect: 'Connect'
+    connect: 'Route'
   };
 
   const maxStars = {
