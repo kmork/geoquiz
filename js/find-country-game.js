@@ -19,6 +19,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
   const gameLogic = new FindCountryGameLogic({
     singleRound,
     maxRounds,
+    easyMode: config.easyMode ?? false,
     onAnswer: (result) => {
       // Logic has processed the answer, handle UI feedback
       handleAnswerFeedback(result);

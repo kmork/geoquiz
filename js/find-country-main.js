@@ -4,7 +4,8 @@ import { attachWikipediaPopup } from "./wiki.js";
 const _params = new URLSearchParams(location.search);
 const _roundsParam = _params.get('rounds') || '10';
 const _maxRounds = _roundsParam === 'all' ? Infinity : (parseInt(_roundsParam) || 10);
-const _diffSuffix = _roundsParam === 'all' ? 'long' : (_roundsParam === '25' ? 'medium' : 'short');
+const _easyMode = _params.get('difficulty') === 'easy';
+const _diffSuffix = _easyMode ? 'easy' : (_roundsParam === 'all' ? 'long' : (_roundsParam === '25' ? 'medium' : 'short'));
 const _continentParam = _params.get('continent');
 const _continentSlug = _continentParam ? _continentParam.toLowerCase().replace(/\s+/g, '-') : null;
 const _gameIdSuffix = _continentSlug ? `${_continentSlug}-${_diffSuffix}` : _diffSuffix;
@@ -45,6 +46,7 @@ let gameInstance = null;
       maxRounds: _maxRounds,
       gameIdSuffix: _gameIdSuffix,
       continent: _continentParam,
+      easyMode: _easyMode,
     });
     
     gameInstance = result;

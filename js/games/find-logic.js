@@ -10,9 +10,31 @@ import { shuffleInPlace } from "../game-utils.js";
 // Countries with no visible outline on the map even when fully zoomed in
 const FIND_EXCLUDE = new Set([]);
 
+// Well-known countries for the Easy mode — large, recognizable, beginner-friendly
+const EASY_COUNTRIES = new Set([
+  // Europe
+  'France', 'Germany', 'Spain', 'Italy', 'United Kingdom', 'Portugal',
+  'Norway', 'Sweden', 'Finland', 'Poland', 'Ukraine', 'Greece', 'Turkey',
+  'Iceland', 'Ireland', 'Romania', 'Switzerland', 'Austria',
+  // Asia
+  'China', 'India', 'Japan', 'Russia', 'Saudi Arabia', 'Iran',
+  'Indonesia', 'Thailand', 'South Korea', 'Mongolia', 'Pakistan',
+  'Philippines', 'Vietnam', 'Iraq',
+  // Africa
+  'Egypt', 'South Africa', 'Nigeria', 'Kenya', 'Madagascar',
+  'Morocco', 'Ethiopia', 'Algeria', 'Democratic Republic of the Congo',
+  'Tanzania', 'Libya', 'Sudan',
+  // Americas
+  'United States', 'Canada', 'Brazil', 'Mexico', 'Argentina', 'Chile',
+  'Colombia', 'Peru', 'Cuba', 'Venezuela', 'Bolivia', 'Paraguay',
+  // Oceania
+  'Australia', 'New Zealand', 'Papua New Guinea',
+]);
+
 export class FindCountryGameLogic {
-  constructor({ onAnswer, onComplete, singleRound = false, maxRounds = 10 }) {
+  constructor({ onAnswer, onComplete, singleRound = false, maxRounds = 10, easyMode = false }) {
     this.DATA = window.DATA.filter(c => !FIND_EXCLUDE.has(c.country));
+    if (easyMode) this.DATA = this.DATA.filter(c => EASY_COUNTRIES.has(c.country));
     this._configMaxRounds = singleRound ? 1 : maxRounds;
     this.maxRounds = this._configMaxRounds;
     this.singleRound = singleRound;

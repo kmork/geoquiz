@@ -41,6 +41,7 @@ export async function createCompleteMap({
   maxRounds = 10,
   gameIdSuffix = 'short',
   continent = null,
+  easyMode = false,
 }) {
 
   // Canvas setup
@@ -562,7 +563,8 @@ export async function createCompleteMap({
       hideScoreUI: singleRound,
       onComplete: onComplete,
       maxRounds,
-      gameIdSuffix
+      gameIdSuffix,
+      easyMode,
     }
   });
 
