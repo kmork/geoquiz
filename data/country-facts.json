@@ -1,0 +1,1356 @@
+{
+  "Afghanistan": [
+    {"fact": "Buzkashi, the national sport, involves horse-mounted players competing to drag a headless goat carcass into a scoring circle.", "category": "culture"},
+    {"fact": "The Bamiyan Valley once held two enormous Buddha statues carved into a cliff face in the 6th century, standing 53 and 35 metres tall, before their destruction in 2001.", "category": "landmarks"},
+    {"fact": "Lapis lazuli mined from the Sar-i Sang mines in Badakhshan province has been traded for over 6,000 years — it was used to create the ultramarine pigment in Renaissance paintings.", "category": "history"},
+    {"fact": "The Hindu Kush mountain range, whose name translates roughly to 'Hindu Killer', reaches over 7,700 metres and forms the western end of the Himalayas.", "category": "geography"}
+  ],
+  "Aland": [
+    {"fact": "This autonomous, demilitarised archipelago of over 6,700 islands between Sweden and Finland has been officially Swedish-speaking since the League of Nations ruling in 1921.", "category": "politics"},
+    {"fact": "The islands have their own flag, postage stamps, and vehicle registration plates, despite being part of Finland.", "category": "politics"},
+    {"fact": "The Kastelholm Castle, dating from the 14th century, is one of the best-preserved medieval castles in Finland.", "category": "landmarks"}
+  ],
+  "Albania": [
+    {"fact": "Over 170,000 concrete bunkers were built across the country during Enver Hoxha's communist rule — roughly one for every 11 inhabitants at the time.", "category": "history"},
+    {"fact": "The ancient city of Butrint has been continuously inhabited since at least the 8th century BC and contains Greek, Roman, Byzantine, and Venetian ruins layered on top of each other.", "category": "landmarks"},
+    {"fact": "Nodding the head means 'no' and shaking it means 'yes', the opposite of most Western countries.", "category": "culture"},
+    {"fact": "The country was officially declared the world's first atheist state in 1967, banning all religious practice for over two decades.", "category": "history"}
+  ],
+  "Algeria": [
+    {"fact": "Covering 2.38 million square kilometres, it is the largest country in Africa by area, yet roughly 80% of its territory is Sahara Desert.", "category": "geography"},
+    {"fact": "The ancient Roman ruins at Timgad, founded by Emperor Trajan around 100 AD, were so perfectly preserved under Saharan sand that they are sometimes called the 'Pompeii of Africa'.", "category": "landmarks"},
+    {"fact": "The Saharan silver ant can withstand surface temperatures of up to 60°C, making it one of the most heat-tolerant land animals on Earth.", "category": "nature"},
+    {"fact": "During the French colonial era, France detonated 17 nuclear devices in the Algerian desert between 1960 and 1966.", "category": "history"}
+  ],
+  "American Samoa": [
+    {"fact": "It is the only US territory south of the equator, and residents are US nationals but not US citizens unless they naturalise.", "category": "politics"},
+    {"fact": "The National Park of American Samoa is the only US national park in the Southern Hemisphere and includes sections of tropical rainforest, coral reefs, and volcanic landscapes.", "category": "nature"},
+    {"fact": "The Samoan fa'a Samoa culture here has produced more NFL players per capita than any other place in the United States.", "category": "culture"}
+  ],
+  "Andorra": [
+    {"fact": "The country has two co-heads of state: the President of France and the Bishop of Urgell in Spain — a diarchy that has existed since 1278.", "category": "politics"},
+    {"fact": "It has no airport, railway, or motorway, yet attracts over 8 million tourists a year — more than 100 times its own population — mostly for duty-free shopping and skiing.", "category": "economy"},
+    {"fact": "The national anthem, 'El Gran Carlemany', is the only national anthem that mentions Charlemagne by name.", "category": "culture"},
+    {"fact": "It did not formally become a democracy until 1993, when its first constitution was adopted, making it one of the last European countries to do so.", "category": "politics"}
+  ],
+  "Angola": [
+    {"fact": "The giant sable antelope, with sweeping curved horns reaching up to 1.6 metres, is found nowhere else on Earth and was feared extinct until camera traps rediscovered it in 2006.", "category": "nature"},
+    {"fact": "Kalandula Falls plunges 105 metres and stretches 400 metres wide, making it one of the largest waterfalls by volume in Africa.", "category": "geography"},
+    {"fact": "The country is Africa's second-largest oil producer, yet the majority of the population lives below the poverty line.", "category": "economy"},
+    {"fact": "Welwitschia mirabilis, a bizarre desert plant that can live for over 1,000 years and only ever grows two leaves, is found in the Namib Desert region and appears on the national coat of arms.", "category": "nature"}
+  ],
+  "Anguilla": [
+    {"fact": "The 1967 Anguillian Revolution is one of the few armed uprisings in history where nobody was killed — islanders rebelled against being governed from St Kitts.", "category": "history"},
+    {"fact": "Despite having a population of only about 15,000, the island has over 30 white sand beaches and is considered one of the Caribbean's most exclusive destinations.", "category": "geography"},
+    {"fact": "The .ai internet domain, originally assigned to the island, became hugely valuable during the artificial intelligence boom, generating significant revenue for the territory.", "category": "economy"}
+  ],
+  "Antigua and Barbuda": [
+    {"fact": "There is said to be a different beach for every day of the year — the country claims 365 beaches across its islands.", "category": "geography"},
+    {"fact": "Nelson's Dockyard in English Harbour is the world's only continuously working Georgian dockyard and served as the British Royal Navy's headquarters in the Leeward Islands.", "category": "landmarks"},
+    {"fact": "The country was the first in the Caribbean to pass legislation banning single-use plastics, in 2016.", "category": "politics"},
+    {"fact": "Barbuda's Frigate Bird Sanctuary hosts one of the largest frigatebird colonies in the Western Hemisphere, with over 5,000 birds nesting there.", "category": "nature"}
+  ],
+  "Argentina": [
+    {"fact": "Ushuaia, at the southern tip of Patagonia, is widely considered the southernmost city in the world and serves as a common departure point for Antarctic expeditions.", "category": "geography"},
+    {"fact": "The country has experienced hyperinflation so extreme that in 1989 the monthly inflation rate reached nearly 200%, and it has defaulted on its sovereign debt nine times.", "category": "economy"},
+    {"fact": "Tango was born in the working-class neighbourhoods of Buenos Aires in the late 19th century, blending influences from African, European, and indigenous musical traditions.", "category": "culture"},
+    {"fact": "Perito Moreno Glacier in Patagonia is one of the few glaciers in the world that is still advancing, periodically damming a lake and then collapsing spectacularly.", "category": "nature"},
+    {"fact": "The country's psychiatric tradition led to Buenos Aires having more psychologists per capita than any other city in the world.", "category": "culture"}
+  ],
+  "Armenia": [
+    {"fact": "In 301 AD, it became the first country in the world to adopt Christianity as its state religion, predating the Roman Empire's conversion by several decades.", "category": "history"},
+    {"fact": "The Armenian alphabet, created by Mesrop Mashtots in 405 AD, has remained virtually unchanged for over 1,600 years and has 39 letters.", "category": "culture"},
+    {"fact": "The world's oldest known leather shoe, dating to approximately 3,500 BC, was found perfectly preserved in a cave in the Vayots Dzor province.", "category": "history"},
+    {"fact": "Mount Ararat, the national symbol visible from the capital Yerevan, is actually located across the border in Turkey.", "category": "geography"}
+  ],
+  "Aruba": [
+    {"fact": "The island lies outside the Caribbean hurricane belt and has virtually no rainfall, making it one of the driest inhabited Caribbean islands.", "category": "geography"},
+    {"fact": "The official languages are Dutch and Papiamento, a creole language blending Portuguese, Spanish, Dutch, and West African languages.", "category": "culture"},
+    {"fact": "The divi-divi tree, permanently bent by the trade winds into dramatic shapes, is an unofficial symbol and natural compass — they all point southwest.", "category": "nature"}
+  ],
+  "Australia": [
+    {"fact": "The fence known as the Dingo Barrier stretches 5,614 kilometres across southeastern Australia — longer than the Great Wall of China.", "category": "landmarks"},
+    {"fact": "Approximately 80% of its native mammals are found nowhere else on Earth, the highest rate of mammalian endemism of any continent.", "category": "nature"},
+    {"fact": "The country is wider than the Moon — the diameter from east to west spans about 4,000 km, while the Moon's diameter is 3,400 km.", "category": "geography"},
+    {"fact": "Voting in federal elections has been compulsory since 1924, with fines for those who fail to vote without a valid reason.", "category": "politics"},
+    {"fact": "The platypus is one of only five species of egg-laying mammals, and the male has a venomous spur on its hind leg capable of causing excruciating pain.", "category": "nature"}
+  ],
+  "Austria": [
+    {"fact": "Vienna has been ranked the world's most liveable city multiple years running and has a public sewer system so grand that tours are offered through it.", "category": "landmarks"},
+    {"fact": "The world's oldest zoo, the Tiergarten Schönbrunn, was founded in Vienna in 1752 as an imperial menagerie and is still in operation.", "category": "landmarks"},
+    {"fact": "The country produces more than 400 varieties of cheese, a surprising number for a landlocked Alpine nation of fewer than 10 million people.", "category": "culture"},
+    {"fact": "The town of Hallstatt has lent its name to an entire archaeological era — the Hallstatt culture (800–450 BC) — and has been mining salt for over 7,000 years.", "category": "history"}
+  ],
+  "Azerbaijan": [
+    {"fact": "Yanar Dag ('Burning Mountain') near Baku has had a natural gas fire burning continuously on its hillside for at least several decades, and possibly centuries.", "category": "nature"},
+    {"fact": "The capital Baku lies about 28 metres below sea level on the shore of the Caspian Sea, making it one of the lowest-lying national capitals in the world.", "category": "geography"},
+    {"fact": "The country is sometimes called the 'Land of Fire' — Zoroastrianism, the ancient fire-worshipping religion, flourished here for over a thousand years, fuelled by natural gas seeping from the ground.", "category": "history"},
+    {"fact": "The Maiden Tower in Baku is a 12th-century structure whose original purpose remains a genuine mystery — theories range from a defensive tower to an astronomical observatory.", "category": "landmarks"}
+  ],
+  "Bahamas": [
+    {"fact": "The swimming pigs of Big Major Cay have become one of the most photographed attractions in the Caribbean, though nobody knows exactly how the pigs originally arrived on the uninhabited island.", "category": "nature"},
+    {"fact": "Dean's Blue Hole on Long Island plunges 202 metres deep, making it the second-deepest known blue hole in the world.", "category": "geography"},
+    {"fact": "The Exuma Cays Land and Sea Park, established in 1958, was the first of its kind in the world — a protected no-take marine reserve.", "category": "nature"},
+    {"fact": "Columbus's first landfall in the Americas in 1492 was on the island of San Salvador (then called Guanahani) in the Bahamas.", "category": "history"}
+  ],
+  "Bahrain": [
+    {"fact": "The Tree of Life, a 400-year-old mesquite tree standing alone in the desert with no visible water source, attracts around 50,000 visitors per year.", "category": "nature"},
+    {"fact": "Archaeological sites on the island are believed to be the ancient land of Dilmun, described in Sumerian texts as an earthly paradise and major trading hub around 3000 BC.", "category": "history"},
+    {"fact": "The country was the first Gulf state to discover oil in 1932, but was also the first to begin running out, forcing early diversification into banking and finance.", "category": "economy"},
+    {"fact": "The Bahrain Grand Prix circuit hosts one of Formula 1's most dramatic races, run partly under floodlights as the first night race venue.", "category": "culture"}
+  ],
+  "Bangladesh": [
+    {"fact": "The Sundarbans, the world's largest mangrove forest, is shared with India and is home to the Bengal tiger — some of these tigers are known to swim between islands.", "category": "nature"},
+    {"fact": "The ready-made garment industry produces roughly 80% of the country's export earnings, making it the world's second-largest clothing exporter after China.", "category": "economy"},
+    {"fact": "The Padma River can be up to 10 kilometres wide during monsoon season, and the country's landscape is constantly reshaped by river erosion and sedimentation.", "category": "geography"},
+    {"fact": "Rickshaw art — colourful paintings decorating the backs of cycle rickshaws — is a unique folk art tradition, with an estimated 300,000 decorated rickshaws operating in Dhaka alone.", "category": "culture"}
+  ],
+  "Barbados": [
+    {"fact": "The country has the third-oldest parliament in the Commonwealth, with a House of Assembly established in 1639 — only Westminster and Bermuda are older.", "category": "politics"},
+    {"fact": "The grapefruit was accidentally created here in the 18th century as a natural hybrid between an orange and a pomelo.", "category": "science"},
+    {"fact": "In 2021, it became the world's newest republic, removing Queen Elizabeth II as head of state while remaining in the Commonwealth.", "category": "politics"},
+    {"fact": "Mount Gay Rum, distilled here since 1703, is the world's oldest existing rum brand and has been in continuous production for over 300 years.", "category": "culture"}
+  ],
+  "Belarus": [
+    {"fact": "Belovezhskaya Pushcha is one of the last remnants of the primeval forest that once covered much of Europe, and is home to the largest population of European bison.", "category": "nature"},
+    {"fact": "The country still uses the death penalty — the last country in Europe to do so — and executions are carried out by a single shot to the back of the head.", "category": "politics"},
+    {"fact": "The Mir Castle Complex, a UNESCO World Heritage Site built in the 16th century, blends Gothic, Renaissance, and Baroque architectural styles in a single fortress.", "category": "landmarks"},
+    {"fact": "Draniki (crispy potato pancakes) are the unofficial national dish, and potatoes are so central to the cuisine that Belarusians are sometimes jokingly called 'bulbashi' (potato people).", "category": "culture"}
+  ],
+  "Belgium": [
+    {"fact": "The country has three official languages (Dutch, French, and German) and such complex linguistic politics that forming a government after elections once took 541 days — a world record.", "category": "politics"},
+    {"fact": "Brussels produces over 220,000 tonnes of chocolate per year, and the Brussels Airport chocolate shop is reportedly the world's biggest chocolate seller by volume.", "category": "economy"},
+    {"fact": "Manneken Pis, the famous peeing boy fountain in Brussels, has a wardrobe of over 1,000 costumes, which are regularly changed and displayed in a dedicated museum.", "category": "landmarks"},
+    {"fact": "The saxophone was invented in 1846 by Adolphe Sax, born in Dinant, who survived multiple near-death childhood accidents including falling down stairs, swallowing a needle, and being struck on the head by a cobblestone.", "category": "science"}
+  ],
+  "Belize": [
+    {"fact": "The Great Blue Hole, a giant marine sinkhole visible from space, is over 300 metres wide and 125 metres deep — Jacques Cousteau declared it one of the top five scuba diving sites in the world.", "category": "geography"},
+    {"fact": "It is the only country in Central America with English as its official language, a legacy of its history as British Honduras.", "category": "culture"},
+    {"fact": "The ATM (Actun Tunichil Muknal) cave contains calcified Maya skeletons, including the 'Crystal Maiden', whose bones have been cemented to the cave floor by thousands of years of mineral deposits.", "category": "landmarks"},
+    {"fact": "The Belize Barrier Reef is the second-longest in the world after Australia's Great Barrier Reef, stretching nearly 300 kilometres along the coast.", "category": "nature"}
+  ],
+  "Benin": [
+    {"fact": "The Kingdom of Dahomey maintained an all-female military regiment called the Mino ('our mothers') from the 17th to 19th century, inspiring the film 'The Woman King'.", "category": "history"},
+    {"fact": "Vodun (voodoo) originated here and is still an officially recognised religion — January 10th is a national public holiday called 'Traditional Religions Day'.", "category": "culture"},
+    {"fact": "The village of Ganvié, built entirely on stilts in Lake Nokoué, houses around 30,000 people and is often called the 'Venice of Africa'.", "category": "landmarks"},
+    {"fact": "The country was formerly called Dahomey and changed its name to Benin in 1975, after the historical Bight of Benin.", "category": "history"}
+  ],
+  "Bermuda": [
+    {"fact": "The island gave its name to the Bermuda Triangle, yet the territory itself has one of the highest densities of shipwrecks in the world — over 300 wrecks surround the reef.", "category": "geography"},
+    {"fact": "Bermuda shorts are considered acceptable formal business attire when worn with knee-high socks, blazers, and ties — even in banks and government offices.", "category": "culture"},
+    {"fact": "The Bermuda petrel (cahow), thought extinct for 330 years, was rediscovered in 1951 in a remarkable conservation success story.", "category": "nature"}
+  ],
+  "Bhutan": [
+    {"fact": "It is the world's only carbon-negative country — its forests absorb more CO₂ than the nation produces, largely because over 70% of the land is forested.", "category": "nature"},
+    {"fact": "Gross National Happiness, rather than GDP, has been the country's official development philosophy since the 1970s, measuring wellbeing across nine domains.", "category": "politics"},
+    {"fact": "Television and the internet were not introduced until 1999, making it one of the last countries on Earth to adopt either technology.", "category": "culture"},
+    {"fact": "The Tiger's Nest monastery (Paro Taktsang) clings to a cliff face 900 metres above the Paro Valley floor and is one of the most photographed landmarks in Asia.", "category": "landmarks"}
+  ],
+  "Bolivia": [
+    {"fact": "The capital city of Sucre holds the constitutional capital status, while La Paz, the seat of government, has the world's longest urban cable car network at over 30 kilometres.", "category": "landmarks"},
+    {"fact": "The 'Death Road' (North Yungas Road) descends 3,600 metres over 64 kilometres from the Andes to the Amazon, with sheer drops of up to 600 metres and no guardrails.", "category": "geography"},
+    {"fact": "Lake Titicaca on the Peru-Bolivia border is the highest navigable lake in the world at 3,812 metres above sea level and contains floating islands made of totora reeds.", "category": "geography"},
+    {"fact": "The Cerro Rico mountain in Potosí was the single largest source of silver in the world during the Spanish colonial period, producing enough to fundamentally alter the global economy.", "category": "history"}
+  ],
+  "Bosnia and Herzegovina": [
+    {"fact": "The Stari Most (Old Bridge) in Mostar, built by the Ottomans in 1566, stood for 427 years before being destroyed in the 1993 war and was rebuilt using original stone recovered from the river.", "category": "landmarks"},
+    {"fact": "The assassination of Archduke Franz Ferdinand in Sarajevo on 28 June 1914 triggered a chain of events that led to World War I.", "category": "history"},
+    {"fact": "The country has one of the most complex governmental structures in the world, with three presidents (one Bosniak, one Croat, one Serb) rotating the chairmanship every eight months.", "category": "politics"},
+    {"fact": "Vrelo Bosne, the spring of the River Bosna near Sarajevo, produces a constant flow at exactly 12°C year-round and is surrounded by one of Europe's most beautiful urban parks.", "category": "nature"}
+  ],
+  "Botswana": [
+    {"fact": "The Okavango Delta is the world's largest inland delta — its floodwaters travel 1,200 km from Angola and never reach the sea, instead evaporating in the Kalahari Desert.", "category": "geography"},
+    {"fact": "At independence in 1966, it was one of the poorest countries in the world with just 12 km of paved road, but diamond revenues transformed it into one of Africa's most prosperous nations.", "category": "economy"},
+    {"fact": "The Makgadikgadi salt pans are so flat and vast that they were used by NASA to calibrate Earth observation satellites.", "category": "science"},
+    {"fact": "It has the highest concentration of African elephants on the continent, with over 130,000 — roughly a third of all Africa's savanna elephants.", "category": "nature"}
+  ],
+  "Brazil": [
+    {"fact": "The Amazon rainforest produces roughly 6% of the world's oxygen and contains about 10% of all species on Earth.", "category": "nature"},
+    {"fact": "Brasília, the capital, was built from scratch in just 41 months (1956–1960) in the middle of nowhere and was designed to look like an aeroplane from above.", "category": "landmarks"},
+    {"fact": "The country's coastline stretches over 7,400 km, yet it borders every South American country except Chile and Ecuador.", "category": "geography"},
+    {"fact": "Japanese immigration was so significant that today São Paulo has the largest Japanese diaspora community in the world, with over 1.5 million people of Japanese descent.", "category": "culture"},
+    {"fact": "The Itaipu Dam on the Brazil-Paraguay border generates roughly 75% of Paraguay's electricity and 15% of Brazil's — it held the world record for annual energy generation for decades.", "category": "science"}
+  ],
+  "British Indian Ocean Territory": [
+    {"fact": "The Chagos Archipelago contains one of the world's largest marine protected areas at over 640,000 square kilometres, yet has a permanent population of zero after all inhabitants were controversially evicted between 1967 and 1973.", "category": "politics"},
+    {"fact": "Diego Garcia, the largest island, hosts a major US military base that served as a bomber staging point during operations in Afghanistan and Iraq.", "category": "politics"},
+    {"fact": "In 2019, the International Court of Justice ruled that the UK's separation of the Chagos Islands from Mauritius was unlawful, but the territory has not yet been returned.", "category": "politics"}
+  ],
+  "British Virgin Islands": [
+    {"fact": "Despite having a population of only about 30,000, the territory has more registered companies than people — it is one of the world's leading offshore financial centres.", "category": "economy"},
+    {"fact": "The wreck of the RMS Rhone, a Royal Mail ship sunk during an 1867 hurricane, is considered one of the best wreck dives in the Caribbean.", "category": "landmarks"},
+    {"fact": "The Baths on Virgin Gorda feature enormous granite boulders creating a labyrinth of grottoes and tidal pools along the beach.", "category": "geography"}
+  ],
+  "Brunei": [
+    {"fact": "The Sultan of Brunei's Istana Nurul Iman palace has 1,788 rooms, 257 bathrooms, and a 110-car garage — it is the largest residential palace in the world.", "category": "landmarks"},
+    {"fact": "The country has no income tax, free education, and free healthcare, all funded by vast oil and gas reserves that make its citizens among the wealthiest in Southeast Asia.", "category": "economy"},
+    {"fact": "Kampong Ayer, a water village in the capital Bandar Seri Begawan, has been inhabited for over 1,300 years and houses around 30,000 people in stilt houses over the Brunei River.", "category": "landmarks"},
+    {"fact": "The sale and public consumption of alcohol has been banned since 1991, though non-Muslims may import limited quantities for personal consumption.", "category": "culture"}
+  ],
+  "Bulgaria": [
+    {"fact": "The Thracian Tomb of Kazanlak contains frescoes from the 4th century BC that are among the best-preserved examples of ancient Thracian art in the world.", "category": "landmarks"},
+    {"fact": "Bulgarian yoghurt is made with a unique strain of bacteria called Lactobacillus bulgaricus, first identified by Bulgarian scientist Stamen Grigorov in 1905.", "category": "science"},
+    {"fact": "The Cyrillic alphabet, used by over 250 million people worldwide, was developed by disciples of Saints Cyril and Methodius in the First Bulgarian Empire in the 9th century.", "category": "history"},
+    {"fact": "The country has been producing rose oil in the Rose Valley near Kazanlak for over 300 years and supplies roughly 85% of the world's rose oil.", "category": "economy"}
+  ],
+  "Burkina Faso": [
+    {"fact": "FESPACO, Africa's largest film festival, has been held biennially in Ouagadougou since 1969 and is sometimes called the 'Cannes of Africa'.", "category": "culture"},
+    {"fact": "The name means 'Land of Incorruptible People' — chosen in 1984 by revolutionary leader Thomas Sankara, combining words from Mooré ('burkina') and Dioula ('faso').", "category": "history"},
+    {"fact": "Thomas Sankara vaccinated 2.5 million children against meningitis, yellow fever, and measles in just one week during a mass campaign in 1984.", "category": "history"},
+    {"fact": "The Ruins of Loropéni, a UNESCO World Heritage Site, are a mysterious 11th-century stone fortress whose builders remain unidentified.", "category": "landmarks"}
+  ],
+  "Burundi": [
+    {"fact": "Ritual drumming known as 'karyenda' is so culturally important that the royal drums were considered semi-divine — UNESCO inscribed the Ritual Dance of the Royal Drum as Intangible Cultural Heritage.", "category": "culture"},
+    {"fact": "A hill called Kasumo has been identified as one of the southernmost sources of the Nile, making the country a contender for the ultimate headwaters of the world's longest river.", "category": "geography"},
+    {"fact": "It is one of the few countries in Africa where a single indigenous language, Kirundi, is spoken by virtually the entire population as a mother tongue.", "category": "culture"},
+    {"fact": "With one of the lowest GDPs per capita in the world, the country nonetheless has one of the highest population densities in Africa at over 400 people per square kilometre.", "category": "economy"}
+  ],
+  "Cabo Verde": [
+    {"fact": "The musical genre morna, often compared to Portuguese fado, was inscribed by UNESCO as Intangible Cultural Heritage — singer Cesária Évora, the 'barefoot diva', made it world-famous.", "category": "culture"},
+    {"fact": "Pico do Fogo, an active volcano that last erupted in 2014, rises to 2,829 metres — residents of the caldera village returned and rebuilt their homes on the fresh lava.", "category": "geography"},
+    {"fact": "The islands were uninhabited until Portuguese sailors discovered them in 1456, making them one of the first European colonial settlements in the tropics.", "category": "history"},
+    {"fact": "Despite being a small island nation, it has one of the highest literacy rates in Africa at around 90% and is considered one of the most stable democracies on the continent.", "category": "politics"}
+  ],
+  "Cambodia": [
+    {"fact": "Angkor Wat is the largest religious monument ever built, covering 162 hectares — it appears on the national flag, the only building featured on a country's flag.", "category": "landmarks"},
+    {"fact": "The Tonle Sap river reverses its flow direction twice a year due to monsoon rains, causing the Tonle Sap lake to expand from 2,500 to 16,000 square kilometres.", "category": "geography"},
+    {"fact": "The country has one of the youngest populations in Southeast Asia, with roughly 65% of its people under the age of 30, partly a demographic consequence of the Khmer Rouge era.", "category": "history"},
+    {"fact": "Koh Ker, a remote 10th-century capital, contains a 36-metre stepped pyramid called Prasat Thom that predates similar structures found elsewhere in the Khmer Empire.", "category": "landmarks"}
+  ],
+  "Cameroon": [
+    {"fact": "Lake Nyos, a crater lake, catastrophically released a cloud of CO₂ in 1986 that silently suffocated 1,746 people and 3,500 livestock in nearby villages within minutes.", "category": "science"},
+    {"fact": "The country is called 'Africa in miniature' because it contains nearly every type of African landscape — desert, rainforest, savanna, mountains, and coastline — within its borders.", "category": "geography"},
+    {"fact": "Mount Cameroon at 4,040 metres is the highest peak in West Africa and one of Africa's most active volcanoes, having erupted seven times in the 20th century alone.", "category": "geography"},
+    {"fact": "It is the only country in Africa where both English and French are official languages due to its split colonial history between Britain and France.", "category": "politics"}
+  ],
+  "Canada": [
+    {"fact": "Alert, Nunavut, at 82°N latitude, is the northernmost permanently inhabited place in the world — it is closer to Moscow than to Toronto.", "category": "geography"},
+    {"fact": "The country has more doughnut shops per capita than any other country, largely thanks to the Tim Hortons chain which has over 5,000 locations.", "category": "culture"},
+    {"fact": "Manitoba's Hudson Bay has lower gravity than most of the rest of Earth, due to the lingering effects of ice sheets that compressed the land during the last Ice Age.", "category": "science"},
+    {"fact": "The Trans-Canada Highway stretches 7,821 kilometres from Victoria, British Columbia to St. John's, Newfoundland — one of the longest national highways in the world.", "category": "landmarks"}
+  ],
+  "Cayman Islands": [
+    {"fact": "Despite a population of only about 65,000, the territory hosts over 100,000 registered companies and is the world's fifth-largest financial centre.", "category": "economy"},
+    {"fact": "Stingray City, a series of shallow sandbars, allows visitors to swim with and hand-feed wild southern stingrays.", "category": "nature"},
+    {"fact": "The islands have no direct taxation — no income tax, corporate tax, capital gains tax, or withholding tax of any kind.", "category": "economy"}
+  ],
+  "Central African Republic": [
+    {"fact": "The Dzanga-Sangha reserve contains a forest clearing called 'Dzanga Bai' where up to 100 forest elephants gather simultaneously to drink mineral-rich water.", "category": "nature"},
+    {"fact": "Emperor Bokassa I crowned himself in a ceremony modelled on Napoleon's coronation in 1977, spending an estimated $20 million — roughly a third of the national budget.", "category": "history"},
+    {"fact": "Sango, a creole trade lingua franca, is spoken by about 90% of the population, a rarity in Africa where colonial languages usually dominate official communication.", "category": "culture"},
+    {"fact": "Despite being one of the world's poorest countries, it sits atop significant diamond and uranium deposits that conflict and instability have prevented from being developed.", "category": "economy"}
+  ],
+  "Chad": [
+    {"fact": "The Ennedi Plateau contains natural rock arches, including Aloba Arch which at 120 metres is one of the tallest natural arches in the world.", "category": "landmarks"},
+    {"fact": "Lake Chad has shrunk by approximately 90% since the 1960s, declining from 25,000 square kilometres to around 1,350.", "category": "geography"},
+    {"fact": "The Sahélanthropus tchadensis skull, nicknamed 'Toumaï' and discovered here in 2001, is approximately 7 million years old — one of the oldest known hominid fossils.", "category": "science"},
+    {"fact": "The Zakouma National Park is one of the last refuges for large elephant herds in Central Africa and has seen a remarkable recovery from poaching since the 2010s.", "category": "nature"}
+  ],
+  "Chile": [
+    {"fact": "The Atacama Desert contains places where no rainfall has ever been recorded, yet it is also home to some of the world's most powerful astronomical observatories because of the exceptionally clear skies.", "category": "science"},
+    {"fact": "Easter Island (Rapa Nui), located 3,700 km from the mainland, has nearly 900 monumental moai statues carved between 1250 and 1500 AD.", "category": "landmarks"},
+    {"fact": "The country is so narrow (averaging just 177 km wide) that you can stand on a mountain and see both the Andes and the Pacific Ocean.", "category": "geography"},
+    {"fact": "The 2010 earthquake was so powerful (8.8 magnitude) that it shifted the city of Concepción 3 metres to the west and shortened Earth's day by 1.26 microseconds.", "category": "science"}
+  ],
+  "China": [
+    {"fact": "The Terracotta Army, discovered by farmers in 1974, contains over 8,000 individually sculpted soldiers — no two faces are alike.", "category": "landmarks"},
+    {"fact": "The country built more high-speed rail track between 2008 and 2020 than the rest of the world combined, with a network exceeding 40,000 kilometres.", "category": "economy"},
+    {"fact": "The Giant Leshan Buddha, carved into a cliff face in the 8th century, is 71 metres tall — so large that a tree grows on top of its head.", "category": "landmarks"},
+    {"fact": "Despite spanning five geographical time zones, the entire country officially uses a single time zone (UTC+8, Beijing Time), meaning sunset in western Xinjiang can occur as late as midnight.", "category": "geography"}
+  ],
+  "Colombia": [
+    {"fact": "The country is the world's leading producer of emeralds, supplying roughly 70–90% of the global market, primarily from the Muzo and Chivor mines.", "category": "economy"},
+    {"fact": "Caño Cristales river is known as the 'River of Five Colours' because aquatic plants turn it red, yellow, green, blue, and black between July and November.", "category": "nature"},
+    {"fact": "The Lost City (Ciudad Perdida) in the Sierra Nevada was built around 800 AD — roughly 650 years before Machu Picchu — and was only rediscovered in 1972.", "category": "landmarks"},
+    {"fact": "The country has more bird species than any other in the world — over 1,900 — roughly 20% of all bird species on Earth.", "category": "nature"}
+  ],
+  "Comoros": [
+    {"fact": "A living coelacanth, a prehistoric fish thought extinct for 65 million years, was caught off the islands in 1938 — one of the most famous zoological discoveries of the 20th century.", "category": "nature"},
+    {"fact": "It is one of the world's largest producers of ylang-ylang, an essential oil used in Chanel No. 5 perfume, supplying roughly 80% of the global crop.", "category": "economy"},
+    {"fact": "Mount Karthala on Grande Comore is one of the world's most active volcanoes, having erupted more than 20 times since the 19th century.", "category": "geography"},
+    {"fact": "The island of Mayotte voted to remain French in 1974 while the other three islands declared independence, creating a territorial dispute that persists to this day.", "category": "politics"}
+  ],
+  "Congo": [
+    {"fact": "Brazzaville and Kinshasa are the world's closest pair of national capitals, separated by just the width of the Congo River — roughly 1.6 km apart.", "category": "geography"},
+    {"fact": "The Sapeurs subculture in Brazzaville sees working-class men spending extraordinary amounts on designer suits and parading in dandy fashion as an expression of elegance and dignity.", "category": "culture"},
+    {"fact": "It was the first country in Africa to adopt a Marxist-Leninist government in 1970, renaming itself the People's Republic of the Congo until democratic reforms in 1991.", "category": "politics"},
+    {"fact": "Over 70% of the population lives in cities, primarily along the railway between Brazzaville and the port of Pointe-Noire, one of the highest urbanisation rates in Africa.", "category": "economy"}
+  ],
+  "Cook Islands": [
+    {"fact": "The marine park surrounding the islands covers 1.9 million square kilometres — one of the world's largest, yet the total land area is only 236 square kilometres.", "category": "nature"},
+    {"fact": "Despite being a self-governing state in free association with New Zealand, it is not a UN member and issues its own currency, stamps, and passports.", "category": "politics"},
+    {"fact": "The island of Aitutaki has a lagoon widely considered one of the most beautiful in the world, enclosed by a triangle of tiny, uninhabited islets.", "category": "geography"}
+  ],
+  "Costa Rica": [
+    {"fact": "The country abolished its military in 1948 and redirected the budget to education and healthcare, becoming one of the few nations with no standing army.", "category": "politics"},
+    {"fact": "Despite covering only 0.03% of Earth's surface, it contains roughly 6% of the world's biodiversity.", "category": "nature"},
+    {"fact": "Mysterious stone spheres, some over 2 metres in diameter and nearly perfectly round, were crafted by a pre-Columbian civilisation and are now a UNESCO World Heritage Site.", "category": "landmarks"},
+    {"fact": "The country generates over 98% of its electricity from renewable sources, primarily hydroelectric, geothermal, and wind power.", "category": "science"}
+  ],
+  "Côte d'Ivoire": [
+    {"fact": "The Basilica of Our Lady of Peace in Yamoussoukro is the largest church in the world by area, surpassing even St. Peter's Basilica in Rome.", "category": "landmarks"},
+    {"fact": "The country produces roughly 40% of the world's cocoa supply, yet most Ivorians have never tasted chocolate.", "category": "economy"},
+    {"fact": "The government officially requests that the country's French name not be translated — hence 'Côte d'Ivoire' rather than 'Ivory Coast' in formal use.", "category": "politics"},
+    {"fact": "Chimpanzees in Taï National Park have been observed using stone tools to crack nuts — one of the few documented cases of stone-tool culture in non-human primates.", "category": "nature"}
+  ],
+  "Croatia": [
+    {"fact": "The necktie originated here — the cravat worn by Croatian mercenaries in 17th-century France inspired the fashion accessory, and the word 'cravat' derives from 'Croat'.", "category": "culture"},
+    {"fact": "Dubrovnik's Old Town served as the primary filming location for King's Landing in Game of Thrones.", "category": "landmarks"},
+    {"fact": "The Dalmatian dog breed takes its name from the Dalmatia region along the Croatian coast, though the breed's exact origins remain debated.", "category": "culture"},
+    {"fact": "Plitvice Lakes National Park features 16 terraced lakes connected by over 90 waterfalls, with the water's colour shifting between azure, green, and grey depending on mineral content and sunlight.", "category": "nature"}
+  ],
+  "Cuba": [
+    {"fact": "Havana's streets still have roughly 60,000 vintage American cars from the 1940s and 1950s, maintained with improvised parts due to decades of trade embargoes.", "category": "culture"},
+    {"fact": "The country has one of the highest doctor-to-patient ratios in the world and regularly sends medical brigades to other countries — Cuban doctors have served in over 60 nations.", "category": "science"},
+    {"fact": "The Cuban solenodon, a venomous mammal that injects toxin through grooved teeth like a snake, is one of the few venomous mammals in the world and is found only here and in Hispaniola.", "category": "nature"},
+    {"fact": "Ernest Hemingway lived in Cuba for over 20 years and wrote 'The Old Man and the Sea' at his estate Finca Vigía, now a museum.", "category": "culture"}
+  ],
+  "Curaçao": [
+    {"fact": "The famous blue liqueur Curaçao is named after the island, originally made from the dried peels of the locally grown laraha citrus fruit.", "category": "culture"},
+    {"fact": "The colourful colonial buildings of Willemstad's Handelskade waterfront are a UNESCO World Heritage Site, painted in bright colours allegedly because a governor complained that white buildings gave him headaches.", "category": "landmarks"},
+    {"fact": "The island has one of the oldest Jewish congregations in the Western Hemisphere, with Mikvé Israel-Emanuel Synagogue founded in 1651.", "category": "history"}
+  ],
+  "Cyprus": [
+    {"fact": "The island has been divided since 1974, with a UN buffer zone splitting the Greek Cypriot south from the Turkish-controlled north — Nicosia is the world's last divided capital.", "category": "politics"},
+    {"fact": "In Greek mythology, the goddess Aphrodite was born from the sea foam near Petra tou Romiou (Aphrodite's Rock) on the southwestern coast.", "category": "culture"},
+    {"fact": "Choirokoitia is one of the best-preserved prehistoric sites in the eastern Mediterranean, with a Neolithic settlement dating back to the 7th millennium BC.", "category": "history"},
+    {"fact": "The island has some of the oldest wine-producing villages in the world — the Commandaria wine region has been producing sweet wine continuously since around 800 BC.", "category": "culture"}
+  ],
+  "Czechia": [
+    {"fact": "The country consumes more beer per capita than any other nation in the world — roughly 140 litres per person annually.", "category": "culture"},
+    {"fact": "The Prague Astronomical Clock, installed in 1410, is the oldest still-operating astronomical clock in the world.", "category": "landmarks"},
+    {"fact": "The word 'robot' was coined by Czech writer Karel Čapek in his 1920 play R.U.R. (Rossum's Universal Robots), from the Czech word 'robota' meaning forced labour.", "category": "science"},
+    {"fact": "Bohemian crystal has been produced here since the 13th century and remains one of the most renowned types of glassware in the world.", "category": "culture"}
+  ],
+  "Democratic Republic of the Congo": [
+    {"fact": "The Congo River is the deepest river in the world, reaching depths of over 220 metres, and has the second-largest discharge volume after the Amazon.", "category": "geography"},
+    {"fact": "The country holds roughly 70% of the world's known coltan reserves, a mineral essential for manufacturing smartphones and electronics.", "category": "economy"},
+    {"fact": "The okapi, a forest-dwelling relative of the giraffe with zebra-striped legs, was unknown to Western science until 1901 and is found only in the Ituri Forest.", "category": "nature"},
+    {"fact": "Virunga National Park, Africa's oldest national park (1925), contains Nyiragongo volcano whose persistent lava lake is the largest on Earth.", "category": "landmarks"}
+  ],
+  "Denmark": [
+    {"fact": "LEGO was invented in Billund in 1932, and the name comes from the Danish 'leg godt' meaning 'play well' — there are roughly 80 LEGO bricks for every person on Earth.", "category": "culture"},
+    {"fact": "Jelling, the site of enormous Viking-era runestones erected by King Harald Bluetooth in the 10th century, is known as Denmark's birth certificate — and the wireless technology Bluetooth is named after the king.", "category": "history"},
+    {"fact": "The country has over 7,000 kilometres of coastline, and no point in Denmark is more than 52 kilometres from the sea.", "category": "geography"},
+    {"fact": "Tivoli Gardens in Copenhagen, opened in 1843, is one of the world's oldest operating amusement parks and inspired Walt Disney to create Disneyland.", "category": "landmarks"}
+  ],
+  "Djibouti": [
+    {"fact": "Lake Assal, at 155 metres below sea level, is the lowest point in Africa and the third-lowest on Earth, with water saltier than the Dead Sea.", "category": "geography"},
+    {"fact": "The country hosts military bases from the United States, France, China, Japan, and Italy simultaneously — more foreign bases per square kilometre than almost anywhere.", "category": "politics"},
+    {"fact": "The Afar Triple Junction, where three tectonic plates are pulling apart, runs through the territory — scientists predict the region will eventually split from Africa to form a new ocean.", "category": "science"}
+  ],
+  "Dominica": [
+    {"fact": "Boiling Lake, the second-largest thermally active lake in the world, sits in a volcanic crater and maintains water temperatures of 82–92°C.", "category": "geography"},
+    {"fact": "It is sometimes called the 'Nature Isle of the Caribbean' and has 365 rivers — reportedly one for every day of the year.", "category": "nature"},
+    {"fact": "The island is one of the last refuges of the Kalinago (Carib) people, who have lived there for over 3,000 years and maintain a designated territory.", "category": "history"},
+    {"fact": "The Sisserou parrot, found only on this island, is featured on the national flag — one of only a few flags to depict a specific animal species.", "category": "nature"}
+  ],
+  "Dominican Republic": [
+    {"fact": "Santo Domingo, founded in 1496, is the oldest continuously inhabited European settlement in the Americas and contains the first cathedral, university, and hospital built in the New World.", "category": "history"},
+    {"fact": "The country is the world's primary source of larimar, a rare blue variety of pectolite found nowhere else on Earth.", "category": "science"},
+    {"fact": "Lake Enriquillo is the largest lake in the Caribbean and lies 44 metres below sea level — it is one of the few saltwater lakes with a population of American crocodiles.", "category": "nature"},
+    {"fact": "Baseball is so culturally important that the country has produced over 800 Major League Baseball players, more than any other country outside the United States.", "category": "culture"}
+  ],
+  "Ecuador": [
+    {"fact": "The country is named after the Equator, and a monument called Mitad del Mundo ('Middle of the World') marks the line — though GPS later showed the actual equator is about 240 metres away.", "category": "geography"},
+    {"fact": "The Galápagos Islands, 1,000 km off the coast, inspired Charles Darwin's theory of evolution by natural selection during his visit in 1835.", "category": "science"},
+    {"fact": "Due to Earth's equatorial bulge, the summit of Mount Chimborazo (6,263 m) is the farthest point from Earth's centre — farther than the top of Everest.", "category": "geography"},
+    {"fact": "The Panama hat actually originates here, not Panama — the misnomer arose because the hats were shipped through Panama on their way to international markets.", "category": "culture"}
+  ],
+  "Egypt": [
+    {"fact": "The Great Pyramid of Giza was the tallest man-made structure for nearly 3,800 years, until Lincoln Cathedral surpassed it around 1300 AD.", "category": "landmarks"},
+    {"fact": "Ancient Egyptians invented one of the earliest forms of toothpaste around 5000 BC, using crushed rock salt, mint, dried iris flowers, and pepper.", "category": "history"},
+    {"fact": "The Suez Canal carries approximately 12% of global trade by volume, and its 2015 expansion allows ships to transit in both directions simultaneously.", "category": "economy"},
+    {"fact": "Cleopatra VII lived closer in time to the Moon landing than to the construction of the Great Pyramid — the pyramid was already 2,500 years old when she was born.", "category": "history"}
+  ],
+  "El Salvador": [
+    {"fact": "It is the smallest country in Central America yet the most densely populated, with about 300 people per square kilometre.", "category": "geography"},
+    {"fact": "In 2021, it became the first country in the world to adopt Bitcoin as legal tender alongside the US dollar.", "category": "economy"},
+    {"fact": "The Joya de Cerén archaeological site, a Maya farming village buried by volcanic ash around 600 AD, is called the 'Pompeii of the Americas' for its remarkable preservation.", "category": "landmarks"},
+    {"fact": "Pupusas, thick corn tortillas stuffed with cheese, beans, or pork, are the national dish and have been declared an Intangible Cultural Heritage.", "category": "culture"}
+  ],
+  "Equatorial Guinea": [
+    {"fact": "It is the only country in Africa with Spanish as an official language, a legacy of being Spain's sole sub-Saharan colonial territory.", "category": "culture"},
+    {"fact": "After oil was discovered in 1996, it briefly had the highest GDP per capita in Africa, yet the vast majority of the population continued to live in poverty.", "category": "economy"},
+    {"fact": "President Teodoro Obiang Nguema Mbasogo has held power since 1979, making him one of the world's longest-serving heads of state.", "category": "politics"},
+    {"fact": "The capital was moved from Malabo on Bioko Island to a purpose-built city called Ciudad de la Paz deep in the mainland rainforest.", "category": "politics"}
+  ],
+  "Eritrea": [
+    {"fact": "The capital Asmara is a UNESCO World Heritage Site nicknamed 'La Piccola Roma' for its extraordinary collection of 1930s Italian Modernist, Art Deco, and Futurist architecture.", "category": "landmarks"},
+    {"fact": "The Dahlak Archipelago in the Red Sea contains over 200 islands with coral reefs considered among the best-preserved in the world.", "category": "nature"},
+    {"fact": "The Italian-built railway climbs from sea level to 2,394 metres through 30 tunnels and across 65 bridges in just 118 kilometres.", "category": "landmarks"},
+    {"fact": "The country has no privately owned media — it has been ranked last or near-last in the world for press freedom for over a decade.", "category": "politics"}
+  ],
+  "Eswatini": [
+    {"fact": "It is one of the last absolute monarchies in the world — the king can dissolve parliament, veto legislation, and appoints the prime minister.", "category": "politics"},
+    {"fact": "The annual Umhlanga (Reed Dance) ceremony sees up to 40,000 unmarried young women present reeds to the Queen Mother.", "category": "culture"},
+    {"fact": "The country changed its name from Swaziland in 2018, on the 50th anniversary of independence, partly to avoid confusion with Switzerland.", "category": "history"},
+    {"fact": "Ngwenya Mine has evidence of iron ore extraction dating back 43,000 years, making it one of the oldest known mines in the world.", "category": "history"}
+  ],
+  "Estonia": [
+    {"fact": "The country pioneered e-governance — citizens can vote online, file taxes in minutes, and 99% of government services are available digitally 24/7.", "category": "science"},
+    {"fact": "Skype was originally developed by Estonian programmers Ahti Heinla, Priit Kasesalu, and Jaan Tallinn in 2003.", "category": "science"},
+    {"fact": "It has more than 1,500 islands and over 50% of the land is covered by forest, making it one of the least densely populated countries in Europe.", "category": "geography"},
+    {"fact": "The song festivals held every five years gather up to 30,000 singers performing simultaneously, and the 'Singing Revolution' of 1988–1991 helped the country peacefully regain independence from the Soviet Union.", "category": "culture"}
+  ],
+  "Ethiopia": [
+    {"fact": "The calendar has 13 months (twelve 30-day months plus a short 13th month) and runs roughly 7 to 8 years behind the Gregorian calendar.", "category": "culture"},
+    {"fact": "It is the only African country never to have been colonised by a European power, having defeated Italy at the Battle of Adwa in 1896.", "category": "history"},
+    {"fact": "The rock-hewn churches of Lalibela, carved downward into volcanic rock in the 12th century, are sometimes called the 'Eighth Wonder of the World'.", "category": "landmarks"},
+    {"fact": "Coffee was discovered here according to legend when a goat herder noticed his goats dancing after eating berries — the word 'coffee' may derive from Kaffa, the region where it originated.", "category": "culture"},
+    {"fact": "The Danakil Depression reaches temperatures averaging 34.4°C year-round, making it one of the hottest inhabited places on Earth.", "category": "geography"}
+  ],
+  "Falkland Islands": [
+    {"fact": "The islands have more penguins than people — over one million penguins from five different species compared to about 3,400 human residents.", "category": "nature"},
+    {"fact": "There are reportedly more landmines per square kilometre (left from the 1982 war) than almost anywhere, and their fenced-off areas have accidentally created wildlife sanctuaries.", "category": "nature"},
+    {"fact": "The capital Stanley has the southernmost Anglican cathedral in the world, built in 1892 using a whalebone arch at its entrance.", "category": "landmarks"}
+  ],
+  "Faroe Islands": [
+    {"fact": "The 18 islands have more sheep than people — approximately 80,000 sheep to 54,000 humans.", "category": "nature"},
+    {"fact": "Google Street View was unavailable until locals strapped cameras to sheep to create 'Sheep View 360', prompting Google to officially map the islands.", "category": "culture"},
+    {"fact": "The islands have grass-roofed houses that have been insulating homes for centuries, and even a grass-roofed bus shelter became a viral sensation.", "category": "culture"}
+  ],
+  "Fiji": [
+    {"fact": "The country was the first nation in the world to see each new day, due to its position near the International Date Line.", "category": "geography"},
+    {"fact": "The traditional ceremony of drinking kava (yaqona) is central to Fijian culture and is offered as a welcome ritual to visiting guests and dignitaries.", "category": "culture"},
+    {"fact": "Fiji Water, one of the world's best-selling bottled water brands, is sourced from an aquifer on Viti Levu and is exported to over 60 countries.", "category": "economy"},
+    {"fact": "The island of Taveuni has a point where the 180th meridian passes through — visitors can stand with one foot in today and one in yesterday.", "category": "geography"}
+  ],
+  "Finland": [
+    {"fact": "There are roughly 3.3 million saunas in the country — about one for every 1.6 inhabitants — and sauna is the only Finnish word widely adopted into English.", "category": "culture"},
+    {"fact": "The country hosts the World Wife Carrying Championship, where the winning couple receives the wife's weight in beer.", "category": "culture"},
+    {"fact": "The education system has no standardised tests until age 16, short school days, and virtually no homework, yet consistently ranks among the best in the world.", "category": "politics"},
+    {"fact": "The heavy metal band density is the highest in the world — approximately 54 metal bands per 100,000 inhabitants.", "category": "culture"}
+  ],
+  "France": [
+    {"fact": "The Millau Viaduct in southern France is the tallest bridge in the world, with one mast reaching 343 metres — taller than the Eiffel Tower.", "category": "landmarks"},
+    {"fact": "There are more than 400 distinct varieties of cheese produced in the country, prompting Charles de Gaulle to famously quip: 'How can anyone govern a nation that has 246 kinds of cheese?'", "category": "culture"},
+    {"fact": "The Louvre museum is so large that if you spent 30 seconds looking at each artwork, it would take over 100 days to see everything.", "category": "landmarks"},
+    {"fact": "The country still uses the guillotine's abolition date (1981) as a point of pride — it was the last Western European country to abolish capital punishment.", "category": "history"}
+  ],
+  "French Polynesia": [
+    {"fact": "The territory encompasses an area of ocean the size of Western Europe, yet its total land area is only about 4,000 square kilometres across 118 islands.", "category": "geography"},
+    {"fact": "Tahitian black pearls, cultivated in the lagoons of the Tuamotu Archipelago, are the territory's most valuable export and are the only naturally dark pearls in the world.", "category": "economy"},
+    {"fact": "France conducted 193 nuclear tests in the territory between 1966 and 1996, primarily at Moruroa and Fangataufa atolls.", "category": "history"}
+  ],
+  "Gabon": [
+    {"fact": "In 1972, French scientists discovered a natural nuclear fission reactor at Oklo that had operated on its own approximately 2 billion years ago — the only known natural nuclear reactor.", "category": "science"},
+    {"fact": "Roughly 88% of the country is covered by rainforest, giving it one of the highest forest-coverage ratios of any nation.", "category": "nature"},
+    {"fact": "Surfing hippos have been filmed on the beaches of Loango National Park — forest hippopotamuses wade into Atlantic Ocean waves, a behaviour seen almost nowhere else.", "category": "nature"},
+    {"fact": "Albert Schweitzer, the Nobel Peace Prize-winning physician, built his famous hospital in Lambaréné in 1913, which still operates today.", "category": "landmarks"}
+  ],
+  "Gambia": [
+    {"fact": "It is the smallest country on mainland Africa, essentially a narrow strip of land no wider than 48 km on either side of the River Gambia, almost entirely surrounded by Senegal.", "category": "geography"},
+    {"fact": "Kunta Kinteh Island was a key holding site in the transatlantic slave trade and inspired Alex Haley's novel 'Roots'.", "category": "history"},
+    {"fact": "The country's name officially includes the definite article — it is 'The Gambia', one of only two countries (with The Bahamas) that formally use 'The'.", "category": "culture"},
+    {"fact": "Former president Yahya Jammeh claimed he could cure AIDS with a herbal concoction and bananas, then declared the country an Islamic republic before fleeing in 2017 after losing an election.", "category": "politics"}
+  ],
+  "Georgia": [
+    {"fact": "Archaeological evidence from Gadachrili Gora suggests that wine was first produced here around 6000 BC — making it the birthplace of winemaking.", "category": "history"},
+    {"fact": "Unique qvevri (large clay vessels buried underground) have been used to ferment wine for 8,000 years and are now a UNESCO Intangible Cultural Heritage.", "category": "culture"},
+    {"fact": "The Georgian alphabet is one of only 14 scripts still in use today and is thought to have been created in the 3rd century BC.", "category": "culture"},
+    {"fact": "Vardzia is a cave monastery carved into the side of Mount Erusheti in the 12th century, originally containing over 6,000 apartments spread across 13 stories.", "category": "landmarks"}
+  ],
+  "Germany": [
+    {"fact": "There are over 1,500 different varieties of beer brewed in the country, and the Reinheitsgebot (beer purity law) of 1516 is one of the oldest food safety regulations still in effect.", "category": "culture"},
+    {"fact": "The country has over 20,000 castles and castle ruins — more than any other country in Europe.", "category": "landmarks"},
+    {"fact": "The Autobahn has sections with no speed limit, yet the fatality rate is lower than on many speed-limited motorways elsewhere in Europe.", "category": "culture"},
+    {"fact": "The Christmas tree tradition originated here — Martin Luther is said to have first added lit candles to a tree in the 16th century.", "category": "culture"}
+  ],
+  "Ghana": [
+    {"fact": "Fantasy coffins shaped like cars, fish, aeroplanes, and mobile phones are a unique funerary art from the Ga people, now exhibited in museums worldwide.", "category": "culture"},
+    {"fact": "Lake Volta, created by the Akosombo Dam in 1965, is the world's largest artificial lake by surface area at approximately 8,500 square kilometres.", "category": "geography"},
+    {"fact": "It was the first sub-Saharan African country to gain independence from colonial rule, in 1957, under Kwame Nkrumah.", "category": "history"},
+    {"fact": "The country is the second-largest cocoa producer in the world and the second-largest gold producer in Africa — the colonial name 'Gold Coast' reflected centuries of gold trade.", "category": "economy"}
+  ],
+  "Gibraltar": [
+    {"fact": "The famous Rock of Gibraltar is home to the only wild primate population in Europe — the Barbary macaques, whose presence superstition says guarantees British sovereignty.", "category": "nature"},
+    {"fact": "The airport runway crosses the main road into the territory — traffic stops for planes like a level crossing.", "category": "geography"},
+    {"fact": "Gorham's Cave Complex contains Neanderthal engravings dating back over 39,000 years, making them some of the oldest known examples of abstract art.", "category": "history"}
+  ],
+  "Greece": [
+    {"fact": "The country has more archaeological museums than any other country in the world — over 100 — reflecting its extraordinary ancient heritage.", "category": "landmarks"},
+    {"fact": "There are between 1,200 and 6,000 islands (depending on the minimum size counted), of which only about 200 are inhabited.", "category": "geography"},
+    {"fact": "The Greek national anthem, 'Hymn to Liberty', has 158 stanzas — the longest national anthem by number of verses, though only the first two are typically sung.", "category": "culture"},
+    {"fact": "The Antikythera mechanism, discovered in a shipwreck in 1901, is a 2,000-year-old analogue computer used to predict astronomical positions and eclipses.", "category": "science"}
+  ],
+  "Greenland": [
+    {"fact": "The ice sheet covering about 80% of the island contains enough water to raise global sea levels by approximately 7 metres if it all melted.", "category": "geography"},
+    {"fact": "Despite being the world's largest island, it has a population of only about 56,000 — making it the least densely populated territory on Earth.", "category": "geography"},
+    {"fact": "The Norse settlers who arrived around 985 AD named it 'Greenland' allegedly as a marketing ploy to attract settlers, even though it was mostly ice.", "category": "history"},
+    {"fact": "The Northeast Greenland National Park is the world's largest national park at 972,000 square kilometres — larger than all but 29 countries.", "category": "nature"}
+  ],
+  "Grenada": [
+    {"fact": "Known as the 'Spice Isle', the country is the world's second-largest nutmeg producer (after Indonesia) — the nutmeg even appears on its flag.", "category": "economy"},
+    {"fact": "The Underwater Sculpture Park in Molinière Bay, created by artist Jason deCaires Taylor, was the world's first underwater art gallery.", "category": "landmarks"},
+    {"fact": "The 1983 US invasion (Operation Urgent Fury) was triggered by a Marxist coup and remains one of the shortest military operations in US history.", "category": "history"}
+  ],
+  "Guam": [
+    {"fact": "The invasive brown tree snake, accidentally introduced after World War II, has wiped out most of the island's native bird species and occasionally causes power outages by climbing electrical lines.", "category": "nature"},
+    {"fact": "The island's location near the International Date Line means it is one of the first US territories to see sunrise each day.", "category": "geography"},
+    {"fact": "Latte stones, ancient mushroom-shaped stone pillars used as building foundations by the Chamorro people, are the island's most iconic archaeological remains.", "category": "history"}
+  ],
+  "Guatemala": [
+    {"fact": "Tikal, one of the largest Maya cities, had a population of over 100,000 at its peak around 700 AD, with pyramids rising above the jungle canopy.", "category": "landmarks"},
+    {"fact": "The country is the birthplace of chocolate — the ancient Maya were the first to cultivate cacao and drink it as a bitter, spiced beverage.", "category": "history"},
+    {"fact": "Lake Atitlán, described by Aldous Huxley as the most beautiful lake in the world, fills a massive volcanic caldera surrounded by three volcanoes.", "category": "nature"},
+    {"fact": "The quetzal bird, with iridescent green tail feathers up to a metre long, is the national bird and lends its name to the country's currency.", "category": "nature"}
+  ],
+  "Guernsey": [
+    {"fact": "During World War II, it was the only part of the British Isles occupied by Nazi Germany, who built extensive fortifications that still stand.", "category": "history"},
+    {"fact": "The island has its own breed of dairy cow, the Golden Guernsey, famous for producing rich, golden-yellow milk with high butterfat content.", "category": "nature"},
+    {"fact": "Victor Hugo wrote 'Les Misérables' and several other works while living in exile on the island from 1855 to 1870.", "category": "culture"}
+  ],
+  "Guinea": [
+    {"fact": "The Niger, Senegal, and Gambia rivers all have their sources in the Fouta Djallon highlands, earning the country the nickname 'the water tower of West Africa'.", "category": "geography"},
+    {"fact": "It possesses roughly a third of the world's known bauxite reserves, making it one of the most mineral-rich countries on Earth relative to its size.", "category": "economy"},
+    {"fact": "In the 1958 independence referendum, it was the only French African colony to vote 'no' to de Gaulle's French Community — France retaliated by withdrawing all personnel and even ripping out telephone wires.", "category": "history"},
+    {"fact": "Mount Nimba is home to the viviparous toad, the only known toad species that gives birth to live young rather than laying eggs.", "category": "nature"}
+  ],
+  "Guinea-Bissau": [
+    {"fact": "The Bijagós Archipelago is a UNESCO Biosphere Reserve where saltwater hippopotamuses swim between islands in the Atlantic Ocean.", "category": "nature"},
+    {"fact": "Since independence in 1974, no president has ever successfully completed a full term in office due to coups and political instability.", "category": "politics"},
+    {"fact": "Cashew nuts account for roughly 90% of the country's export earnings, making it one of the most economically dependent on a single crop of any nation.", "category": "economy"}
+  ],
+  "Guyana": [
+    {"fact": "Kaieteur Falls drops 226 metres in a single plunge — nearly five times the height of Niagara Falls — making it one of the world's most powerful waterfalls.", "category": "nature"},
+    {"fact": "It is the only English-speaking country in South America, though culturally it is considered part of the Caribbean.", "category": "culture"},
+    {"fact": "The interior rainforest covers about 80% of the country and is so remote that some areas have never been surveyed by scientists.", "category": "nature"},
+    {"fact": "Massive offshore oil discoveries since 2015 have made the country one of the fastest-growing economies in the world, with GDP growth exceeding 60% in a single year.", "category": "economy"}
+  ],
+  "Haiti": [
+    {"fact": "In 1804, it became the first independent Black republic in the world and the second independent nation in the Western Hemisphere (after the United States).", "category": "history"},
+    {"fact": "The Citadelle Laferrière, built atop a 900-metre mountain between 1805 and 1820, is the largest fortress in the Americas and was designed to repel a potential French invasion that never came.", "category": "landmarks"},
+    {"fact": "Vodou is an officially recognised religion blending West African, Catholic, and indigenous Taíno spiritual traditions.", "category": "culture"},
+    {"fact": "The country shares the island of Hispaniola with the Dominican Republic — it is the most populated island in the Caribbean.", "category": "geography"}
+  ],
+  "Honduras": [
+    {"fact": "The ancient Maya city of Copán contains a hieroglyphic stairway with over 2,000 individual glyphs — the longest known Maya text.", "category": "landmarks"},
+    {"fact": "The Bay Islands (Roatán, Utila, Guanaja) sit on the Mesoamerican Barrier Reef, the second-largest in the world, and Utila is one of the cheapest places on Earth to get scuba certified.", "category": "nature"},
+    {"fact": "The 'Ciudad Blanca' (White City), a legendary lost city, was partially confirmed in 2015 when archaeologists found extensive ruins deep in the Mosquito Coast rainforest using LiDAR.", "category": "landmarks"},
+    {"fact": "The country's name comes from the Spanish word 'honduras' meaning 'depths', reportedly because Columbus was grateful for the deep waters off the coast after shallow sailing.", "category": "history"}
+  ],
+  "Hong Kong": [
+    {"fact": "The city has more skyscrapers over 150 metres than any other city in the world — over 500, more than New York and Dubai combined.", "category": "landmarks"},
+    {"fact": "The Star Ferry has been crossing Victoria Harbour since 1888, and a ride costs less than 50 US cents.", "category": "culture"},
+    {"fact": "Despite being one of the most densely populated places on Earth, about 40% of the territory's land area is designated as country parks and nature reserves.", "category": "nature"}
+  ],
+  "Hungary": [
+    {"fact": "The Rubik's Cube was invented here in 1974 by architecture professor Ernő Rubik, and it took him over a month to solve his own puzzle the first time.", "category": "science"},
+    {"fact": "The country has more thermal springs than almost any other — Budapest alone has over 120 natural hot springs and is called the 'City of Spas'.", "category": "nature"},
+    {"fact": "Hungarian uses 44 letters in its alphabet and is one of the most linguistically isolated languages in Europe, unrelated to any of its neighbours' languages.", "category": "culture"},
+    {"fact": "The Tokaji wine region produced what Louis XIV of France called 'the king of wines and the wine of kings' — it was the world's first classified wine region in 1730.", "category": "culture"}
+  ],
+  "Iceland": [
+    {"fact": "The Althing, established in 930 AD at Þingvellir, is often considered the world's oldest surviving parliament.", "category": "politics"},
+    {"fact": "There are no surnames in the traditional sense — people use patronymic (or matronymic) naming, and the phone book is sorted by first name.", "category": "culture"},
+    {"fact": "Silfra fissure allows divers to swim between the North American and Eurasian tectonic plates in water so clear that visibility exceeds 100 metres.", "category": "nature"},
+    {"fact": "The country heats about 90% of its homes using geothermal energy, piping naturally heated water directly to radiators.", "category": "science"}
+  ],
+  "India": [
+    {"fact": "Kumbh Mela, a Hindu pilgrimage held every 12 years, is the largest peaceful gathering of humans on Earth — the 2019 event attracted an estimated 150 million people.", "category": "culture"},
+    {"fact": "The country launches satellites for other nations at a fraction of competitors' costs — in 2017, ISRO set a world record by launching 104 satellites on a single rocket.", "category": "science"},
+    {"fact": "Meghalaya's living root bridges are grown by the Khasi people over decades by training the aerial roots of rubber fig trees — some are over 500 years old and can support 50 people.", "category": "landmarks"},
+    {"fact": "Varanasi (Benares) is one of the oldest continuously inhabited cities in the world, with settlement evidence dating back to the 11th century BC.", "category": "history"},
+    {"fact": "The Thar Desert has a village called Kuldhara that was abandoned overnight in 1825 by its entire population of 1,500 and has remained empty ever since — the reason remains a mystery.", "category": "history"}
+  ],
+  "Indonesia": [
+    {"fact": "The country spans 17,508 islands across three time zones, yet about 6,000 of those islands are unnamed and uninhabited.", "category": "geography"},
+    {"fact": "Komodo dragons, the world's largest living lizards at up to 3 metres long, are found only on a handful of islands in the Lesser Sunda chain.", "category": "nature"},
+    {"fact": "The 1883 eruption of Krakatoa was one of the loudest sounds in recorded history, heard nearly 5,000 km away in Australia, and caused a global temperature drop.", "category": "science"},
+    {"fact": "Toraja people in Sulawesi practise elaborate funeral rites that can last for days, during which the deceased is kept in the family home — sometimes for years — and treated as if merely sick.", "category": "culture"}
+  ],
+  "Iran": [
+    {"fact": "Persepolis, the ceremonial capital of the Achaemenid Empire founded around 518 BC, was once the richest city in the world before being burned by Alexander the Great.", "category": "landmarks"},
+    {"fact": "The qanat system, an ancient network of underground water channels, has been used for over 3,000 years and some qanats still function today.", "category": "science"},
+    {"fact": "The country has a ski industry with over 20 resorts in the Alborz Mountains — Dizin ski resort reaches an altitude of 3,600 metres.", "category": "geography"},
+    {"fact": "The first known human rights declaration, the Cyrus Cylinder (539 BC), was issued by Cyrus the Great after conquering Babylon and allowed exiled peoples to return home.", "category": "history"}
+  ],
+  "Iraq": [
+    {"fact": "The Mesopotamian region between the Tigris and Euphrates rivers is where writing was first invented, with Sumerian cuneiform dating back to approximately 3400 BC.", "category": "history"},
+    {"fact": "The Marshes of southern Iraq, drained by Saddam Hussein in the 1990s in retaliation against the Marsh Arabs, have been partially reflooded and are a UNESCO World Heritage Site.", "category": "nature"},
+    {"fact": "The ancient city of Babylon is mentioned more times in the Bible than any other city except Jerusalem.", "category": "history"},
+    {"fact": "The world's first known written law code, the Code of Hammurabi (c. 1754 BC), was created in Babylon and contains 282 laws including the principle of 'an eye for an eye'.", "category": "history"}
+  ],
+  "Ireland": [
+    {"fact": "Newgrange, a 5,200-year-old passage tomb in County Meath, was built over 500 years before the Great Pyramid of Giza and is precisely aligned so that sunlight floods its inner chamber at winter solstice.", "category": "landmarks"},
+    {"fact": "The country has no native snakes — legend credits St Patrick, but the real reason is that rising sea levels after the Ice Age cut off the island before snakes could colonise it.", "category": "nature"},
+    {"fact": "The Cliffs of Moher rise 214 metres above the Atlantic and on a clear day you can see the Aran Islands, the Twelve Bens mountains, and Loop Head from the summit.", "category": "geography"},
+    {"fact": "The harp, not the shamrock, is the official national symbol — Ireland is the only country in the world with a musical instrument as its state emblem.", "category": "culture"}
+  ],
+  "Isle of Man": [
+    {"fact": "The Tynwald, established in 979 AD, claims to be the world's oldest parliament in continuous existence.", "category": "politics"},
+    {"fact": "The Isle of Man TT motorcycle race, held since 1907 on public roads at speeds exceeding 300 km/h, is widely considered the most dangerous motorsport event in the world.", "category": "culture"},
+    {"fact": "The Manx cat, famous for its lack of a tail caused by a natural genetic mutation, originates from the island.", "category": "nature"}
+  ],
+  "Israel": [
+    {"fact": "The Dead Sea shoreline, at about 430 metres below sea level, is the lowest point on Earth's surface.", "category": "geography"},
+    {"fact": "The country produces more scientific papers per capita than any other nation and has the highest density of start-up companies in the world.", "category": "science"},
+    {"fact": "Hebrew was revived from a liturgical language with no native speakers to a fully functional modern language in the late 19th century — the only successful example of language revival.", "category": "culture"},
+    {"fact": "Masada, a clifftop fortress built by King Herod, was the site of a last stand by Jewish rebels against Rome in 73 AD, ending in mass suicide rather than surrender.", "category": "history"}
+  ],
+  "Italy": [
+    {"fact": "The University of Bologna, founded in 1088, is the oldest university in continuous operation in the world.", "category": "history"},
+    {"fact": "Venice is built on 118 small islands connected by over 400 bridges, and its foundations rest on millions of wooden piles driven into the lagoon floor.", "category": "landmarks"},
+    {"fact": "The country has more UNESCO World Heritage Sites than any other country in the world — over 55.", "category": "landmarks"},
+    {"fact": "San Marino and Vatican City are both entirely surrounded by Italian territory, making Italy one of only three countries to completely enclose another sovereign nation.", "category": "geography"}
+  ],
+  "Jamaica": [
+    {"fact": "The Blue Mountain coffee beans are among the most expensive in the world, with about 80% of the annual crop exported to Japan.", "category": "economy"},
+    {"fact": "Reggae music, which originated here in the late 1960s, was inscribed by UNESCO as Intangible Cultural Heritage in 2018.", "category": "culture"},
+    {"fact": "The country has produced the fastest sprinters in history — Usain Bolt's 100m world record of 9.58 seconds has stood since 2009.", "category": "culture"},
+    {"fact": "The Blue Lagoon in Port Antonio is a mineral spring-fed lagoon that changes colour from sapphire to turquoise depending on the time of day and sunlight angle.", "category": "nature"}
+  ],
+  "Japan": [
+    {"fact": "There are more than 5 million vending machines in the country, selling everything from hot ramen to fresh eggs — roughly one machine for every 23 people.", "category": "culture"},
+    {"fact": "The Shinkansen (bullet train) has an average delay of less than one minute per year across its entire network, including delays caused by natural disasters.", "category": "science"},
+    {"fact": "The country has over 6,800 islands and sits at the junction of four tectonic plates, producing about 1,500 earthquakes per year.", "category": "geography"},
+    {"fact": "The Jōmon period pottery, dating back to 14,000 BC, represents some of the oldest pottery ever discovered in the world.", "category": "history"},
+    {"fact": "There are more centenarians (people over 100) per capita than anywhere else — over 90,000 as of recent counts.", "category": "science"}
+  ],
+  "Jersey": [
+    {"fact": "The island gave its name to both the Jersey cow (known for rich, creamy milk) and the New Jersey state in the US, founded by a former governor of the island.", "category": "history"},
+    {"fact": "During low tide, it is possible to walk to the Ecrehous reef, 9 km offshore, across exposed seabed.", "category": "geography"},
+    {"fact": "The German-built underground hospital from World War II, carved into solid rock by forced labourers, is one of the largest WWII tunnels open to the public in Europe.", "category": "history"}
+  ],
+  "Jordan": [
+    {"fact": "Petra, the ancient Nabataean city carved into rose-red sandstone cliffs around 312 BC, was lost to the Western world for centuries until rediscovered in 1812.", "category": "landmarks"},
+    {"fact": "Wadi Rum's otherworldly desert landscape has been used as a filming location for Mars in numerous movies, including 'The Martian' and 'Dune'.", "category": "geography"},
+    {"fact": "The country is one of the most water-scarce on Earth, with less than 100 cubic metres of renewable freshwater per person per year.", "category": "geography"},
+    {"fact": "The Baptism Site on the Jordan River (Bethany Beyond the Jordan) is believed to be where John the Baptist baptised Jesus and is a UNESCO World Heritage Site.", "category": "landmarks"}
+  ],
+  "Kazakhstan": [
+    {"fact": "The Baikonur Cosmodrome, located here, is where Yuri Gagarin launched into space in 1961 and remains the primary launch site for crewed missions to the International Space Station.", "category": "science"},
+    {"fact": "It is the largest landlocked country in the world — its area is larger than all of Western Europe combined.", "category": "geography"},
+    {"fact": "The apple originated here — the wild ancestor of all domestic apples (Malus sieversii) still grows in the Tian Shan mountains, and the former capital Almaty means 'Father of Apples'.", "category": "nature"},
+    {"fact": "The Aral Sea disaster, shared with Uzbekistan, turned a thriving port town of Aralsk into a city stranded 100 km from the retreating water's edge.", "category": "geography"}
+  ],
+  "Kenya": [
+    {"fact": "The Great Rift Valley's geothermal activity generates roughly 50% of the country's electricity — the highest geothermal share in Africa.", "category": "science"},
+    {"fact": "Kenyan distance runners have won roughly 40% of all major international distance-running medals, with a disproportionate number from the Kalenjin ethnic group.", "category": "culture"},
+    {"fact": "Lake Turkana is the world's largest permanent desert lake and the world's largest alkaline lake, stretching 250 km in the Rift Valley.", "category": "geography"},
+    {"fact": "The mobile money system M-Pesa, launched here in 2007, was the world's first widely successful mobile banking platform — roughly 50% of GDP passed through it at its peak.", "category": "economy"},
+    {"fact": "Tsavo National Park is larger than some countries and is famous for its 'red elephants' who dust-bathe in crimson-coloured soil.", "category": "nature"}
+  ],
+  "Kiribati": [
+    {"fact": "The country was the first to enter the year 2000, having shifted its time zone in 1995 so all its islands would be on the same calendar day.", "category": "geography"},
+    {"fact": "With a maximum elevation of just 3 metres above sea level, it is one of the countries most vulnerable to rising sea levels and may become uninhabitable this century.", "category": "geography"},
+    {"fact": "The Phoenix Islands Protected Area, at 408,250 square kilometres, is one of the world's largest marine protected areas.", "category": "nature"}
+  ],
+  "Kosovo": [
+    {"fact": "The Newborn monument in Pristina, unveiled on independence day in 2008, is repainted with a different design each year to mark the anniversary.", "category": "landmarks"},
+    {"fact": "Despite declaring independence in 2008, it is not recognised by roughly half of the UN member states, including Russia, China, Spain, and Serbia.", "category": "politics"},
+    {"fact": "The medieval Visoki Dečani monastery contains one of the largest collections of well-preserved Byzantine frescoes in the world.", "category": "landmarks"}
+  ],
+  "Kuwait": [
+    {"fact": "The Kuwait Towers, completed in 1979, store the country's freshwater supply while doubling as an iconic landmark — the largest sphere holds 4,500 cubic metres of water.", "category": "landmarks"},
+    {"fact": "During the 1990 Iraqi invasion, retreating forces set fire to over 600 oil wells, creating an environmental catastrophe that took over eight months to fully extinguish.", "category": "history"},
+    {"fact": "The dinar is the highest-valued currency unit in the world — one Kuwaiti dinar is worth roughly 3.25 US dollars.", "category": "economy"},
+    {"fact": "Summer temperatures regularly exceed 50°C, and in 2016 the country recorded one of the highest reliably measured air temperatures on Earth at 54°C.", "category": "geography"}
+  ],
+  "Kyrgyzstan": [
+    {"fact": "The epic of Manas, an oral tradition over 500,000 lines long, is roughly 20 times longer than the Iliad and Odyssey combined — UNESCO recognises it as a masterpiece.", "category": "culture"},
+    {"fact": "Issyk-Kul is the second-largest alpine lake in the world after Titicaca and never freezes despite being surrounded by snow-capped mountains, due to its slight salinity and geothermal activity.", "category": "geography"},
+    {"fact": "Eagle hunting, where trained golden eagles are used to hunt foxes and hares, is still practised by the Kyrgyz people and has been for over 4,000 years.", "category": "culture"},
+    {"fact": "About 94% of the country lies above 1,000 metres in elevation, earning it the nickname 'the Switzerland of Central Asia'.", "category": "geography"}
+  ],
+  "Laos": [
+    {"fact": "The Plain of Jars contains thousands of mysterious stone vessels up to 3 metres tall, dating from 500 BC to 500 AD — their exact purpose remains unknown.", "category": "landmarks"},
+    {"fact": "During the Vietnam War, the country was subjected to the heaviest aerial bombardment in history — more bombs were dropped here than on all of Europe in World War II.", "category": "history"},
+    {"fact": "Roughly 80 million unexploded bombs remain in the soil, and the country still suffers hundreds of casualties annually from unexploded ordnance.", "category": "history"},
+    {"fact": "The Mekong River runs through the country for 1,898 km, and the Pak Ou Caves along its banks contain thousands of Buddha statues deposited over centuries.", "category": "landmarks"}
+  ],
+  "Latvia": [
+    {"fact": "Riga's Art Nouveau district contains over 800 buildings in the style — roughly a third of all buildings in the city centre — the highest concentration in the world.", "category": "landmarks"},
+    {"fact": "The country is so forested (over 50% forest cover) that it is one of Europe's leading timber exporters, and Latvians have a deep tradition of forest mythology.", "category": "nature"},
+    {"fact": "The Latvian Song and Dance Festival, held every five years, gathers up to 40,000 performers and is a UNESCO Intangible Cultural Heritage.", "category": "culture"},
+    {"fact": "The Christmas tree tradition of bringing a decorated tree indoors is claimed to have originated in Riga in 1510, predating the more commonly cited German tradition.", "category": "history"}
+  ],
+  "Lebanon": [
+    {"fact": "The Cedars of God grove in the northern mountains contains some of the oldest living cedar trees in the world — some are over 1,000 years old and the cedar adorns the national flag.", "category": "nature"},
+    {"fact": "Byblos (Jbeil) is one of the oldest continuously inhabited cities in the world, with evidence of habitation dating back over 7,000 years, and the word 'Bible' derives from the city's Greek name.", "category": "history"},
+    {"fact": "Baalbek's Temple of Jupiter contains the largest stone blocks ever used in construction — the 'Stone of the Pregnant Woman' weighs an estimated 1,000 tonnes.", "category": "landmarks"},
+    {"fact": "The country has 18 officially recognised religious sects and a political system that distributes power among them — the president must be Maronite Christian, the PM Sunni, and the speaker Shia.", "category": "politics"}
+  ],
+  "Lesotho": [
+    {"fact": "It is the only country in the world where every point of territory lies above 1,000 metres elevation, earning it the nickname 'The Kingdom in the Sky'.", "category": "geography"},
+    {"fact": "The Highlands Water Project diverts water through tunnels to South Africa's Gauteng province, making water one of the country's most valuable exports.", "category": "economy"},
+    {"fact": "Dinosaur footprints dating back roughly 200 million years are found at multiple sites, making it one of the richest dinosaur trackway regions in Africa.", "category": "science"},
+    {"fact": "Traditional Basotho blankets, introduced by a British trader in 1860, are so culturally significant that they appear on the national coat of arms.", "category": "culture"}
+  ],
+  "Liberia": [
+    {"fact": "Founded in 1822 by freed American slaves, its capital Monrovia is named after US President James Monroe — the only African capital named after an American president.", "category": "history"},
+    {"fact": "Along with Myanmar and the United States, it is one of only three countries that have not officially adopted the metric system.", "category": "culture"},
+    {"fact": "Its maritime registry is the second-largest in the world by tonnage — thousands of ships fly the Liberian flag even though they have no connection to the country.", "category": "economy"},
+    {"fact": "Ellen Johnson Sirleaf, elected in 2005, was the first elected female head of state in Africa and later won the Nobel Peace Prize in 2011.", "category": "politics"}
+  ],
+  "Libya": [
+    {"fact": "Leptis Magna, a Roman city on the coast, is one of the best-preserved Roman ruins in the world — its amphitheatre could seat 15,000 spectators.", "category": "landmarks"},
+    {"fact": "The Great Man-Made River is the world's largest irrigation project, consisting of a network of pipes that transport water from fossil aquifers beneath the Sahara to coastal cities.", "category": "science"},
+    {"fact": "The Saharan Ubari lakes, surrounded by towering sand dunes, are remnants of an ancient freshwater lake system and have become increasingly saline.", "category": "geography"},
+    {"fact": "In 1922, the town of Al Azizia recorded a temperature of 58°C (136°F), though this reading was later invalidated by the World Meteorological Organization in 2012.", "category": "science"}
+  ],
+  "Liechtenstein": [
+    {"fact": "The country is one of only two doubly landlocked countries in the world (the other is Uzbekistan) — both it and all its neighbours are landlocked.", "category": "geography"},
+    {"fact": "It has more registered companies than citizens — about 40,000 companies for roughly 39,000 people — largely due to its favourable tax laws.", "category": "economy"},
+    {"fact": "During the Austro-Prussian War of 1866, the country sent 80 soldiers to guard the Brenner Pass and came back with 81 — they made a friend along the way.", "category": "history"},
+    {"fact": "The entire country can be rented for $70,000 per night through a tourism promotion, including customised street signs and a symbolic key to the principality.", "category": "culture"}
+  ],
+  "Lithuania": [
+    {"fact": "The Hill of Crosses near Šiauliai contains over 200,000 crosses placed by pilgrims over centuries — the Soviets bulldozed it three times, but crosses always reappeared.", "category": "landmarks"},
+    {"fact": "The country was the last pagan nation in Europe, officially adopting Christianity only in 1387.", "category": "history"},
+    {"fact": "Basketball is essentially the national religion — the country of under 3 million people has won Olympic basketball medals and the sport is said to be 'the second religion'.", "category": "culture"},
+    {"fact": "The Curonian Spit is a 98-km sand dune peninsula shared with Russia that contains some of the tallest sand dunes in Europe, reaching nearly 60 metres.", "category": "geography"}
+  ],
+  "Luxembourg": [
+    {"fact": "Despite having a population of only about 660,000, it has the highest GDP per capita in the world, driven largely by its financial services sector.", "category": "economy"},
+    {"fact": "The country has three official languages — Luxembourgish, French, and German — and most citizens speak all three fluently.", "category": "culture"},
+    {"fact": "The Bock Casemates, a 17-km network of underground tunnels carved into the rock beneath Luxembourg City, once sheltered 35,000 people during World War II.", "category": "landmarks"},
+    {"fact": "It is the only Grand Duchy in the world — ruled by a Grand Duke rather than a king or president.", "category": "politics"}
+  ],
+  "Macao": [
+    {"fact": "The gambling industry generates roughly seven times more revenue than Las Vegas, making it the world's largest gambling centre by revenue.", "category": "economy"},
+    {"fact": "The Historic Centre of Macao is a UNESCO World Heritage Site blending Chinese and Portuguese architectural styles after 442 years of Portuguese administration.", "category": "landmarks"},
+    {"fact": "With over 20,000 people per square kilometre, it is the most densely populated region in the world.", "category": "geography"}
+  ],
+  "Madagascar": [
+    {"fact": "Roughly 90% of wildlife found on the island exists nowhere else on Earth, including over 100 species of lemurs.", "category": "nature"},
+    {"fact": "The Tsingy de Bemaraha is a labyrinth of razor-sharp limestone pinnacles up to 70 metres tall, forming one of the most visually striking landscapes on the planet.", "category": "geography"},
+    {"fact": "It is the world's largest producer of vanilla, supplying roughly 80% of the global market — a single kilogram of vanilla beans can cost more than silver.", "category": "economy"},
+    {"fact": "Baobab trees, which can live for thousands of years and store up to 120,000 litres of water in their trunks, have six of the world's eight species on the island.", "category": "nature"}
+  ],
+  "Malawi": [
+    {"fact": "Lake Malawi contains more species of fish than any other lake in the world — over 1,000 species of cichlids, most found nowhere else.", "category": "nature"},
+    {"fact": "The lake takes up roughly a third of the country's total area and is the third-largest lake in Africa.", "category": "geography"},
+    {"fact": "The Gule Wamkulu, a ritual dance performed by the Chewa people using elaborate masks and costumes, is a UNESCO Intangible Cultural Heritage.", "category": "culture"},
+    {"fact": "Despite being one of the world's poorest countries, it has been called 'The Warm Heart of Africa' due to the friendliness of its people.", "category": "culture"}
+  ],
+  "Malaysia": [
+    {"fact": "The Petronas Twin Towers in Kuala Lumpur were the tallest buildings in the world from 1998 to 2004 and remain the tallest twin towers ever built.", "category": "landmarks"},
+    {"fact": "Borneo's Gunung Mulu National Park contains the world's largest cave chamber — the Sarawak Chamber could fit 40 Boeing 747s parked inside.", "category": "nature"},
+    {"fact": "The Rafflesia arnoldii, the world's largest individual flower at up to one metre across, is found in the rainforests of Borneo and smells like rotting flesh.", "category": "nature"},
+    {"fact": "The country is divided into two non-contiguous regions separated by the South China Sea — Peninsular Malaysia and Malaysian Borneo, which are about 600 km apart.", "category": "geography"}
+  ],
+  "Maldives": [
+    {"fact": "The country held the world's first underwater cabinet meeting in 2009, with the president and ministers in scuba gear, to highlight the threat of rising sea levels.", "category": "politics"},
+    {"fact": "It consists of 1,192 coral islands grouped into 26 atolls, yet no point is higher than 2.4 metres above sea level.", "category": "geography"},
+    {"fact": "The bioluminescent plankton that occasionally wash onto the beaches create a 'sea of stars' effect, making the shoreline glow electric blue at night.", "category": "nature"}
+  ],
+  "Mali": [
+    {"fact": "Timbuktu was one of the world's great centres of learning in the 15th and 16th centuries, with its university and libraries containing hundreds of thousands of manuscripts.", "category": "history"},
+    {"fact": "The Great Mosque of Djenné is the largest mud-brick building in the world and is replastered annually in a community festival involving the entire city.", "category": "landmarks"},
+    {"fact": "Mansa Musa, the 14th-century emperor of the Mali Empire, is often considered the wealthiest person in history — his pilgrimage to Mecca included so much gold that he crashed the gold market in Cairo.", "category": "history"},
+    {"fact": "The Bandiagara Escarpment, home to the Dogon people, contains cliff dwellings and granaries built into a 150-km sandstone cliff face.", "category": "landmarks"}
+  ],
+  "Malta": [
+    {"fact": "The Megalithic Temples are older than both Stonehenge and the Egyptian pyramids, with Ġgantija dating to approximately 3600 BC.", "category": "landmarks"},
+    {"fact": "The country has one of the highest population densities in the world, with over 1,600 people per square kilometre.", "category": "geography"},
+    {"fact": "The Maltese language is the only Semitic language written in Latin script and the only Semitic language that is an official EU language.", "category": "culture"},
+    {"fact": "The Knights of St John ruled the islands from 1530 to 1798 and successfully defended against the Great Siege of 1565, one of the most famous sieges in military history.", "category": "history"}
+  ],
+  "Marshall Islands": [
+    {"fact": "Bikini Atoll was the site of 23 US nuclear tests between 1946 and 1958, including the first hydrogen bomb test — the islanders were relocated and most have never returned.", "category": "history"},
+    {"fact": "Traditional Marshallese stick charts (rebbelib) used shells and sticks to map ocean swells and currents for navigation — a unique non-visual cartographic system.", "category": "culture"},
+    {"fact": "The Kwajalein Atoll has the world's largest lagoon by area, at over 2,170 square kilometres, and hosts a US military missile testing range.", "category": "geography"}
+  ],
+  "Mauritania": [
+    {"fact": "The Eye of the Sahara (Richat Structure) is a 40-km-wide circular geological formation visible from space — once thought to be a meteorite impact, it is now believed to be an eroded geological dome.", "category": "geography"},
+    {"fact": "The ancient town of Chinguetti was a major stop on trans-Saharan trade routes and its libraries still contain manuscripts dating back to the 9th century.", "category": "history"},
+    {"fact": "The Iron Train (Train du Désert) is one of the longest and heaviest trains in the world, stretching over 2.5 km long as it hauls iron ore across the Sahara.", "category": "economy"},
+    {"fact": "It was the last country in the world to officially abolish slavery, in 1981, though enforcement has been inconsistent.", "category": "politics"}
+  ],
+  "Mauritius": [
+    {"fact": "The dodo, the most famous extinct bird in history, was endemic to the island and was driven to extinction by the 1680s, barely 80 years after humans arrived.", "category": "nature"},
+    {"fact": "The 'Underwater Waterfall' illusion off the coast of Le Morne is created by sand and silt on the ocean floor flowing off an underwater plateau, visible from the air.", "category": "geography"},
+    {"fact": "The island has one of the highest population densities in Africa and has transformed from a sugar-dependent economy to a diversified one including textiles, tourism, and financial services.", "category": "economy"},
+    {"fact": "The Seven Coloured Earths of Chamarel are sand dunes with naturally occurring layers of seven distinct colours that never erode into a single shade despite rainfall.", "category": "nature"}
+  ],
+  "Mexico": [
+    {"fact": "The Chicxulub crater on the Yucatán Peninsula is the impact site of the asteroid that caused the mass extinction of dinosaurs 66 million years ago.", "category": "science"},
+    {"fact": "The country is home to the world's smallest volcano — Cuexcomate in Puebla is just 13 metres tall with a staircase leading into its crater.", "category": "geography"},
+    {"fact": "Monarch butterflies migrate up to 4,500 km from Canada and the US to winter in the oyamel fir forests of Michoacán — an estimated billion butterflies arrive each year.", "category": "nature"},
+    {"fact": "The ancient city of Teotihuacán, with its Pyramid of the Sun, once had a population of over 100,000 and was one of the largest cities in the world around 400 AD.", "category": "landmarks"},
+    {"fact": "The country has 35 UNESCO World Heritage Sites, more than any other country in the Americas.", "category": "landmarks"}
+  ],
+  "Micronesia": [
+    {"fact": "Yap Island still uses rai stones — large circular limestone discs up to 4 metres in diameter — as a form of traditional currency, even though some weigh several tonnes.", "category": "culture"},
+    {"fact": "Nan Madol, a ruined city of stone palaces built on 92 artificial islands in a lagoon, is sometimes called the 'Venice of the Pacific' and is a UNESCO World Heritage Site.", "category": "landmarks"},
+    {"fact": "Chuuk (Truk) Lagoon contains the wrecks of over 60 Japanese warships and aircraft sunk during a 1944 US air raid, making it one of the world's premier wreck-diving destinations.", "category": "history"}
+  ],
+  "Moldova": [
+    {"fact": "The Mileștii Mici wine cellar holds the Guinness World Record for the largest wine collection — over 2 million bottles stored in 200 km of underground tunnels.", "category": "culture"},
+    {"fact": "Transnistria, a narrow strip of land along the Ukrainian border, has its own government, currency, and military but is not recognised by any UN member state.", "category": "politics"},
+    {"fact": "Despite being one of Europe's poorest countries, its wine industry is a major economic driver, with vineyards covering about 3.8% of the national territory.", "category": "economy"},
+    {"fact": "The country has one of the highest rates of emigration in Europe — roughly a quarter of the population lives abroad.", "category": "economy"}
+  ],
+  "Monaco": [
+    {"fact": "At just 2.02 square kilometres, it is the second-smallest country in the world, yet has the highest population density of any sovereign nation at over 19,000 people per square kilometre.", "category": "geography"},
+    {"fact": "About one in three residents is a millionaire, giving it the highest concentration of wealth per capita in the world.", "category": "economy"},
+    {"fact": "The Monte Carlo Casino, opened in 1863, was built specifically to save the royal family from bankruptcy, and citizens of Monaco are forbidden from gambling there.", "category": "culture"},
+    {"fact": "The Monaco Grand Prix is run through the streets of the principality and is considered one of the most prestigious motor races in the world, held annually since 1929.", "category": "culture"}
+  ],
+  "Mongolia": [
+    {"fact": "It is the most sparsely populated sovereign country in the world, with roughly 2 people per square kilometre — about 30% of the population still lives as nomadic herders.", "category": "geography"},
+    {"fact": "The Genghis Khan equestrian statue near Ulaanbaatar stands 40 metres tall and is the largest equestrian statue in the world.", "category": "landmarks"},
+    {"fact": "The Mongolian Empire under Genghis Khan and his successors was the largest contiguous land empire in history, stretching from Korea to Eastern Europe at its peak.", "category": "history"},
+    {"fact": "The Gobi Desert contains some of the world's most important dinosaur fossil sites — the first confirmed dinosaur eggs were discovered here in 1923.", "category": "science"}
+  ],
+  "Montenegro": [
+    {"fact": "The Bay of Kotor, a winding fjord-like inlet, is often called the southernmost fjord in Europe, though it is technically a submerged river canyon.", "category": "geography"},
+    {"fact": "Tara River Canyon, at 1,300 metres deep, is the deepest river canyon in Europe and the second-deepest in the world after the Grand Canyon.", "category": "geography"},
+    {"fact": "Our Lady of the Rocks is a tiny artificial island in the Bay of Kotor, created over centuries by locals dropping stones and sinking old ships.", "category": "landmarks"},
+    {"fact": "The country's name literally means 'Black Mountain', referring to the dark appearance of Mount Lovćen when covered in dense forest.", "category": "geography"}
+  ],
+  "Montserrat": [
+    {"fact": "The Soufrière Hills volcano erupted in 1995, burying the capital Plymouth under metres of ash and rock — it remains the only ghost town serving as an official capital.", "category": "geography"},
+    {"fact": "Roughly two-thirds of the island is an exclusion zone, and the pre-eruption population of 11,000 dropped to under 5,000.", "category": "geography"},
+    {"fact": "The island was known as the 'Emerald Isle of the Caribbean' due to its Irish heritage — St Patrick's Day is a public holiday commemorating both Irish settlers and a 1768 slave uprising.", "category": "history"}
+  ],
+  "Morocco": [
+    {"fact": "The University of al-Qarawiyyin in Fez, founded in 859 AD, is recognised by UNESCO and Guinness World Records as the oldest continuously operating university in the world.", "category": "history"},
+    {"fact": "The Hassan II Mosque in Casablanca has the tallest minaret in the world at 210 metres and is one of the few mosques open to non-Muslims.", "category": "landmarks"},
+    {"fact": "The Todra Gorge features 300-metre limestone canyon walls narrowing to just 10 metres apart, creating one of the most dramatic geological formations in North Africa.", "category": "geography"},
+    {"fact": "Argan trees are found almost exclusively here, and goats famously climb them to eat the fruit — argan oil has become one of the world's most expensive culinary and cosmetic oils.", "category": "nature"}
+  ],
+  "Mozambique": [
+    {"fact": "The country's flag is the only one in the world to feature a modern assault rifle — an AK-47 crossed with a hoe, symbolising defence and agriculture.", "category": "culture"},
+    {"fact": "The Bazaruto Archipelago is home to one of the last viable populations of dugongs in the western Indian Ocean.", "category": "nature"},
+    {"fact": "Mozambique Island (Ilha de Moçambique) was a major Portuguese trading post and the original capital — the entire country is named after it.", "category": "history"},
+    {"fact": "Lake Malawi's southeastern shore falls within the country, where it is known as Lake Niassa.", "category": "geography"}
+  ],
+  "Myanmar": [
+    {"fact": "Bagan contains over 2,000 surviving Buddhist temples and pagodas built between the 9th and 13th centuries, spread across a 104-square-kilometre plain.", "category": "landmarks"},
+    {"fact": "The country is one of only three (with Liberia and the US) that has not officially adopted the metric system.", "category": "culture"},
+    {"fact": "Inle Lake's leg-rowing fishermen wrap one leg around their oar while balancing on the stern with the other, a technique unique to this lake.", "category": "culture"},
+    {"fact": "The Shwedagon Pagoda in Yangon is covered in hundreds of gold plates and topped with 5,448 diamonds and 2,317 rubies.", "category": "landmarks"}
+  ],
+  "Namibia": [
+    {"fact": "The Namib Desert is considered the oldest desert in the world, having been arid for roughly 55-80 million years.", "category": "geography"},
+    {"fact": "Kolmanskop, a former diamond-mining town, was abandoned in 1954 and is now half-buried in sand, creating one of the most photogenic ghost towns on Earth.", "category": "landmarks"},
+    {"fact": "The Skeleton Coast is littered with the remains of shipwrecks and whale bones, and the Bushmen called it 'The Land God Made in Anger'.", "category": "geography"},
+    {"fact": "It was the first African country to incorporate environmental protection into its constitution, and roughly 44% of the land is under conservation management.", "category": "politics"}
+  ],
+  "Nauru": [
+    {"fact": "At just 21 square kilometres, it is the world's smallest island nation and the third-smallest country by area.", "category": "geography"},
+    {"fact": "Phosphate mining once made it the richest country per capita on Earth in the late 1960s, but reserves were exhausted, leaving 80% of the island a barren moonscape.", "category": "economy"},
+    {"fact": "It is the only country in the world without an official capital city — government offices are located in the Yaren district.", "category": "politics"}
+  ],
+  "Nepal": [
+    {"fact": "The country contains eight of the world's fourteen peaks over 8,000 metres, including Mount Everest at 8,849 metres.", "category": "geography"},
+    {"fact": "Lumbini, the birthplace of Siddhartha Gautama (the Buddha) around 563 BC, is one of the holiest sites in Buddhism.", "category": "landmarks"},
+    {"fact": "The Kumari tradition selects a young girl to be worshipped as the living incarnation of the goddess Taleju until she reaches puberty.", "category": "culture"},
+    {"fact": "The country's calendar runs 56 years and 8 months ahead of the Gregorian calendar — Bikram Sambat is the official calendar.", "category": "culture"}
+  ],
+  "Netherlands": [
+    {"fact": "About a third of the country lies below sea level, and without its system of dykes, levees, and pumps, 65% of the land would be underwater at high tide.", "category": "geography"},
+    {"fact": "During the 17th-century 'Tulip Mania', single tulip bulbs sold for more than 10 times a skilled craftsman's annual salary — one of history's first recorded speculative bubbles.", "category": "history"},
+    {"fact": "There are more bicycles than people — roughly 23 million bikes for 17.5 million inhabitants — and the country has over 35,000 km of dedicated cycle paths.", "category": "culture"},
+    {"fact": "The world's first stock exchange was established in Amsterdam in 1602 to trade shares of the Dutch East India Company.", "category": "history"}
+  ],
+  "New Caledonia": [
+    {"fact": "The territory has the world's largest enclosed lagoon, covering 24,000 square kilometres and surrounded by the world's second-longest double barrier reef.", "category": "nature"},
+    {"fact": "It holds roughly 25% of the world's known nickel reserves, making mining the economic backbone of the territory.", "category": "economy"},
+    {"fact": "The kagu, a flightless bird found only here, has no close living relatives and is the sole surviving member of its entire family (Rhynochetidae).", "category": "nature"}
+  ],
+  "New Zealand": [
+    {"fact": "The country was the last major landmass to be settled by humans — Polynesians arrived only around 1250-1300 AD.", "category": "history"},
+    {"fact": "In 1893, it became the first self-governing country in the world to grant all women the right to vote in national elections.", "category": "politics"},
+    {"fact": "The kiwi bird has nostrils at the tip of its beak (unique among birds) and lays an egg that is up to 25% of the mother's body weight — the largest egg-to-body ratio of any bird.", "category": "nature"},
+    {"fact": "Milford Sound receives roughly 8 metres of rain per year, creating temporary waterfalls that cascade down cliffs during storms.", "category": "nature"}
+  ],
+  "Nicaragua": [
+    {"fact": "Lake Nicaragua (Lake Cocibolca) contains the world's only freshwater sharks — bull sharks that have adapted to swim up the San Juan River from the Caribbean.", "category": "nature"},
+    {"fact": "The country has the only flag in the world (besides El Salvador's) that features the colour purple, visible in the rainbow on its coat of arms.", "category": "culture"},
+    {"fact": "Cerro Negro, one of the youngest volcanoes in Central America (born in 1850), is popular for 'volcano boarding' — sliding down its ash-covered slopes at speeds up to 95 km/h.", "category": "geography"},
+    {"fact": "It is the largest country in Central America by area, yet one of the least densely populated.", "category": "geography"}
+  ],
+  "Niger": [
+    {"fact": "The Sahara Desert covers about 80% of the country's territory, yet the area around the Niger River in the southwest supports most of the population.", "category": "geography"},
+    {"fact": "The Cure Salée ('Salt Cure') festival sees Tuareg and Wodaabe nomads converge annually for camel races and the Gerewol, a male beauty contest where men dance elaborately to attract wives.", "category": "culture"},
+    {"fact": "The Tree of Ténéré was considered the most isolated tree on Earth — the only one for over 400 km in any direction — until a truck driver knocked it down in 1973.", "category": "nature"},
+    {"fact": "Agadez contains one of the oldest mud-brick minarets in West Africa, the Grand Mosque, which has been standing since the 16th century.", "category": "landmarks"}
+  ],
+  "Nigeria": [
+    {"fact": "Nollywood produces more films per year than Hollywood, making it the second or third largest film industry in the world by volume.", "category": "culture"},
+    {"fact": "The country has over 250 ethnic groups speaking over 500 distinct languages — more linguistic diversity than nearly any other African nation.", "category": "culture"},
+    {"fact": "The Benin Bronzes, intricate metal plaques and sculptures from the Kingdom of Benin dating to the 13th century, are among the most famous examples of African art.", "category": "history"},
+    {"fact": "With over 220 million people, it is the most populous country in Africa and the seventh most populous in the world.", "category": "geography"}
+  ],
+  "Niue": [
+    {"fact": "With a population of roughly 1,600, it is one of the smallest self-governing states in the world, yet it was the first country to offer free nationwide Wi-Fi.", "category": "science"},
+    {"fact": "The entire island is essentially a raised coral atoll, and there are no rivers or streams — all freshwater comes from underground.", "category": "geography"},
+    {"fact": "The island issued legal tender coins featuring Disney characters and Pokémon, making them some of the most unusual currency in the world.", "category": "economy"}
+  ],
+  "Norfolk Island": [
+    {"fact": "The island was settled in 1856 by descendants of the Bounty mutineers who were relocated from overcrowded Pitcairn Island, and many residents still speak Norfuk, a creole of 18th-century English and Tahitian.", "category": "history"},
+    {"fact": "The towering Norfolk Island pine, now an ornamental tree found worldwide, is native only to this tiny island.", "category": "nature"},
+    {"fact": "The island's convict settlement ruins from the 18th and 19th centuries are a UNESCO World Heritage Site documenting the harsh realities of British penal transportation.", "category": "history"}
+  ],
+  "North Korea": [
+    {"fact": "The country uses its own calendar — the Juche calendar — which starts from the birth year of Kim Il-sung (1912), making 2026 the year Juche 115.", "category": "culture"},
+    {"fact": "The Ryugyong Hotel in Pyongyang, a 330-metre pyramid-shaped skyscraper started in 1987, remains unfinished and unoccupied after nearly four decades of construction.", "category": "landmarks"},
+    {"fact": "The DMZ (Demilitarised Zone) between North and South Korea has become an accidental nature reserve, with rare species like the red-crowned crane thriving in the undisturbed strip.", "category": "nature"},
+    {"fact": "Pyongyang's metro system runs up to 110 metres underground, making it one of the deepest metro systems in the world, partly designed to serve as a nuclear bunker.", "category": "landmarks"}
+  ],
+  "North Macedonia": [
+    {"fact": "Lake Ohrid is one of the oldest and deepest lakes in Europe, dating back 2-3 million years, and contains numerous endemic species found nowhere else.", "category": "nature"},
+    {"fact": "Mother Teresa was born in Skopje in 1910, though the city was then part of the Ottoman Empire.", "category": "history"},
+    {"fact": "The country changed its name from 'Macedonia' to 'North Macedonia' in 2019 to resolve a decades-long naming dispute with Greece.", "category": "politics"},
+    {"fact": "The Stone Bridge over the Vardar River in Skopje dates to the 15th century and is the city's most recognisable symbol.", "category": "landmarks"}
+  ],
+  "Northern Mariana Islands": [
+    {"fact": "The Mariana Trench, the deepest point in the world's oceans at nearly 11,000 metres, lies just east of the islands.", "category": "geography"},
+    {"fact": "Residents are US citizens but cannot vote in presidential elections, and the territory has a non-voting delegate in the US House of Representatives.", "category": "politics"},
+    {"fact": "The island of Pagan has an active volcano that erupted in 1981, forcing the evacuation of all residents, and the island has remained largely uninhabited since.", "category": "geography"}
+  ],
+  "Norway": [
+    {"fact": "The country has a sovereign wealth fund worth over $1.5 trillion — roughly $280,000 for every citizen — built from oil and gas revenues.", "category": "economy"},
+    {"fact": "Svalbard, in the Arctic, has a Global Seed Vault dug into a mountain that stores over one million seed samples from around the world as insurance against agricultural catastrophe.", "category": "science"},
+    {"fact": "The Lofoten Islands above the Arctic Circle experience the midnight sun for over two months, yet have surprisingly mild winters due to the Gulf Stream.", "category": "geography"},
+    {"fact": "Slow TV originated here — a 7-hour train journey from Bergen to Oslo was broadcast in real time and watched by over 1.2 million viewers, about a quarter of the population.", "category": "culture"}
+  ],
+  "Oman": [
+    {"fact": "The Rub' al Khali (Empty Quarter) extends into the country's interior — it is the largest continuous sand desert in the world.", "category": "geography"},
+    {"fact": "Frankincense has been harvested in the Dhofar region for over 5,000 years and was once worth more than gold — the trees are UNESCO-listed.", "category": "history"},
+    {"fact": "The Majlis al Jinn (Meeting Place of the Spirits) is one of the largest cave chambers in the world, so vast that several hot-air balloons have been flown inside it.", "category": "geography"},
+    {"fact": "The Al Hajar Mountains contain some of the world's best-exposed sections of oceanic crust thrust onto land, making the country a pilgrimage site for geologists.", "category": "science"}
+  ],
+  "Pakistan": [
+    {"fact": "K2, the second-tallest mountain in the world at 8,611 metres, has a fatality rate of roughly 1 in 4 climbers, making it far deadlier than Everest.", "category": "geography"},
+    {"fact": "Mohenjo-daro, a 4,500-year-old Indus Valley city, had a sophisticated urban grid, indoor plumbing, and a public bath system centuries before the Roman Empire.", "category": "history"},
+    {"fact": "The Karakoram Highway, linking the country to China, is the highest paved international road in the world, reaching 4,693 metres at the Khunjerab Pass.", "category": "landmarks"},
+    {"fact": "The country has more than 7,000 glaciers — more than anywhere outside the polar regions — and the Baltoro Glacier alone is 63 km long.", "category": "geography"}
+  ],
+  "Palau": [
+    {"fact": "Jellyfish Lake contains millions of golden jellyfish that have evolved without stingers, allowing swimmers to safely float among them.", "category": "nature"},
+    {"fact": "In 2009, it became the first country to create a shark sanctuary, banning all commercial shark fishing across its entire exclusive economic zone.", "category": "nature"},
+    {"fact": "The Rock Islands, a collection of over 400 limestone islets covered in jungle, are a UNESCO World Heritage Site with some of the highest marine biodiversity in the world.", "category": "nature"}
+  ],
+  "Palestine": [
+    {"fact": "Jericho, in the West Bank, is one of the oldest continuously inhabited cities in the world, with evidence of settlement dating back over 10,000 years.", "category": "history"},
+    {"fact": "The Church of the Nativity in Bethlehem, built over the traditional birthplace of Jesus, is one of the oldest continuously operating churches in the world.", "category": "landmarks"},
+    {"fact": "Olive oil production is central to the culture and economy — some olive trees in the West Bank are estimated to be over 2,000 years old.", "category": "culture"}
+  ],
+  "Panama": [
+    {"fact": "The Panama Canal uses a system of locks that raises ships 26 metres above sea level to cross through Gatun Lake — roughly 14,000 vessels transit each year.", "category": "landmarks"},
+    {"fact": "It is the only place in the world where you can watch the sun rise over the Pacific Ocean and set over the Atlantic, due to the country's S-shaped isthmus.", "category": "geography"},
+    {"fact": "The country has more bird species than the United States and Canada combined — over 1,000 species in a territory smaller than South Carolina.", "category": "nature"},
+    {"fact": "The Darién Gap, a 160-km stretch of dense jungle between Panama and Colombia, is the only break in the Pan-American Highway's 30,000-km route from Alaska to Patagonia.", "category": "geography"}
+  ],
+  "Papua New Guinea": [
+    {"fact": "The island of New Guinea has been inhabited for at least 50,000 years, making its indigenous peoples among the oldest continuous cultures on Earth.", "category": "history"},
+    {"fact": "The country's highland tribes were completely unknown to the outside world until the 1930s, when Australian gold prospectors stumbled upon a million people living in the interior.", "category": "history"},
+    {"fact": "Birds of paradise, with their extraordinary plumage displays, are found almost exclusively here and on nearby islands — there are 38 known species.", "category": "nature"},
+    {"fact": "The country has no functioning national road network — most travel between major towns is by air, making it one of the most aviation-dependent countries in the world.", "category": "geography"}
+  ],
+  "Paraguay": [
+    {"fact": "It is one of only two landlocked countries in South America (the other is Bolivia) and contains the Gran Chaco, one of the last great wilderness areas on the continent.", "category": "geography"},
+    {"fact": "The Itaipu Dam on the Paraguay-Brazil border is one of the most powerful hydroelectric plants in the world and supplies roughly 90% of Paraguay's electricity.", "category": "science"},
+    {"fact": "Guaraní is an official language alongside Spanish, and over 90% of the population speaks it — the only indigenous language in the Americas with such widespread use.", "category": "culture"},
+    {"fact": "The Chaco War (1932–1935) with Bolivia was the deadliest South American conflict of the 20th century, fought over territory believed to hold oil reserves that were never found.", "category": "history"}
+  ],
+  "Peru": [
+    {"fact": "Machu Picchu, the 15th-century Inca citadel perched 2,430 metres above sea level, was unknown to the outside world until Hiram Bingham publicised it in 1911.", "category": "landmarks"},
+    {"fact": "The Nazca Lines, enormous geoglyphs etched into the desert floor between 500 BC and 500 AD, include figures up to 370 metres long and can only be fully appreciated from the air.", "category": "landmarks"},
+    {"fact": "The country has over 3,000 varieties of potato — more than any other country — as the potato was first domesticated in the Andes around 8,000 BC.", "category": "culture"},
+    {"fact": "Cotahuasi Canyon, at over 3,354 metres deep, is one of the deepest canyons in the world — roughly twice the depth of the Grand Canyon.", "category": "geography"},
+    {"fact": "Rainbow Mountain (Vinicunca), with its vivid stripes of red, gold, and turquoise caused by mineral deposits, was only revealed to tourists after its snow cap melted due to climate change.", "category": "nature"}
+  ],
+  "Philippines": [
+    {"fact": "The country consists of 7,641 islands, but only about 2,000 are inhabited, and many do not even have names.", "category": "geography"},
+    {"fact": "The Chocolate Hills of Bohol — over 1,200 nearly identical conical hills — turn brown in the dry season, resembling a vast landscape of chocolate drops.", "category": "geography"},
+    {"fact": "The Philippine Eagle, with a wingspan of over 2 metres, is one of the world's largest and most powerful raptors and is found nowhere else.", "category": "nature"},
+    {"fact": "The Puerto Princesa Underground River flows 8.2 km through a cave system directly into the sea and is one of the longest navigable underground rivers in the world.", "category": "nature"}
+  ],
+  "Poland": [
+    {"fact": "The Wieliczka Salt Mine near Kraków has been operating since the 13th century and contains an entire underground cathedral, complete with chandeliers carved from rock salt.", "category": "landmarks"},
+    {"fact": "Białowieża Forest, shared with Belarus, is the last remaining primeval forest in lowland Europe and is home to the European bison.", "category": "nature"},
+    {"fact": "The country is the world's largest exporter of amber, and the Baltic coast regularly washes up pieces of the fossilised tree resin, some containing insects millions of years old.", "category": "nature"},
+    {"fact": "Nicolaus Copernicus, who proposed the heliocentric model of the solar system in 1543, was born in Toruń — the discovery fundamentally changed humanity's understanding of the universe.", "category": "science"}
+  ],
+  "Portugal": [
+    {"fact": "In 1755, Lisbon was struck by one of the deadliest earthquakes in European history, followed by a tsunami and fires that destroyed 85% of the city — it led to the birth of modern seismology.", "category": "history"},
+    {"fact": "The Vasco da Gama Bridge in Lisbon stretches 17.2 km, making it the longest bridge in Europe.", "category": "landmarks"},
+    {"fact": "The Livraria Lello bookstore in Porto, with its dramatic neo-Gothic interior and crimson staircase, is often called one of the most beautiful bookstores in the world and reportedly inspired J.K. Rowling.", "category": "landmarks"},
+    {"fact": "Cork production accounts for over 50% of the world's supply, harvested from the bark of cork oak trees every 9 years without harming the tree.", "category": "economy"}
+  ],
+  "Puerto Rico": [
+    {"fact": "Mosquito Bay on the island of Vieques is the brightest bioluminescent bay in the world, with microorganisms that flash blue-green when disturbed.", "category": "nature"},
+    {"fact": "El Yunque is the only tropical rainforest in the US National Forest System and receives over 200 inches of rain per year.", "category": "nature"},
+    {"fact": "The Arecibo Observatory housed the world's largest single-aperture radio telescope (305 metres) from 1963 until its collapse in 2020.", "category": "science"},
+    {"fact": "San Juan, founded in 1521, is the second-oldest European-established capital city in the Americas (after Santo Domingo).", "category": "history"}
+  ],
+  "Qatar": [
+    {"fact": "The country will host the first FIFA World Cup in the Middle East in 2022 — and built seven entirely new stadiums, including one designed to be disassembled after the tournament.", "category": "landmarks"},
+    {"fact": "The Pearl-Qatar, an artificial island, is a luxury development built on the former site of pearl diving beds that were the country's economic foundation before oil.", "category": "economy"},
+    {"fact": "The peninsula has virtually no natural freshwater, so roughly 99% of the country's drinking water comes from desalinated seawater.", "category": "geography"},
+    {"fact": "Al Jazeera, one of the most-watched news channels in the world, was founded in Doha in 1996 and broadcasts in multiple languages.", "category": "culture"}
+  ],
+  "Romania": [
+    {"fact": "The Palace of the Parliament in Bucharest is the heaviest building in the world and the largest civilian administrative building, with 1,100 rooms.", "category": "landmarks"},
+    {"fact": "Bran Castle in Transylvania is marketed as 'Dracula's Castle', though Vlad the Impaler — the historical inspiration for Bram Stoker's character — likely only passed through.", "category": "landmarks"},
+    {"fact": "The Danube Delta is Europe's largest wetland, home to over 300 species of birds and 45 freshwater fish species.", "category": "nature"},
+    {"fact": "The Merry Cemetery in Săpânța features brightly painted wooden crosses with humorous poems describing the deceased's life — a unique and irreverent approach to death.", "category": "culture"}
+  ],
+  "Russia": [
+    {"fact": "The Trans-Siberian Railway stretches 9,289 km from Moscow to Vladivostok, crossing 8 time zones — the longest railway line in the world.", "category": "landmarks"},
+    {"fact": "Lake Baikal in Siberia is the deepest lake in the world (1,642 m) and contains about 20% of the world's unfrozen surface freshwater.", "category": "geography"},
+    {"fact": "The Hermitage Museum in St Petersburg has over 3 million items in its collection and employs a staff of cats to protect artworks from mice.", "category": "landmarks"},
+    {"fact": "Oymyakon in Siberia recorded a temperature of −67.7°C in 1933, making it the coldest permanently inhabited place on Earth.", "category": "geography"}
+  ],
+  "Rwanda": [
+    {"fact": "Mountain gorillas in Volcanoes National Park have recovered from fewer than 250 individuals to over 1,000, one of the great conservation success stories.", "category": "nature"},
+    {"fact": "The country banned single-use plastic bags in 2008, making it one of the first nations to do so — Kigali is now often called the cleanest city in Africa.", "category": "politics"},
+    {"fact": "Women hold over 60% of seats in the national parliament, the highest proportion of any country in the world.", "category": "politics"},
+    {"fact": "The country is known as the 'Land of a Thousand Hills' (Pays des Mille Collines) due to its undulating hilly terrain across nearly every part of the country.", "category": "geography"}
+  ],
+  "Saint Barthelemy": [
+    {"fact": "The island is the only Caribbean territory that was once a Swedish colony (1784–1878), and the capital Gustavia is named after King Gustav III of Sweden.", "category": "history"},
+    {"fact": "The airport runway ends just metres from the beach, where planes descend over a hilltop road — it is considered one of the most dramatic airport approaches in the world.", "category": "geography"},
+    {"fact": "It is entirely duty-free, with no income tax, and has become one of the most exclusive luxury holiday destinations in the Caribbean.", "category": "economy"}
+  ],
+  "Saint Helena": [
+    {"fact": "Napoleon Bonaparte spent his final six years of exile on the island (1815–1821), and his former residence Longwood House is still maintained by the French government.", "category": "history"},
+    {"fact": "Jonathan, a Seychelles giant tortoise living on the island, is the oldest known living land animal, born around 1832.", "category": "nature"},
+    {"fact": "The island had no airport until 2017 — previously the only way to reach it was by ship, a five-day journey from Cape Town.", "category": "geography"}
+  ],
+  "Saint Kitts and Nevis": [
+    {"fact": "It is the smallest sovereign state in the Americas by both area and population — roughly 47,000 people across 261 square kilometres.", "category": "geography"},
+    {"fact": "Brimstone Hill Fortress, a UNESCO World Heritage Site, is one of the best-preserved historical fortifications in the Americas and was known as 'The Gibraltar of the West Indies'.", "category": "landmarks"},
+    {"fact": "The Citizenship by Investment Programme, established in 1984, was the first of its kind in the world, allowing foreign nationals to obtain citizenship through investment.", "category": "politics"}
+  ],
+  "Saint Lucia": [
+    {"fact": "The Pitons — two volcanic spires rising over 700 metres from the sea — are the island's iconic UNESCO World Heritage landmark.", "category": "landmarks"},
+    {"fact": "It is the only country in the world named after a woman — Saint Lucy of Syracuse.", "category": "history"},
+    {"fact": "The island has produced two Nobel Prize winners (Sir Arthur Lewis for Economics, Derek Walcott for Literature) — the highest per capita Nobel rate of any sovereign nation.", "category": "culture"}
+  ],
+  "Saint Martin": [
+    {"fact": "The island is the smallest landmass in the world divided between two sovereign states — France (north) and the Netherlands (south) — with an open border since 1648.", "category": "geography"},
+    {"fact": "Maho Beach is famous for planes landing at Princess Juliana Airport directly overhead, with jet blast strong enough to knock people off their feet.", "category": "geography"},
+    {"fact": "The French side has over 300 restaurants, earning it the nickname 'Gourmet Capital of the Caribbean'.", "category": "culture"}
+  ],
+  "Saint Pierre and Miquelon": [
+    {"fact": "It is the last remnant of France's once-vast North American empire (New France) and is only 25 km from the coast of Newfoundland.", "category": "geography"},
+    {"fact": "During Prohibition in the United States (1920–1933), the islands became a major smuggling hub for Canadian whisky bound for the American market.", "category": "history"},
+    {"fact": "Despite being in North America, the territory uses the euro and has a distinctly French culture, with bakeries, cafés, and Basque-influenced architecture.", "category": "culture"}
+  ],
+  "Saint Vincent and the Grenadines": [
+    {"fact": "La Soufrière volcano erupted in April 2021, forcing the evacuation of roughly 20,000 people — about a fifth of the population.", "category": "geography"},
+    {"fact": "The Tobago Cays, a cluster of uninhabited islands with crystal-clear water, were used as a filming location for 'Pirates of the Caribbean'.", "category": "landmarks"},
+    {"fact": "Breadfruit was first introduced to the Caribbean here by Captain Bligh of Bounty fame, on his second (successful) breadfruit voyage in 1793.", "category": "history"}
+  ],
+  "Samoa": [
+    {"fact": "In 2011, the country skipped an entire day by switching from the east side to the west side of the International Date Line, jumping from Thursday 29 December directly to Saturday 31 December.", "category": "geography"},
+    {"fact": "Robert Louis Stevenson spent the last four years of his life here and is buried atop Mount Vaea — the Samoans called him 'Tusitala' (Teller of Tales).", "category": "culture"},
+    {"fact": "The traditional Samoan tatau (tattoo) covers the body from waist to knee and takes weeks to complete using hand-tapped instruments — the English word 'tattoo' derives from the Polynesian practice.", "category": "culture"}
+  ],
+  "San Marino": [
+    {"fact": "Founded in 301 AD, it claims to be the world's oldest surviving republic and one of the oldest continuously existing sovereign states.", "category": "history"},
+    {"fact": "The entire country is perched on and around Mount Titano, with three medieval fortresses on its peaks visible from miles around.", "category": "landmarks"},
+    {"fact": "Despite a population of only about 33,000, the country has its own football team, Olympic committee, and more cars than people.", "category": "culture"},
+    {"fact": "During World War II, it accepted over 100,000 refugees — more than 10 times its own population at the time.", "category": "history"}
+  ],
+  "Sao Tome and Principe": [
+    {"fact": "The islands sit almost exactly on the Equator and the Prime Meridian, placing them near the geographic coordinates 0°N, 0°E.", "category": "geography"},
+    {"fact": "Pico Cão Grande, a 370-metre volcanic plug rising from the jungle floor like a needle, is one of the most dramatic geological formations in Africa.", "category": "geography"},
+    {"fact": "The islands were uninhabited when Portuguese explorers arrived in the 1470s and became a major centre of the sugar trade, later shifting to cocoa.", "category": "history"}
+  ],
+  "Saudi Arabia": [
+    {"fact": "The Empty Quarter (Rub' al Khali) is the largest continuous sand desert in the world, covering an area roughly the size of France.", "category": "geography"},
+    {"fact": "Mada'in Saleh (Hegra), the first UNESCO World Heritage Site in the country, contains 131 rock-cut tombs built by the Nabataean civilisation, similar to Petra in Jordan.", "category": "landmarks"},
+    {"fact": "Women were only allowed to drive starting in June 2018, ending the world's last remaining ban on female drivers.", "category": "politics"},
+    {"fact": "The NEOM megaproject includes 'The Line', a planned 170-km-long linear city with no cars and no streets, designed to house 9 million people.", "category": "economy"}
+  ],
+  "Senegal": [
+    {"fact": "The Dakar Rally, one of the world's most famous off-road endurance races, originally ended in the capital Dakar (though the race moved to South America in 2009 and later Saudi Arabia).", "category": "culture"},
+    {"fact": "Gorée Island, just offshore from Dakar, was a major departure point in the Atlantic slave trade and is a UNESCO World Heritage Site.", "category": "history"},
+    {"fact": "The African Renaissance Monument in Dakar stands 49 metres tall — taller than the Statue of Liberty — and was controversially built by a North Korean construction company.", "category": "landmarks"},
+    {"fact": "The country is known for its 'teranga' (hospitality) culture, and its national football team is nicknamed the Lions of Teranga.", "category": "culture"}
+  ],
+  "Serbia": [
+    {"fact": "Nikola Tesla, one of history's most important inventors (AC electricity, radio waves, the Tesla coil), was born in Smiljan, then part of the Austrian Empire, to Serbian parents.", "category": "science"},
+    {"fact": "The Đavolja Varoš ('Devil's Town') contains over 200 earth pyramids formed by erosion, some topped with stone caps, which local legend attributes to petrified wedding guests.", "category": "geography"},
+    {"fact": "Belgrade, situated at the confluence of the Danube and Sava rivers, has been destroyed and rebuilt over 40 times throughout its history.", "category": "history"},
+    {"fact": "The country is one of the world's largest exporters of raspberries, producing roughly a third of the global supply.", "category": "economy"}
+  ],
+  "Seychelles": [
+    {"fact": "The Vallée de Mai on Praslin Island contains the endemic coco de mer palm, which produces the largest seed in the plant kingdom — up to 25 kg.", "category": "nature"},
+    {"fact": "Aldabra Atoll is a UNESCO World Heritage Site home to the world's largest population of giant tortoises — over 100,000, outnumbering the Galápagos population.", "category": "nature"},
+    {"fact": "With a population of roughly 100,000, it is the smallest African country by population and the least populous sovereign African nation.", "category": "geography"},
+    {"fact": "The islands are made of granite rather than coral, making them the only mid-oceanic granite islands in the world.", "category": "geography"}
+  ],
+  "Sierra Leone": [
+    {"fact": "The name means 'Lion Mountains', given by Portuguese explorer Pedro de Sintra in 1462 because the shape of the mountains reminded him of a lion.", "category": "history"},
+    {"fact": "Freetown was founded in 1792 as a settlement for freed slaves from the American Revolution, making it one of the oldest established communities of free Black people in Africa.", "category": "history"},
+    {"fact": "The country has some of the world's most beautiful beaches, but Bunce Island in the Sierra Leone River was one of the largest British slave trading posts in West Africa.", "category": "history"},
+    {"fact": "The 'Star of Sierra Leone', discovered in 1972, was the third-largest gem-quality diamond ever found, weighing 968.9 carats.", "category": "economy"}
+  ],
+  "Singapore": [
+    {"fact": "The country has virtually no natural resources, yet has one of the highest GDPs per capita in the world, built on trade, finance, and manufacturing.", "category": "economy"},
+    {"fact": "Chewing gum has been banned since 1992 (with exceptions for therapeutic gum), and littering, jaywalking, and failing to flush a public toilet are all finable offences.", "category": "politics"},
+    {"fact": "The Changi Airport Jewel features the world's tallest indoor waterfall at 40 metres, surrounded by a terraced indoor forest.", "category": "landmarks"},
+    {"fact": "Despite being a city-state of just 733 square kilometres, it has gained about 25% more land since independence through land reclamation.", "category": "geography"}
+  ],
+  "Sint Maarten": [
+    {"fact": "The Dutch side of the shared island of Saint Martin is the smallest territory in the world that is part of two separate sovereign nations.", "category": "geography"},
+    {"fact": "Great Bay Beach is famous for planes from Princess Juliana Airport passing just metres overhead on landing approach.", "category": "geography"},
+    {"fact": "Despite its tiny size (34 square kilometres), it hosts over a million cruise ship passengers per year.", "category": "economy"}
+  ],
+  "Slovakia": [
+    {"fact": "The country has more castles and chateaux per capita than any other country in the world — over 180 for a population of 5.4 million.", "category": "landmarks"},
+    {"fact": "The Dobšiná Ice Cave contains permanent ice formations up to 26 metres thick that have been there for thousands of years, despite the cave being at a relatively low altitude.", "category": "nature"},
+    {"fact": "Andy Warhol's parents were from the village of Miková in northeastern Slovakia, and a museum dedicated to the pop art icon operates in nearby Medzilaborce.", "category": "culture"},
+    {"fact": "Bratislava is the only national capital that borders two other sovereign countries — Austria and Hungary.", "category": "geography"}
+  ],
+  "Slovenia": [
+    {"fact": "Over 60% of the country is covered by forest, making it the third-most-forested country in Europe after Finland and Sweden.", "category": "nature"},
+    {"fact": "Postojna Cave, 24 km of passages, has been a tourist attraction since 1819 and is home to the olm (proteus), a blind cave salamander that can live for over 100 years.", "category": "nature"},
+    {"fact": "Lake Bled, with its island church and clifftop castle, was voted one of the most beautiful alpine lakes in Europe — the island is the only natural island in the country.", "category": "landmarks"},
+    {"fact": "The Lipizzaner horses, famous for the Spanish Riding School in Vienna, originate from the village of Lipica in southwestern Slovenia.", "category": "culture"}
+  ],
+  "Solomon Islands": [
+    {"fact": "The islands were the site of fierce World War II battles, including Guadalcanal — wrecks of ships and aircraft still litter the surrounding waters, known as 'Iron Bottom Sound'.", "category": "history"},
+    {"fact": "Some islanders use dolphin teeth as traditional currency, and the practice of dolphin hunting and tooth trading continues on certain islands.", "category": "culture"},
+    {"fact": "Kavachi, an active submarine volcano, is one of the most active in the Pacific and occasionally creates temporary islands that erode back below the surface.", "category": "geography"}
+  ],
+  "Somalia": [
+    {"fact": "The country has the longest coastline in mainland Africa, stretching over 3,000 km along the Indian Ocean and Gulf of Aden.", "category": "geography"},
+    {"fact": "Laas Geel cave paintings near Hargeisa, dating back roughly 5,000 years, are among the best-preserved rock art in Africa, depicting cattle and human figures.", "category": "history"},
+    {"fact": "Frankincense and myrrh have been traded from the country since ancient times — the region was known as the 'Land of Punt' by ancient Egyptians.", "category": "history"},
+    {"fact": "Camel milk is a dietary staple, and the country has one of the largest camel populations in the world, estimated at over 7 million.", "category": "culture"}
+  ],
+  "South Africa": [
+    {"fact": "Table Mountain in Cape Town is estimated to be one of the oldest mountains in the world, around 600 million years old — six times older than the Himalayas.", "category": "geography"},
+    {"fact": "The Cradle of Humankind, a UNESCO site near Johannesburg, has produced more hominid fossils than any other place on Earth, including 'Little Foot', a 3.67-million-year-old skeleton.", "category": "science"},
+    {"fact": "The Sardine Run along the KwaZulu-Natal coast is one of the largest marine migrations in the world, with billions of sardines attracting sharks, dolphins, and diving birds.", "category": "nature"},
+    {"fact": "The first human-to-human heart transplant was performed by Dr Christiaan Barnard at Groote Schuur Hospital in Cape Town in 1967.", "category": "science"}
+  ],
+  "South Korea": [
+    {"fact": "The DMZ between North and South Korea has accidentally become a wildlife corridor, hosting endangered species like the Asiatic black bear and red-crowned crane.", "category": "nature"},
+    {"fact": "Jjimjilbangs (Korean bathhouses) are open 24 hours and function as social hubs where people eat, sleep, watch TV, and socialise — many Koreans use them as informal hotels.", "category": "culture"},
+    {"fact": "The country went from one of the poorest in the world in the 1960s to having the 10th largest economy — a transformation known as the 'Miracle on the Han River'.", "category": "economy"},
+    {"fact": "Hangul, the Korean alphabet created in 1443 by King Sejong the Great, was specifically designed to be easy to learn — it can be learned in a few hours.", "category": "culture"}
+  ],
+  "South Sudan": [
+    {"fact": "It is the youngest country in the world, having gained independence from Sudan on 9 July 2011 after a referendum in which 98.83% voted for separation.", "category": "politics"},
+    {"fact": "The Sudd, one of the world's largest wetlands, is so vast that it absorbs over half of the White Nile's water flow, which is why the Nile loses enormous volume crossing the country.", "category": "geography"},
+    {"fact": "The Mundari people of central South Sudan wash their cattle with the animals' own urine (which acts as an antiseptic) and sleep among their herds, coating themselves in ash for insect protection.", "category": "culture"},
+    {"fact": "Oil accounts for roughly 98% of the government's revenue, making it one of the most oil-dependent economies in the world.", "category": "economy"}
+  ],
+  "Spain": [
+    {"fact": "La Tomatina festival in Buñol sees roughly 20,000 participants throw over 150 tonnes of tomatoes at each other in the world's largest food fight.", "category": "culture"},
+    {"fact": "The Sagrada Família in Barcelona has been under construction since 1882 and is expected to be completed around 2026 — over 140 years after work began.", "category": "landmarks"},
+    {"fact": "The country has the second-highest number of UNESCO World Heritage Sites in the world, after Italy.", "category": "landmarks"},
+    {"fact": "The Siesta tradition means many shops and businesses still close for 2–3 hours in the afternoon, and the country's prime-time TV starts at 10:30 PM.", "category": "culture"},
+    {"fact": "Alhambra in Granada receives roughly 2.7 million visitors per year, making it the most-visited monument in Spain.", "category": "landmarks"}
+  ],
+  "Sri Lanka": [
+    {"fact": "The island has the highest biodiversity density in Asia — more species per square kilometre than any other country in the region.", "category": "nature"},
+    {"fact": "Sigiriya is a 5th-century fortress built atop a 200-metre granite rock column, with elaborate gardens, frescoes, and a mirror wall.", "category": "landmarks"},
+    {"fact": "The country is the world's fourth-largest tea producer, and 'Ceylon tea' (the island's former name) is still a globally recognised brand.", "category": "economy"},
+    {"fact": "Adam's Peak (Sri Pada) features a boulder at its summit with a footprint-shaped impression claimed by Buddhists, Hindus, Christians, and Muslims as belonging to their respective religious figures.", "category": "culture"}
+  ],
+  "Sudan": [
+    {"fact": "The ancient civilisation of Kush, centred in Nubia, had powerful queens (Kandakes) who ruled in their own right — Queen Amanirenas famously fought against Roman Emperor Augustus.", "category": "history"},
+    {"fact": "At the confluence of the Blue and White Nile in Khartoum, you can see the two rivers flowing side by side in different colours before merging.", "category": "geography"},
+    {"fact": "Meroe was the capital of the Kingdom of Kush and contains over 200 pyramids — smaller and steeper than Egypt's, with many still largely intact.", "category": "landmarks"},
+    {"fact": "Jebel Barkal, a flat-topped mountain near Karima, was considered sacred by both the ancient Egyptians and the Kushites, who built temples and pyramids at its base.", "category": "landmarks"}
+  ],
+  "Suriname": [
+    {"fact": "Over 90% of the country is covered by tropical rainforest, giving it one of the highest forest-coverage ratios of any nation on Earth.", "category": "nature"},
+    {"fact": "It is the smallest country in South America by area and the only one with Dutch as its official language.", "category": "culture"},
+    {"fact": "The country's population is remarkably diverse, including significant communities of Hindustani, Javanese, Maroon, Indigenous, Chinese, and European descent.", "category": "culture"},
+    {"fact": "Central Suriname Nature Reserve covers 1.6 million hectares of pristine tropical forest and is home to the jaguar, giant armadillo, and harpy eagle.", "category": "nature"}
+  ],
+  "Sweden": [
+    {"fact": "The Icehotel in Jukkasjärvi is rebuilt entirely from ice and snow each winter and has been operating since 1989 — even the glasses at the bar are made of ice.", "category": "landmarks"},
+    {"fact": "The country has a 'Right of Public Access' (Allemansrätten) that allows anyone to roam freely across private land, camp overnight, and pick berries and mushrooms.", "category": "politics"},
+    {"fact": "ABBA's music generates more annual revenue than any other Swedish export category besides automobiles and iron.", "category": "culture"},
+    {"fact": "The Vasa warship, which sank on its maiden voyage in 1628 after sailing just 1,300 metres, was raised from Stockholm harbour in 1961 and is now the most visited museum in Scandinavia.", "category": "history"}
+  ],
+  "Switzerland": [
+    {"fact": "The country has not fought in a foreign war since 1515, making it one of the longest-standing neutral nations in the world.", "category": "politics"},
+    {"fact": "There are enough nuclear bunkers to shelter the entire population — roughly 8.6 million spaces — more per capita than any other country.", "category": "politics"},
+    {"fact": "CERN, on the Franco-Swiss border near Geneva, is where the World Wide Web was invented by Tim Berners-Lee in 1989.", "category": "science"},
+    {"fact": "The Gotthard Base Tunnel, opened in 2016, is the world's longest and deepest traffic tunnel at 57.1 km, running up to 2,300 metres below the Alps.", "category": "landmarks"}
+  ],
+  "Syria": [
+    {"fact": "Damascus is widely considered the oldest continuously inhabited capital city in the world, with evidence of settlement dating back over 11,000 years.", "category": "history"},
+    {"fact": "The ancient city of Palmyra was a major trading centre on the Silk Road and contained some of the most spectacular Roman-era ruins in the Middle East.", "category": "landmarks"},
+    {"fact": "Aleppo's Great Mosque contains what is claimed to be a relic of John the Baptist's father, Zechariah, and the city's souk (marketplace) was one of the longest covered markets in the world.", "category": "landmarks"},
+    {"fact": "The Dead Cities, a group of about 700 abandoned settlements in northwestern Syria, provide the best-preserved examples of rural life in the late Roman and Byzantine periods.", "category": "history"}
+  ],
+  "Taiwan": [
+    {"fact": "Taipei 101 was the world's tallest building from 2004 to 2010, and its 730-tonne tuned mass damper (visible to visitors) stabilises the tower against typhoons and earthquakes.", "category": "landmarks"},
+    {"fact": "The island manufactures over 60% of the world's semiconductors and over 90% of the most advanced chips, making TSMC one of the most strategically important companies on Earth.", "category": "economy"},
+    {"fact": "Taroko Gorge, carved through marble cliffs up to 1,000 metres deep, is one of the most dramatic natural formations in East Asia.", "category": "nature"},
+    {"fact": "Night markets are a defining feature of the culture, with over 300 across the island serving everything from stinky tofu to bubble tea, which was invented here in the 1980s.", "category": "culture"}
+  ],
+  "Tajikistan": [
+    {"fact": "Over 93% of the country is mountainous, including the 7,495-metre Ismoil Somoni Peak, the highest point in the former Soviet Union.", "category": "geography"},
+    {"fact": "The Fedchenko Glacier is the longest glacier outside the polar regions, stretching 77 km through the Pamir Mountains.", "category": "geography"},
+    {"fact": "Lake Sarez was formed in 1911 when an earthquake created a massive natural dam — the lake is considered a major risk because a breach could flood millions of people downstream.", "category": "geography"},
+    {"fact": "The Pamir Highway (M41) is one of the highest paved roads in the world, crossing passes above 4,600 metres.", "category": "landmarks"}
+  ],
+  "Tanzania": [
+    {"fact": "Mount Kilimanjaro is the tallest freestanding mountain in the world at 5,895 metres and the highest point in Africa, yet it sits just 3 degrees south of the equator.", "category": "geography"},
+    {"fact": "The Serengeti wildebeest migration, involving over 1.5 million animals, is one of the largest mass movements of land mammals on Earth.", "category": "nature"},
+    {"fact": "Tanzanite, a blue-violet gemstone found only in a 4-km strip near Mount Kilimanjaro, is 1,000 times rarer than diamonds.", "category": "science"},
+    {"fact": "Olduvai Gorge, in the Serengeti, has yielded some of the oldest known evidence of early human evolution, including 1.8-million-year-old Homo habilis remains.", "category": "history"},
+    {"fact": "Zanzibar's Stone Town, a UNESCO World Heritage Site, was once the centre of the Indian Ocean spice trade and the Arab slave trade.", "category": "history"}
+  ],
+  "Thailand": [
+    {"fact": "It is the only Southeast Asian country never to have been colonised by a European power, maintaining its independence while neighbours fell to Britain and France.", "category": "history"},
+    {"fact": "The full ceremonial name of Bangkok in Thai has 168 characters, making it the longest city name in the world.", "category": "culture"},
+    {"fact": "The floating markets of Damnoen Saduak and Amphawa, where vendors sell goods from boats, have been a trading tradition for over two centuries.", "category": "culture"},
+    {"fact": "The country is the world's largest exporter of rice and natural rubber, and Thai massage was inscribed by UNESCO as Intangible Cultural Heritage in 2019.", "category": "economy"}
+  ],
+  "Timor-Leste": [
+    {"fact": "It became the first new sovereign state of the 21st century when it gained independence from Indonesia on 20 May 2002.", "category": "politics"},
+    {"fact": "The Atauro Island reef has been recorded as having the highest concentration of reef fish species at a single site anywhere in the world.", "category": "nature"},
+    {"fact": "The country's petroleum fund, modelled after Norway's sovereign wealth fund, holds billions of dollars from oil and gas revenues in the Timor Sea.", "category": "economy"}
+  ],
+  "Togo": [
+    {"fact": "The Koutammakou landscape, home to the Batammariba people, features remarkable tower-houses (Takienta) made of mud that serve as both dwellings and granaries.", "category": "landmarks"},
+    {"fact": "The Akodessewa Fetish Market in Lomé is the world's largest voodoo market, selling animal skulls, herbs, and fetish objects used in West African spiritual practices.", "category": "culture"},
+    {"fact": "The country is one of the narrowest in Africa, stretching just 50–100 km wide while extending over 500 km from coast to savanna.", "category": "geography"}
+  ],
+  "Tonga": [
+    {"fact": "It is the only remaining monarchy in the Pacific and one of the few countries in the world never formally colonised by a European power.", "category": "politics"},
+    {"fact": "The Hunga Tonga–Hunga Ha'apai volcanic eruption in January 2022 was the most powerful explosion recorded in the 21st century, generating a tsunami and atmospheric shockwave felt around the world.", "category": "science"},
+    {"fact": "Rugby union is the de facto national sport, and per capita the country has produced more professional rugby players than any other nation.", "category": "culture"}
+  ],
+  "Trinidad and Tobago": [
+    {"fact": "Pitch Lake in southwest Trinidad is the world's largest natural deposit of asphalt, covering 40 hectares and estimated to contain 10 million tonnes of pitch.", "category": "geography"},
+    {"fact": "The steelpan drum, the only acoustic musical instrument invented in the 20th century, was created here in the 1930s from discarded oil drums.", "category": "culture"},
+    {"fact": "The country's Carnival is one of the largest in the world and features soca and calypso music that have influenced carnival celebrations globally.", "category": "culture"},
+    {"fact": "It has one of the highest GDPs per capita in the Caribbean, largely due to its oil and natural gas industry.", "category": "economy"}
+  ],
+  "Tunisia": [
+    {"fact": "The Amphitheatre of El Jem, built around 238 AD, is one of the largest and best-preserved Roman amphitheatres in the world, rivalling the Colosseum in Rome.", "category": "landmarks"},
+    {"fact": "The ancient city of Carthage, founded in the 9th century BC and famously destroyed by Rome in 146 BC, lies within the suburbs of modern-day Tunis.", "category": "history"},
+    {"fact": "Multiple Star Wars films used locations in the Saharan south — the town of Tataouine lent its name to Luke Skywalker's home planet Tatooine.", "category": "culture"},
+    {"fact": "The country sparked the Arab Spring in December 2010 and is often cited as the only country where the movement resulted in a lasting democratic transition.", "category": "politics"}
+  ],
+  "Turkey": [
+    {"fact": "Göbekli Tepe, dating to approximately 9500 BC, is the world's oldest known temple complex — predating Stonehenge by about 6,000 years.", "category": "landmarks"},
+    {"fact": "Cappadocia's fairy chimneys (tall, cone-shaped rock formations) were hollowed out to create underground cities that once sheltered up to 20,000 people.", "category": "landmarks"},
+    {"fact": "The Grand Bazaar in Istanbul, with over 4,000 shops across 61 covered streets, is one of the oldest and largest covered markets in the world, dating to 1461.", "category": "landmarks"},
+    {"fact": "Tulips were first cultivated here, not in the Netherlands — the Dutch imported the bulbs from the Ottoman Empire in the 16th century.", "category": "history"}
+  ],
+  "Turkmenistan": [
+    {"fact": "The Darvaza gas crater ('Door to Hell') has been burning continuously since 1971, when Soviet engineers set fire to a collapsed drilling rig to prevent methane spread — they expected it to burn out in weeks.", "category": "geography"},
+    {"fact": "The former president Saparmurat Niyazov renamed the months of the year after himself and his family, banned dogs from the capital, and installed a rotating gold statue of himself.", "category": "politics"},
+    {"fact": "The Karakum Desert covers roughly 70% of the country and contains some of the world's largest natural gas reserves.", "category": "geography"},
+    {"fact": "The Akhal-Teke horse breed, originating here, has a metallic golden sheen to its coat and is sometimes called the 'most beautiful horse in the world'.", "category": "nature"}
+  ],
+  "Turks and Caicos Islands": [
+    {"fact": "Grace Bay Beach on Providenciales is consistently ranked among the best beaches in the world, with powdery white sand and turquoise water.", "category": "geography"},
+    {"fact": "The islands were once a major centre of sea salt production, and the historic salinas on Grand Turk are now home to flamingo colonies.", "category": "nature"},
+    {"fact": "The territory has considered several proposals to join Canada over the years, most recently in 2004, though none have advanced.", "category": "politics"}
+  ],
+  "Tuvalu": [
+    {"fact": "With a maximum elevation of just 4.6 metres, it is the second-lowest-lying country in the world (after the Maldives) and faces existential threat from rising sea levels.", "category": "geography"},
+    {"fact": "The .tv internet domain generates significant national revenue — the country licences it to media and streaming companies worldwide.", "category": "economy"},
+    {"fact": "It is the fourth-smallest country in the world by area (26 sq km) and one of the least visited, receiving only about 2,000 tourists per year.", "category": "geography"}
+  ],
+  "Uganda": [
+    {"fact": "The source of the White Nile flows out of Lake Victoria at Jinja, marking the beginning of the world's longest river's journey to the Mediterranean.", "category": "geography"},
+    {"fact": "Bwindi Impenetrable Forest is home to roughly half of the world's remaining mountain gorillas.", "category": "nature"},
+    {"fact": "The country straddles the equator and contains parts of both Lake Victoria (Africa's largest lake) and the Albertine Rift, one of the most biodiverse regions in Africa.", "category": "nature"},
+    {"fact": "Winston Churchill called it 'the Pearl of Africa' after visiting in 1907, impressed by its natural beauty, climate, and wildlife.", "category": "history"}
+  ],
+  "Ukraine": [
+    {"fact": "The Chernobyl Exclusion Zone, site of the 1986 nuclear disaster, has become an accidental nature reserve where wolves, wild horses, and other wildlife now thrive.", "category": "nature"},
+    {"fact": "The Tunnel of Love near Klevan is a 3-km railway passage through an arched canopy of trees, creating one of the world's most romantic-looking tunnels.", "category": "landmarks"},
+    {"fact": "The country is home to some of the most fertile soil on Earth — its chernozem (black soil) covers roughly a third of the world's total supply.", "category": "geography"},
+    {"fact": "The pysanka tradition of decorating eggs with intricate wax-resist designs dates back thousands of years and is recognised as an important cultural heritage.", "category": "culture"}
+  ],
+  "United Arab Emirates": [
+    {"fact": "The Burj Khalifa in Dubai stands at 828 metres — so tall that residents on the top floors see the sun set several minutes later than people at ground level.", "category": "landmarks"},
+    {"fact": "The Palm Jumeirah, an artificial archipelago shaped like a palm tree, added 78 km of shoreline to Dubai's coast.", "category": "landmarks"},
+    {"fact": "Abu Dhabi's Louvre museum is built over the sea with a dome of 7,850 metal stars creating a 'rain of light' effect inspired by the pattern of overlapping palm fronds.", "category": "landmarks"},
+    {"fact": "The country went from a collection of fishing and pearling villages to one of the world's wealthiest nations in just 50 years after oil was discovered in the 1960s.", "category": "economy"}
+  ],
+  "United Kingdom": [
+    {"fact": "The Royal Mail has been delivering letters since 1516, making it one of the oldest postal services in the world.", "category": "history"},
+    {"fact": "The London Underground, opened in 1863, was the world's first underground railway — today it carries nearly 5 million passengers per day.", "category": "landmarks"},
+    {"fact": "The Greenwich Meridian (0° longitude) passes through the Royal Observatory in London, establishing the basis for global time zones since 1884.", "category": "science"},
+    {"fact": "The country has over 1,500 listed stone circles, and the tradition of afternoon tea only dates to the 1840s, when the Duchess of Bedford invented it to bridge the gap between lunch and dinner.", "category": "culture"}
+  ],
+  "United States": [
+    {"fact": "The Library of Congress contains over 170 million items, making it the largest library in the world by catalogue size.", "category": "landmarks"},
+    {"fact": "Yellowstone sits atop a supervolcano whose magma chamber could fill the Grand Canyon over 11 times — its last full eruption was 640,000 years ago.", "category": "geography"},
+    {"fact": "The interstate highway system was partly inspired by President Eisenhower's experience with the German Autobahn and was originally justified as a military defence project.", "category": "history"},
+    {"fact": "Hawaii's Mauna Kea, measured from its base on the ocean floor, rises over 10,000 metres — taller than Mount Everest measured from sea level.", "category": "geography"}
+  ],
+  "United States Virgin Islands": [
+    {"fact": "The territory was purchased from Denmark in 1917 for $25 million in gold — the only US territory acquired by purchase from a European power.", "category": "history"},
+    {"fact": "Trunk Bay on St John, surrounded by the Virgin Islands National Park, is regularly voted one of the world's most beautiful beaches.", "category": "nature"},
+    {"fact": "Traffic drives on the left side of the road, a holdover from the Danish colonial era, despite using American left-hand-drive vehicles.", "category": "culture"}
+  ],
+  "Uruguay": [
+    {"fact": "The country hosted and won the first ever FIFA World Cup in 1930, and its team has won two World Cups despite a population of only about 3.5 million.", "category": "culture"},
+    {"fact": "In 2013, it became the first country in the world to fully legalise the production, sale, and consumption of recreational cannabis.", "category": "politics"},
+    {"fact": "Nearly 98% of the country's electricity comes from renewable sources, primarily hydroelectric and wind power.", "category": "science"},
+    {"fact": "Uruguayans consume more beef per capita than almost any other country — about 50 kg per person per year.", "category": "culture"}
+  ],
+  "Uzbekistan": [
+    {"fact": "Samarkand's Registan Square, flanked by three madrasas covered in brilliant blue tilework, is considered one of the most stunning public squares in the world.", "category": "landmarks"},
+    {"fact": "Along with Liechtenstein, it is one of only two doubly landlocked countries in the world — both the country and all its neighbours are landlocked.", "category": "geography"},
+    {"fact": "The mathematician and astronomer al-Khwarizmi, born near Khiva around 780 AD, wrote the foundational text on algebra — the word 'algorithm' derives from his name.", "category": "science"},
+    {"fact": "The country is one of the world's largest cotton producers, though the industry has been criticised for historical use of forced labour during harvest season.", "category": "economy"}
+  ],
+  "Vanuatu": [
+    {"fact": "Land diving on Pentecost Island, where men jump from tall wooden towers with vines tied to their ankles, is the original inspiration for modern bungee jumping.", "category": "culture"},
+    {"fact": "The country has the highest density of languages per capita in the world — over 100 indigenous languages for a population of roughly 300,000.", "category": "culture"},
+    {"fact": "Mount Yasur on Tanna Island has been erupting continuously for over 800 years and is one of the most accessible active volcanoes in the world.", "category": "geography"},
+    {"fact": "It was ranked the happiest country in the world by the Happy Planet Index despite being one of the poorest in the Pacific.", "category": "economy"}
+  ],
+  "Vatican City": [
+    {"fact": "The Sistine Chapel ceiling, painted by Michelangelo between 1508 and 1512, covers over 500 square metres and contains more than 300 figures.", "category": "landmarks"},
+    {"fact": "The Vatican Secret Archives contain over 85 km of shelving and include documents dating back to the 8th century, including a letter from Mary Queen of Scots written before her execution.", "category": "history"},
+    {"fact": "It has its own post office, pharmacy, and radio station, but no permanent maternity ward — no one has been born there in modern times.", "category": "culture"},
+    {"fact": "The Swiss Guard, who protect the Pope, have served continuously since 1506 and still wear uniforms designed in a Renaissance style, though the popular attribution to Michelangelo is likely apocryphal.", "category": "history"}
+  ],
+  "Venezuela": [
+    {"fact": "Catatumbo lightning occurs at the mouth of the Catatumbo River for up to 300 nights per year, producing an estimated 1.2 million lightning strikes annually.", "category": "nature"},
+    {"fact": "The tepui (table-top mountains) of the Gran Sabana inspired Arthur Conan Doyle's novel 'The Lost World' — their flat summits are home to species found nowhere else on Earth.", "category": "nature"},
+    {"fact": "The country sits atop the world's largest proven oil reserves, surpassing even Saudi Arabia.", "category": "economy"},
+    {"fact": "Simón Bolívar, born in Caracas, led the liberation of six nations from Spanish rule and is one of the most revered figures in Latin American history.", "category": "history"}
+  ],
+  "Vietnam": [
+    {"fact": "Hang Sơn Đoòng, discovered in 2009, is the world's largest cave by volume — so large that a 747 could fly through its biggest chamber.", "category": "geography"},
+    {"fact": "The country is the world's second-largest coffee producer (after Brazil), specialising in robusta beans, and Vietnamese iced coffee with condensed milk is now globally popular.", "category": "economy"},
+    {"fact": "Halong Bay contains roughly 1,600 limestone islands and islets, many of which are hollow with enormous caves, and is a UNESCO World Heritage Site.", "category": "nature"},
+    {"fact": "The Vietnamese writing system (chữ Quốc ngữ) uses the Latin alphabet with extensive diacritical marks — it was developed by Portuguese missionaries in the 17th century.", "category": "culture"}
+  ],
+  "Wallis and Futuna": [
+    {"fact": "The territory has three traditional kingdoms (Uvea, Alo, and Sigave) that still function alongside the French administration, each with its own king.", "category": "politics"},
+    {"fact": "With a population of roughly 11,000 and no tourism industry to speak of, it is one of the most isolated and least-visited inhabited places on Earth.", "category": "geography"},
+    {"fact": "There are no hotels on Futuna island — visitors must arrange to stay with local families.", "category": "culture"}
+  ],
+  "Western Sahara": [
+    {"fact": "It is one of the most sparsely populated territories in the world and has been the subject of a sovereignty dispute between Morocco and the Sahrawi independence movement since 1975.", "category": "politics"},
+    {"fact": "A 2,700-km sand wall (the Berm), lined with millions of landmines, divides the territory between Moroccan-controlled areas and a Polisario-held buffer zone.", "category": "geography"},
+    {"fact": "The territory has some of the world's richest phosphate deposits and fishing grounds, which are central to the economic dimension of the sovereignty dispute.", "category": "economy"}
+  ],
+  "Yemen": [
+    {"fact": "The old walled city of Shibam in the Hadramaut Valley contains mud-brick tower houses up to 11 stories tall, built as early as the 16th century — it is called the 'Manhattan of the Desert'.", "category": "landmarks"},
+    {"fact": "Socotra Island, 350 km south of the mainland, has such unique flora that a third of its plant species are found nowhere else — the dragon blood tree is its most iconic species.", "category": "nature"},
+    {"fact": "Coffee drinking culture originated in the Yemeni port of Mocha in the 15th century, and the word 'mocha' still refers to a style of coffee.", "category": "culture"},
+    {"fact": "The Queen of Sheba, mentioned in the Bible and Quran, is traditionally believed to have ruled from the ancient kingdom of Saba in present-day Yemen.", "category": "history"}
+  ],
+  "Zambia": [
+    {"fact": "Victoria Falls, on the border with Zimbabwe, is the world's largest sheet of falling water at 1,708 metres wide and 108 metres tall — the spray can be seen from 50 km away.", "category": "landmarks"},
+    {"fact": "The Bangweulu Wetlands are home to the shoebill stork, a prehistoric-looking bird with a shoe-shaped bill that can stand over 1.5 metres tall.", "category": "nature"},
+    {"fact": "The country has one of the highest rates of urbanisation in sub-Saharan Africa, with roughly 45% of the population living in cities along the 'line of rail'.", "category": "geography"},
+    {"fact": "In 1964, shortly before independence, Zambia's space programme — consisting of one man, a 17-year-old girl, a missionary, and a cat — made international headlines for its plan to beat the US and USSR to the Moon.", "category": "history"}
+  ],
+  "Zimbabwe": [
+    {"fact": "Great Zimbabwe, the medieval stone city that gives the country its name, was the largest stone structure in sub-Saharan Africa built before the modern era, covering over 700 hectares.", "category": "landmarks"},
+    {"fact": "During hyperinflation in 2008, the country printed a 100-trillion-dollar banknote — at the time barely enough to buy a loaf of bread.", "category": "economy"},
+    {"fact": "The balancing rocks at Epworth near Harare are so iconic that they appear on the country's banknotes.", "category": "geography"},
+    {"fact": "Lake Kariba, created by the dam of the same name, is the world's largest artificial lake by volume and was a major engineering feat of the 1950s.", "category": "landmarks"}
+  ]
+}
