@@ -11,6 +11,7 @@ import { PlaceCitiesLogic } from './games/place-cities-logic.js';
 import { proj, getCSSVar } from './map-utils.js';
 import { renderFinishScreen } from './game-records.js';
 import { attachZoomPan } from './map-zoom-pan.js';
+import { initConfetti } from './confetti.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
@@ -22,6 +23,7 @@ export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, countr
   ]);
 
   const renderer = new OutlinesRenderer(svgEl, worldData.features);
+  const confetti = initConfetti('confetti');
   const countries = window.DATA;
   const logic = new PlaceCitiesLogic({ countries, maxRounds });
   logic.loadCapitalCoords(placesData.features);
@@ -339,7 +341,8 @@ export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, countr
     }
 
     if (result.correct === result.total) {
-      // All correct — auto-advance, no status needed
+      // All correct — confetti + auto-advance
+      confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
       setTimeout(() => {
         if (submitted) nextRound();
       }, 1200);
