@@ -658,9 +658,15 @@ function updateInfoPanel(dataName) {
   const iso2 = countriesFlags[dataName] || (props?.ISO_A2 !== '-99' ? props?.ISO_A2?.toLowerCase() : props?.ISO_A2_EH?.toLowerCase());
   const flagSrc = (iso2 && iso2 !== '-99') ? `img/flags/${iso2}.svg` : '';
   const subregion = props?.SUBREGION || props?.CONTINENT || '';
-  const entry = (window.DATA || []).find(d => d.country === dataName);
+  const allData = window.ALL_COUNTRIES || window.DATA || [];
+  const entry = allData.find(d => d.country === dataName);
   const capital = entry?.capitals?.[0] || '—';
   const popStr = props?.POP_EST ? formatPop(props.POP_EST) : '—';
+
+  // Territory: show sovereign from GeoJSON SOVEREIGNT field
+  const isTerritory = entry && !entry.un;
+  const sovereign = isTerritory && props?.SOVEREIGNT && props.SOVEREIGNT !== dataName
+    ? props.SOVEREIGNT : null;
 
   const nbrs = neighborsData?.[dataName];
   const bordersStr = nbrs == null ? '—' : nbrs.length === 0 ? 'Island nation' : nbrs.join(', ');
@@ -670,7 +676,7 @@ function updateInfoPanel(dataName) {
       ${flagSrc ? `<img class="study-info-flag" src="${flagSrc}" alt="${dataName} flag">` : '<div class="study-info-flag-placeholder"></div>'}
       <div>
         <div class="study-info-name">${dataName}</div>
-        ${subregion ? `<div class="study-info-region">${subregion}</div>` : ''}
+        ${sovereign ? `<div class="study-info-region">Territory of ${sovereign}</div>` : subregion ? `<div class="study-info-region">${subregion}</div>` : ''}
       </div>
     </div>
     <div class="study-info-divider"></div>

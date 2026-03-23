@@ -224,8 +224,10 @@ export function buildNameLookups(countryPaths) {
   const dataToGeo = {}; // DATA country name → GeoJSON ADMIN name
   const geoToData = {}; // GeoJSON ADMIN name → DATA country name
 
+  const allCountries = window.ALL_COUNTRIES || window.DATA || [];
+
   for (const { name: geoName } of countryPaths) {
-    const directMatch = (window.DATA || []).find(d => norm(d.country) === norm(geoName));
+    const directMatch = allCountries.find(d => norm(d.country) === norm(geoName));
     if (directMatch) {
       dataToGeo[directMatch.country] = geoName;
       geoToData[geoName] = directMatch.country;
@@ -239,13 +241,13 @@ export function buildNameLookups(countryPaths) {
   }
 
   /**
-   * Resolve a GeoJSON ADMIN name to the matching window.DATA country name.
-   * Checks direct match and alias lookup.
+   * Resolve a GeoJSON ADMIN name to the matching data country name.
+   * Checks direct match and alias lookup against ALL_COUNTRIES (includes territories).
    */
   function resolveToDataName(geoName) {
     const gn = norm(geoName);
     const aliasTarget = COUNTRY_ALIASES[geoName];
-    for (const d of (window.DATA || [])) {
+    for (const d of allCountries) {
       if (norm(d.country) === gn) return d.country;
       if (aliasTarget && norm(aliasTarget) === norm(d.country)) return d.country;
     }
