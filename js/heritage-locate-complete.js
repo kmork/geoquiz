@@ -25,7 +25,7 @@ import {
  * @param {HTMLElement}       config.progressEl    - Progress display element
  * @param {HTMLElement}       config.finalOverlay  - Finish screen overlay
  * @param {number}            config.maxRounds     - Number of rounds
- * @param {string}            config.gameIdSuffix  - 'short'|'medium'|'long'
+ * @param {string}            config.gameIdSuffix  - 'short'|'long'
  * @returns {Promise<{ start: Function }>}
  */
 export async function createHeritageLocateGame({

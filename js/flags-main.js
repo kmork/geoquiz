@@ -7,7 +7,7 @@ import { renderFinishScreen } from './game-records.js';
 const params = new URLSearchParams(location.search);
 const roundsParam = params.get('rounds') || '10';
 const maxRounds = roundsParam === 'all' ? Infinity : (parseInt(roundsParam) || 10);
-const gameIdSuffix = roundsParam === 'all' ? 'long' : (roundsParam === '25' ? 'medium' : 'short');
+const gameIdSuffix = roundsParam === 'all' ? 'long' : 'short';
 const continentParam = params.get('continent');
 const continentSlug = continentParam ? continentParam.toLowerCase().replace(/\s+/g, '-') : null;
 const gameId = continentSlug ? `flags-${continentSlug}-${gameIdSuffix}` : `flags-${gameIdSuffix}`;

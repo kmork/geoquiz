@@ -37,7 +37,6 @@ const GAME_NAMES = {
 
 const DIFFICULTY_LABELS = {
   short:  'Short',
-  medium: 'Medium',
   long:   'Long',
   all:    'All',
 };

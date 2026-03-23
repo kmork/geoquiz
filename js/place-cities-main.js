@@ -8,7 +8,7 @@ import { createPlaceCitiesGame } from './place-cities-complete.js';
 const params = new URLSearchParams(location.search);
 const roundsParam = params.get('rounds') || '10';
 const maxRounds = roundsParam === 'all' ? Infinity : (parseInt(roundsParam) || 10);
-const diffSuffix = roundsParam === 'all' ? 'long' : (roundsParam === '10' ? 'medium' : 'short');
+const diffSuffix = roundsParam === 'all' ? 'long' : 'short';
 const continentParam = params.get('continent');
 const continentSlug = continentParam ? continentParam.toLowerCase().replace(/\s+/g, '-') : null;
 const gameIdSuffix = continentSlug ? `${continentSlug}-${diffSuffix}` : diffSuffix;

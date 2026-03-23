@@ -11,7 +11,7 @@ const maxRounds = roundsParam === 'all' ? Infinity : (parseInt(roundsParam) || 1
 const continentParam = params.get('continent');
 const continentSlug = continentParam ? continentParam.toLowerCase().replace(/\s+/g, '-') : null;
 
-const diffKey = roundsParam === 'all' ? 'long' : (roundsParam === '25' ? 'medium' : 'short');
+const diffKey = roundsParam === 'all' ? 'long' : 'short';
 const baseId = `spelling-${mode === 'cities' ? 'cities' : 'countries'}`;
 const gameId = continentSlug ? `${baseId}-${diffKey}-${continentSlug}` : `${baseId}-${diffKey}`;
 

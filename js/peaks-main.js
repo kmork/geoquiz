@@ -428,7 +428,6 @@ function waitForData() {
       gameIdSuffix += `-${continentParam.toLowerCase().replace(/\s+/g, '-')}`;
     }
     if (roundsParam === 'all') gameIdSuffix += '-long';
-    else if (roundsParam === '25') gameIdSuffix += '-medium';
     else gameIdSuffix += '-short';
 
     const gameId = `peaks${gameIdSuffix}`;
