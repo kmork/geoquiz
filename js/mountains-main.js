@@ -6,7 +6,7 @@ const modeParam   = params.get('mode');
 const roundsParam = params.get('rounds') || 'all';
 const maxRounds   = roundsParam === 'all' ? Infinity : (parseInt(roundsParam) || 10);
 const pickOne     = modeParam === 'easy';
-const gameIdSuffix = roundsParam === 'all' ? 'all' : 'short';
+const gameIdSuffix = roundsParam === 'all' ? 'long' : 'short';
 const gameId      = pickOne ? `mountains-easy-${gameIdSuffix}` : `mountains-${gameIdSuffix}`;
 
 const initOverlay   = document.getElementById('init-overlay');
