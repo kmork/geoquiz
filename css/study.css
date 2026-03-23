@@ -449,14 +449,18 @@ html.light-mode .osm-attribution a {
   /* Toggle buttons: horizontal row at bottom-center */
   .study-map-toggles {
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
     right: unset;
     left: 50%;
     transform: translateX(-50%);
     bottom: 10px;
-    gap: 8px;
-    max-width: 90vw;
+    gap: 6px;
+  }
+  .study-toggle-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 0.75rem;
   }
   /* Info panel: move to top-left so it doesn't overlap bottom buttons */
   .study-info-panel {
