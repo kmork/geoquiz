@@ -38,6 +38,10 @@ function injectStyles() {
       width: 100%;
       color: inherit;
       line-height: 1.3;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
     .pair-card:hover:not(:disabled) {
       transform: translateY(-2px);
@@ -56,6 +60,7 @@ function injectStyles() {
       background: var(--wrong-bg);
     }
     .pair-card:disabled { cursor: default; }
+    .pair-flag { width: 56px; height: auto; border-radius: 3px; pointer-events: none; }
   `;
   document.head.appendChild(style);
 }
@@ -65,7 +70,7 @@ function injectStyles() {
  * @param {{ leftItems: string[], rightItems: string[], leftLabel?: string, rightLabel?: string }} opts
  * @returns {{ setupEvents, markCorrect, markWrong }}
  */
-export function renderPairsUI(container, { leftItems, rightItems, leftLabel = 'Countries', rightLabel = 'Capitals' }) {
+export function renderPairsUI(container, { leftItems, rightItems, leftLabel = 'Countries', rightLabel = 'Capitals', renderRight }) {
   injectStyles();
 
   container.innerHTML = `
@@ -79,7 +84,12 @@ export function renderPairsUI(container, { leftItems, rightItems, leftLabel = 'C
           ${leftItems.map(c => `<button class="pair-card" data-type="left" data-value="${escapeAttr(c)}">${escapeHtml(c)}</button>`).join('')}
         </div>
         <div class="pairs-column" id="pairs-right">
-          ${rightItems.map(c => `<button class="pair-card" data-type="right" data-value="${escapeAttr(c)}">${escapeHtml(c)}</button>`).join('')}
+          ${rightItems.map(c => {
+            const inner = renderRight === 'flag'
+              ? `<img src="img/flags/${escapeAttr(c)}.svg" alt="Flag" class="pair-flag">`
+              : escapeHtml(c);
+            return `<button class="pair-card" data-type="right" data-value="${escapeAttr(c)}">${inner}</button>`;
+          }).join('')}
         </div>
       </div>
     </div>

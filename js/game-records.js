@@ -25,6 +25,7 @@ const GAME_NAMES = {
   'pairs': 'Pairs — Capitals',
   'pairs-peaks': 'Pairs — Peaks',
   'pairs-cities': 'Pairs — Cities',
+  'pairs-flags': 'Pairs — Flags',
   duel:            'Country Duel',
   'heritage-locate': 'Heritage Locate',
   rotated:         'Rotate & Guess',

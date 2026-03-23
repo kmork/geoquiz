@@ -45,6 +45,17 @@ const MODES = {
         });
     },
   },
+  flags: {
+    leftLabel: 'Countries',
+    rightLabel: 'Flags',
+    subtitle: 'Match each country with its flag. One wrong guess ends the game.',
+    renderRight: 'flag',
+    buildPairs(data) {
+      return data
+        .filter(c => c.flagCode)
+        .map(c => ({ left: c.country, right: c.flagCode }));
+    },
+  },
 };
 
 const modeConfig = MODES[mode] || MODES.capitals;
@@ -103,6 +114,7 @@ function render(left = null, right = null) {
     rightItems: displayRight,
     leftLabel:  modeConfig.leftLabel,
     rightLabel: modeConfig.rightLabel,
+    renderRight: modeConfig.renderRight,
   });
   ui.setupEvents({ onAttempt: handleAttempt });
   updateUI();
