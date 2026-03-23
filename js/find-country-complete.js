@@ -42,6 +42,7 @@ export async function createCompleteMap({
   gameIdSuffix = 'short',
   continent = null,
   easyMode = false,
+  hardMode = false,
   streakMode = false,
 }) {
 
@@ -566,6 +567,7 @@ export async function createCompleteMap({
       maxRounds,
       gameIdSuffix,
       easyMode,
+      hardMode,
       streakMode,
     }
   });

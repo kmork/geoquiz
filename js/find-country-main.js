@@ -6,7 +6,8 @@ const _streakMode = _params.get('mode') === 'streak';
 const _roundsParam = _params.get('rounds') || '10';
 const _maxRounds = _streakMode ? Infinity : (_roundsParam === 'all' ? Infinity : (parseInt(_roundsParam) || 10));
 const _easyMode = _params.get('difficulty') === 'easy';
-const _diffSuffix = _streakMode ? 'streak' : (_easyMode ? 'easy' : (_roundsParam === 'all' ? 'long' : 'short'));
+const _hardMode = _params.get('difficulty') === 'hard';
+const _diffSuffix = _streakMode ? 'streak' : (_hardMode ? 'hard' : (_easyMode ? 'easy' : (_roundsParam === 'all' ? 'long' : 'short')));
 const _continentParam = _params.get('continent');
 const _continentSlug = _continentParam ? _continentParam.toLowerCase().replace(/\s+/g, '-') : null;
 const _gameIdSuffix = _continentSlug ? `${_continentSlug}-${_diffSuffix}` : _diffSuffix;
@@ -48,6 +49,7 @@ let gameInstance = null;
       gameIdSuffix: _gameIdSuffix,
       continent: _continentParam,
       easyMode: _easyMode,
+      hardMode: _hardMode,
       streakMode: _streakMode,
     });
     

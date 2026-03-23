@@ -31,10 +31,33 @@ const EASY_COUNTRIES = new Set([
   'Australia', 'New Zealand', 'Papua New Guinea',
 ]);
 
+// Small countries and islands for Hard mode
+const HARD_COUNTRIES = new Set([
+  // Caribbean
+  'Antigua and Barbuda', 'Barbados', 'Dominica', 'Grenada',
+  'Saint Kitts and Nevis', 'Saint Lucia', 'Saint Vincent and the Grenadines',
+  'Trinidad and Tobago', 'Bahamas', 'Jamaica',
+  // Pacific Islands
+  'Fiji', 'Kiribati', 'Marshall Islands', 'Micronesia', 'Nauru',
+  'Palau', 'Samoa', 'Solomon Islands', 'Tonga', 'Tuvalu', 'Vanuatu',
+  // Indian Ocean & Atlantic islands
+  'Comoros', 'Maldives', 'Mauritius', 'Seychelles',
+  'Sao Tome and Principe', 'Cabo Verde',
+  // Small European
+  'Luxembourg', 'Malta', 'Montenegro', 'North Macedonia', 'Moldova',
+  'Andorra', 'Liechtenstein', 'San Marino', 'Monaco',
+  // Small Asian
+  'Brunei', 'Timor-Leste', 'Bahrain', 'Qatar', 'Singapore', 'Bhutan',
+  // Small African
+  'Gambia', 'Eswatini', 'Lesotho', 'Djibouti',
+  'Equatorial Guinea', 'Guinea-Bissau', 'Rwanda', 'Burundi',
+]);
+
 export class FindCountryGameLogic {
-  constructor({ onAnswer, onComplete, singleRound = false, maxRounds = 10, easyMode = false }) {
+  constructor({ onAnswer, onComplete, singleRound = false, maxRounds = 10, easyMode = false, hardMode = false }) {
     this.DATA = window.DATA.filter(c => !FIND_EXCLUDE.has(c.country));
     if (easyMode) this.DATA = this.DATA.filter(c => EASY_COUNTRIES.has(c.country));
+    if (hardMode) this.DATA = this.DATA.filter(c => HARD_COUNTRIES.has(c.country));
     this._configMaxRounds = singleRound ? 1 : maxRounds;
     this.maxRounds = this._configMaxRounds;
     this.singleRound = singleRound;

@@ -21,6 +21,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
     singleRound,
     maxRounds,
     easyMode: config.easyMode ?? false,
+    hardMode: config.hardMode ?? false,
     onAnswer: (result) => {
       // Logic has processed the answer, handle UI feedback
       handleAnswerFeedback(result);
