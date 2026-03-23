@@ -1,13 +1,7 @@
  This is a site for learning geography through gamification. Could you give me suggestions for new games or other improvements for such a purpose?
 
-⏺ Here are my suggestions, organized by category:
-
   ---
   New Game Ideas
-
-  1. Time Zones
-
-  Given a city or country, place it in the correct UTC offset (or vice versa). Could use a horizontal timeline UI. Tests practical geography knowledge that's useful in daily life.
 
   2. Border Draw
 
@@ -25,18 +19,6 @@
 
   Name all countries in a continent as fast as possible (typed). A pure speed/recall challenge — like Sporcle-style quizzes. Simple to build with your existing data and autocomplete component.
 
-  6. Landmark Photo Round
-
-  Show a photo of a famous landmark (beyond UNESCO heritage) and ask "which country?" or "which city?". You already have heritage site images — this could expand that concept.
-
-  7. Language / Currency Match
-
-  Match countries to their official language or currency. You'd need a new data field, but it tests cultural geography rather than just physical/political.
-
-  8. Neighbor Chain
-
-  Given a start and end country, build the longest possible chain where each country borders the next — but you can't repeat. A puzzle/strategy variant of your Route game.
-
   ---
   Improvements to Existing Features
 
@@ -48,26 +30,6 @@
 
   A page showing overall mastery: which continents/countries the user knows well vs. struggles with, games completed, streaks, historical scores. Motivates continued play and shows gaps.
 
-  11. Multiplayer / Challenge a Friend
-
-  Share a link that generates the same seeded quiz for a friend. Compare scores afterward. You already have seeded RNG — this is a natural extension.
-
-  12. Guided Learning Path
-
-  A suggested order for new users: start with continents, then major countries, then capitals, then flags, etc. Progressive difficulty rather than choosing randomly from 15 games.
-
-  13. Hints System
-
-  Optional hints (continent highlight, first letter, neighbor shown) at the cost of reduced score. Helps beginners who might otherwise give up.
-
   14. Sound Effects / Audio Cues
 
   Correct/incorrect sounds, streak sounds, completion fanfare. Audio feedback significantly improves engagement and learning reinforcement.
-
-  ---
-  Highest Impact Picks
-
-  If I had to pick the top 3 for learning value:
-  - Spaced repetition (#9) — transforms passive quizzing into effective learning
-  - Continent Sprint (#5) — simple to build, highly addictive, strong recall training
-  - Progress Dashboard (#10) — gives users visibility into what they've actually learned
