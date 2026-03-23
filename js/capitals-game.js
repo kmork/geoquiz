@@ -481,7 +481,10 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
 
   // Enter key submits (when no autocomplete item is selected)
   ui.answer.addEventListener('keydown', (e) => {
-    if (e.key === 'Enter') handleGuess();
+    if (e.key !== 'Enter') return;
+    const acDropdown = document.querySelector('.mobile-autocomplete-dropdown');
+    if (acDropdown && acDropdown.style.display !== 'none' && acDropdown.querySelector('.highlighted')) return;
+    handleGuess();
   });
 
   // Tap anywhere / Enter to continue
@@ -511,7 +514,11 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
       // Enter is the only submit key.
       if (e.key !== "Enter") return;
 
-      // If choices visible, Enter does nothing (don’t skip the choice phase)
+      // Let autocomplete handle Enter when a suggestion is highlighted
+      const acDropdown = document.querySelector('.mobile-autocomplete-dropdown');
+      if (acDropdown && acDropdown.style.display !== 'none' && acDropdown.querySelector('.highlighted')) return;
+
+      // If choices visible, Enter does nothing (don't skip the choice phase)
       if (ui.elChoices.style.display !== "none") return;
 
       if (bonusMode) return;
