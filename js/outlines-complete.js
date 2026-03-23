@@ -108,7 +108,11 @@ export async function createCompleteOutlinesGame({
     if (!neighborCountries || neighborCountries.length === 0) {
       hideHintPanel();
       hintUsed = false;
-      if (hintBtn) hintBtn.style.opacity = '1';
+      if (hintBtn) {
+        const nbrs = NEIGHBORS[targetCountry] || [];
+        hintBtn.disabled = nbrs.length === 0;
+        hintBtn.style.opacity = nbrs.length === 0 ? '0.3' : '1';
+      }
     }
   }
   
@@ -305,20 +309,19 @@ export async function createCompleteOutlinesGame({
     hintPanel.addEventListener('click', () => hideHintPanel());
 
     hintBtn.addEventListener('click', () => {
-      if (hintPanel.classList.contains('visible')) {
-        hideHintPanel();
-        return;
-      }
       const currentCountry = game?.getCurrent?.();
       if (!currentCountry) return;
       if (!hintUsed) {
+        // First click: show neighbors on map
         const nbrs = NEIGHBORS[currentCountry] || [];
         if (nbrs.length > 0) rawDrawCountries(currentCountry, nbrs);
         hintUsed = true;
         game?.markHintUsed?.();
         hintBtn.style.opacity = '0.5';
+      } else {
+        // Second click: hide neighbors (scoring penalty stays)
+        rawDrawCountries(currentCountry, []);
       }
-      showHintPanel(currentCountry);
     });
   }
 
