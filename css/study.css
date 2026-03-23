@@ -199,7 +199,7 @@
 /* ── Search input ── */
 #study-search {
   position: absolute;
-  top: 12px;
+  bottom: 12px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 15;
@@ -510,4 +510,6 @@ html.light-mode .osm-attribution a {
   }
   /* Fact overlay: hidden on mobile */
   .fact-overlay { display: none !important; }
+  /* Search: hidden on mobile */
+  #study-search { display: none; }
 }

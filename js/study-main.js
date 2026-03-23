@@ -1546,6 +1546,8 @@ if (searchInput && window.initMobileAutocomplete) {
 
   const suggestions = [...searchActions.keys()].sort();
 
+  searchInput.focus();
+
   window.initMobileAutocomplete(searchInput, suggestions, {
     maxSuggestions: 8,
     minChars: 1,
@@ -1553,7 +1555,7 @@ if (searchInput && window.initMobileAutocomplete) {
       const action = searchActions.get(value);
       if (action) action();
       searchInput.value = '';
-      searchInput.blur();
+      setTimeout(() => searchInput.focus(), 0);
     },
   });
 
@@ -1567,7 +1569,6 @@ if (searchInput && window.initMobileAutocomplete) {
       if (action) {
         action();
         searchInput.value = '';
-        searchInput.blur();
         return;
       }
       // Try case-insensitive prefix match
@@ -1577,7 +1578,6 @@ if (searchInput && window.initMobileAutocomplete) {
         const matchAction = searchActions.get(match);
         if (matchAction) matchAction();
         searchInput.value = '';
-        searchInput.blur();
       }
     }
   });
