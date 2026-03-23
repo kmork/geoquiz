@@ -23,11 +23,12 @@ const QUESTION_TYPES = [
 ];
 
 export class DuelGameLogic {
-  constructor({ data, onAnswer, onGameOver, continentFiltered = false }) {
+  constructor({ data, onAnswer, onGameOver, continentFiltered = false, rng }) {
     this.countries = data || window.DATA;
     this.continentFiltered = continentFiltered;
     this.onAnswer = onAnswer;
     this.onGameOver = onGameOver;
+    this.rng = rng || { next: () => Math.random(), shuffle: (a) => shuffleArray([...a]) };
 
     this.usedPairs = new Set();
     this.streak = 0;
@@ -58,7 +59,7 @@ export class DuelGameLogic {
     if (this.usedPairs.size >= maxPairs) this.usedPairs.clear();
 
     for (let attempts = 0; attempts < 100; attempts++) {
-      const shuffled = shuffleArray([...pool]);
+      const shuffled = this.rng.shuffle(pool);
       const a = shuffled[0];
       const b = shuffled[1];
       const key = this._pairKey(a.country, b.country);
@@ -70,7 +71,7 @@ export class DuelGameLogic {
 
     // Fallback
     this.usedPairs.clear();
-    const shuffled = shuffleArray([...pool]);
+    const shuffled = this.rng.shuffle(pool);
     return [shuffled[0], shuffled[1]];
   }
 
@@ -140,7 +141,7 @@ export class DuelGameLogic {
       weighted.push(...eligible.filter(t => late.includes(t)));
     }
 
-    const type = weighted[Math.floor(Math.random() * weighted.length)];
+    const type = weighted[Math.floor(this.rng.next() * weighted.length)];
     return this._buildQuestion(type, a, b);
   }
 
@@ -149,7 +150,7 @@ export class DuelGameLogic {
 
     switch (type) {
       case 'area': {
-        const bigger = Math.random() < 0.5;
+        const bigger = this.rng.next() < 0.5;
         if (bigger) {
           questionText = 'Which country is larger by area?';
           correctAnswer = a.area > b.area ? 'A' : 'B';
@@ -160,7 +161,7 @@ export class DuelGameLogic {
         break;
       }
       case 'population': {
-        const more = Math.random() < 0.5;
+        const more = this.rng.next() < 0.5;
         if (more) {
           questionText = 'Which country has more people?';
           correctAnswer = a.population > b.population ? 'A' : 'B';
@@ -176,7 +177,7 @@ export class DuelGameLogic {
         break;
       }
       case 'neighbors_count': {
-        const more = Math.random() < 0.5;
+        const more = this.rng.next() < 0.5;
         const aN = (a.neighbors || []).length;
         const bN = (b.neighbors || []).length;
         if (more) {
@@ -194,19 +195,19 @@ export class DuelGameLogic {
         const aOnly = [...aSet].filter(n => !bSet.has(n) && n !== b.country);
         const bOnly = [...bSet].filter(n => !aSet.has(n) && n !== a.country);
 
-        if (aOnly.length > 0 && (bOnly.length === 0 || Math.random() < 0.5)) {
-          const neighbor = aOnly[Math.floor(Math.random() * aOnly.length)];
+        if (aOnly.length > 0 && (bOnly.length === 0 || this.rng.next() < 0.5)) {
+          const neighbor = aOnly[Math.floor(this.rng.next() * aOnly.length)];
           questionText = `Which country borders ${neighbor}?`;
           correctAnswer = 'A';
         } else {
-          const neighbor = bOnly[Math.floor(Math.random() * bOnly.length)];
+          const neighbor = bOnly[Math.floor(this.rng.next() * bOnly.length)];
           questionText = `Which country borders ${neighbor}?`;
           correctAnswer = 'B';
         }
         break;
       }
       case 'continent': {
-        const pickA = Math.random() < 0.5;
+        const pickA = this.rng.next() < 0.5;
         if (pickA) {
           questionText = `Which country is in ${a.continent}?`;
           correctAnswer = 'A';
@@ -217,20 +218,20 @@ export class DuelGameLogic {
         break;
       }
       case 'capital': {
-        const pickA = Math.random() < 0.5;
+        const pickA = this.rng.next() < 0.5;
         if (pickA) {
-          const cap = a.capitals[Math.floor(Math.random() * a.capitals.length)];
+          const cap = a.capitals[Math.floor(this.rng.next() * a.capitals.length)];
           questionText = `Which country's capital is ${cap}?`;
           correctAnswer = 'A';
         } else {
-          const cap = b.capitals[Math.floor(Math.random() * b.capitals.length)];
+          const cap = b.capitals[Math.floor(this.rng.next() * b.capitals.length)];
           questionText = `Which country's capital is ${cap}?`;
           correctAnswer = 'B';
         }
         break;
       }
       case 'highest_peak': {
-        const higher = Math.random() < 0.5;
+        const higher = this.rng.next() < 0.5;
         if (higher) {
           questionText = 'Which country has a higher peak?';
           correctAnswer = a.highestPeak.elev > b.highestPeak.elev ? 'A' : 'B';
@@ -241,7 +242,7 @@ export class DuelGameLogic {
         break;
       }
       case 'equator': {
-        const closer = Math.random() < 0.5;
+        const closer = this.rng.next() < 0.5;
         if (closer) {
           questionText = 'Which country is closer to the equator?';
           correctAnswer = Math.abs(a.closestLat) < Math.abs(b.closestLat) ? 'A' : 'B';

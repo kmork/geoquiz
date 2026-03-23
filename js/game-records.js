@@ -27,6 +27,7 @@ const GAME_NAMES = {
   'pairs-cities': 'Pairs — Cities',
   'pairs-flags': 'Pairs — Flags',
   duel:            'Country Duel',
+  'duel-daily':    'Country Duel — Daily',
   'heritage-locate': 'Heritage Locate',
   rotated:         'Rotate & Guess',
   'rotate-only':   'Rotate Only',
@@ -40,6 +41,7 @@ const DIFFICULTY_LABELS = {
   short:  'Short',
   long:   'Long',
   streak: 'Streak',
+  daily:  'Daily',
 };
 
 /* ── localStorage helpers ───────────────────────────────────── */

@@ -3,11 +3,14 @@ import { renderDuelUI } from './ui-components/duel-ui.js';
 import { hapticFeedback } from './game-utils.js';
 import { initConfetti } from './confetti.js';
 import { renderFinishScreen } from './game-records.js';
+import { SeededRandom, dateToSeed, getTodayDate } from './seeded-random.js';
 
 const params = new URLSearchParams(location.search);
 const continentParam = params.get('continent');
 const continentSlug = continentParam ? continentParam.toLowerCase().replace(/\s+/g, '-') : null;
-const gameId = continentSlug ? `duel-${continentSlug}` : 'duel';
+const dailyMode = params.get('mode') === 'daily';
+const baseGameId = dailyMode ? 'duel-daily' : 'duel';
+const gameId = continentSlug ? `${baseGameId}-${continentSlug}` : baseGameId;
 
 const gameContent = document.getElementById('game-content');
 const streakEl = document.getElementById('streak');
@@ -36,9 +39,12 @@ async function init() {
     (window.ALL_COUNTRIES || window.DATA).map(c => [c.country, c.flagCode])
   );
 
+  const rng = dailyMode ? new SeededRandom(dateToSeed(getTodayDate())) : undefined;
+
   logic = new DuelGameLogic({
     data,
     continentFiltered: !!continentParam,
+    rng,
     onAnswer: ({ streak }) => {
       updateStreak(streak);
     },
@@ -103,6 +109,9 @@ function showFinal() {
     explanation,
     shareUrl: `geoquiz.info${location.pathname}${location.search}`,
     onPlayAgain: () => {
+      if (dailyMode) {
+        logic.rng = new SeededRandom(dateToSeed(getTodayDate()));
+      }
       startGame();
     }
   });
