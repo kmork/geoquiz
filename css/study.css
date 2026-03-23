@@ -196,6 +196,35 @@
   flex-shrink: 0;
 }
 
+/* ── Search input ── */
+#study-search {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 15;
+  width: 260px;
+  max-width: calc(100% - 120px);
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--panel-border, rgba(255,255,255,.14));
+  background: var(--panel-bg, rgba(15,20,40,.85));
+  backdrop-filter: blur(10px);
+  color: var(--text-primary);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+#study-search::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+#study-search:focus {
+  border-color: rgba(129,140,248,0.6);
+  box-shadow: 0 2px 12px rgba(0,0,0,.3);
+}
+
 /* ── Map toggle buttons ── */
 .study-map-toggles {
   position: absolute;

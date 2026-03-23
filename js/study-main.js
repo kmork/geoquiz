@@ -1287,6 +1287,44 @@ function zoomToCountry(dataName) {
   zoomAnimId = requestAnimationFrame(step);
 }
 
+function zoomToPoint(lon, lat, targetZoom = 8) {
+  if (zoomAnimId) { cancelAnimationFrame(zoomAnimId); zoomAnimId = null; }
+  const [toCx, toCy] = proj([lon, lat]);
+  const toZoom = Math.max(viewport.minZoom, targetZoom);
+
+  const fromZoom = viewport.zoom;
+  const fromCx = viewport.scrollX + canvasDisplayWidth / (2 * fromZoom);
+  const fromCy = viewport.scrollY + canvasDisplayHeight / (2 * fromZoom);
+
+  const fromLogZ = Math.log(fromZoom);
+  const toLogZ = Math.log(toZoom);
+
+  const dist = Math.hypot(
+    (toCx - fromCx) * fromZoom,
+    (toCy - fromCy) * fromZoom,
+    (toLogZ - fromLogZ) * 200,
+  );
+  const duration = Math.max(500, Math.min(1000, dist * 1.2));
+  const start = performance.now();
+
+  function step(now) {
+    const t = easeInOut(Math.min((now - start) / duration, 1));
+    const z = Math.exp(fromLogZ + (toLogZ - fromLogZ) * t);
+    const cx = fromCx + (toCx - fromCx) * t;
+    const cy = fromCy + (toCy - fromCy) * t;
+    viewport.zoom = z;
+    viewport.scrollX = cx - canvasDisplayWidth / (2 * z);
+    viewport.scrollY = Math.max(0, Math.min(cy - canvasDisplayHeight / (2 * z), getMapH() - canvasDisplayHeight / z));
+    drawWorldMap();
+    if (t < 1) {
+      zoomAnimId = requestAnimationFrame(step);
+    } else {
+      zoomAnimId = null;
+    }
+  }
+  zoomAnimId = requestAnimationFrame(step);
+}
+
 createPanZoom(canvas, viewport, drawWorldMap, {
   onHover(cx, cy) {
     // Overlay layers take priority: heritage > rivers > mountains/peaks > countries
@@ -1410,3 +1448,137 @@ createPanZoom(canvas, viewport, drawWorldMap, {
     }
   },
 });
+
+// ── Search ────────────────────────────────────────────────────────────────────
+
+const searchInput = document.getElementById('study-search');
+if (searchInput && window.initMobileAutocomplete) {
+  const searchActions = new Map();
+
+  // Countries & territories
+  for (const c of (window.ALL_COUNTRIES || window.DATA)) {
+    searchActions.set(c.country, () => {
+      hoveredCountry = c.country;
+      updateInfoPanel(c.country);
+      showFactOverlay(c.country);
+      drawWorldMap();
+      zoomToCountry(c.country);
+    });
+  }
+
+  // Capitals
+  for (const [country, cap] of capitalDots) {
+    const label = `${cap.name} (capital of ${country})`;
+    searchActions.set(label, () => {
+      hoveredCountry = country;
+      updateInfoPanel(country);
+      drawWorldMap();
+      zoomToPoint(cap.lon, cap.lat, 10);
+    });
+  }
+
+  // Cities
+  for (const [country, cities] of cityDots) {
+    for (const city of cities) {
+      const label = `${city.name} (city in ${country})`;
+      if (!searchActions.has(label)) {
+        searchActions.set(label, () => {
+          hoveredCountry = country;
+          updateInfoPanel(country);
+          drawWorldMap();
+          zoomToPoint(city.lon, city.lat, 12);
+        });
+      }
+    }
+  }
+
+  // Rivers
+  for (const river of riversData) {
+    const mid = river.path[Math.floor(river.path.length / 2)];
+    const label = `${river.name} (river)`;
+    searchActions.set(label, () => {
+      hoveredCountry = null;
+      hoveredOverlay = river;
+      updateInfoPanelForRiver(river);
+      drawWorldMap();
+      zoomToPoint(mid[0], mid[1], 3);
+    });
+  }
+
+  // Mountain ranges
+  for (const range of mountainsData) {
+    const mid = range.path[Math.floor(range.path.length / 2)];
+    const label = `${range.name} (mountain range)`;
+    searchActions.set(label, () => {
+      hoveredCountry = null;
+      hoveredOverlay = range;
+      updateInfoPanelForMountain(range);
+      drawWorldMap();
+      zoomToPoint(mid[0], mid[1], 3);
+    });
+  }
+
+  // Peaks
+  for (const peak of peaksData) {
+    const label = `${peak.name} (peak, ${peak.elev}m)`;
+    searchActions.set(label, () => {
+      hoveredCountry = null;
+      hoveredOverlay = peak;
+      updateInfoPanelForPeak(peak);
+      drawWorldMap();
+      zoomToPoint(peak.lon, peak.lat, 8);
+    });
+  }
+
+  // Heritage sites
+  for (const site of heritageSitesData) {
+    const label = `${site.siteName} (heritage site)`;
+    if (!searchActions.has(label)) {
+      searchActions.set(label, () => {
+        hoveredCountry = null;
+        hoveredOverlay = site;
+        updateInfoPanelForHeritage(site);
+        drawWorldMap();
+        zoomToPoint(site.lon, site.lat, 6);
+      });
+    }
+  }
+
+  const suggestions = [...searchActions.keys()].sort();
+
+  window.initMobileAutocomplete(searchInput, suggestions, {
+    maxSuggestions: 8,
+    minChars: 1,
+    onSelect(value) {
+      const action = searchActions.get(value);
+      if (action) action();
+      searchInput.value = '';
+      searchInput.blur();
+    },
+  });
+
+  // Also handle Enter without autocomplete selection (typed full name)
+  searchInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      const val = searchInput.value.trim();
+      if (!val) return;
+      // Try exact match first
+      const action = searchActions.get(val);
+      if (action) {
+        action();
+        searchInput.value = '';
+        searchInput.blur();
+        return;
+      }
+      // Try case-insensitive prefix match
+      const lower = val.toLowerCase();
+      const match = suggestions.find(s => s.toLowerCase().startsWith(lower));
+      if (match) {
+        const matchAction = searchActions.get(match);
+        if (matchAction) matchAction();
+        searchInput.value = '';
+        searchInput.blur();
+      }
+    }
+  });
+}
