@@ -64,6 +64,7 @@
           { key: 'find-easy',   url: 'find-country.html', urlParam: 'difficulty=easy&rounds=all', label: 'Find – Easy', emoji: '🌱', desc: 'Well-known countries' },
           { key: 'find-short',  url: 'find-country.html', urlParam: 'rounds=10',  label: 'Find – Short',  emoji: '⚡', desc: '10 rounds' },
           { key: 'find-long',   url: 'find-country.html', urlParam: 'rounds=all', label: 'Find – All',    emoji: '🏆', desc: 'All countries' },
+          { key: 'find-streak', url: 'find-country.html', urlParam: 'mode=streak', label: 'Find – Streak', emoji: '🔥', desc: 'One wrong answer ends the game' },
           { key: 'spelling-countries-short',  url: 'spelling.html', urlParam: 'mode=countries&rounds=10',  label: 'Spelling – Short',  emoji: '🔤', desc: '10 country names' },
           { key: 'spelling-countries-long',   url: 'spelling.html', urlParam: 'mode=countries&rounds=all', label: 'Spelling – All',    emoji: '🔤', desc: 'All countries' },
         ],
@@ -77,6 +78,7 @@
         customDifficulties: [
           { key: 'outlines-short',       url: 'outlines.html', urlParam: 'rounds=10',  label: 'Guess – Short',           emoji: '❓', desc: '10 rounds · name the country' },
           { key: 'outlines-long',        url: 'outlines.html', urlParam: 'rounds=all', label: 'Guess – All',             emoji: '❓', desc: 'All countries · name the country' },
+          { key: 'outlines-streak',      url: 'outlines.html', urlParam: 'mode=streak', label: 'Guess – Streak',         emoji: '🔥', desc: 'One wrong answer ends the game' },
           { key: 'rotate-only-short',    url: 'outlines.html', urlParam: 'rounds=10&mode=rotate-only',   label: 'Rotate – Short',  emoji: 'rotate-svg', desc: '10 rounds · name shown' },
           { key: 'rotate-only-long',     url: 'outlines.html', urlParam: 'rounds=all&mode=rotate-only',  label: 'Rotate – All',    emoji: 'rotate-svg', desc: 'All countries · name shown' },
           { key: 'rotated-short',        url: 'outlines.html', urlParam: 'rounds=10&mode=rotated',       label: 'Rotate & Guess – Short',  emoji: '⚡', desc: '10 rounds · rotate & guess' },
@@ -93,6 +95,7 @@
         customDifficulties: [
           { key: 'capitals-short',  url: 'capitals.html', urlParam: 'rounds=10',  label: 'Capitals – Short',  emoji: '⚡', desc: '10 rounds' },
           { key: 'capitals-long',   url: 'capitals.html', urlParam: 'rounds=all', label: 'Capitals – All',    emoji: '🏆', desc: 'All countries' },
+          { key: 'capitals-streak', url: 'capitals.html', urlParam: 'mode=streak', label: 'Capitals – Streak', emoji: '🔥', desc: 'One wrong answer ends the game' },
           { key: 'place-cities-short',  url: 'cities.html', urlParam: 'rounds=5',   label: 'Place Cities – Short',  emoji: '📍', desc: '5 rounds' },
           { key: 'place-cities-long',   url: 'cities.html', urlParam: 'rounds=all', label: 'Place Cities – All',    emoji: '📍', desc: 'All countries' },
           { key: 'spelling-cities-short',  url: 'spelling.html', urlParam: 'mode=cities&rounds=10',  label: 'Spelling – Short',  emoji: '🔤', desc: '10 city names' },
@@ -107,6 +110,11 @@
         pointsPerRound: 1,
         icon: '📚',
         noContinent: true,
+        customDifficulties: [
+          { key: 'trivia-short',  url: 'trivia.html', urlParam: 'rounds=10',   label: 'Short',  emoji: '⚡', desc: '10 questions' },
+          { key: 'trivia-long',   url: 'trivia.html', urlParam: 'rounds=all',  label: 'All',    emoji: '🏆', desc: 'All 124 questions' },
+          { key: 'trivia-streak', url: 'trivia.html', urlParam: 'mode=streak', label: 'Streak', emoji: '🔥', desc: 'One wrong answer ends the game' },
+        ],
       },
       heritage: {
         title: 'UNESCO Heritage',
@@ -118,6 +126,7 @@
         customDifficulties: [
           { key: 'heritage-short',  url: 'heritage.html', urlParam: 'rounds=10',  label: 'Guess – Short',  emoji: '🖼️', desc: '10 sites · guess the country' },
           { key: 'heritage-long',   url: 'heritage.html', urlParam: 'rounds=all', label: 'Guess – All',    emoji: '🖼️', desc: 'All 116 sites · guess the country' },
+          { key: 'heritage-streak', url: 'heritage.html', urlParam: 'mode=streak', label: 'Guess – Streak', emoji: '🔥', desc: 'One wrong answer ends the game' },
           { key: 'heritage-locate-short',  url: 'heritage-locate.html', urlParam: 'rounds=10',  label: 'Locate – Short',  emoji: '📍', desc: '10 sites · pinpoint on map' },
           { key: 'heritage-locate-long',   url: 'heritage-locate.html', urlParam: 'rounds=all', label: 'Locate – All',    emoji: '📍', desc: 'All 116 sites · pinpoint on map' },
         ],
@@ -128,7 +137,12 @@
         url: 'flags.html',
         fullCount: 194,
         pointsPerRound: 1,
-        icon: '🚩'
+        icon: '🚩',
+        customDifficulties: [
+          { key: 'flags-short',  url: 'flags.html', urlParam: 'rounds=10',   label: 'Short',  emoji: '⚡', desc: '10 rounds' },
+          { key: 'flags-long',   url: 'flags.html', urlParam: 'rounds=all',  label: 'All',    emoji: '🏆', desc: 'All 194 flags' },
+          { key: 'flags-streak', url: 'flags.html', urlParam: 'mode=streak', label: 'Streak', emoji: '🔥', desc: 'One wrong answer ends the game' },
+        ],
       },
       route: {
         title: 'Route',

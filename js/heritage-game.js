@@ -24,6 +24,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
   const singleRound = config.singleRound ?? false;
   const maxSites = config.maxSites ?? 10;
   const gameIdSuffix = config.gameIdSuffix || 'short';
+  const streakMode = config.streakMode ?? false;
   const allowMultipleChoice = config.allowMultipleChoice ?? true;
   const showHint = config.showHint ?? true;
   const customOnAnswer = config.onAnswer;
@@ -51,7 +52,7 @@ export function createHeritageGame({ container, confetti, config = {} }) {
 
   function updateUI() {
     if (scoreEl) scoreEl.textContent = score;
-    if (progressEl) progressEl.textContent = `${currentIndex} / ${sites.length}`;
+    if (progressEl) progressEl.textContent = streakMode ? `Streak: ${totalCorrect}` : `${currentIndex} / ${sites.length}`;
     if (currentUI) {
       currentUI.updateProgress(score, currentIndex, sites.length);
     }
@@ -175,10 +176,19 @@ export function createHeritageGame({ container, confetti, config = {} }) {
         }, AUTO_MS_CORRECT);
       }
     } else {
-      // Wrong - show multiple choice
       hapticFeedback('wrong');
-      currentAttempt = 2;
-      showMultipleChoice();
+      if (streakMode) {
+        answeredThisRound = true;
+        currentUI.showFeedback(`❌ Wrong. This is ${site.siteName} in ${site.country}.`, false);
+        if (customOnAnswer) customOnAnswer({ isCorrect: false, points: 0 });
+        autoAdvanceTimer = setTimeout(() => {
+          showFinalScreen(gameStartTime ? (Date.now() - gameStartTime) / 1000 : 0);
+        }, 2000);
+      } else {
+        // Wrong - show multiple choice
+        currentAttempt = 2;
+        showMultipleChoice();
+      }
     }
   }
 
@@ -236,9 +246,8 @@ export function createHeritageGame({ container, confetti, config = {} }) {
 
       // Call custom callback if provided
       if (customOnAnswer) customOnAnswer({ isCorrect: false, points: 0 });
-      
+
       if (singleRound) {
-        // For single round mode, immediately resolve with result
         if (customOnComplete) {
           customOnComplete({
             correct: false,
@@ -246,6 +255,10 @@ export function createHeritageGame({ container, confetti, config = {} }) {
             time: (Date.now() - roundStartTime) / 1000
           });
         }
+      } else if (streakMode) {
+        autoAdvanceTimer = setTimeout(() => {
+          showFinalScreen(gameStartTime ? (Date.now() - gameStartTime) / 1000 : 0);
+        }, 2000);
       } else {
         autoAdvanceTimer = setTimeout(() => {
           currentIndex++;
@@ -297,12 +310,12 @@ export function createHeritageGame({ container, confetti, config = {} }) {
 
     renderFinishScreen(finalOverlay, {
       gameId: `heritage-${gameIdSuffix}`,
-      score,
-      scoreLabel: 'Score',
-      maxScore: sites.length * 2,
+      score: streakMode ? totalCorrect : score,
+      scoreLabel: streakMode ? 'Streak' : 'Score',
+      maxScore: streakMode ? null : sites.length * 2,
       time: totalTime,
-      accuracy,
-      stats: [
+      accuracy: streakMode ? 0 : accuracy,
+      stats: streakMode ? [] : [
         { label: 'Perfect guesses', value: perfectGuesses },
         { label: 'Accuracy', value: `${accuracy}%` },
       ],

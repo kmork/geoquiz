@@ -12,6 +12,7 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
   const DATA = window.DATA; // IMPORTANT: data.js sets window.DATA
   const configMaxRounds = config.maxRounds ?? 10;
   const gameIdSuffix = config.gameIdSuffix || 'short';
+  const streakMode = config.streakMode || false;
   let totalRounds = configMaxRounds;
 
   let deck = [];
@@ -302,29 +303,7 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
     bonusMode = false;
 
     if (!deck.length) {
-      const totalTime = gameStartTime ? (Date.now() - gameStartTime) / 1000 : 0;
-      const accuracy = totalRounds > 0 ? Math.round((correctAny / totalRounds) * 100) : 0;
-
-      renderFinishScreen(ui.finalOverlay, {
-        gameId: `capitals-${gameIdSuffix}`,
-        score,
-        scoreLabel: 'Score',
-        maxScore: totalRounds * 2,
-        time: totalTime,
-        accuracy,
-        stats: [
-          { label: 'Correct', value: correctAny },
-          { label: 'First try', value: correctFirstTry },
-        ],
-        shareUrl: `geoquiz.info${location.pathname}${location.search}`,
-        onPlayAgain: () => {
-          reset();
-          nextQ();
-        },
-      });
-
-      ui.finalOverlay.style.display = "flex";
-      confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
+      showFinish();
       return;
     }
 
@@ -334,13 +313,43 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
     }
     ui.elCountry.textContent = current.country;
 
-    updateProgress(ui.progressEl, totalRounds - deck.length, totalRounds);
+    if (streakMode) {
+      ui.progressEl.textContent = `Streak: ${correctAny}`;
+    } else {
+      updateProgress(ui.progressEl, totalRounds - deck.length, totalRounds);
+    }
     mapApi?.draw?.(current.country, false);
 
     // Only auto-focus on desktop (not mobile to avoid unwanted keyboard)
     if (!isMobileDevice()) {
       ui.answer.focus();
     }
+  }
+
+  function showFinish() {
+    const totalTime = gameStartTime ? (Date.now() - gameStartTime) / 1000 : 0;
+    const accuracy = totalRounds > 0 ? Math.round((correctAny / totalRounds) * 100) : 0;
+
+    renderFinishScreen(ui.finalOverlay, {
+      gameId: `capitals-${gameIdSuffix}`,
+      score: streakMode ? correctAny : score,
+      scoreLabel: streakMode ? 'Streak' : 'Score',
+      maxScore: streakMode ? null : totalRounds * 2,
+      time: totalTime,
+      accuracy: streakMode ? 0 : accuracy,
+      stats: streakMode ? [] : [
+        { label: 'Correct', value: correctAny },
+        { label: 'First try', value: correctFirstTry },
+      ],
+      shareUrl: `geoquiz.info${location.pathname}${location.search}`,
+      onPlayAgain: () => {
+        reset();
+        nextQ();
+      },
+    });
+
+    ui.finalOverlay.style.display = "flex";
+    if (!streakMode) confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
   }
 
   function endRound({ ok, pointsAwarded, autoMs }) {
@@ -408,7 +417,12 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
         } else {
           shakeWrong(b);
           hapticFeedback('wrong');
-          endRound({ ok: false, pointsAwarded: 0, autoMs: AUTO_MS_WRONG_SECOND });
+          if (streakMode) {
+            roundEnded = true;
+            setTimeout(() => showFinish(), 1500);
+          } else {
+            endRound({ ok: false, pointsAwarded: 0, autoMs: AUTO_MS_WRONG_SECOND });
+          }
         }
       };
 
@@ -445,11 +459,20 @@ export function createGame({ ui, mapApi, confetti, config = {} }) {
       flashCorrect(document.querySelector('.card'));
       hapticFeedback('correct');
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
-      startBonusRound();
+      if (streakMode) {
+        endRound({ ok: true, pointsAwarded: 2, autoMs: AUTO_MS_CORRECT_FIRST });
+      } else {
+        startBonusRound();
+      }
     } else {
       shakeWrong(ui.answer);
       hapticFeedback('wrong');
-      showMC();
+      if (streakMode) {
+        roundEnded = true;
+        setTimeout(() => showFinish(), 1500);
+      } else {
+        showMC();
+      }
     }
     guessInProgress = false;
   }

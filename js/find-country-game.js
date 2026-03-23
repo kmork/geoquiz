@@ -14,6 +14,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
 
   const maxRounds = config.maxRounds ?? 10;
   const gameIdSuffix = config.gameIdSuffix || 'short';
+  const streakMode = config.streakMode ?? false;
 
   // Create game logic instance
   const gameLogic = new FindCountryGameLogic({
@@ -39,7 +40,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
     if (hideScoreUI) return;
     const progress = gameLogic.getProgress();
     if (ui.scoreEl) ui.scoreEl.textContent = progress.score;
-    if (ui.progressEl) ui.progressEl.textContent = `${progress.current} / ${progress.total}`;
+    if (ui.progressEl) ui.progressEl.textContent = streakMode ? `Streak: ${progress.score}` : `${progress.current} / ${progress.total}`;
   }
 
   function reset() {
@@ -120,8 +121,21 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
         // Timeout - just show correct country
         highlightCountry(result.correctCountry, "correct");
       }
-      
-      continueTimer = setTimeout(() => nextQ(), AUTO_MS_WRONG);
+
+      if (streakMode) {
+        continueTimer = setTimeout(() => {
+          const progress = gameLogic.getProgress();
+          showFinal({
+            score: progress.score,
+            total: progress.total,
+            correctCount: gameLogic.correctCount,
+            accuracy: gameLogic.getAccuracy(),
+            time: gameLogic.gameStartTime ? (Date.now() - gameLogic.gameStartTime) / 1000 : 0,
+          });
+        }, AUTO_MS_WRONG);
+      } else {
+        continueTimer = setTimeout(() => nextQ(), AUTO_MS_WRONG);
+      }
     }
   }
 
@@ -130,12 +144,12 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
 
     renderFinishScreen(ui.finalOverlay, {
       gameId: `find-${gameIdSuffix}`,
-      score: finalResult.score,
-      scoreLabel: 'Score',
-      maxScore: finalResult.total * 2,
+      score: streakMode ? finalResult.correctCount : finalResult.score,
+      scoreLabel: streakMode ? 'Streak' : 'Score',
+      maxScore: streakMode ? null : finalResult.total * 2,
       time: finalResult.time,
-      accuracy: finalResult.accuracy,
-      stats: [
+      accuracy: streakMode ? 0 : finalResult.accuracy,
+      stats: streakMode ? [] : [
         { label: 'Correct', value: finalResult.correctCount },
         { label: 'Accuracy', value: `${finalResult.accuracy}%` },
       ],
@@ -148,7 +162,7 @@ export function createFindCountryGame({ ui, confetti, checkClickedCountry, highl
 
     ui.finalOverlay.style.display = "flex";
 
-    if (finalResult.accuracy >= 80) {
+    if (!streakMode && finalResult.accuracy >= 80) {
       confetti?.burst?.({ x: innerWidth / 2, y: innerHeight / 2 });
     }
   }

@@ -12,6 +12,7 @@ export function createOutlinesGame({ ui, confetti, drawCountries, revealAnswer, 
   const singleRound = config.singleRound ?? false;
   const maxRounds = config.maxRounds ?? 10;
   const gameIdSuffix = config.gameIdSuffix || 'short';
+  const streakMode = config.streakMode ?? false;
   const customOnAnswer = config.onAnswer;
   const customOnComplete = config.onComplete;
 
@@ -34,7 +35,7 @@ export function createOutlinesGame({ ui, confetti, drawCountries, revealAnswer, 
     if (hideScoreUI) return;
     const progress = gameLogic.getProgress();
     if (ui.scoreEl) ui.scoreEl.textContent = progress.score;
-    if (ui.progressEl) ui.progressEl.textContent = `${progress.current} / ${progress.total}`;
+    if (ui.progressEl) ui.progressEl.textContent = streakMode ? `Streak: ${gameLogic.correct}` : `${progress.current} / ${progress.total}`;
   }
 
   function reset() {
@@ -143,7 +144,7 @@ export function createOutlinesGame({ ui, confetti, drawCountries, revealAnswer, 
         nextQ();
       }, AUTO_MS_CORRECT);
     } else {
-      // Wrong or skip — show correct answer, enter Continue mode
+      // Wrong or skip — show correct answer
       shakeWrong(ui.answerInput);
       hapticFeedback('wrong');
       showStatus(result.message, false);
@@ -155,8 +156,22 @@ export function createOutlinesGame({ ui, confetti, drawCountries, revealAnswer, 
         revealAnswer(current.country, countryNeighbors);
       }
 
-      enterContinueMode();
-      isProcessing = false;
+      if (streakMode) {
+        isProcessing = false;
+        setTimeout(() => {
+          const progress = gameLogic.getProgress();
+          showFinal({
+            score: gameLogic.score,
+            total: progress.total,
+            correct: gameLogic.correct,
+            accuracy: gameLogic.getAccuracy(),
+            time: gameLogic.gameStartTime ? (Date.now() - gameLogic.gameStartTime) / 1000 : 0,
+          });
+        }, 2000);
+      } else {
+        enterContinueMode();
+        isProcessing = false;
+      }
     }
   }
 
@@ -165,12 +180,12 @@ export function createOutlinesGame({ ui, confetti, drawCountries, revealAnswer, 
 
     renderFinishScreen(ui.finalOverlay, {
       gameId: `outlines-${gameIdSuffix}`,
-      score: finalResult.score,
-      scoreLabel: 'Points',
-      maxScore: finalResult.total * 2,
+      score: streakMode ? finalResult.correct : finalResult.score,
+      scoreLabel: streakMode ? 'Streak' : 'Points',
+      maxScore: streakMode ? null : finalResult.total * 2,
       time: finalResult.time,
-      accuracy: finalResult.accuracy,
-      stats: [
+      accuracy: streakMode ? 0 : finalResult.accuracy,
+      stats: streakMode ? [] : [
         { label: 'Correct', value: finalResult.correct },
       ],
       shareUrl: `geoquiz.info${location.pathname}${location.search}`,

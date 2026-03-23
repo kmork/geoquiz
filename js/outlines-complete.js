@@ -33,7 +33,8 @@ export async function createCompleteOutlinesGame({
   singleRound = false,
   onComplete,
   maxRounds = 10,
-  gameIdSuffix = 'short'
+  gameIdSuffix = 'short',
+  streakMode = false,
 }) {
   
   // Load world data (route variant — overseas territories pre-removed)
@@ -348,6 +349,7 @@ export async function createCompleteOutlinesGame({
       onComplete: onComplete,
       maxRounds,
       gameIdSuffix,
+      streakMode,
     }
   });
 

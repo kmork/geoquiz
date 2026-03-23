@@ -25,7 +25,8 @@ export async function createCompleteHeritageGame({
   allowMultipleChoice = true,
   showHint = true,
   maxSites = 10,
-  gameIdSuffix = 'short'
+  gameIdSuffix = 'short',
+  streakMode = false,
 }) {
 
   const confetti = confettiInstance || (singleRound ? null : initConfetti("confetti"));
@@ -40,7 +41,8 @@ export async function createCompleteHeritageGame({
       allowMultipleChoice,
       showHint,
       maxSites,
-      gameIdSuffix
+      gameIdSuffix,
+      streakMode,
     }
   });
   

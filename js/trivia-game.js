@@ -11,6 +11,7 @@ export function createTriviaGame({ ui, confetti, config = {} }) {
   const singleRound = config.singleRound ?? false;
   const maxCount = config.maxCount ?? 10;
   const gameIdSuffix = config.gameIdSuffix || 'short';
+  const streakMode = config.streakMode ?? false;
   const customOnAnswer = config.onAnswer;
   const customOnComplete = config.onComplete;
 
@@ -41,7 +42,7 @@ export function createTriviaGame({ ui, confetti, config = {} }) {
     if (hideScoreUI) return;
     const progress = gameLogic.getProgress();
     if (ui.scoreEl) ui.scoreEl.textContent = progress.score;
-    if (ui.progressEl) ui.progressEl.textContent = `${progress.current} / ${progress.total}`;
+    if (ui.progressEl) ui.progressEl.textContent = streakMode ? `Streak: ${progress.score}` : `${progress.current} / ${progress.total}`;
   }
 
   function showQuestion() {
@@ -81,8 +82,19 @@ export function createTriviaGame({ ui, confetti, config = {} }) {
 
     showAnswerFeedback(result);
 
-    // Auto-advance to next question
-    if (!result.isLastQuestion) {
+    if (streakMode && !result.correct) {
+      // Streak mode: wrong answer ends the game
+      autoAdvanceTimer = setTimeout(() => {
+        const progress = gameLogic.getProgress();
+        showFinalScreen({
+          score: progress.score,
+          total: progress.total,
+          correctCount: gameLogic.correctCount,
+          accuracy: gameLogic.getAccuracy(),
+          time: gameLogic.gameStartTime ? (Date.now() - gameLogic.gameStartTime) / 1000 : 0,
+        });
+      }, AUTO_MS);
+    } else if (!result.isLastQuestion) {
       autoAdvanceTimer = setTimeout(() => {
         gameLogic.advance();
         showQuestion();
@@ -116,11 +128,11 @@ export function createTriviaGame({ ui, confetti, config = {} }) {
     renderFinishScreen(ui.finalOverlay, {
       gameId: `trivia-${gameIdSuffix}`,
       score: finalResult.score,
-      scoreLabel: 'Score',
-      maxScore: finalResult.total,
+      scoreLabel: streakMode ? 'Streak' : 'Score',
+      maxScore: streakMode ? null : finalResult.total,
       time: finalResult.time,
-      accuracy: finalResult.accuracy,
-      stats: [
+      accuracy: streakMode ? 0 : finalResult.accuracy,
+      stats: streakMode ? [] : [
         { label: 'Correct', value: finalResult.correctCount },
         { label: 'Accuracy', value: `${finalResult.accuracy}%` },
       ],
@@ -132,7 +144,7 @@ export function createTriviaGame({ ui, confetti, config = {} }) {
     });
 
     ui.finalOverlay.style.display = "flex";
-    confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
+    if (!streakMode) confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
   }
 
   function reset() {

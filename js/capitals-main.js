@@ -5,9 +5,10 @@ import { createGame } from "./capitals-game.js";
 import { attachWikipediaPopup } from "./wiki.js";
 
 const _params = new URLSearchParams(location.search);
+const _streakMode = _params.get('mode') === 'streak';
 const _roundsParam = _params.get('rounds') || '10';
-const _maxRounds = _roundsParam === 'all' ? Infinity : (parseInt(_roundsParam) || 10);
-const _diffSuffix = _roundsParam === 'all' ? 'long' : 'short';
+const _maxRounds = _streakMode ? Infinity : (_roundsParam === 'all' ? Infinity : (parseInt(_roundsParam) || 10));
+const _diffSuffix = _streakMode ? 'streak' : (_roundsParam === 'all' ? 'long' : 'short');
 const _continentParam = _params.get('continent');
 const _continentSlug = _continentParam ? _continentParam.toLowerCase().replace(/\s+/g, '-') : null;
 const _gameIdSuffix = _continentSlug ? `${_continentSlug}-${_diffSuffix}` : _diffSuffix;
@@ -46,7 +47,7 @@ try {
 
 mapApi.attachInteractions();
 
-const game = createGame({ ui, mapApi, confetti, config: { maxRounds: _maxRounds, gameIdSuffix: _gameIdSuffix } });
+const game = createGame({ ui, mapApi, confetti, config: { maxRounds: _maxRounds, gameIdSuffix: _gameIdSuffix, streakMode: _streakMode } });
 attachWikipediaPopup(ui.elCountry, () => game.getCurrent());
 
 // Buttons are now wired dynamically by renderFinishScreen

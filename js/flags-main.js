@@ -5,9 +5,10 @@ import { initConfetti } from './confetti.js';
 import { renderFinishScreen } from './game-records.js';
 
 const params = new URLSearchParams(location.search);
+const streakMode = params.get('mode') === 'streak';
 const roundsParam = params.get('rounds') || '10';
-const maxRounds = roundsParam === 'all' ? Infinity : (parseInt(roundsParam) || 10);
-const gameIdSuffix = roundsParam === 'all' ? 'long' : 'short';
+const maxRounds = streakMode ? Infinity : (roundsParam === 'all' ? Infinity : (parseInt(roundsParam) || 10));
+const gameIdSuffix = streakMode ? 'streak' : (roundsParam === 'all' ? 'long' : 'short');
 const continentParam = params.get('continent');
 const continentSlug = continentParam ? continentParam.toLowerCase().replace(/\s+/g, '-') : null;
 const gameId = continentSlug ? `flags-${continentSlug}-${gameIdSuffix}` : `flags-${gameIdSuffix}`;
@@ -90,9 +91,12 @@ function nextRound() {
       } else {
         hapticFeedback('wrong');
         ui.showFeedback(`You guessed: ${selectedCountry}`, false);
-        // Expand the correct flag after a short pause so the player can study it
         setTimeout(() => ui.animateCorrectFlag(country.country), 500);
-        setTimeout(() => nextRound(), 2500);
+        if (streakMode) {
+          setTimeout(() => showFinal(), 2000);
+        } else {
+          setTimeout(() => nextRound(), 2500);
+        }
       }
     }
   });
@@ -100,7 +104,7 @@ function nextRound() {
 
 function updateUI(progress) {
   if (scoreEl) scoreEl.textContent = progress.score;
-  if (progressEl) progressEl.textContent = `${progress.current} / ${progress.total}`;
+  if (progressEl) progressEl.textContent = streakMode ? `Streak: ${progress.score}` : `${progress.current} / ${progress.total}`;
 }
 
 function showFinal() {
@@ -115,10 +119,10 @@ function showFinal() {
   renderFinishScreen(finalOverlay, {
     gameId,
     score: progress.score,
-    scoreLabel: 'Correct',
-    maxScore: progress.total,
+    scoreLabel: streakMode ? 'Streak' : 'Correct',
+    maxScore: streakMode ? null : progress.total,
     time: elapsed,
-    accuracy,
+    accuracy: streakMode ? 0 : accuracy,
     shareUrl: `geoquiz.info${location.pathname}${location.search}`,
     onPlayAgain: () => {
       logic.reset();

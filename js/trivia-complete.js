@@ -26,7 +26,8 @@ export async function createCompleteTriviaGame({
   onComplete,
   onAnswer,
   maxCount = 10,
-  gameIdSuffix = 'short'
+  gameIdSuffix = 'short',
+  streakMode = false,
 }) {
   
   // If no UI provided, create default UI elements from container
@@ -62,7 +63,8 @@ export async function createCompleteTriviaGame({
       onComplete: onComplete,
       onAnswer: onAnswer,
       maxCount,
-      gameIdSuffix
+      gameIdSuffix,
+      streakMode,
     }
   });
   

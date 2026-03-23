@@ -39,6 +39,7 @@ const DIFFICULTY_LABELS = {
   short:  'Short',
   long:   'Long',
   all:    'All',
+  streak: 'Streak',
 };
 
 /* ── localStorage helpers ───────────────────────────────────── */
