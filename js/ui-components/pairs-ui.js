@@ -61,6 +61,7 @@ function injectStyles() {
     }
     .pair-card:disabled { cursor: default; }
     .pair-flag { width: 56px; height: auto; border-radius: 3px; pointer-events: none; }
+    .pair-outline { width: 80px; height: auto; pointer-events: none; }
   `;
   document.head.appendChild(style);
 }
@@ -70,7 +71,7 @@ function injectStyles() {
  * @param {{ leftItems: string[], rightItems: string[], leftLabel?: string, rightLabel?: string }} opts
  * @returns {{ setupEvents, markCorrect, markWrong }}
  */
-export function renderPairsUI(container, { leftItems, rightItems, leftLabel = 'Countries', rightLabel = 'Capitals', renderRight }) {
+export function renderPairsUI(container, { leftItems, rightItems, leftLabel = 'Countries', rightLabel = 'Capitals', renderRight, outlineData }) {
   injectStyles();
 
   container.innerHTML = `
@@ -85,9 +86,17 @@ export function renderPairsUI(container, { leftItems, rightItems, leftLabel = 'C
         </div>
         <div class="pairs-column" id="pairs-right">
           ${rightItems.map(c => {
-            const inner = renderRight === 'flag'
-              ? `<img src="img/flags/${escapeAttr(c)}.svg" alt="Flag" class="pair-flag">`
-              : escapeHtml(c);
+            let inner;
+            if (renderRight === 'flag') {
+              inner = `<img src="img/flags/${escapeAttr(c)}.svg" alt="Flag" class="pair-flag">`;
+            } else if (renderRight === 'outline' && outlineData) {
+              const od = outlineData.get(c);
+              inner = od
+                ? `<svg class="pair-outline" viewBox="${escapeAttr(od.viewBox)}" xmlns="http://www.w3.org/2000/svg"><path d="${escapeAttr(od.pathData)}" fill="var(--map-country-fill-highlight)" stroke="var(--map-country-stroke-highlight)" stroke-width="0.8" vector-effect="non-scaling-stroke"/></svg>`
+                : escapeHtml(c);
+            } else {
+              inner = escapeHtml(c);
+            }
             return `<button class="pair-card" data-type="right" data-value="${escapeAttr(c)}">${inner}</button>`;
           }).join('')}
         </div>

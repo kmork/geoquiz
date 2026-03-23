@@ -3,6 +3,9 @@ import { renderPairsUI } from './ui-components/pairs-ui.js';
 import { shuffleArray, hapticFeedback } from './game-utils.js';
 import { initConfetti } from './confetti.js';
 import { renderFinishScreen } from './game-records.js';
+import { loadGeoJSON } from './geojson-loader.js';
+import { findGeoFeatures } from './aliases.js';
+import { pathFromMainland, bboxOfMainlandLonLat, padBBox, proj } from './map-utils.js';
 
 const params         = new URLSearchParams(location.search);
 const roundsParam    = params.get('rounds') || 'all';
@@ -56,6 +59,16 @@ const MODES = {
         .map(c => ({ left: c.country, right: c.flagCode }));
     },
   },
+  outlines: {
+    leftLabel: 'Countries',
+    rightLabel: 'Outlines',
+    subtitle: 'Match each country with its outline. One wrong guess ends the game.',
+    renderRight: 'outline',
+    needsGeoJSON: true,
+    buildPairs(data) {
+      return data.map(c => ({ left: c.country, right: c.country }));
+    },
+  },
 };
 
 const modeConfig = MODES[mode] || MODES.capitals;
@@ -75,6 +88,7 @@ let logic;
 let ui;
 let displayLeft  = [];
 let displayRight = [];
+let outlineData  = null; // Map<countryName, {pathData, viewBox}>
 
 async function waitForData() {
   while (!window.DATA) {
@@ -96,6 +110,33 @@ async function init() {
     if (filtered.length > 0) data = filtered;
   }
 
+  if (modeConfig.needsGeoJSON) {
+    const geo = await loadGeoJSON('data/ne_10m_admin_0_countries_route.geojson.gz');
+    outlineData = new Map();
+    for (const c of data) {
+      const features = findGeoFeatures(geo.features, c.country);
+      if (features.length === 0) continue;
+      const pathData = features.map(f => pathFromMainland(f)).join(' ');
+      let bb = bboxOfMainlandLonLat(features[0]);
+      for (let i = 1; i < features.length; i++) {
+        const b = bboxOfMainlandLonLat(features[i]);
+        bb = {
+          minLon: Math.min(bb.minLon, b.minLon),
+          minLat: Math.min(bb.minLat, b.minLat),
+          maxLon: Math.max(bb.maxLon, b.maxLon),
+          maxLat: Math.max(bb.maxLat, b.maxLat),
+        };
+      }
+      bb = padBBox(bb, 0.18);
+      const [x1, y1] = proj([bb.minLon, bb.maxLat]);
+      const [x2, y2] = proj([bb.maxLon, bb.minLat]);
+      outlineData.set(c.country, {
+        pathData,
+        viewBox: `${x1} ${y1} ${x2 - x1} ${y2 - y1}`,
+      });
+    }
+  }
+
   const pairs = modeConfig.buildPairs(data);
   logic = new PairsLogic({ pairs, maxPairs });
   logic.reset();
@@ -115,6 +156,7 @@ function render(left = null, right = null) {
     leftLabel:  modeConfig.leftLabel,
     rightLabel: modeConfig.rightLabel,
     renderRight: modeConfig.renderRight,
+    outlineData,
   });
   ui.setupEvents({ onAttempt: handleAttempt });
   updateUI();
