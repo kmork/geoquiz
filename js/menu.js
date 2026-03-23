@@ -89,6 +89,13 @@
     + '</div>'
     + '<button id="clear-records-btn" class="clear-records-btn">Clear All</button>'
     + '</div>'
+    + '<div class="pref-row">'
+    + '<div class="pref-label">'
+    + '<span class="pref-label-title">Cache</span>'
+    + '<span class="pref-label-desc">Clear cached data and reload to get latest updates</span>'
+    + '</div>'
+    + '<button id="clear-cache-btn" class="clear-records-btn">Clear</button>'
+    + '</div>'
     + '</section>'
 
     + '</div>';
@@ -127,5 +134,27 @@
     keys.forEach(function (k) { localStorage.removeItem(k); });
     clearBtn.textContent = 'Cleared!';
     setTimeout(function () { clearBtn.textContent = 'Clear All'; }, 2000);
+  });
+
+  // Clear cache (IndexedDB + browser cache) and force reload
+  var clearCacheBtn = document.getElementById('clear-cache-btn');
+  clearCacheBtn.addEventListener('click', function () {
+    var tasks = [];
+    // Delete IndexedDB cached GeoJSON
+    tasks.push(new Promise(function (resolve) {
+      var req = indexedDB.deleteDatabase('geoquiz-cache');
+      req.onsuccess = resolve;
+      req.onerror = resolve;
+      req.onblocked = resolve;
+    }));
+    // Clear browser Cache API (cached JS/CSS/HTML)
+    if (window.caches) {
+      tasks.push(caches.keys().then(function (names) {
+        return Promise.all(names.map(function (n) { return caches.delete(n); }));
+      }));
+    }
+    Promise.all(tasks).then(function () {
+      location.reload(true);
+    });
   });
 })();
