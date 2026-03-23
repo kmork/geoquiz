@@ -1212,6 +1212,9 @@ if (window.visualViewport) {
 }
 drawWorldMap();
 
+const initOverlay = document.getElementById('init-overlay');
+if (initOverlay) initOverlay.style.display = 'none';
+
 // Redraw when light/dark mode changes (theme toggle in menu)
 new MutationObserver(() => drawWorldMap()).observe(
   document.documentElement, { attributes: true, attributeFilter: ['class'] }
