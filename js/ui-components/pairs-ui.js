@@ -61,7 +61,7 @@ function injectStyles() {
     }
     .pair-card:disabled { cursor: default; }
     .pair-flag { width: 56px; height: auto; border-radius: 3px; pointer-events: none; }
-    .pair-outline { width: 80px; height: auto; pointer-events: none; }
+    .pair-outline { width: 56px; max-height: 56px; pointer-events: none; }
   `;
   document.head.appendChild(style);
 }

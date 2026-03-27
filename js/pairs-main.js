@@ -111,7 +111,7 @@ async function init() {
   }
 
   if (modeConfig.needsGeoJSON) {
-    const geo = await loadGeoJSON('data/ne_10m_admin_0_countries_route.geojson.gz');
+    const geo = await loadGeoJSON('data/ne_10m_admin_0_countries.geojson.gz');
     outlineData = new Map();
     for (const c of data) {
       const features = findGeoFeatures(geo.features, c.country);
