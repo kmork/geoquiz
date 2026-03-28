@@ -14,6 +14,8 @@ import {
   setupCanvas, createPanZoom,
 } from './canvas-map-engine.js';
 import { drawOSMTiles } from './osm-tiles.js';
+import { pathFromMainland, bboxOfMainlandLonLat, padBBox, proj as projEquirect, mainlandPolygons } from './map-utils.js';
+import { findGeoFeature } from './aliases.js';
 
 // ── DOM references ────────────────────────────────────────────────────────────
 
@@ -678,6 +680,7 @@ function updateInfoPanel(dataName) {
         <div class="study-info-name">${dataName}</div>
         ${sovereign ? `<div class="study-info-region">Territory of ${sovereign}</div>` : subregion ? `<div class="study-info-region">${subregion}</div>` : ''}
       </div>
+      <button class="study-info-close" aria-label="Close">✕</button>
     </div>
     <div class="study-info-divider"></div>
     <div class="study-info-rows">
@@ -691,7 +694,17 @@ function updateInfoPanel(dataName) {
 
 function hideInfoPanel() {
   infoPanel.style.display = 'none';
+  hoveredCountry = null;
+  hoveredOverlay = null;
+  drawWorldMap();
 }
+
+// Delegated close button handler for the info panel
+infoPanel.addEventListener('click', (e) => {
+  if (e.target.closest('.study-info-close')) {
+    hideInfoPanel();
+  }
+});
 
 // ── Overlay hit-testing ───────────────────────────────────────────────────────
 
@@ -769,6 +782,7 @@ function updateInfoPanelForHeritage(site) {
         <div class="study-info-name">${site.siteName}</div>
         <div class="study-info-region">${site.country} · ${typeLabel}</div>
       </div>
+      <button class="study-info-close" aria-label="Close">✕</button>
     </div>
     <div class="study-info-divider"></div>
     <div class="study-info-rows">
@@ -786,6 +800,7 @@ function updateInfoPanelForRiver(river) {
         <div class="study-info-name">${river.name}</div>
         <div class="study-info-region">River</div>
       </div>
+      <button class="study-info-close" aria-label="Close">✕</button>
     </div>
     <div class="study-info-divider"></div>
     <div class="study-info-rows">
@@ -805,6 +820,7 @@ function updateInfoPanelForMountain(range) {
         <div class="study-info-name">${range.name}</div>
         <div class="study-info-region">Mountain range</div>
       </div>
+      <button class="study-info-close" aria-label="Close">✕</button>
     </div>
     <div class="study-info-divider"></div>
     <div class="study-info-rows">
@@ -825,6 +841,7 @@ function updateInfoPanelForPeak(peak) {
         <div class="study-info-name">${peak.name}</div>
         <div class="study-info-region">Highest point · ${peak.country}</div>
       </div>
+      <button class="study-info-close" aria-label="Close">✕</button>
     </div>
     <div class="study-info-divider"></div>
     <div class="study-info-rows">
@@ -844,6 +861,7 @@ function updateInfoPanelForEmpire(empire) {
         <div class="study-info-name">${empire.name}</div>
         <div class="study-info-region">${empire.yearLabel}</div>
       </div>
+      <button class="study-info-close" aria-label="Close">✕</button>
     </div>
     <div class="study-info-divider"></div>
     <div class="study-info-rows">
@@ -1182,6 +1200,601 @@ function createTimelineBar() {
   mapwrap.insertBefore(bar, canvas);
 }
 
+// ── Shape similarity: rasterize-and-compare ──────────────────────────────────
+
+const SHAPE_GRID = 32;
+const SHAPE_CELLS = SHAPE_GRID * SHAPE_GRID;
+
+/** Ray-casting point-in-polygon test for a set of projected rings (outer + holes). */
+function pointInRings(px, py, rings) {
+  let inside = false;
+  for (const ring of rings) {
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      const xi = ring[i][0], yi = ring[i][1];
+      const xj = ring[j][0], yj = ring[j][1];
+      if (((yi > py) !== (yj > py)) && (px < (xj - xi) * (py - yi) / (yj - yi) + xi)) {
+        inside = !inside;
+      }
+    }
+  }
+  return inside;
+}
+
+/**
+ * Rasterize a country's mainland polygons to a binary grid.
+ * Stretches to fill the full 32×32 grid (aspect ratio is tracked separately).
+ * Returns { grid, aspect, fill, polyCount } or null.
+ */
+function rasterizeShape(feature) {
+  const polys = mainlandPolygons(feature);
+  if (polys.length === 0) return null;
+
+  // Project all polygon rings
+  const projectedPolys = polys.map(poly =>
+    poly.map(ring => ring.map(([lon, lat]) => projEquirect([lon, lat])))
+  );
+
+  // Bounding box of all projected points
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const poly of projectedPolys) {
+    for (const ring of poly) {
+      for (const [x, y] of ring) {
+        if (x < minX) minX = x; if (y < minY) minY = y;
+        if (x > maxX) maxX = x; if (y > maxY) maxY = y;
+      }
+    }
+  }
+
+  const w = maxX - minX || 1;
+  const h = maxY - minY || 1;
+  const aspect = w / h; // >1 = wide, <1 = tall
+
+  // Stretch to fill entire grid (shape comparison independent of aspect ratio)
+  const scaleX = SHAPE_GRID / w;
+  const scaleY = SHAPE_GRID / h;
+
+  const grid = new Uint8Array(SHAPE_CELLS);
+  let filled = 0;
+  for (let gy = 0; gy < SHAPE_GRID; gy++) {
+    for (let gx = 0; gx < SHAPE_GRID; gx++) {
+      // Map grid cell center back to projected coords
+      const px = minX + (gx + 0.5) / scaleX;
+      const py = minY + (gy + 0.5) / scaleY;
+      for (const rings of projectedPolys) {
+        if (pointInRings(px, py, rings)) {
+          grid[gy * SHAPE_GRID + gx] = 1;
+          filled++;
+          break;
+        }
+      }
+    }
+  }
+
+  const fill = filled / SHAPE_CELLS; // 0–1: how much of the bbox is filled (low = archipelago/irregular)
+  return { grid, aspect, fill, polyCount: polys.length };
+}
+
+/** BFS distance transform: for each cell, distance to nearest foreground pixel. */
+function distanceTransform(grid) {
+  const dt = new Float32Array(SHAPE_CELLS);
+  const queue = [];
+  for (let i = 0; i < SHAPE_CELLS; i++) {
+    if (grid[i]) { dt[i] = 0; queue.push(i); }
+    else dt[i] = 1e9;
+  }
+  // BFS with 4-connectivity
+  let head = 0;
+  while (head < queue.length) {
+    const idx = queue[head++];
+    const x = idx % SHAPE_GRID, y = (idx - x) / SHAPE_GRID;
+    const d = dt[idx] + 1;
+    const neighbors = [];
+    if (x > 0) neighbors.push(idx - 1);
+    if (x < SHAPE_GRID - 1) neighbors.push(idx + 1);
+    if (y > 0) neighbors.push(idx - SHAPE_GRID);
+    if (y < SHAPE_GRID - 1) neighbors.push(idx + SHAPE_GRID);
+    for (const ni of neighbors) {
+      if (d < dt[ni]) { dt[ni] = d; queue.push(ni); }
+    }
+  }
+  return dt;
+}
+
+/**
+ * Combined distance: aspect ratio + fill density + raster (IoU + Chamfer).
+ * - Aspect ratio (50%): primary separator — keeps tall-thin with tall-thin, wide with wide
+ * - Fill density (15%): separates archipelagos from solid landmasses
+ * - Raster IoU + Chamfer (35%): actual outline shape similarity (on stretched grid)
+ */
+function shapeDistance(itemA, itemB, dtA, dtB) {
+  // Aspect ratio distance (log scale, amplified so even moderate differences matter)
+  // /1.5 means a 4.5:1 aspect ratio difference saturates to 1.0
+  // Malawi (~0.15) vs Israel (~0.4): |ln(.15)-ln(.4)|/1.5 ≈ 0.65 → strong separation
+  const logAspectDiff = Math.abs(Math.log(itemA.raster.aspect) - Math.log(itemB.raster.aspect));
+  const aspectDist = Math.min(logAspectDiff / 1.5, 1);
+
+  // Fill density distance
+  const fillDist = Math.abs(itemA.raster.fill - itemB.raster.fill);
+
+  // Raster IoU + Chamfer
+  const gridA = itemA.raster.grid, gridB = itemB.raster.grid;
+  let intersection = 0, union = 0;
+  let chamferAB = 0, countA = 0, chamferBA = 0, countB = 0;
+  for (let i = 0; i < SHAPE_CELLS; i++) {
+    const a = gridA[i], b = gridB[i];
+    if (a || b) union++;
+    if (a && b) intersection++;
+    if (a) { chamferAB += dtB[i]; countA++; }
+    if (b) { chamferBA += dtA[i]; countB++; }
+  }
+  const iou = union > 0 ? intersection / union : 0;
+  const maxDist = SHAPE_GRID * 1.42;
+  const chamfer = (
+    (countA > 0 ? chamferAB / countA : 0) +
+    (countB > 0 ? chamferBA / countB : 0)
+  ) / (2 * maxDist);
+  const rasterDist = 0.7 * (1 - iou) + 0.3 * chamfer;
+
+  return 0.50 * aspectDist + 0.15 * fillDist + 0.35 * rasterDist;
+}
+
+/** Build full NxN distance matrix. */
+function buildDistanceMatrix(items) {
+  const n = items.length;
+  // Precompute distance transforms for each raster grid
+  const dts = items.map(it => distanceTransform(it.raster.grid));
+  // Symmetric matrix stored as flat array
+  const dist = new Float32Array(n * n);
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      const d = shapeDistance(items[i], items[j], dts[i], dts[j]);
+      dist[i * n + j] = d;
+      dist[j * n + i] = d;
+    }
+  }
+  return dist;
+}
+
+/** Agglomerative clustering with average linkage. Returns array of groups. */
+function agglomerativeCluster(distMatrix, items, targetGroups) {
+  const n = items.length;
+  // Each cluster: set of original indices
+  const clusters = items.map((_, i) => [i]);
+  // Track active cluster ids
+  const active = new Set(Array.from({ length: n }, (_, i) => i));
+  // Average-linkage distance between clusters (start = pairwise distances)
+  const clusterDist = new Float32Array(n * n);
+  clusterDist.set(distMatrix);
+
+  while (active.size > targetGroups) {
+    // Find closest pair of active clusters
+    let bestI = -1, bestJ = -1, bestD = Infinity;
+    const activeArr = [...active];
+    for (let ai = 0; ai < activeArr.length; ai++) {
+      for (let aj = ai + 1; aj < activeArr.length; aj++) {
+        const i = activeArr[ai], j = activeArr[aj];
+        if (clusterDist[i * n + j] < bestD) {
+          bestD = clusterDist[i * n + j];
+          bestI = i; bestJ = j;
+        }
+      }
+    }
+    if (bestI < 0) break;
+
+    // Merge j into i
+    const sizeI = clusters[bestI].length;
+    const sizeJ = clusters[bestJ].length;
+    clusters[bestI] = clusters[bestI].concat(clusters[bestJ]);
+    active.delete(bestJ);
+
+    // Update distances from merged cluster to all others (average linkage)
+    for (const k of active) {
+      if (k === bestI) continue;
+      const newDist = (clusterDist[bestI * n + k] * sizeI + clusterDist[bestJ * n + k] * sizeJ) / (sizeI + sizeJ);
+      clusterDist[bestI * n + k] = newDist;
+      clusterDist[k * n + bestI] = newDist;
+    }
+  }
+
+  return [...active].map(ci => clusters[ci]);
+}
+
+/** Order items within a group by MST walk so similar shapes are adjacent. */
+function mstOrderGroup(indices, distMatrix, n) {
+  if (indices.length <= 2) return indices;
+
+  // Build MST using Prim's algorithm
+  const m = indices.length;
+  const inMST = new Uint8Array(m);
+  const key = new Float32Array(m).fill(Infinity);
+  const parent = new Int32Array(m).fill(-1);
+  const adj = Array.from({ length: m }, () => []);
+
+  key[0] = 0;
+  for (let step = 0; step < m; step++) {
+    // Pick minimum key vertex not in MST
+    let u = -1, minK = Infinity;
+    for (let i = 0; i < m; i++) {
+      if (!inMST[i] && key[i] < minK) { minK = key[i]; u = i; }
+    }
+    if (u < 0) break;
+    inMST[u] = 1;
+    if (parent[u] >= 0) {
+      adj[u].push(parent[u]);
+      adj[parent[u]].push(u);
+    }
+    // Update keys for neighbors
+    for (let v = 0; v < m; v++) {
+      if (inMST[v]) continue;
+      const d = distMatrix[indices[u] * n + indices[v]];
+      if (d < key[v]) { key[v] = d; parent[v] = u; }
+    }
+  }
+
+  // Find most central node (minimum sum of distances to all others)
+  let bestRoot = 0, bestSum = Infinity;
+  for (let i = 0; i < m; i++) {
+    let sum = 0;
+    for (let j = 0; j < m; j++) sum += distMatrix[indices[i] * n + indices[j]];
+    if (sum < bestSum) { bestSum = sum; bestRoot = i; }
+  }
+
+  // DFS from root
+  const order = [];
+  const visited = new Uint8Array(m);
+  const stack = [bestRoot];
+  while (stack.length > 0) {
+    const u = stack.pop();
+    if (visited[u]) continue;
+    visited[u] = 1;
+    order.push(indices[u]);
+    // Sort children by distance (closest first) for better visual flow
+    const children = adj[u].filter(v => !visited[v]);
+    children.sort((a, b) => distMatrix[indices[b] * n + indices[u]] - distMatrix[indices[a] * n + indices[u]]);
+    stack.push(...children);
+  }
+  return order;
+}
+
+/** Orchestrate: rasterize → distance matrix → cluster → order → label. */
+/** Derive a shape-descriptive label from a group's average properties. */
+function labelGroup(items) {
+  let avgAspect = 0, avgFill = 0;
+  for (const it of items) {
+    avgAspect += it.raster.aspect;
+    avgFill += it.raster.fill;
+  }
+  avgAspect /= items.length;
+  avgFill /= items.length;
+
+  // Aspect: <0.45 tall, 0.45–0.7 squarish, 0.7–1.5 squarish, 1.5–2.2 wide, >2.2 very wide
+  // Fill: <0.35 sparse (archipelago/fragmented), 0.35–0.55 moderate, >0.55 solid
+  const logA = Math.log(avgAspect);
+
+  let shape;
+  if (logA < -0.8) shape = 'Tall & narrow';        // aspect < ~0.45
+  else if (logA < -0.35) shape = 'Upright';         // aspect ~0.45–0.7
+  else if (logA < 0.35) shape = 'Compact';          // aspect ~0.7–1.4
+  else if (logA < 0.8) shape = 'Wide';              // aspect ~1.4–2.2
+  else shape = 'Wide & flat';                        // aspect > ~2.2
+
+  let density;
+  if (avgFill < 0.30) density = 'scattered';
+  else if (avgFill < 0.50) density = 'irregular';
+  else density = null; // solid shapes don't need a density qualifier
+
+  // Archetype: most central member name in parentheses
+  const archetype = items[0].country; // items are MST-ordered, first is near center
+
+  if (density) return `${shape}, ${density} · e.g. ${archetype}`;
+  return `${shape} · e.g. ${archetype}`;
+}
+
+function buildShapeGroups(shapeItems) {
+  if (shapeItems.length === 0) return [];
+  const n = shapeItems.length;
+  const distMatrix = buildDistanceMatrix(shapeItems);
+
+  // More groups → tighter similarity within each; ~6 countries per group on average
+  const targetGroups = Math.max(12, Math.min(30, Math.round(n / 6)));
+  const clusterIndices = agglomerativeCluster(distMatrix, shapeItems, targetGroups);
+
+  // Build groups: order within each, label by shape description
+  const regular = [];
+  const loners = [];
+  for (const indices of clusterIndices) {
+    if (indices.length === 1) {
+      loners.push(indices[0]);
+      continue;
+    }
+    const ordered = mstOrderGroup(indices, distMatrix, n);
+    const items = ordered.map(i => shapeItems[i]);
+
+    regular.push({ label: labelGroup(items), items });
+  }
+
+  // Sort by size: most countries first
+  regular.sort((a, b) => b.items.length - a.items.length);
+
+  // Merge all single-country loners into "Unique shapes" at the end
+  if (loners.length > 0) {
+    regular.push({
+      label: 'Unique shapes',
+      items: loners.map(i => shapeItems[i]),
+    });
+  }
+
+  return regular;
+}
+
+// ── Jigsaw overlay ───────────────────────────────────────────────────────────
+
+let showJigsaw = false;
+
+function createJigsawOverlay() {
+  const mapwrap = canvas.parentElement;
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+
+  // Toggle button — positioned at top-right, separate from the other toggles
+  const btn = document.createElement('button');
+  btn.className = 'study-toggle-btn study-jigsaw-btn';
+  btn.title = 'Show country outlines';
+  btn.textContent = '🧩';
+  mapwrap.appendChild(btn);
+
+  // Overlay container
+  const overlay = document.createElement('div');
+  overlay.className = 'study-jigsaw-overlay';
+  overlay.style.display = 'none';
+  mapwrap.appendChild(overlay);
+
+  // Build pieces from all DATA countries
+  const MIN_AREA = 500;
+  const pieces = [];
+  const countryDataMap = Object.fromEntries(window.DATA.map(c => [c.country, c]));
+  for (const c of window.DATA) {
+    if ((c.area || 0) < MIN_AREA) continue;
+    const feature = findGeoFeature(WORLD, c.country);
+    if (!feature) continue;
+    const d = pathFromMainland(feature);
+    if (!d) continue;
+
+    const bb = bboxOfMainlandLonLat(feature);
+    const pbb = padBBox(bb, 0.15);
+    const [tx1, ty1] = projEquirect([pbb.minLon, pbb.maxLat]);
+    const [tx2, ty2] = projEquirect([pbb.maxLon, pbb.minLat]);
+    const tw = tx2 - tx1;
+    const th = ty2 - ty1;
+    // Aspect ratio for shape similarity grouping
+    const aspect = tw / (th || 1);
+
+    pieces.push({ country: c.country, continent: c.continent, area: c.area || 0, aspect, feature, pathD: d, tx1, ty1, tw, th });
+  }
+
+  // Create DOM element for each piece
+  for (const p of pieces) {
+    const piece = document.createElement('div');
+    piece.className = 'jigsaw-piece';
+
+    const thumbSvg = document.createElementNS(SVG_NS, 'svg');
+    thumbSvg.setAttribute('viewBox', `${p.tx1} ${p.ty1} ${p.tw} ${p.th}`);
+    thumbSvg.setAttribute('width', '100%');
+    thumbSvg.setAttribute('height', '100%');
+    thumbSvg.style.pointerEvents = 'none';
+
+    const thumbPath = document.createElementNS(SVG_NS, 'path');
+    thumbPath.setAttribute('d', p.pathD);
+    thumbPath.setAttribute('class', 'jigsaw-thumb-path');
+    thumbPath.setAttribute('vector-effect', 'non-scaling-stroke');
+    thumbSvg.appendChild(thumbPath);
+    piece.appendChild(thumbSvg);
+
+    const label = document.createElement('div');
+    label.className = 'jigsaw-piece-label';
+    label.textContent = p.country;
+    piece.appendChild(label);
+
+    piece.addEventListener('click', () => showZoomedPiece(p));
+    p.el = piece;
+  }
+
+  // ── Shape similarity: rasterize each country, compare images ──
+  const shapeItems = [];
+  for (const p of pieces) {
+    const raster = rasterizeShape(p.feature);
+    if (raster) {
+      p.raster = raster;
+      shapeItems.push(p);
+    }
+  }
+  const shapeGroups = buildShapeGroups(shapeItems);
+
+  let groupByContinent = false;
+  let groupBySimilarity = false;
+
+  function renderPieces() {
+    overlay.innerHTML = '';
+    const sorted = [...pieces];
+
+    if (groupBySimilarity) {
+      // Render all pieces in similarity order (no separators)
+      for (const group of shapeGroups) {
+        for (const p of group.items) overlay.appendChild(p.el);
+      }
+      const withFeatures = new Set(shapeGroups.flatMap(g => g.items));
+      const without = sorted.filter(p => !withFeatures.has(p));
+      without.sort((a, b) => a.country.localeCompare(b.country));
+      for (const p of without) overlay.appendChild(p.el);
+    } else if (groupByContinent) {
+      // Group by continent, then by aspect ratio within each continent
+      const continentOrder = ['Africa', 'Americas', 'Asia', 'Europe', 'Oceania'];
+      sorted.sort((a, b) => {
+        const ci = continentOrder.indexOf(a.continent) - continentOrder.indexOf(b.continent);
+        if (ci !== 0) return ci;
+        return a.aspect - b.aspect;
+      });
+      let lastContinent = null;
+      for (const p of sorted) {
+        if (p.continent !== lastContinent) {
+          lastContinent = p.continent;
+          const header = document.createElement('div');
+          header.className = 'jigsaw-group-header';
+          header.textContent = p.continent;
+          overlay.appendChild(header);
+        }
+        overlay.appendChild(p.el);
+      }
+    } else {
+      sorted.sort((a, b) => a.country.localeCompare(b.country));
+      for (const p of sorted) overlay.appendChild(p.el);
+    }
+  }
+
+  renderPieces();
+
+  // Sub-toggle 1: group by continent
+  const btnGroup = document.createElement('button');
+  btnGroup.className = 'study-toggle-btn study-jigsaw-sub-btn';
+  btnGroup.title = 'Group by continent';
+  btnGroup.textContent = '🌍';
+  mapwrap.appendChild(btnGroup);
+  btnGroup.style.display = 'none';
+
+  // Sub-toggle 2: group by shape similarity
+  const btnShape = document.createElement('button');
+  btnShape.className = 'study-toggle-btn study-jigsaw-sub-btn-2';
+  btnShape.title = 'Group by shape similarity';
+  btnShape.textContent = '🔬';
+  mapwrap.appendChild(btnShape);
+  btnShape.style.display = 'none';
+
+  btnGroup.addEventListener('click', () => {
+    groupByContinent = !groupByContinent;
+    if (groupByContinent) groupBySimilarity = false;
+    btnGroup.classList.toggle('active', groupByContinent);
+    btnShape.classList.toggle('active', groupBySimilarity);
+    renderPieces();
+  });
+
+  btnShape.addEventListener('click', () => {
+    groupBySimilarity = !groupBySimilarity;
+    if (groupBySimilarity) groupByContinent = false;
+    btnShape.classList.toggle('active', groupBySimilarity);
+    btnGroup.classList.toggle('active', groupByContinent);
+    renderPieces();
+  });
+
+  // Enlarged view popup
+  const zoomPopup = document.createElement('div');
+  zoomPopup.className = 'study-jigsaw-zoom';
+  zoomPopup.style.display = 'none';
+  mapwrap.appendChild(zoomPopup);
+
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'study-jigsaw-zoom-close';
+  closeBtn.textContent = '✕';
+  closeBtn.setAttribute('aria-label', 'Close');
+
+  const prevBtn = document.createElement('button');
+  prevBtn.className = 'study-jigsaw-zoom-nav study-jigsaw-zoom-prev';
+  prevBtn.textContent = '‹';
+  prevBtn.setAttribute('aria-label', 'Previous');
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'study-jigsaw-zoom-nav study-jigsaw-zoom-next';
+  nextBtn.textContent = '›';
+  nextBtn.setAttribute('aria-label', 'Next');
+
+  closeBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    zoomPopup.style.display = 'none';
+  });
+
+  zoomPopup.addEventListener('click', (e) => {
+    if (e.target === zoomPopup) zoomPopup.style.display = 'none';
+  });
+
+  // Append buttons once — they stay in DOM permanently
+  zoomPopup.appendChild(closeBtn);
+  zoomPopup.appendChild(prevBtn);
+  zoomPopup.appendChild(nextBtn);
+
+  function getVisiblePieceOrder() {
+    return pieces.filter(p => overlay.contains(p.el));
+  }
+
+  let currentZoomedPiece = null;
+
+  prevBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const order = getVisiblePieceOrder();
+    const idx = order.indexOf(currentZoomedPiece);
+    if (idx > 0) showZoomedPiece(order[idx - 1]);
+  });
+
+  nextBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const order = getVisiblePieceOrder();
+    const idx = order.indexOf(currentZoomedPiece);
+    if (idx < order.length - 1) showZoomedPiece(order[idx + 1]);
+  });
+
+  function showZoomedPiece(p) {
+    currentZoomedPiece = p;
+    const bb = bboxOfMainlandLonLat(p.feature);
+    const pbb = padBBox(bb, 0.15);
+    const [tx1, ty1] = projEquirect([pbb.minLon, pbb.maxLat]);
+    const [tx2, ty2] = projEquirect([pbb.maxLon, pbb.minLat]);
+    const tw = tx2 - tx1;
+    const th = ty2 - ty1;
+
+    // Remove only content (SVG + name), keep buttons
+    zoomPopup.querySelectorAll('svg, .study-jigsaw-zoom-name').forEach(el => el.remove());
+
+    const svg = document.createElementNS(SVG_NS, 'svg');
+    svg.setAttribute('viewBox', `${tx1} ${ty1} ${tw} ${th}`);
+
+    const path = document.createElementNS(SVG_NS, 'path');
+    path.setAttribute('d', p.pathD);
+    path.setAttribute('class', 'jigsaw-thumb-path');
+    path.setAttribute('vector-effect', 'non-scaling-stroke');
+    svg.appendChild(path);
+    zoomPopup.appendChild(svg);
+
+    const name = document.createElement('div');
+    name.className = 'study-jigsaw-zoom-name';
+    name.textContent = p.country;
+    zoomPopup.appendChild(name);
+
+    // Update nav button visibility
+    const order = getVisiblePieceOrder();
+    const idx = order.indexOf(p);
+    prevBtn.style.display = idx > 0 ? '' : 'none';
+    nextBtn.style.display = idx < order.length - 1 ? '' : 'none';
+
+    zoomPopup.style.display = '';
+  }
+
+  const toggleBar = mapwrap.querySelector('.study-map-toggles');
+  const searchInput = document.getElementById('study-search');
+  const timelineBar = mapwrap.querySelector('.study-timeline-bar');
+
+  btn.addEventListener('click', () => {
+    showJigsaw = !showJigsaw;
+    btn.classList.toggle('active', showJigsaw);
+    overlay.style.display = showJigsaw ? '' : 'none';
+    if (!showJigsaw) zoomPopup.style.display = 'none';
+
+    // Show/hide sub-toggles and other controls
+    btnGroup.style.display = showJigsaw ? '' : 'none';
+    btnShape.style.display = showJigsaw ? '' : 'none';
+    if (toggleBar) toggleBar.style.display = showJigsaw ? 'none' : '';
+    if (searchInput) searchInput.style.display = showJigsaw ? 'none' : '';
+    if (timelineBar) timelineBar.style.display = showJigsaw ? 'none' : '';
+    if (showJigsaw) hideInfoPanel();
+  });
+}
+
 // ── Canvas resize & height sync ───────────────────────────────────────────────
 
 function resizeCanvas() {
@@ -1228,6 +1841,7 @@ new MutationObserver(() => drawWorldMap()).observe(
 
 createMapToggles();
 createTimelineBar();
+createJigsawOverlay();
 
 // ── Zoom to country (desktop click) ──────────────────────────────────────────
 

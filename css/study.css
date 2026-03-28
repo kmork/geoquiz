@@ -23,6 +23,8 @@
   min-height: 0;
   display: flex;
   flex-direction: column;
+  position: relative;
+  overflow: hidden;
 }
 .study-page #map {
   flex: 1;
@@ -61,6 +63,35 @@
   align-items: center;
   gap: 12px;
   margin-bottom: 0;
+}
+.study-info-close {
+  margin-left: auto;
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  color: rgba(255,255,255,0.6);
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: all;
+  transition: background 0.15s, color 0.15s;
+}
+.study-info-close:hover {
+  background: rgba(255,255,255,0.2);
+  color: #fff;
+}
+html.light-mode .study-info-close {
+  background: rgba(0,0,0,0.08);
+  color: rgba(0,0,0,0.4);
+}
+html.light-mode .study-info-close:hover {
+  background: rgba(0,0,0,0.15);
+  color: rgba(0,0,0,0.7);
 }
 .study-info-flag {
   width: 44px;
@@ -512,4 +543,152 @@ html.light-mode .osm-attribution a {
   .fact-overlay { display: none !important; }
   /* Search: hidden on mobile */
   #study-search { display: none; }
+
+  .study-jigsaw-btn {
+    top: 8px;
+    right: 8px;
+  }
+  .study-jigsaw-sub-btn {
+    top: 52px;
+    right: 8px;
+  }
+  .study-jigsaw-sub-btn-2 {
+    top: 96px;
+    right: 8px;
+  }
 }
+
+/* ── Jigsaw puzzle overlay ── */
+
+.study-jigsaw-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  z-index: 10;
+}
+
+.study-jigsaw-sub-btn {
+  position: absolute;
+  top: 64px;
+  right: 12px;
+  z-index: 10;
+}
+
+.study-jigsaw-sub-btn-2 {
+  position: absolute;
+  top: 116px;
+  right: 12px;
+  z-index: 10;
+}
+
+.jigsaw-group-spacer {
+  width: 100%;
+  height: 12px;
+}
+
+.jigsaw-group-header {
+  width: 100%;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 8px 4px 2px;
+  border-bottom: 1px solid var(--card-border);
+  margin-bottom: 2px;
+}
+
+.study-jigsaw-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 60px;
+  z-index: 8;
+  overflow-y: auto;
+  background: var(--panel-bg, rgba(15,20,40,.92));
+  backdrop-filter: blur(8px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px;
+  justify-content: center;
+  align-content: flex-start;
+  border-radius: 14px 0 0 14px;
+}
+
+.study-jigsaw-overlay .jigsaw-piece {
+  cursor: pointer;
+}
+
+.study-jigsaw-zoom {
+  position: absolute;
+  inset: 0;
+  z-index: 9;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--panel-bg, rgba(15,20,40,.96));
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  cursor: pointer;
+}
+
+.study-jigsaw-zoom svg {
+  width: 70%;
+  max-height: 60%;
+}
+
+.study-jigsaw-zoom-name {
+  margin-top: 16px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.study-jigsaw-zoom-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.55);
+  color: rgba(255,255,255,0.8);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.study-jigsaw-zoom-close:hover {
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+}
+
+.study-jigsaw-zoom-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: rgba(0,0,0,0.55);
+  color: rgba(255,255,255,0.8);
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+.study-jigsaw-zoom-nav:hover {
+  background: rgba(0,0,0,0.8);
+  color: #fff;
+}
+.study-jigsaw-zoom-prev { left: 12px; }
+.study-jigsaw-zoom-next { right: 12px; }

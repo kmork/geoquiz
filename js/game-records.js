@@ -35,6 +35,7 @@ const GAME_NAMES = {
   'spelling-countries': 'Spell the Country',
   'spelling-cities': 'Spell the City',
   peaks:             'Mountain Peaks',
+  jigsaw:            'Map Jigsaw',
 };
 
 const DIFFICULTY_LABELS = {

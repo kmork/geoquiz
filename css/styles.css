@@ -2189,3 +2189,159 @@ html.light-mode .geo-bonus-overlay.wrong {
     width: 90px;
   }
 }
+
+/* ── Map Jigsaw ────────────────────────────────────────────── */
+
+.jigsaw-page {
+  max-width: 100%;
+  padding: 12px;
+  height: 100vh;
+  height: 100dvh;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.jigsaw-page > .card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.jigsaw-page .mapwrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.jigsaw-page #map {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+}
+
+.jigsaw-tray {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 12px 0;
+  justify-content: center;
+}
+
+.jigsaw-piece {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  padding: 6px;
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  transition: opacity .15s, transform .15s, border-color .15s;
+}
+
+.jigsaw-piece:hover {
+  border-color: var(--map-selected-stroke);
+}
+
+.jigsaw-piece:active {
+  cursor: grabbing;
+}
+
+.jigsaw-piece.dragging {
+  opacity: 0.3;
+}
+
+.jigsaw-piece.placed {
+  opacity: 0.25;
+  pointer-events: none;
+  border-color: var(--good-color);
+}
+
+.jigsaw-piece svg {
+  flex: 1;
+  min-height: 0;
+}
+
+.jigsaw-piece-label {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--text-muted);
+  text-align: center;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+  line-height: 1.2;
+  margin-top: 2px;
+}
+
+.jigsaw-thumb-path {
+  fill: var(--map-country-fill-highlight);
+  stroke: var(--map-country-stroke);
+  stroke-width: 1px;
+}
+
+.jigsaw-ghost {
+  position: fixed;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.85;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,.3));
+}
+
+.jigsaw-ghost-path {
+  fill: var(--map-correct-fill);
+  stroke: var(--map-correct-stroke);
+  stroke-width: 2px;
+}
+
+.jigsaw-guide {
+  fill: var(--map-country-fill-highlight);
+  stroke: var(--map-country-stroke);
+  stroke-width: 1px;
+}
+
+.jigsaw-snapped {
+  fill: var(--map-correct-fill);
+  stroke: var(--map-correct-stroke);
+  stroke-width: 1px;
+  animation: jigsaw-snap-in .3s ease;
+}
+
+@keyframes jigsaw-snap-in {
+  0% { opacity: 0; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+.jigsaw-reject {
+  animation: jigsaw-shake .35s ease;
+}
+
+@keyframes jigsaw-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+@media (max-width: 600px) {
+  .jigsaw-piece {
+    width: 60px;
+    height: 60px;
+    padding: 4px;
+    border-radius: 8px;
+  }
+
+  .jigsaw-piece-label {
+    font-size: 8px;
+  }
+}

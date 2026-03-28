@@ -201,6 +201,17 @@
           { key: 'duel-daily', url: 'duel.html', urlParam: 'mode=daily', label: 'Daily', emoji: '📅', desc: 'Same questions for everyone today' },
         ],
       },
+      jigsaw: {
+        title: 'Map Jigsaw',
+        desc: 'Drag country shapes onto a blank map to reassemble a continent.',
+        url: 'jigsaw.html',
+        pointsPerRound: null,
+        icon: '🧩',
+        customDifficulties: [
+          { key: 'jigsaw-short', url: 'jigsaw.html', urlParam: 'mode=major', label: 'Major Countries', emoji: '⚡', desc: '10–15 largest · names shown' },
+          { key: 'jigsaw-long',  url: 'jigsaw.html', urlParam: '',           label: 'All Countries',   emoji: '🏆', desc: 'Every country · shapes only' },
+        ],
+      },
     };
 
     const DIFFICULTIES = [
