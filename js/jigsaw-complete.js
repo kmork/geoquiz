@@ -105,11 +105,33 @@ export async function createJigsawGame({
     centroidY: p.centroidY,
   })));
 
-  // Shuffle piece order for tray
-  const shuffledIndices = piecesData.map((_, i) => i);
-  for (let i = shuffledIndices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffledIndices[i], shuffledIndices[j]] = [shuffledIndices[j], shuffledIndices[i]];
+  // ─── Pool / queue state ─────────────────────────────────────
+
+  let queueIndices = [];
+
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+
+  function computePoolCapacity() {
+    const total = piecesData.length;
+    const mobile = window.innerWidth <= 600;
+    const piece = mobile ? 60 : 80;
+    const gap = 8;
+    const availW = trayEl.clientWidth;
+    const cols = Math.max(3, Math.floor((availW + gap) / (piece + gap)));
+
+    // Mobile: always 1 row to maximize map space
+    if (mobile) return cols;
+
+    // Desktop: use 2 rows only if enough pieces to fill both rows
+    if (total > cols * 2) return cols * 2;
+    if (total > cols) return cols;
+    return total;
   }
 
   // ─── Render target map ───────────────────────────────────────
@@ -126,46 +148,69 @@ export async function createJigsawGame({
     }
   }
 
+  // ─── Piece element creation ────────────────────────────────
+
+  function createPieceElement(idx) {
+    const p = piecesData[idx];
+
+    const bb = bboxOfMainlandLonLat(p.feature);
+    const pbb = padBBox(bb, 0.15);
+    const [tx1, ty1] = proj([pbb.minLon, pbb.maxLat]);
+    const [tx2, ty2] = proj([pbb.maxLon, pbb.minLat]);
+    const tw = tx2 - tx1;
+    const th = ty2 - ty1;
+
+    const piece = document.createElement('div');
+    piece.className = 'jigsaw-piece';
+    piece.dataset.pieceIndex = idx;
+    piece.setAttribute('touch-action', 'none');
+
+    const thumbSvg = document.createElementNS(SVG_NS, 'svg');
+    thumbSvg.setAttribute('viewBox', `${tx1} ${ty1} ${tw} ${th}`);
+    thumbSvg.setAttribute('width', '100%');
+    thumbSvg.setAttribute('height', '100%');
+    thumbSvg.style.pointerEvents = 'none';
+
+    const thumbPath = createPath(p.pathD, 'jigsaw-thumb-path');
+    thumbPath.setAttribute('vector-effect', 'non-scaling-stroke');
+    thumbSvg.appendChild(thumbPath);
+    piece.appendChild(thumbSvg);
+
+    if (showNames) {
+      const label = document.createElement('div');
+      label.className = 'jigsaw-piece-label';
+      label.textContent = p.country;
+      piece.appendChild(label);
+    }
+
+    piece.addEventListener('pointerdown', onPointerDown);
+    trayEl.appendChild(piece);
+    return piece;
+  }
+
   // ─── Render piece tray ───────────────────────────────────────
 
   function renderTray() {
     trayEl.innerHTML = '';
 
-    for (const idx of shuffledIndices) {
-      const p = piecesData[idx];
+    const allIndices = shuffleArray(piecesData.map((_, i) => i));
+    const capacity = computePoolCapacity();
 
-      // Compute piece-local bounding box for thumbnail viewBox
-      const bb = bboxOfMainlandLonLat(p.feature);
-      const pbb = padBBox(bb, 0.15);
-      const [tx1, ty1] = proj([pbb.minLon, pbb.maxLat]);
-      const [tx2, ty2] = proj([pbb.maxLon, pbb.minLat]);
-      const tw = tx2 - tx1;
-      const th = ty2 - ty1;
+    // Set max-height to enforce row limit (prevents overflow on resize)
+    const mobile = window.innerWidth <= 600;
+    const piece = mobile ? 60 : 80;
+    const gap = 8;
+    const cols = Math.max(3, Math.floor((trayEl.clientWidth + gap) / (piece + gap)));
+    const rows = Math.ceil(Math.min(capacity, allIndices.length) / cols);
+    trayEl.style.maxHeight = (rows * piece + (rows - 1) * gap + 24) + 'px'; // +24 for padding
 
-      const piece = document.createElement('div');
-      piece.className = 'jigsaw-piece';
-      piece.dataset.pieceIndex = idx;
-      piece.setAttribute('touch-action', 'none');
-
-      const thumbSvg = document.createElementNS(SVG_NS, 'svg');
-      thumbSvg.setAttribute('viewBox', `${tx1} ${ty1} ${tw} ${th}`);
-      thumbSvg.setAttribute('width', '100%');
-      thumbSvg.setAttribute('height', '100%');
-      thumbSvg.style.pointerEvents = 'none';
-
-      const thumbPath = createPath(p.pathD, 'jigsaw-thumb-path');
-      thumbPath.setAttribute('vector-effect', 'non-scaling-stroke');
-      thumbSvg.appendChild(thumbPath);
-      piece.appendChild(thumbSvg);
-
-      if (showNames) {
-        const label = document.createElement('div');
-        label.className = 'jigsaw-piece-label';
-        label.textContent = p.country;
-        piece.appendChild(label);
-      }
-
-      trayEl.appendChild(piece);
+    if (allIndices.length <= capacity) {
+      queueIndices = [];
+      for (const idx of allIndices) createPieceElement(idx);
+    } else {
+      const visible = allIndices.slice(0, capacity);
+      queueIndices = allIndices.slice(capacity);
+      for (const idx of visible) createPieceElement(idx);
     }
   }
 
@@ -284,9 +329,12 @@ export async function createJigsawGame({
       snapped.setAttribute('vector-effect', 'non-scaling-stroke');
       svgEl.appendChild(snapped);
 
-      // Hide tray piece
-      piece.classList.add('placed');
+      // Remove placed piece from tray and pull next from queue
       piece.removeEventListener('pointerdown', onPointerDown);
+      piece.remove();
+      if (queueIndices.length > 0) {
+        createPieceElement(queueIndices.shift());
+      }
 
       // Update progress
       const prog = logic.getProgress();
@@ -305,12 +353,6 @@ export async function createJigsawGame({
     }
   }
 
-  function setupDragHandlers() {
-    const pieces = trayEl.querySelectorAll('.jigsaw-piece');
-    for (const piece of pieces) {
-      piece.addEventListener('pointerdown', onPointerDown);
-    }
-  }
 
   // ─── Finish game ─────────────────────────────────────────────
 
@@ -340,7 +382,6 @@ export async function createJigsawGame({
     logic.reset();
     renderMap();
     renderTray();
-    setupDragHandlers();
     // Reset zoom-pan flag so it can re-attach after Play Again
     delete svgEl.dataset.zoomPanAttached;
     attachZoomPan(svgEl, () => ({ x: vbX1, y: vbY1, w: vbW, h: vbH }));

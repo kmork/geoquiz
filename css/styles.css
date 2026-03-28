@@ -2229,6 +2229,8 @@ html.light-mode .geo-bonus-overlay.wrong {
   gap: 8px;
   padding: 12px 0;
   justify-content: center;
+  flex-shrink: 0;
+  overflow: hidden;
 }
 
 .jigsaw-piece {
