@@ -1495,36 +1495,13 @@ function buildShapeGroups(shapeItems) {
   const n = shapeItems.length;
   const distMatrix = buildDistanceMatrix(shapeItems);
 
-  // More groups → tighter similarity within each; ~6 countries per group on average
-  const targetGroups = Math.max(12, Math.min(30, Math.round(n / 6)));
-  const clusterIndices = agglomerativeCluster(distMatrix, shapeItems, targetGroups);
+  // Global MST ordering across ALL items — produces a single sequence
+  // where each country is adjacent to its most similar neighbor
+  const allIndices = Array.from({ length: n }, (_, i) => i);
+  const ordered = mstOrderGroup(allIndices, distMatrix, n);
+  const items = ordered.map(i => shapeItems[i]);
 
-  // Build groups: order within each, label by shape description
-  const regular = [];
-  const loners = [];
-  for (const indices of clusterIndices) {
-    if (indices.length === 1) {
-      loners.push(indices[0]);
-      continue;
-    }
-    const ordered = mstOrderGroup(indices, distMatrix, n);
-    const items = ordered.map(i => shapeItems[i]);
-
-    regular.push({ label: labelGroup(items), items });
-  }
-
-  // Sort by size: most countries first
-  regular.sort((a, b) => b.items.length - a.items.length);
-
-  // Merge all single-country loners into "Unique shapes" at the end
-  if (loners.length > 0) {
-    regular.push({
-      label: 'Unique shapes',
-      items: loners.map(i => shapeItems[i]),
-    });
-  }
-
-  return regular;
+  return [{ label: '', items }];
 }
 
 // ── Jigsaw overlay ───────────────────────────────────────────────────────────
@@ -1714,13 +1691,24 @@ function createJigsawOverlay() {
     if (e.target === zoomPopup) zoomPopup.style.display = 'none';
   });
 
-  // Append buttons once — they stay in DOM permanently
+  // Build persistent popup structure — nothing is ever removed/re-added
+  const zoomSvg = document.createElementNS(SVG_NS, 'svg');
+  const zoomPath = document.createElementNS(SVG_NS, 'path');
+  zoomPath.setAttribute('class', 'jigsaw-thumb-path');
+  zoomPath.setAttribute('vector-effect', 'non-scaling-stroke');
+  zoomSvg.appendChild(zoomPath);
+  const zoomName = document.createElement('div');
+  zoomName.className = 'study-jigsaw-zoom-name';
+
   zoomPopup.appendChild(closeBtn);
   zoomPopup.appendChild(prevBtn);
   zoomPopup.appendChild(nextBtn);
+  zoomPopup.appendChild(zoomSvg);
+  zoomPopup.appendChild(zoomName);
 
   function getVisiblePieceOrder() {
-    return pieces.filter(p => overlay.contains(p.el));
+    const els = [...overlay.querySelectorAll('.jigsaw-piece')];
+    return els.map(el => pieces.find(p => p.el === el)).filter(Boolean);
   }
 
   let currentZoomedPiece = null;
@@ -1748,25 +1736,11 @@ function createJigsawOverlay() {
     const tw = tx2 - tx1;
     const th = ty2 - ty1;
 
-    // Remove only content (SVG + name), keep buttons
-    zoomPopup.querySelectorAll('svg, .study-jigsaw-zoom-name').forEach(el => el.remove());
+    // Update persistent elements in place — no DOM additions/removals
+    zoomSvg.setAttribute('viewBox', `${tx1} ${ty1} ${tw} ${th}`);
+    zoomPath.setAttribute('d', p.pathD);
+    zoomName.textContent = p.country;
 
-    const svg = document.createElementNS(SVG_NS, 'svg');
-    svg.setAttribute('viewBox', `${tx1} ${ty1} ${tw} ${th}`);
-
-    const path = document.createElementNS(SVG_NS, 'path');
-    path.setAttribute('d', p.pathD);
-    path.setAttribute('class', 'jigsaw-thumb-path');
-    path.setAttribute('vector-effect', 'non-scaling-stroke');
-    svg.appendChild(path);
-    zoomPopup.appendChild(svg);
-
-    const name = document.createElement('div');
-    name.className = 'study-jigsaw-zoom-name';
-    name.textContent = p.country;
-    zoomPopup.appendChild(name);
-
-    // Update nav button visibility
     const order = getVisiblePieceOrder();
     const idx = order.indexOf(p);
     prevBtn.style.display = idx > 0 ? '' : 'none';
