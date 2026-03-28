@@ -1525,6 +1525,8 @@ function createJigsawOverlay() {
   overlay.style.display = 'none';
   mapwrap.appendChild(overlay);
 
+
+
   // Build pieces from all DATA countries
   const MIN_AREA = 500;
   const pieces = [];
@@ -1729,15 +1731,9 @@ function createJigsawOverlay() {
 
   function showZoomedPiece(p) {
     currentZoomedPiece = p;
-    const bb = bboxOfMainlandLonLat(p.feature);
-    const pbb = padBBox(bb, 0.15);
-    const [tx1, ty1] = projEquirect([pbb.minLon, pbb.maxLat]);
-    const [tx2, ty2] = projEquirect([pbb.maxLon, pbb.minLat]);
-    const tw = tx2 - tx1;
-    const th = ty2 - ty1;
 
     // Update persistent elements in place — no DOM additions/removals
-    zoomSvg.setAttribute('viewBox', `${tx1} ${ty1} ${tw} ${th}`);
+    zoomSvg.setAttribute('viewBox', `${p.tx1} ${p.ty1} ${p.tw} ${p.th}`);
     zoomPath.setAttribute('d', p.pathD);
     zoomName.textContent = p.country;
 
@@ -1784,8 +1780,15 @@ function resizeCanvas() {
 // This fixes the extra-space-at-bottom bug on Android Chrome where
 // 100dvh is computed before the browser chrome (URL bar / nav bar) adjusts.
 function syncPageHeight() {
-  const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-  studyPage.style.height = h + 'px';
+  if (window.visualViewport) {
+    // When the browser is pinch-zoomed (scale > 1), visualViewport.height
+    // shrinks. Multiply by scale to recover the full CSS-pixel layout height
+    // so the page doesn't collapse.
+    const vv = window.visualViewport;
+    studyPage.style.height = Math.round(vv.height * vv.scale) + 'px';
+  } else {
+    studyPage.style.height = window.innerHeight + 'px';
+  }
 }
 
 function syncAndResize() {
@@ -1803,6 +1806,8 @@ if (window.visualViewport) {
   // Fires when URL bar shows/hides on mobile — more reliable than 'resize' alone
   window.visualViewport.addEventListener('resize', syncAndResize);
 }
+
+
 drawWorldMap();
 
 const initOverlay = document.getElementById('init-overlay');
