@@ -3,19 +3,15 @@
   ---
   New Game Ideas
 
-  2. Border Draw
+  1. Border Draw
 
   Given two neighboring countries, draw/trace the approximate border between them on a blank map. Score based on accuracy. This builds deep spatial memory of country shapes and adjacency.
 
-  3. Population Order / Area Order
+  2. Population Order / Area Order
 
   Given 4–6 countries, drag them into the correct order by population (or area). A ranking/sorting mechanic you don't currently have. Builds intuition for scale.
 
-  4. Map Jigsaw
-
-  Drag country shapes onto a blank regional map to reassemble a continent. Combines outline recognition with location knowledge. Could start with a continent (easier) and scale to the whole world.
-
-  5. Continent Sprint
+  3. Continent Sprint
 
   Name all countries in a continent as fast as possible (typed). A pure speed/recall challenge — like Sporcle-style quizzes. Simple to build with your existing data and autocomplete component.
 
