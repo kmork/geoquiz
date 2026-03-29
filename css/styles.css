@@ -2250,6 +2250,32 @@ html.light-mode .geo-bonus-overlay.wrong {
   background: rgba(129,140,248,0.1);
 }
 
+.jigsaw-hint-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+  z-index: 2;
+}
+.jigsaw-hint-btn:hover {
+  border-color: rgba(251,191,36,0.6);
+  background: rgba(251,191,36,0.15);
+}
+.jigsaw-hint-btn.active {
+  border-color: rgba(251,191,36,0.5);
+  background: rgba(251,191,36,0.12);
+}
+
 .jigsaw-tray {
   display: flex;
   flex-wrap: wrap;
@@ -2312,6 +2338,10 @@ html.light-mode .geo-bonus-overlay.wrong {
   max-width: 100%;
   line-height: 1.2;
   margin-top: 2px;
+  display: none;
+}
+.jigsaw-tray.show-labels .jigsaw-piece-label {
+  display: block;
 }
 
 .jigsaw-thumb-path {

@@ -158,6 +158,25 @@ export async function createJigsawGame({
   prevArrow.addEventListener('click', () => rotatePieces(-1));
   nextArrow.addEventListener('click', () => rotatePieces(1));
 
+  // Hint toggle: show/hide country names on pieces
+  const hintBtn = document.createElement('button');
+  hintBtn.className = 'jigsaw-hint-btn';
+  hintBtn.textContent = '💡';
+  hintBtn.title = 'Toggle country names';
+  const mapwrap = svgEl.parentElement;
+  mapwrap.style.position = 'relative';
+  mapwrap.appendChild(hintBtn);
+
+  let hintsVisible = showNames;
+  if (showNames) trayEl.classList.add('show-labels');
+
+  hintBtn.classList.toggle('active', hintsVisible);
+  hintBtn.addEventListener('click', () => {
+    hintsVisible = !hintsVisible;
+    trayEl.classList.toggle('show-labels', hintsVisible);
+    hintBtn.classList.toggle('active', hintsVisible);
+  });
+
   function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -224,12 +243,10 @@ export async function createJigsawGame({
     thumbSvg.appendChild(thumbPath);
     piece.appendChild(thumbSvg);
 
-    if (showNames) {
-      const label = document.createElement('div');
-      label.className = 'jigsaw-piece-label';
-      label.textContent = p.country;
-      piece.appendChild(label);
-    }
+    const label = document.createElement('div');
+    label.className = 'jigsaw-piece-label';
+    label.textContent = p.country;
+    piece.appendChild(label);
 
     piece.addEventListener('pointerdown', onPointerDown);
     trayEl.appendChild(piece);
