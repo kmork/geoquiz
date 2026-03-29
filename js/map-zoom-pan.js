@@ -41,7 +41,7 @@ export function attachZoomPan(svgEl, getBaseViewBox) {
   });
 
   // Zoom limits (relative to base viewBox)
-  const ZOOM_MIN_FACTOR = 0.35;
+  const ZOOM_MIN_FACTOR = 0.05;
   const ZOOM_MAX_FACTOR = 7.0;
 
   const getVB = () => {
