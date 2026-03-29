@@ -108,6 +108,55 @@ export async function createJigsawGame({
   // ─── Pool / queue state ─────────────────────────────────────
 
   let queueIndices = [];
+  let visibleIndices = [];
+
+  // Wrap tray in a container with nav arrows
+  const trayWrap = document.createElement('div');
+  trayWrap.className = 'jigsaw-tray-wrap';
+  trayEl.parentNode.insertBefore(trayWrap, trayEl);
+
+  const prevArrow = document.createElement('button');
+  prevArrow.className = 'jigsaw-tray-arrow jigsaw-tray-arrow-prev';
+  prevArrow.textContent = '‹';
+  prevArrow.setAttribute('aria-label', 'Previous pieces');
+
+  const nextArrow = document.createElement('button');
+  nextArrow.className = 'jigsaw-tray-arrow jigsaw-tray-arrow-next';
+  nextArrow.textContent = '›';
+  nextArrow.setAttribute('aria-label', 'Next pieces');
+
+  trayWrap.appendChild(prevArrow);
+  trayWrap.appendChild(trayEl);
+  trayWrap.appendChild(nextArrow);
+
+  function updateArrows() {
+    const hasQueue = queueIndices.length > 0;
+    prevArrow.style.display = hasQueue ? '' : 'none';
+    nextArrow.style.display = hasQueue ? '' : 'none';
+  }
+
+  function rotatePieces(direction) {
+    if (queueIndices.length === 0) return;
+    const capacity = visibleIndices.length;
+
+    if (direction > 0) {
+      // Next: move visible to front of queue, take from end of queue
+      queueIndices.unshift(...visibleIndices);
+      visibleIndices = queueIndices.splice(-capacity);
+    } else {
+      // Prev: move visible to end of queue, take from front of queue
+      queueIndices.push(...visibleIndices);
+      visibleIndices = queueIndices.splice(0, capacity);
+    }
+
+    // Re-render just the pieces
+    trayEl.innerHTML = '';
+    for (const idx of visibleIndices) createPieceElement(idx);
+    updateArrows();
+  }
+
+  prevArrow.addEventListener('click', () => rotatePieces(-1));
+  nextArrow.addEventListener('click', () => rotatePieces(1));
 
   function shuffleArray(arr) {
     for (let i = arr.length - 1; i > 0; i--) {
@@ -140,12 +189,11 @@ export async function createJigsawGame({
     svgEl.innerHTML = '';
     svgEl.setAttribute('viewBox', `${vbX1} ${vbY1} ${vbW} ${vbH}`);
 
-    // Draw faint guide outlines for all pieces
-    for (const p of piecesData) {
-      const guide = createPath(p.pathD, 'jigsaw-guide');
-      guide.setAttribute('vector-effect', 'non-scaling-stroke');
-      svgEl.appendChild(guide);
-    }
+    // Draw all countries as a single landmass — coastlines only, no internal borders
+    const allPaths = piecesData.map(p => p.pathD).join(' ');
+    const land = createPath(allPaths, 'jigsaw-land');
+    land.setAttribute('vector-effect', 'non-scaling-stroke');
+    svgEl.appendChild(land);
   }
 
   // ─── Piece element creation ────────────────────────────────
@@ -205,13 +253,15 @@ export async function createJigsawGame({
     trayEl.style.maxHeight = (rows * piece + (rows - 1) * gap + 24) + 'px'; // +24 for padding
 
     if (allIndices.length <= capacity) {
+      visibleIndices = allIndices;
       queueIndices = [];
-      for (const idx of allIndices) createPieceElement(idx);
     } else {
-      const visible = allIndices.slice(0, capacity);
+      visibleIndices = allIndices.slice(0, capacity);
       queueIndices = allIndices.slice(capacity);
-      for (const idx of visible) createPieceElement(idx);
     }
+
+    for (const idx of visibleIndices) createPieceElement(idx);
+    updateArrows();
   }
 
   // ─── Drag-and-drop ───────────────────────────────────────────
@@ -332,9 +382,13 @@ export async function createJigsawGame({
       // Remove placed piece from tray and pull next from queue
       piece.removeEventListener('pointerdown', onPointerDown);
       piece.remove();
+      visibleIndices = visibleIndices.filter(i => i !== idx);
       if (queueIndices.length > 0) {
-        createPieceElement(queueIndices.shift());
+        const nextIdx = queueIndices.shift();
+        visibleIndices.push(nextIdx);
+        createPieceElement(nextIdx);
       }
+      updateArrows();
 
       // Update progress
       const prog = logic.getProgress();

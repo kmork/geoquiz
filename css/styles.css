@@ -2223,12 +2223,41 @@ html.light-mode .geo-bonus-overlay.wrong {
   max-height: none;
 }
 
+.jigsaw-tray-wrap {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+.jigsaw-tray-arrow {
+  flex-shrink: 0;
+  width: 32px;
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, border-color 0.15s;
+}
+.jigsaw-tray-arrow:hover {
+  border-color: var(--map-selected-stroke);
+  background: rgba(129,140,248,0.1);
+}
+
 .jigsaw-tray {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   padding: 12px 0;
   justify-content: center;
+  flex: 1;
+  min-width: 0;
   flex-shrink: 0;
   overflow: hidden;
 }
@@ -2309,6 +2338,11 @@ html.light-mode .geo-bonus-overlay.wrong {
   fill: var(--map-country-fill-highlight);
   stroke: var(--map-country-stroke);
   stroke-width: 1px;
+}
+
+.jigsaw-land {
+  fill: var(--map-country-fill-highlight);
+  stroke: none;
 }
 
 .jigsaw-snapped {
