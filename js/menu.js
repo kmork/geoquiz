@@ -87,7 +87,7 @@
     + '<span class="pref-label-title">Game Records</span>'
     + '<span class="pref-label-desc">Clears all saved best scores and times</span>'
     + '</div>'
-    + '<button id="clear-records-btn" class="clear-records-btn">Clear All</button>'
+    + '<button id="clear-records-btn" class="clear-records-btn">Clear</button>'
     + '</div>'
     + '<div class="pref-row">'
     + '<div class="pref-label">'
@@ -133,7 +133,7 @@
     var keys = Object.keys(localStorage).filter(function (k) { return k.startsWith('geoquiz-record-'); });
     keys.forEach(function (k) { localStorage.removeItem(k); });
     clearBtn.textContent = 'Cleared!';
-    setTimeout(function () { clearBtn.textContent = 'Clear All'; }, 2000);
+    setTimeout(function () { clearBtn.textContent = 'Clear'; }, 2000);
   });
 
   // Clear cache (IndexedDB + browser cache) and force reload
