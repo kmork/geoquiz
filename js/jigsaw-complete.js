@@ -283,8 +283,10 @@ export async function createJigsawGame({
 
   // ─── Drag-and-drop ───────────────────────────────────────────
 
+  let zoomPan = null;
   let ghostEl = null;
   let dragPiece = null;
+  let edgePanRAF = null;
 
   function ghostCenter() {
     if (!ghostEl) return null;
@@ -433,12 +435,54 @@ export async function createJigsawGame({
     piece.classList.remove('dragging');
     if (!keepGhost && ghostEl) { ghostEl.remove(); ghostEl = null; }
     dragPiece = null;
+    stopEdgePan();
+  }
+
+  // Edge-pan: pan the map when dragging near the SVG border
+  const EDGE_ZONE = 40; // px from edge to start panning
+  const PAN_SPEED = 0.004; // fraction of viewBox per frame
+
+  let lastPointer = null;
+
+  function stopEdgePan() {
+    if (edgePanRAF) { cancelAnimationFrame(edgePanRAF); edgePanRAF = null; }
+    lastPointer = null;
+  }
+
+  function edgePanLoop() {
+    edgePanRAF = null;
+    if (!ghostEl || !dragPiece || !zoomPan || !lastPointer) return;
+
+    const rect = svgEl.getBoundingClientRect();
+    const cx = lastPointer.x;
+    const cy = lastPointer.y;
+
+    // Only edge-pan when cursor is inside the SVG bounds
+    const inside = cx >= rect.left && cx <= rect.right && cy >= rect.top && cy <= rect.bottom;
+    let dx = 0, dy = 0;
+    if (inside) {
+      if (cx < rect.left + EDGE_ZONE) dx = -(1 - (cx - rect.left) / EDGE_ZONE);
+      else if (cx > rect.right - EDGE_ZONE) dx = 1 - (rect.right - cx) / EDGE_ZONE;
+      if (cy < rect.top + EDGE_ZONE) dy = -(1 - (cy - rect.top) / EDGE_ZONE);
+      else if (cy > rect.bottom - EDGE_ZONE) dy = 1 - (rect.bottom - cy) / EDGE_ZONE;
+    }
+
+    if (dx !== 0 || dy !== 0) {
+      const vb = svgEl.viewBox.baseVal;
+      zoomPan.panBy(dx * vb.width * PAN_SPEED, dy * vb.height * PAN_SPEED);
+    }
+
+    edgePanRAF = requestAnimationFrame(edgePanLoop);
   }
 
   function onPointerMove(e) {
     if (!ghostEl) return;
     ghostEl.style.left = (e.clientX - ghostEl.offsetWidth / 2) + 'px';
     ghostEl.style.top = (e.clientY - ghostEl.offsetHeight / 2) + 'px';
+    lastPointer = { x: e.clientX, y: e.clientY };
+
+    // Start edge-pan loop if not running
+    if (!edgePanRAF) edgePanRAF = requestAnimationFrame(edgePanLoop);
 
     // Auto-snap when close enough
     const c = ghostCenter();
@@ -516,7 +560,7 @@ export async function createJigsawGame({
     renderTray();
     // Reset zoom-pan flag so it can re-attach after Play Again
     delete svgEl.dataset.zoomPanAttached;
-    attachZoomPan(svgEl, () => ({ x: vbX1, y: vbY1, w: vbW, h: vbH }));
+    zoomPan = attachZoomPan(svgEl, () => ({ x: vbX1, y: vbY1, w: vbW, h: vbH }));
 
     const prog = logic.getProgress();
     scoreEl.textContent = prog.score;

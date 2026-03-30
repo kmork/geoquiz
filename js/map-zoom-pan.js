@@ -216,4 +216,12 @@ export function attachZoomPan(svgEl, getBaseViewBox) {
     panStart = null;
     startDist = 0;
   });
+
+  /** Shift the current viewBox by (dx, dy) in SVG units. */
+  const panBy = (dx, dy) => {
+    const vb = getVB();
+    setViewBox(clampPan({ x: vb.x + dx, y: vb.y + dy, w: vb.w, h: vb.h }));
+  };
+
+  return { panBy };
 }
