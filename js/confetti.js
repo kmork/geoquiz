@@ -1,8 +1,5 @@
-// Play a short celebratory ping on mobile devices
-function playPing() {
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  if (!isMobile) return;
-
+// Play a short celebratory ping
+export function playPing() {
   try {
     const ac = new (window.AudioContext || window.webkitAudioContext)();
     const now = ac.currentTime;

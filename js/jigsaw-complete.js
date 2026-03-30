@@ -10,7 +10,7 @@ import { proj, pathFromMainland, bboxOfMainlandLonLat, padBBox } from './map-uti
 import { findGeoFeature } from './aliases.js';
 import { renderFinishScreen } from './game-records.js';
 import { attachZoomPan } from './map-zoom-pan.js';
-import { initConfetti } from './confetti.js';
+import { initConfetti, playPing } from './confetti.js';
 import { JigsawLogic } from './games/jigsaw-logic.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -95,8 +95,8 @@ export async function createJigsawGame({
   const vbW = vbX2 - vbX1;
   const vbH = vbY2 - vbY1;
 
-  // Snap threshold: ~2.5% of the continent view width
-  const snapThreshold = vbW * 0.025;
+  // Snap threshold: ~1.5% of the continent view width
+  const snapThreshold = vbW * 0.015;
 
   // Initialize logic
   const logic = new JigsawLogic(piecesData.map(p => ({
@@ -356,47 +356,20 @@ export async function createJigsawGame({
     piece.addEventListener('pointercancel', onPointerUp);
   }
 
-  function onPointerMove(e) {
-    if (!ghostEl) return;
-    ghostEl.style.left = (e.clientX - ghostEl.offsetWidth / 2) + 'px';
-    ghostEl.style.top = (e.clientY - ghostEl.offsetHeight / 2) + 'px';
-  }
+  function snapPiece(idx, piece, ghost) {
+    logic.markPlaced(idx);
+    const p = piecesData[idx];
 
-  function onPointerUp(e) {
-    if (!ghostEl || !dragPiece) return;
-
-    const piece = dragPiece;
-    const idx = parseInt(piece.dataset.pieceIndex);
-
-    piece.removeEventListener('pointermove', onPointerMove);
-    piece.removeEventListener('pointerup', onPointerUp);
-    piece.removeEventListener('pointercancel', onPointerUp);
-    piece.classList.remove('dragging');
-
-    // Determine drop position in SVG coords
-    const c = ghostCenter();
-    let svgPt = null;
-    if (c) svgPt = clientToSvg(c.x, c.y);
-
-    // Clean up ghost
-    ghostEl.remove();
-    ghostEl = null;
-    dragPiece = null;
-
-    if (!svgPt) return;
-
-    // Check placement
-    const result = logic.checkPlacement(idx, svgPt.x, svgPt.y, snapThreshold);
-
-    if (result.correct) {
-      // Snap: add the piece to the map SVG
-      logic.markPlaced(idx);
-      const p = piecesData[idx];
+    let finalized = false;
+    function finalize() {
+      if (finalized) return;
+      finalized = true;
+      if (ghost) { ghost.remove(); }
+      playPing();
       const snapped = createPath(p.pathD, 'jigsaw-snapped');
       snapped.setAttribute('vector-effect', 'non-scaling-stroke');
       svgEl.appendChild(snapped);
 
-      // Remove placed piece from tray and pull next from queue
       piece.removeEventListener('pointerdown', onPointerDown);
       piece.remove();
       visibleIndices = visibleIndices.filter(i => i !== idx);
@@ -407,20 +380,108 @@ export async function createJigsawGame({
       }
       updateArrows();
 
-      // Update progress
       const prog = logic.getProgress();
       scoreEl.textContent = prog.score;
       progressEl.textContent = `${prog.placed} / ${prog.total}`;
 
-      // Check completion
       if (logic.isComplete()) {
         confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2 });
         setTimeout(() => finishGame(), 800);
       }
+    }
+
+    if (!ghost) { finalize(); return; }
+
+    // Compute where the centroid falls inside the ghost's local coordinate system.
+    // The ghost's inner SVG viewBox starts at the padded bounding box origin,
+    // so the centroid offset (as a fraction of the ghost size) determines its
+    // pixel position within the ghost.
+    const ctm = svgEl.getScreenCTM();
+    if (!ctm) { finalize(); return; }
+    const bb = bboxOfMainlandLonLat(p.feature);
+    const pbb = padBBox(bb, 0.1);
+    const [vx1, vy1] = proj([pbb.minLon, pbb.maxLat]);
+    const [vx2, vy2] = proj([pbb.maxLon, pbb.minLat]);
+    const vw = vx2 - vx1;
+    const vh = vy2 - vy1;
+
+    // Fraction of the ghost where the centroid sits
+    const fracX = (p.centroidX - vx1) / vw;
+    const fracY = (p.centroidY - vy1) / vh;
+
+    // Screen position the centroid should land on
+    const pt = svgEl.createSVGPoint();
+    pt.x = p.centroidX;
+    pt.y = p.centroidY;
+    const screenPt = pt.matrixTransform(ctm);
+
+    const gw = ghost.offsetWidth;
+    const gh = ghost.offsetHeight;
+
+    ghost.style.transition = 'left 0.15s ease-out, top 0.15s ease-out';
+    ghost.style.left = (screenPt.x - gw * fracX) + 'px';
+    ghost.style.top = (screenPt.y - gh * fracY) + 'px';
+    ghost.addEventListener('transitionend', finalize, { once: true });
+    // Fallback in case transitionend doesn't fire
+    setTimeout(finalize, 200);
+  }
+
+  function cleanUpDrag(piece, keepGhost) {
+    piece.removeEventListener('pointermove', onPointerMove);
+    piece.removeEventListener('pointerup', onPointerUp);
+    piece.removeEventListener('pointercancel', onPointerUp);
+    piece.classList.remove('dragging');
+    if (!keepGhost && ghostEl) { ghostEl.remove(); ghostEl = null; }
+    dragPiece = null;
+  }
+
+  function onPointerMove(e) {
+    if (!ghostEl) return;
+    ghostEl.style.left = (e.clientX - ghostEl.offsetWidth / 2) + 'px';
+    ghostEl.style.top = (e.clientY - ghostEl.offsetHeight / 2) + 'px';
+
+    // Auto-snap when close enough
+    const c = ghostCenter();
+    if (!c) return;
+    const svgPt = clientToSvg(c.x, c.y);
+    if (!svgPt) return;
+    const piece = dragPiece;
+    const idx = parseInt(piece.dataset.pieceIndex);
+    const result = logic.checkPlacement(idx, svgPt.x, svgPt.y, snapThreshold);
+    if (result.correct) {
+      const ghost = ghostEl;
+      ghostEl = null;
+      cleanUpDrag(piece, true);
+      snapPiece(idx, piece, ghost);
+    }
+  }
+
+  function onPointerUp(e) {
+    if (!ghostEl || !dragPiece) return;
+
+    const piece = dragPiece;
+    const idx = parseInt(piece.dataset.pieceIndex);
+
+    // Determine drop position in SVG coords
+    const c = ghostCenter();
+    let svgPt = null;
+    if (c) svgPt = clientToSvg(c.x, c.y);
+
+    // Check placement
+    const result = svgPt ? logic.checkPlacement(idx, svgPt.x, svgPt.y, snapThreshold) : null;
+
+    if (result?.correct) {
+      const ghost = ghostEl;
+      ghostEl = null;
+      cleanUpDrag(piece, true);
+      snapPiece(idx, piece, ghost);
     } else {
-      // Reject: shake the tray piece
-      piece.classList.add('jigsaw-reject');
-      setTimeout(() => piece.classList.remove('jigsaw-reject'), 400);
+      cleanUpDrag(piece);
+      if (svgPt) {
+        // Reject: shake the tray piece
+        piece.classList.add('jigsaw-reject');
+        setTimeout(() => piece.classList.remove('jigsaw-reject'), 400);
+      }
     }
   }
 
