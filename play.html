@@ -80,6 +80,7 @@
           { key: 'outlines-short',       url: 'outlines.html', urlParam: 'rounds=10',  label: 'Guess – Short',           emoji: '❓', desc: '10 rounds · name the country' },
           { key: 'outlines-long',        url: 'outlines.html', urlParam: 'rounds=all', label: 'Guess – All',             emoji: '❓', desc: 'All countries · name the country' },
           { key: 'outlines-streak',      url: 'outlines.html', urlParam: 'mode=streak', label: 'Guess – Streak',         emoji: '🔥', desc: 'One wrong answer ends the game' },
+          { key: 'pairs-outlines', url: 'pairs.html', urlParam: 'mode=outlines', label: 'Pairs – Outlines', emoji: '🔗', desc: 'Match countries with their outlines' },
           { key: 'rotate-only-short',    url: 'outlines.html', urlParam: 'rounds=10&mode=rotate-only',   label: 'Rotate – Short',  emoji: 'rotate-svg', desc: '10 rounds · name shown' },
           { key: 'rotate-only-long',     url: 'outlines.html', urlParam: 'rounds=all&mode=rotate-only',  label: 'Rotate – All',    emoji: 'rotate-svg', desc: 'All countries · name shown' },
           { key: 'rotated-short',        url: 'outlines.html', urlParam: 'rounds=10&mode=rotated',       label: 'Rotate & Guess – Short',  emoji: '⚡', desc: '10 rounds · rotate & guess' },
@@ -101,6 +102,8 @@
           { key: 'place-cities-long',   url: 'cities.html', urlParam: 'rounds=all', label: 'Place Cities – All',    emoji: '📍', desc: 'All countries' },
           { key: 'spelling-cities-short',  url: 'spelling.html', urlParam: 'mode=cities&rounds=10',  label: 'Spelling – Short',  emoji: '🔤', desc: '10 city names' },
           { key: 'spelling-cities-long',   url: 'spelling.html', urlParam: 'mode=cities&rounds=all', label: 'Spelling – All',    emoji: '🔤', desc: 'All cities' },
+          { key: 'pairs', url: 'pairs.html', urlParam: 'mode=capitals', label: 'Pairs – Capitals', emoji: '🔗', desc: 'Match countries with capitals' },
+          { key: 'pairs-cities', url: 'pairs.html', urlParam: 'mode=cities', label: 'Pairs – Cities', emoji: '🔗', desc: 'Match countries with their cities' },
         ],
       },
       trivia: {
@@ -143,6 +146,7 @@
           { key: 'flags-short',  url: 'flags.html', urlParam: 'rounds=10',   label: 'Short',  emoji: '⚡', desc: '10 rounds' },
           { key: 'flags-long',   url: 'flags.html', urlParam: 'rounds=all',  label: 'All',    emoji: '🏆', desc: 'All 194 flags' },
           { key: 'flags-streak', url: 'flags.html', urlParam: 'mode=streak', label: 'Streak', emoji: '🔥', desc: 'One wrong answer ends the game' },
+          { key: 'pairs-flags', url: 'pairs.html', urlParam: 'mode=flags', label: 'Pairs – Flags', emoji: '🔗', desc: 'Match countries with their flags' },
         ],
       },
       route: {
@@ -174,20 +178,7 @@
           { key: 'mountains-long',       url: 'mountains.html', urlParam: '',                    label: 'Mountains – All',   emoji: '⛰️', desc: 'All 16 ranges · pick all countries', worldOnly: true },
           { key: 'peaks-short',  url: 'peaks.html', urlParam: 'rounds=10',  label: 'Peaks – Short',  emoji: '▲', desc: '10 peaks · click the location', excludeContinents: ['Oceania'] },
           { key: 'peaks-long',   url: 'peaks.html', urlParam: 'rounds=all', label: 'Peaks – All',    emoji: '▲', desc: 'All peaks · click the location' },
-        ],
-      },
-      'pairs': {
-        title: 'Pairs',
-        desc: 'Match countries with capitals, peaks, cities, flags, or outlines — one wrong answer ends your streak.',
-        url: 'pairs.html',
-        pointsPerRound: null,
-        icon: '🔗',
-        customDifficulties: [
-          { key: 'pairs', url: 'pairs.html', urlParam: 'mode=capitals', label: 'Capitals', emoji: '🏛️', desc: 'Match countries with capitals' },
-          { key: 'pairs-peaks', url: 'pairs.html', urlParam: 'mode=peaks', label: 'Peaks', emoji: '⛰️', desc: 'Match countries with highest peaks' },
-          { key: 'pairs-cities', url: 'pairs.html', urlParam: 'mode=cities', label: 'Cities', emoji: '🏙️', desc: 'Match countries with their cities' },
-          { key: 'pairs-flags', url: 'pairs.html', urlParam: 'mode=flags', label: 'Flags', emoji: '🚩', desc: 'Match countries with their flags' },
-          { key: 'pairs-outlines', url: 'pairs.html', urlParam: 'mode=outlines', label: 'Outlines', emoji: '🗺️', desc: 'Match countries with their outlines' },
+          { key: 'pairs-peaks', url: 'pairs.html', urlParam: 'mode=peaks', label: 'Pairs – Peaks', emoji: '🔗', desc: 'Match countries with highest peaks' },
         ],
       },
       duel: {
