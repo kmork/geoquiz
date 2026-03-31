@@ -359,7 +359,7 @@ export async function createJigsawGame({
   }
 
   function snapPiece(idx, piece, ghost) {
-    logic.markPlaced(idx);
+    logic.markPlaced(idx, hintsVisible);
     const p = piecesData[idx];
 
     let finalized = false;
@@ -383,7 +383,7 @@ export async function createJigsawGame({
       updateArrows();
 
       const prog = logic.getProgress();
-      scoreEl.textContent = prog.score;
+      scoreEl.textContent = `${prog.score} / ${prog.maxScore}`;
       progressEl.textContent = `${prog.placed} / ${prog.total}`;
 
       if (logic.isComplete()) {
@@ -491,8 +491,7 @@ export async function createJigsawGame({
     if (!svgPt) return;
     const piece = dragPiece;
     const idx = parseInt(piece.dataset.pieceIndex);
-    const result = logic.checkPlacement(idx, svgPt.x, svgPt.y, snapThreshold);
-    if (result.correct) {
+    if (logic.isWithinThreshold(idx, svgPt.x, svgPt.y, snapThreshold)) {
       const ghost = ghostEl;
       ghostEl = null;
       cleanUpDrag(piece, true);
@@ -541,8 +540,8 @@ export async function createJigsawGame({
     renderFinishScreen(overlayEl, {
       gameId,
       score: prog.score,
-      scoreLabel: 'Correct',
-      maxScore: prog.total,
+      scoreLabel: 'Score',
+      maxScore: prog.maxScore,
       time,
       accuracy,
       onPlayAgain: () => start(),
@@ -563,7 +562,7 @@ export async function createJigsawGame({
     zoomPan = attachZoomPan(svgEl, () => ({ x: vbX1, y: vbY1, w: vbW, h: vbH }));
 
     const prog = logic.getProgress();
-    scoreEl.textContent = prog.score;
+    scoreEl.textContent = `${prog.score} / ${prog.maxScore}`;
     progressEl.textContent = `${prog.placed} / ${prog.total}`;
   }
 

@@ -36,6 +36,16 @@ export class JigsawLogic {
    * @param {number} threshold - max distance for a snap
    * @returns {{ correct: boolean, snapX: number, snapY: number }}
    */
+  /**
+   * Check distance without penalizing — used during drag for auto-snap.
+   */
+  isWithinThreshold(index, dropX, dropY, threshold) {
+    const piece = this.pieces[index];
+    const dx = dropX - piece.centroidX;
+    const dy = dropY - piece.centroidY;
+    return Math.sqrt(dx * dx + dy * dy) <= threshold;
+  }
+
   checkPlacement(index, dropX, dropY, threshold) {
     const piece = this.pieces[index];
     const dx = dropX - piece.centroidX;
@@ -50,12 +60,11 @@ export class JigsawLogic {
     return { correct, snapX: piece.centroidX, snapY: piece.centroidY };
   }
 
-  markPlaced(index) {
+  markPlaced(index, hintsVisible) {
     const piece = this.pieces[index];
     piece.placed = true;
-    if (piece.firstAttempt) {
-      this.score++;
-    }
+    if (piece.firstAttempt && !hintsVisible) this.score += 2;
+    else if (piece.firstAttempt || !hintsVisible) this.score += 1;
   }
 
   isComplete() {
@@ -64,12 +73,13 @@ export class JigsawLogic {
 
   getProgress() {
     const placed = this.pieces.filter(p => p.placed).length;
-    return { placed, total: this.pieces.length, score: this.score };
+    return { placed, total: this.pieces.length, maxScore: this.pieces.length * 2, score: this.score };
   }
 
   getAccuracy() {
-    if (this.pieces.length === 0) return 100;
-    return Math.round((this.score / this.pieces.length) * 100);
+    const max = this.pieces.length * 2;
+    if (max === 0) return 100;
+    return Math.round((this.score / max) * 100);
   }
 
   getElapsedSeconds() {
