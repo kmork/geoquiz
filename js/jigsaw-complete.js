@@ -256,56 +256,7 @@ export async function createJigsawGame({
 
   // ─── Render piece tray ───────────────────────────────────────
 
-  // ─── Mobile looping scroll ───────────────────────────────────
-
-  let loopCleanup = null;
-
-  function setupMobileLoop() {
-    if (loopCleanup) { loopCleanup(); loopCleanup = null; }
-    if (!isMobile || trayEl.children.length < 2) return;
-
-    // Clone all pieces and append copies at the end for seamless looping
-    const originals = [...trayEl.children];
-    const clones = originals.map(el => {
-      const clone = el.cloneNode(true);
-      clone.classList.add('jigsaw-clone');
-      clone.addEventListener('pointerdown', onPointerDown);
-      return clone;
-    });
-    clones.forEach(c => trayEl.appendChild(c));
-
-    // Measure the total width of the original set after layout
-    const last = originals[originals.length - 1];
-    const first = originals[0];
-    const setWidth = last.offsetLeft + last.offsetWidth - first.offsetLeft;
-
-    // Compute gap between original set and first clone
-    const firstClone = clones[0];
-    const gapAfter = firstClone.offsetLeft - (last.offsetLeft + last.offsetWidth);
-    const jumpDist = setWidth + gapAfter;
-
-    // Scroll handler: loop when reaching clone region or start
-    const onScroll = () => {
-      if (trayEl.scrollLeft >= jumpDist) {
-        trayEl.scrollLeft -= jumpDist;
-      } else if (trayEl.scrollLeft <= 0) {
-        trayEl.scrollLeft += jumpDist;
-      }
-    };
-
-    trayEl.addEventListener('scroll', onScroll);
-
-    // Start scrolled slightly so user can scroll left too
-    trayEl.scrollLeft = 1;
-
-    loopCleanup = () => {
-      trayEl.removeEventListener('scroll', onScroll);
-      trayEl.querySelectorAll('.jigsaw-clone').forEach(c => c.remove());
-    };
-  }
-
   function renderTray() {
-    if (loopCleanup) { loopCleanup(); loopCleanup = null; }
     trayEl.innerHTML = '';
 
     const allIndices = shuffleArray(piecesData.map((_, i) => i));
@@ -330,8 +281,6 @@ export async function createJigsawGame({
 
     for (const idx of visibleIndices) createPieceElement(idx);
     updateArrows();
-
-    if (isMobile) setupMobileLoop();
   }
 
   // ─── Drag-and-drop ───────────────────────────────────────────
@@ -465,12 +414,8 @@ export async function createJigsawGame({
       snapped.setAttribute('vector-effect', 'non-scaling-stroke');
       svgEl.appendChild(snapped);
 
-      // Remove the piece and any clones with the same index
-      trayEl.querySelectorAll(`.jigsaw-piece[data-piece-index="${idx}"]`).forEach(el => {
-        el.removeEventListener('pointerdown', onPointerDown);
-        el.remove();
-      });
-      if (piece.parentNode) piece.remove();
+      piece.removeEventListener('pointerdown', onPointerDown);
+      piece.remove();
       visibleIndices = visibleIndices.filter(i => i !== idx);
       if (queueIndices.length > 0) {
         const nextIdx = queueIndices.shift();

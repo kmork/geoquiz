@@ -2402,6 +2402,7 @@ html.light-mode .geo-bonus-overlay.wrong {
 @media (max-width: 600px) {
   .jigsaw-tray-wrap {
     gap: 0;
+    margin-top: auto;
   }
   .jigsaw-tray-arrow {
     display: none;
@@ -2409,6 +2410,7 @@ html.light-mode .geo-bonus-overlay.wrong {
   .jigsaw-tray {
     flex-wrap: nowrap;
     overflow-x: auto;
+    overflow-y: hidden;
     -webkit-overflow-scrolling: touch;
     scroll-behavior: auto;
     padding: 8px 0;
