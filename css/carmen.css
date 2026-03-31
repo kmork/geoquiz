@@ -66,25 +66,22 @@
   max-height: 300px;
 }
 
-/* ── Clue Tabs ───────────────────────────────────────── */
-.carmen-clues {
-  margin-bottom: 1rem;
-}
-
-.carmen-clue-tabs {
+/* ── Clue Icons (sidebar on map) ─────────────────────── */
+.carmen-map-sidebar {
+  position: absolute;
+  top: 8px;
+  right: 8px;
   display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 0.5rem;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 2;
 }
 
-
-.carmen-clue-tab {
-  height: 48px;
-  padding: 0 0.75rem;
-  font-size: 1.4rem;
-  border-radius: 12px;
+.carmen-clue-icon {
+  width: 44px;
+  height: 44px;
+  font-size: 1.3rem;
+  border-radius: 10px;
   background: var(--button-bg);
   border: 2px solid var(--button-border);
   color: var(--button-color);
@@ -93,42 +90,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.35rem;
 }
 
-.carmen-clue-tab-label {
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--text-muted);
-}
-
-.carmen-clue-tab.active .carmen-clue-tab-label {
-  color: var(--star-color);
-}
-
-@media (max-width: 380px) {
-  .carmen-clue-tab-label {
-    display: none;
-  }
-  .carmen-clue-tab {
-    width: 48px;
-    padding: 0;
-  }
-}
-
-.carmen-clue-tab:hover {
+.carmen-clue-icon:hover {
   background: var(--button-hover);
-  transform: translateY(-1px);
+  transform: scale(1.05);
 }
 
-.carmen-clue-tab.active {
+.carmen-clue-icon.active {
   border-color: var(--star-color);
   background: var(--button-hover);
 }
 
+/* ── Clue Reveal (below map) ────────────────────────── */
 .carmen-clue-reveal {
   text-align: center;
   padding: 0.65rem 0.85rem;
+  margin-bottom: 1rem;
   border-radius: 10px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);

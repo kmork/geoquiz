@@ -20,9 +20,10 @@ export function createCarmenUI(container, flagCodes) {
     <div class="carmen-narrative" id="carmen-narrative"></div>
     <div class="carmen-map-wrap">
       <svg id="carmen-map" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"></svg>
+      <div class="carmen-map-sidebar" id="carmen-map-sidebar"></div>
       <button class="carmen-map-hint" id="carmen-map-hint" title="Extra Clue (-20 pts)"></button>
     </div>
-    <div class="carmen-clues" id="carmen-clues"></div>
+    <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
     <div class="carmen-neighbors-label" id="carmen-neighbors-label">Where did the thief go?</div>
     <div class="carmen-neighbors" id="carmen-neighbors"></div>
   `;
@@ -33,8 +34,10 @@ export function createCarmenUI(container, flagCodes) {
     score: container.querySelector('#carmen-score'),
     progress: container.querySelector('#carmen-progress'),
     map: container.querySelector('#carmen-map'),
+    mapWrap: container.querySelector('.carmen-map-wrap'),
+    sidebar: container.querySelector('#carmen-map-sidebar'),
     hintBtn: container.querySelector('#carmen-map-hint'),
-    clues: container.querySelector('#carmen-clues'),
+    reveal: container.querySelector('#carmen-clue-reveal'),
     neighborsLabel: container.querySelector('#carmen-neighbors-label'),
     neighbors: container.querySelector('#carmen-neighbors'),
   };
@@ -83,57 +86,55 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     showClues(clues) {
-      const iconsHtml = clues.map((c, i) => `
-        <button class="carmen-clue-tab" data-index="${i}">
-          ${c.icon}<span class="carmen-clue-tab-label">Clue ${i + 1}</span>
-        </button>
-      `).join('');
-      els.clues.innerHTML = `
-        <div class="carmen-clue-tabs">${iconsHtml}</div>
-        <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
-      `;
       this._clueData = [...clues];
-      this._bindClueTabs();
+      els.sidebar.innerHTML = clues.map((c, i) =>
+        `<button class="carmen-clue-icon" data-index="${i}">${c.icon}</button>`
+      ).join('');
+      els.reveal.style.display = 'none';
+      els.reveal.innerHTML = '';
+      this._bindClueIcons();
+      this._updateMapMinHeight();
     },
 
-    _bindClueTabs() {
-      const reveal = els.clues.querySelector('#carmen-clue-reveal');
-      const tabs = els.clues.querySelectorAll('.carmen-clue-tab');
+    _bindClueIcons() {
+      const icons = els.sidebar.querySelectorAll('.carmen-clue-icon');
       const clues = this._clueData;
 
-      tabs.forEach((tab, i) => {
-        tab.addEventListener('click', () => {
-          tabs.forEach(t => t.classList.remove('active'));
-          tab.classList.add('active');
-          reveal.innerHTML = `<span class="carmen-clue-text">${esc(clues[i].text)}</span>`;
-          reveal.style.display = '';
+      icons.forEach((icon, i) => {
+        icon.addEventListener('click', () => {
+          icons.forEach(ic => ic.classList.remove('active'));
+          icon.classList.add('active');
+          els.reveal.innerHTML = `<span class="carmen-clue-text">${esc(clues[i].text)}</span>`;
+          els.reveal.style.display = '';
         });
       });
+    },
 
-      // Don't auto-reveal — let the player tap
-      reveal.style.display = 'none';
+    _updateMapMinHeight() {
+      // Ensure map is tall enough for sidebar icons + hint button
+      const iconCount = els.sidebar.querySelectorAll('.carmen-clue-icon').length;
+      // Each icon ~44px + 6px gap, plus hint button ~40px + 12px spacing
+      const needed = iconCount * 50 + 12 + 40 + 16;
+      els.mapWrap.style.minHeight = needed + 'px';
     },
 
     addClue(clue) {
       this._clueData.push(clue);
-      const tabsRow = els.clues.querySelector('.carmen-clue-tabs');
-      if (!tabsRow) return;
-
       const index = this._clueData.length - 1;
       const btn = document.createElement('button');
-      btn.className = 'carmen-clue-tab';
+      btn.className = 'carmen-clue-icon';
       btn.dataset.index = index;
-      btn.innerHTML = `${clue.icon}<span class="carmen-clue-tab-label">Clue ${index + 1}</span>`;
-      tabsRow.appendChild(btn);
+      btn.textContent = clue.icon;
+      els.sidebar.appendChild(btn);
 
-      const reveal = els.clues.querySelector('#carmen-clue-reveal');
       btn.addEventListener('click', () => {
-        tabsRow.querySelectorAll('.carmen-clue-tab').forEach(t => t.classList.remove('active'));
+        els.sidebar.querySelectorAll('.carmen-clue-icon').forEach(ic => ic.classList.remove('active'));
         btn.classList.add('active');
-        reveal.innerHTML = `<span class="carmen-clue-text">${esc(clue.text)}</span>`;
-        reveal.style.display = '';
+        els.reveal.innerHTML = `<span class="carmen-clue-text">${esc(clue.text)}</span>`;
+        els.reveal.style.display = '';
       });
 
+      this._updateMapMinHeight();
       // Auto-reveal the new clue
       btn.click();
     },
@@ -189,8 +190,10 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     showTransition(stopScore, country) {
-      els.clues.innerHTML = '';
+      els.sidebar.innerHTML = '';
+      els.reveal.style.display = 'none';
       els.hintBtn.style.display = 'none';
+      els.mapWrap.style.minHeight = '';
       els.neighbors.innerHTML = `
         <div class="carmen-transition">
           <div class="score-gained">+${stopScore} points</div>
