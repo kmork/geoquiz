@@ -231,7 +231,7 @@ export async function createJigsawGame({
     const piece = document.createElement('div');
     piece.className = 'jigsaw-piece';
     piece.dataset.pieceIndex = idx;
-    piece.setAttribute('touch-action', 'none');
+    if (!isMobile) piece.setAttribute('touch-action', 'none');
 
     const thumbSvg = document.createElementNS(SVG_NS, 'svg');
     thumbSvg.setAttribute('viewBox', `${tx1} ${ty1} ${tw} ${th}`);
@@ -356,11 +356,8 @@ export async function createJigsawGame({
     return pt.matrixTransform(ctm.inverse());
   }
 
-  function onPointerDown(e) {
-    const piece = e.currentTarget;
-    if (piece.classList.contains('placed')) return;
+  function startDrag(piece, e) {
     e.preventDefault();
-
     dragPiece = piece;
     piece.classList.add('dragging');
     piece.setPointerCapture(e.pointerId);
@@ -409,6 +406,49 @@ export async function createJigsawGame({
     piece.addEventListener('pointermove', onPointerMove);
     piece.addEventListener('pointerup', onPointerUp);
     piece.addEventListener('pointercancel', onPointerUp);
+  }
+
+  function onPointerDown(e) {
+    const piece = e.currentTarget;
+    if (piece.classList.contains('placed')) return;
+
+    if (!isMobile) {
+      startDrag(piece, e);
+      return;
+    }
+
+    // Mobile: defer drag until we know the user intends to drag (vertical)
+    // rather than scroll the tray (horizontal)
+    const startX = e.clientX;
+    const startY = e.clientY;
+    let resolved = false;
+
+    const onFirstMove = (me) => {
+      if (resolved) return;
+      const dx = Math.abs(me.clientX - startX);
+      const dy = Math.abs(me.clientY - startY);
+      if (dx < 8 && dy < 8) return; // not enough movement to decide
+      resolved = true;
+      piece.removeEventListener('pointermove', onFirstMove);
+      piece.removeEventListener('pointerup', onCancel);
+      piece.removeEventListener('pointercancel', onCancel);
+      if (dy > dx) {
+        // Vertical movement: start drag
+        startDrag(piece, me);
+      }
+      // Horizontal movement: do nothing, let native scroll handle it
+    };
+
+    const onCancel = () => {
+      resolved = true;
+      piece.removeEventListener('pointermove', onFirstMove);
+      piece.removeEventListener('pointerup', onCancel);
+      piece.removeEventListener('pointercancel', onCancel);
+    };
+
+    piece.addEventListener('pointermove', onFirstMove);
+    piece.addEventListener('pointerup', onCancel);
+    piece.addEventListener('pointercancel', onCancel);
   }
 
   function snapPiece(idx, piece, ghost) {
@@ -496,8 +536,8 @@ export async function createJigsawGame({
   }
 
   // Edge-pan: pan the map when dragging near the SVG border
-  const EDGE_ZONE = 40; // px from edge to start panning
-  const PAN_SPEED = 0.004; // fraction of viewBox per frame
+  const EDGE_ZONE = isMobile ? 50 : 40; // px from edge to start panning
+  const PAN_SPEED = isMobile ? 0.008 : 0.004; // fraction of viewBox per frame
 
   let lastPointer = null;
 
