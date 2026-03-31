@@ -2402,22 +2402,21 @@ html.light-mode .geo-bonus-overlay.wrong {
 @media (max-width: 600px) {
   .jigsaw-tray-wrap {
     gap: 0;
-    margin-top: auto;
   }
   .jigsaw-tray-arrow {
     display: none;
   }
   .jigsaw-tray {
     flex-wrap: nowrap;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: visible;
+    overflow-x: scroll;
     -webkit-overflow-scrolling: touch;
-    scroll-behavior: auto;
     padding: 8px 0;
     justify-content: flex-start;
     gap: 6px;
     max-height: none !important;
     scrollbar-width: none;
+    touch-action: pan-x;
   }
   .jigsaw-tray::-webkit-scrollbar {
     display: none;
