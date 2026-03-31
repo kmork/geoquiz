@@ -189,18 +189,30 @@ export function createCarmenUI(container, flagCodes) {
       els.neighborsLabel.style.display = 'none';
     },
 
-    showTransition(stopScore, country) {
+    showTransition(stopScore, country, onContinue) {
       els.sidebar.innerHTML = '';
       els.reveal.style.display = 'none';
       els.hintBtn.style.display = 'none';
       els.mapWrap.style.minHeight = '';
-      els.neighbors.innerHTML = `
+      els.neighborsLabel.style.display = 'none';
+      els.neighbors.innerHTML = '';
+
+      // Overlay on the map
+      const overlay = document.createElement('div');
+      overlay.className = 'carmen-map-overlay';
+      overlay.innerHTML = `
         <div class="carmen-transition">
           <div class="score-gained">+${stopScore} points</div>
-          <div>The thief was spotted in <strong>${esc(country)}</strong>! The chase continues...</div>
+          <div>The thief was spotted in <strong>${esc(country)}</strong>!</div>
+          <button class="carmen-continue-btn">Continue the chase →</button>
         </div>
       `;
-      els.neighborsLabel.style.display = 'none';
+      els.mapWrap.appendChild(overlay);
+
+      overlay.querySelector('.carmen-continue-btn').addEventListener('click', () => {
+        overlay.remove();
+        onContinue();
+      });
     },
   };
 }
