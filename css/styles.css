@@ -2400,13 +2400,33 @@ html.light-mode .geo-bonus-overlay.wrong {
 }
 
 @media (max-width: 600px) {
+  .jigsaw-tray-wrap {
+    gap: 0;
+  }
+  .jigsaw-tray-arrow {
+    display: none;
+  }
+  .jigsaw-tray {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: auto;
+    padding: 8px 0;
+    justify-content: flex-start;
+    gap: 6px;
+    max-height: none !important;
+    scrollbar-width: none;
+  }
+  .jigsaw-tray::-webkit-scrollbar {
+    display: none;
+  }
   .jigsaw-piece {
     width: 60px;
+    min-width: 60px;
     height: 60px;
     padding: 4px;
     border-radius: 8px;
   }
-
   .jigsaw-piece-label {
     font-size: 8px;
   }
