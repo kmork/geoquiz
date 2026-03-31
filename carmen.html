@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Where in the World? - GeoQuiz</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/carmen.css">
+  <script>
+    // Prevent FOUC - apply theme immediately
+    (function() {
+      const saved = localStorage.getItem('geoquiz-theme');
+      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      const theme = saved || system;
+      if (theme === 'light') {
+        document.documentElement.classList.add('light-mode');
+      }
+    })();
+  </script>
+</head>
+
+<body>
+<div class="wrap">
+  <div class="card">
+
+    <div id="init-overlay">
+      <div class="spinner"></div>
+      <div>Loading GeoQuiz...</div>
+    </div>
+
+    <div class="row row-space-between">
+      <div>
+        <h1>
+          <a href="index.html" style="text-decoration: none; color: inherit;">
+            <span class="game-header-icon">🔍</span>
+            Where in the World?
+          </a>
+        </h1>
+        <div class="muted">Track a thief across borders using geographic clues — a Carmen Sandiego homage.</div>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div id="game-content"></div>
+
+    <div class="overlay" id="finalOverlay" style="display:none"></div>
+    <canvas id="confetti"></canvas>
+  </div>
+</div>
+
+<script src="js/pako.min.js"></script>
+<script src="js/theme.js"></script>
+<script type="module" src="js/data.js"></script>
+<script type="module" src="js/carmen-main.js"></script>
+</body>
+</html>

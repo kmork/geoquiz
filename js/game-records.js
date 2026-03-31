@@ -36,6 +36,7 @@ const GAME_NAMES = {
   'spelling-cities': 'Spell the City',
   peaks:             'Mountain Peaks',
   jigsaw:            'Map Jigsaw',
+  carmen:            'Where in the World?',
 };
 
 const DIFFICULTY_LABELS = {
