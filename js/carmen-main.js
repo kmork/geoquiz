@@ -97,10 +97,10 @@ function showExtraClueButton() {
     if (clue) {
       ui.addClue(clue);
       ui.updateScore(logic.getProgress().score);
-      // Check if more extras allowed
-      if (logic.extraCluesUsed >= logic.diff.extraClues) {
-        ui.disableExtraClueButton();
-      }
+    }
+    // Disable if no more extras allowed or no clues left to show
+    if (!clue || logic.extraCluesUsed >= logic.diff.extraClues) {
+      ui.disableExtraClueButton();
     }
   });
 }

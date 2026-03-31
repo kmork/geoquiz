@@ -12,17 +12,17 @@
 export function createCarmenUI(container, flagCodes) {
   // Build skeleton
   container.innerHTML = `
-    <div class="carmen-narrative" id="carmen-narrative"></div>
     <div class="carmen-status-bar">
       <div class="carmen-lives" id="carmen-lives"></div>
       <div class="pill">Score: <b id="carmen-score">0</b></div>
       <div class="carmen-progress" id="carmen-progress"></div>
     </div>
+    <div class="carmen-narrative" id="carmen-narrative"></div>
     <div class="carmen-map-wrap">
       <svg id="carmen-map" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"></svg>
+      <button class="carmen-map-hint" id="carmen-map-hint" title="Extra Clue (-20 pts)"></button>
     </div>
     <div class="carmen-clues" id="carmen-clues"></div>
-    <div id="carmen-extra-clue-wrap"></div>
     <div class="carmen-neighbors-label" id="carmen-neighbors-label">Where did the thief go?</div>
     <div class="carmen-neighbors" id="carmen-neighbors"></div>
   `;
@@ -33,8 +33,8 @@ export function createCarmenUI(container, flagCodes) {
     score: container.querySelector('#carmen-score'),
     progress: container.querySelector('#carmen-progress'),
     map: container.querySelector('#carmen-map'),
+    hintBtn: container.querySelector('#carmen-map-hint'),
     clues: container.querySelector('#carmen-clues'),
-    extraClueWrap: container.querySelector('#carmen-extra-clue-wrap'),
     neighborsLabel: container.querySelector('#carmen-neighbors-label'),
     neighbors: container.querySelector('#carmen-neighbors'),
   };
@@ -83,40 +83,75 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     showClues(clues) {
-      els.clues.innerHTML = clues.map(c => `
-        <div class="carmen-clue">
-          <span class="carmen-clue-icon">${c.icon}</span>
-          <span class="carmen-clue-text">${esc(c.text)}</span>
-        </div>
+      const iconsHtml = clues.map((c, i) => `
+        <button class="carmen-clue-tab" data-index="${i}">
+          ${c.icon}<span class="carmen-clue-tab-label">Clue ${i + 1}</span>
+        </button>
       `).join('');
+      els.clues.innerHTML = `
+        <div class="carmen-clue-tabs">${iconsHtml}</div>
+        <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
+      `;
+      this._clueData = [...clues];
+      this._bindClueTabs();
+    },
+
+    _bindClueTabs() {
+      const reveal = els.clues.querySelector('#carmen-clue-reveal');
+      const tabs = els.clues.querySelectorAll('.carmen-clue-tab');
+      const clues = this._clueData;
+
+      tabs.forEach((tab, i) => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          reveal.innerHTML = `<span class="carmen-clue-text">${esc(clues[i].text)}</span>`;
+          reveal.style.display = '';
+        });
+      });
+
+      // Don't auto-reveal — let the player tap
+      reveal.style.display = 'none';
     },
 
     addClue(clue) {
-      const div = document.createElement('div');
-      div.className = 'carmen-clue';
-      div.innerHTML = `
-        <span class="carmen-clue-icon">${clue.icon}</span>
-        <span class="carmen-clue-text">${esc(clue.text)}</span>
-      `;
-      els.clues.appendChild(div);
+      this._clueData.push(clue);
+      const tabsRow = els.clues.querySelector('.carmen-clue-tabs');
+      if (!tabsRow) return;
+
+      const index = this._clueData.length - 1;
+      const btn = document.createElement('button');
+      btn.className = 'carmen-clue-tab';
+      btn.dataset.index = index;
+      btn.innerHTML = `${clue.icon}<span class="carmen-clue-tab-label">Clue ${index + 1}</span>`;
+      tabsRow.appendChild(btn);
+
+      const reveal = els.clues.querySelector('#carmen-clue-reveal');
+      btn.addEventListener('click', () => {
+        tabsRow.querySelectorAll('.carmen-clue-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        reveal.innerHTML = `<span class="carmen-clue-text">${esc(clue.text)}</span>`;
+        reveal.style.display = '';
+      });
+
+      // Auto-reveal the new clue
+      btn.click();
     },
 
     showExtraClueButton(enabled, onClick) {
-      if (!enabled) {
-        els.extraClueWrap.innerHTML = '';
-        return;
+      els.hintBtn.style.display = '';
+      els.hintBtn.disabled = !enabled;
+      // Remove old listener by cloning
+      const fresh = els.hintBtn.cloneNode(true);
+      els.hintBtn.replaceWith(fresh);
+      els.hintBtn = fresh;
+      if (enabled) {
+        fresh.addEventListener('click', onClick);
       }
-      els.extraClueWrap.innerHTML = `
-        <button class="carmen-extra-clue-btn" id="carmen-extra-btn">
-          🔎 Extra Clue <span class="carmen-extra-clue-cost">(-20 pts)</span>
-        </button>
-      `;
-      els.extraClueWrap.querySelector('#carmen-extra-btn').addEventListener('click', onClick);
     },
 
     disableExtraClueButton() {
-      const btn = els.extraClueWrap.querySelector('#carmen-extra-btn');
-      if (btn) btn.disabled = true;
+      els.hintBtn.disabled = true;
     },
 
     showNeighbors(neighbors, onPick) {

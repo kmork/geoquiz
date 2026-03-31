@@ -66,34 +66,78 @@
   max-height: 300px;
 }
 
-/* ── Clue Cards ──────────────────────────────────────── */
+/* ── Clue Tabs ───────────────────────────────────────── */
 .carmen-clues {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
   margin-bottom: 1rem;
 }
 
-.carmen-clue {
+.carmen-clue-tabs {
   display: flex;
-  align-items: flex-start;
-  gap: 0.6rem;
+  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+}
+
+
+.carmen-clue-tab {
+  height: 48px;
+  padding: 0 0.75rem;
+  font-size: 1.4rem;
+  border-radius: 12px;
+  background: var(--button-bg);
+  border: 2px solid var(--button-border);
+  color: var(--button-color);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.2s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+}
+
+.carmen-clue-tab-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.carmen-clue-tab.active .carmen-clue-tab-label {
+  color: var(--star-color);
+}
+
+@media (max-width: 380px) {
+  .carmen-clue-tab-label {
+    display: none;
+  }
+  .carmen-clue-tab {
+    width: 48px;
+    padding: 0;
+  }
+}
+
+.carmen-clue-tab:hover {
+  background: var(--button-hover);
+  transform: translateY(-1px);
+}
+
+.carmen-clue-tab.active {
+  border-color: var(--star-color);
+  background: var(--button-hover);
+}
+
+.carmen-clue-reveal {
+  text-align: center;
   padding: 0.65rem 0.85rem;
   border-radius: 10px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  animation: carmen-clue-in 0.35s ease-out;
+  animation: carmen-clue-in 0.25s ease-out;
 }
 
 @keyframes carmen-clue-in {
-  from { opacity: 0; transform: translateY(8px); }
+  from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
-}
-
-.carmen-clue-icon {
-  font-size: 1.1rem;
-  flex-shrink: 0;
-  margin-top: 0.1rem;
 }
 
 .carmen-clue-text {
@@ -101,34 +145,47 @@
   line-height: 1.45;
 }
 
-/* ── Extra Clue Button ───────────────────────────────── */
-.carmen-extra-clue-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.4rem 0.85rem;
-  border-radius: 8px;
-  background: var(--button-bg);
-  border: 1px solid var(--button-border);
-  color: var(--button-color);
+/* ── Hint Button (on map, matches #showHint style) ───── */
+.carmen-map-hint {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  padding: 0;
+  font-size: 0;
+  border: 2px solid rgba(251, 191, 36, 0.4);
+  border-radius: 10px;
+  background: rgba(251, 191, 36, 0.15);
   cursor: pointer;
-  font-size: 0.82rem;
-  transition: background 0.2s, opacity 0.2s;
-  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
 }
 
-.carmen-extra-clue-btn:hover {
-  background: var(--button-hover);
+.carmen-map-hint::before {
+  content: "💡";
+  font-size: 20px;
+  line-height: 1;
+  filter: brightness(1.2) contrast(1.1);
 }
 
-.carmen-extra-clue-btn:disabled {
-  opacity: 0.35;
+.carmen-map-hint:hover:not(:disabled) {
+  background: rgba(251, 191, 36, 0.25);
+  border-color: rgba(251, 191, 36, 0.6);
+}
+
+.carmen-map-hint:disabled {
+  opacity: 0.3;
   cursor: not-allowed;
 }
 
-.carmen-extra-clue-cost {
-  opacity: 0.6;
-  font-size: 0.78rem;
+.carmen-map-hint:disabled:hover {
+  background: rgba(251, 191, 36, 0.15);
+  border-color: rgba(251, 191, 36, 0.4);
 }
 
 /* ── Neighbor Buttons ────────────────────────────────── */
