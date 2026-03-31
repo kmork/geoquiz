@@ -124,11 +124,14 @@ function handleGuess(country) {
       return;
     }
 
-    // Show transition, then next stop
-    ui.showTransition(result.stopScore, result.country);
+    // Show highlight, then transition, then next stop
     const progress = result.progress;
-    drawMap(progress.route);
     ui.updateScore(progress.score);
+
+    setTimeout(() => {
+      ui.showTransition(result.stopScore, result.country);
+      drawMap(progress.route);
+    }, 800);
 
     setTimeout(() => {
       ui.updateProgress(progress.stop, progress.totalStops);
@@ -136,7 +139,7 @@ function handleGuess(country) {
       ui.showClues(result.clues);
       showExtraClueButton();
       ui.showNeighbors(result.neighbors, handleGuess);
-    }, 1500);
+    }, 2200);
 
   } else {
     // Wrong guess

@@ -190,7 +190,7 @@ export function createCarmenUI(container, flagCodes) {
 
     showTransition(stopScore, country) {
       els.clues.innerHTML = '';
-      els.extraClueWrap.innerHTML = '';
+      els.hintBtn.style.display = 'none';
       els.neighbors.innerHTML = `
         <div class="carmen-transition">
           <div class="score-gained">+${stopScore} points</div>
