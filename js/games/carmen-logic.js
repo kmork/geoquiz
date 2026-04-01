@@ -6,10 +6,23 @@
  */
 
 const DIFFICULTY = {
-  rookie:    { stops: 4, lives: 5, cluesPerStop: 3, extraClues: Infinity },
-  detective: { stops: 6, lives: 3, cluesPerStop: 2, extraClues: 2 },
-  ace:       { stops: 8, lives: 2, cluesPerStop: 1, extraClues: 1 },
+  rookie:    { stops: 4, lives: 5, cluesPerStop: 3, extraClues: Infinity, investigations: 4, totalHours: 72 },
+  detective: { stops: 6, lives: 3, cluesPerStop: 2, extraClues: 2, investigations: 3, totalHours: 72 },
+  ace:       { stops: 8, lives: 2, cluesPerStop: 1, extraClues: 1, investigations: 2, totalHours: 64 },
 };
+
+const INVESTIGATION_COST_HOURS = 3; // hours per investigation
+const TRAVEL_COST_HOURS = 5;        // hours per travel between stops
+const EXTRA_CLUE_COST_HOURS = 2;    // hours per extra clue
+
+// Investigation locations and which clue types they provide
+const LOCATIONS = [
+  { id: 'airport',  emoji: '✈️', name: 'Airport',  clueTypes: ['geography'] },
+  { id: 'hotel',    emoji: '🏨', name: 'Hotel',    clueTypes: ['fact'] },
+  { id: 'market',   emoji: '🏪', name: 'Market',   clueTypes: ['fact', 'river_mountain'] },
+  { id: 'library',  emoji: '📚', name: 'Library',  clueTypes: ['empire', 'heritage'] },
+  { id: 'embassy',  emoji: '🏛️', name: 'Embassy',  clueTypes: ['heritage', 'geography'] },
+];
 
 // Demonym patterns for country-name redaction
 const DEMONYM_MAP = {
@@ -146,6 +159,87 @@ const THIEF_NAMES = [
   'Scarlet Cipher', 'Dr. Atlas', 'The Cartographer', 'Velvet Mask',
 ];
 
+// Suspect profiles for the warrant system
+const SUSPECTS = [
+  { name: 'Carmen Sandiego', hair: 'black', accessory: 'red trench coat', hobby: 'tango dancing', vehicle: 'red convertible' },
+  { name: 'Viktor Voss', hair: 'blond', accessory: 'monocle', hobby: 'chess', vehicle: 'submarine' },
+  { name: 'Natasha Petrova', hair: 'red', accessory: 'fur hat', hobby: 'ice skating', vehicle: 'snowmobile' },
+  { name: 'El Zorro', hair: 'black', accessory: 'mask', hobby: 'fencing', vehicle: 'black stallion' },
+  { name: 'The Shadow', hair: 'unknown', accessory: 'dark cloak', hobby: 'magic tricks', vehicle: 'motorcycle' },
+  { name: 'Lady Crimson', hair: 'auburn', accessory: 'ruby necklace', hobby: 'opera singing', vehicle: 'luxury yacht' },
+  { name: 'Phantom Fox', hair: 'silver', accessory: 'fox brooch', hobby: 'origami', vehicle: 'hang glider' },
+  { name: 'Raven', hair: 'black', accessory: 'feathered hat', hobby: 'bird watching', vehicle: 'hot air balloon' },
+  { name: 'Scarlet Cipher', hair: 'red', accessory: 'coded tattoo', hobby: 'cryptography', vehicle: 'sports car' },
+  { name: 'Dr. Atlas', hair: 'gray', accessory: 'vintage compass', hobby: 'cartography', vehicle: 'seaplane' },
+  { name: 'The Cartographer', hair: 'brown', accessory: 'leather satchel', hobby: 'mountaineering', vehicle: 'jeep' },
+  { name: 'Velvet Mask', hair: 'platinum', accessory: 'velvet gloves', hobby: 'ballroom dancing', vehicle: 'limousine' },
+];
+
+const SUSPECT_ATTRIBUTES = ['hair', 'accessory', 'hobby', 'vehicle'];
+
+const SUSPECT_CLUE_TEMPLATES = {
+  hair: (val) => `A witness saw someone with ${val} hair leaving the scene.`,
+  accessory: (val) => `The suspect was spotted wearing a ${val}.`,
+  hobby: (val) => `An informant says the thief is known for ${val}.`,
+  vehicle: (val) => `The getaway vehicle was described as a ${val}.`,
+};
+
+// Informant prefixes for clue presentation
+const INFORMANTS = [
+  { emoji: '🚕', prefix: 'A taxi driver told you' },
+  { emoji: '🏨', prefix: 'The hotel concierge mentioned' },
+  { emoji: '👮', prefix: 'A local officer reported' },
+  { emoji: '🧑‍🍳', prefix: 'A street food vendor said' },
+  { emoji: '📰', prefix: 'A newspaper seller whispered' },
+  { emoji: '🧳', prefix: 'A fellow traveler shared' },
+  { emoji: '🏛️', prefix: 'An embassy attaché noted' },
+  { emoji: '🧑‍✈️', prefix: 'An airline attendant revealed' },
+  { emoji: '📚', prefix: 'A librarian recalled' },
+  { emoji: '🎭', prefix: 'A street performer hinted' },
+  { emoji: '🛍️', prefix: 'A market vendor confided' },
+  { emoji: '⛵', prefix: 'A harbor captain observed' },
+  { emoji: '🧑‍🔬', prefix: 'A museum guide explained' },
+  { emoji: '🗞️', prefix: 'An old journalist mentioned' },
+  { emoji: '👨‍🏫', prefix: 'A university professor noted' },
+  { emoji: '🔔', prefix: 'A church bell-ringer said' },
+  { emoji: '🏪', prefix: 'A shopkeeper overheard' },
+  { emoji: '🚂', prefix: 'A train conductor recalled' },
+];
+
+// Thief taunts by game phase
+const THIEF_TAUNTS = {
+  early: [
+    "You'll never catch me!",
+    "I'm always three steps ahead, detective.",
+    "Is that the best ACME has to offer?",
+    "By the time you read this, I'll be long gone.",
+    "Better luck next country!",
+    "Catch me if you can!",
+  ],
+  mid: [
+    "Still following me? How persistent.",
+    "I have to admit, you're better than the last detective.",
+    "Getting warmer... or are you?",
+    "You're closer than I expected. Don't get used to it.",
+    "Not bad, detective. But I have a few tricks left.",
+    "Enjoy the scenery — I certainly am.",
+  ],
+  late: [
+    "How are you still on my trail?!",
+    "Fine, you're good. But I'm better.",
+    "I can hear your footsteps... getting closer.",
+    "This isn't over yet, detective!",
+    "You've earned my respect. But not my surrender.",
+  ],
+  wrongGuess: [
+    "Ha! Wrong turn, detective!",
+    "You just wasted precious time. Thanks!",
+    "That's not where I went. Try again!",
+    "Cold, very cold!",
+    "My grandmother could track better than you!",
+  ],
+};
+
 export class CarmenGameLogic {
   /**
    * @param {Object} config
@@ -211,7 +305,9 @@ export class CarmenGameLogic {
   reset() {
     this.route = [];
     this.artifact = null;
-    this.thiefName = THIEF_NAMES[Math.floor(Math.random() * THIEF_NAMES.length)];
+    // Pick the actual suspect (thief)
+    this.suspect = SUSPECTS[Math.floor(Math.random() * SUSPECTS.length)];
+    this.thiefName = '???'; // Unknown until identified
     this.currentStop = 0;
     this.score = 0;
     this.lives = this.diff.lives;
@@ -224,6 +320,15 @@ export class CarmenGameLogic {
     this.stopStartTime = null;
     this.gameOver = false;
     this.won = false;
+
+    // Shuffle suspect attributes for clue distribution across stops
+    this._suspectClueAttrs = [...SUSPECT_ATTRIBUTES].sort(() => Math.random() - 0.5);
+    this._suspectClueIndex = 0;
+    this._revealedAttrs = [];
+
+    // Time tracking (in-game hours)
+    this.hoursRemaining = this.diff.totalHours;
+    this.timeExpired = false;
   }
 
   /** Generate route and return the intro data. */
@@ -712,6 +817,165 @@ export class CarmenGameLogic {
       economy: '💰',
     };
     return map[category] || '📋';
+  }
+
+  // ─── Time Management ─────────────────────────────────────────
+
+  /** Spend in-game hours. Returns false if time ran out. */
+  spendTime(hours) {
+    this.hoursRemaining = Math.max(0, this.hoursRemaining - hours);
+    if (this.hoursRemaining <= 0) {
+      this.timeExpired = true;
+      this.gameOver = true;
+      this.won = false;
+    }
+    return !this.timeExpired;
+  }
+
+  /** Cost for investigating a location. */
+  getInvestigationCost() { return INVESTIGATION_COST_HOURS; }
+
+  /** Cost for traveling to next stop. */
+  getTravelCost() { return TRAVEL_COST_HOURS; }
+
+  /** Cost for requesting an extra clue. */
+  getExtraClueCost() { return EXTRA_CLUE_COST_HOURS; }
+
+  /** Get current time state. */
+  getTimeState() {
+    return {
+      hoursRemaining: this.hoursRemaining,
+      totalHours: this.diff.totalHours,
+      expired: this.timeExpired,
+    };
+  }
+
+  // ─── Suspect / Warrant System ────────────────────────────────
+
+  /** Get the next suspect identity clue for this stop (one per stop). Returns null if all revealed. */
+  getSuspectClue() {
+    if (this._suspectClueIndex >= this._suspectClueAttrs.length) return null;
+    const attr = this._suspectClueAttrs[this._suspectClueIndex];
+    this._suspectClueIndex++;
+    const value = this.suspect[attr];
+    this._revealedAttrs.push({ attr, value });
+    return {
+      text: SUSPECT_CLUE_TEMPLATES[attr](value),
+      icon: '🔍',
+      attr,
+      value,
+    };
+  }
+
+  /** Get a lineup of 4 suspects for the final stop (includes the real one). */
+  getSuspectLineup() {
+    const others = SUSPECTS.filter(s => s.name !== this.suspect.name);
+    // Pick 3 random others
+    const shuffled = others.sort(() => Math.random() - 0.5).slice(0, 3);
+    const lineup = [...shuffled, this.suspect].sort(() => Math.random() - 0.5);
+    return lineup;
+  }
+
+  /** Check if the player identified the correct suspect. */
+  identifySuspect(name) {
+    return name === this.suspect.name;
+  }
+
+  /** Get revealed suspect attributes for the dossier. */
+  getRevealedSuspectAttrs() {
+    return this._revealedAttrs;
+  }
+
+  // ─── Investigation Locations ─────────────────────────────────
+
+  /** Get available locations for the current stop. */
+  getLocations() {
+    return LOCATIONS;
+  }
+
+  /** Get the max investigations allowed per stop. */
+  getMaxInvestigations() {
+    return this.diff.investigations;
+  }
+
+  /** Investigate a location — returns a clue for that location type, or null. */
+  investigateLocation(locationId) {
+    if (this.gameOver) return null;
+
+    const location = LOCATIONS.find(l => l.id === locationId);
+    if (!location) return null;
+
+    const target = this.route[this.currentStop + 1];
+    const currentCountry = this.route[this.currentStop];
+    const neighborChoices = this.neighborsMap[currentCountry] || [];
+
+    // Try each clue type the location provides
+    for (const clueType of location.clueTypes) {
+      let clue = null;
+      switch (clueType) {
+        case 'geography':
+          clue = this._clueFromGeography(target, neighborChoices);
+          break;
+        case 'fact':
+          clue = this._clueFromFact(target);
+          break;
+        case 'heritage':
+          clue = this._clueFromHeritage(target);
+          break;
+        case 'river_mountain':
+          clue = this._clueFromRiverOrMountain(target);
+          break;
+        case 'empire':
+          clue = this._clueFromEmpire(target);
+          break;
+      }
+      if (clue && !this.usedClueIds.has(clue.id)) {
+        this.usedClueIds.add(clue.id);
+        return clue;
+      }
+    }
+
+    // Fallback: try any available clue
+    const fallbackGenerators = [
+      () => this._clueFromFact(target),
+      () => this._clueFromGeography(target, neighborChoices),
+      () => this._clueFromHeritage(target),
+      () => this._clueFromRiverOrMountain(target),
+      () => this._clueFromEmpire(target),
+    ];
+    for (const gen of fallbackGenerators) {
+      const clue = gen();
+      if (clue && !this.usedClueIds.has(clue.id)) {
+        this.usedClueIds.add(clue.id);
+        return clue;
+      }
+    }
+
+    return null;
+  }
+
+  // ─── Informants ──────────────────────────────────────────────
+
+  /** Pick a random informant for a clue. */
+  getInformant() {
+    return INFORMANTS[Math.floor(Math.random() * INFORMANTS.length)];
+  }
+
+  // ─── Thief Taunts ──────────────────────────────────────────
+
+  /** Get a taunt appropriate for the current game state. */
+  getTaunt(wrongGuess = false) {
+    if (wrongGuess) {
+      return this._pickRandom(THIEF_TAUNTS.wrongGuess);
+    }
+    const progress = this.currentStop / (this.route.length - 1);
+    if (progress < 0.4) return this._pickRandom(THIEF_TAUNTS.early);
+    if (progress < 0.75) return this._pickRandom(THIEF_TAUNTS.mid);
+    return this._pickRandom(THIEF_TAUNTS.late);
+  }
+
+  _pickRandom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
   }
 
   // ─── Scoring ────────────────────────────────────────────────

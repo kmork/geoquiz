@@ -1,5 +1,139 @@
 /* Where in the World? — Carmen Sandiego homage */
 
+/* ── Case Briefing Overlay ──────────────────────────── */
+.carmen-briefing-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 100;
+  animation: carmen-fade-in 0.4s ease-out;
+}
+
+.carmen-briefing-content {
+  position: relative;
+  max-width: 420px;
+  width: 90%;
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  background: var(--card-bg);
+  border: 2px solid var(--bad-color);
+  text-align: center;
+  animation: carmen-briefing-slide 0.5s ease-out;
+}
+
+@keyframes carmen-briefing-slide {
+  from { opacity: 0; transform: translateY(30px) scale(0.95); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.carmen-briefing-stamp {
+  position: absolute;
+  top: 20px;
+  right: -10px;
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--bad-color);
+  transform: rotate(12deg) scale(0);
+  opacity: 0;
+  letter-spacing: 3px;
+  text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+  pointer-events: none;
+}
+
+.carmen-briefing-stamp.animate {
+  animation: carmen-stamp 0.4s 0.3s ease-out forwards;
+}
+
+@keyframes carmen-stamp {
+  0%   { transform: rotate(12deg) scale(3); opacity: 0; }
+  60%  { transform: rotate(12deg) scale(0.9); opacity: 1; }
+  100% { transform: rotate(12deg) scale(1); opacity: 1; }
+}
+
+.carmen-briefing-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--text-muted);
+  margin-bottom: 1.2rem;
+  text-transform: uppercase;
+}
+
+.carmen-artifact-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--star-color);
+  margin-bottom: 0.3rem;
+}
+
+.carmen-artifact-name {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 0.25rem;
+  line-height: 1.3;
+}
+
+.carmen-artifact-origin {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 1.2rem;
+}
+
+.carmen-briefing-suspect {
+  margin-bottom: 1rem;
+}
+
+.carmen-suspect-badge {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--bad-color);
+  padding: 0.4rem 0.8rem;
+  border: 1px dashed var(--bad-color);
+  border-radius: 8px;
+  display: inline-block;
+  margin-bottom: 0.3rem;
+}
+
+.carmen-suspect-hint {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.carmen-briefing-mission {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.carmen-briefing-start {
+  padding: 0.65rem 1.5rem;
+  border-radius: 10px;
+  border: 1px solid var(--bad-color);
+  background: rgba(239, 68, 68, 0.15);
+  color: var(--bad-color);
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+}
+
+.carmen-briefing-start:hover {
+  background: rgba(239, 68, 68, 0.25);
+  transform: translateY(-1px);
+}
+
+.carmen-briefing-start:active {
+  transform: translateY(0);
+}
+
 /* ── Narrative / Story ───────────────────────────────── */
 .carmen-narrative {
   text-align: center;
@@ -48,6 +182,133 @@
 .carmen-progress {
   font-size: 0.85rem;
   color: var(--text-muted);
+}
+
+.carmen-clock {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-color);
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  background: var(--button-bg);
+  border: 1px solid var(--button-border);
+  transition: color 0.3s, border-color 0.3s, background 0.3s;
+}
+
+.carmen-clock.low {
+  color: var(--star-color);
+  border-color: rgba(251, 191, 36, 0.4);
+  background: rgba(251, 191, 36, 0.1);
+}
+
+.carmen-clock.critical {
+  color: var(--bad-color);
+  border-color: rgba(239, 68, 68, 0.4);
+  background: rgba(239, 68, 68, 0.1);
+  animation: carmen-clock-pulse 1s ease-in-out infinite;
+}
+
+@keyframes carmen-clock-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* ── Dossier Button & Panel ──────────────────────────── */
+.carmen-dossier-btn {
+  width: 36px;
+  height: 36px;
+  font-size: 1.1rem;
+  border-radius: 8px;
+  background: var(--button-bg);
+  border: 1px solid var(--button-border);
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carmen-dossier-btn:hover {
+  background: var(--button-hover);
+  transform: scale(1.05);
+}
+
+.carmen-dossier {
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  margin-bottom: 1rem;
+  overflow: hidden;
+  animation: carmen-clue-in 0.25s ease-out;
+}
+
+.carmen-dossier-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 0.85rem;
+  font-weight: 700;
+  font-size: 0.88rem;
+  border-bottom: 1px solid var(--card-border);
+  background: var(--button-bg);
+}
+
+.carmen-dossier-close {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 0.2rem;
+}
+
+.carmen-dossier-close:hover {
+  color: var(--text-color);
+}
+
+.carmen-dossier-body {
+  padding: 0.6rem 0.85rem;
+  max-height: 200px;
+  overflow-y: auto;
+  font-size: 0.85rem;
+  line-height: 1.45;
+}
+
+.carmen-dossier-stop {
+  font-weight: 700;
+  font-size: 0.78rem;
+  color: var(--star-color);
+  letter-spacing: 1px;
+  margin-top: 0.6rem;
+  margin-bottom: 0.25rem;
+  text-transform: uppercase;
+}
+
+.carmen-dossier-stop:first-child {
+  margin-top: 0;
+}
+
+.carmen-dossier-entry {
+  padding: 0.25rem 0;
+  border-bottom: 1px solid var(--card-border);
+}
+
+.carmen-dossier-entry:last-child {
+  border-bottom: none;
+}
+
+.carmen-dossier-prefix {
+  font-weight: 600;
+  color: var(--text-muted);
+  font-style: italic;
+  font-size: 0.8rem;
+}
+
+.carmen-dossier-empty {
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+  padding: 0.5rem 0;
 }
 
 /* ── Map ─────────────────────────────────────────────── */
@@ -121,6 +382,172 @@
 .carmen-clue-text {
   font-size: 0.92rem;
   line-height: 1.45;
+}
+
+/* ── Informant Clue Style ───────────────────────────── */
+.carmen-informant {
+  text-align: left;
+}
+
+.carmen-informant-header {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
+}
+
+.carmen-informant-emoji {
+  font-size: 1.2rem;
+}
+
+.carmen-informant-prefix {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+.carmen-informant-bubble {
+  position: relative;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  background: var(--button-bg);
+  border: 1px solid var(--button-border);
+}
+
+.carmen-informant-bubble .carmen-clue-text {
+  font-style: italic;
+}
+
+/* ── Thief Taunts ───────────────────────────────────── */
+.carmen-taunt {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+  margin: 0.75rem 0 0.25rem;
+  padding: 0.6rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  text-align: left;
+  animation: carmen-taunt-in 0.4s ease-out;
+}
+
+@keyframes carmen-taunt-in {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+.carmen-taunt-silhouette {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.carmen-taunt-bubble {
+  font-size: 0.88rem;
+  font-style: italic;
+  line-height: 1.4;
+  color: var(--text-color);
+}
+
+.carmen-taunt-name {
+  font-weight: 700;
+  color: var(--bad-color);
+  font-style: normal;
+  margin-right: 0.3rem;
+}
+
+/* ── Wrong Guess Flash ──────────────────────────────── */
+.carmen-wrong-flash {
+  position: fixed;
+  inset: 0;
+  background: rgba(239, 68, 68, 0.15);
+  z-index: 50;
+  pointer-events: none;
+  animation: carmen-flash 0.35s ease-out forwards;
+}
+
+@keyframes carmen-flash {
+  0%   { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── Typewriter Cursor ──────────────────────────────── */
+.typewriter-active::after {
+  content: '▌';
+  animation: carmen-blink 0.6s step-end infinite;
+  color: var(--text-muted);
+}
+
+@keyframes carmen-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── Investigation Locations ─────────────────────────── */
+.carmen-locations-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+}
+
+.carmen-locations {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 0.45rem;
+  margin-bottom: 0.75rem;
+}
+
+.carmen-location-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.6rem 0.4rem;
+  border-radius: 10px;
+  background: var(--button-bg);
+  border: 2px solid var(--button-border);
+  color: var(--button-color);
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background 0.15s, border-color 0.2s, transform 0.15s, opacity 0.2s;
+}
+
+.carmen-location-btn:hover:not(:disabled) {
+  background: var(--button-hover);
+  border-color: var(--star-color);
+  transform: translateY(-2px);
+}
+
+.carmen-location-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.carmen-location-emoji {
+  font-size: 1.5rem;
+}
+
+.carmen-location-name {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.carmen-location-btn.investigated {
+  background: var(--correct-bg);
+  border-color: var(--good-color);
+  opacity: 0.6;
+  cursor: default;
+}
+
+.carmen-location-btn.investigated::after {
+  content: '✓';
+  font-size: 0.7rem;
+  color: var(--good-color);
+}
+
+.carmen-location-btn.exhausted {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 /* ── Hint Button (on map, matches #showHint style) ───── */
@@ -282,29 +709,115 @@
 
 @keyframes carmen-shake {
   0%, 100% { transform: translateX(0); }
-  20% { transform: translateX(-4px); }
-  40% { transform: translateX(4px); }
-  60% { transform: translateX(-3px); }
-  80% { transform: translateX(2px); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(3px); }
 }
 
-/* ── Transition overlay between stops ────────────────── */
-.carmen-transition {
+/* ── Suspect Lineup ──────────────────────────────────── */
+.carmen-lineup-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 100;
+  animation: carmen-fade-in 0.4s ease-out;
+  overflow-y: auto;
+  padding: 1rem;
+}
+
+.carmen-lineup-content {
+  max-width: 520px;
+  width: 100%;
   text-align: center;
-  padding: 1.5rem 1rem;
-  animation: carmen-fade-in 0.3s ease-out;
 }
 
-.carmen-transition .score-gained {
-  color: var(--good-color);
-  font-weight: 700;
-  font-size: 1.3rem;
+.carmen-lineup-title {
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: var(--star-color);
   margin-bottom: 0.3rem;
 }
 
-@keyframes carmen-fade-in {
-  from { opacity: 0; }
-  to   { opacity: 1; }
+.carmen-lineup-subtitle {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 1rem;
+}
+
+.carmen-lineup-attrs {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 0.6rem 0.85rem;
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.carmen-lineup-attrs-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.carmen-lineup-attr {
+  font-size: 0.85rem;
+  padding: 0.15rem 0;
+  color: var(--text-color);
+}
+
+.carmen-lineup-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.6rem;
+}
+
+.carmen-suspect-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  padding: 0.75rem 0.5rem;
+  border-radius: 12px;
+  background: var(--card-bg);
+  border: 2px solid var(--card-border);
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.15s, background 0.15s;
+}
+
+.carmen-suspect-card:hover {
+  border-color: var(--bad-color);
+  background: rgba(239, 68, 68, 0.08);
+  transform: translateY(-2px);
+}
+
+.carmen-suspect-card:active {
+  transform: translateY(0);
+}
+
+.carmen-suspect-silhouette {
+  font-size: 2rem;
+}
+
+.carmen-suspect-name {
+  font-weight: 700;
+  font-size: 0.88rem;
+  color: var(--bad-color);
+}
+
+.carmen-suspect-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+  font-size: 0.75rem;
+  color: var(--text-muted);
 }
 
 /* ── Game Over Specific ──────────────────────────────── */
@@ -340,5 +853,13 @@
 
   .carmen-clue-text {
     font-size: 0.85rem;
+  }
+
+  .carmen-briefing-content {
+    padding: 1.5rem 1rem;
+  }
+
+  .carmen-briefing-stamp {
+    font-size: 1.2rem;
   }
 }

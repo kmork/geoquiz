@@ -241,6 +241,96 @@ export class RouteRenderer {
   }
   
   /**
+   * Get the centroid of a country in SVG coordinates.
+   */
+  getCentroid(countryName) {
+    const features = findGeoFeatures(this.worldFeatures, countryName);
+    if (features.length === 0) return null;
+
+    const bb = this.bboxOfFeature(features[0]);
+    if (!bb) return null;
+
+    const centerLon = (bb.minLon + bb.maxLon) / 2;
+    const centerLat = (bb.minLat + bb.maxLat) / 2;
+    return this.proj([centerLon, centerLat]);
+  }
+
+  /**
+   * Animate a travel icon along a path between two countries.
+   * Returns a promise that resolves when the animation completes.
+   * @param {string} fromCountry
+   * @param {string} toCountry
+   * @param {number} duration — ms (default 1200)
+   */
+  animateTravel(fromCountry, toCountry, duration = 1200) {
+    return new Promise(resolve => {
+      const from = this.getCentroid(fromCountry);
+      const to = this.getCentroid(toCountry);
+      if (!from || !to) { resolve(); return; }
+
+      const ns = "http://www.w3.org/2000/svg";
+
+      // Dashed travel path
+      const line = document.createElementNS(ns, "line");
+      line.setAttribute("x1", from[0]);
+      line.setAttribute("y1", from[1]);
+      line.setAttribute("x2", to[0]);
+      line.setAttribute("y2", to[1]);
+      line.setAttribute("stroke", "rgba(251, 191, 36, 0.7)");
+      line.setAttribute("stroke-width", "2");
+      line.setAttribute("stroke-dasharray", "6,4");
+      line.setAttribute("vector-effect", "non-scaling-stroke");
+      line.style.opacity = "0";
+      this.svg.appendChild(line);
+
+      // Travel icon (plane emoji via foreignObject)
+      const icon = document.createElementNS(ns, "text");
+      icon.setAttribute("x", from[0]);
+      icon.setAttribute("y", from[1]);
+      icon.setAttribute("font-size", "14");
+      icon.setAttribute("text-anchor", "middle");
+      icon.setAttribute("dominant-baseline", "central");
+      icon.textContent = "✈";
+      this.svg.appendChild(icon);
+
+      // Animate
+      const startTime = performance.now();
+      let cancelled = false;
+
+      // Allow click to skip
+      const skipHandler = () => { cancelled = true; };
+      this.svg.addEventListener('click', skipHandler, { once: true });
+
+      const animate = (now) => {
+        const elapsed = now - startTime;
+        const t = Math.min(elapsed / duration, 1);
+        const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // easeInOutQuad
+
+        if (cancelled || t >= 1) {
+          line.remove();
+          icon.remove();
+          this.svg.removeEventListener('click', skipHandler);
+          resolve();
+          return;
+        }
+
+        // Show dashed line with growing opacity
+        line.style.opacity = String(Math.min(t * 3, 0.7));
+
+        // Move icon along path
+        const x = from[0] + (to[0] - from[0]) * eased;
+        const y = from[1] + (to[1] - from[1]) * eased;
+        icon.setAttribute("x", x);
+        icon.setAttribute("y", y);
+
+        requestAnimationFrame(animate);
+      };
+
+      requestAnimationFrame(animate);
+    });
+  }
+
+  /**
    * Clear the map
    */
   clear() {

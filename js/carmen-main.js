@@ -46,7 +46,9 @@ attachZoomPan(ui.mapSvg, () => baseViewBox);
 
 let logic;
 
-function startGame() {
+async function startGame() {
+  finalOverlay.style.display = 'none';
+
   logic = new CarmenGameLogic({
     countries: window.DATA,
     facts: factsData,
@@ -59,15 +61,25 @@ function startGame() {
 
   const intro = logic.start();
 
+  // Show case briefing first
+  await ui.showCaseBriefing(intro.artifact, intro.startCountry);
+
   // Draw starting country on map
   drawMap(intro.progress.route);
 
-  // Update UI
-  ui.showIntro(intro.thiefName, intro.artifact, intro.startCountry);
+  // Update UI — thief identity unknown
+  ui.showIntro('A mysterious thief', intro.artifact, intro.startCountry);
   ui.updateScore(intro.progress.score);
   ui.updateLives(intro.progress.lives, intro.progress.maxLives);
   ui.updateProgress(intro.progress.stop, intro.progress.totalStops);
-  ui.showClues(intro.clues);
+  updateClock();
+
+  // Reset dossier for new game
+  ui.resetDossier();
+
+  // Show investigation locations instead of pre-generated clues
+  showInvestigationLocations();
+  ui.showClues([], []);
   showExtraClueButton();
   ui.showNeighbors(intro.neighbors, handleGuess);
 }
@@ -88,14 +100,60 @@ function drawMap(visitedCountries) {
   baseViewBox = { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
 }
 
+function updateClock() {
+  const ts = logic.getTimeState();
+  ui.updateClock(ts.hoursRemaining, ts.totalHours);
+}
+
+function checkTimeExpired() {
+  if (logic.timeExpired) {
+    ui.disableAllNeighbors();
+    ui.hideLocations();
+    setTimeout(() => showFinish(), 500);
+    return true;
+  }
+  return false;
+}
+
+function showInvestigationLocations() {
+  const locations = logic.getLocations();
+  const maxInvestigations = logic.getMaxInvestigations();
+
+  // Show a suspect identity clue at the start of each stop
+  const suspectClue = logic.getSuspectClue();
+  if (suspectClue) {
+    ui.addClue(suspectClue, { emoji: '🔍', prefix: 'Witness report' });
+    ui.addDossierEntry(logic.currentStop, suspectClue.text, 'Witness report');
+  }
+
+  ui.showLocations(locations, maxInvestigations, (locationId) => {
+    // Each investigation costs time
+    logic.spendTime(logic.getInvestigationCost());
+    updateClock();
+    if (checkTimeExpired()) return;
+
+    const clue = logic.investigateLocation(locationId);
+    if (clue) {
+      const informant = logic.getInformant();
+      ui.addClue(clue, informant);
+      ui.addDossierEntry(logic.currentStop, clue.text, informant.prefix);
+    }
+  });
+}
+
 function showExtraClueButton() {
-  const extra = logic.requestExtraClue.bind(logic);
-  // Check if extra clues are available by peeking at diff settings
   const canExtra = logic.extraCluesUsed < logic.diff.extraClues;
   ui.showExtraClueButton(canExtra, () => {
+    // Extra clue costs time
+    logic.spendTime(logic.getExtraClueCost());
+    updateClock();
+    if (checkTimeExpired()) return;
+
     const clue = logic.requestExtraClue();
     if (clue) {
-      ui.addClue(clue);
+      const informant = logic.getInformant();
+      ui.addClue(clue, informant);
+      ui.addDossierEntry(logic.currentStop, clue.text, informant.prefix);
       ui.updateScore(logic.getProgress().score);
     }
     // Disable if no more extras allowed or no clues left to show
@@ -113,35 +171,65 @@ function handleGuess(country) {
     ui.disableAllNeighbors();
 
     if (result.gameOver && result.won) {
-      // Caught the thief!
+      // Found the thief's location — now identify them!
       const progress = logic.getProgress();
       drawMap(logic.route);
       ui.updateScore(progress.score);
       ui.updateProgress(progress.stop, progress.totalStops);
 
-      setTimeout(() => showFinish(), 1500);
-      confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2, count: 100 });
+      // Show suspect lineup before declaring victory
+      setTimeout(async () => {
+        const lineup = logic.getSuspectLineup();
+        const revealedAttrs = logic.getRevealedSuspectAttrs();
+        const chosenName = await ui.showSuspectLineup(lineup, revealedAttrs);
+        const correct = logic.identifySuspect(chosenName);
+
+        if (correct) {
+          // Correct identification — full victory!
+          confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2, count: 100 });
+          showFinish(true, chosenName);
+        } else {
+          // Wrong suspect — thief escapes with reduced score
+          logic.score = Math.max(0, logic.score - 200);
+          showFinish(false, chosenName);
+        }
+      }, 1200);
       return;
     }
 
-    // Show highlight, then overlay with continue button
+    // Show highlight, then animate travel and show transition overlay
     const progress = result.progress;
     ui.updateScore(progress.score);
 
-    setTimeout(() => {
+    // Get a taunt from the thief
+    const taunt = logic.getTaunt();
+
+    // Animate travel from previous position to guessed country
+    const fromCountry = progress.route[progress.route.length - 2] || progress.route[0];
+    const toCountry = result.country;
+
+    setTimeout(async () => {
+      // Travel costs time
+      logic.spendTime(logic.getTravelCost());
+      updateClock();
+      if (checkTimeExpired()) return;
+
+      await renderer.animateTravel(fromCountry, toCountry);
       drawMap(progress.route);
-      ui.showTransition(result.stopScore, result.country, () => {
+      ui.showTransition(result.stopScore, result.country, taunt, 'The thief', () => {
         ui.updateProgress(progress.stop, progress.totalStops);
         ui.showStopNarrative(progress.stop, progress.totalStops);
-        ui.showClues(result.clues);
+        ui.showClues([], []);
+        showInvestigationLocations();
         showExtraClueButton();
         ui.showNeighbors(result.neighbors, handleGuess);
       });
-    }, 800);
+    }, 600);
 
   } else {
     // Wrong guess
     ui.highlightNeighbor(country, false);
+    ui.flashWrong();
     const progress = result.progress;
     ui.updateScore(progress.score);
     ui.updateLives(progress.lives, progress.maxLives);
@@ -156,10 +244,21 @@ function handleGuess(country) {
   }
 }
 
-function showFinish() {
+function showFinish(identifiedCorrectly, chosenSuspect) {
   const results = logic.getResults();
 
   finalOverlay.style.display = 'flex';
+
+  const stats = [
+    { label: 'Stops', value: `${results.stopsCompleted}/${results.totalStops}` },
+    { label: 'Wrong guesses', value: results.totalWrongGuesses },
+  ];
+  if (chosenSuspect !== undefined) {
+    stats.push({
+      label: 'Suspect ID',
+      value: identifiedCorrectly ? '✓ Correct' : `✗ Wrong (was ${logic.suspect.name})`,
+    });
+  }
 
   renderFinishScreen(finalOverlay, {
     gameId,
@@ -168,10 +267,7 @@ function showFinish() {
     maxScore: results.maxScore,
     time: results.time,
     accuracy: results.accuracy,
-    stats: [
-      { label: 'Stops', value: `${results.stopsCompleted}/${results.totalStops}` },
-      { label: 'Wrong guesses', value: results.totalWrongGuesses },
-    ],
+    stats,
     shareUrl: `geoquiz.info${location.pathname}${location.search}`,
     onPlayAgain: () => {
       startGame();

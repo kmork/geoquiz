@@ -3,6 +3,37 @@
  */
 
 /**
+ * Typewriter effect — reveals text letter-by-letter.
+ * Returns a promise that resolves when done. Click skips to full text.
+ */
+function typewriter(element, text, speed = 25) {
+  return new Promise(resolve => {
+    element.textContent = '';
+    element.classList.add('typewriter-active');
+    let i = 0;
+    let skip = false;
+
+    function onClick() {
+      skip = true;
+    }
+    element.addEventListener('click', onClick);
+
+    function tick() {
+      if (skip || i >= text.length) {
+        element.textContent = text;
+        element.classList.remove('typewriter-active');
+        element.removeEventListener('click', onClick);
+        resolve();
+        return;
+      }
+      element.textContent += text[i++];
+      setTimeout(tick, speed);
+    }
+    tick();
+  });
+}
+
+/**
  * Build the full game UI inside the given container.
  * Returns an API object with methods to update each section.
  *
@@ -12,10 +43,32 @@
 export function createCarmenUI(container, flagCodes) {
   // Build skeleton
   container.innerHTML = `
+    <div class="carmen-briefing-overlay" id="carmen-briefing" style="display:none">
+      <div class="carmen-briefing-content">
+        <div class="carmen-briefing-stamp">CLASSIFIED</div>
+        <div class="carmen-briefing-label">CASE BRIEFING</div>
+        <div class="carmen-briefing-artifact" id="carmen-briefing-artifact"></div>
+        <div class="carmen-briefing-suspect">
+          <div class="carmen-suspect-badge">🔍 SUSPECT: UNKNOWN</div>
+          <div class="carmen-suspect-hint">Gather clues to identify the thief</div>
+        </div>
+        <div class="carmen-briefing-mission" id="carmen-briefing-mission"></div>
+        <button class="carmen-briefing-start" id="carmen-briefing-start">Accept Mission →</button>
+      </div>
+    </div>
     <div class="carmen-status-bar">
       <div class="carmen-lives" id="carmen-lives"></div>
       <div class="pill">Score: <b id="carmen-score">0</b></div>
       <div class="carmen-progress" id="carmen-progress"></div>
+      <div class="carmen-clock" id="carmen-clock"></div>
+      <button class="carmen-dossier-btn" id="carmen-dossier-btn" title="Case Dossier">📋</button>
+    </div>
+    <div class="carmen-dossier" id="carmen-dossier" style="display:none">
+      <div class="carmen-dossier-header">
+        <span>📋 Case Dossier</span>
+        <button class="carmen-dossier-close" id="carmen-dossier-close">✕</button>
+      </div>
+      <div class="carmen-dossier-body" id="carmen-dossier-body"></div>
     </div>
     <div class="carmen-narrative" id="carmen-narrative"></div>
     <div class="carmen-map-wrap">
@@ -23,16 +76,29 @@ export function createCarmenUI(container, flagCodes) {
       <div class="carmen-map-sidebar" id="carmen-map-sidebar"></div>
       <button class="carmen-map-hint" id="carmen-map-hint" title="Extra Clue (-20 pts)"></button>
     </div>
+    <div class="carmen-locations-label" id="carmen-locations-label" style="display:none">Investigate a location:</div>
+    <div class="carmen-locations" id="carmen-locations"></div>
     <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
     <div class="carmen-neighbors-label" id="carmen-neighbors-label">Where did the thief go?</div>
     <div class="carmen-neighbors" id="carmen-neighbors"></div>
   `;
 
   const els = {
+    briefing: container.querySelector('#carmen-briefing'),
+    briefingArtifact: container.querySelector('#carmen-briefing-artifact'),
+    briefingMission: container.querySelector('#carmen-briefing-mission'),
+    briefingStart: container.querySelector('#carmen-briefing-start'),
     narrative: container.querySelector('#carmen-narrative'),
     lives: container.querySelector('#carmen-lives'),
     score: container.querySelector('#carmen-score'),
     progress: container.querySelector('#carmen-progress'),
+    clock: container.querySelector('#carmen-clock'),
+    dossierBtn: container.querySelector('#carmen-dossier-btn'),
+    dossier: container.querySelector('#carmen-dossier'),
+    dossierBody: container.querySelector('#carmen-dossier-body'),
+    dossierClose: container.querySelector('#carmen-dossier-close'),
+    locationsLabel: container.querySelector('#carmen-locations-label'),
+    locations: container.querySelector('#carmen-locations'),
     map: container.querySelector('#carmen-map'),
     mapWrap: container.querySelector('.carmen-map-wrap'),
     sidebar: container.querySelector('#carmen-map-sidebar'),
@@ -48,8 +114,83 @@ export function createCarmenUI(container, flagCodes) {
     return `<img src="img/flags/${code}.svg" alt="" loading="lazy">`;
   }
 
+  // Dossier state
+  const dossierEntries = []; // [{stop, clueText, informantPrefix}]
+
+  // Toggle dossier panel
+  els.dossierBtn.addEventListener('click', () => {
+    const showing = els.dossier.style.display !== 'none';
+    els.dossier.style.display = showing ? 'none' : '';
+  });
+  els.dossierClose.addEventListener('click', () => {
+    els.dossier.style.display = 'none';
+  });
+
+  function renderDossier() {
+    if (dossierEntries.length === 0) {
+      els.dossierBody.innerHTML = '<div class="carmen-dossier-empty">No clues gathered yet. Investigate locations to find leads.</div>';
+      return;
+    }
+    // Group by stop
+    const byStop = {};
+    for (const entry of dossierEntries) {
+      if (!byStop[entry.stop]) byStop[entry.stop] = [];
+      byStop[entry.stop].push(entry);
+    }
+    let html = '';
+    for (const [stop, entries] of Object.entries(byStop)) {
+      html += `<div class="carmen-dossier-stop">Stop ${Number(stop) + 1}</div>`;
+      for (const e of entries) {
+        html += `<div class="carmen-dossier-entry">
+          <span class="carmen-dossier-prefix">${esc(e.informantPrefix || 'Clue')}:</span>
+          <span>${esc(e.clueText)}</span>
+        </div>`;
+      }
+    }
+    els.dossierBody.innerHTML = html;
+    // Auto-scroll to bottom
+    els.dossierBody.scrollTop = els.dossierBody.scrollHeight;
+  }
+
   return {
     get mapSvg() { return els.map; },
+
+    /** Add a clue to the dossier. */
+    addDossierEntry(stop, clueText, informantPrefix) {
+      dossierEntries.push({ stop, clueText, informantPrefix });
+      renderDossier();
+    },
+
+    /** Reset the dossier for a new game. */
+    resetDossier() {
+      dossierEntries.length = 0;
+      renderDossier();
+    },
+
+    /** Show dramatic case briefing overlay. Returns a promise that resolves when player clicks start. */
+    showCaseBriefing(artifact, startCountry) {
+      return new Promise(resolve => {
+        const siteName = artifact.siteName || 'a priceless artifact';
+        els.briefingArtifact.innerHTML = `
+          <div class="carmen-artifact-label">STOLEN ARTIFACT</div>
+          <div class="carmen-artifact-name">${esc(siteName)}</div>
+          <div class="carmen-artifact-origin">Last seen in ${esc(startCountry)}</div>
+        `;
+        els.briefing.style.display = 'flex';
+        typewriter(els.briefingMission, 'Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.', 20);
+
+        // Animate stamp
+        const stamp = els.briefing.querySelector('.carmen-briefing-stamp');
+        stamp.classList.remove('animate');
+        void stamp.offsetWidth; // force reflow
+        stamp.classList.add('animate');
+
+        els.briefingStart.onclick = () => {
+          els.briefing.style.display = 'none';
+          resolve();
+        };
+      });
+    },
 
     showIntro(thiefName, artifact, startCountry) {
       const siteName = artifact.siteName || 'a priceless artifact';
@@ -85,11 +226,24 @@ export function createCarmenUI(container, flagCodes) {
       els.progress.textContent = `Stop ${stop + 1} of ${total}`;
     },
 
-    showClues(clues) {
+    updateClock(hoursRemaining, totalHours) {
+      const days = Math.floor(hoursRemaining / 24);
+      const hours = hoursRemaining % 24;
+      els.clock.textContent = `⏰ ${days}d ${hours}h`;
+      // Pulse when low
+      const pct = hoursRemaining / totalHours;
+      els.clock.classList.toggle('low', pct < 0.25);
+      els.clock.classList.toggle('critical', pct < 0.12);
+    },
+
+    showClues(clues, informants) {
       this._clueData = [...clues];
-      els.sidebar.innerHTML = clues.map((c, i) =>
-        `<button class="carmen-clue-icon" data-index="${i}">${c.icon}</button>`
-      ).join('');
+      this._informants = informants || [];
+      els.sidebar.innerHTML = clues.map((c, i) => {
+        const inf = this._informants[i];
+        const icon = inf ? inf.emoji : c.icon;
+        return `<button class="carmen-clue-icon" data-index="${i}">${icon}</button>`;
+      }).join('');
       els.reveal.style.display = 'none';
       els.reveal.innerHTML = '';
       this._bindClueIcons();
@@ -99,12 +253,28 @@ export function createCarmenUI(container, flagCodes) {
     _bindClueIcons() {
       const icons = els.sidebar.querySelectorAll('.carmen-clue-icon');
       const clues = this._clueData;
+      const informants = this._informants;
 
       icons.forEach((icon, i) => {
         icon.addEventListener('click', () => {
           icons.forEach(ic => ic.classList.remove('active'));
           icon.classList.add('active');
-          els.reveal.innerHTML = `<span class="carmen-clue-text">${esc(clues[i].text)}</span>`;
+          const inf = informants[i];
+          if (inf) {
+            els.reveal.innerHTML = `
+              <div class="carmen-informant">
+                <div class="carmen-informant-header">
+                  <span class="carmen-informant-emoji">${inf.emoji}</span>
+                  <span class="carmen-informant-prefix">${esc(inf.prefix)}:</span>
+                </div>
+                <div class="carmen-informant-bubble">
+                  <span class="carmen-clue-text">"${esc(clues[i].text)}"</span>
+                </div>
+              </div>
+            `;
+          } else {
+            els.reveal.innerHTML = `<span class="carmen-clue-text">${esc(clues[i].text)}</span>`;
+          }
           els.reveal.style.display = '';
         });
       });
@@ -118,25 +288,91 @@ export function createCarmenUI(container, flagCodes) {
       els.mapWrap.style.minHeight = needed + 'px';
     },
 
-    addClue(clue) {
+    addClue(clue, informant) {
       this._clueData.push(clue);
+      if (informant) this._informants.push(informant);
+      else this._informants.push(null);
       const index = this._clueData.length - 1;
       const btn = document.createElement('button');
       btn.className = 'carmen-clue-icon';
       btn.dataset.index = index;
-      btn.textContent = clue.icon;
+      btn.textContent = informant ? informant.emoji : clue.icon;
       els.sidebar.appendChild(btn);
 
+      const inf = informant;
       btn.addEventListener('click', () => {
         els.sidebar.querySelectorAll('.carmen-clue-icon').forEach(ic => ic.classList.remove('active'));
         btn.classList.add('active');
-        els.reveal.innerHTML = `<span class="carmen-clue-text">${esc(clue.text)}</span>`;
+        if (inf) {
+          els.reveal.innerHTML = `
+            <div class="carmen-informant">
+              <div class="carmen-informant-header">
+                <span class="carmen-informant-emoji">${inf.emoji}</span>
+                <span class="carmen-informant-prefix">${esc(inf.prefix)}:</span>
+              </div>
+              <div class="carmen-informant-bubble">
+                <span class="carmen-clue-text">"${esc(clue.text)}"</span>
+              </div>
+            </div>
+          `;
+        } else {
+          els.reveal.innerHTML = `<span class="carmen-clue-text">${esc(clue.text)}</span>`;
+        }
         els.reveal.style.display = '';
       });
 
       this._updateMapMinHeight();
       // Auto-reveal the new clue
       btn.click();
+    },
+
+    /**
+     * Show investigation location cards.
+     * @param {Array} locations — [{id, emoji, name}]
+     * @param {number} maxInvestigations — how many the player can pick
+     * @param {Function} onInvestigate — called with (locationId) when player picks a location
+     */
+    showLocations(locations, maxInvestigations, onInvestigate) {
+      this._investigationsLeft = maxInvestigations;
+      this._investigatedIds = new Set();
+      els.locationsLabel.style.display = '';
+      els.locationsLabel.textContent = `Investigate a location (${this._investigationsLeft} remaining):`;
+      els.locations.innerHTML = locations.map(loc => `
+        <button class="carmen-location-btn" data-location="${loc.id}">
+          <span class="carmen-location-emoji">${loc.emoji}</span>
+          <span class="carmen-location-name">${loc.name}</span>
+        </button>
+      `).join('');
+
+      els.locations.querySelectorAll('.carmen-location-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const locId = btn.dataset.location;
+          if (this._investigatedIds.has(locId) || this._investigationsLeft <= 0) return;
+
+          this._investigatedIds.add(locId);
+          this._investigationsLeft--;
+          btn.classList.add('investigated');
+          btn.disabled = true;
+          els.locationsLabel.textContent = this._investigationsLeft > 0
+            ? `Investigate a location (${this._investigationsLeft} remaining):`
+            : 'No investigations left — make your guess!';
+
+          onInvestigate(locId);
+
+          // Disable all if no investigations left
+          if (this._investigationsLeft <= 0) {
+            els.locations.querySelectorAll('.carmen-location-btn:not(.investigated)').forEach(b => {
+              b.disabled = true;
+              b.classList.add('exhausted');
+            });
+          }
+        });
+      });
+    },
+
+    hideLocations() {
+      els.locationsLabel.style.display = 'none';
+      els.locations.innerHTML = '';
     },
 
     showExtraClueButton(enabled, onClick) {
@@ -180,6 +416,14 @@ export function createCarmenUI(container, flagCodes) {
       }
     },
 
+    /** Flash the screen red on wrong guess */
+    flashWrong() {
+      const flash = document.createElement('div');
+      flash.className = 'carmen-wrong-flash';
+      container.appendChild(flash);
+      flash.addEventListener('animationend', () => flash.remove());
+    },
+
     disableAllNeighbors() {
       els.neighbors.querySelectorAll('.carmen-neighbor-btn').forEach(b => b.disabled = true);
     },
@@ -189,21 +433,92 @@ export function createCarmenUI(container, flagCodes) {
       els.neighborsLabel.style.display = 'none';
     },
 
-    showTransition(stopScore, country, onContinue) {
+    /**
+     * Show suspect lineup for final identification.
+     * Returns a promise that resolves with the chosen suspect name.
+     */
+    showSuspectLineup(lineup, revealedAttrs) {
+      return new Promise(resolve => {
+        els.locationsLabel.style.display = 'none';
+        els.locations.innerHTML = '';
+        els.reveal.style.display = 'none';
+        els.neighborsLabel.style.display = 'none';
+        els.neighbors.innerHTML = '';
+        els.sidebar.innerHTML = '';
+        els.hintBtn.style.display = 'none';
+
+        const overlay = document.createElement('div');
+        overlay.className = 'carmen-lineup-overlay';
+
+        let attrsHtml = '';
+        if (revealedAttrs.length > 0) {
+          attrsHtml = `<div class="carmen-lineup-attrs">
+            <div class="carmen-lineup-attrs-label">What you know about the suspect:</div>
+            ${revealedAttrs.map(a => `<div class="carmen-lineup-attr">🔍 <strong>${a.attr}:</strong> ${esc(a.value)}</div>`).join('')}
+          </div>`;
+        }
+
+        overlay.innerHTML = `
+          <div class="carmen-lineup-content">
+            <div class="carmen-lineup-title">SUSPECT LINEUP</div>
+            <div class="carmen-lineup-subtitle">Issue a warrant — identify the thief!</div>
+            ${attrsHtml}
+            <div class="carmen-lineup-grid">
+              ${lineup.map(s => `
+                <button class="carmen-suspect-card" data-name="${esc(s.name)}">
+                  <div class="carmen-suspect-silhouette">🕵️</div>
+                  <div class="carmen-suspect-name">${esc(s.name)}</div>
+                  <div class="carmen-suspect-details">
+                    <span>Hair: ${esc(s.hair)}</span>
+                    <span>${esc(s.accessory)}</span>
+                    <span>${esc(s.hobby)}</span>
+                    <span>${esc(s.vehicle)}</span>
+                  </div>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+
+        container.appendChild(overlay);
+
+        overlay.querySelectorAll('.carmen-suspect-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const name = card.dataset.name;
+            overlay.remove();
+            resolve(name);
+          });
+        });
+      });
+    },
+
+    showTransition(stopScore, country, taunt, thiefName, onContinue) {
       els.sidebar.innerHTML = '';
       els.reveal.style.display = 'none';
       els.hintBtn.style.display = 'none';
       els.mapWrap.style.minHeight = '';
+      els.locationsLabel.style.display = 'none';
+      els.locations.innerHTML = '';
       els.neighborsLabel.style.display = 'none';
       els.neighbors.innerHTML = '';
 
       // Overlay on the map
       const overlay = document.createElement('div');
       overlay.className = 'carmen-map-overlay';
+      const tauntHtml = taunt ? `
+        <div class="carmen-taunt">
+          <div class="carmen-taunt-silhouette">🕵️</div>
+          <div class="carmen-taunt-bubble">
+            <span class="carmen-taunt-name">${esc(thiefName)}:</span>
+            "${esc(taunt)}"
+          </div>
+        </div>
+      ` : '';
       overlay.innerHTML = `
         <div class="carmen-transition">
           <div class="score-gained">+${stopScore} points</div>
           <div>The thief was spotted in <strong>${esc(country)}</strong>!</div>
+          ${tauntHtml}
           <button class="carmen-continue-btn">Continue the chase →</button>
         </div>
       `;
