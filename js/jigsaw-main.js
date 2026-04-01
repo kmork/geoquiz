@@ -9,7 +9,7 @@ const params = new URLSearchParams(location.search);
 const continentParam = params.get('continent');
 const mode = params.get('mode'); // 'major' or null
 const majorOnly = mode === 'major';
-const showNames = majorOnly; // Short mode shows names, Long mode hides them
+const showNames = false; // Hints off by default for all modes
 
 const diffSuffix = majorOnly ? 'short' : 'long';
 const continentSlug = continentParam ? continentParam.toLowerCase().replace(/\s+/g, '-') : null;
