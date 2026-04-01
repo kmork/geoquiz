@@ -15,13 +15,34 @@ const INVESTIGATION_COST_HOURS = 3; // hours per investigation
 const TRAVEL_COST_HOURS = 5;        // hours per travel between stops
 const EXTRA_CLUE_COST_HOURS = 2;    // hours per extra clue
 
-// Investigation locations and which clue types they provide
+// Investigation locations: clue types + location-specific informants
+// Each location only gives clues that thematically match the setting.
 const LOCATIONS = [
-  { id: 'airport',  emoji: '✈️', name: 'Airport',  clueTypes: ['geography'] },
-  { id: 'hotel',    emoji: '🏨', name: 'Hotel',    clueTypes: ['fact'] },
-  { id: 'market',   emoji: '🏪', name: 'Market',   clueTypes: ['fact', 'river_mountain'] },
-  { id: 'library',  emoji: '📚', name: 'Library',  clueTypes: ['empire', 'heritage'] },
-  { id: 'embassy',  emoji: '🏛️', name: 'Embassy',  clueTypes: ['heritage', 'geography'] },
+  { id: 'airport',  emoji: '✈️', name: 'Airport',  clueTypes: ['geography', 'river_mountain'], informants: [
+    { emoji: '🧑‍✈️', prefix: 'An airline attendant revealed' },
+    { emoji: '🧳', prefix: 'A fellow traveler shared' },
+    { emoji: '🚕', prefix: 'A taxi driver outside told you' },
+  ]},
+  { id: 'hotel',    emoji: '🏨', name: 'Hotel',    clueTypes: ['fact'], informants: [
+    { emoji: '🏨', prefix: 'The hotel concierge mentioned' },
+    { emoji: '🛎️', prefix: 'A bellhop whispered' },
+    { emoji: '🧹', prefix: 'A housekeeper recalled' },
+  ]},
+  { id: 'market',   emoji: '🏪', name: 'Market',   clueTypes: ['fact', 'river_mountain'], informants: [
+    { emoji: '🛍️', prefix: 'A market vendor confided' },
+    { emoji: '🧑‍🍳', prefix: 'A street food vendor said' },
+    { emoji: '🏪', prefix: 'A shopkeeper overheard' },
+  ]},
+  { id: 'library',  emoji: '📚', name: 'Library',  clueTypes: ['empire', 'heritage', 'fact'], informants: [
+    { emoji: '📚', prefix: 'A librarian recalled' },
+    { emoji: '👨‍🏫', prefix: 'A professor noted' },
+    { emoji: '🗞️', prefix: 'An old journalist mentioned' },
+  ]},
+  { id: 'embassy',  emoji: '🏛️', name: 'Embassy',  clueTypes: ['heritage', 'geography'], informants: [
+    { emoji: '🏛️', prefix: 'An embassy attaché noted' },
+    { emoji: '👮', prefix: 'A local officer reported' },
+    { emoji: '🧑‍💼', prefix: 'A diplomat mentioned' },
+  ]},
 ];
 
 // Demonym patterns for country-name redaction
@@ -183,28 +204,6 @@ const SUSPECT_CLUE_TEMPLATES = {
   hobby: (val) => `An informant says the thief is known for ${val}.`,
   vehicle: (val) => `The getaway vehicle was described as a ${val}.`,
 };
-
-// Informant prefixes for clue presentation
-const INFORMANTS = [
-  { emoji: '🚕', prefix: 'A taxi driver told you' },
-  { emoji: '🏨', prefix: 'The hotel concierge mentioned' },
-  { emoji: '👮', prefix: 'A local officer reported' },
-  { emoji: '🧑‍🍳', prefix: 'A street food vendor said' },
-  { emoji: '📰', prefix: 'A newspaper seller whispered' },
-  { emoji: '🧳', prefix: 'A fellow traveler shared' },
-  { emoji: '🏛️', prefix: 'An embassy attaché noted' },
-  { emoji: '🧑‍✈️', prefix: 'An airline attendant revealed' },
-  { emoji: '📚', prefix: 'A librarian recalled' },
-  { emoji: '🎭', prefix: 'A street performer hinted' },
-  { emoji: '🛍️', prefix: 'A market vendor confided' },
-  { emoji: '⛵', prefix: 'A harbor captain observed' },
-  { emoji: '🧑‍🔬', prefix: 'A museum guide explained' },
-  { emoji: '🗞️', prefix: 'An old journalist mentioned' },
-  { emoji: '👨‍🏫', prefix: 'A university professor noted' },
-  { emoji: '🔔', prefix: 'A church bell-ringer said' },
-  { emoji: '🏪', prefix: 'A shopkeeper overheard' },
-  { emoji: '🚂', prefix: 'A train conductor recalled' },
-];
 
 // Thief taunts by game phase
 const THIEF_TAUNTS = {
@@ -909,8 +908,10 @@ export class CarmenGameLogic {
     const currentCountry = this.route[this.currentStop];
     const neighborChoices = this.neighborsMap[currentCountry] || [];
 
-    // Try each clue type the location provides
-    for (const clueType of location.clueTypes) {
+    // Try each clue type the location provides (thematically matched)
+    // Shuffle so repeated visits to the same location type vary
+    const shuffledTypes = [...location.clueTypes].sort(() => Math.random() - 0.5);
+    for (const clueType of shuffledTypes) {
       let clue = null;
       switch (clueType) {
         case 'geography':
@@ -935,30 +936,20 @@ export class CarmenGameLogic {
       }
     }
 
-    // Fallback: try any available clue
-    const fallbackGenerators = [
-      () => this._clueFromFact(target),
-      () => this._clueFromGeography(target, neighborChoices),
-      () => this._clueFromHeritage(target),
-      () => this._clueFromRiverOrMountain(target),
-      () => this._clueFromEmpire(target),
-    ];
-    for (const gen of fallbackGenerators) {
-      const clue = gen();
-      if (clue && !this.usedClueIds.has(clue.id)) {
-        this.usedClueIds.add(clue.id);
-        return clue;
-      }
-    }
-
+    // No leads at this location for this destination
     return null;
   }
 
   // ─── Informants ──────────────────────────────────────────────
 
-  /** Pick a random informant for a clue. */
-  getInformant() {
-    return INFORMANTS[Math.floor(Math.random() * INFORMANTS.length)];
+  /** Pick a random informant matching the given location. */
+  getInformant(locationId) {
+    const location = LOCATIONS.find(l => l.id === locationId);
+    if (location && location.informants.length > 0) {
+      return location.informants[Math.floor(Math.random() * location.informants.length)];
+    }
+    // Fallback for non-location clues (e.g. suspect clues)
+    return { emoji: '🔍', prefix: 'A witness reported' };
   }
 
   // ─── Thief Taunts ──────────────────────────────────────────

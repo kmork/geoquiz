@@ -22,6 +22,7 @@
   border: 2px solid var(--bad-color);
   text-align: center;
   animation: carmen-briefing-slide 0.5s ease-out;
+  overflow: hidden;
 }
 
 @keyframes carmen-briefing-slide {
@@ -31,15 +32,17 @@
 
 .carmen-briefing-stamp {
   position: absolute;
-  top: 20px;
-  right: -10px;
-  font-size: 1.6rem;
+  top: 18px;
+  right: 16px;
+  font-size: 1.4rem;
   font-weight: 800;
   color: var(--bad-color);
+  border: 3px solid var(--bad-color);
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
   transform: rotate(12deg) scale(0);
   opacity: 0;
   letter-spacing: 3px;
-  text-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
   pointer-events: none;
 }
 
@@ -134,6 +137,30 @@
   transform: translateY(0);
 }
 
+/* ── Intro Row (side-by-side on first stop) ─────────── */
+.carmen-intro-row {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.carmen-intro-row.side-by-side {
+  flex-direction: row;
+  align-items: stretch;
+}
+
+.carmen-intro-row.side-by-side .carmen-narrative {
+  flex: 0 0 220px;
+  margin-bottom: 0;
+}
+
+.carmen-intro-row.side-by-side .carmen-map-wrap {
+  flex: 1;
+  min-width: 0;
+  margin-bottom: 0;
+}
+
 /* ── Narrative / Story ───────────────────────────────── */
 .carmen-narrative {
   text-align: center;
@@ -152,6 +179,52 @@
 .carmen-narrative .thief-name {
   color: var(--bad-color);
   font-weight: 700;
+}
+
+/* ── Intro Card (artifact + suspect info) ───────────── */
+.carmen-intro-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+}
+
+.carmen-intro-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--bad-color);
+  border: 1px solid var(--bad-color);
+  border-radius: 4px;
+  padding: 0.15rem 0.5rem;
+  display: inline-block;
+  align-self: flex-start;
+}
+
+.carmen-intro-artifact {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1.3;
+}
+
+.carmen-intro-origin {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+.carmen-intro-suspect {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 0.2rem;
+}
+
+.carmen-intro-mission {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  font-style: italic;
+  margin-top: 0.3rem;
+  line-height: 1.4;
 }
 
 /* ── Status Bar ──────────────────────────────────────── */
@@ -550,49 +623,6 @@
   cursor: not-allowed;
 }
 
-/* ── Hint Button (on map, matches #showHint style) ───── */
-.carmen-map-hint {
-  position: absolute;
-  bottom: 8px;
-  right: 8px;
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  padding: 0;
-  font-size: 0;
-  border: 2px solid rgba(251, 191, 36, 0.4);
-  border-radius: 10px;
-  background: rgba(251, 191, 36, 0.15);
-  cursor: pointer;
-  transition: all 0.2s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-}
-
-.carmen-map-hint::before {
-  content: "💡";
-  font-size: 20px;
-  line-height: 1;
-  filter: brightness(1.2) contrast(1.1);
-}
-
-.carmen-map-hint:hover:not(:disabled) {
-  background: rgba(251, 191, 36, 0.25);
-  border-color: rgba(251, 191, 36, 0.6);
-}
-
-.carmen-map-hint:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-}
-
-.carmen-map-hint:disabled:hover {
-  background: rgba(251, 191, 36, 0.15);
-  border-color: rgba(251, 191, 36, 0.4);
-}
-
 /* ── Map Overlay (correct guess transition) ──────────── */
 .carmen-map-overlay {
   position: absolute;
@@ -841,6 +871,16 @@
 }
 
 /* ── Responsive ──────────────────────────────────────── */
+@media (max-width: 600px) {
+  .carmen-intro-row.side-by-side {
+    flex-direction: column;
+  }
+
+  .carmen-intro-row.side-by-side .carmen-narrative {
+    flex: none;
+  }
+}
+
 @media (max-width: 480px) {
   .carmen-neighbors {
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));

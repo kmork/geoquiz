@@ -77,10 +77,9 @@ async function startGame() {
   // Reset dossier for new game
   ui.resetDossier();
 
-  // Show investigation locations instead of pre-generated clues
-  showInvestigationLocations();
+  // Clear old clues, then show investigation locations
   ui.showClues([], []);
-  showExtraClueButton();
+  showInvestigationLocations();
   ui.showNeighbors(intro.neighbors, handleGuess);
 }
 
@@ -134,34 +133,19 @@ function showInvestigationLocations() {
 
     const clue = logic.investigateLocation(locationId);
     if (clue) {
-      const informant = logic.getInformant();
+      const informant = logic.getInformant(locationId);
       ui.addClue(clue, informant);
       ui.addDossierEntry(logic.currentStop, clue.text, informant.prefix);
+    } else {
+      const informant = logic.getInformant(locationId);
+      ui.addClue(
+        { text: 'No new leads here.', icon: '❌' },
+        informant
+      );
     }
   });
 }
 
-function showExtraClueButton() {
-  const canExtra = logic.extraCluesUsed < logic.diff.extraClues;
-  ui.showExtraClueButton(canExtra, () => {
-    // Extra clue costs time
-    logic.spendTime(logic.getExtraClueCost());
-    updateClock();
-    if (checkTimeExpired()) return;
-
-    const clue = logic.requestExtraClue();
-    if (clue) {
-      const informant = logic.getInformant();
-      ui.addClue(clue, informant);
-      ui.addDossierEntry(logic.currentStop, clue.text, informant.prefix);
-      ui.updateScore(logic.getProgress().score);
-    }
-    // Disable if no more extras allowed or no clues left to show
-    if (!clue || logic.extraCluesUsed >= logic.diff.extraClues) {
-      ui.disableExtraClueButton();
-    }
-  });
-}
 
 function handleGuess(country) {
   const result = logic.guess(country);
@@ -221,7 +205,6 @@ function handleGuess(country) {
         ui.showStopNarrative(progress.stop, progress.totalStops);
         ui.showClues([], []);
         showInvestigationLocations();
-        showExtraClueButton();
         ui.showNeighbors(result.neighbors, handleGuess);
       });
     }, 600);

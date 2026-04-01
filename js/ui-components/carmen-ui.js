@@ -2,8 +2,10 @@
  * Carmen UI — DOM rendering for "Where in the World?" game.
  */
 
+import { playStamp, playTypeKey } from '../carmen-audio.js';
+
 /**
- * Typewriter effect — reveals text letter-by-letter.
+ * Typewriter effect — reveals text letter-by-letter with key sounds.
  * Returns a promise that resolves when done. Click skips to full text.
  */
 function typewriter(element, text, speed = 25) {
@@ -12,6 +14,7 @@ function typewriter(element, text, speed = 25) {
     element.classList.add('typewriter-active');
     let i = 0;
     let skip = false;
+    let keyCount = 0;
 
     function onClick() {
       skip = true;
@@ -26,7 +29,12 @@ function typewriter(element, text, speed = 25) {
         resolve();
         return;
       }
-      element.textContent += text[i++];
+      element.textContent += text[i];
+      // Play key sound every 2-3 characters to avoid audio overload
+      if (text[i] !== ' ' && keyCount++ % 2 === 0) {
+        playTypeKey();
+      }
+      i++;
       setTimeout(tick, speed);
     }
     tick();
@@ -70,11 +78,12 @@ export function createCarmenUI(container, flagCodes) {
       </div>
       <div class="carmen-dossier-body" id="carmen-dossier-body"></div>
     </div>
-    <div class="carmen-narrative" id="carmen-narrative"></div>
-    <div class="carmen-map-wrap">
-      <svg id="carmen-map" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"></svg>
-      <div class="carmen-map-sidebar" id="carmen-map-sidebar"></div>
-      <button class="carmen-map-hint" id="carmen-map-hint" title="Extra Clue (-20 pts)"></button>
+    <div class="carmen-intro-row" id="carmen-intro-row">
+      <div class="carmen-narrative" id="carmen-narrative"></div>
+      <div class="carmen-map-wrap">
+        <svg id="carmen-map" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"></svg>
+        <div class="carmen-map-sidebar" id="carmen-map-sidebar"></div>
+      </div>
     </div>
     <div class="carmen-locations-label" id="carmen-locations-label" style="display:none">Investigate a location:</div>
     <div class="carmen-locations" id="carmen-locations"></div>
@@ -88,6 +97,7 @@ export function createCarmenUI(container, flagCodes) {
     briefingArtifact: container.querySelector('#carmen-briefing-artifact'),
     briefingMission: container.querySelector('#carmen-briefing-mission'),
     briefingStart: container.querySelector('#carmen-briefing-start'),
+    introRow: container.querySelector('#carmen-intro-row'),
     narrative: container.querySelector('#carmen-narrative'),
     lives: container.querySelector('#carmen-lives'),
     score: container.querySelector('#carmen-score'),
@@ -102,7 +112,6 @@ export function createCarmenUI(container, flagCodes) {
     map: container.querySelector('#carmen-map'),
     mapWrap: container.querySelector('.carmen-map-wrap'),
     sidebar: container.querySelector('#carmen-map-sidebar'),
-    hintBtn: container.querySelector('#carmen-map-hint'),
     reveal: container.querySelector('#carmen-clue-reveal'),
     neighborsLabel: container.querySelector('#carmen-neighbors-label'),
     neighbors: container.querySelector('#carmen-neighbors'),
@@ -179,11 +188,12 @@ export function createCarmenUI(container, flagCodes) {
         els.briefing.style.display = 'flex';
         typewriter(els.briefingMission, 'Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.', 20);
 
-        // Animate stamp
+        // Animate stamp with sound
         const stamp = els.briefing.querySelector('.carmen-briefing-stamp');
         stamp.classList.remove('animate');
         void stamp.offsetWidth; // force reflow
         stamp.classList.add('animate');
+        setTimeout(() => playStamp(), 300); // sync with animation delay
 
         els.briefingStart.onclick = () => {
           els.briefing.style.display = 'none';
@@ -194,14 +204,22 @@ export function createCarmenUI(container, flagCodes) {
 
     showIntro(thiefName, artifact, startCountry) {
       const siteName = artifact.siteName || 'a priceless artifact';
+      // Side-by-side layout for intro: artifact card + map
+      els.introRow.classList.add('side-by-side');
       els.narrative.innerHTML = `
-        <span class="thief-name">${esc(thiefName)}</span> has stolen
-        <strong>${esc(siteName)}</strong> from ${esc(startCountry)}!<br>
-        Track the thief through neighboring countries.
+        <div class="carmen-intro-card">
+          <div class="carmen-intro-badge">ACTIVE CASE</div>
+          <div class="carmen-intro-artifact">${esc(siteName)}</div>
+          <div class="carmen-intro-origin">Stolen from <strong>${esc(startCountry)}</strong></div>
+          <div class="carmen-intro-suspect">🔍 Suspect: <span class="thief-name">Unknown</span></div>
+          <div class="carmen-intro-mission">Investigate locations, gather clues, and follow the trail.</div>
+        </div>
       `;
     },
 
     showStopNarrative(stopIndex, totalStops) {
+      // Collapse back to stacked layout for subsequent stops
+      els.introRow.classList.remove('side-by-side');
       const remaining = totalStops - stopIndex;
       if (remaining <= 1) {
         els.narrative.innerHTML = `The thief is cornered — this is the <strong>final stop</strong>!`;
@@ -375,22 +393,6 @@ export function createCarmenUI(container, flagCodes) {
       els.locations.innerHTML = '';
     },
 
-    showExtraClueButton(enabled, onClick) {
-      els.hintBtn.style.display = '';
-      els.hintBtn.disabled = !enabled;
-      // Remove old listener by cloning
-      const fresh = els.hintBtn.cloneNode(true);
-      els.hintBtn.replaceWith(fresh);
-      els.hintBtn = fresh;
-      if (enabled) {
-        fresh.addEventListener('click', onClick);
-      }
-    },
-
-    disableExtraClueButton() {
-      els.hintBtn.disabled = true;
-    },
-
     showNeighbors(neighbors, onPick) {
       els.neighborsLabel.style.display = '';
       els.neighbors.innerHTML = neighbors.map(name => `
@@ -445,7 +447,7 @@ export function createCarmenUI(container, flagCodes) {
         els.neighborsLabel.style.display = 'none';
         els.neighbors.innerHTML = '';
         els.sidebar.innerHTML = '';
-        els.hintBtn.style.display = 'none';
+
 
         const overlay = document.createElement('div');
         overlay.className = 'carmen-lineup-overlay';
@@ -495,7 +497,6 @@ export function createCarmenUI(container, flagCodes) {
     showTransition(stopScore, country, taunt, thiefName, onContinue) {
       els.sidebar.innerHTML = '';
       els.reveal.style.display = 'none';
-      els.hintBtn.style.display = 'none';
       els.mapWrap.style.minHeight = '';
       els.locationsLabel.style.display = 'none';
       els.locations.innerHTML = '';
