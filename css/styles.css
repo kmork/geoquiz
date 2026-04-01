@@ -2408,8 +2408,7 @@ html.light-mode .geo-bonus-overlay.wrong {
   }
   .jigsaw-tray {
     flex-wrap: nowrap;
-    overflow: visible;
-    overflow-x: scroll;
+    overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     padding: 8px 0;
     justify-content: flex-start;
@@ -2427,6 +2426,7 @@ html.light-mode .geo-bonus-overlay.wrong {
     height: 60px;
     padding: 4px;
     border-radius: 8px;
+    touch-action: pan-x;
   }
   .jigsaw-piece-label {
     font-size: 8px;

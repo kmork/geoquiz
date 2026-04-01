@@ -231,7 +231,6 @@ export async function createJigsawGame({
     const piece = document.createElement('div');
     piece.className = 'jigsaw-piece';
     piece.dataset.pieceIndex = idx;
-    if (!isMobile) piece.setAttribute('touch-action', 'none');
 
     const thumbSvg = document.createElementNS(SVG_NS, 'svg');
     thumbSvg.setAttribute('viewBox', `${tx1} ${ty1} ${tw} ${th}`);
