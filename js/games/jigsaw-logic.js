@@ -60,11 +60,13 @@ export class JigsawLogic {
     return { correct, snapX: piece.centroidX, snapY: piece.centroidY };
   }
 
-  markPlaced(index, hintsVisible) {
+  markPlaced(index, hintLevel) {
     const piece = this.pieces[index];
     piece.placed = true;
-    if (piece.firstAttempt && !hintsVisible) this.score += 2;
-    else if (piece.firstAttempt || !hintsVisible) this.score += 1;
+    // 3 pts base, −1 per hint level, −1 if not first attempt, min 0
+    let pts = 3 - hintLevel;
+    if (!piece.firstAttempt) pts -= 1;
+    this.score += Math.max(0, pts);
   }
 
   isComplete() {
@@ -73,11 +75,11 @@ export class JigsawLogic {
 
   getProgress() {
     const placed = this.pieces.filter(p => p.placed).length;
-    return { placed, total: this.pieces.length, maxScore: this.pieces.length * 2, score: this.score };
+    return { placed, total: this.pieces.length, maxScore: this.pieces.length * 3, score: this.score };
   }
 
   getAccuracy() {
-    const max = this.pieces.length * 2;
+    const max = this.pieces.length * 3;
     if (max === 0) return 100;
     return Math.round((this.score / max) * 100);
   }

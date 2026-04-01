@@ -2398,6 +2398,78 @@ html.light-mode .geo-bonus-overlay.wrong {
   80% { transform: translateX(4px); }
 }
 
+/* Continent hint colors — dark mode (subtle, same-style pastel fills) */
+:root {
+  --cont-af: rgba(251, 191, 36, 0.30);   /* amber — Africa */
+  --cont-as: rgba(248, 113, 113, 0.30);   /* rose — Asia */
+  --cont-eu: rgba(129, 140, 248, 0.30);   /* indigo — Europe */
+  --cont-am: rgba(168, 85, 247, 0.30);    /* purple — Americas */
+  --cont-na: rgba(52, 211, 153, 0.30);    /* emerald — N. America */
+  --cont-sa: rgba(168, 85, 247, 0.30);    /* purple — S. America */
+  --cont-oc: rgba(56, 189, 248, 0.30);    /* sky — Oceania */
+
+  --cont-af-solid: rgba(251, 191, 36, 0.55);
+  --cont-as-solid: rgba(248, 113, 113, 0.55);
+  --cont-eu-solid: rgba(129, 140, 248, 0.55);
+  --cont-am-solid: rgba(168, 85, 247, 0.55);
+  --cont-na-solid: rgba(52, 211, 153, 0.55);
+  --cont-sa-solid: rgba(168, 85, 247, 0.55);
+  --cont-oc-solid: rgba(56, 189, 248, 0.55);
+}
+html.light-mode {
+  --cont-af: rgba(251, 191, 36, 0.22);
+  --cont-as: rgba(248, 113, 113, 0.22);
+  --cont-eu: rgba(99, 102, 241, 0.22);
+  --cont-am: rgba(147, 51, 234, 0.22);
+  --cont-na: rgba(16, 185, 129, 0.22);
+  --cont-sa: rgba(147, 51, 234, 0.22);
+  --cont-oc: rgba(14, 165, 233, 0.22);
+
+  --cont-af-solid: rgba(251, 191, 36, 0.45);
+  --cont-as-solid: rgba(248, 113, 113, 0.45);
+  --cont-eu-solid: rgba(99, 102, 241, 0.45);
+  --cont-am-solid: rgba(147, 51, 234, 0.45);
+  --cont-na-solid: rgba(16, 185, 129, 0.45);
+  --cont-sa-solid: rgba(147, 51, 234, 0.45);
+  --cont-oc-solid: rgba(14, 165, 233, 0.45);
+}
+
+/* Apply continent colors when hint level >= 1 */
+.show-continent-colors .cont-af { fill: var(--cont-af); }
+.show-continent-colors .cont-as { fill: var(--cont-as); }
+.show-continent-colors .cont-eu { fill: var(--cont-eu); }
+.show-continent-colors .cont-am { fill: var(--cont-am); }
+.show-continent-colors .cont-na { fill: var(--cont-na); }
+.show-continent-colors .cont-sa { fill: var(--cont-sa); }
+.show-continent-colors .cont-oc { fill: var(--cont-oc); }
+
+/* Snapped pieces get a slightly stronger fill */
+.show-continent-colors .jigsaw-snapped.cont-af { fill: var(--cont-af-solid); }
+.show-continent-colors .jigsaw-snapped.cont-as { fill: var(--cont-as-solid); }
+.show-continent-colors .jigsaw-snapped.cont-eu { fill: var(--cont-eu-solid); }
+.show-continent-colors .jigsaw-snapped.cont-am { fill: var(--cont-am-solid); }
+.show-continent-colors .jigsaw-snapped.cont-na { fill: var(--cont-na-solid); }
+.show-continent-colors .jigsaw-snapped.cont-sa { fill: var(--cont-sa-solid); }
+.show-continent-colors .jigsaw-snapped.cont-oc { fill: var(--cont-oc-solid); }
+
+/* Ghost inherits continent color when hints active */
+.jigsaw-ghost.show-continent-colors .cont-af { fill: var(--cont-af-solid); }
+.jigsaw-ghost.show-continent-colors .cont-as { fill: var(--cont-as-solid); }
+.jigsaw-ghost.show-continent-colors .cont-eu { fill: var(--cont-eu-solid); }
+.jigsaw-ghost.show-continent-colors .cont-am { fill: var(--cont-am-solid); }
+.jigsaw-ghost.show-continent-colors .cont-na { fill: var(--cont-na-solid); }
+.jigsaw-ghost.show-continent-colors .cont-sa { fill: var(--cont-sa-solid); }
+.jigsaw-ghost.show-continent-colors .cont-oc { fill: var(--cont-oc-solid); }
+
+/* Tray piece backgrounds tinted by continent */
+.show-continent-colors .jigsaw-piece[data-continent="af"] { background: var(--cont-af); }
+.show-continent-colors .jigsaw-piece[data-continent="as"] { background: var(--cont-as); }
+.show-continent-colors .jigsaw-piece[data-continent="eu"] { background: var(--cont-eu); }
+.show-continent-colors .jigsaw-piece[data-continent="am"] { background: var(--cont-am); }
+.show-continent-colors .jigsaw-piece[data-continent="na"] { background: var(--cont-na); }
+.show-continent-colors .jigsaw-piece[data-continent="sa"] { background: var(--cont-sa); }
+.show-continent-colors .jigsaw-piece[data-continent="oc"] { background: var(--cont-oc); }
+
 @media (max-width: 600px) {
   .jigsaw-tray-wrap {
     gap: 0;

@@ -15,6 +15,20 @@ import { JigsawLogic } from './games/jigsaw-logic.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
 
+/** Map continent name → short CSS class suffix */
+function continentSlug(continent) {
+  const map = {
+    'Africa': 'af',
+    'Asia': 'as',
+    'Europe': 'eu',
+    'Americas': 'am',
+    'North America': 'na',
+    'South America': 'sa',
+    'Oceania': 'oc',
+  };
+  return map[continent] || 'oc';
+}
+
 /**
  * Compute the centroid (center of bounding box) in projected SVG coords
  * for a GeoJSON feature's mainland polygons.
@@ -68,6 +82,7 @@ export async function createJigsawGame({
     const [cx, cy] = featureCentroid(feature);
     piecesData.push({
       country: c.country,
+      continent: c.continent,
       feature,
       pathD: d,
       centroidX: cx,
@@ -158,23 +173,29 @@ export async function createJigsawGame({
   prevArrow.addEventListener('click', () => rotatePieces(-1));
   nextArrow.addEventListener('click', () => rotatePieces(1));
 
-  // Hint toggle: show/hide country names on pieces
+  // Hint toggle: cycle through 3 levels
+  // 0 = off (3 pts), 1 = country names (2 pts), 2 = names + continent colors (1 pt)
   const hintBtn = document.createElement('button');
   hintBtn.className = 'jigsaw-hint-btn';
   hintBtn.textContent = '💡';
-  hintBtn.title = 'Toggle country names';
+  hintBtn.title = 'Toggle hints';
   const mapwrap = svgEl.parentElement;
   mapwrap.style.position = 'relative';
   mapwrap.appendChild(hintBtn);
 
-  let hintsVisible = showNames;
-  if (showNames) trayEl.classList.add('show-labels');
+  let hintLevel = showNames ? 1 : 0;
 
-  hintBtn.classList.toggle('active', hintsVisible);
+  function applyHintLevel() {
+    trayEl.classList.toggle('show-labels', hintLevel >= 1);
+    trayEl.classList.toggle('show-continent-colors', hintLevel >= 2);
+    svgEl.classList.toggle('show-continent-colors', hintLevel >= 2);
+    hintBtn.classList.toggle('active', hintLevel > 0);
+  }
+  applyHintLevel();
+
   hintBtn.addEventListener('click', () => {
-    hintsVisible = !hintsVisible;
-    trayEl.classList.toggle('show-labels', hintsVisible);
-    hintBtn.classList.toggle('active', hintsVisible);
+    hintLevel = (hintLevel + 1) % 3;
+    applyHintLevel();
   });
 
   function shuffleArray(arr) {
@@ -209,11 +230,13 @@ export async function createJigsawGame({
     svgEl.innerHTML = '';
     svgEl.setAttribute('viewBox', `${vbX1} ${vbY1} ${vbW} ${vbH}`);
 
-    // Draw all countries as a single landmass — coastlines only, no internal borders
-    const allPaths = piecesData.map(p => p.pathD).join(' ');
-    const land = createPath(allPaths, 'jigsaw-land');
-    land.setAttribute('vector-effect', 'non-scaling-stroke');
-    svgEl.appendChild(land);
+    // Draw each country as an individual land shape (for continent coloring)
+    for (const p of piecesData) {
+      const slug = continentSlug(p.continent);
+      const land = createPath(p.pathD, `jigsaw-land cont-${slug}`);
+      land.setAttribute('vector-effect', 'non-scaling-stroke');
+      svgEl.appendChild(land);
+    }
   }
 
   // ─── Piece element creation ────────────────────────────────
@@ -228,9 +251,11 @@ export async function createJigsawGame({
     const tw = tx2 - tx1;
     const th = ty2 - ty1;
 
+    const slug = continentSlug(p.continent);
     const piece = document.createElement('div');
     piece.className = 'jigsaw-piece';
     piece.dataset.pieceIndex = idx;
+    piece.dataset.continent = slug;
 
     const thumbSvg = document.createElementNS(SVG_NS, 'svg');
     thumbSvg.setAttribute('viewBox', `${tx1} ${ty1} ${tw} ${th}`);
@@ -238,7 +263,7 @@ export async function createJigsawGame({
     thumbSvg.setAttribute('height', '100%');
     thumbSvg.style.pointerEvents = 'none';
 
-    const thumbPath = createPath(p.pathD, 'jigsaw-thumb-path');
+    const thumbPath = createPath(p.pathD, `jigsaw-thumb-path cont-${slug}`);
     thumbPath.setAttribute('vector-effect', 'non-scaling-stroke');
     thumbSvg.appendChild(thumbPath);
     piece.appendChild(thumbSvg);
@@ -315,7 +340,7 @@ export async function createJigsawGame({
 
     // Create ghost: a floating SVG of the country shape, sized to match the map
     ghostEl = document.createElement('div');
-    ghostEl.className = 'jigsaw-ghost';
+    ghostEl.className = hintLevel >= 2 ? 'jigsaw-ghost show-continent-colors' : 'jigsaw-ghost';
 
     // Use getScreenCTM to compute exact pixel size matching the map
     const ctm = svgEl.getScreenCTM();
@@ -341,7 +366,7 @@ export async function createJigsawGame({
     ghostSvg.setAttribute('height', '100%');
     ghostSvg.style.pointerEvents = 'none';
 
-    const ghostPath = createPath(p.pathD, 'jigsaw-ghost-path');
+    const ghostPath = createPath(p.pathD, `jigsaw-ghost-path cont-${continentSlug(p.continent)}`);
     ghostPath.setAttribute('vector-effect', 'non-scaling-stroke');
     ghostSvg.appendChild(ghostPath);
     ghostEl.appendChild(ghostSvg);
@@ -400,7 +425,7 @@ export async function createJigsawGame({
   }
 
   function snapPiece(idx, piece, ghost) {
-    logic.markPlaced(idx, hintsVisible);
+    logic.markPlaced(idx, hintLevel);
     const p = piecesData[idx];
 
     let finalized = false;
@@ -409,7 +434,8 @@ export async function createJigsawGame({
       finalized = true;
       if (ghost) { ghost.remove(); }
       playPing();
-      const snapped = createPath(p.pathD, 'jigsaw-snapped');
+      const slug = continentSlug(p.continent);
+      const snapped = createPath(p.pathD, `jigsaw-snapped cont-${slug}`);
       snapped.setAttribute('vector-effect', 'non-scaling-stroke');
       svgEl.appendChild(snapped);
 
