@@ -120,8 +120,8 @@ export async function createPlaceCitiesGame({ svgEl, labelsEl, submitBtn, countr
     const ctm = svgEl.getScreenCTM();
     if (!ctm) return;
     const svgUnitsPerPx = 1 / ctm.a;  // ctm.a == ctm.d when aspect ratio preserved
-    const r = svgUnitsPerPx * 7;
-    const strokeW = svgUnitsPerPx * 1.5;
+    const r = svgUnitsPerPx * 4;
+    const strokeW = svgUnitsPerPx * 1.2;
     for (const dot of dotElements) {
       dot.setAttribute('r', r);
       dot.setAttribute('stroke-width', strokeW);
