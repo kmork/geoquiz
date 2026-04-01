@@ -424,6 +424,33 @@ export async function createJigsawGame({
     piece.addEventListener('pointercancel', onCancel);
   }
 
+  // Track continent completion (only meaningful for World mode)
+  const continentCounts = {};   // continent → total pieces
+  const continentPlaced = {};   // continent → placed so far
+  const continentDone = {};     // continent → already celebrated
+  for (const p of piecesData) {
+    continentCounts[p.continent] = (continentCounts[p.continent] || 0) + 1;
+    continentPlaced[p.continent] = 0;
+    continentDone[p.continent] = false;
+  }
+
+  function checkContinentComplete(continent) {
+    if (continentName) return false; // skip for single-continent games
+    continentPlaced[continent]++;
+    if (!continentDone[continent] && continentPlaced[continent] >= continentCounts[continent]) {
+      continentDone[continent] = true;
+      return true;
+    }
+    return false;
+  }
+
+  function resetContinentTracking() {
+    for (const c of Object.keys(continentPlaced)) {
+      continentPlaced[c] = 0;
+      continentDone[c] = false;
+    }
+  }
+
   function showSnapLabel(name) {
     const lbl = document.createElement('div');
     lbl.className = 'jigsaw-snap-label';
@@ -449,11 +476,16 @@ export async function createJigsawGame({
       finalized = true;
       if (ghost) { ghost.remove(); }
       playPing();
-      showSnapLabel(p.country);
+      const continentJustDone = checkContinentComplete(p.continent);
+      showSnapLabel(continentJustDone ? `${p.country} — ${p.continent} complete!` : p.country);
       const slug = continentSlug(p.continent);
       const snapped = createPath(p.pathD, `jigsaw-snapped cont-${slug}`);
       snapped.setAttribute('vector-effect', 'non-scaling-stroke');
       svgEl.appendChild(snapped);
+
+      if (continentJustDone) {
+        confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2, count: 60 });
+      }
 
       piece.removeEventListener('pointerdown', onPointerDown);
       piece.remove();
@@ -638,6 +670,7 @@ export async function createJigsawGame({
   function start() {
     overlayEl.style.display = 'none';
     logic.reset();
+    resetContinentTracking();
     renderMap();
     renderTray();
     // Reset zoom-pan flag so it can re-attach after Play Again
