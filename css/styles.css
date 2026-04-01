@@ -2398,6 +2398,28 @@ html.light-mode .geo-bonus-overlay.wrong {
   80% { transform: translateX(4px); }
 }
 
+.jigsaw-snap-label {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-color);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  padding: 6px 16px;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+}
+.jigsaw-snap-label.visible {
+  opacity: 1;
+}
+
 /* Continent hint colors — dark mode (subtle, same-style pastel fills) */
 :root {
   --cont-af: rgba(251, 191, 36, 0.30);   /* amber — Africa */

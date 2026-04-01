@@ -424,6 +424,21 @@ export async function createJigsawGame({
     piece.addEventListener('pointercancel', onCancel);
   }
 
+  function showSnapLabel(name) {
+    const lbl = document.createElement('div');
+    lbl.className = 'jigsaw-snap-label';
+    lbl.textContent = name;
+    mapwrap.appendChild(lbl);
+    // Trigger reflow so the transition starts from initial state
+    lbl.offsetWidth;
+    lbl.classList.add('visible');
+    setTimeout(() => {
+      lbl.classList.remove('visible');
+      lbl.addEventListener('transitionend', () => lbl.remove(), { once: true });
+      setTimeout(() => lbl.remove(), 500); // fallback
+    }, 1000);
+  }
+
   function snapPiece(idx, piece, ghost) {
     logic.markPlaced(idx, hintLevel);
     const p = piecesData[idx];
@@ -434,6 +449,7 @@ export async function createJigsawGame({
       finalized = true;
       if (ghost) { ghost.remove(); }
       playPing();
+      showSnapLabel(p.country);
       const slug = continentSlug(p.continent);
       const snapped = createPath(p.pathD, `jigsaw-snapped cont-${slug}`);
       snapped.setAttribute('vector-effect', 'non-scaling-stroke');
