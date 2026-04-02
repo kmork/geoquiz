@@ -311,22 +311,34 @@ export class RouteRenderer {
         });
       }
 
-      // Add country name label at centroid — size relative to viewBox
+      // Add country name label at centroid — sized to fit within country
       const centroid = this.getCentroid(name);
       if (centroid) {
-        const vb = this.svg.viewBox.baseVal;
-        const fontSize = Math.max(vb.width * 0.018, 1.5);
-        const text = document.createElementNS(ns, "text");
-        text.setAttribute("x", centroid[0]);
-        text.setAttribute("y", centroid[1]);
-        text.setAttribute("text-anchor", "middle");
-        text.setAttribute("dominant-baseline", "central");
-        text.setAttribute("font-size", fontSize);
-        text.setAttribute("class", "carmen-map-label");
-        text.setAttribute("pointer-events", "none");
-        text.textContent = name;
-        group.appendChild(text);
-        entry.label = text;
+        const bb = this.bboxOfFeature(features[0]);
+        if (bb) {
+          const [x1] = this.proj([bb.minLon, 0]);
+          const [x2] = this.proj([bb.maxLon, 0]);
+          const countryW = Math.abs(x2 - x1);
+          // Estimate: ~0.6 SVG units per character at font-size 1
+          const maxByWidth = countryW / (name.length * 0.6);
+          const [, y1] = this.proj([0, bb.maxLat]);
+          const [, y2] = this.proj([0, bb.minLat]);
+          const countryH = Math.abs(y2 - y1);
+          const fontSize = Math.min(maxByWidth, countryH * 0.35, 4);
+          if (fontSize >= 1) {
+            const text = document.createElementNS(ns, "text");
+            text.setAttribute("x", centroid[0]);
+            text.setAttribute("y", centroid[1]);
+            text.setAttribute("text-anchor", "middle");
+            text.setAttribute("dominant-baseline", "central");
+            text.setAttribute("font-size", fontSize);
+            text.setAttribute("class", "carmen-map-label");
+            text.setAttribute("pointer-events", "none");
+            text.textContent = name;
+            group.appendChild(text);
+            entry.label = text;
+          }
+        }
       }
 
       btnMap[name] = entry;
@@ -402,10 +414,12 @@ export class RouteRenderer {
       line.style.opacity = "0";
       this.svg.appendChild(line);
 
-      // Travel icon — rotate to match flight direction
+      // Travel icon — scale to viewBox, rotate to match flight direction
+      const vb = this.svg.viewBox.baseVal;
+      const planeSize = Math.max(vb.width * 0.04, 3);
       const angle = Math.atan2(to[1] - from[1], to[0] - from[0]) * (180 / Math.PI);
       const icon = document.createElementNS(ns, "text");
-      icon.setAttribute("font-size", "14");
+      icon.setAttribute("font-size", planeSize);
       icon.setAttribute("text-anchor", "middle");
       icon.setAttribute("dominant-baseline", "central");
       icon.setAttribute("transform", `translate(${from[0]},${from[1]}) rotate(${angle})`);
