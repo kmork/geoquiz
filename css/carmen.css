@@ -145,13 +145,14 @@
   transform: translateY(0);
 }
 
-/* ── Intro Row (always side-by-side) ────────────────── */
+/* ── Intro Row (always side-by-side, fixed height) ──── */
 .carmen-intro-row {
   display: flex;
   flex-direction: row;
   gap: 1rem;
   margin-bottom: 1rem;
   align-items: stretch;
+  height: 480px;
 }
 
 .carmen-left-panel {
@@ -159,16 +160,38 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  height: 100%;
 }
 
 .carmen-right-panel {
   flex: 1;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.carmen-right-view {
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.carmen-right-view .carmen-artifact-display,
+.carmen-right-view .carmen-map-wrap,
+.carmen-right-view .carmen-clue-reveal,
+.carmen-right-view .carmen-dossier-inline {
+  height: 100%;
+}
+
+.carmen-artifact-img {
+  height: 100%;
 }
 
 .carmen-panel-content {
   flex: 1;
   overflow-y: auto;
+  min-height: 0;
 }
 
 /* ── Panel Tabs ────────────────────────────────────── */
@@ -530,7 +553,7 @@
 .carmen-map-wrap svg {
   display: block;
   width: 100%;
-  max-height: 300px;
+  height: 100%;
 }
 
 /* ── Clue Icons (sidebar on map) ─────────────────────── */
@@ -571,13 +594,15 @@
 
 /* ── Clue Reveal (below map) ────────────────────────── */
 .carmen-clue-reveal {
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   padding: 0.65rem 0.85rem;
-  margin-bottom: 1rem;
   border-radius: 10px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   animation: carmen-clue-in 0.25s ease-out;
+  box-sizing: border-box;
 }
 
 @keyframes carmen-clue-in {
@@ -719,11 +744,6 @@
   font-style: italic;
   color: var(--text-color);
   line-height: 1.5;
-}
-
-/* ── Right Panel Views ─────────────────────────────── */
-.carmen-right-view {
-  height: 100%;
 }
 
 /* ── Dossier Tab Label ─────────────────────────────── */
@@ -1070,10 +1090,16 @@
 @media (max-width: 600px) {
   .carmen-intro-row {
     flex-direction: column;
+    height: auto;
   }
 
   .carmen-left-panel {
     flex: none;
+    height: auto;
+  }
+
+  .carmen-right-panel {
+    height: 280px;
   }
 
   .carmen-clue-text {
