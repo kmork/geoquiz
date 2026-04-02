@@ -82,16 +82,25 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-witness-report" id="carmen-witness-report"></div>
           </div>
           <div class="carmen-panel-view" id="carmen-panel-investigate" style="display:none">
-            <div class="carmen-locations-label" id="carmen-locations-label"></div>
-            <div class="carmen-locations" id="carmen-locations"></div>
+            <div class="carmen-panel-card">
+              <div class="carmen-panel-badge">🔍 INVESTIGATE</div>
+              <div class="carmen-panel-desc" id="carmen-locations-label"></div>
+              <div class="carmen-locations" id="carmen-locations"></div>
+            </div>
           </div>
           <div class="carmen-panel-view" id="carmen-panel-travel" style="display:none">
-            <div class="carmen-travel-label">Where did the thief go?</div>
-            <div class="carmen-travel-hint">Select a neighboring country on the map</div>
+            <div class="carmen-panel-card">
+              <div class="carmen-panel-badge">✈️ TRAVEL</div>
+              <div class="carmen-panel-title">Where did the thief go?</div>
+              <div class="carmen-panel-desc">Select a neighboring country on the map to follow the trail.</div>
+            </div>
           </div>
           <div class="carmen-panel-view" id="carmen-panel-dossier" style="display:none">
-            <div class="carmen-dossier-tab-label">📋 Case Dossier</div>
-            <div class="carmen-dossier-tab-hint">Review collected clues on the right</div>
+            <div class="carmen-panel-card">
+              <div class="carmen-panel-badge">📋 DOSSIER</div>
+              <div class="carmen-panel-title">Case Dossier</div>
+              <div class="carmen-panel-desc">All gathered evidence and witness statements are compiled on the right.</div>
+            </div>
           </div>
         </div>
         <div class="carmen-bottom-tabs" id="carmen-bottom-tabs" style="display:none">
@@ -341,11 +350,18 @@ export function createCarmenUI(container, flagCodes) {
 
     showStopNarrative(stopIndex, totalStops) {
       const remaining = totalStops - stopIndex;
+      let intel;
       if (remaining <= 1) {
-        els.narrative.innerHTML = `The thief is cornered — this is the <strong>final stop</strong>!`;
+        intel = `The thief is cornered — this is the <strong>final stop</strong>!`;
       } else {
-        els.narrative.innerHTML = `Intel says the thief is <strong>${remaining} ${remaining === 1 ? 'stop' : 'stops'}</strong> ahead. Follow the clues.`;
+        intel = `Intel says the thief is <strong>${remaining} ${remaining === 1 ? 'stop' : 'stops'}</strong> ahead. Follow the clues.`;
       }
+      els.narrative.innerHTML = `
+        <div class="carmen-intro-card">
+          <div class="carmen-intro-badge">ACTIVE CASE</div>
+          <div class="carmen-intro-intel">${intel}</div>
+        </div>
+      `;
       switchTab('case');
     },
 

@@ -156,7 +156,7 @@
 }
 
 .carmen-left-panel {
-  flex: 0 0 230px;
+  flex: 0 0 260px;
   display: flex;
   flex-direction: column;
   min-width: 0;
@@ -192,6 +192,7 @@
   flex: 1;
   overflow-y: auto;
   min-height: 0;
+  padding: 0.5rem 0.4rem;
 }
 
 /* ── Panel Tabs ────────────────────────────────────── */
@@ -260,25 +261,13 @@
   background: var(--card-bg);
 }
 
-/* ── Travel Panel ──────────────────────────────────── */
-.carmen-travel-label {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text-color);
-  margin-bottom: 0.3rem;
-}
-
-.carmen-travel-hint {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  font-style: italic;
-}
+/* (Travel panel uses shared .carmen-panel-card styles) */
 
 /* ── Narrative / Story ───────────────────────────────── */
 .carmen-narrative {
   text-align: center;
-  padding: 0.75rem 1rem;
-  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  border-radius: 10px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   line-height: 1.5;
@@ -293,11 +282,48 @@
   font-weight: 700;
 }
 
+/* ── Shared Panel Card (used by all tabs) ──────────── */
+.carmen-panel-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.85rem;
+  border-radius: 10px;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+}
+
+.carmen-panel-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--star-color);
+  border: 1px solid var(--star-color);
+  border-radius: 4px;
+  padding: 0.2rem 0.6rem;
+  display: inline-block;
+  align-self: flex-start;
+  text-transform: uppercase;
+}
+
+.carmen-panel-title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-color);
+  line-height: 1.3;
+}
+
+.carmen-panel-desc {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+}
+
 /* ── Intro Card (artifact + suspect info) ───────────── */
 .carmen-intro-card {
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  gap: 0.6rem;
   text-align: left;
 }
 
@@ -308,7 +334,7 @@
   color: var(--bad-color);
   border: 1px solid var(--bad-color);
   border-radius: 4px;
-  padding: 0.15rem 0.5rem;
+  padding: 0.2rem 0.6rem;
   display: inline-block;
   align-self: flex-start;
 }
@@ -365,11 +391,16 @@
 }
 
 .carmen-intro-mission {
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   color: var(--text-muted);
   font-style: italic;
-  margin-top: 0.3rem;
   line-height: 1.4;
+}
+
+.carmen-intro-intel {
+  font-size: 0.88rem;
+  color: var(--text-color);
+  line-height: 1.5;
 }
 
 /* ── Status Bar ──────────────────────────────────────── */
@@ -652,15 +683,15 @@
 
 /* ── Witness Report (Case tab) ─────────────────────── */
 .carmen-witness-report {
-  margin-top: 0.5rem;
+  margin-top: 0.6rem;
 }
 
 .carmen-witness-entry {
-  padding: 0.4rem 0.6rem;
+  padding: 0.5rem 0.7rem;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   border-radius: 8px;
-  margin-bottom: 0.35rem;
+  margin-bottom: 0.45rem;
 }
 
 .carmen-witness-header {
@@ -746,19 +777,7 @@
   line-height: 1.5;
 }
 
-/* ── Dossier Tab Label ─────────────────────────────── */
-.carmen-dossier-tab-label {
-  font-size: 0.95rem;
-  font-weight: 700;
-  color: var(--text-color);
-  margin-bottom: 0.3rem;
-}
-
-.carmen-dossier-tab-hint {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  font-style: italic;
-}
+/* (Dossier tab panel uses shared .carmen-panel-card styles) */
 
 /* ── Thief Taunts ───────────────────────────────────── */
 .carmen-taunt {
@@ -826,24 +845,19 @@
 }
 
 /* ── Investigation Locations ─────────────────────────── */
-.carmen-locations-label {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  margin-bottom: 0.4rem;
-}
 
 .carmen-locations {
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.45rem;
 }
 
 .carmen-location-btn {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.45rem 0.6rem;
+  gap: 0.6rem;
+  padding: 0.55rem 0.7rem;
   border-radius: 8px;
   background: var(--button-bg);
   border: 2px solid var(--button-border);
@@ -865,12 +879,12 @@
 }
 
 .carmen-location-emoji {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   flex-shrink: 0;
 }
 
 .carmen-location-name {
-  font-size: 0.78rem;
+  font-size: 0.82rem;
   font-weight: 600;
 }
 
