@@ -311,14 +311,17 @@ export class RouteRenderer {
         });
       }
 
-      // Add country name label at centroid
+      // Add country name label at centroid — size relative to viewBox
       const centroid = this.getCentroid(name);
       if (centroid) {
+        const vb = this.svg.viewBox.baseVal;
+        const fontSize = Math.max(vb.width * 0.018, 1.5);
         const text = document.createElementNS(ns, "text");
         text.setAttribute("x", centroid[0]);
         text.setAttribute("y", centroid[1]);
         text.setAttribute("text-anchor", "middle");
         text.setAttribute("dominant-baseline", "central");
+        text.setAttribute("font-size", fontSize);
         text.setAttribute("class", "carmen-map-label");
         text.setAttribute("pointer-events", "none");
         text.textContent = name;
@@ -399,13 +402,13 @@ export class RouteRenderer {
       line.style.opacity = "0";
       this.svg.appendChild(line);
 
-      // Travel icon (plane emoji via foreignObject)
+      // Travel icon — rotate to match flight direction
+      const angle = Math.atan2(to[1] - from[1], to[0] - from[0]) * (180 / Math.PI);
       const icon = document.createElementNS(ns, "text");
-      icon.setAttribute("x", from[0]);
-      icon.setAttribute("y", from[1]);
       icon.setAttribute("font-size", "14");
       icon.setAttribute("text-anchor", "middle");
       icon.setAttribute("dominant-baseline", "central");
+      icon.setAttribute("transform", `translate(${from[0]},${from[1]}) rotate(${angle})`);
       icon.textContent = "✈";
       this.svg.appendChild(icon);
 
@@ -433,11 +436,10 @@ export class RouteRenderer {
         // Show dashed line with growing opacity
         line.style.opacity = String(Math.min(t * 3, 0.7));
 
-        // Move icon along path
+        // Move icon along path, keeping rotation
         const x = from[0] + (to[0] - from[0]) * eased;
         const y = from[1] + (to[1] - from[1]) * eased;
-        icon.setAttribute("x", x);
-        icon.setAttribute("y", y);
+        icon.setAttribute("transform", `translate(${x},${y}) rotate(${angle})`);
 
         requestAnimationFrame(animate);
       };
