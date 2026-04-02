@@ -630,6 +630,23 @@
   cursor: not-allowed;
 }
 
+/* ── Map-based Neighbor Choices ──────────────────────── */
+.carmen-map-header {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 0.3rem;
+}
+
+.carmen-map-label {
+  font-size: 4px;
+  font-weight: 500;
+  fill: #fff;
+}
+
+.carmen-map-choice {
+  transition: fill 0.15s, stroke 0.15s;
+}
+
 /* ── Map Overlay (correct guess transition) ──────────── */
 .carmen-map-overlay {
   position: absolute;
@@ -679,69 +696,6 @@
 @keyframes carmen-fade-in {
   from { opacity: 0; }
   to   { opacity: 1; }
-}
-
-/* ── Neighbor Buttons ────────────────────────────────── */
-.carmen-neighbors-label {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  margin-bottom: 0.4rem;
-}
-
-.carmen-neighbors {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 0.45rem;
-  margin-bottom: 1rem;
-}
-
-.carmen-neighbor-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.55rem 0.75rem;
-  border-radius: 10px;
-  background: var(--button-bg);
-  border: 1px solid var(--button-border);
-  color: var(--button-color);
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background 0.15s, border-color 0.15s, transform 0.15s;
-}
-
-.carmen-neighbor-btn:hover {
-  background: var(--button-hover);
-  transform: translateY(-1px);
-}
-
-.carmen-neighbor-btn:active {
-  transform: translateY(0);
-}
-
-.carmen-neighbor-btn img {
-  width: 24px;
-  height: 16px;
-  border-radius: 2px;
-  object-fit: cover;
-}
-
-.carmen-neighbor-btn.correct {
-  background: var(--correct-bg);
-  border-color: var(--correct-border);
-  color: var(--good-color);
-}
-
-.carmen-neighbor-btn.wrong {
-  background: var(--wrong-bg);
-  border-color: var(--wrong-border);
-  color: var(--bad-color);
-  animation: carmen-shake 0.4s ease-out;
-}
-
-.carmen-neighbor-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
 }
 
 @keyframes carmen-shake {

@@ -64,8 +64,8 @@ async function startGame() {
   // Show case briefing first
   await ui.showCaseBriefing(intro.artifact, intro.startCountry);
 
-  // Draw starting country on map
-  drawMap(intro.progress.route);
+  // Draw starting country on map, include neighbors in viewBox
+  drawMap(intro.progress.route, intro.neighbors);
 
   // Update UI — thief identity unknown
   ui.showIntro('A mysterious thief', intro.artifact, intro.startCountry);
@@ -80,10 +80,12 @@ async function startGame() {
   // Clear old clues, then show investigation locations
   ui.showClues([], []);
   showInvestigationLocations();
-  ui.showNeighbors(intro.neighbors, handleGuess);
+  showNeighborsOnMap(intro.neighbors);
 }
 
-function drawMap(visitedCountries) {
+let activeNeighborChoices = null;
+
+function drawMap(visitedCountries, neighbors = []) {
   const list = visitedCountries.map((country, i) => ({
     country,
     color: i === 0 ? 'start' : i === visitedCountries.length - 1 ? 'end' : 'path',
@@ -92,11 +94,20 @@ function drawMap(visitedCountries) {
   if (list.length > 0) list[list.length - 1].color = 'end';
   if (list.length > 1) list[0].color = 'start';
 
-  renderer.drawRoute(list);
+  renderer.drawRoute(list, neighbors);
 
   // Update base viewBox for zoom/pan
   const vb = ui.mapSvg.viewBox.baseVal;
   baseViewBox = { x: vb.x, y: vb.y, w: vb.width, h: vb.height };
+}
+
+function showNeighborsOnMap(neighbors) {
+  if (activeNeighborChoices) {
+    activeNeighborChoices.remove();
+    activeNeighborChoices = null;
+  }
+  activeNeighborChoices = renderer.drawNeighborChoices(neighbors, handleGuess);
+  ui.showMapHeader();
 }
 
 function updateClock() {
@@ -106,7 +117,7 @@ function updateClock() {
 
 function checkTimeExpired() {
   if (logic.timeExpired) {
-    ui.disableAllNeighbors();
+    if (activeNeighborChoices) activeNeighborChoices.disableAll();
     ui.hideLocations();
     setTimeout(() => showFinish(), 500);
     return true;
@@ -151,8 +162,10 @@ function handleGuess(country) {
   const result = logic.guess(country);
 
   if (result.correct) {
-    ui.highlightNeighbor(country, true);
-    ui.disableAllNeighbors();
+    if (activeNeighborChoices) {
+      activeNeighborChoices.highlight(country, true);
+      activeNeighborChoices.disableAll();
+    }
 
     if (result.gameOver && result.won) {
       // Found the thief's location — now identify them!
@@ -169,11 +182,9 @@ function handleGuess(country) {
         const correct = logic.identifySuspect(chosenName);
 
         if (correct) {
-          // Correct identification — full victory!
           confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2, count: 100 });
           showFinish(true, chosenName);
         } else {
-          // Wrong suspect — thief escapes with reduced score
           logic.score = Math.max(0, logic.score - 200);
           showFinish(false, chosenName);
         }
@@ -185,42 +196,40 @@ function handleGuess(country) {
     const progress = result.progress;
     ui.updateScore(progress.score);
 
-    // Get a taunt from the thief
     const taunt = logic.getTaunt();
-
-    // Animate travel from previous position to guessed country
     const fromCountry = progress.route[progress.route.length - 2] || progress.route[0];
     const toCountry = result.country;
 
     setTimeout(async () => {
-      // Travel costs time
       logic.spendTime(logic.getTravelCost());
       updateClock();
       if (checkTimeExpired()) return;
 
       await renderer.animateTravel(fromCountry, toCountry);
-      drawMap(progress.route);
+      drawMap(progress.route, result.neighbors);
       ui.showTransition(result.stopScore, result.country, taunt, 'The thief', () => {
         ui.updateProgress(progress.stop, progress.totalStops);
         ui.showStopNarrative(progress.stop, progress.totalStops);
         ui.showClues([], []);
         showInvestigationLocations();
-        ui.showNeighbors(result.neighbors, handleGuess);
+        showNeighborsOnMap(result.neighbors);
       });
     }, 600);
 
   } else {
     // Wrong guess
-    ui.highlightNeighbor(country, false);
+    if (activeNeighborChoices) {
+      activeNeighborChoices.highlight(country, false);
+    }
     ui.flashWrong();
     const progress = result.progress;
     ui.updateScore(progress.score);
     ui.updateLives(progress.lives, progress.maxLives);
 
     if (result.gameOver) {
-      ui.disableAllNeighbors();
-      // Show the correct answer
-      ui.highlightNeighbor(result.correctCountry, true);
+      if (activeNeighborChoices) activeNeighborChoices.disableAll();
+      // Show the correct answer on the map
+      if (activeNeighborChoices) activeNeighborChoices.highlight(result.correctCountry, true);
       drawMap([...logic.route.slice(0, logic.currentStop + 1), result.correctCountry]);
       setTimeout(() => showFinish(), 2000);
     }

@@ -186,11 +186,15 @@ export class RouteRenderer {
    * @param {Array} countryList - Array of {country, color} objects
    *   color can be: 'start', 'end', 'path', 'hint', 'optimal'
    */
-  drawRoute(countryList) {
+  /**
+   * @param {Array} countryList - Array of {country, color} objects
+   * @param {Array} [extraCountries] - Additional country names to include in the viewBox (e.g. neighbors)
+   */
+  drawRoute(countryList, extraCountries = []) {
     this.svg.innerHTML = "";
-    
+
     if (!this.worldFeatures) return;
-    
+
     // Collect all highlighted country features and calculate bounding box
     const highlightedFeatures = [];
     const featureBboxes = [];
@@ -203,43 +207,155 @@ export class RouteRenderer {
         if (bb) featureBboxes.push(bb);
       }
     }
+
+    // Include extra countries in the bounding box (not drawn as route)
+    for (const name of extraCountries) {
+      const features = findGeoFeatures(this.worldFeatures, name);
+      for (const feature of features) {
+        const bb = this.bboxOfFeature(feature);
+        if (bb) featureBboxes.push(bb);
+      }
+    }
+
     let bbox = this.computeViewBbox(featureBboxes);
-    
-    // Set viewBox to fit highlighted countries
+
+    // Set viewBox to fit highlighted countries + extras
     if (bbox) {
       bbox = padBBox(bbox, 0.18);
       const [x1, y1] = this.proj([bbox.minLon, bbox.maxLat]);
       const [x2, y2] = this.proj([bbox.maxLon, bbox.minLat]);
-      
+
       const width = Math.abs(x2 - x1);
       const height = Math.abs(y2 - y1);
       const x = Math.min(x1, x2);
       const y = Math.min(y1, y2);
-      
+
       this.svg.setAttribute("viewBox", `${x} ${y} ${width} ${height}`);
     } else {
       this.svg.setAttribute("viewBox", `0 0 ${this.MAP_W} ${this.MAP_H}`);
     }
-    
+
     // Draw highlighted countries
     for (const item of highlightedFeatures) {
       const colors = this.colors[item.color] || this.colors.path;
       const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      
+
       path.setAttribute("d", this.pathFromFeature(item.feature));
       path.setAttribute("stroke", colors.stroke);
       path.setAttribute("stroke-width", colors.strokeWidth);
       path.setAttribute("fill", colors.fill);
       path.setAttribute("vector-effect", "non-scaling-stroke");
-      
+
       if (colors.strokeDasharray) {
         path.setAttribute("stroke-dasharray", colors.strokeDasharray);
       }
-      
+
       this.svg.appendChild(path);
     }
   }
   
+  /**
+   * Draw clickable neighbor countries on the map.
+   * @param {Array} neighbors — country name strings
+   * @param {Function} onClick — called with country name when clicked
+   * @returns {Object} API with highlight(country, correct) and disableAll()
+   */
+  drawNeighborChoices(neighbors, onClick) {
+    const ns = "http://www.w3.org/2000/svg";
+    const group = document.createElementNS(ns, "g");
+    group.setAttribute("class", "carmen-neighbor-choices");
+    this.svg.appendChild(group);
+
+    const btnMap = {}; // countryName → {paths, label, disabled}
+
+    for (const name of neighbors) {
+      const features = findGeoFeatures(this.worldFeatures, name);
+      if (features.length === 0) continue;
+
+      const entry = { paths: [], label: null, disabled: false };
+
+      // Draw country shape(s) as clickable
+      for (const feature of features) {
+        const path = document.createElementNS(ns, "path");
+        path.setAttribute("d", this.pathFromFeature(feature));
+        path.setAttribute("fill", "rgba(148, 163, 184, 0.2)");
+        path.setAttribute("stroke", "rgba(148, 163, 184, 0.6)");
+        path.setAttribute("stroke-width", "1.2");
+        path.setAttribute("vector-effect", "non-scaling-stroke");
+        path.setAttribute("cursor", "pointer");
+        path.setAttribute("class", "carmen-map-choice");
+        path.setAttribute("data-country", name);
+        group.appendChild(path);
+        entry.paths.push(path);
+
+        // Stop propagation so zoom-pan doesn't steal the pointer
+        path.addEventListener('pointerdown', (e) => {
+          if (!entry.disabled) e.stopPropagation();
+        });
+        path.addEventListener('click', () => {
+          if (!entry.disabled) onClick(name);
+        });
+        path.addEventListener('mouseenter', () => {
+          if (entry.disabled) return;
+          for (const p of entry.paths) {
+            p.setAttribute("fill", "rgba(148, 163, 184, 0.4)");
+            p.setAttribute("stroke", "rgba(148, 163, 184, 0.9)");
+          }
+        });
+        path.addEventListener('mouseleave', () => {
+          if (entry.disabled) return;
+          for (const p of entry.paths) {
+            p.setAttribute("fill", "rgba(148, 163, 184, 0.2)");
+            p.setAttribute("stroke", "rgba(148, 163, 184, 0.6)");
+          }
+        });
+      }
+
+      // Add country name label at centroid
+      const centroid = this.getCentroid(name);
+      if (centroid) {
+        const text = document.createElementNS(ns, "text");
+        text.setAttribute("x", centroid[0]);
+        text.setAttribute("y", centroid[1]);
+        text.setAttribute("text-anchor", "middle");
+        text.setAttribute("dominant-baseline", "central");
+        text.setAttribute("class", "carmen-map-label");
+        text.setAttribute("pointer-events", "none");
+        text.textContent = name;
+        group.appendChild(text);
+        entry.label = text;
+      }
+
+      btnMap[name] = entry;
+    }
+
+    return {
+      highlight(country, correct) {
+        const entry = btnMap[country];
+        if (!entry) return;
+        const fill = correct ? "rgba(34, 197, 94, 0.35)" : "rgba(239, 68, 68, 0.35)";
+        const stroke = correct ? "rgba(34, 197, 94, 0.9)" : "rgba(239, 68, 68, 0.9)";
+        for (const p of entry.paths) {
+          p.setAttribute("fill", fill);
+          p.setAttribute("stroke", stroke);
+          p.setAttribute("cursor", "default");
+        }
+        entry.disabled = true;
+      },
+      disableAll() {
+        for (const entry of Object.values(btnMap)) {
+          entry.disabled = true;
+          for (const p of entry.paths) {
+            p.setAttribute("cursor", "default");
+          }
+        }
+      },
+      remove() {
+        group.remove();
+      }
+    };
+  }
+
   /**
    * Get the centroid of a country in SVG coordinates.
    */

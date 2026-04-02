@@ -81,6 +81,7 @@ export function createCarmenUI(container, flagCodes) {
     <div class="carmen-intro-row" id="carmen-intro-row">
       <div class="carmen-narrative" id="carmen-narrative"></div>
       <div class="carmen-map-wrap">
+        <div class="carmen-map-header" id="carmen-map-header" style="display:none">Where did the thief go?</div>
         <svg id="carmen-map" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"></svg>
         <div class="carmen-map-sidebar" id="carmen-map-sidebar"></div>
       </div>
@@ -88,8 +89,6 @@ export function createCarmenUI(container, flagCodes) {
     <div class="carmen-locations-label" id="carmen-locations-label" style="display:none">Investigate a location:</div>
     <div class="carmen-locations" id="carmen-locations"></div>
     <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
-    <div class="carmen-neighbors-label" id="carmen-neighbors-label">Where did the thief go?</div>
-    <div class="carmen-neighbors" id="carmen-neighbors"></div>
   `;
 
   const els = {
@@ -109,11 +108,12 @@ export function createCarmenUI(container, flagCodes) {
     dossierClose: container.querySelector('#carmen-dossier-close'),
     locationsLabel: container.querySelector('#carmen-locations-label'),
     locations: container.querySelector('#carmen-locations'),
+    // Neighbor buttons removed — neighbors are now on the map
     map: container.querySelector('#carmen-map'),
+    mapHeader: container.querySelector('#carmen-map-header'),
     mapWrap: container.querySelector('.carmen-map-wrap'),
     sidebar: container.querySelector('#carmen-map-sidebar'),
     reveal: container.querySelector('#carmen-clue-reveal'),
-    neighborsLabel: container.querySelector('#carmen-neighbors-label'),
     neighbors: container.querySelector('#carmen-neighbors'),
   };
 
@@ -163,6 +163,9 @@ export function createCarmenUI(container, flagCodes) {
 
   return {
     get mapSvg() { return els.map; },
+
+    showMapHeader() { els.mapHeader.style.display = ''; },
+    hideMapHeader() { els.mapHeader.style.display = 'none'; },
 
     /** Add a clue to the dossier. */
     addDossierEntry(stop, clueText, informantPrefix) {
@@ -414,46 +417,12 @@ export function createCarmenUI(container, flagCodes) {
       els.locations.innerHTML = '';
     },
 
-    showNeighbors(neighbors, onPick) {
-      els.neighborsLabel.style.display = '';
-      els.neighbors.innerHTML = neighbors.map(name => `
-        <button class="carmen-neighbor-btn" data-country="${esc(name)}">
-          ${flagImg(name)}
-          <span>${esc(name)}</span>
-        </button>
-      `).join('');
-
-      els.neighbors.querySelectorAll('.carmen-neighbor-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          const country = btn.dataset.country;
-          onPick(country);
-        });
-      });
-    },
-
-    highlightNeighbor(country, correct) {
-      const btn = els.neighbors.querySelector(`[data-country="${CSS.escape(country)}"]`);
-      if (btn) {
-        btn.classList.add(correct ? 'correct' : 'wrong');
-        if (!correct) btn.disabled = true;
-      }
-    },
-
     /** Flash the screen red on wrong guess */
     flashWrong() {
       const flash = document.createElement('div');
       flash.className = 'carmen-wrong-flash';
       container.appendChild(flash);
       flash.addEventListener('animationend', () => flash.remove());
-    },
-
-    disableAllNeighbors() {
-      els.neighbors.querySelectorAll('.carmen-neighbor-btn').forEach(b => b.disabled = true);
-    },
-
-    clearNeighbors() {
-      els.neighbors.innerHTML = '';
-      els.neighborsLabel.style.display = 'none';
     },
 
     /**
@@ -465,8 +434,6 @@ export function createCarmenUI(container, flagCodes) {
         els.locationsLabel.style.display = 'none';
         els.locations.innerHTML = '';
         els.reveal.style.display = 'none';
-        els.neighborsLabel.style.display = 'none';
-        els.neighbors.innerHTML = '';
         els.sidebar.innerHTML = '';
 
 
@@ -519,10 +486,9 @@ export function createCarmenUI(container, flagCodes) {
       els.sidebar.innerHTML = '';
       els.reveal.style.display = 'none';
       els.mapWrap.style.minHeight = '';
+      els.mapHeader.style.display = 'none';
       els.locationsLabel.style.display = 'none';
       els.locations.innerHTML = '';
-      els.neighborsLabel.style.display = 'none';
-      els.neighbors.innerHTML = '';
 
       // Overlay on the map
       const overlay = document.createElement('div');
