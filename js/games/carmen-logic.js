@@ -173,15 +173,9 @@ const DEMONYM_MAP = {
   'Zimbabwe': ['Zimbabwean'],
 };
 
-// Thief names for flavor
-const THIEF_NAMES = [
-  'Carmen Sandiego', 'Viktor Voss', 'Natasha Petrova', 'El Zorro',
-  'The Shadow', 'Lady Crimson', 'Phantom Fox', 'Raven',
-  'Scarlet Cipher', 'Dr. Atlas', 'The Cartographer', 'Velvet Mask',
-];
-
 // Suspect profiles for the warrant system
 const SUSPECTS = [
+  // Original suspects
   { name: 'Carmen Sandiego', hair: 'black', accessory: 'red trench coat', hobby: 'tango dancing', vehicle: 'red convertible' },
   { name: 'Viktor Voss', hair: 'blond', accessory: 'monocle', hobby: 'chess', vehicle: 'submarine' },
   { name: 'Natasha Petrova', hair: 'red', accessory: 'fur hat', hobby: 'ice skating', vehicle: 'snowmobile' },
@@ -194,7 +188,46 @@ const SUSPECTS = [
   { name: 'Dr. Atlas', hair: 'gray', accessory: 'vintage compass', hobby: 'cartography', vehicle: 'seaplane' },
   { name: 'The Cartographer', hair: 'brown', accessory: 'leather satchel', hobby: 'mountaineering', vehicle: 'jeep' },
   { name: 'Velvet Mask', hair: 'platinum', accessory: 'velvet gloves', hobby: 'ballroom dancing', vehicle: 'limousine' },
+
+  // Added suspects (balanced overlap)
+  { name: 'Raven Noir', hair: 'black', accessory: 'feathered hat', hobby: 'bird watching', vehicle: 'balloon' },
+  { name: 'Professor Paradox', hair: 'white', accessory: 'pocket watch', hobby: 'time theory', vehicle: 'experimental car' },
+  { name: 'Luna Nocturne', hair: 'silver', accessory: 'moon pendant', hobby: 'stargazing', vehicle: 'glider' },
+  { name: 'Count Obsidian', hair: 'black', accessory: 'obsidian ring', hobby: 'antiquities', vehicle: 'helicopter' },
+  { name: 'Ivy Virelli', hair: 'green', accessory: 'vine bracelet', hobby: 'botany', vehicle: 'bicycle' },
+  { name: 'Echo', hair: 'unknown', accessory: 'voice modulator', hobby: 'sound engineering', vehicle: 'drone' },
+  { name: 'The Locksmith', hair: 'brown', accessory: 'keychain', hobby: 'lockpicking', vehicle: 'van' },
+  { name: 'Captain Marlowe', hair: 'gray', accessory: 'captain hat', hobby: 'navigation', vehicle: 'cargo ship' },
+  { name: 'Nova Vex', hair: 'red', accessory: 'visor', hobby: 'astronomy', vehicle: 'jet' },
+  { name: 'Saffron Silk', hair: 'auburn', accessory: 'silk fan', hobby: 'tea ceremonies', vehicle: 'rickshaw' },
+
+  { name: 'Silk Serpent', hair: 'black', accessory: 'gold earrings', hobby: 'dance', vehicle: 'motorbike' },
+  { name: 'Crimson Dagger', hair: 'red', accessory: 'dagger', hobby: 'dueling', vehicle: 'motorcycle' },
+  { name: 'Golden Lynx', hair: 'blond', accessory: 'necklace', hobby: 'jewelry', vehicle: 'sports car' },
+  { name: 'Ivory Whisper', hair: 'white', accessory: 'gloves', hobby: 'piano', vehicle: 'car' },
+  { name: 'Neon Specter', hair: 'green', accessory: 'visor', hobby: 'hacking', vehicle: 'motorbike' },
+  { name: 'Scarlet Swan', hair: 'red', accessory: 'necklace', hobby: 'ballet', vehicle: 'car' },
+
+  { name: 'Midnight Owl', hair: 'black', accessory: 'glasses', hobby: 'reading', vehicle: 'bicycle' },
+  { name: 'Dusty Nomad', hair: 'brown', accessory: 'hat', hobby: 'traveling', vehicle: 'jeep' },
+  { name: 'Silver Comet', hair: 'silver', accessory: 'watch', hobby: 'running', vehicle: 'jet' },
+  { name: 'Velvet Raven', hair: 'black', accessory: 'cloak', hobby: 'poetry', vehicle: 'boat' },
+  { name: 'Amber Fox', hair: 'auburn', accessory: 'brooch', hobby: 'collecting', vehicle: 'car' },
+
+  { name: 'Storm Herald', hair: 'gray', accessory: 'coat', hobby: 'meteorology', vehicle: 'plane' },
+  { name: 'Crimson Mirage', hair: 'red', accessory: 'scarf', hobby: 'illusion', vehicle: 'train' },
+  { name: 'Onyx Panther', hair: 'black', accessory: 'mask', hobby: 'stealth', vehicle: 'motorcycle' },
+  { name: 'Golden Seraph', hair: 'blond', accessory: 'pendant', hobby: 'history', vehicle: 'ship' },
+  { name: 'Ivory Phantom', hair: 'white', accessory: 'cloak', hobby: 'acting', vehicle: 'car' },
+
+  { name: 'Emerald Kite', hair: 'green', accessory: 'ring', hobby: 'kite flying', vehicle: 'glider' },
+  { name: 'Shadow Lynx', hair: 'black', accessory: 'gloves', hobby: 'tracking', vehicle: 'jeep' },
+  { name: 'Copper Sparrow', hair: 'auburn', accessory: 'hat', hobby: 'writing', vehicle: 'bicycle' },
+  { name: 'Ghost Mariner', hair: 'gray', accessory: 'compass', hobby: 'sailing', vehicle: 'ship' },
+  { name: 'Velvet Cipher', hair: 'black', accessory: 'tattoo', hobby: 'cryptography', vehicle: 'car' },
 ];
+
+const THIEF_NAMES = SUSPECTS.map(s => s.name);
 
 const SUSPECT_ATTRIBUTES = ['hair', 'accessory', 'hobby', 'vehicle'];
 
