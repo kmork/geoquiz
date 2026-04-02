@@ -78,17 +78,33 @@ export function createCarmenUI(container, flagCodes) {
       </div>
       <div class="carmen-dossier-body" id="carmen-dossier-body"></div>
     </div>
-    <div class="carmen-intro-row" id="carmen-intro-row">
-      <div class="carmen-narrative" id="carmen-narrative"></div>
+    <div class="carmen-intro-row side-by-side" id="carmen-intro-row">
+      <div class="carmen-left-panel">
+        <div class="carmen-panel-tabs" id="carmen-panel-tabs" style="display:none">
+          <button class="carmen-panel-tab active" data-tab="case">📁 Case</button>
+          <button class="carmen-panel-tab" data-tab="investigate">🔍 Investigate</button>
+        </div>
+        <div class="carmen-panel-view" id="carmen-panel-case">
+          <div class="carmen-narrative" id="carmen-narrative"></div>
+          <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
+        </div>
+        <div class="carmen-panel-view" id="carmen-panel-investigate" style="display:none">
+          <div class="carmen-locations-label" id="carmen-locations-label"></div>
+          <div class="carmen-locations" id="carmen-locations"></div>
+        </div>
+      </div>
       <div class="carmen-map-wrap">
-        <div class="carmen-map-header" id="carmen-map-header" style="display:none">Where did the thief go?</div>
-        <svg id="carmen-map" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"></svg>
-        <div class="carmen-map-sidebar" id="carmen-map-sidebar"></div>
+        <div class="carmen-artifact-display" id="carmen-artifact-display" style="display:none">
+          <img class="carmen-artifact-img" id="carmen-artifact-img" src="" alt="">
+          <div class="carmen-artifact-stamp">STOLEN</div>
+        </div>
+        <div class="carmen-map-area" id="carmen-map-area">
+          <div class="carmen-map-header" id="carmen-map-header" style="display:none">Where did the thief go?</div>
+          <svg id="carmen-map" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"></svg>
+          <div class="carmen-map-sidebar" id="carmen-map-sidebar"></div>
+        </div>
       </div>
     </div>
-    <div class="carmen-locations-label" id="carmen-locations-label" style="display:none">Investigate a location:</div>
-    <div class="carmen-locations" id="carmen-locations"></div>
-    <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
   `;
 
   const els = {
@@ -98,6 +114,9 @@ export function createCarmenUI(container, flagCodes) {
     briefingStart: container.querySelector('#carmen-briefing-start'),
     introRow: container.querySelector('#carmen-intro-row'),
     narrative: container.querySelector('#carmen-narrative'),
+    panelTabs: container.querySelector('#carmen-panel-tabs'),
+    panelCase: container.querySelector('#carmen-panel-case'),
+    panelInvestigate: container.querySelector('#carmen-panel-investigate'),
     lives: container.querySelector('#carmen-lives'),
     score: container.querySelector('#carmen-score'),
     progress: container.querySelector('#carmen-progress'),
@@ -111,10 +130,12 @@ export function createCarmenUI(container, flagCodes) {
     // Neighbor buttons removed — neighbors are now on the map
     map: container.querySelector('#carmen-map'),
     mapHeader: container.querySelector('#carmen-map-header'),
+    mapArea: container.querySelector('#carmen-map-area'),
     mapWrap: container.querySelector('.carmen-map-wrap'),
+    artifactDisplay: container.querySelector('#carmen-artifact-display'),
+    artifactImg: container.querySelector('#carmen-artifact-img'),
     sidebar: container.querySelector('#carmen-map-sidebar'),
     reveal: container.querySelector('#carmen-clue-reveal'),
-    neighbors: container.querySelector('#carmen-neighbors'),
   };
 
   function flagImg(country) {
@@ -133,6 +154,24 @@ export function createCarmenUI(container, flagCodes) {
   });
   els.dossierClose.addEventListener('click', () => {
     els.dossier.style.display = 'none';
+  });
+
+  // Panel tab switching — also toggles artifact image vs map
+  function switchTab(tab) {
+    els.panelTabs.querySelectorAll('.carmen-panel-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.tab === tab);
+    });
+    els.panelCase.style.display = tab === 'case' ? '' : 'none';
+    els.panelInvestigate.style.display = tab === 'investigate' ? '' : 'none';
+
+    // Show artifact image for Case tab, map for Investigate tab
+    const hasImg = els.artifactImg.src && !els.artifactImg.src.endsWith('/');
+    els.artifactDisplay.style.display = (tab === 'case' && hasImg) ? '' : 'none';
+    els.mapArea.style.display = tab === 'investigate' ? '' : 'none';
+  }
+  els.panelTabs.addEventListener('click', (e) => {
+    const tab = e.target.closest('.carmen-panel-tab');
+    if (tab) switchTab(tab.dataset.tab);
   });
 
   function renderDossier() {
@@ -228,8 +267,14 @@ export function createCarmenUI(container, flagCodes) {
 
     showIntro(thiefName, artifact, startCountry) {
       const siteName = artifact.siteName || 'a priceless artifact';
-      // Side-by-side layout for intro: artifact card + map
-      els.introRow.classList.add('side-by-side');
+      const imgUrl = artifact.imageUrl || '';
+      // Set artifact image for the right-side display
+      if (imgUrl) {
+        els.artifactImg.src = imgUrl;
+        els.artifactImg.alt = siteName;
+      }
+      els.panelTabs.style.display = '';
+      switchTab('case');
       els.narrative.innerHTML = `
         <div class="carmen-intro-card">
           <div class="carmen-intro-badge">ACTIVE CASE</div>
@@ -413,8 +458,8 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     hideLocations() {
-      els.locationsLabel.style.display = 'none';
       els.locations.innerHTML = '';
+      els.locationsLabel.textContent = '';
     },
 
     /** Flash the screen red on wrong guess */
@@ -487,8 +532,12 @@ export function createCarmenUI(container, flagCodes) {
       els.reveal.style.display = 'none';
       els.mapWrap.style.minHeight = '';
       els.mapHeader.style.display = 'none';
-      els.locationsLabel.style.display = 'none';
       els.locations.innerHTML = '';
+      els.locationsLabel.textContent = '';
+      // Show map during transition (not artifact image)
+      els.artifactDisplay.style.display = 'none';
+      els.mapArea.style.display = '';
+      switchTab('case');
 
       // Overlay on the map
       const overlay = document.createElement('div');

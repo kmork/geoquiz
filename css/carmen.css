@@ -145,28 +145,60 @@
   transform: translateY(0);
 }
 
-/* ── Intro Row (side-by-side on first stop) ─────────── */
+/* ── Intro Row (always side-by-side) ────────────────── */
 .carmen-intro-row {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 1rem;
   margin-bottom: 1rem;
-}
-
-.carmen-intro-row.side-by-side {
-  flex-direction: row;
   align-items: stretch;
 }
 
-.carmen-intro-row.side-by-side .carmen-narrative {
-  flex: 0 0 220px;
-  margin-bottom: 0;
+.carmen-left-panel {
+  flex: 0 0 230px;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
 }
 
-.carmen-intro-row.side-by-side .carmen-map-wrap {
+.carmen-intro-row .carmen-map-wrap {
   flex: 1;
   min-width: 0;
-  margin-bottom: 0;
+}
+
+/* ── Panel Tabs ────────────────────────────────────── */
+.carmen-panel-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: 0.5rem;
+}
+
+.carmen-panel-tab {
+  flex: 1;
+  padding: 0.35rem 0.4rem;
+  border: 1px solid var(--card-border);
+  background: var(--bg-color);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px 8px 0 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.carmen-panel-tab.active {
+  background: var(--card-bg);
+  color: var(--text-color);
+  border-bottom-color: var(--card-bg);
+}
+
+.carmen-panel-tab:hover:not(.active) {
+  background: var(--card-bg);
+}
+
+.carmen-panel-view {
+  flex: 1;
+  overflow-y: auto;
 }
 
 /* ── Narrative / Story ───────────────────────────────── */
@@ -176,7 +208,6 @@
   border-radius: 12px;
   background: var(--card-bg);
   border: 1px solid var(--card-border);
-  margin-bottom: 1rem;
   line-height: 1.5;
 }
 
@@ -207,6 +238,39 @@
   padding: 0.15rem 0.5rem;
   display: inline-block;
   align-self: flex-start;
+}
+
+/* ── Artifact Display (replaces map on Case tab) ───── */
+.carmen-artifact-display {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+
+.carmen-artifact-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.carmen-artifact-stamp {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-18deg);
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: rgba(220, 38, 38, 0.85);
+  border: 5px solid rgba(220, 38, 38, 0.85);
+  border-radius: 8px;
+  padding: 0.2rem 1.2rem;
+  text-transform: uppercase;
+  pointer-events: none;
+  white-space: nowrap;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 
 .carmen-intro-artifact {
@@ -572,25 +636,25 @@
 }
 
 .carmen-locations {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 0.45rem;
-  margin-bottom: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
 }
 
 .carmen-location-btn {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  gap: 0.3rem;
-  padding: 0.6rem 0.4rem;
-  border-radius: 10px;
+  gap: 0.5rem;
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
   background: var(--button-bg);
   border: 2px solid var(--button-border);
   color: var(--button-color);
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   transition: background 0.15s, border-color 0.2s, transform 0.15s, opacity 0.2s;
+  text-align: left;
 }
 
 .carmen-location-btn:hover:not(:disabled) {
@@ -604,7 +668,8 @@
 }
 
 .carmen-location-emoji {
-  font-size: 1.5rem;
+  font-size: 1.1rem;
+  flex-shrink: 0;
 }
 
 .carmen-location-name {
@@ -832,23 +897,12 @@
 
 /* ── Responsive ──────────────────────────────────────── */
 @media (max-width: 600px) {
-  .carmen-intro-row.side-by-side {
+  .carmen-intro-row {
     flex-direction: column;
   }
 
-  .carmen-intro-row.side-by-side .carmen-narrative {
+  .carmen-left-panel {
     flex: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .carmen-neighbors {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  }
-
-  .carmen-neighbor-btn {
-    padding: 0.45rem 0.6rem;
-    font-size: 0.82rem;
   }
 
   .carmen-clue-text {
