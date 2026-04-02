@@ -48,6 +48,48 @@ export function playStamp() {
   noise.stop(ac.currentTime + 0.1);
 }
 
+/* ── Background music ──────────────────────────────── */
+let bgMusic = null;
+
+function getBgMusic() {
+  if (!bgMusic) {
+    bgMusic = new Audio('night_walk.mp3');
+    bgMusic.loop = true;
+    bgMusic.volume = 0.25;
+  }
+  return bgMusic;
+}
+
+/** Start looping background music (fade in). */
+export function startMusic() {
+  const m = getBgMusic();
+  if (!m.paused) return;
+  m.volume = 0;
+  m.play().catch(() => {});
+  // Fade in
+  let v = 0;
+  const fade = setInterval(() => {
+    v = Math.min(v + 0.05, 0.25);
+    m.volume = v;
+    if (v >= 0.25) clearInterval(fade);
+  }, 60);
+}
+
+/** Stop background music (fade out). */
+export function stopMusic() {
+  const m = getBgMusic();
+  if (m.paused) return;
+  let v = m.volume;
+  const fade = setInterval(() => {
+    v = Math.max(v - 0.05, 0);
+    m.volume = v;
+    if (v <= 0) {
+      clearInterval(fade);
+      m.pause();
+    }
+  }, 60);
+}
+
 /** Single typewriter key click. */
 export function playTypeKey() {
   const ac = getCtx();

@@ -5,6 +5,7 @@ import { loadGeoJSON } from './geojson-loader.js';
 import { attachZoomPan } from './map-zoom-pan.js';
 import { renderFinishScreen } from './game-records.js';
 import { initConfetti } from './confetti.js';
+import { startMusic, stopMusic } from './carmen-audio.js';
 
 const params = new URLSearchParams(location.search);
 const difficulty = params.get('difficulty') || 'detective';
@@ -126,6 +127,7 @@ function checkTimeExpired() {
 }
 
 function showInvestigationLocations() {
+  startMusic();
   const locations = logic.getLocations();
   const maxInvestigations = logic.getMaxInvestigations();
 
@@ -159,6 +161,7 @@ function showInvestigationLocations() {
 
 
 function handleGuess(country) {
+  stopMusic();
   const result = logic.guess(country);
 
   if (result.correct) {
@@ -237,6 +240,7 @@ function handleGuess(country) {
 }
 
 function showFinish(identifiedCorrectly, chosenSuspect) {
+  stopMusic();
   const results = logic.getResults();
 
   finalOverlay.style.display = 'flex';
