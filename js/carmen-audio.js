@@ -49,37 +49,47 @@ export function playStamp() {
 }
 
 /* ── Background music ──────────────────────────────── */
+const TRACKS = [
+  'carmen/audio/Alley Thoughts.mp3',
+  'carmen/audio/Bass Walker.mp3',
+  'carmen/audio/Catching The Thief.mp3',
+  'carmen/audio/Cool Vibes.mp3',
+  'carmen/audio/Covert Affair.mp3',
+  'carmen/audio/Fallen Petals.mp3',
+  'carmen/audio/Just As Soon.mp3',
+  'carmen/audio/Night Walk In Paris.mp3',
+  'carmen/audio/Noir Alley.mp3',
+  'carmen/audio/Signs To Nowhere.mp3',
+];
+
 let bgMusic = null;
 
-function getBgMusic() {
-  if (!bgMusic) {
-    bgMusic = new Audio('night_walk.mp3');
-    bgMusic.loop = true;
-    bgMusic.volume = 0.25;
-  }
-  return bgMusic;
+function pickRandomTrack() {
+  return TRACKS[Math.floor(Math.random() * TRACKS.length)];
 }
 
-/** Start looping background music (fade in). */
+/** Start looping background music (fade in). Picks a random track each time. */
 export function startMusic() {
-  const m = getBgMusic();
-  if (!m.paused) return;
-  m.volume = 0;
-  m.play().catch(() => {});
-  // Fade in
+  if (bgMusic && !bgMusic.paused) return;
+
+  bgMusic = new Audio(pickRandomTrack());
+  bgMusic.loop = true;
+  bgMusic.volume = 0;
+  bgMusic.play().catch(() => {});
+
   let v = 0;
   const fade = setInterval(() => {
     v = Math.min(v + 0.05, 0.25);
-    m.volume = v;
+    bgMusic.volume = v;
     if (v >= 0.25) clearInterval(fade);
   }, 60);
 }
 
 /** Stop background music (fade out). */
 export function stopMusic() {
-  const m = getBgMusic();
-  if (m.paused) return;
-  let v = m.volume;
+  if (!bgMusic || bgMusic.paused) return;
+  let v = bgMusic.volume;
+  const m = bgMusic;
   const fade = setInterval(() => {
     v = Math.max(v - 0.05, 0);
     m.volume = v;
