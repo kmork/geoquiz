@@ -69,14 +69,6 @@ export function createCarmenUI(container, flagCodes) {
       <div class="pill">Score: <b id="carmen-score">0</b></div>
       <div class="carmen-progress" id="carmen-progress"></div>
       <div class="carmen-clock" id="carmen-clock"></div>
-      <button class="carmen-dossier-btn" id="carmen-dossier-btn" title="Case Dossier">📋</button>
-    </div>
-    <div class="carmen-dossier" id="carmen-dossier" style="display:none">
-      <div class="carmen-dossier-header">
-        <span>📋 Case Dossier</span>
-        <button class="carmen-dossier-close" id="carmen-dossier-close">✕</button>
-      </div>
-      <div class="carmen-dossier-body" id="carmen-dossier-body"></div>
     </div>
     <div class="carmen-intro-row side-by-side" id="carmen-intro-row">
       <div class="carmen-left-panel">
@@ -84,24 +76,47 @@ export function createCarmenUI(container, flagCodes) {
           <button class="carmen-panel-tab active" data-tab="case">📁 Case</button>
           <button class="carmen-panel-tab" data-tab="investigate">🔍 Investigate</button>
         </div>
-        <div class="carmen-panel-view" id="carmen-panel-case">
-          <div class="carmen-narrative" id="carmen-narrative"></div>
-          <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
+        <div class="carmen-panel-content">
+          <div class="carmen-panel-view" id="carmen-panel-case">
+            <div class="carmen-narrative" id="carmen-narrative"></div>
+            <div class="carmen-witness-report" id="carmen-witness-report"></div>
+          </div>
+          <div class="carmen-panel-view" id="carmen-panel-investigate" style="display:none">
+            <div class="carmen-locations-label" id="carmen-locations-label"></div>
+            <div class="carmen-locations" id="carmen-locations"></div>
+          </div>
+          <div class="carmen-panel-view" id="carmen-panel-travel" style="display:none">
+            <div class="carmen-travel-label">Where did the thief go?</div>
+            <div class="carmen-travel-hint">Select a neighboring country on the map</div>
+          </div>
+          <div class="carmen-panel-view" id="carmen-panel-dossier" style="display:none">
+            <div class="carmen-dossier-tab-label">📋 Case Dossier</div>
+            <div class="carmen-dossier-tab-hint">Review collected clues on the right</div>
+          </div>
         </div>
-        <div class="carmen-panel-view" id="carmen-panel-investigate" style="display:none">
-          <div class="carmen-locations-label" id="carmen-locations-label"></div>
-          <div class="carmen-locations" id="carmen-locations"></div>
+        <div class="carmen-bottom-tabs" id="carmen-bottom-tabs" style="display:none">
+          <button class="carmen-bottom-tab" data-tab="travel">✈️ Travel</button>
+          <button class="carmen-bottom-tab" data-tab="dossier">📋 Dossier</button>
         </div>
       </div>
-      <div class="carmen-map-wrap">
-        <div class="carmen-artifact-display" id="carmen-artifact-display" style="display:none">
-          <img class="carmen-artifact-img" id="carmen-artifact-img" src="" alt="">
-          <div class="carmen-artifact-stamp">STOLEN</div>
+      <div class="carmen-right-panel">
+        <div class="carmen-right-view" id="carmen-rv-artifact">
+          <div class="carmen-artifact-display">
+            <img class="carmen-artifact-img" id="carmen-artifact-img" src="" alt="">
+            <div class="carmen-artifact-stamp">STOLEN</div>
+          </div>
         </div>
-        <div class="carmen-map-area" id="carmen-map-area">
-          <div class="carmen-map-header" id="carmen-map-header" style="display:none">Where did the thief go?</div>
-          <svg id="carmen-map" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"></svg>
-          <div class="carmen-map-sidebar" id="carmen-map-sidebar"></div>
+        <div class="carmen-right-view" id="carmen-rv-clues" style="display:none">
+          <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
+        </div>
+        <div class="carmen-right-view" id="carmen-rv-map" style="display:none">
+          <div class="carmen-map-wrap" id="carmen-map-wrap">
+            <svg id="carmen-map" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"></svg>
+            <div class="carmen-map-sidebar" id="carmen-map-sidebar"></div>
+          </div>
+        </div>
+        <div class="carmen-right-view" id="carmen-rv-dossier" style="display:none">
+          <div class="carmen-dossier-inline" id="carmen-dossier-body-inline"></div>
         </div>
       </div>
     </div>
@@ -121,21 +136,23 @@ export function createCarmenUI(container, flagCodes) {
     score: container.querySelector('#carmen-score'),
     progress: container.querySelector('#carmen-progress'),
     clock: container.querySelector('#carmen-clock'),
-    dossierBtn: container.querySelector('#carmen-dossier-btn'),
-    dossier: container.querySelector('#carmen-dossier'),
-    dossierBody: container.querySelector('#carmen-dossier-body'),
-    dossierClose: container.querySelector('#carmen-dossier-close'),
     locationsLabel: container.querySelector('#carmen-locations-label'),
     locations: container.querySelector('#carmen-locations'),
-    // Neighbor buttons removed — neighbors are now on the map
-    map: container.querySelector('#carmen-map'),
-    mapHeader: container.querySelector('#carmen-map-header'),
-    mapArea: container.querySelector('#carmen-map-area'),
-    mapWrap: container.querySelector('.carmen-map-wrap'),
-    artifactDisplay: container.querySelector('#carmen-artifact-display'),
+    witnessReport: container.querySelector('#carmen-witness-report'),
+    panelTravel: container.querySelector('#carmen-panel-travel'),
+    panelDossier: container.querySelector('#carmen-panel-dossier'),
+    bottomTabs: container.querySelector('#carmen-bottom-tabs'),
+    // Right panel views
+    rvArtifact: container.querySelector('#carmen-rv-artifact'),
+    rvClues: container.querySelector('#carmen-rv-clues'),
+    rvMap: container.querySelector('#carmen-rv-map'),
+    rvDossier: container.querySelector('#carmen-rv-dossier'),
     artifactImg: container.querySelector('#carmen-artifact-img'),
+    map: container.querySelector('#carmen-map'),
+    mapWrap: container.querySelector('#carmen-map-wrap'),
     sidebar: container.querySelector('#carmen-map-sidebar'),
     reveal: container.querySelector('#carmen-clue-reveal'),
+    dossierBody: container.querySelector('#carmen-dossier-body-inline'),
   };
 
   function flagImg(country) {
@@ -147,30 +164,50 @@ export function createCarmenUI(container, flagCodes) {
   // Dossier state
   const dossierEntries = []; // [{stop, clueText, informantPrefix}]
 
-  // Toggle dossier panel
-  els.dossierBtn.addEventListener('click', () => {
-    const showing = els.dossier.style.display !== 'none';
-    els.dossier.style.display = showing ? 'none' : '';
-  });
-  els.dossierClose.addEventListener('click', () => {
-    els.dossier.style.display = 'none';
-  });
+  // ── Tab switching ──
+  // Left panels + right views mapping
+  const leftPanels = {
+    case: els.panelCase,
+    investigate: els.panelInvestigate,
+    travel: els.panelTravel,
+    dossier: els.panelDossier,
+  };
+  // Which right view each tab shows
+  const rightViewForTab = {
+    case: els.rvArtifact,
+    investigate: els.rvClues,   // shows clues (or zoomed country before any clue)
+    travel: els.rvMap,
+    dossier: els.rvDossier,
+  };
+  const allRightViews = [els.rvArtifact, els.rvClues, els.rvMap, els.rvDossier];
+  let activeTab = 'case';
 
-  // Panel tab switching — also toggles artifact image vs map
   function switchTab(tab) {
+    activeTab = tab;
+    // Left panel
+    for (const [key, el] of Object.entries(leftPanels)) {
+      el.style.display = key === tab ? '' : 'none';
+    }
+    // Right panel
+    const targetRight = rightViewForTab[tab];
+    for (const rv of allRightViews) {
+      rv.style.display = rv === targetRight ? '' : 'none';
+    }
+    // Update all tab active states
     els.panelTabs.querySelectorAll('.carmen-panel-tab').forEach(t => {
       t.classList.toggle('active', t.dataset.tab === tab);
     });
-    els.panelCase.style.display = tab === 'case' ? '' : 'none';
-    els.panelInvestigate.style.display = tab === 'investigate' ? '' : 'none';
-
-    // Show artifact image for Case tab, map for Investigate tab
-    const hasImg = els.artifactImg.src && !els.artifactImg.src.endsWith('/');
-    els.artifactDisplay.style.display = (tab === 'case' && hasImg) ? '' : 'none';
-    els.mapArea.style.display = tab === 'investigate' ? '' : 'none';
+    els.bottomTabs.querySelectorAll('.carmen-bottom-tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.tab === tab);
+    });
   }
+
   els.panelTabs.addEventListener('click', (e) => {
     const tab = e.target.closest('.carmen-panel-tab');
+    if (tab) switchTab(tab.dataset.tab);
+  });
+  els.bottomTabs.addEventListener('click', (e) => {
+    const tab = e.target.closest('.carmen-bottom-tab');
     if (tab) switchTab(tab.dataset.tab);
   });
 
@@ -203,8 +240,7 @@ export function createCarmenUI(container, flagCodes) {
   return {
     get mapSvg() { return els.map; },
 
-    showMapHeader() { els.mapHeader.style.display = ''; },
-    hideMapHeader() { els.mapHeader.style.display = 'none'; },
+    switchTab(tab) { switchTab(tab); },
 
     /** Add a clue to the dossier. */
     addDossierEntry(stop, clueText, informantPrefix) {
@@ -216,6 +252,22 @@ export function createCarmenUI(container, flagCodes) {
     resetDossier() {
       dossierEntries.length = 0;
       renderDossier();
+    },
+
+    /** Show a witness report on the Case tab. */
+    addWitnessReport(clue, informant) {
+      const emoji = informant ? informant.emoji : '🔍';
+      const prefix = informant ? informant.prefix : 'Witness report';
+      const text = clue.text;
+      els.witnessReport.innerHTML += `
+        <div class="carmen-witness-entry">
+          <div class="carmen-witness-header">
+            <span class="carmen-witness-emoji">${emoji}</span>
+            <span class="carmen-witness-prefix">${esc(prefix)}:</span>
+          </div>
+          <div class="carmen-witness-text">"${esc(text)}"</div>
+        </div>
+      `;
     },
 
     /** Show dramatic case briefing overlay. Returns a promise that resolves when player clicks start. */
@@ -274,6 +326,7 @@ export function createCarmenUI(container, flagCodes) {
         els.artifactImg.alt = siteName;
       }
       els.panelTabs.style.display = '';
+      els.bottomTabs.style.display = '';
       switchTab('case');
       els.narrative.innerHTML = `
         <div class="carmen-intro-card">
@@ -287,14 +340,13 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     showStopNarrative(stopIndex, totalStops) {
-      // Collapse back to stacked layout for subsequent stops
-      els.introRow.classList.remove('side-by-side');
       const remaining = totalStops - stopIndex;
       if (remaining <= 1) {
         els.narrative.innerHTML = `The thief is cornered — this is the <strong>final stop</strong>!`;
       } else {
         els.narrative.innerHTML = `Intel says the thief is <strong>${remaining} ${remaining === 1 ? 'stop' : 'stops'}</strong> ahead. Follow the clues.`;
       }
+      switchTab('case');
     },
 
     updateScore(score) {
@@ -323,94 +375,29 @@ export function createCarmenUI(container, flagCodes) {
       els.clock.classList.toggle('critical', pct < 0.12);
     },
 
-    showClues(clues, informants) {
-      this._clueData = [...clues];
-      this._informants = informants || [];
-      els.sidebar.innerHTML = clues.map((c, i) => {
-        const inf = this._informants[i];
-        const icon = inf ? inf.emoji : c.icon;
-        return `<button class="carmen-clue-icon" data-index="${i}">${icon}</button>`;
-      }).join('');
+    /** Clear the clue display on the right panel. */
+    clearClues() {
+      els.sidebar.innerHTML = '';
       els.reveal.style.display = 'none';
       els.reveal.innerHTML = '';
-      this._bindClueIcons();
-      this._updateMapMinHeight();
-    },
-
-    _bindClueIcons() {
-      const icons = els.sidebar.querySelectorAll('.carmen-clue-icon');
-      const clues = this._clueData;
-      const informants = this._informants;
-
-      icons.forEach((icon, i) => {
-        icon.addEventListener('click', () => {
-          icons.forEach(ic => ic.classList.remove('active'));
-          icon.classList.add('active');
-          const inf = informants[i];
-          if (inf) {
-            els.reveal.innerHTML = `
-              <div class="carmen-informant">
-                <div class="carmen-informant-header">
-                  <span class="carmen-informant-emoji">${inf.emoji}</span>
-                  <span class="carmen-informant-prefix">${esc(inf.prefix)}:</span>
-                </div>
-                <div class="carmen-informant-bubble">
-                  <span class="carmen-clue-text">"${esc(clues[i].text)}"</span>
-                </div>
-              </div>
-            `;
-          } else {
-            els.reveal.innerHTML = `<span class="carmen-clue-text">${esc(clues[i].text)}</span>`;
-          }
-          els.reveal.style.display = '';
-        });
-      });
-    },
-
-    _updateMapMinHeight() {
-      // Ensure map is tall enough for sidebar icons + hint button
-      const iconCount = els.sidebar.querySelectorAll('.carmen-clue-icon').length;
-      // Each icon ~44px + 6px gap, plus hint button ~40px + 12px spacing
-      const needed = iconCount * 50 + 12 + 40 + 16;
-      els.mapWrap.style.minHeight = needed + 'px';
     },
 
     addClue(clue, informant) {
-      this._clueData.push(clue);
-      if (informant) this._informants.push(informant);
-      else this._informants.push(null);
-      const index = this._clueData.length - 1;
-      const btn = document.createElement('button');
-      btn.className = 'carmen-clue-icon';
-      btn.dataset.index = index;
-      btn.textContent = informant ? informant.emoji : clue.icon;
-      els.sidebar.appendChild(btn);
-
-      const inf = informant;
-      btn.addEventListener('click', () => {
-        els.sidebar.querySelectorAll('.carmen-clue-icon').forEach(ic => ic.classList.remove('active'));
-        btn.classList.add('active');
-        if (inf) {
-          els.reveal.innerHTML = `
-            <div class="carmen-informant">
-              <div class="carmen-informant-header">
-                <span class="carmen-informant-emoji">${inf.emoji}</span>
-                <span class="carmen-informant-prefix">${esc(inf.prefix)}:</span>
-              </div>
-              <div class="carmen-informant-bubble">
-                <span class="carmen-clue-text">"${esc(clue.text)}"</span>
-              </div>
-            </div>
-          `;
-        } else {
-          els.reveal.innerHTML = `<span class="carmen-clue-text">${esc(clue.text)}</span>`;
-        }
-        els.reveal.style.display = '';
-      });
-
-      this._updateMapMinHeight();
-      // Auto-reveal the new clue
-      btn.click();
+      const emoji = informant ? informant.emoji : (clue.icon || '💬');
+      const prefix = informant ? informant.prefix : 'Intel';
+      els.reveal.innerHTML = `
+        <div class="carmen-speech-bubble">
+          <div class="carmen-speech-avatar">${emoji}</div>
+          <div class="carmen-speech-body">
+            <div class="carmen-speech-name">${esc(prefix)}</div>
+            <div class="carmen-speech-text">"${esc(clue.text)}"</div>
+          </div>
+        </div>
+      `;
+      els.reveal.style.display = '';
+      // Switch right panel to clues view
+      for (const rv of allRightViews) rv.style.display = 'none';
+      els.rvClues.style.display = '';
     },
 
     /**
@@ -530,14 +517,15 @@ export function createCarmenUI(container, flagCodes) {
     showTransition(stopScore, country, taunt, thiefName, onContinue) {
       els.sidebar.innerHTML = '';
       els.reveal.style.display = 'none';
+      els.reveal.innerHTML = '';
       els.mapWrap.style.minHeight = '';
-      els.mapHeader.style.display = 'none';
       els.locations.innerHTML = '';
       els.locationsLabel.textContent = '';
-      // Show map during transition (not artifact image)
-      els.artifactDisplay.style.display = 'none';
-      els.mapArea.style.display = '';
+      els.witnessReport.innerHTML = '';
+      // Force map visible on right for transition animation
       switchTab('case');
+      for (const rv of allRightViews) rv.style.display = 'none';
+      els.rvMap.style.display = '';
 
       // Overlay on the map
       const overlay = document.createElement('div');

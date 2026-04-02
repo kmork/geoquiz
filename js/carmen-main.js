@@ -79,7 +79,7 @@ async function startGame() {
   ui.resetDossier();
 
   // Clear old clues, then show investigation locations
-  ui.showClues([], []);
+  ui.clearClues();
   showInvestigationLocations();
   showNeighborsOnMap(intro.neighbors);
 }
@@ -108,7 +108,6 @@ function showNeighborsOnMap(neighbors) {
     activeNeighborChoices = null;
   }
   activeNeighborChoices = renderer.drawNeighborChoices(neighbors, handleGuess);
-  ui.showMapHeader();
 }
 
 function updateClock() {
@@ -131,10 +130,10 @@ function showInvestigationLocations() {
   const locations = logic.getLocations();
   const maxInvestigations = logic.getMaxInvestigations();
 
-  // Show a suspect identity clue at the start of each stop
+  // Show a suspect identity clue as witness report on Case tab
   const suspectClue = logic.getSuspectClue();
   if (suspectClue) {
-    ui.addClue(suspectClue, { emoji: '🔍', prefix: 'Witness report' });
+    ui.addWitnessReport(suspectClue, { emoji: '🔍', prefix: 'Witness report' });
     ui.addDossierEntry(logic.currentStop, suspectClue.text, 'Witness report');
   }
 
@@ -213,7 +212,7 @@ function handleGuess(country) {
       ui.showTransition(result.stopScore, result.country, taunt, 'The thief', () => {
         ui.updateProgress(progress.stop, progress.totalStops);
         ui.showStopNarrative(progress.stop, progress.totalStops);
-        ui.showClues([], []);
+        ui.clearClues();
         showInvestigationLocations();
         showNeighborsOnMap(result.neighbors);
       });

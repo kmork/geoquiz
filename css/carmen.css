@@ -161,9 +161,14 @@
   min-width: 0;
 }
 
-.carmen-intro-row .carmen-map-wrap {
+.carmen-right-panel {
   flex: 1;
   min-width: 0;
+}
+
+.carmen-panel-content {
+  flex: 1;
+  overflow-y: auto;
 }
 
 /* ── Panel Tabs ────────────────────────────────────── */
@@ -199,6 +204,51 @@
 .carmen-panel-view {
   flex: 1;
   overflow-y: auto;
+}
+
+/* ── Bottom Tabs (Travel / Dossier) ────────────────── */
+.carmen-bottom-tabs {
+  display: flex;
+  gap: 2px;
+  margin-top: auto;
+  padding-top: 0.4rem;
+}
+
+.carmen-bottom-tab {
+  flex: 1;
+  padding: 0.3rem 0.4rem;
+  border: 1px solid var(--card-border);
+  background: var(--bg-color);
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 0 0 8px 8px;
+  transition: background 0.15s, color 0.15s;
+}
+
+.carmen-bottom-tab.active {
+  background: var(--card-bg);
+  color: var(--text-color);
+  border-top-color: var(--card-bg);
+}
+
+.carmen-bottom-tab:hover:not(.active) {
+  background: var(--card-bg);
+}
+
+/* ── Travel Panel ──────────────────────────────────── */
+.carmen-travel-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 0.3rem;
+}
+
+.carmen-travel-hint {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
 }
 
 /* ── Narrative / Story ───────────────────────────────── */
@@ -419,6 +469,18 @@
   line-height: 1.45;
 }
 
+.carmen-dossier-inline {
+  padding: 0.75rem 1rem;
+  overflow-y: auto;
+  height: 100%;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  background: var(--card-bg);
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  box-sizing: border-box;
+}
+
 .carmen-dossier-stop {
   font-weight: 700;
   font-size: 0.78rem;
@@ -563,6 +625,121 @@
   font-style: italic;
 }
 
+/* ── Witness Report (Case tab) ─────────────────────── */
+.carmen-witness-report {
+  margin-top: 0.5rem;
+}
+
+.carmen-witness-entry {
+  padding: 0.4rem 0.6rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  margin-bottom: 0.35rem;
+}
+
+.carmen-witness-header {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  margin-bottom: 0.2rem;
+}
+
+.carmen-witness-emoji {
+  font-size: 1rem;
+}
+
+.carmen-witness-prefix {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.carmen-witness-text {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-color);
+  line-height: 1.4;
+}
+
+/* ── Speech Bubble (right panel clue) ──────────────── */
+.carmen-speech-bubble {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1.2rem;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.carmen-speech-avatar {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.carmen-speech-body {
+  flex: 1;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  position: relative;
+}
+
+.carmen-speech-body::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 14px;
+  border: 6px solid transparent;
+  border-right-color: var(--card-border);
+}
+
+.carmen-speech-body::after {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 15px;
+  border: 5px solid transparent;
+  border-right-color: var(--card-bg);
+}
+
+.carmen-speech-name {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.carmen-speech-text {
+  font-size: 1rem;
+  font-style: italic;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
+/* ── Right Panel Views ─────────────────────────────── */
+.carmen-right-view {
+  height: 100%;
+}
+
+/* ── Dossier Tab Label ─────────────────────────────── */
+.carmen-dossier-tab-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: 0.3rem;
+}
+
+.carmen-dossier-tab-hint {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
 /* ── Thief Taunts ───────────────────────────────────── */
 .carmen-taunt {
   display: flex;
@@ -696,12 +873,6 @@
 }
 
 /* ── Map-based Neighbor Choices ──────────────────────── */
-.carmen-map-header {
-  font-size: 0.82rem;
-  color: var(--text-muted);
-  margin-bottom: 0.3rem;
-}
-
 .carmen-map-label {
   font-weight: 500;
   fill: #fff;
