@@ -14,6 +14,7 @@ const gameId = `carmen-${difficulty}`;
 const gameContent = document.getElementById('game-content');
 const finalOverlay = document.getElementById('finalOverlay');
 const initOverlay = document.getElementById('init-overlay');
+const carmenFront = document.getElementById('carmen-front');
 
 const confetti = initConfetti('confetti');
 
@@ -35,9 +36,14 @@ const flagCodes = Object.fromEntries(
   window.ALL_COUNTRIES.map(c => [c.country, c.flagCode])
 );
 
-if (initOverlay) initOverlay.style.display = 'none';
+// Data loaded — hide the loading text, keep the front image visible
+if (carmenFront) {
+  const loadingText = carmenFront.querySelector('.carmen-init-loading');
+  if (loadingText) loadingText.style.display = 'none';
+}
 
-// Create UI
+// Create UI (hidden until briefing is dismissed)
+gameContent.style.display = 'none';
 const ui = createCarmenUI(gameContent, flagCodes);
 
 // Create map renderer
@@ -62,8 +68,12 @@ async function startGame() {
 
   const intro = logic.start();
 
-  // Show case briefing first
+  // Show case briefing over the front image
   await ui.showCaseBriefing(intro.artifact, intro.startCountry);
+
+  // Hide the front image, show the game
+  if (carmenFront) carmenFront.style.display = 'none';
+  gameContent.style.display = '';
 
   // Draw starting country on map, include neighbors in viewBox
   drawMap(intro.progress.route, intro.neighbors);

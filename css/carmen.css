@@ -1,5 +1,34 @@
 /* Where in the World? — Carmen Sandiego homage */
 
+/* ── Front Image (shown while loading) ────────────── */
+.carmen-front-wrap {
+  position: relative;
+  height: 480px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+}
+
+.carmen-front-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.carmen-init-loading {
+  position: absolute;
+  bottom: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.85rem;
+  color: rgba(255, 255, 255, 0.8);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 0.3rem 1rem;
+  border-radius: 6px;
+  animation: carmen-blink 1.5s ease-in-out infinite;
+}
+
 /* ── Case Briefing Overlay ──────────────────────────── */
 .carmen-briefing-overlay {
   position: fixed;
