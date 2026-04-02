@@ -116,6 +116,14 @@
   margin-bottom: 1.5rem;
 }
 
+.carmen-tap-hint {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 1rem;
+  animation: carmen-blink 1.5s ease-in-out infinite;
+  cursor: pointer;
+}
+
 .carmen-briefing-start {
   padding: 0.65rem 1.5rem;
   border-radius: 10px;
@@ -391,7 +399,6 @@
   overflow: hidden;
   background: var(--map-bg);
   border: 1px solid var(--map-border);
-  margin-bottom: 1rem;
 }
 
 .carmen-map-wrap svg {

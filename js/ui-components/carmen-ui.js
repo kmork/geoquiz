@@ -185,15 +185,36 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-artifact-name">${esc(siteName)}</div>
           <div class="carmen-artifact-origin">Last seen in ${esc(startCountry)}</div>
         `;
+        els.briefingMission.textContent = '';
         els.briefing.style.display = 'flex';
-        typewriter(els.briefingMission, 'Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.', 20);
 
-        // Animate stamp with sound
+        // Hide stamp and start button until user interacts
         const stamp = els.briefing.querySelector('.carmen-briefing-stamp');
         stamp.classList.remove('animate');
-        void stamp.offsetWidth; // force reflow
-        stamp.classList.add('animate');
-        setTimeout(() => playStamp(), 300); // sync with animation delay
+        els.briefingStart.style.display = 'none';
+
+        // Show "tap to open" prompt
+        const tapHint = document.createElement('div');
+        tapHint.className = 'carmen-tap-hint';
+        tapHint.textContent = 'Tap to open dossier';
+        els.briefing.querySelector('.carmen-briefing-content').appendChild(tapHint);
+
+        // First click unlocks audio and triggers the reveal
+        function onFirstClick() {
+          els.briefing.removeEventListener('click', onFirstClick);
+          tapHint.remove();
+
+          // Stamp animation + sound (user has interacted, audio is unlocked)
+          stamp.classList.add('animate');
+          setTimeout(() => playStamp(), 300);
+
+          // Typewriter with sounds
+          typewriter(els.briefingMission, 'Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.', 20)
+            .then(() => {
+              els.briefingStart.style.display = '';
+            });
+        }
+        els.briefing.addEventListener('click', onFirstClick);
 
         els.briefingStart.onclick = () => {
           els.briefing.style.display = 'none';
