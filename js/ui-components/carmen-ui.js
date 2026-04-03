@@ -401,9 +401,29 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     updateClock(hoursRemaining, totalHours) {
-      const days = Math.floor(hoursRemaining / 24);
-      const hours = hoursRemaining % 24;
-      els.clock.textContent = `⏰ ${days}d ${hours}h`;
+      const prev = this._prevHours ?? hoursRemaining;
+      this._prevHours = hoursRemaining;
+
+      if (prev === hoursRemaining) {
+        // No change — just set it
+        const days = Math.floor(hoursRemaining / 24);
+        const hours = hoursRemaining % 24;
+        els.clock.textContent = `⏰ ${days}d ${hours}h`;
+      } else {
+        // Animate countdown from prev to target
+        if (this._clockTimer) clearInterval(this._clockTimer);
+        let current = prev;
+        this._clockTimer = setInterval(() => {
+          current--;
+          const d = Math.floor(current / 24);
+          const h = current % 24;
+          els.clock.textContent = `⏰ ${d}d ${h}h`;
+          if (current <= hoursRemaining) {
+            clearInterval(this._clockTimer);
+            this._clockTimer = null;
+          }
+        }, 120);
+      }
       // Pulse when low
       const pct = hoursRemaining / totalHours;
       els.clock.classList.toggle('low', pct < 0.25);
