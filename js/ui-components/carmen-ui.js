@@ -425,7 +425,7 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-speech-avatar">${emoji}</div>
           <div class="carmen-speech-body">
             <div class="carmen-speech-name">${esc(prefix)}</div>
-            <div class="carmen-speech-text">"${esc(clue.text)}"</div>
+            <div class="carmen-speech-text"></div>
           </div>
         </div>
       `;
@@ -433,6 +433,9 @@ export function createCarmenUI(container, flagCodes) {
       // Switch right panel to clues view
       for (const rv of allRightViews) rv.style.display = 'none';
       els.rvClues.style.display = '';
+      // Typewriter the clue text
+      const textEl = els.reveal.querySelector('.carmen-speech-text');
+      typewriter(textEl, `"${clue.text}"`, 20);
     },
 
     /**
