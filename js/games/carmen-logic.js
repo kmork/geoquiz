@@ -6,9 +6,9 @@
  */
 
 const DIFFICULTY = {
-  rookie:    { stops: 4, lives: 5, cluesPerStop: 3, extraClues: Infinity, investigations: 4, totalHours: 72 },
-  detective: { stops: 6, lives: 3, cluesPerStop: 2, extraClues: 2, investigations: 3, totalHours: 72 },
-  ace:       { stops: 8, lives: 2, cluesPerStop: 1, extraClues: 1, investigations: 2, totalHours: 64 },
+  rookie:    { stops: 4, cluesPerStop: 3, extraClues: Infinity, investigations: 4, totalHours: 72 },
+  detective: { stops: 6, cluesPerStop: 2, extraClues: 2, investigations: 3, totalHours: 72 },
+  ace:       { stops: 8, cluesPerStop: 1, extraClues: 1, investigations: 2, totalHours: 64 },
 };
 
 const INVESTIGATION_COST_HOURS = 3; // hours per investigation
@@ -412,7 +412,6 @@ export class CarmenGameLogic {
     this.thiefName = '???'; // Unknown until identified
     this.currentStop = 0;
     this.score = 0;
-    this.lives = this.diff.lives;
     this.extraCluesUsed = 0;
     this.wrongGuessesThisStop = 0;
     this.totalWrongGuesses = 0;
@@ -509,29 +508,22 @@ export class CarmenGameLogic {
       };
     }
 
-    // Wrong guess
+    // Wrong guess — player travels there and discovers a dead end
     this.wrongGuessesThisStop++;
     this.totalWrongGuesses++;
-    this.lives--;
     this.score = Math.max(0, this.score - 25);
 
-    if (this.lives <= 0) {
-      this.gameOver = true;
-      this.won = false;
-      return {
-        correct: false,
-        gameOver: true,
-        won: false,
-        country,
-        correctCountry: target,
-        progress: this.getProgress(),
-      };
-    }
+    // Return neighbors of the correct stop + the correct stop itself (to go back)
+    const currentCountry = this.route[this.currentStop];
+    const neighbors = this._getNeighborChoices(currentCountry);
+    if (!neighbors.includes(currentCountry)) neighbors.push(currentCountry);
 
     return {
       correct: false,
       gameOver: false,
       country,
+      fromCountry: currentCountry,
+      neighbors,
       progress: this.getProgress(),
     };
   }
@@ -557,8 +549,6 @@ export class CarmenGameLogic {
       stop: this.currentStop,
       totalStops: this.route.length - 1,
       score: this.score,
-      lives: this.lives,
-      maxLives: this.diff.lives,
       route: this.route.slice(0, this.currentStop + 1),
     };
   }
@@ -647,6 +637,14 @@ export class CarmenGameLogic {
       const j = Math.floor(Math.random() * (i + 1));
       [neighbors[i], neighbors[j]] = [neighbors[j], neighbors[i]];
     }
+    return neighbors;
+  }
+
+  /** Get neighbor choices for the current stop (plus the stop itself for going back). */
+  getNeighborChoicesForCurrentStop() {
+    const current = this.route[this.currentStop];
+    const neighbors = this._getNeighborChoices(current);
+    if (!neighbors.includes(current)) neighbors.push(current);
     return neighbors;
   }
 

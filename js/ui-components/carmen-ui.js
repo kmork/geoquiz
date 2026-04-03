@@ -603,6 +603,30 @@ export function createCarmenUI(container, flagCodes) {
       });
     },
 
+    showDeadEnd(country, onContinue) {
+      // Force map visible
+      for (const rv of allRightViews) rv.style.display = 'none';
+      els.rvMap.style.display = '';
+
+      const overlay = document.createElement('div');
+      overlay.className = 'carmen-map-overlay carmen-dead-end';
+      overlay.innerHTML = `
+        <div class="carmen-transition">
+          <div class="carmen-dead-end-icon">❌</div>
+          <div class="score-lost">-25 points</div>
+          <div>No trace of the thief in <strong>${esc(country)}</strong>!</div>
+          <div class="carmen-dead-end-hint">This is a dead end. You've lost precious time.</div>
+          <button class="carmen-continue-btn carmen-dead-end-btn">Continue searching →</button>
+        </div>
+      `;
+      els.mapWrap.appendChild(overlay);
+
+      overlay.querySelector('.carmen-continue-btn').addEventListener('click', () => {
+        overlay.remove();
+        onContinue();
+      });
+    },
+
     showTransition(stopScore, country, taunt, thiefName, onContinue) {
       els.sidebar.innerHTML = '';
       els.reveal.style.display = 'none';

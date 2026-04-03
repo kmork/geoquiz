@@ -89,7 +89,6 @@ async function startGame() {
   // Update UI — thief identity unknown
   ui.showIntro('A mysterious thief', intro.artifact, intro.startCountry);
   ui.updateScore(intro.progress.score);
-  ui.updateLives(intro.progress.lives, intro.progress.maxLives);
   ui.updateProgress(intro.progress.stop, intro.progress.totalStops);
   updateClock();
 
@@ -99,11 +98,13 @@ async function startGame() {
   // Clear old clues and witness reports, then show investigation locations
   ui.clearClues();
   ui.clearWitnessReports();
+  playerPosition = intro.startCountry;
   showInvestigationLocations();
   showNeighborsOnMap(intro.neighbors);
 }
 
 let activeNeighborChoices = null;
+let playerPosition = null; // tracks where the player physically is
 
 function drawMap(visitedCountries, neighbors = []) {
   const list = visitedCountries.map((country, i) => ({
@@ -201,8 +202,35 @@ function showInvestigationLocations() {
 }
 
 
+function handleGoBack(fromCountry) {
+  // Player chose to go back to the current correct stop for more investigation
+  stopMusic();
+  const backTo = logic.route[logic.currentStop];
+
+  logic.spendTime(logic.getTravelCost());
+  updateClock();
+  if (checkTimeExpired()) return;
+
+  setTimeout(async () => {
+    await renderer.animateTravel(fromCountry, backTo);
+    playerPosition = backTo;
+    const neighbors = logic.getNeighborChoicesForCurrentStop();
+    drawMap(logic.route.slice(0, logic.currentStop + 1), neighbors);
+    ui.clearClues();
+    showInvestigationLocations();
+    showNeighborsOnMap(neighbors.filter(n => n !== backTo));
+  }, 300);
+}
+
 function handleGuess(country) {
   stopMusic();
+
+  // If the player picks the country they're currently at (going back)
+  if (country === logic.route[logic.currentStop] && playerPosition !== country) {
+    handleGoBack(playerPosition);
+    return;
+  }
+
   const result = logic.guess(country);
 
   if (result.correct) {
@@ -240,7 +268,7 @@ function handleGuess(country) {
     ui.updateScore(progress.score);
 
     const taunt = logic.getTaunt();
-    const fromCountry = progress.route[progress.route.length - 2] || progress.route[0];
+    const fromCountry = playerPosition || progress.route[progress.route.length - 2] || progress.route[0];
     const toCountry = result.country;
 
     setTimeout(async () => {
@@ -249,6 +277,7 @@ function handleGuess(country) {
       if (checkTimeExpired()) return;
 
       await renderer.animateTravel(fromCountry, toCountry);
+      playerPosition = toCountry;
       drawMap(progress.route, result.neighbors);
       ui.showTransition(result.stopScore, result.country, taunt, 'The thief', () => {
         ui.updateProgress(progress.stop, progress.totalStops);
@@ -260,22 +289,32 @@ function handleGuess(country) {
     }, 600);
 
   } else {
-    // Wrong guess
+    // Wrong guess — travel to the dead end
     if (activeNeighborChoices) {
       activeNeighborChoices.highlight(country, false);
+      activeNeighborChoices.disableAll();
     }
-    ui.flashWrong();
+
     const progress = result.progress;
     ui.updateScore(progress.score);
-    ui.updateLives(progress.lives, progress.maxLives);
+    const fromCountry = playerPosition || result.fromCountry;
 
-    if (result.gameOver) {
-      if (activeNeighborChoices) activeNeighborChoices.disableAll();
-      // Show the correct answer on the map
-      if (activeNeighborChoices) activeNeighborChoices.highlight(result.correctCountry, true);
-      drawMap([...logic.route.slice(0, logic.currentStop + 1), result.correctCountry]);
-      setTimeout(() => showFinish(), 2000);
-    }
+    setTimeout(async () => {
+      logic.spendTime(logic.getTravelCost());
+      updateClock();
+      if (checkTimeExpired()) return;
+
+      await renderer.animateTravel(fromCountry, country);
+      playerPosition = country;
+      drawMap([...logic.route.slice(0, logic.currentStop + 1)], [country]);
+
+      ui.showDeadEnd(country, () => {
+        // Show neighbors of the original stop + the original stop itself
+        const neighbors = result.neighbors;
+        drawMap(logic.route.slice(0, logic.currentStop + 1), neighbors);
+        showNeighborsOnMap(neighbors);
+      });
+    }, 600);
   }
 }
 
