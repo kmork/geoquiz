@@ -90,8 +90,9 @@ async function startGame() {
   // Reset dossier for new game
   ui.resetDossier();
 
-  // Clear old clues, then show investigation locations
+  // Clear old clues and witness reports, then show investigation locations
   ui.clearClues();
+  ui.clearWitnessReports();
   showInvestigationLocations();
   showNeighborsOnMap(intro.neighbors);
 }

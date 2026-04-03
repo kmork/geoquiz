@@ -270,6 +270,11 @@ export function createCarmenUI(container, flagCodes) {
       renderDossier();
     },
 
+    /** Clear witness reports on Case tab. */
+    clearWitnessReports() {
+      els.witnessReport.innerHTML = '';
+    },
+
     /** Show a witness report on the Case tab. */
     addWitnessReport(clue, informant) {
       const emoji = informant ? informant.emoji : '🔍';
