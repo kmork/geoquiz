@@ -51,15 +51,31 @@ export function playStamp() {
 /* ── Background music ──────────────────────────────── */
 const TRACKS = [
   'carmen/audio/Alley Thoughts.mp3',
+  'carmen/audio/Ashtray Alibi 2.mp3',
+  'carmen/audio/Ashtray Alibi.mp3',
   'carmen/audio/Bass Walker.mp3',
+  'carmen/audio/Broken Casefiles 2.mp3',
+  'carmen/audio/Broken Casefiles.mp3',
+  'carmen/audio/Case Soda Pop.mp3',
+  'carmen/audio/Casefile Chrome.mp3',
   'carmen/audio/Catching The Thief.mp3',
+  'carmen/audio/Cigar Ashes 2.mp3',
+  'carmen/audio/Cigar Ashes.mp3',
+  'carmen/audio/Coal-Lit Case.mp3',
+  'carmen/audio/Cobalt Alibi 2.mp3',
+  'carmen/audio/Cobalt Alibi.mp3',
   'carmen/audio/Cool Vibes.mp3',
   'carmen/audio/Covert Affair.mp3',
   'carmen/audio/Fallen Petals.mp3',
   'carmen/audio/Just As Soon.mp3',
+  'carmen/audio/Lacquered Alibi 2.mp3',
+  'carmen/audio/Lacquered Alibi.mp3',
   'carmen/audio/Night Walk In Paris.mp3',
   'carmen/audio/Noir Alley.mp3',
   'carmen/audio/Signs To Nowhere.mp3',
+  'carmen/audio/Smoldered Alibis.mp3',
+  'carmen/audio/Tin Stethoscope 2.mp3',
+  'carmen/audio/Tin Stethoscope.mp3',
 ];
 
 let bgMusic = null;
