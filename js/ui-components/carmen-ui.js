@@ -298,7 +298,7 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     /** Show dramatic case briefing overlay. Returns a promise that resolves when player clicks start. */
-    showCaseBriefing(artifact, startCountry) {
+    showCaseBriefing(artifact, startCountry, totalHours) {
       return new Promise(resolve => {
         const siteName = artifact.siteName || 'a priceless artifact';
         els.briefingArtifact.innerHTML = `
@@ -330,7 +330,8 @@ export function createCarmenUI(container, flagCodes) {
           setTimeout(() => playStamp(), 300);
 
           // Typewriter with sounds
-          typewriter(els.briefingMission, 'Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.', 20)
+          const timeText = totalHours ? ` You have only ${totalHours} hours to hunt down the criminal!` : '';
+          typewriter(els.briefingMission, `Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.${timeText}`, 20)
             .then(() => {
               els.briefingStart.style.display = '';
             });

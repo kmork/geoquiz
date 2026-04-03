@@ -75,7 +75,8 @@ async function startGame() {
   const intro = logic.start();
 
   // Show case briefing over the front image
-  await ui.showCaseBriefing(intro.artifact, intro.startCountry);
+  const totalHours = logic.getTimeState().totalHours;
+  await ui.showCaseBriefing(intro.artifact, intro.startCountry, totalHours);
 
   // Hide the front image, show the header and game
   if (carmenFront) carmenFront.style.display = 'none';
