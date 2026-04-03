@@ -583,6 +583,13 @@
 .carmen-dossier-entry {
   padding: 0.25rem 0;
   border-bottom: 1px solid var(--card-border);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
+.carmen-dossier-emoji {
+  font-size: 0.82rem;
+  margin-right: 0.2rem;
 }
 
 .carmen-dossier-entry:last-child {

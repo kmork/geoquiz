@@ -37,6 +37,11 @@ const flagCodes = Object.fromEntries(
   window.ALL_COUNTRIES.map(c => [c.country, c.flagCode])
 );
 
+// Build capital lookup
+const capitalOf = Object.fromEntries(
+  window.DATA.map(c => [c.country, c.capitals?.[0] || ''])
+);
+
 // Data loaded — hide the loading text, keep the front image visible
 if (carmenFront) {
   const loadingText = carmenFront.querySelector('.carmen-init-loading');
@@ -147,7 +152,8 @@ function showInvestigationLocations() {
   const suspectClue = logic.getSuspectClue();
   if (suspectClue) {
     ui.addWitnessReport(suspectClue, { emoji: '🔍', prefix: 'Witness report' });
-    ui.addDossierEntry(logic.currentStop, suspectClue.text, 'Witness report');
+    const country = logic.route[logic.currentStop];
+    ui.addDossierEntry(logic.currentStop, suspectClue.text, 'Witness report', '🔍', country, capitalOf[country]);
   }
 
   ui.showLocations(locations, maxInvestigations, (locationId) => {
@@ -160,7 +166,8 @@ function showInvestigationLocations() {
     if (clue) {
       const informant = logic.getInformant(locationId);
       ui.addClue(clue, informant);
-      ui.addDossierEntry(logic.currentStop, clue.text, informant.prefix);
+      const country = logic.route[logic.currentStop];
+      ui.addDossierEntry(logic.currentStop, clue.text, informant.prefix, informant.emoji, country, capitalOf[country]);
     } else {
       const informant = logic.getInformant(locationId);
       ui.addClue(

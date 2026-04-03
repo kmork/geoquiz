@@ -240,9 +240,15 @@ export function createCarmenUI(container, flagCodes) {
     }
     let html = '';
     for (const [stop, entries] of Object.entries(byStop)) {
-      html += `<div class="carmen-dossier-stop">Stop ${Number(stop) + 1}</div>`;
+      const first = entries[0];
+      const location = first.capital && first.country
+        ? ` — ${esc(first.capital)}, ${esc(first.country)}`
+        : first.country ? ` — ${esc(first.country)}` : '';
+      html += `<div class="carmen-dossier-stop">Stop ${Number(stop) + 1}${location}</div>`;
       for (const e of entries) {
+        const icon = e.emoji || '';
         html += `<div class="carmen-dossier-entry">
+          ${icon ? `<span class="carmen-dossier-emoji">${icon}</span>` : ''}
           <span class="carmen-dossier-prefix">${esc(e.informantPrefix || 'Clue')}:</span>
           <span>${esc(e.clueText)}</span>
         </div>`;
@@ -259,8 +265,8 @@ export function createCarmenUI(container, flagCodes) {
     switchTab(tab) { switchTab(tab); },
 
     /** Add a clue to the dossier. */
-    addDossierEntry(stop, clueText, informantPrefix) {
-      dossierEntries.push({ stop, clueText, informantPrefix });
+    addDossierEntry(stop, clueText, informantPrefix, emoji, country, capital) {
+      dossierEntries.push({ stop, clueText, informantPrefix, emoji, country, capital });
       renderDossier();
     },
 
