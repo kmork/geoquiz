@@ -1,5 +1,18 @@
 /* Where in the World? — Carmen Sandiego homage */
 
+/* ── Header Detective Image ───────────────────────── */
+.carmen-header-detective {
+  height: 72px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .carmen-header-detective {
+    display: none;
+  }
+}
+
 /* ── Front Image (shown while loading) ────────────── */
 .carmen-front-wrap {
   position: fixed;
