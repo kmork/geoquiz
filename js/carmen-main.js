@@ -200,8 +200,7 @@ function handleGuess(country) {
       // Show suspect lineup before declaring victory
       setTimeout(async () => {
         const lineup = logic.getSuspectLineup();
-        const revealedAttrs = logic.getRevealedSuspectAttrs();
-        const chosenName = await ui.showSuspectLineup(lineup, revealedAttrs);
+        const chosenName = await ui.showSuspectLineup(lineup);
         const correct = logic.identifySuspect(chosenName);
 
         if (correct) {

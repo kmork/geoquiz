@@ -496,30 +496,20 @@ export function createCarmenUI(container, flagCodes) {
      * Show suspect lineup for final identification.
      * Returns a promise that resolves with the chosen suspect name.
      */
-    showSuspectLineup(lineup, revealedAttrs) {
+    showSuspectLineup(lineup) {
       return new Promise(resolve => {
         els.locationsLabel.style.display = 'none';
         els.locations.innerHTML = '';
         els.reveal.style.display = 'none';
         els.sidebar.innerHTML = '';
 
-
         const overlay = document.createElement('div');
         overlay.className = 'carmen-lineup-overlay';
-
-        let attrsHtml = '';
-        if (revealedAttrs.length > 0) {
-          attrsHtml = `<div class="carmen-lineup-attrs">
-            <div class="carmen-lineup-attrs-label">What you know about the suspect:</div>
-            ${revealedAttrs.map(a => `<div class="carmen-lineup-attr">🔍 <strong>${a.attr}:</strong> ${esc(a.value)}</div>`).join('')}
-          </div>`;
-        }
 
         overlay.innerHTML = `
           <div class="carmen-lineup-content">
             <div class="carmen-lineup-title">SUSPECT LINEUP</div>
             <div class="carmen-lineup-subtitle">Issue a warrant — identify the thief!</div>
-            ${attrsHtml}
             <div class="carmen-lineup-grid">
               ${lineup.map(s => `
                 <button class="carmen-suspect-card" data-name="${esc(s.name)}">
