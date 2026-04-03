@@ -15,6 +15,7 @@ const gameContent = document.getElementById('game-content');
 const finalOverlay = document.getElementById('finalOverlay');
 const initOverlay = document.getElementById('init-overlay');
 const carmenFront = document.getElementById('carmen-front');
+const carmenHeader = document.getElementById('carmen-header');
 
 const confetti = initConfetti('confetti');
 
@@ -71,8 +72,9 @@ async function startGame() {
   // Show case briefing over the front image
   await ui.showCaseBriefing(intro.artifact, intro.startCountry);
 
-  // Hide the front image, show the game
+  // Hide the front image, show the header and game
   if (carmenFront) carmenFront.style.display = 'none';
+  if (carmenHeader) carmenHeader.style.display = '';
   gameContent.style.display = '';
 
   // Draw starting country on map, include neighbors in viewBox

@@ -49,21 +49,28 @@ function typewriter(element, text, speed = 25) {
  * @param {Object}      flagCodes — { countryName: isoCode }
  */
 export function createCarmenUI(container, flagCodes) {
+  // Briefing overlay — appended to body so it's not blocked by hidden gameContent
+  const briefingEl = document.createElement('div');
+  briefingEl.className = 'carmen-briefing-overlay';
+  briefingEl.id = 'carmen-briefing';
+  briefingEl.style.display = 'none';
+  briefingEl.innerHTML = `
+    <div class="carmen-briefing-content">
+      <div class="carmen-briefing-stamp">CLASSIFIED</div>
+      <div class="carmen-briefing-label">CASE BRIEFING</div>
+      <div class="carmen-briefing-artifact" id="carmen-briefing-artifact"></div>
+      <div class="carmen-briefing-suspect">
+        <div class="carmen-suspect-badge">🔍 SUSPECT: UNKNOWN</div>
+        <div class="carmen-suspect-hint">Gather clues to identify the thief</div>
+      </div>
+      <div class="carmen-briefing-mission" id="carmen-briefing-mission"></div>
+      <button class="carmen-briefing-start" id="carmen-briefing-start">Accept Mission →</button>
+    </div>
+  `;
+  document.body.appendChild(briefingEl);
+
   // Build skeleton
   container.innerHTML = `
-    <div class="carmen-briefing-overlay" id="carmen-briefing" style="display:none">
-      <div class="carmen-briefing-content">
-        <div class="carmen-briefing-stamp">CLASSIFIED</div>
-        <div class="carmen-briefing-label">CASE BRIEFING</div>
-        <div class="carmen-briefing-artifact" id="carmen-briefing-artifact"></div>
-        <div class="carmen-briefing-suspect">
-          <div class="carmen-suspect-badge">🔍 SUSPECT: UNKNOWN</div>
-          <div class="carmen-suspect-hint">Gather clues to identify the thief</div>
-        </div>
-        <div class="carmen-briefing-mission" id="carmen-briefing-mission"></div>
-        <button class="carmen-briefing-start" id="carmen-briefing-start">Accept Mission →</button>
-      </div>
-    </div>
     <div class="carmen-status-bar">
       <div class="carmen-lives" id="carmen-lives"></div>
       <div class="pill">Score: <b id="carmen-score">0</b></div>
@@ -132,10 +139,10 @@ export function createCarmenUI(container, flagCodes) {
   `;
 
   const els = {
-    briefing: container.querySelector('#carmen-briefing'),
-    briefingArtifact: container.querySelector('#carmen-briefing-artifact'),
-    briefingMission: container.querySelector('#carmen-briefing-mission'),
-    briefingStart: container.querySelector('#carmen-briefing-start'),
+    briefing: briefingEl,
+    briefingArtifact: briefingEl.querySelector('#carmen-briefing-artifact'),
+    briefingMission: briefingEl.querySelector('#carmen-briefing-mission'),
+    briefingStart: briefingEl.querySelector('#carmen-briefing-start'),
     introRow: container.querySelector('#carmen-intro-row'),
     narrative: container.querySelector('#carmen-narrative'),
     panelTabs: container.querySelector('#carmen-panel-tabs'),
