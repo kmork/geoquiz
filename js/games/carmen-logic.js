@@ -231,11 +231,81 @@ const THIEF_NAMES = SUSPECTS.map(s => s.name);
 
 const SUSPECT_ATTRIBUTES = ['hair', 'accessory', 'hobby', 'vehicle'];
 
-const SUSPECT_CLUE_TEMPLATES = {
-  hair: (val) => `A witness saw someone with ${val} hair leaving the scene.`,
-  accessory: (val) => `The suspect was spotted wearing a ${val}.`,
-  hobby: (val) => `An informant says the thief is known for ${val}.`,
-  vehicle: (val) => `The getaway vehicle was described as a ${val}.`,
+const ATTRIBUTE_GROUPS = {
+  hair: {
+    dark:    ['black', 'brown'],
+    light:   ['blond', 'auburn', 'platinum'],
+    unusual: ['green', 'silver', 'white', 'gray', 'unknown'],
+    red:     ['red'],
+  },
+  accessory: {
+    headwear:  ['fur hat', 'feathered hat', 'captain hat', 'hat'],
+    eyewear:   ['monocle', 'visor', 'glasses'],
+    jewelry:   ['ruby necklace', 'moon pendant', 'obsidian ring', 'necklace', 'gold earrings', 'pendant', 'ring', 'vine bracelet', 'brooch', 'fox brooch'],
+    outerwear: ['red trench coat', 'dark cloak', 'velvet gloves', 'gloves', 'cloak', 'coat', 'scarf'],
+    gadget:    ['coded tattoo', 'vintage compass', 'leather satchel', 'pocket watch', 'voice modulator', 'keychain', 'watch', 'compass', 'tattoo'],
+    other:     ['mask', 'dagger', 'silk fan'],
+  },
+  hobby: {
+    physical:  ['tango dancing', 'ice skating', 'fencing', 'ballroom dancing', 'dance', 'dueling', 'ballet', 'running', 'stealth', 'tracking'],
+    cerebral:  ['chess', 'cryptography', 'time theory', 'hacking', 'lockpicking', 'sound engineering', 'navigation'],
+    artistic:  ['opera singing', 'origami', 'poetry', 'piano', 'acting', 'writing', 'illusion', 'magic tricks'],
+    outdoors:  ['bird watching', 'cartography', 'mountaineering', 'botany', 'stargazing', 'astronomy', 'kite flying', 'sailing', 'meteorology', 'traveling'],
+    collector: ['antiquities', 'jewelry', 'tea ceremonies', 'collecting', 'reading', 'history'],
+  },
+  vehicle: {
+    air:  ['hang glider', 'hot air balloon', 'seaplane', 'balloon', 'glider', 'helicopter', 'drone', 'jet', 'plane'],
+    land: ['red convertible', 'black stallion', 'motorcycle', 'jeep', 'limousine', 'experimental car', 'van', 'motorbike', 'car', 'bicycle', 'rickshaw', 'sports car', 'train'],
+    sea:  ['submarine', 'luxury yacht', 'cargo ship', 'boat', 'ship', 'snowmobile'],
+  },
+};
+
+function getAttributeGroup(attr, value) {
+  const groups = ATTRIBUTE_GROUPS[attr];
+  if (!groups) return null;
+  for (const [groupName, members] of Object.entries(groups)) {
+    if (members.includes(value)) return groupName;
+  }
+  return null;
+}
+
+const SUSPECT_CLUE_TEMPLATES_VAGUE = {
+  hair: (group) => ({
+    dark: 'A witness noticed the suspect had dark hair.',
+    light: 'A witness described the suspect as having light-colored hair.',
+    unusual: 'A witness said the suspect had unusual hair — not a natural color.',
+    red: 'A witness recalls the suspect had reddish hair.',
+  })[group] || `A witness said the suspect had ${group} hair.`,
+
+  accessory: (group) => ({
+    headwear: 'The suspect was seen wearing some kind of distinctive hat.',
+    eyewear: 'The suspect was wearing something over their eyes.',
+    jewelry: 'A bystander noticed the suspect was wearing jewelry.',
+    outerwear: 'The suspect was wrapped in notable outerwear.',
+    gadget: 'The suspect was carrying a notable accessory or gadget.',
+    other: 'The suspect had something unusual on them.',
+  })[group] || `The suspect had some kind of ${group}.`,
+
+  hobby: (group) => ({
+    physical: 'An informant says the thief is into physical activities or performance.',
+    cerebral: 'The thief is reportedly a thinker — into puzzles or technical skills.',
+    artistic: 'Sources say the thief has artistic or creative interests.',
+    outdoors: 'The thief apparently enjoys outdoor or nature-related activities.',
+    collector: 'Word is the thief is a collector or scholar of some kind.',
+  })[group] || `The thief reportedly enjoys ${group} activities.`,
+
+  vehicle: (group) => ({
+    air: 'The getaway involved something that flies.',
+    land: 'The thief escaped by land vehicle.',
+    sea: 'The thief was last seen heading toward the water.',
+  })[group] || `The getaway was by ${group}.`,
+};
+
+const SUSPECT_CLUE_TEMPLATES_SPECIFIC = {
+  hair:      (val) => `A witness positively identified the suspect as having ${val} hair.`,
+  accessory: (val) => `The suspect was confirmed to be wearing a ${val}.`,
+  hobby:     (val) => `A reliable source confirms the thief is known for ${val}.`,
+  vehicle:   (val) => `The getaway vehicle has been identified as a ${val}.`,
 };
 
 // Thief taunts by game phase
@@ -357,6 +427,7 @@ export class CarmenGameLogic {
     this._suspectClueAttrs = [...SUSPECT_ATTRIBUTES].sort(() => Math.random() - 0.5);
     this._suspectClueIndex = 0;
     this._revealedAttrs = [];
+    this._pendingSpecificClue = null;
 
     // Time tracking (in-game hours)
     this.hoursRemaining = this.diff.totalHours;
@@ -884,28 +955,83 @@ export class CarmenGameLogic {
 
   // ─── Suspect / Warrant System ────────────────────────────────
 
-  /** Get the next suspect identity clue for this stop (one per stop). Returns null if all revealed. */
+  /** Get the next suspect identity clue for this stop (vague). Returns null if all revealed. */
   getSuspectClue() {
     if (this._suspectClueIndex >= this._suspectClueAttrs.length) return null;
     const attr = this._suspectClueAttrs[this._suspectClueIndex];
     this._suspectClueIndex++;
     const value = this.suspect[attr];
-    this._revealedAttrs.push({ attr, value });
+    const group = getAttributeGroup(attr, value);
+
+    const clueId = `suspect-${this.currentStop}-${attr}`;
+    this._pendingSpecificClue = { clueId, attr, value, group };
+    this._revealedAttrs.push({ attr, value: group, vague: true });
+
     return {
-      text: SUSPECT_CLUE_TEMPLATES[attr](value),
+      text: SUSPECT_CLUE_TEMPLATES_VAGUE[attr](group),
       icon: '🔍',
       attr,
-      value,
+      group,
+      clueId,
+      canInvestigate: true,
     };
   }
 
-  /** Get a lineup of 4 suspects for the final stop (includes the real one). */
+  /** Spend time to refine the latest vague suspect clue into a specific one. */
+  investigateSuspectClue() {
+    if (!this._pendingSpecificClue) return null;
+    const { clueId, attr, value } = this._pendingSpecificClue;
+    this._pendingSpecificClue = null;
+
+    // Upgrade the revealed attr from vague to specific
+    const entry = this._revealedAttrs.find(e => e.attr === attr && e.vague);
+    if (entry) {
+      entry.value = value;
+      entry.vague = false;
+    }
+
+    return {
+      text: SUSPECT_CLUE_TEMPLATES_SPECIFIC[attr](value),
+      icon: '🔎',
+      attr,
+      value,
+      clueId,
+    };
+  }
+
+  /** Time cost for investigating a suspect clue further. */
+  getSuspectInvestigateCost() {
+    return EXTRA_CLUE_COST_HOURS;
+  }
+
+  /** Get a lineup of 4 suspects (includes the real one). Decoys match vague clues. */
   getSuspectLineup() {
-    const others = SUSPECTS.filter(s => s.name !== this.suspect.name);
-    // Pick 3 random others
-    const shuffled = others.sort(() => Math.random() - 0.5).slice(0, 3);
-    const lineup = [...shuffled, this.suspect].sort(() => Math.random() - 0.5);
-    return lineup;
+    const real = this.suspect;
+    const others = SUSPECTS.filter(s => s.name !== real.name);
+
+    const specificAttrs = new Set(
+      this._revealedAttrs.filter(e => !e.vague).map(e => e.attr)
+    );
+    const vagueEntries = this._revealedAttrs.filter(e => e.vague);
+
+    // Score candidates: prefer those matching the real suspect on vague attributes
+    const scored = others.map(s => {
+      let score = 0;
+      for (const { attr, value: groupName } of vagueEntries) {
+        const candidateGroup = getAttributeGroup(attr, s[attr]);
+        if (candidateGroup === groupName) score += 10;
+      }
+      // Slight penalty if they match on specific attrs (too confusing even with info)
+      for (const attr of specificAttrs) {
+        if (s[attr] === real[attr]) score -= 5;
+      }
+      score += Math.random() * 2;
+      return { suspect: s, score };
+    });
+
+    scored.sort((a, b) => b.score - a.score);
+    const decoys = scored.slice(0, 3).map(s => s.suspect);
+    return [...decoys, real].sort(() => Math.random() - 0.5);
   }
 
   /** Check if the player identified the correct suspect. */

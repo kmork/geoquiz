@@ -281,20 +281,61 @@ export function createCarmenUI(container, flagCodes) {
       els.witnessReport.innerHTML = '';
     },
 
-    /** Show a witness report on the Case tab. */
+    /** Show a witness report on the Case tab. Optionally with an "investigate further" button. */
     addWitnessReport(clue, informant) {
-      const emoji = informant ? informant.emoji : '🔍';
-      const prefix = informant ? informant.prefix : 'Witness report';
+      const emoji = informant?.emoji || '🔍';
+      const prefix = informant?.prefix || 'Witness report';
       const text = clue.text;
-      els.witnessReport.innerHTML += `
-        <div class="carmen-witness-entry">
-          <div class="carmen-witness-header">
-            <span class="carmen-witness-emoji">${emoji}</span>
-            <span class="carmen-witness-prefix">${esc(prefix)}:</span>
-          </div>
-          <div class="carmen-witness-text">"${esc(text)}"</div>
+      const clueId = informant?.clueId || '';
+
+      const entry = document.createElement('div');
+      entry.className = 'carmen-witness-entry';
+      if (clueId) entry.dataset.clueId = clueId;
+
+      let investigateHtml = '';
+      if (informant?.canInvestigate && informant?.onInvestigateFurther) {
+        const cost = informant.investigateCost || 2;
+        investigateHtml = `
+          <button class="carmen-investigate-further-btn">
+            🔎 Investigate further (${cost}h)
+          </button>
+        `;
+      }
+
+      entry.innerHTML = `
+        <div class="carmen-witness-header">
+          <span class="carmen-witness-emoji">${emoji}</span>
+          <span class="carmen-witness-prefix">${esc(prefix)}:</span>
         </div>
+        <div class="carmen-witness-text">"${esc(text)}"</div>
+        ${investigateHtml}
       `;
+
+      if (informant?.onInvestigateFurther) {
+        const btn = entry.querySelector('.carmen-investigate-further-btn');
+        if (btn) {
+          btn.addEventListener('click', () => {
+            btn.remove();
+            informant.onInvestigateFurther();
+          });
+        }
+      }
+
+      els.witnessReport.appendChild(entry);
+    },
+
+    /** Upgrade a vague witness report to a specific one in-place. */
+    upgradeWitnessReport(clueId, specificClue) {
+      const entry = els.witnessReport.querySelector(`[data-clue-id="${clueId}"]`);
+      if (entry) {
+        const textEl = entry.querySelector('.carmen-witness-text');
+        if (textEl) {
+          textEl.textContent = `"${specificClue.text}"`;
+          entry.classList.add('carmen-witness-confirmed');
+        }
+        const btn = entry.querySelector('.carmen-investigate-further-btn');
+        if (btn) btn.remove();
+      }
     },
 
     /** Show dramatic case briefing overlay. Returns a promise that resolves when player clicks start. */

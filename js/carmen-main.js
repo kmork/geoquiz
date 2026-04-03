@@ -149,11 +149,32 @@ function showInvestigationLocations() {
   const locations = logic.getLocations();
   const maxInvestigations = logic.getMaxInvestigations();
 
-  // Show a suspect identity clue as witness report on Case tab
+  // Show a vague suspect identity clue as witness report on Case tab
   const suspectClue = logic.getSuspectClue();
   if (suspectClue) {
-    ui.addWitnessReport(suspectClue, { emoji: '🔍', prefix: 'Witness report' });
     const country = logic.route[logic.currentStop];
+
+    const onInvestigateFurther = () => {
+      const cost = logic.getSuspectInvestigateCost();
+      logic.spendTime(cost);
+      updateClock();
+      if (checkTimeExpired()) return;
+
+      const specificClue = logic.investigateSuspectClue();
+      if (specificClue) {
+        ui.upgradeWitnessReport(suspectClue.clueId, specificClue);
+        ui.addDossierEntry(logic.currentStop, specificClue.text, 'Confirmed report', '🔎', country, capitalOf[country]);
+      }
+    };
+
+    ui.addWitnessReport(suspectClue, {
+      emoji: '🔍',
+      prefix: 'Witness report',
+      canInvestigate: true,
+      investigateCost: logic.getSuspectInvestigateCost(),
+      onInvestigateFurther,
+      clueId: suspectClue.clueId,
+    });
     ui.addDossierEntry(logic.currentStop, suspectClue.text, 'Witness report', '🔍', country, capitalOf[country]);
   }
 
