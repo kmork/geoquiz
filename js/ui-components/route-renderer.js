@@ -373,17 +373,50 @@ export class RouteRenderer {
 
   /**
    * Get the centroid of a country in SVG coordinates.
+   * Uses the average of the largest polygon's points, excluding outliers
+   * beyond the antimeridian (e.g. Russia's far-east Chukotka wrapping to
+   * negative longitudes).
    */
   getCentroid(countryName) {
     const features = findGeoFeatures(this.worldFeatures, countryName);
     if (features.length === 0) return null;
 
-    const bb = this.bboxOfFeature(features[0]);
-    if (!bb) return null;
+    const geom = features[0].geometry;
+    if (!geom) return null;
 
-    const centerLon = (bb.minLon + bb.maxLon) / 2;
-    const centerLat = (bb.minLat + bb.maxLat) / 2;
-    return this.proj([centerLon, centerLat]);
+    const polys = geom.type === "Polygon"
+      ? [geom.coordinates]
+      : geom.coordinates;
+
+    // Use the largest polygon (mainland)
+    const mainPoly = polys.reduce((best, poly) =>
+      poly[0].length > best[0].length ? poly : best
+    );
+
+    // Collect all normalized lon/lat from outer ring
+    const ring = mainPoly[0];
+    const points = ring.map(([lon, lat]) => [this.normalizeLon(lon), lat]);
+
+    // Count how many points are positive vs negative longitude
+    const posCount = points.filter(([lon]) => lon > 0).length;
+    const negCount = points.length - posCount;
+
+    // If most points are positive, exclude far-negative ones (antimeridian wrap)
+    // and vice versa — threshold of 90° difference from the majority side
+    let filtered = points;
+    if (posCount > negCount * 2) {
+      filtered = points.filter(([lon]) => lon > -90);
+    } else if (negCount > posCount * 2) {
+      filtered = points.filter(([lon]) => lon < 90);
+    }
+    if (filtered.length === 0) filtered = points;
+
+    let sumLon = 0, sumLat = 0;
+    for (const [lon, lat] of filtered) {
+      sumLon += lon;
+      sumLat += lat;
+    }
+    return this.proj([sumLon / filtered.length, sumLat / filtered.length]);
   }
 
   /**
