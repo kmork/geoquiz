@@ -72,6 +72,7 @@ export function createCarmenUI(container, flagCodes) {
   // Build skeleton
   container.innerHTML = `
     <div class="carmen-status-bar">
+      <div class="carmen-missions" id="carmen-missions"></div>
       <div class="pill">Score: <b id="carmen-score">0</b></div>
       <div class="carmen-progress" id="carmen-progress"></div>
       <div class="carmen-clock" id="carmen-clock"></div>
@@ -147,6 +148,7 @@ export function createCarmenUI(container, flagCodes) {
     panelTabs: container.querySelector('#carmen-panel-tabs'),
     panelCase: container.querySelector('#carmen-panel-case'),
     panelInvestigate: container.querySelector('#carmen-panel-investigate'),
+    missions: container.querySelector('#carmen-missions'),
     score: container.querySelector('#carmen-score'),
     progress: container.querySelector('#carmen-progress'),
     clock: container.querySelector('#carmen-clock'),
@@ -430,6 +432,29 @@ export function createCarmenUI(container, flagCodes) {
 
     updateScore(score) {
       els.score.textContent = score;
+    },
+
+    /**
+     * Render mission tally marks.
+     * @param {Array} history — array of 'success'|'fail' strings (past missions)
+     * @param {boolean} showCurrent — whether to show the current mission marker
+     */
+    updateMissions(history, showCurrent = true) {
+      // Limit to fit: keep last N entries
+      const maxMarks = 12;
+      const totalNeeded = history.length + (showCurrent ? 1 : 0);
+      const start = Math.max(0, totalNeeded - maxMarks);
+      const visible = history.slice(start);
+
+      let html = '<span class="carmen-missions-label">Cases solved:</span>';
+      for (const result of visible) {
+        const cls = result === 'success' ? 'carmen-mark-success' : 'carmen-mark-fail';
+        html += `<span class="carmen-mark ${cls}">I</span>`;
+      }
+      if (showCurrent) {
+        html += '<span class="carmen-mark carmen-mark-current">I</span>';
+      }
+      els.missions.innerHTML = html;
     },
 
     updateProgress(stop, total) {

@@ -19,6 +19,18 @@ const carmenHeader = document.getElementById('carmen-header');
 
 const confetti = initConfetti('confetti');
 
+// Mission history — stored in localStorage
+const MISSION_KEY = 'carmen-missions';
+function getMissionHistory() {
+  try { return JSON.parse(localStorage.getItem(MISSION_KEY)) || []; }
+  catch { return []; }
+}
+function saveMissionResult(result) {
+  const history = getMissionHistory();
+  history.push(result);
+  localStorage.setItem(MISSION_KEY, JSON.stringify(history));
+}
+
 // Wait for data.js
 while (!window.DATA) await new Promise(r => setTimeout(r, 50));
 
@@ -100,8 +112,8 @@ async function handleEndChoice(choice, wasSuccess) {
     [6.5,  "Still don't know who they really were.\nDidn't stick around for introductions."],
     [10.0,  "Figures."],
     [11.0, "I poured myself a coffee that tasted like\nregret and bad decisions."],
-    [13.0, "Didn't even finish it."],
-    [14.0, "Because I know how this goes."],
+    [15.0, "Didn't even finish it."],
+    [16.0, "Because I know how this goes."],
     [18.5, "You close one case\u2026 and somewhere out there\u2014"],
     [21.5, "someone's already picking their next target."],
   ] : [
@@ -232,6 +244,7 @@ async function startGame() {
 
   // Update UI — thief identity unknown
   ui.showIntro('A mysterious thief', intro.artifact, intro.startCountry);
+  ui.updateMissions(getMissionHistory(), true);
   ui.updateScore(intro.progress.score);
   ui.updateProgress(intro.progress.stop, intro.progress.totalStops);
   updateClock();
@@ -288,6 +301,7 @@ function checkTimeExpired() {
       stopNarrator();
       const results = logic.getResults();
       saveGameRecord(gameId, results.score, results.time);
+      saveMissionResult('fail');
       const choice = await ui.showCaseFailed(logic.suspect.name, results.score);
       await handleEndChoice(choice, false);
     }, 500);
@@ -419,12 +433,14 @@ function handleGuess(country) {
             confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2, count: 100 });
             const ts = logic.getTimeState();
             saveGameRecord(gameId, results.score, results.time);
+            saveMissionResult('success');
             const choice = await ui.showCaseSolved(logic.suspect.name, ts.hoursRemaining, results.score);
             await handleEndChoice(choice, true);
           } else {
             logic.score = Math.max(0, logic.score - 200);
             const failResults = logic.getResults();
             saveGameRecord(gameId, failResults.score, failResults.time);
+            saveMissionResult('fail');
             const choice = await ui.showCaseFailed(logic.suspect.name, failResults.score);
             await handleEndChoice(choice, false);
           }

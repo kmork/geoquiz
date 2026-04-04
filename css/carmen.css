@@ -497,6 +497,40 @@
   flex-wrap: wrap;
 }
 
+.carmen-missions {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+  font-family: 'DM Sans', sans-serif;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.carmen-missions-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-right: 0.3rem;
+  white-space: nowrap;
+}
+
+.carmen-mark {
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.carmen-mark-success {
+  color: var(--good-color);
+}
+
+.carmen-mark-fail {
+  color: var(--bad-color);
+}
+
+.carmen-mark-current {
+  color: var(--star-color);
+}
+
 .carmen-progress {
   font-size: 0.85rem;
   color: var(--text-muted);
