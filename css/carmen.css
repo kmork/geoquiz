@@ -625,6 +625,15 @@
   line-height: 1.4;
 }
 
+.carmen-dossier-detour.carmen-dossier-stop {
+  color: var(--bad-color);
+}
+
+.carmen-dossier-entry.carmen-dossier-detour {
+  color: var(--bad-color);
+  opacity: 0.85;
+}
+
 .carmen-dossier-emoji {
   font-size: 1.1rem;
   margin-right: 0.25rem;

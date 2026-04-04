@@ -402,6 +402,8 @@ function handleGuess(country) {
       playerPosition = country;
       drawMap([...logic.route.slice(0, logic.currentStop + 1)], [country]);
 
+      ui.addDetourEntry(country, capitalOf[country]);
+
       ui.showDeadEnd(country, () => {
         // Show neighbors of the original stop + the original stop itself
         const neighbors = result.neighbors;

@@ -230,32 +230,34 @@ export function createCarmenUI(container, flagCodes) {
       els.dossierBody.innerHTML = '<div class="carmen-dossier-empty">No clues gathered yet. Investigate locations to find leads.</div>';
       return;
     }
-    // Group by stop
-    const byStop = {};
-    for (const entry of dossierEntries) {
-      if (!byStop[entry.stop]) byStop[entry.stop] = [];
-      byStop[entry.stop].push(entry);
-    }
+    // Render entries in order, grouping consecutive entries with the same stopKey
     let html = '';
-    for (const [stop, entries] of Object.entries(byStop)) {
-      const first = entries[0];
-      const location = first.capital && first.country
-        ? ` — ${esc(first.capital)}, ${esc(first.country)}`
-        : first.country ? ` — ${esc(first.country)}` : '';
-      html += `<div class="carmen-dossier-stop">Stop ${Number(stop) + 1}${location}</div>`;
-      for (const e of entries) {
-        const icon = e.emoji || '';
-        html += `<div class="carmen-dossier-entry">
-          ${icon ? `<span class="carmen-dossier-emoji">${icon}</span>` : ''}
-          <span class="carmen-dossier-prefix">${esc(e.informantPrefix || 'Clue')}:</span>
-          <span>${esc(e.clueText)}</span>
-        </div>`;
+    let currentKey = null;
+    for (const e of dossierEntries) {
+      const key = e.stopKey;
+      if (key !== currentKey) {
+        currentKey = key;
+        const location = e.capital && e.country
+          ? ` — ${esc(e.capital)}, ${esc(e.country)}`
+          : e.country ? ` — ${esc(e.country)}` : '';
+        const detourClass = e.type === 'detour' ? ' carmen-dossier-detour' : '';
+        const label = e.type === 'detour' ? 'Dead end' : `Stop ${Number(e.stop) + 1}`;
+        html += `<div class="carmen-dossier-stop${detourClass}">${label}${location}</div>`;
       }
+      const icon = e.emoji || '';
+      const entryClass = e.type === 'detour' ? ' carmen-dossier-detour' : '';
+      html += `<div class="carmen-dossier-entry${entryClass}">
+        ${icon ? `<span class="carmen-dossier-emoji">${icon}</span>` : ''}
+        <span class="carmen-dossier-prefix">${esc(e.informantPrefix || 'Clue')}:</span>
+        <span>${esc(e.clueText)}</span>
+      </div>`;
     }
     els.dossierBody.innerHTML = html;
     // Auto-scroll to bottom
     els.dossierBody.scrollTop = els.dossierBody.scrollHeight;
   }
+
+  let detourCounter = 0;
 
   return {
     get mapSvg() { return els.map; },
@@ -264,13 +266,26 @@ export function createCarmenUI(container, flagCodes) {
 
     /** Add a clue to the dossier. */
     addDossierEntry(stop, clueText, informantPrefix, emoji, country, capital) {
-      dossierEntries.push({ stop, clueText, informantPrefix, emoji, country, capital });
+      dossierEntries.push({ stop, stopKey: `stop-${stop}`, clueText, informantPrefix, emoji, country, capital });
+      renderDossier();
+    },
+
+    /** Add a dead-end detour entry to the dossier. */
+    addDetourEntry(country, capital) {
+      const key = `detour-${detourCounter++}`;
+      dossierEntries.push({
+        stop: -1, stopKey: key, type: 'detour',
+        clueText: 'No witnesses, no clues. A dead end.',
+        informantPrefix: 'Dead end', emoji: '❌',
+        country, capital,
+      });
       renderDossier();
     },
 
     /** Reset the dossier for a new game. */
     resetDossier() {
       dossierEntries.length = 0;
+      detourCounter = 0;
       renderDossier();
     },
 
