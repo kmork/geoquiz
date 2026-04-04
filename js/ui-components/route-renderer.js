@@ -112,6 +112,7 @@ export class RouteRenderer {
   // Uses only the largest polygon (by outer ring point count) to avoid small
   // outlier territories (Aleutian Islands, remote islands, etc.) pulling the
   // viewport far off-center for countries like the USA or Russia.
+  // For antimeridian-crossing polygons, excludes points on the minority side.
   bboxOfFeature(feature) {
     if (!feature.geometry) return null;
 
@@ -123,17 +124,36 @@ export class RouteRenderer {
       poly[0].length > best[0].length ? poly : best
     );
 
-    let minLon = Infinity, minLat = Infinity;
-    let maxLon = -Infinity, maxLat = -Infinity;
-
+    // Collect all normalized points from the outer ring
+    const points = [];
     for (const ring of mainPoly) {
       for (const [lon, lat] of ring) {
-        const normalizedLon = this.normalizeLon(lon);
-        minLon = Math.min(minLon, normalizedLon);
-        maxLon = Math.max(maxLon, normalizedLon);
-        minLat = Math.min(minLat, lat);
-        maxLat = Math.max(maxLat, lat);
+        points.push([this.normalizeLon(lon), lat]);
       }
+    }
+
+    // Detect antimeridian crossing: if points span > 180° in longitude,
+    // exclude the minority side to avoid a globe-spanning bbox
+    const posCount = points.filter(([lon]) => lon > 0).length;
+    const negCount = points.length - posCount;
+    let filtered = points;
+    if (posCount > 0 && negCount > 0) {
+      const lonSpan = Math.max(...points.map(p => p[0])) - Math.min(...points.map(p => p[0]));
+      if (lonSpan > 180) {
+        filtered = posCount > negCount
+          ? points.filter(([lon]) => lon > -90)
+          : points.filter(([lon]) => lon < 90);
+        if (filtered.length === 0) filtered = points;
+      }
+    }
+
+    let minLon = Infinity, minLat = Infinity;
+    let maxLon = -Infinity, maxLat = -Infinity;
+    for (const [lon, lat] of filtered) {
+      minLon = Math.min(minLon, lon);
+      maxLon = Math.max(maxLon, lon);
+      minLat = Math.min(minLat, lat);
+      maxLat = Math.max(maxLat, lat);
     }
 
     return { minLon, minLat, maxLon, maxLat };
