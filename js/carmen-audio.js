@@ -58,7 +58,6 @@ const TRACKS = [
   'carmen/audio/Broken Casefiles.mp3',
   'carmen/audio/Case Soda Pop.mp3',
   'carmen/audio/Casefile Chrome.mp3',
-  'carmen/audio/Catching The Thief.mp3',
   'carmen/audio/Cigar Ashes 2.mp3',
   'carmen/audio/Cigar Ashes.mp3',
   'carmen/audio/Coal-Lit Case.mp3',
@@ -124,6 +123,15 @@ export function stopMusic() {
       m.pause();
     }
   }, 60);
+}
+
+/** Play the victory track (replaces background music). */
+export function playVictoryMusic() {
+  stopMusic();
+  bgMusic = new Audio('carmen/audio/Catching The Thief.mp3');
+  bgMusic.loop = false;
+  bgMusic.volume = MUSIC_VOLUME;
+  bgMusic.play().catch(() => {});
 }
 
 /** Play narrator intro audio. Ducks music while speaking. Returns a promise that resolves when done. */
