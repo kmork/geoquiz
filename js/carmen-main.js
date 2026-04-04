@@ -3,7 +3,7 @@ import { createCarmenUI } from './ui-components/carmen-ui.js';
 import { RouteRenderer } from './ui-components/route-renderer.js';
 import { loadGeoJSON } from './geojson-loader.js';
 import { attachZoomPan } from './map-zoom-pan.js';
-import { renderFinishScreen, saveGameRecord } from './game-records.js';
+import { saveGameRecord } from './game-records.js';
 import { initConfetti } from './confetti.js';
 import { startMusic, stopMusic, playNarratorIntro, stopNarrator } from './carmen-audio.js';
 
@@ -197,7 +197,14 @@ function checkTimeExpired() {
   if (logic.timeExpired) {
     if (activeNeighborChoices) activeNeighborChoices.disableAll();
     ui.hideLocations();
-    setTimeout(() => showFinish(), 500);
+    setTimeout(async () => {
+      stopMusic();
+      stopNarrator();
+      const results = logic.getResults();
+      saveGameRecord(gameId, results.score, results.time);
+      await ui.showCaseFailed(logic.suspect.name, results.score);
+      location.href = 'play.html';
+    }, 500);
     return true;
   }
   return false;
@@ -392,39 +399,6 @@ function handleGuess(country) {
       });
     }, 600);
   }
-}
-
-function showFinish(identifiedCorrectly, chosenSuspect) {
-  stopMusic();
-  stopNarrator();
-  const results = logic.getResults();
-
-  finalOverlay.style.display = 'flex';
-
-  const stats = [
-    { label: 'Stops', value: `${results.stopsCompleted}/${results.totalStops}` },
-    { label: 'Wrong guesses', value: results.totalWrongGuesses },
-  ];
-  if (chosenSuspect !== undefined) {
-    stats.push({
-      label: 'Suspect ID',
-      value: identifiedCorrectly ? '✓ Correct' : `✗ Wrong (was ${logic.suspect.name})`,
-    });
-  }
-
-  renderFinishScreen(finalOverlay, {
-    gameId,
-    score: results.score,
-    scoreLabel: 'Score',
-    maxScore: results.maxScore,
-    time: results.time,
-    accuracy: results.accuracy,
-    stats,
-    shareUrl: `geoquiz.info${location.pathname}${location.search}`,
-    onPlayAgain: () => {
-      startGame();
-    },
-  });
 }
 
 startGame();
