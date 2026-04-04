@@ -661,8 +661,8 @@
 
 /* ── Investigate right panel background ──────────────── */
 #carmen-rv-clues {
-  background: url('../carmen/img/detective-full.png') no-repeat right bottom;
-  background-size: auto 58%;
+  background: url('../carmen/img/detective-full.png') no-repeat center calc(100% - 20px);
+  background-size: auto 52%;
 }
 
 /* ── Clue Reveal (below map) ────────────────────────── */
