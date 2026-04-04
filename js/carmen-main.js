@@ -389,6 +389,7 @@ function handleGuess(country) {
       activeNeighborChoices.highlight(country, false);
       activeNeighborChoices.disableAll();
     }
+    ui.hideLocations();
 
     const progress = result.progress;
     ui.updateScore(progress.score);
