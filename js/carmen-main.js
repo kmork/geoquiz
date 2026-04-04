@@ -345,13 +345,13 @@ function handleGuess(country) {
             const ts = logic.getTimeState();
             saveGameRecord(gameId, results.score, results.time);
             await ui.showCaseSolved(logic.suspect.name, ts.hoursRemaining, results.score);
-            location.href = 'play.html';
+            location.href = 'play.html?game=route';
           } else {
             logic.score = Math.max(0, logic.score - 200);
             const failResults = logic.getResults();
             saveGameRecord(gameId, failResults.score, failResults.time);
             await ui.showCaseFailed(logic.suspect.name, failResults.score);
-            location.href = 'play.html';
+            location.href = 'play.html?game=route';
           }
         }, 800);
       }, 600);
