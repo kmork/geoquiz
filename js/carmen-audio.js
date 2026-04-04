@@ -148,6 +148,18 @@ export function playNarratorIntro() {
   });
 }
 
+/** Play any narrator audio file. Ducks music while speaking. Returns a promise that resolves when done. */
+export function playNarrator(file) {
+  return new Promise(resolve => {
+    duckMusic();
+    narratorAudio = new Audio(file);
+    narratorAudio.volume = 1.0;
+    narratorAudio.addEventListener('ended', () => { unduckMusic(); resolve(); }, { once: true });
+    narratorAudio.addEventListener('error', () => { unduckMusic(); resolve(); }, { once: true });
+    narratorAudio.play().catch(() => { unduckMusic(); resolve(); });
+  });
+}
+
 export function stopNarrator() {
   if (narratorAudio && !narratorAudio.paused) {
     narratorAudio.pause();

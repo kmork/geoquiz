@@ -1388,3 +1388,35 @@
   margin-bottom: 1.2rem;
 }
 
+.carmen-closing-buttons {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.carmen-closing-btn {
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.carmen-closing-btn:hover {
+  filter: brightness(1.15);
+}
+
+.carmen-btn-continue {
+  background: var(--good-color);
+  color: #fff;
+}
+
+.carmen-btn-quit {
+  background: var(--card-bg);
+  color: var(--text-muted);
+  border: 1px solid var(--card-border);
+}
+

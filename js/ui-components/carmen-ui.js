@@ -612,22 +612,27 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-closing-text"></div>
             <div class="carmen-closing-score">${score} points</div>
             <div class="carmen-closing-detail">Case completed with ${hoursLeft}h remaining</div>
+            <div class="carmen-closing-buttons" style="display:none">
+              <button class="carmen-closing-btn carmen-btn-continue">Next case →</button>
+              <button class="carmen-closing-btn carmen-btn-quit">Quit</button>
+            </div>
           </div>
         `;
         document.body.appendChild(overlay);
 
         const stamp = overlay.querySelector('.carmen-closing-stamp');
         const textEl = overlay.querySelector('.carmen-closing-text');
+        const buttons = overlay.querySelector('.carmen-closing-buttons');
 
         setTimeout(() => { stamp.classList.add('animate'); playStamp(); }, 300);
         setTimeout(() => {
-          typewriter(textEl, 'has been arrested!', 30);
+          typewriter(textEl, 'has been arrested!', 30).then(() => {
+            buttons.style.display = '';
+          });
         }, 800);
 
-        overlay.addEventListener('click', () => {
-          overlay.remove();
-          resolve();
-        });
+        overlay.querySelector('.carmen-btn-continue').addEventListener('click', () => { overlay.remove(); resolve('continue'); });
+        overlay.querySelector('.carmen-btn-quit').addEventListener('click', () => { overlay.remove(); resolve('quit'); });
       });
     },
 
@@ -644,22 +649,27 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-closing-text"></div>
             <div class="carmen-closing-score">${score} points</div>
             <div class="carmen-closing-detail">The real thief vanished into the shadows...</div>
+            <div class="carmen-closing-buttons" style="display:none">
+              <button class="carmen-closing-btn carmen-btn-continue">Next case →</button>
+              <button class="carmen-closing-btn carmen-btn-quit">Quit</button>
+            </div>
           </div>
         `;
         document.body.appendChild(overlay);
 
         const stamp = overlay.querySelector('.carmen-closing-stamp');
         const textEl = overlay.querySelector('.carmen-closing-text');
+        const buttons = overlay.querySelector('.carmen-closing-buttons');
 
         setTimeout(() => { stamp.classList.add('animate'); playStamp(); }, 300);
         setTimeout(() => {
-          typewriter(textEl, 'has escaped!', 30);
+          typewriter(textEl, 'has escaped!', 30).then(() => {
+            buttons.style.display = '';
+          });
         }, 800);
 
-        overlay.addEventListener('click', () => {
-          overlay.remove();
-          resolve();
-        });
+        overlay.querySelector('.carmen-btn-continue').addEventListener('click', () => { overlay.remove(); resolve('continue'); });
+        overlay.querySelector('.carmen-btn-quit').addEventListener('click', () => { overlay.remove(); resolve('quit'); });
       });
     },
 

@@ -10,17 +10,6 @@
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="css/carmen.css">
-  <script>
-    // Prevent FOUC - apply theme immediately
-    (function() {
-      const saved = localStorage.getItem('geoquiz-theme');
-      const system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-      const theme = saved || system;
-      if (theme === 'light') {
-        document.documentElement.classList.add('light-mode');
-      }
-    })();
-  </script>
 </head>
 
 <body>
@@ -58,7 +47,6 @@
 </div>
 
 <script src="js/pako.min.js"></script>
-<script src="js/theme.js"></script>
 <script type="module" src="js/data.js"></script>
 <script type="module" src="js/carmen-main.js"></script>
 </body>

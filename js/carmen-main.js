@@ -5,7 +5,7 @@ import { loadGeoJSON } from './geojson-loader.js';
 import { attachZoomPan } from './map-zoom-pan.js';
 import { saveGameRecord } from './game-records.js';
 import { initConfetti } from './confetti.js';
-import { startMusic, stopMusic, playNarratorIntro, stopNarrator, playVictoryMusic } from './carmen-audio.js';
+import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic } from './carmen-audio.js';
 
 const params = new URLSearchParams(location.search);
 const difficulty = params.get('difficulty') || 'detective';
@@ -73,6 +73,79 @@ let baseViewBox = { x: 0, y: 0, w: 600, h: 320 };
 attachZoomPan(ui.mapSvg, () => baseViewBox);
 
 let logic;
+let isFirstGame = true;
+
+async function handleEndChoice(choice, wasSuccess) {
+  if (choice === 'quit') {
+    location.href = 'play.html?game=route';
+    return;
+  }
+
+  // Continue — show front image with transition narrator + subtitles
+  stopMusic();
+  gameContent.style.display = 'none';
+  if (carmenHeader) carmenHeader.style.display = 'none';
+  if (carmenFront) carmenFront.style.display = '';
+
+  startMusic();
+  await new Promise(r => setTimeout(r, 1500));
+
+  const narratorFile = wasSuccess
+    ? 'carmen/audio/narrator - mission1 success.mp3'
+    : 'carmen/audio/narrator - mission1 fail.mp3';
+
+  const cues = wasSuccess ? [
+    [0.0,  "Last case\u2026 wrapped up nicely."],
+    [2.0,  "Caught the thief. Handcuffs, paperwork, the whole routine."],
+    [6.5,  "Still don't know who they really were.\nDidn't stick around for introductions."],
+    [10.0,  "Figures."],
+    [11.0, "I poured myself a coffee that tasted like\nregret and bad decisions."],
+    [14.0, "Didn't even finish it."],
+    [16.0, "Because I know how this goes."],
+    [18.5, "You close one case\u2026 and somewhere out there\u2014"],
+    [21.5, "someone's already picking their next target."],
+  ] : [
+    [0.0,  "The thief got away."],
+    [1.5,  "Again."],
+    [3.0,  "I replayed it in my head a dozen times. Maybe more.\nIt doesn't get better with repetition."],
+    [7.5,  "No face. No name."],
+    [9.5,  "Just a disappearing act that would make\na stage magician jealous."],
+    [13.0, "Could be anyone."],
+    [14.5, "Which, in my line of work, is just another way\nof saying I've got nothing."],
+    [18.5, "But the next case is already knocking."],
+    [20.5, "And I don't intend to be the punchline twice."],
+  ];
+
+  // Create subtitle element
+  const subtitle = document.createElement('div');
+  subtitle.className = 'carmen-subtitle';
+  carmenFront.appendChild(subtitle);
+
+  const cueTimeouts = [];
+  for (const [time, text] of cues) {
+    cueTimeouts.push(setTimeout(() => {
+      subtitle.style.opacity = '0';
+      setTimeout(() => {
+        subtitle.textContent = text;
+        subtitle.style.opacity = '1';
+      }, 300);
+    }, time * 1000));
+  }
+
+  // Play narrator (skippable)
+  await Promise.race([
+    playNarrator(narratorFile),
+    waitForClick(carmenFront),
+  ]);
+  stopNarrator();
+
+  // Clean up subtitles
+  cueTimeouts.forEach(t => clearTimeout(t));
+  subtitle.remove();
+
+  isFirstGame = false;
+  startGame();
+}
 
 async function startGame() {
   finalOverlay.style.display = 'none';
@@ -89,58 +162,60 @@ async function startGame() {
 
   const intro = logic.start();
 
-  // Wait for user click on front image to unlock audio
-  await waitForClick(carmenFront);
+  if (isFirstGame) {
+    // Wait for user click on front image to unlock audio
+    await waitForClick(carmenFront);
 
-  // Start background music, then narrator with subtitles (all skippable by tap)
-  startMusic();
+    // Start background music, then narrator with subtitles (all skippable by tap)
+    startMusic();
 
-  // Brief music-only intro (skippable)
-  let skipped = false;
-  await Promise.race([
-    new Promise(r => setTimeout(r, 2500)),
-    waitForClick(carmenFront).then(() => { skipped = true; }),
-  ]);
-
-  if (!skipped) {
-    // Play narrator with subtitles
-    const subtitle = document.createElement('div');
-    subtitle.className = 'carmen-subtitle';
-    carmenFront.appendChild(subtitle);
-
-    const cues = [
-      [0.0,  "The world's a big place."],
-      [1.2,  "Too big, if you ask me. Too many corners to hide in.\nToo many stories buried under stone, sand, and time."],
-      [7.5,  "Most people pass through it without noticing a thing.\nSnap a picture. Buy a postcard. Move on."],
-      [13.0, "Me?"],
-      [14.0, "I notice what's missing."],
-      [15.5, "That's how it starts. It always does."],
-      [18.5, "Something small at first. A whisper.\nA detail that doesn't sit right."],
-      [23.0, "Then the call comes in."],
-      [24.5, "And suddenly\u2026 a piece of the world is gone."],
-    ];
-
-    const cueTimeouts = [];
-    for (const [time, text] of cues) {
-      cueTimeouts.push(setTimeout(() => {
-        subtitle.style.opacity = '0';
-        setTimeout(() => {
-          subtitle.textContent = text;
-          subtitle.style.opacity = '1';
-        }, 300);
-      }, time * 1000));
-    }
-
-    // Wait for narrator to finish OR user tap to skip
+    // Brief music-only intro (skippable)
+    let skipped = false;
     await Promise.race([
-      playNarratorIntro(),
-      waitForClick(carmenFront),
+      new Promise(r => setTimeout(r, 2500)),
+      waitForClick(carmenFront).then(() => { skipped = true; }),
     ]);
-    stopNarrator();
 
-    // Clean up subtitles
-    cueTimeouts.forEach(t => clearTimeout(t));
-    subtitle.remove();
+    if (!skipped) {
+      // Play narrator with subtitles
+      const subtitle = document.createElement('div');
+      subtitle.className = 'carmen-subtitle';
+      carmenFront.appendChild(subtitle);
+
+      const cues = [
+        [0.0,  "The world's a big place."],
+        [1.2,  "Too big, if you ask me. Too many corners to hide in.\nToo many stories buried under stone, sand, and time."],
+        [7.5,  "Most people pass through it without noticing a thing.\nSnap a picture. Buy a postcard. Move on."],
+        [13.0, "Me?"],
+        [14.0, "I notice what's missing."],
+        [15.5, "That's how it starts. It always does."],
+        [18.5, "Something small at first. A whisper.\nA detail that doesn't sit right."],
+        [23.0, "Then the call comes in."],
+        [24.5, "And suddenly\u2026 a piece of the world is gone."],
+      ];
+
+      const cueTimeouts = [];
+      for (const [time, text] of cues) {
+        cueTimeouts.push(setTimeout(() => {
+          subtitle.style.opacity = '0';
+          setTimeout(() => {
+            subtitle.textContent = text;
+            subtitle.style.opacity = '1';
+          }, 300);
+        }, time * 1000));
+      }
+
+      // Wait for narrator to finish OR user tap to skip
+      await Promise.race([
+        playNarratorIntro(),
+        waitForClick(carmenFront),
+      ]);
+      stopNarrator();
+
+      // Clean up subtitles
+      cueTimeouts.forEach(t => clearTimeout(t));
+      subtitle.remove();
+    }
   }
 
   // Now show the case briefing overlay
@@ -213,8 +288,8 @@ function checkTimeExpired() {
       stopNarrator();
       const results = logic.getResults();
       saveGameRecord(gameId, results.score, results.time);
-      await ui.showCaseFailed(logic.suspect.name, results.score);
-      location.href = 'play.html';
+      const choice = await ui.showCaseFailed(logic.suspect.name, results.score);
+      await handleEndChoice(choice, false);
     }, 500);
     return true;
   }
@@ -344,14 +419,14 @@ function handleGuess(country) {
             confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2, count: 100 });
             const ts = logic.getTimeState();
             saveGameRecord(gameId, results.score, results.time);
-            await ui.showCaseSolved(logic.suspect.name, ts.hoursRemaining, results.score);
-            location.href = 'play.html?game=route';
+            const choice = await ui.showCaseSolved(logic.suspect.name, ts.hoursRemaining, results.score);
+            await handleEndChoice(choice, true);
           } else {
             logic.score = Math.max(0, logic.score - 200);
             const failResults = logic.getResults();
             saveGameRecord(gameId, failResults.score, failResults.time);
-            await ui.showCaseFailed(logic.suspect.name, failResults.score);
-            location.href = 'play.html?game=route';
+            const choice = await ui.showCaseFailed(logic.suspect.name, failResults.score);
+            await handleEndChoice(choice, false);
           }
         }, 800);
       }, 600);
