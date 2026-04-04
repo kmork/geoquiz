@@ -23,17 +23,17 @@ const LOCATIONS = [
     { emoji: '🧳', prefix: 'A fellow traveler shared' },
     { emoji: '🚕', prefix: 'A taxi driver outside told you' },
   ]},
-  { id: 'hotel',    emoji: '🏨', name: 'Hotel',    clueTypes: ['fact'], informants: [
+  { id: 'hotel',    emoji: '🏨', name: 'Hotel',    clueTypes: ['famous_for', 'fact'], informants: [
     { emoji: '🏨', prefix: 'The hotel concierge mentioned' },
     { emoji: '🛎️', prefix: 'A bellhop whispered' },
     { emoji: '🧹', prefix: 'A housekeeper recalled' },
   ]},
-  { id: 'market',   emoji: '🏪', name: 'Market',   clueTypes: ['fact', 'river_mountain'], informants: [
+  { id: 'market',   emoji: '🏪', name: 'Market',   clueTypes: ['exports', 'fact', 'river_mountain'], informants: [
     { emoji: '🛍️', prefix: 'A market vendor confided' },
     { emoji: '🧑‍🍳', prefix: 'A street food vendor said' },
     { emoji: '🏪', prefix: 'A shopkeeper overheard' },
   ]},
-  { id: 'library',  emoji: '📚', name: 'Library',  clueTypes: ['empire', 'heritage', 'fact'], informants: [
+  { id: 'library',  emoji: '📚', name: 'Library',  clueTypes: ['empire', 'heritage', 'famous_for', 'fact'], informants: [
     { emoji: '📚', prefix: 'A librarian recalled' },
     { emoji: '👨‍🏫', prefix: 'A professor noted' },
     { emoji: '🗞️', prefix: 'An old journalist mentioned' },
@@ -663,6 +663,8 @@ export class CarmenGameLogic {
       () => this._clueFromHeritage(country),
       () => this._clueFromRiverOrMountain(country),
       () => this._clueFromEmpire(country),
+      () => this._clueFromFamousFor(country),
+      () => this._clueFromExports(country),
     ];
 
     // Shuffle generators for variety
@@ -879,6 +881,63 @@ export class CarmenGameLogic {
     return null;
   }
 
+  _clueFromFamousFor(country) {
+    const items = this.countryMap[country]?.famousFor;
+    if (!items || items.length === 0) return null;
+
+    const templates = [
+      item => `This place is known for ${item}.`,
+      item => `The destination is famous for ${item}.`,
+      item => `You'll find ${item} in this country.`,
+    ];
+
+    const shuffled = items.map((item, i) => ({ item, i })).sort(() => Math.random() - 0.5);
+    for (const { item, i } of shuffled) {
+      const id = `famous-${country}-${i}`;
+      if (this.usedClueIds.has(id)) continue;
+      const template = templates[Math.floor(Math.random() * templates.length)];
+      const text = this._redactCountryName(template(item), country);
+      if (this._containsCountryName(text, country)) continue;
+      return { id, text, icon: '🌟', category: 'culture' };
+    }
+    return null;
+  }
+
+  _clueFromExports(country) {
+    const items = this.countryMap[country]?.exports;
+    if (!items || items.length === 0) return null;
+
+    const templates = [
+      list => `This country is a major exporter of ${list}.`,
+      list => `Key exports from here include ${list}.`,
+      list => `The local economy runs on ${list}.`,
+    ];
+
+    // Pick 2-3 items randomly; use all if ≤2
+    let subset;
+    if (items.length <= 2) {
+      subset = [...items];
+    } else {
+      const shuffled = [...items].sort(() => Math.random() - 0.5);
+      subset = shuffled.slice(0, 2 + Math.floor(Math.random() * 2)); // 2 or 3
+    }
+
+    const sorted = [...subset].sort();
+    const id = `exports-${country}-${sorted.join(',')}`;
+    if (this.usedClueIds.has(id)) return null;
+
+    // Format as "a, b, and c"
+    let list;
+    if (subset.length === 1) list = subset[0];
+    else if (subset.length === 2) list = `${subset[0]} and ${subset[1]}`;
+    else list = `${subset.slice(0, -1).join(', ')}, and ${subset[subset.length - 1]}`;
+
+    const template = templates[Math.floor(Math.random() * templates.length)];
+    const text = this._redactCountryName(template(list), country);
+    if (this._containsCountryName(text, country)) return null;
+    return { id, text, icon: '📦', category: 'economy' };
+  }
+
   // ─── Country Name Redaction ──────────────────────────────────
 
   _redactCountryName(text, country) {
@@ -1089,6 +1148,12 @@ export class CarmenGameLogic {
           break;
         case 'empire':
           clue = this._clueFromEmpire(target);
+          break;
+        case 'famous_for':
+          clue = this._clueFromFamousFor(target);
+          break;
+        case 'exports':
+          clue = this._clueFromExports(target);
           break;
       }
       if (clue && !this.usedClueIds.has(clue.id)) {
