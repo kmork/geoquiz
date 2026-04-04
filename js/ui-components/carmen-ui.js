@@ -72,7 +72,6 @@ export function createCarmenUI(container, flagCodes) {
   // Build skeleton
   container.innerHTML = `
     <div class="carmen-status-bar">
-      <div class="carmen-lives" id="carmen-lives"></div>
       <div class="pill">Score: <b id="carmen-score">0</b></div>
       <div class="carmen-progress" id="carmen-progress"></div>
       <div class="carmen-clock" id="carmen-clock"></div>
@@ -148,7 +147,6 @@ export function createCarmenUI(container, flagCodes) {
     panelTabs: container.querySelector('#carmen-panel-tabs'),
     panelCase: container.querySelector('#carmen-panel-case'),
     panelInvestigate: container.querySelector('#carmen-panel-investigate'),
-    lives: container.querySelector('#carmen-lives'),
     score: container.querySelector('#carmen-score'),
     progress: container.querySelector('#carmen-progress'),
     clock: container.querySelector('#carmen-clock'),
@@ -427,14 +425,6 @@ export function createCarmenUI(container, flagCodes) {
 
     updateScore(score) {
       els.score.textContent = score;
-    },
-
-    updateLives(current, max) {
-      let html = '';
-      for (let i = 0; i < max; i++) {
-        html += `<span class="heart ${i < current ? '' : 'lost'}">&#x2764;&#xFE0F;</span>`;
-      }
-      els.lives.innerHTML = html;
     },
 
     updateProgress(stop, total) {

@@ -457,21 +457,6 @@
   flex-wrap: wrap;
 }
 
-.carmen-lives {
-  display: flex;
-  gap: 0.2rem;
-  font-size: 1.2rem;
-}
-
-.carmen-lives .heart {
-  transition: opacity 0.3s, transform 0.3s;
-}
-
-.carmen-lives .heart.lost {
-  opacity: 0.2;
-  transform: scale(0.8);
-}
-
 .carmen-progress {
   font-size: 0.85rem;
   color: var(--text-muted);
@@ -1210,4 +1195,33 @@
   .carmen-briefing-stamp {
     font-size: 1.2rem;
   }
+}
+
+/* ── Dead End Overlay ────────────────────────────── */
+.carmen-dead-end .carmen-dead-end-icon {
+  font-size: 2.5rem;
+  margin-bottom: 0.3rem;
+}
+
+.carmen-dead-end .score-lost {
+  color: var(--bad-color);
+  font-weight: 700;
+  font-size: 1.3rem;
+  margin-bottom: 0.3rem;
+}
+
+.carmen-dead-end .carmen-dead-end-hint {
+  color: var(--muted-color);
+  font-size: 0.85rem;
+  margin-top: 0.3rem;
+}
+
+.carmen-dead-end-btn {
+  margin-top: 0.8rem;
+  background: var(--bad-color);
+  color: #fff;
+}
+
+.carmen-dead-end-btn:hover {
+  filter: brightness(1.15);
 }
