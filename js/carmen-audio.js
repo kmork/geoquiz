@@ -84,6 +84,8 @@ function pickRandomTrack() {
   return TRACKS[Math.floor(Math.random() * TRACKS.length)];
 }
 
+const MUSIC_VOLUME = 0.25;
+
 /** Start looping background music (fade in). Picks a random track each time. */
 export function startMusic() {
   if (bgMusic && !bgMusic.paused) return;
@@ -95,10 +97,18 @@ export function startMusic() {
 
   let v = 0;
   const fade = setInterval(() => {
-    v = Math.min(v + 0.05, 0.25);
+    v = Math.min(v + 0.05, MUSIC_VOLUME);
     bgMusic.volume = v;
-    if (v >= 0.25) clearInterval(fade);
+    if (v >= MUSIC_VOLUME) clearInterval(fade);
   }, 60);
+}
+
+/** Lower music volume while narrator speaks, restore when done. */
+export function duckMusic() {
+  if (bgMusic && !bgMusic.paused) bgMusic.volume = Math.min(bgMusic.volume, 0.10);
+}
+export function unduckMusic() {
+  if (bgMusic && !bgMusic.paused) bgMusic.volume = MUSIC_VOLUME;
 }
 
 /** Stop background music (fade out). */
@@ -114,6 +124,27 @@ export function stopMusic() {
       m.pause();
     }
   }, 60);
+}
+
+/** Play narrator intro audio. Ducks music while speaking. Returns a promise that resolves when done. */
+let narratorAudio = null;
+
+export function playNarratorIntro() {
+  return new Promise(resolve => {
+    duckMusic();
+    narratorAudio = new Audio('carmen/audio/narrator - intro.mp3');
+    narratorAudio.volume = 1.0;
+    narratorAudio.addEventListener('ended', () => { unduckMusic(); resolve(); }, { once: true });
+    narratorAudio.addEventListener('error', () => { unduckMusic(); resolve(); }, { once: true });
+    narratorAudio.play().catch(() => { unduckMusic(); resolve(); });
+  });
+}
+
+export function stopNarrator() {
+  if (narratorAudio && !narratorAudio.paused) {
+    narratorAudio.pause();
+    narratorAudio = null;
+  }
 }
 
 /** Clock tick-tock sound — alternates between high tick and low tock. */

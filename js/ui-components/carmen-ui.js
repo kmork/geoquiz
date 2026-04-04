@@ -349,34 +349,23 @@ export function createCarmenUI(container, flagCodes) {
         els.briefingMission.textContent = '';
         els.briefing.style.display = 'flex';
 
-        // Hide stamp and start button until user interacts
+        // Stamp animation + sound
         const stamp = els.briefing.querySelector('.carmen-briefing-stamp');
         stamp.classList.remove('animate');
-        els.briefingStart.style.display = 'none';
-
-        // Show "tap to open" prompt
-        const tapHint = document.createElement('div');
-        tapHint.className = 'carmen-tap-hint';
-        tapHint.textContent = 'Tap to open dossier';
-        els.briefing.querySelector('.carmen-briefing-content').appendChild(tapHint);
-
-        // First click unlocks audio and triggers the reveal
-        function onFirstClick() {
-          els.briefing.removeEventListener('click', onFirstClick);
-          tapHint.remove();
-
-          // Stamp animation + sound (user has interacted, audio is unlocked)
+        setTimeout(() => {
           stamp.classList.add('animate');
           setTimeout(() => playStamp(), 300);
+        }, 100);
 
-          // Typewriter with sounds
-          const timeText = totalHours ? ` You have only ${totalHours} hours to hunt down the criminal!` : '';
-          typewriter(els.briefingMission, `Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.${timeText}`, 20)
-            .then(() => {
-              els.briefingStart.style.display = '';
-            });
-        }
-        els.briefing.addEventListener('click', onFirstClick);
+        // Hide start button until typewriter finishes
+        els.briefingStart.style.display = 'none';
+
+        // Typewriter with sounds
+        const timeText = totalHours ? ` You have only ${totalHours} hours to hunt down the criminal!` : '';
+        typewriter(els.briefingMission, `Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.${timeText}`, 20)
+          .then(() => {
+            els.briefingStart.style.display = '';
+          });
 
         els.briefingStart.onclick = () => {
           els.briefing.style.display = 'none';
@@ -617,7 +606,7 @@ export function createCarmenUI(container, flagCodes) {
 
         setTimeout(() => { stamp.classList.add('animate'); playStamp(); }, 300);
         setTimeout(() => {
-          typewriter(textEl, 'has been apprehended!', 30);
+          typewriter(textEl, 'has been arrested!', 30);
         }, 800);
 
         overlay.addEventListener('click', () => {

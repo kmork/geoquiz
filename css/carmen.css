@@ -44,6 +44,46 @@
   animation: carmen-blink 1.5s ease-in-out infinite;
 }
 
+.carmen-front-tap {
+  position: absolute;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.6);
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.carmen-subtitle {
+  position: absolute;
+  bottom: 8%;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 80%;
+  text-align: center;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 2.0rem;
+  line-height: 1.6;
+  color: #e8dcc8;
+  text-shadow: 0 0 12px rgba(0, 0, 0, 0.9), 0 2px 4px rgba(0, 0, 0, 0.8);
+  white-space: pre-line;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .carmen-subtitle {
+    font-size: 1rem;
+    max-width: 90%;
+    bottom: 5%;
+  }
+}
+
 /* ── Case Briefing Overlay ──────────────────────────── */
 .carmen-briefing-overlay {
   position: fixed;

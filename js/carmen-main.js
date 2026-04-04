@@ -5,7 +5,7 @@ import { loadGeoJSON } from './geojson-loader.js';
 import { attachZoomPan } from './map-zoom-pan.js';
 import { renderFinishScreen, saveGameRecord } from './game-records.js';
 import { initConfetti } from './confetti.js';
-import { startMusic, stopMusic } from './carmen-audio.js';
+import { startMusic, stopMusic, playNarratorIntro, stopNarrator } from './carmen-audio.js';
 
 const params = new URLSearchParams(location.search);
 const difficulty = params.get('difficulty') || 'detective';
@@ -42,10 +42,25 @@ const capitalOf = Object.fromEntries(
   window.DATA.map(c => [c.country, c.capitals?.[0] || ''])
 );
 
-// Data loaded — hide the loading text, keep the front image visible
+// Data loaded — hide the loading text, show tap hint
 if (carmenFront) {
   const loadingText = carmenFront.querySelector('.carmen-init-loading');
   if (loadingText) loadingText.style.display = 'none';
+  const tapHint = document.createElement('div');
+  tapHint.className = 'carmen-tap-hint carmen-front-tap';
+  tapHint.textContent = 'Tap to start';
+  carmenFront.appendChild(tapHint);
+}
+
+/** Wait for a click on an element. Resolves on first click. */
+function waitForClick(el) {
+  return new Promise(resolve => {
+    el.addEventListener('click', () => {
+      const hint = el.querySelector('.carmen-front-tap');
+      if (hint) hint.remove();
+      resolve();
+    }, { once: true });
+  });
 }
 
 // Create UI (hidden until briefing is dismissed)
@@ -74,7 +89,50 @@ async function startGame() {
 
   const intro = logic.start();
 
-  // Show case briefing over the front image
+  // Wait for user click on front image to unlock audio
+  await waitForClick(carmenFront);
+
+  // Start background music, then narrator with subtitles after a short delay
+  startMusic();
+  await new Promise(r => setTimeout(r, 2500));
+
+  // Create subtitle element on the front image
+  const subtitle = document.createElement('div');
+  subtitle.className = 'carmen-subtitle';
+  carmenFront.appendChild(subtitle);
+
+  // Timed subtitle cues: [startSeconds, text]
+  const cues = [
+    [0.0,  "The world's a big place."],
+    [1.2,  "Too big, if you ask me. Too many corners to hide in.\nToo many stories buried under stone, sand, and time."],
+    [7.5,  "Most people pass through it without noticing a thing.\nSnap a picture. Buy a postcard. Move on."],
+    [13.0, "Me?"],
+    [14.0, "I notice what's missing."],
+    [15.5, "That's how it starts. It always does."],
+    [18.5, "Something small at first. A whisper.\nA detail that doesn't sit right."],
+    [23.0, "Then the call comes in."],
+    [24.5, "And suddenly\u2026 a piece of the world is gone."],
+  ];
+
+  // Schedule subtitle changes
+  const cueTimeouts = [];
+  for (const [time, text] of cues) {
+    cueTimeouts.push(setTimeout(() => {
+      subtitle.style.opacity = '0';
+      setTimeout(() => {
+        subtitle.textContent = text;
+        subtitle.style.opacity = '1';
+      }, 300);
+    }, time * 1000));
+  }
+
+  await playNarratorIntro();
+
+  // Clean up subtitles
+  cueTimeouts.forEach(t => clearTimeout(t));
+  subtitle.remove();
+
+  // Now show the case briefing overlay
   const totalHours = logic.getTimeState().totalHours;
   await ui.showCaseBriefing(intro.artifact, intro.startCountry, totalHours);
 
@@ -338,6 +396,7 @@ function handleGuess(country) {
 
 function showFinish(identifiedCorrectly, chosenSuspect) {
   stopMusic();
+  stopNarrator();
   const results = logic.getResults();
 
   finalOverlay.style.display = 'flex';
