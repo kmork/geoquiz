@@ -425,6 +425,7 @@ export class CarmenGameLogic {
     // Shuffle suspect attributes for clue distribution across stops
     this._suspectClueAttrs = [...SUSPECT_ATTRIBUTES].sort(() => Math.random() - 0.5);
     this._suspectClueIndex = 0;
+    this._suspectClueStop = -1;
     this._revealedAttrs = [];
     this._pendingSpecificClue = null;
 
@@ -956,6 +957,9 @@ export class CarmenGameLogic {
   /** Get the next suspect identity clue for this stop (vague). Returns null if all revealed. */
   getSuspectClue() {
     if (this._suspectClueIndex >= this._suspectClueAttrs.length) return null;
+    // Don't give a new clue if we already gave one for this stop (e.g. player flew back)
+    if (this._suspectClueStop === this.currentStop) return null;
+    this._suspectClueStop = this.currentStop;
     const attr = this._suspectClueAttrs[this._suspectClueIndex];
     this._suspectClueIndex++;
     const value = this.suspect[attr];
