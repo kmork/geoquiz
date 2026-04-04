@@ -326,13 +326,14 @@ export function createCarmenUI(container, flagCodes) {
     upgradeWitnessReport(clueId, specificClue) {
       const entry = els.witnessReport.querySelector(`[data-clue-id="${clueId}"]`);
       if (entry) {
-        const textEl = entry.querySelector('.carmen-witness-text');
-        if (textEl) {
-          textEl.textContent = `"${specificClue.text}"`;
-          entry.classList.add('carmen-witness-confirmed');
-        }
+        entry.classList.add('carmen-witness-confirmed');
         const btn = entry.querySelector('.carmen-investigate-further-btn');
         if (btn) btn.remove();
+        // Add the confirmed specific clue underneath the vague one
+        const confirmed = document.createElement('div');
+        confirmed.className = 'carmen-witness-text carmen-witness-specific';
+        confirmed.textContent = `"${specificClue.text}"`;
+        entry.appendChild(confirmed);
       }
     },
 

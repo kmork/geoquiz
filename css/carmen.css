@@ -782,8 +782,10 @@
   border-left: 3px solid var(--good-color);
 }
 
-.carmen-witness-confirmed .carmen-witness-text {
+.carmen-witness-specific {
   color: var(--good-color);
+  margin-top: 0.2rem;
+  font-weight: 500;
 }
 
 /* ── Speech Bubble (right panel clue) ──────────────── */
