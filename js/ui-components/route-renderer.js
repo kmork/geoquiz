@@ -156,6 +156,12 @@ export class RouteRenderer {
       maxLat = Math.max(maxLat, lat);
     }
 
+    // Cap very wide countries (e.g. Russia 27°–180°) to a reasonable viewport span
+    const MAX_LON_SPAN = 80;
+    if (maxLon - minLon > MAX_LON_SPAN) {
+      maxLon = minLon + MAX_LON_SPAN;
+    }
+
     return { minLon, minLat, maxLon, maxLat };
   }
 
@@ -345,7 +351,52 @@ export class RouteRenderer {
           const [, y2] = this.proj([0, bb.minLat]);
           const countryH = Math.abs(y2 - y1);
           const fontSize = Math.min(maxByWidth, countryH * 0.35, 4);
-          if (fontSize >= 1) {
+
+          // Micro-country: too small to see/click — draw a marker circle
+          if (fontSize < 1) {
+            const r = 3;
+            const circle = document.createElementNS(ns, "circle");
+            circle.setAttribute("cx", centroid[0]);
+            circle.setAttribute("cy", centroid[1]);
+            circle.setAttribute("r", r);
+            circle.setAttribute("fill", "rgba(148, 163, 184, 0.5)");
+            circle.setAttribute("stroke", "rgba(148, 163, 184, 0.9)");
+            circle.setAttribute("stroke-width", "1");
+            circle.setAttribute("vector-effect", "non-scaling-stroke");
+            circle.setAttribute("cursor", "pointer");
+            circle.setAttribute("class", "carmen-map-choice");
+            circle.setAttribute("data-country", name);
+            group.appendChild(circle);
+            entry.paths.push(circle);
+
+            circle.addEventListener('pointerdown', (e) => {
+              if (!entry.disabled) e.stopPropagation();
+            });
+            circle.addEventListener('click', () => {
+              if (!entry.disabled) onClick(name);
+            });
+            circle.addEventListener('mouseenter', () => {
+              if (entry.disabled) return;
+              circle.setAttribute("fill", "rgba(148, 163, 184, 0.7)");
+            });
+            circle.addEventListener('mouseleave', () => {
+              if (entry.disabled) return;
+              circle.setAttribute("fill", "rgba(148, 163, 184, 0.5)");
+            });
+
+            // Label next to the marker
+            const text = document.createElementNS(ns, "text");
+            text.setAttribute("x", centroid[0] + r + 1);
+            text.setAttribute("y", centroid[1]);
+            text.setAttribute("text-anchor", "start");
+            text.setAttribute("dominant-baseline", "central");
+            text.setAttribute("font-size", 2.5);
+            text.setAttribute("class", "carmen-map-label");
+            text.setAttribute("pointer-events", "none");
+            text.textContent = name;
+            group.appendChild(text);
+            entry.label = text;
+          } else {
             const text = document.createElementNS(ns, "text");
             text.setAttribute("x", centroid[0]);
             text.setAttribute("y", centroid[1]);
