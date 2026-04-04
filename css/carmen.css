@@ -659,6 +659,12 @@
   background: var(--button-hover);
 }
 
+/* ── Investigate right panel background ──────────────── */
+#carmen-rv-clues {
+  background: url('../carmen/img/detective-full.png') no-repeat right bottom;
+  background-size: auto 58%;
+}
+
 /* ── Clue Reveal (below map) ────────────────────────── */
 .carmen-clue-reveal {
   display: flex;
