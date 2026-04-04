@@ -92,45 +92,56 @@ async function startGame() {
   // Wait for user click on front image to unlock audio
   await waitForClick(carmenFront);
 
-  // Start background music, then narrator with subtitles after a short delay
+  // Start background music, then narrator with subtitles (all skippable by tap)
   startMusic();
-  await new Promise(r => setTimeout(r, 2500));
 
-  // Create subtitle element on the front image
-  const subtitle = document.createElement('div');
-  subtitle.className = 'carmen-subtitle';
-  carmenFront.appendChild(subtitle);
+  // Brief music-only intro (skippable)
+  let skipped = false;
+  await Promise.race([
+    new Promise(r => setTimeout(r, 2500)),
+    waitForClick(carmenFront).then(() => { skipped = true; }),
+  ]);
 
-  // Timed subtitle cues: [startSeconds, text]
-  const cues = [
-    [0.0,  "The world's a big place."],
-    [1.2,  "Too big, if you ask me. Too many corners to hide in.\nToo many stories buried under stone, sand, and time."],
-    [7.5,  "Most people pass through it without noticing a thing.\nSnap a picture. Buy a postcard. Move on."],
-    [13.0, "Me?"],
-    [14.0, "I notice what's missing."],
-    [15.5, "That's how it starts. It always does."],
-    [18.5, "Something small at first. A whisper.\nA detail that doesn't sit right."],
-    [23.0, "Then the call comes in."],
-    [24.5, "And suddenly\u2026 a piece of the world is gone."],
-  ];
+  if (!skipped) {
+    // Play narrator with subtitles
+    const subtitle = document.createElement('div');
+    subtitle.className = 'carmen-subtitle';
+    carmenFront.appendChild(subtitle);
 
-  // Schedule subtitle changes
-  const cueTimeouts = [];
-  for (const [time, text] of cues) {
-    cueTimeouts.push(setTimeout(() => {
-      subtitle.style.opacity = '0';
-      setTimeout(() => {
-        subtitle.textContent = text;
-        subtitle.style.opacity = '1';
-      }, 300);
-    }, time * 1000));
+    const cues = [
+      [0.0,  "The world's a big place."],
+      [1.2,  "Too big, if you ask me. Too many corners to hide in.\nToo many stories buried under stone, sand, and time."],
+      [7.5,  "Most people pass through it without noticing a thing.\nSnap a picture. Buy a postcard. Move on."],
+      [13.0, "Me?"],
+      [14.0, "I notice what's missing."],
+      [15.5, "That's how it starts. It always does."],
+      [18.5, "Something small at first. A whisper.\nA detail that doesn't sit right."],
+      [23.0, "Then the call comes in."],
+      [24.5, "And suddenly\u2026 a piece of the world is gone."],
+    ];
+
+    const cueTimeouts = [];
+    for (const [time, text] of cues) {
+      cueTimeouts.push(setTimeout(() => {
+        subtitle.style.opacity = '0';
+        setTimeout(() => {
+          subtitle.textContent = text;
+          subtitle.style.opacity = '1';
+        }, 300);
+      }, time * 1000));
+    }
+
+    // Wait for narrator to finish OR user tap to skip
+    await Promise.race([
+      playNarratorIntro(),
+      waitForClick(carmenFront),
+    ]);
+    stopNarrator();
+
+    // Clean up subtitles
+    cueTimeouts.forEach(t => clearTimeout(t));
+    subtitle.remove();
   }
-
-  await playNarratorIntro();
-
-  // Clean up subtitles
-  cueTimeouts.forEach(t => clearTimeout(t));
-  subtitle.remove();
 
   // Now show the case briefing overlay
   const totalHours = logic.getTimeState().totalHours;
