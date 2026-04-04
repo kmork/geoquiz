@@ -3,7 +3,7 @@ import { createCarmenUI } from './ui-components/carmen-ui.js';
 import { RouteRenderer } from './ui-components/route-renderer.js';
 import { loadGeoJSON } from './geojson-loader.js';
 import { attachZoomPan } from './map-zoom-pan.js';
-import { renderFinishScreen } from './game-records.js';
+import { renderFinishScreen, saveGameRecord } from './game-records.js';
 import { initConfetti } from './confetti.js';
 import { startMusic, stopMusic } from './carmen-audio.js';
 
@@ -240,26 +240,44 @@ function handleGuess(country) {
     }
 
     if (result.gameOver && result.won) {
-      // Found the thief's location — now identify them!
+      // Found the thief's location — fly there first
       const progress = logic.getProgress();
-      drawMap(logic.route);
       ui.updateScore(progress.score);
-      ui.updateProgress(progress.stop, progress.totalStops);
 
-      // Show suspect lineup before declaring victory
+      const fromCountry = playerPosition || progress.route[progress.route.length - 2];
+      const toCountry = result.country;
+
       setTimeout(async () => {
-        const lineup = logic.getSuspectLineup();
-        const chosenName = await ui.showSuspectLineup(lineup);
-        const correct = logic.identifySuspect(chosenName);
+        logic.spendTime(logic.getTravelCost());
+        updateClock();
 
-        if (correct) {
-          confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2, count: 100 });
-          showFinish(true, chosenName);
-        } else {
-          logic.score = Math.max(0, logic.score - 200);
-          showFinish(false, chosenName);
-        }
-      }, 1200);
+        await renderer.animateTravel(fromCountry, toCountry);
+        playerPosition = toCountry;
+        drawMap(logic.route);
+        ui.updateProgress(progress.stop, progress.totalStops);
+
+        // Brief pause, then show lineup
+        setTimeout(async () => {
+          const lineup = logic.getSuspectLineup();
+          const chosenName = await ui.showSuspectLineup(lineup);
+          const correct = logic.identifySuspect(chosenName);
+
+          const results = logic.getResults();
+          if (correct) {
+            confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2, count: 100 });
+            const ts = logic.getTimeState();
+            saveGameRecord(gameId, results.score, results.time);
+            await ui.showCaseSolved(logic.suspect.name, ts.hoursRemaining, results.score);
+            location.href = 'play.html';
+          } else {
+            logic.score = Math.max(0, logic.score - 200);
+            const failResults = logic.getResults();
+            saveGameRecord(gameId, failResults.score, failResults.time);
+            await ui.showCaseFailed(logic.suspect.name, failResults.score);
+            location.href = 'play.html';
+          }
+        }, 800);
+      }, 600);
       return;
     }
 

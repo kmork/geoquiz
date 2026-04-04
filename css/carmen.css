@@ -1233,3 +1233,109 @@
 .carmen-dead-end-btn:hover {
   filter: brightness(1.15);
 }
+
+/* ── Closing Scene (Solved / Failed) ─────────────────── */
+.carmen-closing-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 300;
+  animation: carmen-fade-in 0.4s ease-out;
+  cursor: pointer;
+}
+
+.carmen-closing-content {
+  position: relative;
+  max-width: 420px;
+  width: 90%;
+  padding: 2rem 1.5rem;
+  border-radius: 16px;
+  background: var(--card-bg);
+  text-align: center;
+  animation: carmen-briefing-slide 0.5s ease-out;
+  overflow: hidden;
+}
+
+.carmen-closing-solved {
+  border: 2px solid var(--good-color);
+}
+
+.carmen-closing-failed {
+  border: 2px solid var(--bad-color);
+}
+
+.carmen-closing-stamp {
+  position: absolute;
+  top: 18px;
+  right: 16px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  transform: rotate(12deg) scale(0);
+  opacity: 0;
+  letter-spacing: 3px;
+  pointer-events: none;
+}
+
+.carmen-closing-stamp.animate {
+  animation: carmen-stamp 0.4s 0.3s ease-out forwards;
+}
+
+.carmen-closing-solved .carmen-closing-stamp {
+  color: var(--good-color);
+  border: 3px solid var(--good-color);
+}
+
+.carmen-closing-failed .carmen-closing-stamp {
+  color: var(--bad-color);
+  border: 3px solid var(--bad-color);
+}
+
+.carmen-closing-detective {
+  height: 160px;
+  object-fit: contain;
+  margin-bottom: 0.8rem;
+}
+
+.carmen-closing-icon {
+  font-size: 3.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.carmen-closing-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.2rem;
+}
+
+.carmen-closing-solved .carmen-closing-name {
+  color: var(--good-color);
+}
+
+.carmen-closing-failed .carmen-closing-name {
+  color: var(--bad-color);
+}
+
+.carmen-closing-text {
+  font-size: 0.95rem;
+  margin-bottom: 0.4rem;
+  min-height: 1.4em;
+}
+
+.carmen-closing-score {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--star-color);
+  margin-bottom: 0.4rem;
+}
+
+.carmen-closing-detail {
+  font-size: 0.85rem;
+  color: var(--muted-color);
+  margin-bottom: 1.2rem;
+}
+

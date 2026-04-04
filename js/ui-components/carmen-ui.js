@@ -594,6 +594,70 @@ export function createCarmenUI(container, flagCodes) {
       });
     },
 
+    showCaseSolved(suspectName, hoursLeft, score) {
+      return new Promise(resolve => {
+        const overlay = document.createElement('div');
+        overlay.className = 'carmen-closing-overlay';
+        overlay.innerHTML = `
+          <div class="carmen-closing-content carmen-closing-solved">
+            <div class="carmen-closing-stamp">SOLVED</div>
+            <div class="carmen-briefing-label">CASE CLOSED</div>
+            <img src="carmen/img/detective-full.png" alt="" class="carmen-closing-detective">
+            <div class="carmen-closing-name">${esc(suspectName)}</div>
+            <div class="carmen-closing-text"></div>
+            <div class="carmen-closing-score">${score} points</div>
+            <div class="carmen-closing-detail">Case completed with ${hoursLeft}h remaining</div>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+
+        const stamp = overlay.querySelector('.carmen-closing-stamp');
+        const textEl = overlay.querySelector('.carmen-closing-text');
+
+        setTimeout(() => { stamp.classList.add('animate'); playStamp(); }, 300);
+        setTimeout(() => {
+          typewriter(textEl, 'has been apprehended!', 30);
+        }, 800);
+
+        overlay.addEventListener('click', () => {
+          overlay.remove();
+          resolve();
+        });
+      });
+    },
+
+    showCaseFailed(suspectName, score) {
+      return new Promise(resolve => {
+        const overlay = document.createElement('div');
+        overlay.className = 'carmen-closing-overlay';
+        overlay.innerHTML = `
+          <div class="carmen-closing-content carmen-closing-failed">
+            <div class="carmen-closing-stamp">FAILED</div>
+            <div class="carmen-briefing-label">CASE CLOSED</div>
+            <div class="carmen-closing-icon">💨</div>
+            <div class="carmen-closing-name">${esc(suspectName)}</div>
+            <div class="carmen-closing-text"></div>
+            <div class="carmen-closing-score">${score} points</div>
+            <div class="carmen-closing-detail">The real thief vanished into the shadows...</div>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+
+        const stamp = overlay.querySelector('.carmen-closing-stamp');
+        const textEl = overlay.querySelector('.carmen-closing-text');
+
+        setTimeout(() => { stamp.classList.add('animate'); playStamp(); }, 300);
+        setTimeout(() => {
+          typewriter(textEl, 'has escaped!', 30);
+        }, 800);
+
+        overlay.addEventListener('click', () => {
+          overlay.remove();
+          resolve();
+        });
+      });
+    },
+
     showDeadEnd(country, onContinue) {
       // Force map visible
       for (const rv of allRightViews) rv.style.display = 'none';
