@@ -350,7 +350,7 @@ export class RouteRenderer {
           const [, y1] = this.proj([0, bb.maxLat]);
           const [, y2] = this.proj([0, bb.minLat]);
           const countryH = Math.abs(y2 - y1);
-          const fontSize = Math.min(maxByWidth, countryH * 0.35, 4);
+          const fontSize = Math.min(maxByWidth, countryH * 0.22, 2.5);
 
           // Micro-country: too small to see/click — draw a marker circle
           if (fontSize < 1) {
