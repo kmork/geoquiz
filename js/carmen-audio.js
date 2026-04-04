@@ -116,6 +116,28 @@ export function stopMusic() {
   }, 60);
 }
 
+/** Clock tick-tock sound — alternates between high tick and low tock. */
+let tickTock = 0;
+export function playTick() {
+  const ac = getCtx();
+  const isTick = tickTock++ % 2 === 0;
+
+  const osc = ac.createOscillator();
+  const gain = ac.createGain();
+  osc.connect(gain);
+  gain.connect(ac.destination);
+
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(isTick ? 900 : 600, ac.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(isTick ? 700 : 450, ac.currentTime + 0.04);
+
+  gain.gain.setValueAtTime(0.12, ac.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.06);
+
+  osc.start(ac.currentTime);
+  osc.stop(ac.currentTime + 0.06);
+}
+
 /** Single typewriter key click. */
 export function playTypeKey() {
   const ac = getCtx();

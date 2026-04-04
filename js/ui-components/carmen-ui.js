@@ -2,7 +2,7 @@
  * Carmen UI — DOM rendering for "Where in the World?" game.
  */
 
-import { playStamp, playTypeKey } from '../carmen-audio.js';
+import { playStamp, playTypeKey, playTick } from '../carmen-audio.js';
 
 /**
  * Typewriter effect — reveals text letter-by-letter with key sounds.
@@ -447,6 +447,7 @@ export function createCarmenUI(container, flagCodes) {
         let current = prev;
         this._clockTimer = setInterval(() => {
           current--;
+          playTick();
           const d = Math.floor(current / 24);
           const h = current % 24;
           els.clock.textContent = `⏰ ${d}d ${h}h`;
