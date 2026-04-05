@@ -28,6 +28,9 @@ const heritagePopup     = document.getElementById('heritage-popup');
 const heritagePopupImg  = document.getElementById('heritage-popup-img');
 const heritagePopupName = document.getElementById('heritage-popup-name');
 const heritagePopupMeta = document.getElementById('heritage-popup-meta');
+const heritagePopupSummary = document.getElementById('heritage-popup-summary');
+const historyCard       = document.getElementById('study-history');
+const historyText       = document.getElementById('study-history-text');
 
 let canvasDisplayWidth = 600;
 let canvasDisplayHeight = 320;
@@ -673,6 +676,22 @@ function updateInfoPanel(dataName) {
   const nbrs = neighborsData?.[dataName];
   const bordersStr = nbrs == null ? '—' : nbrs.length === 0 ? 'Island nation' : nbrs.join(', ');
 
+  const climate = entry?.climate || '';
+  const famousFor = entry?.famousFor || [];
+  const exports = entry?.exports || [];
+  const history = entry?.history || '';
+
+  let extraRows = '';
+  if (climate) {
+    extraRows += `<div class="study-info-row"><span>Climate</span><span>${climate}</span></div>`;
+  }
+  if (famousFor.length) {
+    extraRows += `<div class="study-info-row study-info-borders"><span>Known for</span><span>${famousFor.join(', ')}</span></div>`;
+  }
+  if (exports.length) {
+    extraRows += `<div class="study-info-row study-info-borders"><span>Exports</span><span>${exports.join(', ')}</span></div>`;
+  }
+
   infoPanel.innerHTML = `
     <div class="study-info-header">
       ${flagSrc ? `<img class="study-info-flag" src="${flagSrc}" alt="${dataName} flag">` : '<div class="study-info-flag-placeholder"></div>'}
@@ -687,17 +706,25 @@ function updateInfoPanel(dataName) {
       <div class="study-info-row"><span>Capital</span><span>${capital}</span></div>
       <div class="study-info-row"><span>Population</span><span>${popStr}</span></div>
       <div class="study-info-row study-info-borders"><span>Borders</span><span>${bordersStr}</span></div>
+      ${extraRows}
     </div>
   `;
   infoPanel.style.display = 'block';
+
 }
 
 function hideInfoPanel() {
   infoPanel.style.display = 'none';
+  historyCard.style.display = 'none';
   hoveredCountry = null;
   hoveredOverlay = null;
   drawWorldMap();
 }
+
+// History card close button
+document.getElementById('study-history-close').addEventListener('click', () => {
+  historyCard.style.display = 'none';
+});
 
 // Delegated close button handler for the info panel
 infoPanel.addEventListener('click', (e) => {
@@ -790,6 +817,7 @@ function updateInfoPanelForHeritage(site) {
     </div>
   `;
   infoPanel.style.display = 'block';
+  historyCard.style.display = 'none';
 }
 
 function updateInfoPanelForRiver(river) {
@@ -808,6 +836,7 @@ function updateInfoPanelForRiver(river) {
     </div>
   `;
   infoPanel.style.display = 'block';
+  historyCard.style.display = 'none';
 }
 
 function updateInfoPanelForMountain(range) {
@@ -829,6 +858,7 @@ function updateInfoPanelForMountain(range) {
     </div>
   `;
   infoPanel.style.display = 'block';
+  historyCard.style.display = 'none';
 }
 
 function updateInfoPanelForPeak(peak) {
@@ -851,6 +881,7 @@ function updateInfoPanelForPeak(peak) {
     </div>
   `;
   infoPanel.style.display = 'block';
+  historyCard.style.display = 'none';
 }
 
 function updateInfoPanelForEmpire(empire) {
@@ -870,6 +901,7 @@ function updateInfoPanelForEmpire(empire) {
     </div>
   `;
   infoPanel.style.display = 'block';
+  historyCard.style.display = 'none';
 }
 
 // ── Heritage site popup ───────────────────────────────────────────────────────
@@ -900,6 +932,7 @@ function showHeritagePopup(site) {
   heritagePopupName.textContent = site.siteName;
   const typeLabel = site.type === 'natural' ? 'Natural' : 'Cultural';
   heritagePopupMeta.textContent = `${site.country} · ${typeLabel} · ${site.year}`;
+  heritagePopupSummary.textContent = site.summary || '';
   heritagePopup.style.display = 'block';
   heritagePopupVisible = true;
 }
@@ -975,6 +1008,27 @@ function hideFactOverlay() {
 }
 
 document.getElementById('fact-overlay-close').addEventListener('click', hideFactOverlay);
+
+// ── History card (top-left, desktop only) ─────────────────────────────────────
+
+function showHistoryCard(dataName) {
+  if (window.innerWidth <= 768) return;
+  const allData = window.ALL_COUNTRIES || window.DATA || [];
+  const entry = allData.find(d => d.country === dataName);
+  const history = entry?.history || '';
+  if (history) {
+    historyText.textContent = history;
+    historyCard.style.display = 'block';
+  } else {
+    historyCard.style.display = 'none';
+  }
+}
+
+function hideHistoryCard() {
+  historyCard.style.display = 'none';
+}
+
+document.getElementById('study-history-close').addEventListener('click', hideHistoryCard);
 
 // ── Toggle buttons ────────────────────────────────────────────────────────────
 
@@ -1980,6 +2034,7 @@ createPanZoom(canvas, viewport, drawWorldMap, {
     if (site) {
       hideInfoPanel();
       hideFactOverlay();
+      hideHistoryCard();
       showHeritagePopup(site);
       return;
     }
@@ -1990,6 +2045,7 @@ createPanZoom(canvas, viewport, drawWorldMap, {
     if (river) {
       hoveredCountry = null;
       hideFactOverlay();
+      hideHistoryCard();
       updateInfoPanelForRiver(river);
       drawWorldMap();
       return;
@@ -1998,6 +2054,7 @@ createPanZoom(canvas, viewport, drawWorldMap, {
     if (mountain) {
       hoveredCountry = null;
       hideFactOverlay();
+      hideHistoryCard();
       updateInfoPanelForMountain(mountain);
       drawWorldMap();
       return;
@@ -2006,6 +2063,7 @@ createPanZoom(canvas, viewport, drawWorldMap, {
     if (peak) {
       hoveredCountry = null;
       hideFactOverlay();
+      hideHistoryCard();
       updateInfoPanelForPeak(peak);
       drawWorldMap();
       return;
@@ -2027,6 +2085,7 @@ createPanZoom(canvas, viewport, drawWorldMap, {
         hoveredCountry = name;
         updateInfoPanel(name);
         showFactOverlay(name);
+        showHistoryCard(name);
         drawWorldMap();
         zoomToCountry(name);
       } else if (name !== hoveredCountry) {
@@ -2037,12 +2096,14 @@ createPanZoom(canvas, viewport, drawWorldMap, {
         hoveredCountry = null;
         hideInfoPanel();
         hideFactOverlay();
+        hideHistoryCard();
         drawWorldMap();
       }
     } else {
       hoveredCountry = null;
       hideInfoPanel();
       hideFactOverlay();
+      hideHistoryCard();
       drawWorldMap();
     }
   },
@@ -2060,6 +2121,7 @@ if (searchInput && window.initMobileAutocomplete) {
       hoveredCountry = c.country;
       updateInfoPanel(c.country);
       showFactOverlay(c.country);
+      showHistoryCard(c.country);
       drawWorldMap();
       zoomToCountry(c.country);
     });
