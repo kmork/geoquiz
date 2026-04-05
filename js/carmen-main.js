@@ -104,15 +104,17 @@ let isFirstGame = true;
 function refreshInterpolList() {
   const unlocked = getUnlockedSuspects();
   ui.showInterpolList(SUSPECTS, unlocked, interpolViewedThisGame, (suspect) => {
+    // Carmen costs time; solved criminals are free
+    const isCarmen = suspect.name === 'Carmen Sandiego';
     const alreadyViewed = interpolViewedThisGame.has(suspect.name);
 
-    if (!alreadyViewed) {
+    if (isCarmen && !alreadyViewed) {
       logic.spendTime(INTERPOL_COST_HOURS);
       updateClock();
-      interpolViewedThisGame.add(suspect.name);
-      refreshInterpolList(); // update cost labels
       if (checkTimeExpired()) return;
     }
+    interpolViewedThisGame.add(suspect.name);
+    refreshInterpolList(); // update cost labels
 
     ui.showInterpolProfile(suspect);
   });
@@ -334,7 +336,6 @@ function checkTimeExpired() {
       stopNarrator();
       const results = logic.getResults();
       saveGameRecord(gameId, results.score, results.time);
-      unlockSuspect(logic.suspect.name);
       saveMissionResult('fail');
       const choice = await ui.showCaseFailed(logic.suspect.name, results.score);
       await handleEndChoice(choice, false);
@@ -475,7 +476,6 @@ function handleGuess(country) {
             logic.score = Math.max(0, logic.score - 200);
             const failResults = logic.getResults();
             saveGameRecord(gameId, failResults.score, failResults.time);
-            unlockSuspect(logic.suspect.name);
             saveMissionResult('fail');
             const choice = await ui.showCaseFailed(logic.suspect.name, failResults.score);
             await handleEndChoice(choice, false);

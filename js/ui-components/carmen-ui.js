@@ -324,7 +324,8 @@ export function createCarmenUI(container, flagCodes) {
         const unlocked = unlockedNames.has(s.name);
         const viewed = viewedNames.has(s.name);
         if (unlocked) {
-          const costLabel = viewed ? 'free' : '3h';
+          const isCarmen = s.name === 'Carmen Sandiego';
+          const costLabel = isCarmen ? (viewed ? 'free' : '3h') : 'free';
           html += `<button class="carmen-interpol-entry${viewed ? ' viewed' : ''}" data-name="${esc(s.name)}">
             <span class="carmen-interpol-entry-icon">${s.img ? '📷' : '🕵️'}</span>
             <span class="carmen-interpol-entry-name">${esc(s.name)}</span>
