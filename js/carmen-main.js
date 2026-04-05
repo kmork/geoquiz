@@ -1,4 +1,4 @@
-import { CarmenGameLogic } from './games/carmen-logic.js';
+import { CarmenGameLogic, SUSPECTS } from './games/carmen-logic.js';
 import { createCarmenUI } from './ui-components/carmen-ui.js';
 import { RouteRenderer } from './ui-components/route-renderer.js';
 import { loadGeoJSON } from './geojson-loader.js';
@@ -30,6 +30,20 @@ function saveMissionResult(result) {
   history.push(result);
   localStorage.setItem(MISSION_KEY, JSON.stringify(history));
 }
+
+// Interpol database — unlocked suspects stored in localStorage
+const INTERPOL_KEY = 'carmen-interpol-unlocked';
+const INTERPOL_COST_HOURS = 3;
+function getUnlockedSuspects() {
+  try { return new Set(JSON.parse(localStorage.getItem(INTERPOL_KEY)) || ['Carmen Sandiego']); }
+  catch { return new Set(['Carmen Sandiego']); }
+}
+function unlockSuspect(name) {
+  const unlocked = getUnlockedSuspects();
+  unlocked.add(name);
+  localStorage.setItem(INTERPOL_KEY, JSON.stringify([...unlocked]));
+}
+let interpolViewedThisGame = new Set();
 
 // Wait for data.js
 while (!window.DATA) await new Promise(r => setTimeout(r, 50));
@@ -86,6 +100,23 @@ attachZoomPan(ui.mapSvg, () => baseViewBox);
 
 let logic;
 let isFirstGame = true;
+
+function refreshInterpolList() {
+  const unlocked = getUnlockedSuspects();
+  ui.showInterpolList(SUSPECTS, unlocked, interpolViewedThisGame, (suspect) => {
+    const alreadyViewed = interpolViewedThisGame.has(suspect.name);
+
+    if (!alreadyViewed) {
+      logic.spendTime(INTERPOL_COST_HOURS);
+      updateClock();
+      interpolViewedThisGame.add(suspect.name);
+      refreshInterpolList(); // update cost labels
+      if (checkTimeExpired()) return;
+    }
+
+    ui.showInterpolProfile(suspect);
+  });
+}
 
 async function handleEndChoice(choice, wasSuccess) {
   if (choice === 'quit') {
@@ -249,8 +280,10 @@ async function startGame() {
   ui.updateProgress(intro.progress.stop, intro.progress.totalStops);
   updateClock();
 
-  // Reset dossier for new game
+  // Reset dossier and interpol for new game
   ui.resetDossier();
+  interpolViewedThisGame = new Set();
+  refreshInterpolList();
 
   // Clear old clues and witness reports, then show investigation locations
   ui.clearClues();
@@ -301,6 +334,7 @@ function checkTimeExpired() {
       stopNarrator();
       const results = logic.getResults();
       saveGameRecord(gameId, results.score, results.time);
+      unlockSuspect(logic.suspect.name);
       saveMissionResult('fail');
       const choice = await ui.showCaseFailed(logic.suspect.name, results.score);
       await handleEndChoice(choice, false);
@@ -433,6 +467,7 @@ function handleGuess(country) {
             confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2, count: 100 });
             const ts = logic.getTimeState();
             saveGameRecord(gameId, results.score, results.time);
+            unlockSuspect(logic.suspect.name);
             saveMissionResult('success');
             const choice = await ui.showCaseSolved(logic.suspect.name, ts.hoursRemaining, results.score);
             await handleEndChoice(choice, true);
@@ -440,6 +475,7 @@ function handleGuess(country) {
             logic.score = Math.max(0, logic.score - 200);
             const failResults = logic.getResults();
             saveGameRecord(gameId, failResults.score, failResults.time);
+            unlockSuspect(logic.suspect.name);
             saveMissionResult('fail');
             const choice = await ui.showCaseFailed(logic.suspect.name, failResults.score);
             await handleEndChoice(choice, false);

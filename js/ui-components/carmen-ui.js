@@ -109,10 +109,19 @@ export function createCarmenUI(container, flagCodes) {
               <div class="carmen-panel-desc">All gathered evidence and witness statements are compiled on the right.</div>
             </div>
           </div>
+          <div class="carmen-panel-view" id="carmen-panel-interpol" style="display:none">
+            <div class="carmen-panel-card">
+              <div class="carmen-panel-badge">🔎 INTERPOL DATABASE</div>
+              <div class="carmen-panel-title">Known Criminals</div>
+              <div class="carmen-panel-desc">Browse criminal profiles. Each lookup costs 3 hours.</div>
+            </div>
+            <div class="carmen-interpol-list" id="carmen-interpol-list"></div>
+          </div>
         </div>
         <div class="carmen-bottom-tabs" id="carmen-bottom-tabs" style="display:none">
           <button class="carmen-bottom-tab" data-tab="travel">✈️ Travel</button>
           <button class="carmen-bottom-tab" data-tab="dossier">📋 Dossier</button>
+          <button class="carmen-bottom-tab" data-tab="interpol">🔎 Interpol</button>
         </div>
       </div>
       <div class="carmen-right-panel">
@@ -133,6 +142,11 @@ export function createCarmenUI(container, flagCodes) {
         </div>
         <div class="carmen-right-view" id="carmen-rv-dossier" style="display:none">
           <div class="carmen-dossier-inline" id="carmen-dossier-body-inline"></div>
+        </div>
+        <div class="carmen-right-view" id="carmen-rv-interpol" style="display:none">
+          <div class="carmen-interpol-profile" id="carmen-interpol-profile">
+            <div class="carmen-interpol-empty">Select a suspect from the list to view their file.</div>
+          </div>
         </div>
       </div>
     </div>
@@ -157,12 +171,16 @@ export function createCarmenUI(container, flagCodes) {
     witnessReport: container.querySelector('#carmen-witness-report'),
     panelTravel: container.querySelector('#carmen-panel-travel'),
     panelDossier: container.querySelector('#carmen-panel-dossier'),
+    panelInterpol: container.querySelector('#carmen-panel-interpol'),
+    interpolList: container.querySelector('#carmen-interpol-list'),
     bottomTabs: container.querySelector('#carmen-bottom-tabs'),
     // Right panel views
     rvArtifact: container.querySelector('#carmen-rv-artifact'),
     rvClues: container.querySelector('#carmen-rv-clues'),
     rvMap: container.querySelector('#carmen-rv-map'),
     rvDossier: container.querySelector('#carmen-rv-dossier'),
+    rvInterpol: container.querySelector('#carmen-rv-interpol'),
+    interpolProfile: container.querySelector('#carmen-interpol-profile'),
     artifactImg: container.querySelector('#carmen-artifact-img'),
     map: container.querySelector('#carmen-map'),
     mapWrap: container.querySelector('#carmen-map-wrap'),
@@ -187,6 +205,7 @@ export function createCarmenUI(container, flagCodes) {
     investigate: els.panelInvestigate,
     travel: els.panelTravel,
     dossier: els.panelDossier,
+    interpol: els.panelInterpol,
   };
   // Which right view each tab shows
   const rightViewForTab = {
@@ -194,8 +213,9 @@ export function createCarmenUI(container, flagCodes) {
     investigate: els.rvClues,   // shows clues (or zoomed country before any clue)
     travel: els.rvMap,
     dossier: els.rvDossier,
+    interpol: els.rvInterpol,
   };
-  const allRightViews = [els.rvArtifact, els.rvClues, els.rvMap, els.rvDossier];
+  const allRightViews = [els.rvArtifact, els.rvClues, els.rvMap, els.rvDossier, els.rvInterpol];
   let activeTab = 'case';
 
   function switchTab(tab) {
@@ -289,6 +309,85 @@ export function createCarmenUI(container, flagCodes) {
       dossierEntries.length = 0;
       detourCounter = 0;
       renderDossier();
+    },
+
+    /**
+     * Show the Interpol suspect list in the left panel.
+     * @param {Array} suspects — full suspect array
+     * @param {Set} unlockedNames — names of unlocked suspects
+     * @param {Set} viewedNames — names already viewed this game (free re-view)
+     * @param {Function} onView — called with (suspect) when player clicks to view
+     */
+    showInterpolList(suspects, unlockedNames, viewedNames, onView) {
+      let html = '';
+      for (const s of suspects) {
+        const unlocked = unlockedNames.has(s.name);
+        const viewed = viewedNames.has(s.name);
+        if (unlocked) {
+          const costLabel = viewed ? 'free' : '3h';
+          html += `<button class="carmen-interpol-entry${viewed ? ' viewed' : ''}" data-name="${esc(s.name)}">
+            <span class="carmen-interpol-entry-icon">${s.img ? '📷' : '🕵️'}</span>
+            <span class="carmen-interpol-entry-name">${esc(s.name)}</span>
+            <span class="carmen-interpol-entry-cost">${costLabel}</span>
+          </button>`;
+        } else {
+          html += `<div class="carmen-interpol-entry locked">
+            <span class="carmen-interpol-entry-icon">🔒</span>
+            <span class="carmen-interpol-entry-name">CLASSIFIED</span>
+          </div>`;
+        }
+      }
+      els.interpolList.innerHTML = html;
+
+      els.interpolList.querySelectorAll('.carmen-interpol-entry:not(.locked)').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const name = btn.dataset.name;
+          const suspect = suspects.find(s => s.name === name);
+          if (suspect) onView(suspect);
+        });
+      });
+    },
+
+    /**
+     * Show a suspect's full Interpol profile in the right panel.
+     * @param {Object} suspect — suspect object with geographic fields
+     */
+    showInterpolProfile(suspect) {
+      const photoHtml = suspect.img
+        ? `<img src="${esc(suspect.img)}" alt="${esc(suspect.name)}" class="carmen-interpol-photo-img">`
+        : `<div class="carmen-interpol-photo-silhouette">🕵️</div>`;
+
+      els.interpolProfile.innerHTML = `
+        <div class="carmen-interpol-card">
+          <div class="carmen-interpol-header-label">INTERPOL FILE — CLASSIFIED</div>
+          <div class="carmen-interpol-top">
+            <div class="carmen-interpol-photo">
+              <span class="carmen-interpol-clip">📎</span>
+              ${photoHtml}
+            </div>
+            <div class="carmen-interpol-info">
+              <div class="carmen-interpol-name">${esc(suspect.name)}</div>
+              <div class="carmen-interpol-origin">${esc(suspect.origin || 'Unknown')}</div>
+              <div class="carmen-interpol-regions">${(suspect.knownRegions || []).join(', ')}</div>
+            </div>
+          </div>
+          <div class="carmen-interpol-section">
+            <div class="carmen-interpol-section-label">PROFILE</div>
+            <div class="carmen-interpol-detail">Hair: ${esc(suspect.hair)}</div>
+            <div class="carmen-interpol-detail">Accessory: ${esc(suspect.accessory)}</div>
+            <div class="carmen-interpol-detail">Hobby: ${esc(suspect.hobby)}</div>
+            <div class="carmen-interpol-detail">Vehicle: ${esc(suspect.vehicle)}</div>
+          </div>
+          <div class="carmen-interpol-section">
+            <div class="carmen-interpol-section-label">GEO INTEL</div>
+            <div class="carmen-interpol-geo">"${esc(suspect.geoFact || 'No geographic intelligence on file.')}"</div>
+          </div>
+          <div class="carmen-interpol-section">
+            <div class="carmen-interpol-section-label">NOTES</div>
+            <div class="carmen-interpol-notes">${esc(suspect.quirk || 'No behavioral notes on file.')}</div>
+          </div>
+        </div>
+      `;
     },
 
     /** Clear witness reports on Case tab. */

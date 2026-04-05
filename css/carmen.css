@@ -1454,3 +1454,193 @@
   border: 1px solid var(--card-border);
 }
 
+/* ── Interpol Database ─────────────────────────────── */
+.carmen-interpol-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.carmen-interpol-entry {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  border-radius: 6px;
+  background: var(--button-bg);
+  border: 1px solid var(--button-border);
+  color: var(--button-color);
+  cursor: pointer;
+  font-size: 0.82rem;
+  transition: background 0.15s, border-color 0.2s;
+  text-align: left;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.carmen-interpol-entry:hover:not(.locked) {
+  background: var(--button-hover);
+  border-color: var(--star-color);
+}
+
+.carmen-interpol-entry.locked {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.carmen-interpol-entry.viewed {
+  opacity: 0.7;
+  border-color: var(--good-color);
+}
+
+.carmen-interpol-entry-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.carmen-interpol-entry-name {
+  flex: 1;
+  font-weight: 600;
+}
+
+.carmen-interpol-entry-cost {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* ── Interpol Profile Card ─────────────────────────── */
+.carmen-interpol-profile {
+  padding: 0.75rem 1rem;
+  overflow-y: auto;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+.carmen-interpol-empty {
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
+  padding: 2rem 1rem;
+}
+
+.carmen-interpol-card {
+  background: #2a2520;
+  border: 2px solid #5c4a3a;
+  border-radius: 10px;
+  padding: 1rem 1.2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  animation: carmen-clue-in 0.3s ease-out;
+}
+
+.carmen-interpol-header-label {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--bad-color);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.carmen-interpol-top {
+  display: flex;
+  gap: 0.9rem;
+  margin-bottom: 0.8rem;
+}
+
+.carmen-interpol-photo {
+  position: relative;
+  width: 90px;
+  height: 110px;
+  flex-shrink: 0;
+  background: #1a1614;
+  border: 2px solid #5c4a3a;
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carmen-interpol-clip {
+  position: absolute;
+  top: -8px;
+  left: 4px;
+  font-size: 1.5rem;
+  transform: rotate(-15deg);
+  z-index: 1;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.5));
+}
+
+.carmen-interpol-photo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.carmen-interpol-photo-silhouette {
+  font-size: 3rem;
+  opacity: 0.6;
+}
+
+.carmen-interpol-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  justify-content: center;
+}
+
+.carmen-interpol-name {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-color);
+}
+
+.carmen-interpol-origin {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.carmen-interpol-regions {
+  font-size: 0.75rem;
+  color: var(--star-color);
+  font-style: italic;
+}
+
+.carmen-interpol-section {
+  border-top: 1px dashed #5c4a3a;
+  padding-top: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.carmen-interpol-section-label {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: var(--star-color);
+  text-transform: uppercase;
+  margin-bottom: 0.3rem;
+}
+
+.carmen-interpol-detail {
+  font-size: 0.82rem;
+  color: var(--text-color);
+  padding: 0.1rem 0;
+}
+
+.carmen-interpol-geo {
+  font-size: 0.82rem;
+  font-style: italic;
+  color: var(--text-color);
+  line-height: 1.4;
+}
+
+.carmen-interpol-notes {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
