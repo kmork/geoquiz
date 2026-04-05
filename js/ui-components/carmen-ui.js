@@ -365,10 +365,17 @@ export function createCarmenUI(container, flagCodes) {
      * Show a suspect's full Interpol profile in the right panel.
      * @param {Object} suspect — suspect object with geographic fields
      */
-    showInterpolProfile(suspect) {
+    showInterpolProfile(suspect, theftRecords) {
       const photoHtml = suspect.img
         ? `<img src="${esc(suspect.img)}" alt="${esc(suspect.name)}" class="carmen-interpol-photo-img">`
         : `<div class="carmen-interpol-photo-silhouette">🕵️</div>`;
+
+      const thefts = theftRecords || [];
+      const theftHtml = thefts.length > 0
+        ? thefts.map(t =>
+            `<div class="carmen-interpol-detail">📦 ${esc(t.artifact)} — stolen from ${esc(t.country)} (${esc(t.date)})</div>`
+          ).join('')
+        : '<div class="carmen-interpol-detail">No recorded thefts on file.</div>';
 
       els.interpolProfile.innerHTML = `
         <div class="carmen-interpol-card">
@@ -390,6 +397,10 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-interpol-detail">Accessory: ${esc(suspect.accessory)}</div>
             <div class="carmen-interpol-detail">Hobby: ${esc(suspect.hobby)}</div>
             <div class="carmen-interpol-detail">Vehicle: ${esc(suspect.vehicle)}</div>
+          </div>
+          <div class="carmen-interpol-section">
+            <div class="carmen-interpol-section-label">CRIMINAL RECORD</div>
+            ${theftHtml}
           </div>
           <div class="carmen-interpol-section">
             <div class="carmen-interpol-section-label">GEO INTEL</div>

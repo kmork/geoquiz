@@ -43,6 +43,19 @@ function unlockSuspect(name) {
   unlocked.add(name);
   localStorage.setItem(INTERPOL_KEY, JSON.stringify([...unlocked]));
 }
+// Theft history — records of caught suspects and what they stole
+const THEFT_HISTORY_KEY = 'carmen-theft-history';
+function getTheftHistory() {
+  try { return JSON.parse(localStorage.getItem(THEFT_HISTORY_KEY)) || {}; }
+  catch { return {}; }
+}
+function recordTheft(suspectName, artifactName, country) {
+  const history = getTheftHistory();
+  if (!history[suspectName]) history[suspectName] = [];
+  history[suspectName].push({ artifact: artifactName, country, date: new Date().toISOString().slice(0, 10) });
+  localStorage.setItem(THEFT_HISTORY_KEY, JSON.stringify(history));
+}
+
 let interpolViewedThisGame = new Set();
 
 // Wait for data.js
@@ -118,14 +131,16 @@ function refreshInterpolList() {
       interpolViewedThisGame.add(suspect.name);
       setTimeout(() => {
         refreshInterpolList();
-        ui.showInterpolProfile(suspect);
+        const thefts = getTheftHistory()[suspect.name] || [];
+        ui.showInterpolProfile(suspect, thefts);
       }, animDuration);
       return;
     }
     interpolViewedThisGame.add(suspect.name);
     refreshInterpolList(); // update cost labels
 
-    ui.showInterpolProfile(suspect);
+    const thefts = getTheftHistory()[suspect.name] || [];
+    ui.showInterpolProfile(suspect, thefts);
   });
 }
 
@@ -149,25 +164,27 @@ async function handleEndChoice(choice, wasSuccess) {
     : 'carmen/audio/narrator - mission1 fail.mp3';
 
   const cues = wasSuccess ? [
-    [0.0,  "Last case\u2026 wrapped up nicely."],
-    [2.0,  "Caught the thief. Handcuffs, paperwork, the whole routine."],
-    [6.5,  "Still don't know who they really were.\nDidn't stick around for introductions."],
-    [10.0,  "Figures."],
-    [11.0, "I poured myself a coffee that tasted like\nregret and bad decisions."],
+    [0.0,  "Last case\u2026\nwrapped up nicely."],
+    [2.0,  "Caught the thief.\nHandcuffs, paperwork, the whole routine."],
+    [6.5,  "Still don't know\nwho they really were."],
+    [8.5,  "Didn't stick around\nfor introductions."],
+    [10.0, "Figures."],
+    [11.0, "I poured myself a coffee\nthat tasted like regret."],
     [15.0, "Didn't even finish it."],
-    [16.0, "Because I know how this goes."],
-    [18.5, "You close one case\u2026 and somewhere out there\u2014"],
-    [21.5, "someone's already picking their next target."],
+    [16.5, "Because I know\nhow this goes."],
+    [18.5, "You close one case\u2026\nand somewhere out there\u2014"],
+    [21.5, "someone's already\npicking their next target."],
   ] : [
     [0.0,  "The thief got away."],
     [1.1,  "Again."],
-    [2.7,  "I replayed it in my head a dozen times. Maybe more.\nIt doesn't get better with repetition."],
+    [2.7,  "I replayed it in my head\na dozen times. Maybe more."],
+    [5.5,  "It doesn't get better\nwith repetition."],
     [7.5,  "No face. No name."],
-    [9.5,  "Just a disappearing act that would make\na stage magician jealous."],
+    [9.5,  "Just a disappearing act\nthat would make a magician jealous."],
     [13.0, "Could be anyone."],
-    [14.5, "Which, in my line of work, is just another way\nof saying I've got nothing."],
-    [18.5, "But the next case is already knocking."],
-    [20.5, "And I don't intend to be the punchline twice."],
+    [14.5, "Which, in my line of work,\nis just saying I've got nothing."],
+    [18.5, "But the next case\nis already knocking."],
+    [20.5, "And I don't intend\nto be the punchline twice."],
   ];
 
   // Create subtitle element
@@ -238,14 +255,17 @@ async function startGame() {
 
       const cues = [
         [0.0,  "The world's a big place."],
-        [1.2,  "Too big, if you ask me. Too many corners to hide in.\nToo many stories buried under stone, sand, and time."],
-        [7.5,  "Most people pass through it without noticing a thing.\nSnap a picture. Buy a postcard. Move on."],
+        [1.2,  "Too big, if you ask me.\nToo many corners to hide in."],
+        [4.5,  "Too many stories buried\nunder stone, sand, and time."],
+        [7.5,  "Most people pass through it\nwithout noticing a thing."],
+        [10.5, "Snap a picture.\nBuy a postcard. Move on."],
         [13.0, "Me?"],
         [14.0, "I notice what's missing."],
-        [15.5, "That's how it starts. It always does."],
-        [18.5, "Something small at first. A whisper.\nA detail that doesn't sit right."],
+        [15.5, "That's how it starts.\nIt always does."],
+        [18.5, "Something small at first.\nA whisper."],
+        [21.0, "A detail that doesn't sit right."],
         [23.0, "Then the call comes in."],
-        [24.5, "And suddenly\u2026 a piece of the world is gone."],
+        [24.5, "And suddenly\u2026\na piece of the world is gone."],
       ];
 
       const cueTimeouts = [];
@@ -493,6 +513,7 @@ function handleGuess(country) {
             const ts = logic.getTimeState();
             saveGameRecord(gameId, results.score, results.time);
             unlockSuspect(logic.suspect.name);
+            recordTheft(logic.suspect.name, logic.artifact.siteName, logic.artifact.country);
             saveMissionResult('success');
             const choice = await ui.showCaseSolved(logic.suspect.name, ts.hoursRemaining, results.score);
             await handleEndChoice(choice, true);

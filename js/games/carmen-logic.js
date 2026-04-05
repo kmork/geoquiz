@@ -536,9 +536,7 @@ export class CarmenGameLogic {
   reset() {
     this.route = [];
     this.artifact = null;
-    // Pick the actual suspect (thief) — Carmen is the mastermind, never the thief
-    const thiefCandidates = SUSPECTS.filter(s => s.name !== 'Carmen Sandiego');
-    this.suspect = thiefCandidates[Math.floor(Math.random() * thiefCandidates.length)];
+    this.suspect = null;
     this.thiefName = '???'; // Unknown until identified
     this.currentStop = 0;
     this.score = 0;
@@ -569,6 +567,17 @@ export class CarmenGameLogic {
     this.reset();
     this.route = this._generateRoute(this.diff.stops);
     this.artifact = this._pickArtifact(this.route[0]);
+
+    // Pick suspect whose knownRegions overlap the route's continents
+    const routeContinents = new Set(
+      this.route.map(c => this.countryMap[c]?.continent).filter(Boolean)
+    );
+    const regionMatch = SUSPECTS.filter(s =>
+      s.knownRegions?.some(r => routeContinents.has(r))
+    );
+    const candidates = regionMatch.length > 0 ? regionMatch : SUSPECTS;
+    this.suspect = candidates[Math.floor(Math.random() * candidates.length)];
+
     this.stopStartTime = Date.now();
 
     const clues = this._generateClues(this.route[1], this.diff.cluesPerStop);
