@@ -326,9 +326,12 @@ export function createCarmenUI(container, flagCodes) {
         if (unlocked) {
           const isCarmen = s.name === 'Carmen Sandiego';
           const costLabel = isCarmen ? (viewed ? 'free' : '3h') : 'free';
+          const statusTag = isCarmen
+            ? '<span class="carmen-interpol-entry-status at-large">AT LARGE</span>'
+            : '<span class="carmen-interpol-entry-status in-custody">IN CUSTODY</span>';
           html += `<button class="carmen-interpol-entry${viewed ? ' viewed' : ''}" data-name="${esc(s.name)}">
             <span class="carmen-interpol-entry-icon">${s.img ? '📷' : '🕵️'}</span>
-            <span class="carmen-interpol-entry-name">${esc(s.name)}</span>
+            <span class="carmen-interpol-entry-name">${esc(s.name)}${statusTag}</span>
             <span class="carmen-interpol-entry-cost">${costLabel}</span>
           </button>`;
         } else {

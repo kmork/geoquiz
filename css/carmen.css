@@ -1512,6 +1512,27 @@
   white-space: nowrap;
 }
 
+.carmen-interpol-entry-status {
+  display: inline-block;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  border-radius: 3px;
+  padding: 0.05rem 0.35rem;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+
+.carmen-interpol-entry-status.in-custody {
+  color: var(--good-color);
+  border: 1px solid var(--good-color);
+}
+
+.carmen-interpol-entry-status.at-large {
+  color: var(--bad-color);
+  border: 1px solid var(--bad-color);
+}
+
 /* ── Interpol Profile Card ─────────────────────────── */
 .carmen-interpol-profile {
   padding: 0.75rem 1rem;

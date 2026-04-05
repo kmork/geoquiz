@@ -536,8 +536,9 @@ export class CarmenGameLogic {
   reset() {
     this.route = [];
     this.artifact = null;
-    // Pick the actual suspect (thief)
-    this.suspect = SUSPECTS[Math.floor(Math.random() * SUSPECTS.length)];
+    // Pick the actual suspect (thief) — Carmen is the mastermind, never the thief
+    const thiefCandidates = SUSPECTS.filter(s => s.name !== 'Carmen Sandiego');
+    this.suspect = thiefCandidates[Math.floor(Math.random() * thiefCandidates.length)];
     this.thiefName = '???'; // Unknown until identified
     this.currentStop = 0;
     this.score = 0;
@@ -1204,16 +1205,18 @@ export class CarmenGameLogic {
     );
     const vagueEntries = this._revealedAttrs.filter(e => e.vague);
 
-    // Score candidates: prefer those matching the real suspect on vague attributes
+    // Score candidates: prefer those matching the real suspect on both vague
+    // AND specific attributes — forces the player to gather multiple confirmed
+    // clues before they can confidently identify the thief
     const scored = others.map(s => {
       let score = 0;
       for (const { attr, value: groupName } of vagueEntries) {
         const candidateGroup = getAttributeGroup(attr, s[attr]);
         if (candidateGroup === groupName) score += 10;
       }
-      // Slight penalty if they match on specific attrs (too confusing even with info)
+      // Prefer decoys that also match confirmed attributes (harder lineup)
       for (const attr of specificAttrs) {
-        if (s[attr] === real[attr]) score -= 5;
+        if (s[attr] === real[attr]) score += 15;
       }
       score += Math.random() * 2;
       return { suspect: s, score };
