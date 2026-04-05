@@ -33,7 +33,7 @@ function saveMissionResult(result) {
 
 // Interpol database — unlocked suspects stored in localStorage
 const INTERPOL_KEY = 'carmen-interpol-unlocked';
-const INTERPOL_COST_HOURS = 3;
+const INTERPOL_COST_HOURS = 10;
 function getUnlockedSuspects() {
   try { return new Set(JSON.parse(localStorage.getItem(INTERPOL_KEY)) || ['Carmen Sandiego']); }
   catch { return new Set(['Carmen Sandiego']); }
@@ -104,14 +104,23 @@ let isFirstGame = true;
 function refreshInterpolList() {
   const unlocked = getUnlockedSuspects();
   ui.showInterpolList(SUSPECTS, unlocked, interpolViewedThisGame, (suspect) => {
-    // Carmen costs time; solved criminals are free
+    // Suspects with photos cost time to view; Carmen is free
     const isCarmen = suspect.name === 'Carmen Sandiego';
+    const hasPhoto = !!suspect.img;
     const alreadyViewed = interpolViewedThisGame.has(suspect.name);
 
-    if (isCarmen && !alreadyViewed) {
+    if (hasPhoto && !isCarmen && !alreadyViewed) {
       logic.spendTime(INTERPOL_COST_HOURS);
       updateClock();
       if (checkTimeExpired()) return;
+      // Wait for clock animation to finish before revealing profile
+      const animDuration = INTERPOL_COST_HOURS * 120 + 100;
+      interpolViewedThisGame.add(suspect.name);
+      setTimeout(() => {
+        refreshInterpolList();
+        ui.showInterpolProfile(suspect);
+      }, animDuration);
+      return;
     }
     interpolViewedThisGame.add(suspect.name);
     refreshInterpolList(); // update cost labels

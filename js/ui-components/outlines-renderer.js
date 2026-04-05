@@ -17,7 +17,7 @@ export class OutlinesRenderer {
     this.worldData = worldData;
     this.baseViewBox = { x: 0, y: 0, w: MAP_W, h: MAP_H };
   }
-  
+
   /**
    * Draw target country and optionally its neighbors
    * @param {string} targetCountry - Country name
@@ -104,14 +104,14 @@ export class OutlinesRenderer {
       this.svg.appendChild(p);
     }
   }
-  
+
   /**
    * Get current viewBox for pan/zoom features
    */
   getViewBox() {
     return this.baseViewBox;
   }
-  
+
   /**
    * Set viewBox for pan/zoom features
    */
@@ -119,7 +119,7 @@ export class OutlinesRenderer {
     this.baseViewBox = { x, y, w, h };
     this.svg.setAttribute("viewBox", `${x} ${y} ${w} ${h}`);
   }
-  
+
   /**
    * Clear the SVG
    */

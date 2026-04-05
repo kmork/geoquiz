@@ -326,16 +326,20 @@ export function createCarmenUI(container, flagCodes) {
     showInterpolList(suspects, unlockedNames, viewedNames, onView) {
       let html = '';
       for (const s of suspects) {
-        const unlocked = unlockedNames.has(s.name);
+        const isCarmen = s.name === 'Carmen Sandiego';
+        const hasPhoto = !!s.img;
+        const inCustody = unlockedNames.has(s.name) && !isCarmen;
+        const available = isCarmen || hasPhoto;
         const viewed = viewedNames.has(s.name);
-        if (unlocked) {
-          const isCarmen = s.name === 'Carmen Sandiego';
-          const costLabel = isCarmen ? (viewed ? 'free' : '3h') : 'free';
+        if (available) {
+          const costLabel = isCarmen ? 'free' : (viewed ? 'free' : '10h');
           const statusTag = isCarmen
             ? '<span class="carmen-interpol-entry-status at-large">AT LARGE</span>'
-            : '<span class="carmen-interpol-entry-status in-custody">IN CUSTODY</span>';
+            : inCustody
+              ? '<span class="carmen-interpol-entry-status in-custody">IN CUSTODY</span>'
+              : '<span class="carmen-interpol-entry-status at-large">AT LARGE</span>';
           html += `<button class="carmen-interpol-entry${viewed ? ' viewed' : ''}" data-name="${esc(s.name)}">
-            <span class="carmen-interpol-entry-icon">${s.img ? '📷' : '🕵️'}</span>
+            <span class="carmen-interpol-entry-icon">${hasPhoto ? '📷' : '🕵️'}</span>
             <span class="carmen-interpol-entry-name">${esc(s.name)}${statusTag}</span>
             <span class="carmen-interpol-entry-cost">${costLabel}</span>
           </button>`;
