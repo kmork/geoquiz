@@ -145,7 +145,12 @@ export function createCarmenUI(container, flagCodes) {
         </div>
         <div class="carmen-right-view" id="carmen-rv-interpol" style="display:none">
           <div class="carmen-interpol-profile" id="carmen-interpol-profile">
-            <div class="carmen-interpol-empty">Select a suspect from the list to view their file.</div>
+            <div class="carmen-interpol-empty">
+              <div class="carmen-interpol-empty-title">INTERPOL</div>
+              <div class="carmen-interpol-empty-full">International Criminal Police Organization</div>
+              <div class="carmen-interpol-empty-text">Founded in 1923 in Vienna, INTERPOL is the world's largest international police organization with 196 member countries. Its General Secretariat is headquartered in Lyon, France. INTERPOL facilitates cross-border police cooperation and supports law enforcement worldwide in combating transnational crime.</div>
+              <div class="carmen-interpol-empty-hint">Select a suspect from the list to access their file.</div>
+            </div>
           </div>
         </div>
       </div>

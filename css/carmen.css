@@ -264,7 +264,8 @@
 .carmen-right-view .carmen-artifact-display,
 .carmen-right-view .carmen-map-wrap,
 .carmen-right-view .carmen-clue-reveal,
-.carmen-right-view .carmen-dossier-inline {
+.carmen-right-view .carmen-dossier-inline,
+.carmen-right-view .carmen-interpol-profile {
   height: 100%;
 }
 
@@ -744,8 +745,10 @@
 
 /* ── Investigate right panel background ──────────────── */
 #carmen-rv-clues {
-  background: url('../carmen/img/detective-interview.png') no-repeat center calc(100% - 20px);
+  background: var(--card-bg) url('../carmen/img/detective-interview.png') no-repeat center calc(100% - 20px);
   background-size: auto 52%;
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
 }
 
 /* ── Clue Reveal (below map) ────────────────────────── */
@@ -1460,8 +1463,6 @@
   flex-direction: column;
   gap: 0.3rem;
   margin-top: 0.5rem;
-  max-height: 300px;
-  overflow-y: auto;
 }
 
 .carmen-interpol-entry {
@@ -1534,6 +1535,12 @@
 }
 
 /* ── Interpol Profile Card ─────────────────────────── */
+#carmen-rv-interpol {
+  border-radius: 12px;
+  border: 1px solid var(--card-border);
+  background: #2a2520;
+}
+
 .carmen-interpol-profile {
   padding: 0.75rem 1rem;
   overflow-y: auto;
@@ -1542,22 +1549,53 @@
 }
 
 .carmen-interpol-empty {
+  padding: 1.5rem 1.2rem;
+  text-align: center;
+}
+
+.carmen-interpol-empty-title {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 4px;
+  color: var(--star-color);
+  margin-bottom: 0.15rem;
+}
+
+.carmen-interpol-empty-full {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.carmen-interpol-empty-text {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 0.82rem;
+  color: var(--text-color);
+  line-height: 1.5;
+  text-align: left;
+  margin-bottom: 1.2rem;
+}
+
+.carmen-interpol-empty-hint {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 0.78rem;
   color: var(--text-muted);
   font-style: italic;
-  text-align: center;
-  padding: 2rem 1rem;
 }
 
 .carmen-interpol-card {
-  background: #2a2520;
-  border: 2px solid #5c4a3a;
-  border-radius: 10px;
-  padding: 1rem 1.2rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  border-top: 2px solid #5c4a3a;
+  padding: 1rem 0.2rem 0;
+  margin-top: 0.5rem;
   animation: carmen-clue-in 0.3s ease-out;
 }
 
 .carmen-interpol-header-label {
+  font-family: 'Courier New', Courier, monospace;
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 2px;
@@ -1615,17 +1653,20 @@
 }
 
 .carmen-interpol-name {
+  font-family: 'Courier New', Courier, monospace;
   font-size: 1rem;
   font-weight: 700;
   color: var(--text-color);
 }
 
 .carmen-interpol-origin {
+  font-family: 'Georgia', 'Times New Roman', serif;
   font-size: 0.8rem;
   color: var(--text-muted);
 }
 
 .carmen-interpol-regions {
+  font-family: 'Georgia', 'Times New Roman', serif;
   font-size: 0.75rem;
   color: var(--star-color);
   font-style: italic;
@@ -1638,6 +1679,7 @@
 }
 
 .carmen-interpol-section-label {
+  font-family: 'Courier New', Courier, monospace;
   font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 2px;
@@ -1647,12 +1689,14 @@
 }
 
 .carmen-interpol-detail {
+  font-family: 'Courier New', Courier, monospace;
   font-size: 0.82rem;
   color: var(--text-color);
   padding: 0.1rem 0;
 }
 
 .carmen-interpol-geo {
+  font-family: 'Georgia', 'Times New Roman', serif;
   font-size: 0.82rem;
   font-style: italic;
   color: var(--text-color);
@@ -1660,6 +1704,7 @@
 }
 
 .carmen-interpol-notes {
+  font-family: 'Georgia', 'Times New Roman', serif;
   font-size: 0.82rem;
   color: var(--text-muted);
   line-height: 1.4;
