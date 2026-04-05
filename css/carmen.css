@@ -1580,6 +1580,15 @@
   margin-bottom: 1.2rem;
 }
 
+.carmen-interpol-empty-img {
+  max-width: 70%;
+  height: auto;
+  margin: 1rem auto 1rem;
+  display: block;
+  opacity: 0.85;
+  border-radius: 4px;
+}
+
 .carmen-interpol-empty-hint {
   font-family: 'Georgia', 'Times New Roman', serif;
   font-size: 0.78rem;
