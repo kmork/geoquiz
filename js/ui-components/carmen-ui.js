@@ -149,7 +149,7 @@ export function createCarmenUI(container, flagCodes) {
               <div class="carmen-interpol-empty-title">INTERPOL</div>
               <div class="carmen-interpol-empty-full">International Criminal Police Organization</div>
               <div class="carmen-interpol-empty-text">Founded in 1923 in Vienna, INTERPOL is the world's largest international police organization with 196 member countries. Its General Secretariat is headquartered in Lyon, France. INTERPOL facilitates cross-border police cooperation and supports law enforcement worldwide in combating transnational crime.</div>
-              <img src="carmen/audio/typewriter.png" alt="" class="carmen-interpol-empty-img">
+              <img src="carmen/img/typewriter.png" alt="" class="carmen-interpol-empty-img">
               <div class="carmen-interpol-empty-hint">Select a suspect from the list to access their file.</div>
             </div>
           </div>
@@ -329,19 +329,13 @@ export function createCarmenUI(container, flagCodes) {
       for (const s of suspects) {
         const isCarmen = s.name === 'Carmen Sandiego';
         const hasPhoto = !!s.img;
-        const inCustody = unlockedNames.has(s.name) && !isCarmen;
         const available = isCarmen || hasPhoto;
         const viewed = viewedNames.has(s.name);
         if (available) {
           const costLabel = isCarmen ? 'free' : (viewed ? 'free' : '10h');
-          const statusTag = isCarmen
-            ? '<span class="carmen-interpol-entry-status at-large">AT LARGE</span>'
-            : inCustody
-              ? '<span class="carmen-interpol-entry-status in-custody">IN CUSTODY</span>'
-              : '<span class="carmen-interpol-entry-status at-large">AT LARGE</span>';
           html += `<button class="carmen-interpol-entry${viewed ? ' viewed' : ''}" data-name="${esc(s.name)}">
             <span class="carmen-interpol-entry-icon">${hasPhoto ? '📷' : '🕵️'}</span>
-            <span class="carmen-interpol-entry-name">${esc(s.name)}${statusTag}</span>
+            <span class="carmen-interpol-entry-name">${esc(s.name)}</span>
             <span class="carmen-interpol-entry-cost">${costLabel}</span>
           </button>`;
         } else {
@@ -366,7 +360,7 @@ export function createCarmenUI(container, flagCodes) {
      * Show a suspect's full Interpol profile in the right panel.
      * @param {Object} suspect — suspect object with geographic fields
      */
-    showInterpolProfile(suspect, theftRecords) {
+    showInterpolProfile(suspect, theftRecords, status) {
       const photoHtml = suspect.img
         ? `<img src="${esc(suspect.img)}" alt="${esc(suspect.name)}" class="carmen-interpol-photo-img">`
         : `<div class="carmen-interpol-photo-silhouette">🕵️</div>`;
@@ -378,6 +372,8 @@ export function createCarmenUI(container, flagCodes) {
           ).join('')
         : '<div class="carmen-interpol-detail">No recorded thefts on file.</div>';
 
+      const statusClass = status === 'IN CUSTODY' ? 'in-custody' : 'at-large';
+
       els.interpolProfile.innerHTML = `
         <div class="carmen-interpol-card">
           <div class="carmen-interpol-header-label">INTERPOL FILE — CLASSIFIED</div>
@@ -388,6 +384,7 @@ export function createCarmenUI(container, flagCodes) {
             </div>
             <div class="carmen-interpol-info">
               <div class="carmen-interpol-name">${esc(suspect.name)}</div>
+              <span class="carmen-interpol-entry-status ${statusClass}">${esc(status)}</span>
               <div class="carmen-interpol-origin">${esc(suspect.origin || 'Unknown')}</div>
               <div class="carmen-interpol-regions">${(suspect.knownRegions || []).join(', ')}</div>
             </div>

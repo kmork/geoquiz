@@ -121,6 +121,8 @@ function refreshInterpolList() {
     const isCarmen = suspect.name === 'Carmen Sandiego';
     const hasPhoto = !!suspect.img;
     const alreadyViewed = interpolViewedThisGame.has(suspect.name);
+    const inCustody = unlocked.has(suspect.name) && !isCarmen;
+    const status = inCustody ? 'IN CUSTODY' : 'AT LARGE';
 
     if (hasPhoto && !isCarmen && !alreadyViewed) {
       logic.spendTime(INTERPOL_COST_HOURS);
@@ -132,7 +134,7 @@ function refreshInterpolList() {
       setTimeout(() => {
         refreshInterpolList();
         const thefts = getTheftHistory()[suspect.name] || [];
-        ui.showInterpolProfile(suspect, thefts);
+        ui.showInterpolProfile(suspect, thefts, status);
       }, animDuration);
       return;
     }
@@ -140,7 +142,7 @@ function refreshInterpolList() {
     refreshInterpolList(); // update cost labels
 
     const thefts = getTheftHistory()[suspect.name] || [];
-    ui.showInterpolProfile(suspect, thefts);
+    ui.showInterpolProfile(suspect, thefts, status);
   });
 }
 

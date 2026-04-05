@@ -1581,9 +1581,9 @@
 }
 
 .carmen-interpol-empty-img {
-  max-width: 70%;
+  max-width: 30%;
   height: auto;
-  margin: 1rem auto 1rem;
+  margin: 0.8rem auto 5rem;
   display: block;
   opacity: 0.85;
   border-radius: 4px;
