@@ -167,7 +167,59 @@ export function stopNarrator() {
   }
 }
 
-/** Clock tick-tock sound — alternates between high tick and low tock. */
+/* ── Ambient / SFX sounds ─────────────────────────── */
+const AMBIENT_SOUNDS = {
+  airport:  'carmen/audio/airport-terminal.mp3',
+  market:   'carmen/audio/market-area.mp3',
+  hotel:    'carmen/audio/hotel-bell.mp3',
+  taxi:     'carmen/audio/taxi.mp3',
+  airplane: 'carmen/audio/airplane.mp3',
+  footsteps:'carmen/audio/footsteps.mp3',
+};
+
+const AMBIENT_VOLUME = 0.35;
+let ambientAudio = null;
+
+/** Play an ambient sound by key (on top of background music). Plays once. */
+export function playAmbient(key) {
+  stopAmbient();
+  const file = AMBIENT_SOUNDS[key];
+  if (!file) return;
+  ambientAudio = new Audio(file);
+  ambientAudio.volume = AMBIENT_VOLUME;
+  ambientAudio.loop = false;
+  ambientAudio.play().catch(() => {});
+}
+
+/** Stop any playing ambient sound. */
+export function stopAmbient() {
+  if (ambientAudio && !ambientAudio.paused) {
+    ambientAudio.pause();
+    ambientAudio.currentTime = 0;
+  }
+  ambientAudio = null;
+}
+
+/** Start clock ticking sound. Plays on loop until stopClockTicking() is called. */
+let clockAudio = null;
+
+export function startClockTicking() {
+  if (clockAudio && !clockAudio.paused) return;
+  clockAudio = new Audio('carmen/audio/clock-ticking.mp3');
+  clockAudio.volume = 0.4;
+  clockAudio.loop = true;
+  clockAudio.play().catch(() => {});
+}
+
+export function stopClockTicking() {
+  if (clockAudio && !clockAudio.paused) {
+    clockAudio.pause();
+    clockAudio.currentTime = 0;
+  }
+  clockAudio = null;
+}
+
+/** Clock tick-tock sound — synthesized fallback (used by typewriter etc). */
 let tickTock = 0;
 export function playTick() {
   const ac = getCtx();

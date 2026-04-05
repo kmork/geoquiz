@@ -5,7 +5,7 @@ import { loadGeoJSON } from './geojson-loader.js';
 import { attachZoomPan } from './map-zoom-pan.js';
 import { saveGameRecord } from './game-records.js';
 import { initConfetti } from './confetti.js';
-import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic } from './carmen-audio.js';
+import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './carmen-audio.js';
 
 const params = new URLSearchParams(location.search);
 const difficulty = params.get('difficulty') || 'detective';
@@ -332,6 +332,7 @@ function checkTimeExpired() {
     if (activeNeighborChoices) activeNeighborChoices.disableAll();
     ui.hideLocations();
     setTimeout(async () => {
+      stopAmbient();
       stopMusic();
       stopNarrator();
       const results = logic.getResults();
@@ -385,14 +386,22 @@ function showInvestigationLocations() {
     updateClock();
     if (checkTimeExpired()) return;
 
+    const informant = logic.getInformant(locationId);
+
+    // Play ambient sound matching the informant/location
+    const ambientKey = informant.emoji === '🚕' ? 'taxi'
+      : locationId === 'hotel' ? 'hotel'
+      : locationId === 'airport' ? 'airport'
+      : locationId === 'market' ? 'market'
+      : 'footsteps';
+    playAmbient(ambientKey);
+
     const clue = logic.investigateLocation(locationId);
     if (clue) {
-      const informant = logic.getInformant(locationId);
       ui.addClue(clue, informant);
       const country = logic.route[logic.currentStop];
       ui.addDossierEntry(logic.currentStop, clue.text, informant.prefix, informant.emoji, country, capitalOf[country]);
     } else {
-      const informant = logic.getInformant(locationId);
       ui.addClue(
         { text: 'No new leads here.', icon: '❌' },
         informant
@@ -404,6 +413,7 @@ function showInvestigationLocations() {
 
 function handleGoBack(fromCountry) {
   // Player chose to go back to the current correct stop for more investigation
+  stopAmbient();
   stopMusic();
   const backTo = logic.route[logic.currentStop];
 
@@ -412,7 +422,9 @@ function handleGoBack(fromCountry) {
   if (checkTimeExpired()) return;
 
   setTimeout(async () => {
+    playAmbient('airplane');
     await renderer.animateTravel(fromCountry, backTo);
+    stopAmbient();
     playerPosition = backTo;
     const neighbors = logic.getNeighborChoicesForCurrentStop();
     drawMap(logic.route.slice(0, logic.currentStop + 1), neighbors);
@@ -423,6 +435,7 @@ function handleGoBack(fromCountry) {
 }
 
 function handleGuess(country) {
+  stopAmbient();
   stopMusic();
 
   // If the player picks the country they're currently at (going back)
@@ -451,7 +464,9 @@ function handleGuess(country) {
         logic.spendTime(logic.getTravelCost());
         updateClock();
 
+        playAmbient('airplane');
         await renderer.animateTravel(fromCountry, toCountry);
+        stopAmbient();
         playerPosition = toCountry;
         drawMap(logic.route);
         ui.updateProgress(progress.stop, progress.totalStops);
@@ -498,7 +513,9 @@ function handleGuess(country) {
       updateClock();
       if (checkTimeExpired()) return;
 
+      playAmbient('airplane');
       await renderer.animateTravel(fromCountry, toCountry);
+      stopAmbient();
       playerPosition = toCountry;
       drawMap(progress.route, result.neighbors);
       ui.showTransition(result.stopScore, result.country, taunt, 'The thief', () => {
@@ -527,7 +544,9 @@ function handleGuess(country) {
       updateClock();
       if (checkTimeExpired()) return;
 
+      playAmbient('airplane');
       await renderer.animateTravel(fromCountry, country);
+      stopAmbient();
       playerPosition = country;
       drawMap([...logic.route.slice(0, logic.currentStop + 1)], [country]);
 
