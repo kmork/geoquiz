@@ -170,7 +170,7 @@ async function handleEndChoice(choice, wasSuccess) {
     [2.0,  "Caught the thief.\nHandcuffs, paperwork, the whole routine."],
     [6.5,  "Still don't know\nwho they really were."],
     [8.5,  "Didn't stick around\nfor introductions."],
-    [10.0, "Figures."],
+    [9.5, "Figures."],
     [11.0, "I poured myself a coffee\nthat tasted like regret."],
     [15.0, "Didn't even finish it."],
     [16.5, "Because I know\nhow this goes."],
