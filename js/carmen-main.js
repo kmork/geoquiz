@@ -56,6 +56,18 @@ function recordTheft(suspectName, artifactName, country) {
   localStorage.setItem(THEFT_HISTORY_KEY, JSON.stringify(history));
 }
 
+// Persist which suspects have been viewed across games — free on subsequent views
+const INTERPOL_VIEWED_KEY = 'carmen-interpol-viewed';
+function getInterpolViewed() {
+  try { return new Set(JSON.parse(localStorage.getItem(INTERPOL_VIEWED_KEY)) || []); }
+  catch { return new Set(); }
+}
+function saveInterpolViewed(name) {
+  const viewed = getInterpolViewed();
+  viewed.add(name);
+  localStorage.setItem(INTERPOL_VIEWED_KEY, JSON.stringify([...viewed]));
+}
+
 let interpolViewedThisGame = new Set();
 
 // Wait for data.js
@@ -116,11 +128,13 @@ let isFirstGame = true;
 
 function refreshInterpolList() {
   const unlocked = getUnlockedSuspects();
-  ui.showInterpolList(SUSPECTS, unlocked, interpolViewedThisGame, (suspect) => {
+  const allViewed = new Set([...interpolViewedThisGame, ...getInterpolViewed()]);
+  ui.showInterpolList(SUSPECTS, unlocked, allViewed, (suspect) => {
     // Suspects with photos cost time to view; Carmen is free
     const isCarmen = suspect.name === 'Carmen Sandiego';
     const hasPhoto = !!suspect.img;
-    const alreadyViewed = interpolViewedThisGame.has(suspect.name);
+    const everViewed = getInterpolViewed().has(suspect.name);
+    const alreadyViewed = interpolViewedThisGame.has(suspect.name) || everViewed;
     const inCustody = unlocked.has(suspect.name) && !isCarmen;
     const status = inCustody ? 'IN CUSTODY' : 'AT LARGE';
 
@@ -131,6 +145,7 @@ function refreshInterpolList() {
       // Wait for clock animation to finish before revealing profile
       const animDuration = INTERPOL_COST_HOURS * 120 + 100;
       interpolViewedThisGame.add(suspect.name);
+      saveInterpolViewed(suspect.name);
       setTimeout(() => {
         refreshInterpolList();
         const thefts = getTheftHistory()[suspect.name] || [];

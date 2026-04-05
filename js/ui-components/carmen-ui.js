@@ -193,7 +193,19 @@ export function createCarmenUI(container, flagCodes) {
     sidebar: container.querySelector('#carmen-map-sidebar'),
     reveal: container.querySelector('#carmen-clue-reveal'),
     dossierBody: container.querySelector('#carmen-dossier-body-inline'),
+    interpolCard: container.querySelector('#carmen-panel-interpol .carmen-panel-card'),
   };
+
+  // Save original Interpol intro HTML so we can restore it
+  const interpolIntroHtml = els.interpolProfile.innerHTML;
+
+  // Click the Interpol header card to return to intro view
+  if (els.interpolCard) {
+    els.interpolCard.style.cursor = 'pointer';
+    els.interpolCard.addEventListener('click', () => {
+      els.interpolProfile.innerHTML = interpolIntroHtml;
+    });
+  }
 
   function flagImg(country) {
     const code = flagCodes[country];
