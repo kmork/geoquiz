@@ -83,7 +83,7 @@ function pickRandomTrack() {
   return TRACKS[Math.floor(Math.random() * TRACKS.length)];
 }
 
-const MUSIC_VOLUME = 0.25;
+const MUSIC_VOLUME = 0.15;
 
 /** Start looping background music (fade in). Picks a random track each time. */
 export function startMusic() {
@@ -185,7 +185,7 @@ const AMBIENT_SOUNDS = {
   footsteps:'carmen/audio/footsteps.mp3',
 };
 
-const AMBIENT_VOLUME = 0.35;
+const AMBIENT_VOLUME = 0.5;
 let ambientAudio = null;
 
 /** Play an ambient sound by key (on top of background music). Plays once. */
