@@ -549,6 +549,7 @@ export function createCarmenUI(container, flagCodes) {
       els.notebookTabs.style.display = '';
       els.musicToggle.style.display = '';
       els.musicToggle.textContent = isMusicMuted() ? '🔇' : '🔊';
+      this._prevHours = null;
       switchTab('case');
       els.narrative.innerHTML = `
         <div class="carmen-intro-card">
