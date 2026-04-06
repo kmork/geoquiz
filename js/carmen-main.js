@@ -381,6 +381,7 @@ function checkTimeExpired() {
       stopAmbient();
       stopMusic();
       stopNarrator();
+      playFailMusic();
       const results = logic.getResults();
       saveGameRecord(gameId, results.score, results.time);
       saveMissionResult('fail');
