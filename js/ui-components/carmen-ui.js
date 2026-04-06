@@ -124,9 +124,18 @@ export function createCarmenUI(container, flagCodes) {
       </div>
       <div class="carmen-right-panel">
         <div class="carmen-right-view" id="carmen-rv-artifact">
-          <div class="carmen-artifact-display">
-            <img class="carmen-artifact-img" id="carmen-artifact-img" src="" alt="">
-            <div class="carmen-artifact-stamp">STOLEN</div>
+          <div class="carmen-artifact-display" id="carmen-artifact-display">
+            <div class="carmen-artifact-inner">
+              <div class="carmen-artifact-front">
+                <img class="carmen-artifact-img" id="carmen-artifact-img" src="" alt="">
+                <div class="carmen-artifact-stamp">STOLEN</div>
+                <div class="carmen-artifact-flip-hint">↩</div>
+              </div>
+              <div class="carmen-artifact-back">
+                <div class="carmen-artifact-summary" id="carmen-artifact-summary"></div>
+                <div class="carmen-artifact-flip-hint">↩</div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="carmen-right-view" id="carmen-rv-clues" style="display:none">
@@ -185,6 +194,8 @@ export function createCarmenUI(container, flagCodes) {
     rvInterpol: container.querySelector('#carmen-rv-interpol'),
     interpolProfile: container.querySelector('#carmen-interpol-profile'),
     artifactImg: container.querySelector('#carmen-artifact-img'),
+    artifactDisplay: container.querySelector('#carmen-artifact-display'),
+    artifactSummary: container.querySelector('#carmen-artifact-summary'),
     map: container.querySelector('#carmen-map'),
     mapWrap: container.querySelector('#carmen-map-wrap'),
     sidebar: container.querySelector('#carmen-map-sidebar'),
@@ -253,6 +264,10 @@ export function createCarmenUI(container, flagCodes) {
   els.notebookTabs.addEventListener('click', (e) => {
     const tab = e.target.closest('.carmen-notebook-tab');
     if (tab) switchTab(tab.dataset.tab);
+  });
+
+  els.artifactDisplay.addEventListener('click', () => {
+    els.artifactDisplay.classList.toggle('flipped');
   });
 
   function renderDossier() {
@@ -522,6 +537,8 @@ export function createCarmenUI(container, flagCodes) {
         els.artifactImg.src = imgUrl;
         els.artifactImg.alt = siteName;
       }
+      els.artifactSummary.textContent = artifact.summary || '';
+      els.artifactDisplay.classList.remove('flipped');
       els.notebookTabs.style.display = '';
       switchTab('case');
       els.narrative.innerHTML = `
