@@ -755,7 +755,7 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-closing-content carmen-closing-solved">
             <div class="carmen-closing-stamp">SOLVED</div>
             <div class="carmen-briefing-label">CASE CLOSED</div>
-            <img src="carmen/img/detective-full.png" alt="" class="carmen-closing-detective">
+            <img src="carmen/img/detective-arresting.png" alt="" class="carmen-closing-detective">
             <div class="carmen-closing-name">${esc(suspectName)}</div>
             <div class="carmen-closing-text"></div>
             <div class="carmen-closing-score">${score} points</div>
@@ -792,7 +792,7 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-closing-content carmen-closing-failed">
             <div class="carmen-closing-stamp">FAILED</div>
             <div class="carmen-briefing-label">CASE CLOSED</div>
-            <div class="carmen-closing-icon">💨</div>
+            <img src="carmen/img/detective-full.png" alt="" class="carmen-closing-detective">
             <div class="carmen-closing-name">${esc(suspectName)}</div>
             <div class="carmen-closing-text"></div>
             <div class="carmen-closing-score">${score} points</div>
