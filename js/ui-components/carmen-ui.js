@@ -2,7 +2,7 @@
  * Carmen UI — DOM rendering for "Where in the World?" game.
  */
 
-import { playStamp, playTypeKey, startClockTicking, stopClockTicking } from '../carmen-audio.js';
+import { playStamp, playTypeKey, startClockTicking, stopClockTicking, toggleMusicMute, isMusicMuted } from '../carmen-audio.js';
 
 /**
  * Typewriter effect — reveals text letter-by-letter with key sounds.
@@ -76,6 +76,7 @@ export function createCarmenUI(container, flagCodes) {
       <div class="pill">Score: <b id="carmen-score">0</b></div>
       <div class="carmen-progress" id="carmen-progress"></div>
       <div class="carmen-clock" id="carmen-clock"></div>
+      <div class="carmen-music-toggle" id="carmen-music-toggle" title="Toggle music" style="display:none">🔊</div>
     </div>
     <div class="carmen-intro-row side-by-side" id="carmen-intro-row">
       <div class="carmen-left-panel">
@@ -179,6 +180,7 @@ export function createCarmenUI(container, flagCodes) {
     score: container.querySelector('#carmen-score'),
     progress: container.querySelector('#carmen-progress'),
     clock: container.querySelector('#carmen-clock'),
+    musicToggle: container.querySelector('#carmen-music-toggle'),
     locationsLabel: container.querySelector('#carmen-locations-label'),
     locations: container.querySelector('#carmen-locations'),
     witnessReport: container.querySelector('#carmen-witness-report'),
@@ -268,6 +270,11 @@ export function createCarmenUI(container, flagCodes) {
 
   els.artifactDisplay.addEventListener('click', () => {
     els.artifactDisplay.classList.toggle('flipped');
+  });
+
+  els.musicToggle.addEventListener('click', () => {
+    const muted = toggleMusicMute();
+    els.musicToggle.textContent = muted ? '🔇' : '🔊';
   });
 
   function renderDossier() {
@@ -540,6 +547,8 @@ export function createCarmenUI(container, flagCodes) {
       els.artifactSummary.textContent = artifact.summary || '';
       els.artifactDisplay.classList.remove('flipped');
       els.notebookTabs.style.display = '';
+      els.musicToggle.style.display = '';
+      els.musicToggle.textContent = isMusicMuted() ? '🔇' : '🔊';
       switchTab('case');
       els.narrative.innerHTML = `
         <div class="carmen-intro-card">
@@ -765,6 +774,7 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     showCaseSolved(suspectName, hoursLeft, score) {
+      els.musicToggle.style.display = 'none';
       return new Promise(resolve => {
         const overlay = document.createElement('div');
         overlay.className = 'carmen-closing-overlay';
@@ -802,6 +812,7 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     showCaseFailed(suspectName, score) {
+      els.musicToggle.style.display = 'none';
       return new Promise(resolve => {
         const overlay = document.createElement('div');
         overlay.className = 'carmen-closing-overlay';

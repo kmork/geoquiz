@@ -84,6 +84,19 @@ function pickRandomTrack() {
 }
 
 const MUSIC_VOLUME = 0.15;
+let musicMuted = false;
+
+/** Check if music is currently muted. */
+export function isMusicMuted() { return musicMuted; }
+
+/** Toggle music mute state. Returns new muted state. */
+export function toggleMusicMute() {
+  musicMuted = !musicMuted;
+  if (bgMusic && !bgMusic.paused) {
+    bgMusic.volume = musicMuted ? 0 : MUSIC_VOLUME;
+  }
+  return musicMuted;
+}
 
 /** Start looping background music (fade in). Picks a random track each time. */
 export function startMusic() {
@@ -92,6 +105,11 @@ export function startMusic() {
   bgMusic = new Audio(pickRandomTrack());
   bgMusic.loop = true;
   bgMusic.volume = 0;
+  if (musicMuted) {
+    bgMusic.volume = 0;
+    bgMusic.play().catch(() => {});
+    return;
+  }
   bgMusic.play().catch(() => {});
 
   let v = 0;
@@ -107,7 +125,7 @@ export function duckMusic() {
   if (bgMusic && !bgMusic.paused) bgMusic.volume = Math.min(bgMusic.volume, 0.10);
 }
 export function unduckMusic() {
-  if (bgMusic && !bgMusic.paused) bgMusic.volume = MUSIC_VOLUME;
+  if (bgMusic && !bgMusic.paused) bgMusic.volume = musicMuted ? 0 : MUSIC_VOLUME;
 }
 
 /** Stop background music (fade out). */
