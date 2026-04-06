@@ -176,33 +176,48 @@ async function handleEndChoice(choice, wasSuccess) {
   startMusic();
   await new Promise(r => setTimeout(r, 1500));
 
-  const narratorFile = wasSuccess
-    ? 'carmen/audio/narrator - mission1 success.mp3'
-    : 'carmen/audio/narrator - mission1 fail.mp3';
+  const missionCount = getMissionHistory().length;
+  let narratorFile, cues;
 
-  const cues = wasSuccess ? [
-    [0.0,  "Last case\u2026\nwrapped up nicely."],
-    [2.0,  "Caught the thief.\nHandcuffs, paperwork, the whole routine."],
-    [6.5,  "Still don't know\nwho they really were."],
-    [8.5,  "Didn't stick around\nfor introductions."],
-    [9.5, "Figures."],
-    [11.0, "I poured myself a coffee\nthat tasted like regret."],
-    [15.0, "Didn't even finish it."],
-    [16.5, "Because I know\nhow this goes."],
-    [18.5, "You close one case\u2026\nand somewhere out there\u2014"],
-    [21.5, "someone's already\npicking their next target."],
-  ] : [
-    [0.0,  "The thief got away."],
-    [1.1,  "Again."],
-    [2.7,  "I replayed it in my head\na dozen times. Maybe more."],
-    [5.5,  "It doesn't get better\nwith repetition."],
-    [7.5,  "No face. No name."],
-    [9.5,  "Just a disappearing act\nthat would make a magician jealous."],
-    [13.0, "Could be anyone."],
-    [14.5, "Which, in my line of work,\nis just saying I've got nothing."],
-    [18.5, "But the next case\nis already knocking."],
-    [20.5, "And I don't intend\nto be the punchline twice."],
-  ];
+  if (missionCount >= 3) {
+    // 3rd attempt and beyond — use mission3 narrator
+    narratorFile = 'carmen/audio/narrator - mission3.mp3';
+    cues = [
+      [0.0,  "Done."],
+      [1.0,  "For now."],
+      [2.5,  "Different country.\nSame kind of landmark."],
+      [5.5,  "I'm starting to think\nthe world's got habits."],
+      [8.5,  "And someone out there\nis taking notes."],
+    ];
+  } else if (wasSuccess) {
+    narratorFile = 'carmen/audio/narrator - mission1 success.mp3';
+    cues = [
+      [0.0,  "Last case\u2026\nwrapped up nicely."],
+      [2.0,  "Caught the thief.\nHandcuffs, paperwork, the whole routine."],
+      [6.5,  "Still don't know\nwho they really were."],
+      [8.5,  "Didn't stick around\nfor introductions."],
+      [9.5, "Figures."],
+      [11.0, "I poured myself a coffee\nthat tasted like regret."],
+      [15.0, "Didn't even finish it."],
+      [16.5, "Because I know\nhow this goes."],
+      [18.5, "You close one case\u2026\nand somewhere out there\u2014"],
+      [21.5, "someone's already\npicking their next target."],
+    ];
+  } else {
+    narratorFile = 'carmen/audio/narrator - mission1 fail.mp3';
+    cues = [
+      [0.0,  "The thief got away."],
+      [1.1,  "Again."],
+      [2.7,  "I replayed it in my head\na dozen times. Maybe more."],
+      [5.5,  "It doesn't get better\nwith repetition."],
+      [7.5,  "No face. No name."],
+      [9.5,  "Just a disappearing act\nthat would make a magician jealous."],
+      [13.0, "Could be anyone."],
+      [14.5, "Which, in my line of work,\nis just saying I've got nothing."],
+      [18.5, "But the next case\nis already knocking."],
+      [20.5, "And I don't intend\nto be the punchline twice."],
+    ];
+  }
 
   // Create subtitle element
   const subtitle = document.createElement('div');
