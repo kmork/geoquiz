@@ -79,9 +79,12 @@ export function createCarmenUI(container, flagCodes) {
     </div>
     <div class="carmen-intro-row side-by-side" id="carmen-intro-row">
       <div class="carmen-left-panel">
-        <div class="carmen-panel-tabs" id="carmen-panel-tabs" style="display:none">
-          <button class="carmen-panel-tab active" data-tab="case">📁 Case</button>
-          <button class="carmen-panel-tab" data-tab="investigate">🔍 Investigate</button>
+        <div class="carmen-notebook-tabs" id="carmen-notebook-tabs" style="display:none">
+          <button class="carmen-notebook-tab active" data-tab="case">Case</button>
+          <button class="carmen-notebook-tab" data-tab="investigate">Investigate</button>
+          <button class="carmen-notebook-tab" data-tab="travel">Travel</button>
+          <button class="carmen-notebook-tab" data-tab="dossier">Dossier</button>
+          <button class="carmen-notebook-tab" data-tab="interpol">Interpol</button>
         </div>
         <div class="carmen-panel-content">
           <div class="carmen-panel-view" id="carmen-panel-case">
@@ -117,11 +120,6 @@ export function createCarmenUI(container, flagCodes) {
             </div>
             <div class="carmen-interpol-list" id="carmen-interpol-list"></div>
           </div>
-        </div>
-        <div class="carmen-bottom-tabs" id="carmen-bottom-tabs" style="display:none">
-          <button class="carmen-bottom-tab" data-tab="travel">✈️ Travel</button>
-          <button class="carmen-bottom-tab" data-tab="dossier">📋 Dossier</button>
-          <button class="carmen-bottom-tab" data-tab="interpol">🔎 Interpol</button>
         </div>
       </div>
       <div class="carmen-right-panel">
@@ -165,7 +163,7 @@ export function createCarmenUI(container, flagCodes) {
     briefingStart: briefingEl.querySelector('#carmen-briefing-start'),
     introRow: container.querySelector('#carmen-intro-row'),
     narrative: container.querySelector('#carmen-narrative'),
-    panelTabs: container.querySelector('#carmen-panel-tabs'),
+    notebookTabs: container.querySelector('#carmen-notebook-tabs'),
     panelCase: container.querySelector('#carmen-panel-case'),
     panelInvestigate: container.querySelector('#carmen-panel-investigate'),
     missions: container.querySelector('#carmen-missions'),
@@ -179,7 +177,6 @@ export function createCarmenUI(container, flagCodes) {
     panelDossier: container.querySelector('#carmen-panel-dossier'),
     panelInterpol: container.querySelector('#carmen-panel-interpol'),
     interpolList: container.querySelector('#carmen-interpol-list'),
-    bottomTabs: container.querySelector('#carmen-bottom-tabs'),
     // Right panel views
     rvArtifact: container.querySelector('#carmen-rv-artifact'),
     rvClues: container.querySelector('#carmen-rv-clues'),
@@ -248,20 +245,13 @@ export function createCarmenUI(container, flagCodes) {
       rv.style.display = rv === targetRight ? '' : 'none';
     }
     // Update all tab active states
-    els.panelTabs.querySelectorAll('.carmen-panel-tab').forEach(t => {
-      t.classList.toggle('active', t.dataset.tab === tab);
-    });
-    els.bottomTabs.querySelectorAll('.carmen-bottom-tab').forEach(t => {
+    els.notebookTabs.querySelectorAll('.carmen-notebook-tab').forEach(t => {
       t.classList.toggle('active', t.dataset.tab === tab);
     });
   }
 
-  els.panelTabs.addEventListener('click', (e) => {
-    const tab = e.target.closest('.carmen-panel-tab');
-    if (tab) switchTab(tab.dataset.tab);
-  });
-  els.bottomTabs.addEventListener('click', (e) => {
-    const tab = e.target.closest('.carmen-bottom-tab');
+  els.notebookTabs.addEventListener('click', (e) => {
+    const tab = e.target.closest('.carmen-notebook-tab');
     if (tab) switchTab(tab.dataset.tab);
   });
 
@@ -532,8 +522,7 @@ export function createCarmenUI(container, flagCodes) {
         els.artifactImg.src = imgUrl;
         els.artifactImg.alt = siteName;
       }
-      els.panelTabs.style.display = '';
-      els.bottomTabs.style.display = '';
+      els.notebookTabs.style.display = '';
       switchTab('case');
       els.narrative.innerHTML = `
         <div class="carmen-intro-card">

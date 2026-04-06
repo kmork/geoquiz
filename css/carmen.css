@@ -242,7 +242,7 @@
 .carmen-left-panel {
   flex: 0 0 260px;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   min-width: 0;
   height: 100%;
 }
@@ -278,35 +278,6 @@
   overflow-y: auto;
   min-height: 0;
   padding: 0.5rem 0.4rem;
-}
-
-/* ── Panel Tabs ────────────────────────────────────── */
-.carmen-panel-tabs {
-  display: flex;
-  gap: 2px;
-  margin-bottom: 0.5rem;
-}
-
-.carmen-panel-tab {
-  flex: 1;
-  padding: 0.35rem 0.4rem;
-  border: 1px solid var(--card-border);
-  background: var(--bg-color);
-  color: var(--text-muted);
-  font-size: 0.75rem;
-  font-weight: 600;
-  cursor: pointer;
-  border-radius: 8px 8px 0 0;
-  transition: background 0.15s, color 0.15s;
-}
-
-.carmen-panel-tab.active {
-  background: var(--card-bg);
-  color: var(--text-color);
-  border-bottom-color: var(--card-bg);
-}
-
-.carmen-panel-tab:hover:not(.active) {
   background: var(--card-bg);
 }
 
@@ -315,34 +286,42 @@
   overflow-y: auto;
 }
 
-/* ── Bottom Tabs (Travel / Dossier) ────────────────── */
-.carmen-bottom-tabs {
+/* ── Notebook Tabs (vertical left-edge dividers) ───── */
+.carmen-notebook-tabs {
   display: flex;
+  flex-direction: column;
   gap: 2px;
-  margin-top: auto;
-  padding-top: 0.4rem;
+  align-self: stretch;
 }
 
-.carmen-bottom-tab {
-  flex: 1;
-  padding: 0.3rem 0.4rem;
+.carmen-notebook-tab {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  padding: 0.6rem 0.3rem;
   border: 1px solid var(--card-border);
+  border-right: none;
   background: var(--bg-color);
   color: var(--text-muted);
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
   cursor: pointer;
-  border-radius: 0 0 8px 8px;
+  border-radius: 6px 0 0 6px;
+  margin-right: -1px;
   transition: background 0.15s, color 0.15s;
+  white-space: nowrap;
 }
 
-.carmen-bottom-tab.active {
+.carmen-notebook-tab.active {
   background: var(--card-bg);
   color: var(--text-color);
-  border-top-color: var(--card-bg);
+  position: relative;
+  z-index: 3;
 }
 
-.carmen-bottom-tab:hover:not(.active) {
+.carmen-notebook-tab:hover:not(.active) {
   background: var(--card-bg);
 }
 
@@ -1272,6 +1251,25 @@
   .carmen-left-panel {
     flex: none;
     height: auto;
+    flex-direction: column;
+  }
+
+  .carmen-notebook-tabs {
+    flex-direction: row;
+  }
+
+  .carmen-notebook-tab {
+    writing-mode: horizontal-tb;
+    border-radius: 6px 6px 0 0;
+    border: 1px solid var(--card-border);
+    border-bottom: none;
+    margin-right: 0;
+    margin-bottom: -1px;
+  }
+
+  .carmen-panel-content {
+    border-left: none;
+    border-top: 1px solid var(--card-border);
   }
 
   .carmen-right-panel {
