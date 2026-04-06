@@ -353,7 +353,7 @@ export class RouteRenderer {
           const fontSize = Math.min(maxByWidth, countryH * 0.22, 2.5);
 
           // Micro-country: too small to see/click — draw a marker circle
-          if (fontSize < 1) {
+          if (fontSize < 0.3) {
             const r = 3;
             const circle = document.createElementNS(ns, "circle");
             circle.setAttribute("cx", centroid[0]);
