@@ -134,6 +134,14 @@ export function playVictoryMusic() {
   bgMusic.play().catch(() => {});
 }
 
+export function playFailMusic() {
+  stopMusic();
+  bgMusic = new Audio('carmen/audio/Midnight Impulse.mp3');
+  bgMusic.loop = false;
+  bgMusic.volume = MUSIC_VOLUME;
+  bgMusic.play().catch(() => {});
+}
+
 /** Play narrator intro audio. Ducks music while speaking. Returns a promise that resolves when done. */
 let narratorAudio = null;
 

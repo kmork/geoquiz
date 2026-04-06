@@ -5,7 +5,7 @@ import { loadGeoJSON } from './geojson-loader.js';
 import { attachZoomPan } from './map-zoom-pan.js';
 import { saveGameRecord } from './game-records.js';
 import { initConfetti } from './confetti.js';
-import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './carmen-audio.js';
+import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './carmen-audio.js';
 
 const params = new URLSearchParams(location.search);
 const difficulty = params.get('difficulty') || 'detective';
@@ -535,6 +535,7 @@ function handleGuess(country) {
             const choice = await ui.showCaseSolved(logic.suspect.name, ts.hoursRemaining, results.score);
             await handleEndChoice(choice, true);
           } else {
+            playFailMusic();
             logic.score = Math.max(0, logic.score - 200);
             const failResults = logic.getResults();
             saveGameRecord(gameId, failResults.score, failResults.time);
