@@ -571,6 +571,12 @@
   opacity: 1;
 }
 
+.carmen-music-toggle img {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
 .carmen-missions {
   display: flex;
   align-items: center;

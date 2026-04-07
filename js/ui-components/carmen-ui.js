@@ -76,7 +76,7 @@ export function createCarmenUI(container, flagCodes) {
       <div class="pill">Score: <b id="carmen-score">0</b></div>
       <div class="carmen-progress" id="carmen-progress"></div>
       <div class="carmen-clock" id="carmen-clock"></div>
-      <div class="carmen-music-toggle" id="carmen-music-toggle" title="Toggle music" style="display:none">🔊</div>
+      <div class="carmen-music-toggle" id="carmen-music-toggle" title="Toggle music" style="display:none"><img src="carmen/img/music-icon.png" alt="Music"></div>
     </div>
     <div class="carmen-intro-row side-by-side" id="carmen-intro-row">
       <div class="carmen-left-panel">
@@ -275,7 +275,7 @@ export function createCarmenUI(container, flagCodes) {
 
   els.musicToggle.addEventListener('click', () => {
     const muted = toggleMusicMute();
-    els.musicToggle.textContent = muted ? '🔇' : '🔊';
+    els.musicToggle.innerHTML = `<img src="carmen/img/${muted ? 'music-off-icon.png' : 'music-icon.png'}" alt="Music">`;
   });
 
   function renderDossier() {
@@ -575,7 +575,7 @@ export function createCarmenUI(container, flagCodes) {
       els.artifactDisplay.classList.remove('flipped');
       els.notebookTabs.style.display = '';
       els.musicToggle.style.display = '';
-      els.musicToggle.textContent = isMusicMuted() ? '🔇' : '🔊';
+      els.musicToggle.innerHTML = `<img src="carmen/img/${isMusicMuted() ? 'music-off-icon.png' : 'music-icon.png'}" alt="Music">`;
       this._prevHours = null;
       switchTab('case');
       els.narrative.innerHTML = `
