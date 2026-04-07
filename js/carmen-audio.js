@@ -145,6 +145,15 @@ export function stopMusic() {
   }, 60);
 }
 
+/** Play the lineup track (replaces background music). */
+export function playLineupMusic() {
+  stopMusic();
+  bgMusic = new Audio('carmen/audio/Pressure at 3AM.mp3');
+  bgMusic.loop = true;
+  bgMusic.volume = musicMuted ? 0 : MUSIC_VOLUME;
+  bgMusic.play().catch(() => {});
+}
+
 /** Play the victory track (replaces background music). */
 export function playVictoryMusic() {
   stopMusic();

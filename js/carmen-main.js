@@ -5,7 +5,7 @@ import { loadGeoJSON } from './geojson-loader.js';
 import { attachZoomPan } from './map-zoom-pan.js';
 import { saveGameRecord } from './game-records.js';
 import { initConfetti } from './confetti.js';
-import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './carmen-audio.js';
+import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playLineupMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './carmen-audio.js';
 
 const gameId = 'carmen';
 
@@ -587,6 +587,7 @@ function handleGuess(country) {
 
         // Brief pause, then show lineup
         setTimeout(async () => {
+          playLineupMusic();
           const lineup = logic.getSuspectLineup();
           const chosenName = await ui.showSuspectLineup(lineup);
           const correct = logic.identifySuspect(chosenName);
