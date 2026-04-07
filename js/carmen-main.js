@@ -42,6 +42,39 @@ function advanceCase() {
   const next = Math.min(getCurrentCase() + 1, TOTAL_CASES);
   localStorage.setItem(CAMPAIGN_KEY, String(next));
 }
+function setCase(n) {
+  const clamped = Math.max(1, Math.min(TOTAL_CASES, n | 0));
+  localStorage.setItem(CAMPAIGN_KEY, String(clamped));
+  localStorage.removeItem(CAMPAIGN_COMPLETE_KEY);
+  return clamped;
+}
+
+// Debug: ?case=N URL param jumps directly to that case on load.
+const _caseParam = parseInt(new URLSearchParams(location.search).get('case'), 10);
+if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
+  setCase(_caseParam);
+}
+
+// Debug: type "carmen" anywhere to open a case-jump prompt.
+(() => {
+  const secret = 'carmen';
+  let buf = '';
+  window.addEventListener('keydown', (e) => {
+    if (e.target && /^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
+    const k = (e.key || '').toLowerCase();
+    if (k.length !== 1) { buf = ''; return; }
+    buf = (buf + k).slice(-secret.length);
+    if (buf === secret) {
+      buf = '';
+      const answer = window.prompt(`Jump to case (1–${TOTAL_CASES}):`, String(getCurrentCase()));
+      const n = parseInt(answer, 10);
+      if (n >= 1 && n <= TOTAL_CASES) {
+        setCase(n);
+        location.reload();
+      }
+    }
+  });
+})();
 
 // Interpol database — unlocked suspects stored in localStorage
 const INTERPOL_KEY = 'carmen-interpol-unlocked';
