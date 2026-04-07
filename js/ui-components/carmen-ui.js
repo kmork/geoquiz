@@ -691,6 +691,7 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-speech-avatar">${emoji}</div>
           <div class="carmen-speech-body">
             <div class="carmen-speech-name">${esc(prefix)}</div>
+            ${clue.action ? `<div class="carmen-speech-action">${esc(clue.action)}</div>` : ''}
             <div class="carmen-speech-text"></div>
           </div>
         </div>

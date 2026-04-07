@@ -509,8 +509,9 @@ function showInvestigationLocations() {
       : 'footsteps';
     playAmbient(ambientKey);
 
-    const clue = logic.investigateLocation(locationId);
-    if (clue) {
+    const rawClue = logic.investigateLocation(locationId);
+    if (rawClue) {
+      const clue = logic.narrateClue(rawClue, informant, locationId);
       ui.addClue(clue, informant);
       const country = logic.route[logic.currentStop];
       ui.addDossierEntry(logic.currentStop, clue.text, informant.prefix, informant.emoji, country, capitalOf[country]);

@@ -5,6 +5,8 @@
  * No DOM access.
  */
 
+import { composeClue } from './carmen-clue-voice.js';
+
 // Single campaign baseline (formerly "rookie"). Per-case modifiers tighten this as the player progresses.
 const BASE_CONFIG = { stops: 4, cluesPerStop: 3, extraClues: 99, investigations: 4, totalHours: 72 };
 
@@ -934,7 +936,7 @@ export class CarmenGameLogic {
       const redacted = this._redactCountryName(f.fact, country);
       // Only use if the country name doesn't appear in the redacted text
       if (!this._containsCountryName(redacted, country)) {
-        return { id, text: redacted, icon: this._iconForCategory(f.category), category: f.category };
+        return { id, text: redacted, icon: this._iconForCategory(f.category), category: 'fact', data: { text: redacted } };
       }
     }
     return null;
@@ -966,7 +968,8 @@ export class CarmenGameLogic {
       clues.push({
         id: `geo-continent-${country}`,
         text: `This country is in ${c.continent}.`,
-        icon: '🌍', category: 'geography'
+        icon: '🌍', category: 'geography', subtype: 'continent',
+        data: { continent: c.continent },
       });
     }
 
@@ -977,7 +980,8 @@ export class CarmenGameLogic {
         clues.push({
           id: `geo-landlocked-${country}`,
           text: 'This country is landlocked.',
-          icon: '🌍', category: 'geography'
+          icon: '🌍', category: 'geography', subtype: 'landlocked',
+          data: {},
         });
       }
     }
@@ -987,7 +991,8 @@ export class CarmenGameLogic {
       clues.push({
         id: `geo-capital-letter-${country}`,
         text: `The capital starts with the letter "${cap[0]}".`,
-        icon: '🏛️', category: 'geography'
+        icon: '🏛️', category: 'geography', subtype: 'capital_letter',
+        data: { letter: cap[0] },
       });
     }
 
@@ -999,7 +1004,8 @@ export class CarmenGameLogic {
         clues.push({
           id: `geo-pop-${country}`,
           text: `This country has a population of ${bracket}.`,
-          icon: '👥', category: 'geography'
+          icon: '👥', category: 'geography', subtype: 'population',
+          data: { bracket },
         });
       }
     }
@@ -1009,7 +1015,8 @@ export class CarmenGameLogic {
       clues.push({
         id: `geo-neighbors-${country}`,
         text: `This country borders ${nbrCount} ${nbrCount === 1 ? 'country' : 'countries'}.`,
-        icon: '🌍', category: 'geography'
+        icon: '🌍', category: 'geography', subtype: 'neighbors',
+        data: { count: nbrCount },
       });
     }
 
@@ -1017,7 +1024,8 @@ export class CarmenGameLogic {
       clues.push({
         id: `geo-peak-${country}`,
         text: `The highest point here is ${c.highestPeak.name} at ${c.highestPeak.elev.toLocaleString()}m.`,
-        icon: '⛰️', category: 'geography'
+        icon: '⛰️', category: 'geography', subtype: 'peak',
+        data: { name: c.highestPeak.name, elev: c.highestPeak.elev },
       });
     }
 
@@ -1046,7 +1054,7 @@ export class CarmenGameLogic {
         `A famous site here: ${site.hint}.`, country
       );
       if (!this._containsCountryName(text, country)) {
-        return { id, text, icon: '🏛️', category: 'landmarks' };
+        return { id, text, icon: '🏛️', category: 'landmarks', data: { siteName: site.siteName, hint: site.hint } };
       }
     }
     return null;
@@ -1068,7 +1076,8 @@ export class CarmenGameLogic {
         id,
         text: `The ${f.name} ${label} passes through this country.`,
         icon: f.type === 'river' ? '🏞️' : '⛰️',
-        category: 'geography'
+        category: 'river_mountain',
+        data: { name: f.name, type: f.type },
       };
     }
     return null;
@@ -1085,7 +1094,8 @@ export class CarmenGameLogic {
       return {
         id,
         text: `This country was once part of the ${e.name} (${e.yearLabel}).`,
-        icon: '👑', category: 'history'
+        icon: '👑', category: 'history',
+        data: { name: e.name, yearLabel: e.yearLabel },
       };
     }
     return null;
@@ -1108,7 +1118,7 @@ export class CarmenGameLogic {
       const template = templates[Math.floor(Math.random() * templates.length)];
       const text = this._redactCountryName(template(item), country);
       if (this._containsCountryName(text, country)) continue;
-      return { id, text, icon: '🌟', category: 'culture' };
+      return { id, text, icon: '🌟', category: 'famous_for', data: { item } };
     }
     return null;
   }
@@ -1145,7 +1155,7 @@ export class CarmenGameLogic {
     const template = templates[Math.floor(Math.random() * templates.length)];
     const text = this._redactCountryName(template(list), country);
     if (this._containsCountryName(text, country)) return null;
-    return { id, text, icon: '📦', category: 'economy' };
+    return { id, text, icon: '📦', category: 'exports', data: { list, items: subset } };
   }
 
   // ─── Country Name Redaction ──────────────────────────────────
@@ -1315,6 +1325,22 @@ export class CarmenGameLogic {
   /** Get revealed suspect attributes for the dossier. */
   getRevealedSuspectAttrs() {
     return this._revealedAttrs;
+  }
+
+  /**
+   * Wrap a raw clue in noir narrative dialogue (phrasing + location voice + micro-action).
+   * Country-name redaction runs on the final composed line.
+   */
+  narrateClue(clue, informant, locationId) {
+    if (!clue) return clue;
+    const country = this.route[this.currentStop + 1];
+    const redact = (text) => this._redactCountryName(text, country);
+    const { dialogue, action } = composeClue(clue, informant, locationId, redact);
+    if (dialogue && !this._containsCountryName(dialogue, country) &&
+        (!action || !this._containsCountryName(action, country))) {
+      return { ...clue, text: dialogue, action };
+    }
+    return clue;
   }
 
   // ─── Investigation Locations ─────────────────────────────────

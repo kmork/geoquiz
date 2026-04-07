@@ -1007,9 +1007,18 @@
 
 .carmen-speech-text {
   font-size: 1rem;
-  font-style: italic;
   color: var(--text-color);
   line-height: 1.5;
+  white-space: pre-line;
+}
+
+.carmen-speech-action {
+  font-size: 0.92rem;
+  font-style: italic;
+  color: var(--muted-color, var(--text-color));
+  opacity: 0.75;
+  line-height: 1.4;
+  margin-bottom: 0.35rem;
 }
 
 /* (Dossier tab panel uses shared .carmen-panel-card styles) */
