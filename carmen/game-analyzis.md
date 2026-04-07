@@ -738,16 +738,27 @@ The game is now a single campaign of 10 sequential cases. The player advances on
 Carmen is **excluded** from the suspect pool in cases 1–9 and **forced** as the suspect in case 10.
 
 ### Per-case Difficulty Modifier
-Applied on top of the baseline (4 stops, 72h, 4 investigations, 3 clues/stop, 99 extra clues):
+Applied on top of the baseline (4 stops, 72h, 4 investigations, 3 clues/stop, 99 extra clues). Pressure comes from **information scarcity** (fewer clues per stop, fewer extra clues, tighter investigation budget) rather than stacked time/stop penalties — that keeps late cases winnable while making Carmen's lineup a real deduction.
 
 | Phase | Δ hours | Δ stops | Δ investigations | Δ extra clues | Δ clues/stop |
 |-------|---------|---------|------------------|---------------|--------------|
-| prelude  (1–3) | 0   | 0  | 0  | 0  | 0  |
-| whispers (4–6) | −8  | +1 | −1 | −1 | 0  |
-| pursuit  (7–9) | −16 | +2 | −1 | −2 | −1 |
-| finale   (10)  | −24 | +3 | −2 | −2 | −2 |
+| prelude  (1–3) | 0   | 0  |  0 | 0   | 0  |
+| whispers (4–6) | 0   | +1 | −1 | −97 | −1 |
+| pursuit  (7–9) | −8  | +1 | −1 | −98 | −1 |
+| finale   (10)  | −16 | +1 | −1 | −98 | −2 |
 
 Clamps: `stops ≥ 4`, `investigations ≥ 1`, `cluesPerStop ≥ 1`, `extraClues ≥ 0`, `totalHours ≥ 40`.
+
+### Effective per-phase configs
+
+| Phase | stops | inv/stop | clues/stop | extraClues | hours | buffer |
+|-------|-------|----------|------------|------------|-------|--------|
+| prelude  | 4 | 4 | 3 | 99 | 72 | +4h |
+| whispers | 5 | 3 | 2 | 2  | 72 | +2h |
+| pursuit  | 5 | 3 | 2 | 1  | 64 | −6h (must skip ~2 investigations) |
+| finale   | 5 | 3 | 1 | 1  | 56 | −14h (must skip ~5 investigations; only 5 clues across the whole case) |
+
+The finale's signature constraint is **1 clue per stop** — 5 total across the case vs 12 in prelude — so identifying Carmen in the lineup depends on thorough use of witness-report investigation, not brute-force clue gathering.
 
 ### Phase-aware Content
 

@@ -10,10 +10,10 @@ const BASE_CONFIG = { stops: 4, cluesPerStop: 3, extraClues: 99, investigations:
 
 // Applied on top of BASE_CONFIG based on campaignPhase.
 const CAMPAIGN_MODIFIERS = {
-  prelude:  { hours:   0, stops: 0, investigations:  0, extraClues:  0, cluesPerStop:  0 },
-  whispers: { hours:  -8, stops: 1, investigations: -1, extraClues: -1, cluesPerStop:  0 },
-  pursuit:  { hours: -16, stops: 2, investigations: -1, extraClues: -2, cluesPerStop: -1 },
-  finale:   { hours: -24, stops: 3, investigations: -2, extraClues: -2, cluesPerStop: -2 },
+  prelude:  { hours:   0, stops: 0, investigations:  0, extraClues:   0, cluesPerStop:  0 },
+  whispers: { hours:   0, stops: 1, investigations: -1, extraClues: -97, cluesPerStop: -1 },
+  pursuit:  { hours:  -8, stops: 1, investigations: -1, extraClues: -98, cluesPerStop: -1 },
+  finale:   { hours: -16, stops: 1, investigations: -1, extraClues: -98, cluesPerStop: -2 },
 };
 
 function buildCampaignConfig(phase) {
