@@ -1314,6 +1314,16 @@
 
 .carmen-suspect-silhouette {
   font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carmen-suspect-silhouette img {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 6px;
 }
 
 .carmen-suspect-name {

@@ -783,7 +783,7 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-lineup-grid">
               ${lineup.map(s => `
                 <button class="carmen-suspect-card" data-name="${esc(s.name)}">
-                  <div class="carmen-suspect-silhouette">🕵️</div>
+                  <div class="carmen-suspect-silhouette"><img src="carmen/img/${encodeURIComponent(s.name)}.png" alt="${esc(s.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))"></div>
                   <div class="carmen-suspect-name">${esc(s.name)}</div>
                   <div class="carmen-suspect-details">
                     <span>Hair: ${esc(s.hair)}</span>
