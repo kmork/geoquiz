@@ -383,6 +383,14 @@
   line-height: 1.5;
 }
 
+.carmen-panel-cost {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.8rem;
+  color: var(--text-color);
+}
+
 /* ── Intro Card (artifact + suspect info) ───────────── */
 .carmen-intro-card {
   display: flex;

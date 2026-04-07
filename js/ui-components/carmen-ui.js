@@ -104,6 +104,7 @@ export function createCarmenUI(container, flagCodes) {
               <div class="carmen-panel-badge">✈️ TRAVEL</div>
               <div class="carmen-panel-title">Where did the thief go?</div>
               <div class="carmen-panel-desc">Select a neighboring country on the map to follow the trail.</div>
+              <div class="carmen-panel-cost">⏱️ Travel cost: <strong>5 hours</strong> per trip</div>
             </div>
           </div>
           <div class="carmen-panel-view" id="carmen-panel-dossier" style="display:none">
