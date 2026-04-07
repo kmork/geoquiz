@@ -384,7 +384,25 @@ export function createCarmenUI(container, flagCodes) {
      * Show a suspect's full Interpol profile in the right panel.
      * @param {Object} suspect — suspect object with geographic fields
      */
-    showInterpolProfile(suspect, theftRecords, status) {
+    showInterpolProfile(suspect, theftRecords, status, campaignPhase) {
+      // Redact Carmen's profile based on campaign progression.
+      let hair = suspect.hair, accessory = suspect.accessory, hobby = suspect.hobby, vehicle = suspect.vehicle;
+      let quirkOverride = null;
+      if (suspect.name === 'Carmen Sandiego') {
+        const R = '[REDACTED]';
+        if (campaignPhase === 'prelude' || !campaignPhase) {
+          hair = accessory = hobby = vehicle = R;
+          quirkOverride = 'Subject exists only in rumor. ACME has no confirmed file.';
+        } else if (campaignPhase === 'whispers') {
+          hobby = vehicle = R;
+          quirkOverride = 'Fragmented reports reference a figure matching this profile behind multiple thefts.';
+        } else if (campaignPhase === 'pursuit') {
+          vehicle = R;
+          quirkOverride = 'Confirmed mastermind. Currently operating through a network of known associates.';
+        } else if (campaignPhase === 'finale') {
+          quirkOverride = 'Primary target. All cases lead here.';
+        }
+      }
       const photoHtml = suspect.img
         ? `<img src="${esc(suspect.img)}" alt="${esc(suspect.name)}" class="carmen-interpol-photo-img">`
         : `<div class="carmen-interpol-photo-silhouette">🕵️</div>`;
@@ -415,10 +433,10 @@ export function createCarmenUI(container, flagCodes) {
           </div>
           <div class="carmen-interpol-section">
             <div class="carmen-interpol-section-label">PROFILE</div>
-            <div class="carmen-interpol-detail">Hair: ${esc(suspect.hair)}</div>
-            <div class="carmen-interpol-detail">Accessory: ${esc(suspect.accessory)}</div>
-            <div class="carmen-interpol-detail">Hobby: ${esc(suspect.hobby)}</div>
-            <div class="carmen-interpol-detail">Vehicle: ${esc(suspect.vehicle)}</div>
+            <div class="carmen-interpol-detail">Hair: ${esc(hair)}</div>
+            <div class="carmen-interpol-detail">Accessory: ${esc(accessory)}</div>
+            <div class="carmen-interpol-detail">Hobby: ${esc(hobby)}</div>
+            <div class="carmen-interpol-detail">Vehicle: ${esc(vehicle)}</div>
           </div>
           <div class="carmen-interpol-section">
             <div class="carmen-interpol-section-label">CRIMINAL RECORD</div>
@@ -430,7 +448,7 @@ export function createCarmenUI(container, flagCodes) {
           </div>
           <div class="carmen-interpol-section">
             <div class="carmen-interpol-section-label">NOTES</div>
-            <div class="carmen-interpol-notes">${esc(suspect.quirk || 'No behavioral notes on file.')}</div>
+            <div class="carmen-interpol-notes">${esc(quirkOverride || suspect.quirk || 'No behavioral notes on file.')}</div>
           </div>
         </div>
       `;
@@ -527,7 +545,12 @@ export function createCarmenUI(container, flagCodes) {
 
         // Typewriter with sounds
         const timeText = totalHours ? ` You have only ${totalHours} hours to hunt down the criminal!` : '';
-        typewriter(els.briefingMission, `Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.${timeText}`, 20)
+        const missionCopy =
+          campaignPhase === 'whispers' ? "Track the thief through neighboring countries. Witnesses keep mentioning a shadow behind the shadow — someone bigger is pulling strings." :
+          campaignPhase === 'pursuit'  ? "ACME has traced this theft to Carmen Sandiego's network. The thief is one of her lieutenants — every arrest brings you closer to her." :
+          campaignPhase === 'finale'   ? "This is it. Carmen Sandiego herself has surfaced. No more proxies. Track her across the globe and bring her in — or she vanishes forever." :
+          "Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.";
+        typewriter(els.briefingMission, `${missionCopy}${timeText}`, 20)
           .then(() => {
             els.briefingStart.style.display = '';
           });
@@ -591,14 +614,19 @@ export function createCarmenUI(container, flagCodes) {
      * @param {Array} history — array of 'success'|'fail' strings (past missions)
      * @param {boolean} showCurrent — whether to show the current mission marker
      */
-    updateMissions(history, showCurrent = true) {
+    updateMissions(history, showCurrent = true, caseNumber, totalCases) {
       // Limit to fit: keep last N entries
       const maxMarks = 12;
       const totalNeeded = history.length + (showCurrent ? 1 : 0);
       const start = Math.max(0, totalNeeded - maxMarks);
       const visible = history.slice(start);
 
-      let html = '<span class="carmen-missions-label">Cases solved:</span>';
+      let html = '';
+      if (caseNumber && totalCases) {
+        html += `<span class="carmen-missions-label">Case ${caseNumber} / ${totalCases}</span>`;
+      } else {
+        html += '<span class="carmen-missions-label">Cases solved:</span>';
+      }
       for (const result of visible) {
         const cls = result === 'success' ? 'carmen-mark-success' : 'carmen-mark-fail';
         html += `<span class="carmen-mark ${cls}">I</span>`;
@@ -850,6 +878,29 @@ export function createCarmenUI(container, flagCodes) {
 
         overlay.querySelector('.carmen-btn-continue').addEventListener('click', () => { overlay.remove(); resolve('continue'); });
         overlay.querySelector('.carmen-btn-quit').addEventListener('click', () => { overlay.remove(); resolve('quit'); });
+      });
+    },
+
+    showCampaignComplete(score) {
+      return new Promise(resolve => {
+        const overlay = document.createElement('div');
+        overlay.className = 'carmen-closing-overlay';
+        overlay.innerHTML = `
+          <div class="carmen-closing-content carmen-closing-solved carmen-campaign-complete">
+            <div class="carmen-closing-stamp">CAMPAIGN COMPLETE</div>
+            <div class="carmen-briefing-label">CARMEN SANDIEGO — IN CUSTODY</div>
+            <div class="carmen-closing-name">The world is safe. For now.</div>
+            <div class="carmen-closing-score">${score} points</div>
+            <div class="carmen-closing-detail">Ten cases. Ten artifacts. One detective.</div>
+            <div class="carmen-closing-buttons">
+              <button class="carmen-closing-btn carmen-btn-continue">Restart campaign</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+        const stamp = overlay.querySelector('.carmen-closing-stamp');
+        setTimeout(() => { stamp.classList.add('animate'); playStamp(); }, 300);
+        overlay.querySelector('.carmen-btn-continue').addEventListener('click', () => { overlay.remove(); resolve(); });
       });
     },
 

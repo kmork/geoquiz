@@ -7,9 +7,7 @@ import { saveGameRecord } from './game-records.js';
 import { initConfetti } from './confetti.js';
 import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './carmen-audio.js';
 
-const params = new URLSearchParams(location.search);
-const difficulty = params.get('difficulty') || 'detective';
-const gameId = `carmen-${difficulty}`;
+const gameId = 'carmen';
 
 const gameContent = document.getElementById('game-content');
 const finalOverlay = document.getElementById('finalOverlay');
@@ -163,7 +161,7 @@ function refreshInterpolList() {
       setTimeout(() => {
         refreshInterpolList();
         const thefts = getTheftHistory()[suspect.name] || [];
-        ui.showInterpolProfile(suspect, thefts, status);
+        ui.showInterpolProfile(suspect, thefts, status, logic?.campaignPhase);
       }, animDuration);
       return;
     }
@@ -171,7 +169,7 @@ function refreshInterpolList() {
     refreshInterpolList(); // update cost labels
 
     const thefts = getTheftHistory()[suspect.name] || [];
-    ui.showInterpolProfile(suspect, thefts, status);
+    ui.showInterpolProfile(suspect, thefts, status, logic?.campaignPhase);
   });
 }
 
@@ -274,7 +272,6 @@ async function startGame() {
     rivers: riversData,
     mountains: mountainsData,
     empires: empiresData,
-    difficulty,
     caseNumber: getCurrentCase(),
     totalCases: TOTAL_CASES,
   });
@@ -354,7 +351,7 @@ async function startGame() {
 
   // Update UI — thief identity unknown
   ui.showIntro('A mysterious thief', intro.artifact, intro.startCountry);
-  ui.updateMissions(getMissionHistory(), true);
+  ui.updateMissions(getMissionHistory(), true, logic.caseNumber, logic.totalCases);
   ui.updateScore(intro.progress.score);
   ui.updateProgress(intro.progress.stop, intro.progress.totalStops);
   updateClock();
@@ -564,12 +561,18 @@ function handleGuess(country) {
             unlockSuspect(logic.suspect.name);
             recordTheft(logic.suspect.name, logic.artifact.siteName, logic.artifact.country);
             saveMissionResult('success');
-            if (logic.caseNumber >= TOTAL_CASES) {
+            const isFinaleWin = logic.caseNumber >= TOTAL_CASES;
+            if (isFinaleWin) {
               localStorage.setItem(CAMPAIGN_COMPLETE_KEY, 'true');
             } else {
               advanceCase();
             }
             const choice = await ui.showCaseSolved(logic.suspect.name, ts.hoursRemaining, results.score);
+            if (isFinaleWin) {
+              await ui.showCampaignComplete(results.score);
+              localStorage.removeItem(CAMPAIGN_KEY);
+              localStorage.removeItem(CAMPAIGN_COMPLETE_KEY);
+            }
             await handleEndChoice(choice, true);
           } else {
             playFailMusic();

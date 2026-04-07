@@ -5,11 +5,27 @@
  * No DOM access.
  */
 
-const DIFFICULTY = {
-  rookie:    { stops: 4, cluesPerStop: 3, extraClues: Infinity, investigations: 4, totalHours: 72 },
-  detective: { stops: 6, cluesPerStop: 2, extraClues: 2, investigations: 3, totalHours: 72 },
-  ace:       { stops: 8, cluesPerStop: 1, extraClues: 1, investigations: 2, totalHours: 64 },
+// Single campaign baseline (formerly "rookie"). Per-case modifiers tighten this as the player progresses.
+const BASE_CONFIG = { stops: 4, cluesPerStop: 3, extraClues: 99, investigations: 4, totalHours: 72 };
+
+// Applied on top of BASE_CONFIG based on campaignPhase.
+const CAMPAIGN_MODIFIERS = {
+  prelude:  { hours:   0, stops: 0, investigations:  0, extraClues:  0, cluesPerStop:  0 },
+  whispers: { hours:  -8, stops: 1, investigations: -1, extraClues: -1, cluesPerStop:  0 },
+  pursuit:  { hours: -16, stops: 2, investigations: -1, extraClues: -2, cluesPerStop: -1 },
+  finale:   { hours: -24, stops: 3, investigations: -2, extraClues: -2, cluesPerStop: -2 },
 };
+
+function buildCampaignConfig(phase) {
+  const mod = CAMPAIGN_MODIFIERS[phase] || CAMPAIGN_MODIFIERS.prelude;
+  return {
+    stops:          Math.max(4, BASE_CONFIG.stops          + mod.stops),
+    cluesPerStop:   Math.max(1, BASE_CONFIG.cluesPerStop   + mod.cluesPerStop),
+    extraClues:     Math.max(0, BASE_CONFIG.extraClues     + mod.extraClues),
+    investigations: Math.max(1, BASE_CONFIG.investigations + mod.investigations),
+    totalHours:     Math.max(40, BASE_CONFIG.totalHours    + mod.hours),
+  };
+}
 
 const INVESTIGATION_COST_HOURS = 3; // hours per investigation
 const TRAVEL_COST_HOURS = 5;        // hours per travel between stops
@@ -469,6 +485,43 @@ const THIEF_TAUNTS = {
     "Cold, very cold!",
     "My grandmother could track better than you!",
   ],
+  whispers: [
+    "She said you'd be slow.",
+    "I answer to someone you haven't met yet.",
+    "My employer sends her regards, detective.",
+    "You think I'm the one you should be chasing?",
+    "There's a bigger shadow behind me. You'll see.",
+  ],
+  whispersWrong: [
+    "She'll be pleased you wasted the hours.",
+    "My boss is laughing at you right now.",
+    "Careful — the one pulling my strings is watching.",
+  ],
+  pursuit: [
+    "Carmen warned me you were persistent.",
+    "You're closer to her than you realize.",
+    "Carmen Sandiego doesn't lose, detective. Neither do I.",
+    "This was never about the artifact. It's about her.",
+    "Tell Carmen I said hi — if you ever meet her.",
+  ],
+  pursuitWrong: [
+    "Carmen predicted you'd pick wrong.",
+    "Every wrong turn is a gift to her.",
+    "You'll never reach her at this pace.",
+  ],
+  finale: [
+    "So. The famous detective. I expected taller.",
+    "You've chased my lieutenants for nine cases. Now chase me.",
+    "I left you a trail because I wanted to see you try.",
+    "Catch me here, or I vanish for good.",
+    "Nine cases to find me. I'm almost flattered.",
+    "Last dance, detective. Don't step on my toes.",
+  ],
+  finaleWrong: [
+    "Oh dear. And you were doing so well.",
+    "I expected better from my only worthy rival.",
+    "One more mistake and the world loses me for good.",
+  ],
 };
 
 export class CarmenGameLogic {
@@ -489,14 +542,15 @@ export class CarmenGameLogic {
     this.rivers = config.rivers || [];
     this.mountains = config.mountains || [];
     this.empires = config.empires || [];
-    this.diffKey = config.difficulty || 'detective';
-    this.diff = DIFFICULTY[this.diffKey] || DIFFICULTY.detective;
     this.caseNumber = config.caseNumber || 1;
     this.totalCases = config.totalCases || 10;
     this.campaignPhase =
       this.caseNumber >= 10 ? 'finale' :
       this.caseNumber >= 7 ? 'pursuit' :
       this.caseNumber >= 4 ? 'whispers' : 'prelude';
+    this.config = buildCampaignConfig(this.campaignPhase);
+    // Back-compat alias for any internal reads that still say `this.diff`.
+    this.diff = this.config;
 
     // Build lookups
     this.countrySet = new Set(this.countries.map(c => c.country));
@@ -1340,6 +1394,19 @@ export class CarmenGameLogic {
 
   /** Get a taunt appropriate for the current game state. */
   getTaunt(wrongGuess = false) {
+    const phase = this.campaignPhase;
+    // Finale: Carmen always speaks in first person.
+    if (phase === 'finale') {
+      return this._pickRandom(wrongGuess ? THIEF_TAUNTS.finaleWrong : THIEF_TAUNTS.finale);
+    }
+    // Pursuit: 70% explicit Carmen references.
+    if (phase === 'pursuit' && Math.random() < 0.7) {
+      return this._pickRandom(wrongGuess ? THIEF_TAUNTS.pursuitWrong : THIEF_TAUNTS.pursuit);
+    }
+    // Whispers: 50% shadowy-boss hints.
+    if (phase === 'whispers' && Math.random() < 0.5) {
+      return this._pickRandom(wrongGuess ? THIEF_TAUNTS.whispersWrong : THIEF_TAUNTS.whispers);
+    }
     if (wrongGuess) {
       return this._pickRandom(THIEF_TAUNTS.wrongGuess);
     }
