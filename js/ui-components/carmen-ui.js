@@ -811,13 +811,15 @@ export function createCarmenUI(container, flagCodes) {
     showCaseSolved(suspectName, hoursLeft, score) {
       els.musicToggle.style.display = 'none';
       return new Promise(resolve => {
+        const isCarmen = suspectName === 'Carmen Sandiego';
+        const arrestImg = isCarmen ? 'carmen/img/carmen-arrested.png' : 'carmen/img/detective-arresting.png';
         const overlay = document.createElement('div');
         overlay.className = 'carmen-closing-overlay';
         overlay.innerHTML = `
           <div class="carmen-closing-content carmen-closing-solved">
             <div class="carmen-closing-stamp">SOLVED</div>
             <div class="carmen-briefing-label">CASE CLOSED</div>
-            <img src="carmen/img/detective-arresting.png" alt="" class="carmen-closing-detective">
+            <img src="${arrestImg}" alt="" class="carmen-closing-detective">
             <div class="carmen-closing-name">${esc(suspectName)}</div>
             <div class="carmen-closing-text"></div>
             <div class="carmen-closing-score">${score} points</div>
