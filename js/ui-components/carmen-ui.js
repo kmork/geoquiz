@@ -812,7 +812,7 @@ export function createCarmenUI(container, flagCodes) {
       els.musicToggle.style.display = 'none';
       return new Promise(resolve => {
         const isCarmen = suspectName === 'Carmen Sandiego';
-        const arrestImg = isCarmen ? 'carmen/img/carmen-arrested.png' : 'carmen/img/detective-arresting.png';
+        const arrestImg = isCarmen ? 'carmen/img/carmen-arrested-2.png' : 'carmen/img/detective-arresting.png';
         const overlay = document.createElement('div');
         overlay.className = 'carmen-closing-overlay';
         overlay.innerHTML = `
