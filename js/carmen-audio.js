@@ -229,11 +229,37 @@ export function stopAmbient() {
 /** Start clock ticking sound. Plays on loop until stopClockTicking() is called. */
 let clockAudio = null;
 
-export function startClockTicking() {
-  if (clockAudio && !clockAudio.paused) return;
+let clockGain = null;
+let clockSource = null;
+
+export function startClockTicking(urgency = 'normal') {
+  // GainNode can amplify past 1.0 — the mp3 itself is quiet, so we boost it.
+  const gainValue =
+    urgency === 'critical' ? 4.0 :
+    urgency === 'low'      ? 3.0 :
+                             2.2;
+
+  // Duck background music hard while the clock ticks, so it cuts through.
+  if (bgMusic && !bgMusic.paused) bgMusic.volume = musicMuted ? 0 : 0.05;
+
+  if (clockAudio && !clockAudio.paused && clockGain) {
+    clockGain.gain.value = gainValue;
+    return;
+  }
+  const ac = getCtx();
   clockAudio = new Audio('carmen/audio/clock-ticking.mp3');
-  clockAudio.volume = 0.4;
   clockAudio.loop = true;
+  clockAudio.crossOrigin = 'anonymous';
+  try {
+    clockSource = ac.createMediaElementSource(clockAudio);
+    clockGain = ac.createGain();
+    clockGain.gain.value = gainValue;
+    clockSource.connect(clockGain);
+    clockGain.connect(ac.destination);
+  } catch {
+    // Fallback: plain element playback if the graph can't be built.
+    clockAudio.volume = 1.0;
+  }
   clockAudio.play().catch(() => {});
 }
 
@@ -243,6 +269,10 @@ export function stopClockTicking() {
     clockAudio.currentTime = 0;
   }
   clockAudio = null;
+  clockSource = null;
+  clockGain = null;
+  // Restore music volume after the clock stops.
+  if (bgMusic && !bgMusic.paused) bgMusic.volume = musicMuted ? 0 : MUSIC_VOLUME;
 }
 
 /** Clock tick-tock sound — synthesized fallback (used by typewriter etc). */

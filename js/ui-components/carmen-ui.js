@@ -655,7 +655,9 @@ export function createCarmenUI(container, flagCodes) {
         // Animate countdown from prev to target
         if (this._clockTimer) clearInterval(this._clockTimer);
         let current = prev;
-        startClockTicking();
+        const pctNow = hoursRemaining / totalHours;
+        const urgency = pctNow < 0.12 ? 'critical' : pctNow < 0.25 ? 'low' : 'normal';
+        startClockTicking(urgency);
         this._clockTimer = setInterval(() => {
           current--;
           const d = Math.floor(current / 24);
