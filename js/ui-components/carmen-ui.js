@@ -500,11 +500,14 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     /** Show dramatic case briefing overlay. Returns a promise that resolves when player clicks start. */
-    showCaseBriefing(artifact, startCountry, totalHours) {
+    showCaseBriefing(artifact, startCountry, totalHours, caseNumber, totalCases, campaignPhase) {
       return new Promise(resolve => {
         const siteName = artifact.siteName || 'a priceless artifact';
+        const caseLabel = caseNumber
+          ? (campaignPhase === 'finale' ? `FINAL CASE — ${caseNumber} / ${totalCases}` : `CASE ${caseNumber} / ${totalCases}`)
+          : 'STOLEN ARTIFACT';
         els.briefingArtifact.innerHTML = `
-          <div class="carmen-artifact-label">STOLEN ARTIFACT</div>
+          <div class="carmen-artifact-label">${esc(caseLabel)}</div>
           <div class="carmen-artifact-name">${esc(siteName)}</div>
           <div class="carmen-artifact-origin">Last seen in ${esc(startCountry)}</div>
         `;

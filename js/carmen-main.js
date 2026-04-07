@@ -31,6 +31,20 @@ function saveMissionResult(result) {
   localStorage.setItem(MISSION_KEY, JSON.stringify(history));
 }
 
+// Campaign progression — current case number (1..10)
+const CAMPAIGN_KEY = 'carmen-campaign-case';
+const CAMPAIGN_COMPLETE_KEY = 'carmen-campaign-complete';
+const TOTAL_CASES = 10;
+function getCurrentCase() {
+  const n = parseInt(localStorage.getItem(CAMPAIGN_KEY), 10);
+  if (!n || n < 1) return 1;
+  return Math.min(n, TOTAL_CASES);
+}
+function advanceCase() {
+  const next = Math.min(getCurrentCase() + 1, TOTAL_CASES);
+  localStorage.setItem(CAMPAIGN_KEY, String(next));
+}
+
 // Interpol database — unlocked suspects stored in localStorage
 const INTERPOL_KEY = 'carmen-interpol-unlocked';
 const INTERPOL_COST_HOURS = 10;
@@ -261,6 +275,8 @@ async function startGame() {
     mountains: mountainsData,
     empires: empiresData,
     difficulty,
+    caseNumber: getCurrentCase(),
+    totalCases: TOTAL_CASES,
   });
 
   const intro = logic.start();
@@ -326,7 +342,7 @@ async function startGame() {
 
   // Now show the case briefing overlay
   const totalHours = logic.getTimeState().totalHours;
-  await ui.showCaseBriefing(intro.artifact, intro.startCountry, totalHours);
+  await ui.showCaseBriefing(intro.artifact, intro.startCountry, totalHours, intro.caseNumber, intro.totalCases, intro.campaignPhase);
 
   // Hide the front image, show the header and game
   if (carmenFront) carmenFront.style.display = 'none';
@@ -548,6 +564,11 @@ function handleGuess(country) {
             unlockSuspect(logic.suspect.name);
             recordTheft(logic.suspect.name, logic.artifact.siteName, logic.artifact.country);
             saveMissionResult('success');
+            if (logic.caseNumber >= TOTAL_CASES) {
+              localStorage.setItem(CAMPAIGN_COMPLETE_KEY, 'true');
+            } else {
+              advanceCase();
+            }
             const choice = await ui.showCaseSolved(logic.suspect.name, ts.hoursRemaining, results.score);
             await handleEndChoice(choice, true);
           } else {

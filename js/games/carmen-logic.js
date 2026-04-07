@@ -491,6 +491,12 @@ export class CarmenGameLogic {
     this.empires = config.empires || [];
     this.diffKey = config.difficulty || 'detective';
     this.diff = DIFFICULTY[this.diffKey] || DIFFICULTY.detective;
+    this.caseNumber = config.caseNumber || 1;
+    this.totalCases = config.totalCases || 10;
+    this.campaignPhase =
+      this.caseNumber >= 10 ? 'finale' :
+      this.caseNumber >= 7 ? 'pursuit' :
+      this.caseNumber >= 4 ? 'whispers' : 'prelude';
 
     // Build lookups
     this.countrySet = new Set(this.countries.map(c => c.country));
@@ -568,15 +574,23 @@ export class CarmenGameLogic {
     this.route = this._generateRoute(this.diff.stops);
     this.artifact = this._pickArtifact(this.route[0]);
 
-    // Pick suspect whose knownRegions overlap the route's continents
-    const routeContinents = new Set(
-      this.route.map(c => this.countryMap[c]?.continent).filter(Boolean)
-    );
-    const regionMatch = SUSPECTS.filter(s =>
-      s.knownRegions?.some(r => routeContinents.has(r))
-    );
-    const candidates = regionMatch.length > 0 ? regionMatch : SUSPECTS;
-    this.suspect = candidates[Math.floor(Math.random() * candidates.length)];
+    // Finale: Carmen Sandiego herself is the thief.
+    if (this.campaignPhase === 'finale') {
+      const carmen = SUSPECTS.find(s => s.name === 'Carmen Sandiego');
+      if (carmen) this.suspect = carmen;
+    }
+    if (!this.suspect) {
+      // Exclude Carmen from the pool in pre-finale cases — she's only hinted at.
+      const pool = SUSPECTS.filter(s => s.name !== 'Carmen Sandiego');
+      const routeContinents = new Set(
+        this.route.map(c => this.countryMap[c]?.continent).filter(Boolean)
+      );
+      const regionMatch = pool.filter(s =>
+        s.knownRegions?.some(r => routeContinents.has(r))
+      );
+      const candidates = regionMatch.length > 0 ? regionMatch : pool;
+      this.suspect = candidates[Math.floor(Math.random() * candidates.length)];
+    }
 
     this.stopStartTime = Date.now();
 
@@ -591,6 +605,9 @@ export class CarmenGameLogic {
       clues,
       neighbors,
       progress: this.getProgress(),
+      caseNumber: this.caseNumber,
+      totalCases: this.totalCases,
+      campaignPhase: this.campaignPhase,
     };
   }
 
