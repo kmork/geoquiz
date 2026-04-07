@@ -150,7 +150,7 @@ export function playLineupMusic() {
   stopMusic();
   bgMusic = new Audio('carmen/audio/Pressure at 3AM.mp3');
   bgMusic.loop = true;
-  bgMusic.volume = musicMuted ? 0 : MUSIC_VOLUME;
+  bgMusic.volume = musicMuted ? 0 : 0.5;
   bgMusic.play().catch(() => {});
 }
 
