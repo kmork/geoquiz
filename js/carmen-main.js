@@ -78,10 +78,10 @@ if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
 
 // Interpol database — unlocked suspects stored in localStorage
 const INTERPOL_KEY = 'carmen-interpol-unlocked';
-const INTERPOL_COST_HOURS = 10;
+const INTERPOL_COST_HOURS = 3;
 function getUnlockedSuspects() {
-  try { return new Set(JSON.parse(localStorage.getItem(INTERPOL_KEY)) || ['Carmen Sandiego']); }
-  catch { return new Set(['Carmen Sandiego']); }
+  try { return new Set(JSON.parse(localStorage.getItem(INTERPOL_KEY)) || []); }
+  catch { return new Set(); }
 }
 function unlockSuspect(name) {
   const unlocked = getUnlockedSuspects();
@@ -174,16 +174,21 @@ let isFirstGame = true;
 function refreshInterpolList() {
   const unlocked = getUnlockedSuspects();
   const allViewed = new Set([...interpolViewedThisGame, ...getInterpolViewed()]);
-  ui.showInterpolList(SUSPECTS, unlocked, allViewed, (suspect) => {
-    // Suspects with photos cost time to view; Carmen is free
-    const isCarmen = suspect.name === 'Carmen Sandiego';
+  // Sort Carmen to the bottom of the list so she doesn't stand out as the obvious boss.
+  const sortedSuspects = [...SUSPECTS].sort((a, b) => {
+    if (a.name === 'Carmen Sandiego') return 1;
+    if (b.name === 'Carmen Sandiego') return -1;
+    return 0;
+  });
+  ui.showInterpolList(sortedSuspects, unlocked, allViewed, (suspect) => {
+    // All suspects with photos cost time to view — including Carmen.
     const hasPhoto = !!suspect.img;
     const everViewed = getInterpolViewed().has(suspect.name);
     const alreadyViewed = interpolViewedThisGame.has(suspect.name) || everViewed;
-    const inCustody = unlocked.has(suspect.name) && !isCarmen;
+    const inCustody = unlocked.has(suspect.name);
     const status = inCustody ? 'IN CUSTODY' : 'AT LARGE';
 
-    if (hasPhoto && !isCarmen && !alreadyViewed) {
+    if (hasPhoto && !alreadyViewed) {
       logic.spendTime(INTERPOL_COST_HOURS);
       updateClock();
       if (checkTimeExpired()) return;

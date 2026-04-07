@@ -1,5 +1,7 @@
 # Carmen Sandiego — Exhaustive Game Analysis
 
+> **Updated for the 10-case campaign.** The rookie/detective/ace difficulty picker has been removed. The game is now a single progression-driven campaign of 10 cases that ramps in pressure as the player closes in on Carmen Sandiego herself in the final case. See the **Campaign Progression** section below for the new mechanics layered on top of everything else in this document.
+
 ## A. NARRATIVE & STORY
 
 ### Narrator Intro (First Game Only)
@@ -237,7 +239,19 @@ Volume: 0.35. Single-play per investigation.
 
 ## C. DIFFICULTY ANALYSIS
 
-### Difficulty Parameters
+> **Note:** The rookie/detective/ace picker has been removed. Difficulty now scales automatically with the **case number** via the campaign modifier table (see **Campaign Progression** below). The "Rookie" column is the current campaign baseline; the former Detective/Ace tiers no longer exist as independent modes, but their values roughly correspond to mid- and late-campaign cases on top of the baseline.
+
+### Baseline Parameters (every case starts here)
+
+| Parameter | Value |
+|-----------|-------|
+| Stops | 4 |
+| Clues per stop | 3 |
+| Extra clues | 99 (effectively unlimited) |
+| Investigations | 4 |
+| Total hours | 72 |
+
+### Legacy Difficulty Parameters (removed)
 
 | Parameter | Rookie | Detective | Ace |
 |-----------|--------|-----------|-----|
@@ -251,7 +265,7 @@ Volume: 0.35. Single-play per investigation.
 - Investigation: **3 hours**
 - Travel: **5 hours**
 - Extra clue: **2 hours**
-- Interpol (Carmen, first view): **3 hours**
+- Interpol file (first view of any suspect with a photo, including Carmen): **3 hours**. Subsequent views within or across games are free.
 
 ### Time Budget Analysis
 
@@ -537,10 +551,16 @@ Format: `"${days}d ${hours}h"` (e.g., "2d 8h" for 56 hours)
 - UI shows last 12 missions as tally marks
 
 ### Interpol Database (localStorage)
-- Key: `carmen-interpol-unlocked`
-- Carmen Sandiego: 3 hours first view, free on re-view
-- Arrested suspects: Free
-- Persists across games
+- Key: `carmen-interpol-unlocked` (starts empty — no suspects are unlocked by default)
+- **All** suspects with photos cost **3 hours** on first view. Subsequent views are free (tracked via `carmen-interpol-viewed`, which persists across games).
+- Carmen Sandiego is **not** pre-unlocked and is **sorted to the bottom** of the list so she doesn't visually stand out as the eventual boss.
+- Arrested suspects are marked `IN CUSTODY`; everyone else is `AT LARGE` (including Carmen until case 10 is won).
+- Persists across games.
+
+### Campaign Progression (localStorage)
+- Key: `carmen-campaign-case` — current case number (1–10). Defaults to 1.
+- Key: `carmen-campaign-complete` — set when case 10 is won; cleared after the player dismisses the campaign-complete overlay.
+- Advances **only** on a correctly identified suspect. Failed cases replay the same case number with fresh randomness.
 
 ---
 
@@ -699,3 +719,73 @@ Fixed 20–25ms per character. No accessibility control for speed readers or slo
 | Points per stop (retry) | 100 |
 | Wrong suspect penalty | -200 |
 | Replayability ceiling | ~10–20 plays |
+
+---
+
+## K. CAMPAIGN PROGRESSION (10-case arc)
+
+### Overview
+The game is now a single campaign of 10 sequential cases. The player advances only by correctly identifying the thief in the suspect lineup; failed cases are replayed with new randomness. The arc culminates in a direct confrontation with Carmen Sandiego in case 10.
+
+### Phases
+| Cases | Phase | Narrative tone |
+|-------|-------|----------------|
+| 1–3 | `prelude`   | Ordinary thieves. No mention of Carmen anywhere. |
+| 4–6 | `whispers`  | Taunts and briefings hint at "a shadow behind the shadow". Carmen is not named. |
+| 7–9 | `pursuit`   | The thief is explicitly a Carmen lieutenant. Carmen is named in taunts and briefings. |
+| 10  | `finale`    | Carmen Sandiego herself is forced as the thief and speaks in first person. |
+
+Carmen is **excluded** from the suspect pool in cases 1–9 and **forced** as the suspect in case 10.
+
+### Per-case Difficulty Modifier
+Applied on top of the baseline (4 stops, 72h, 4 investigations, 3 clues/stop, 99 extra clues):
+
+| Phase | Δ hours | Δ stops | Δ investigations | Δ extra clues | Δ clues/stop |
+|-------|---------|---------|------------------|---------------|--------------|
+| prelude  (1–3) | 0   | 0  | 0  | 0  | 0  |
+| whispers (4–6) | −8  | +1 | −1 | −1 | 0  |
+| pursuit  (7–9) | −16 | +2 | −1 | −2 | −1 |
+| finale   (10)  | −24 | +3 | −2 | −2 | −2 |
+
+Clamps: `stops ≥ 4`, `investigations ≥ 1`, `cluesPerStop ≥ 1`, `extraClues ≥ 0`, `totalHours ≥ 40`.
+
+### Phase-aware Content
+
+**Briefing mission copy** (`showCaseBriefing` in `js/ui-components/carmen-ui.js`):
+- prelude: original "Track the thief…" copy.
+- whispers: "Witnesses keep mentioning a shadow behind the shadow — someone bigger is pulling strings."
+- pursuit: "ACME has traced this theft to Carmen Sandiego's network. The thief is one of her lieutenants…"
+- finale: "This is it. Carmen Sandiego herself has surfaced…"
+
+**Briefing header:** `CASE X / 10`, or `FINAL CASE — 10 / 10` in the finale.
+
+**Taunts** (`THIEF_TAUNTS` in `js/games/carmen-logic.js`, `getTaunt()`):
+- prelude: original early/mid/late pool by progress %.
+- whispers: 50% chance to pick from the new `whispers` bucket (shadowy-boss hints), else original pool.
+- pursuit: 70% chance `pursuit` bucket (explicit Carmen references).
+- finale: always from the `finale` bucket — Carmen speaking in first person.
+- Each new phase bucket has matching `*Wrong` taunts for incorrect guesses.
+
+**Interpol dossier evolution** (Carmen's file, `showInterpolProfile`):
+- prelude: all fields `[REDACTED]`; notes say *"Subject exists only in rumor. ACME has no confirmed file."*
+- whispers: hair + accessory visible; hobby + vehicle redacted.
+- pursuit: hair + accessory + hobby visible; vehicle redacted.
+- finale: fully visible; notes: *"Primary target. All cases lead here."*
+
+### Campaign-complete Overlay
+After winning case 10, `ui.showCampaignComplete(score)` displays a full-screen "CAMPAIGN COMPLETE — CARMEN SANDIEGO: IN CUSTODY" stamp with a single *Restart campaign* button. Clicking it removes `carmen-campaign-case` and `carmen-campaign-complete` so the next game begins at case 1.
+
+### UI Surfacing
+- Status-bar tally now reads `Case X / 10` instead of "Cases solved:" (`updateMissions()` takes `caseNumber` / `totalCases`).
+- `play.html` exposes a single Carmen tile (`Where in the World – Carmen Sandiego`). The three old `carmen-rookie / carmen-detective / carmen-ace` entries are gone.
+
+---
+
+## L. DEBUG / TESTING SHORTCUTS
+
+For quickly jumping to a specific case without playing through the campaign (`js/carmen-main.js`):
+
+- **URL param:** `carmen.html?case=N` — sets the campaign case to `N` (clamped 1–10) on load and clears `carmen-campaign-complete`.
+- **Secret key sequence:** type `carmen` anywhere on the page → a `window.prompt` asks for a case number (1–10). Entering a value writes `carmen-campaign-case` and reloads. Ignored when focus is in an input/textarea/select.
+
+Both routes funnel through a single `setCase(n)` helper that clamps and writes localStorage.
