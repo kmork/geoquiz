@@ -14,6 +14,8 @@ import { typewriter } from './typewriter.js';
  * @param {Object}      flagCodes — { countryName: isoCode }
  */
 export function createCarmenUI(container, flagCodes) {
+  const ARTIFACT_HINT_KEY = 'carmen-artifact-hint-seen';
+
   // Briefing overlay — appended to body so it's not blocked by hidden gameContent
   const briefingEl = document.createElement('div');
   briefingEl.className = 'carmen-briefing-overlay';
@@ -97,6 +99,7 @@ export function createCarmenUI(container, flagCodes) {
                 <img class="carmen-artifact-img" id="carmen-artifact-img" src="" alt="">
                 <div class="carmen-artifact-stamp">STOLEN</div>
                 <div class="carmen-artifact-flip-hint">↩</div>
+                <div class="carmen-artifact-flip-label" id="carmen-artifact-flip-label">Flip for archive note</div>
               </div>
               <div class="carmen-artifact-back">
                 <div class="carmen-artifact-summary" id="carmen-artifact-summary"></div>
@@ -162,6 +165,7 @@ export function createCarmenUI(container, flagCodes) {
     interpolProfile: container.querySelector('#carmen-interpol-profile'),
     artifactImg: container.querySelector('#carmen-artifact-img'),
     artifactDisplay: container.querySelector('#carmen-artifact-display'),
+    artifactFlipLabel: container.querySelector('#carmen-artifact-flip-label'),
     artifactSummary: container.querySelector('#carmen-artifact-summary'),
     map: container.querySelector('#carmen-map'),
     mapWrap: container.querySelector('#carmen-map-wrap'),
@@ -235,6 +239,12 @@ export function createCarmenUI(container, flagCodes) {
 
   els.artifactDisplay.addEventListener('click', () => {
     els.artifactDisplay.classList.toggle('flipped');
+    if (els.artifactFlipLabel) {
+      els.artifactFlipLabel.classList.add('hidden');
+    }
+    try {
+      localStorage.setItem(ARTIFACT_HINT_KEY, 'true');
+    } catch {}
   });
 
   els.musicToggle.addEventListener('click', () => {
@@ -537,6 +547,13 @@ export function createCarmenUI(container, flagCodes) {
       }
       els.artifactSummary.innerHTML = formatArtifactBack(artifact);
       els.artifactDisplay.classList.remove('flipped');
+      const showArtifactHint = (() => {
+        try { return localStorage.getItem(ARTIFACT_HINT_KEY) !== 'true'; }
+        catch { return true; }
+      })();
+      if (els.artifactFlipLabel) {
+        els.artifactFlipLabel.classList.toggle('hidden', !showArtifactHint);
+      }
       els.notebookTabs.style.display = '';
       els.musicToggle.style.display = '';
       els.musicToggle.innerHTML = `<img src="${isMusicMuted() ? IMG.musicOff : IMG.musicOn}" alt="Music">`;
