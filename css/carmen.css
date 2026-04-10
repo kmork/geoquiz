@@ -1,5 +1,9 @@
 /* Where in the World? — Carmen Sandiego homage */
 
+.wrap {
+  max-width: min(1560px, calc(100vw - 32px));
+}
+
 .wrap > .card {
   background:
     linear-gradient(rgba(13, 16, 24, 0.42), rgba(13, 16, 24, 0.5)),
@@ -249,11 +253,11 @@
   gap: 1rem;
   margin-bottom: 1rem;
   align-items: stretch;
-  height: 480px;
+  height: 620px;
 }
 
 .carmen-left-panel {
-  flex: 0 0 260px;
+  flex: 0 0 320px;
   display: flex;
   flex-direction: row;
   min-width: 0;
@@ -389,14 +393,14 @@
 }
 
 .carmen-panel-title {
-  font-size: 1rem;
+  font-size: 1.12rem;
   font-weight: 700;
   color: var(--text-color);
   line-height: 1.3;
 }
 
 .carmen-panel-desc {
-  font-size: 0.82rem;
+  font-size: 0.92rem;
   color: var(--text-muted);
   line-height: 1.5;
 }
@@ -661,32 +665,32 @@
 }
 
 .carmen-intro-artifact {
-  font-size: 1.05rem;
+  font-size: 1.22rem;
   font-weight: 700;
   color: var(--text-color);
   line-height: 1.3;
 }
 
 .carmen-intro-origin {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
 }
 
 .carmen-intro-suspect {
-  font-size: 0.82rem;
+  font-size: 0.92rem;
   color: var(--text-muted);
   margin-top: 0.2rem;
 }
 
 .carmen-intro-mission {
-  font-size: 0.82rem;
+  font-size: 0.94rem;
   color: var(--text-muted);
   font-style: italic;
   line-height: 1.4;
 }
 
 .carmen-intro-intel {
-  font-size: 0.88rem;
+  font-size: 1rem;
   color: var(--text-color);
   line-height: 1.5;
 }
@@ -729,14 +733,14 @@
 }
 
 .carmen-missions-label {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
   margin-right: 0.3rem;
   white-space: nowrap;
 }
 
 .carmen-mark {
-  font-size: 1.05rem;
+  font-size: 1.15rem;
   font-weight: 800;
   line-height: 1;
 }
@@ -754,12 +758,12 @@
 }
 
 .carmen-progress {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   color: var(--text-muted);
 }
 
 .carmen-clock {
-  font-size: 0.85rem;
+  font-size: 0.95rem;
   font-weight: 600;
   color: var(--text-color);
   padding: 0.2rem 0.5rem;
@@ -852,7 +856,7 @@
   padding: 0.75rem 1rem;
   overflow-y: auto;
   height: 100%;
-  font-size: 0.85rem;
+  font-size: 0.96rem;
   line-height: 1.45;
   background: rgba(37, 43, 57, 0.46);
   border-radius: 12px;
@@ -863,7 +867,7 @@
 
 .carmen-dossier-stop {
   font-weight: 700;
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   color: var(--star-color);
   letter-spacing: 1px;
   margin-top: 0.6rem;
@@ -878,7 +882,7 @@
 .carmen-dossier-entry {
   padding: 0.25rem 0;
   border-bottom: 1px solid var(--card-border);
-  font-size: 0.82rem;
+  font-size: 0.94rem;
   line-height: 1.4;
 }
 
@@ -904,7 +908,7 @@
   font-weight: 600;
   color: var(--text-muted);
   font-style: italic;
-  font-size: 0.8rem;
+  font-size: 0.88rem;
 }
 
 .carmen-dossier-empty {
@@ -1926,20 +1930,20 @@
 
 .carmen-interpol-name {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 1rem;
+  font-size: 1.18rem;
   font-weight: 700;
   color: var(--text-color);
 }
 
 .carmen-interpol-origin {
   font-family: 'Georgia', 'Times New Roman', serif;
-  font-size: 0.8rem;
+  font-size: 0.92rem;
   color: var(--text-muted);
 }
 
 .carmen-interpol-regions {
   font-family: 'Georgia', 'Times New Roman', serif;
-  font-size: 0.75rem;
+  font-size: 0.86rem;
   color: var(--star-color);
   font-style: italic;
 }
