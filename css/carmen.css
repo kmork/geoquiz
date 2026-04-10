@@ -433,9 +433,10 @@
 .carmen-artifact-display {
   position: relative;
   border-radius: 12px 0 12px 12px;
-  background: #000;
+  background: transparent;
   perspective: 800px;
   cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .carmen-artifact-inner {
@@ -461,20 +462,122 @@
 
 .carmen-artifact-back {
   transform: rotateY(180deg);
-  background: var(--card-bg);
+  background:
+    linear-gradient(rgba(75, 61, 46, 0.18), rgba(40, 30, 22, 0.22)),
+    linear-gradient(180deg, #d6c2a7 0%, #c6ae90 100%);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1.5rem;
-  border: 1px solid var(--card-border);
+  align-items: stretch;
+  justify-content: stretch;
+  padding: 1.1rem;
+  border: 1px solid rgba(74, 57, 43, 0.55);
 }
 
 .carmen-artifact-summary {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.85rem;
-  line-height: 1.6;
-  color: var(--text-color);
-  text-align: center;
+  font-size: 0.86rem;
+  line-height: 1.62;
+  color: #2a2018;
+  text-align: left;
+}
+
+.carmen-artifact-backdrop {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0.35rem 0.45rem 0.7rem;
+  background:
+    radial-gradient(circle at top right, rgba(255, 255, 255, 0.28), transparent 32%),
+    linear-gradient(180deg, rgba(255,255,255,0.12), rgba(90,70,52,0.08));
+  box-shadow: inset 0 0 0 1px rgba(96, 74, 56, 0.18);
+}
+
+.carmen-artifact-back-type {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: rgba(68, 49, 36, 0.72);
+  margin-bottom: 0.7rem;
+}
+
+.carmen-artifact-back-site {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.12rem;
+  font-weight: 700;
+  color: #2f2218;
+  margin-bottom: 0.15rem;
+}
+
+.carmen-artifact-back-origin {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.74rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: rgba(78, 56, 40, 0.82);
+  margin-bottom: 0.9rem;
+}
+
+.carmen-artifact-note {
+  position: relative;
+  max-width: 78%;
+  margin: 0 auto;
+  padding: 0.9rem 1rem 0.85rem;
+  background: rgba(246, 235, 218, 0.94);
+  border: 1px solid rgba(122, 95, 72, 0.26);
+  border-radius: 4px;
+  box-shadow:
+    0 14px 28px rgba(39, 26, 18, 0.18),
+    0 2px 6px rgba(39, 26, 18, 0.12);
+}
+
+.carmen-artifact-note-clip {
+  position: absolute;
+  top: -10px;
+  left: 18px;
+  width: 22px;
+  height: 34px;
+  border: 3px solid rgba(123, 91, 55, 0.7);
+  border-bottom: none;
+  border-radius: 12px 12px 0 0;
+  transform: rotate(-8deg);
+  opacity: 0.8;
+}
+
+.carmen-artifact-note-label {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: rgba(101, 68, 43, 0.88);
+  margin-bottom: 0.65rem;
+}
+
+.carmen-artifact-summary-secondary {
+  margin-top: 0.7rem;
+}
+
+.carmen-artifact-geo-note {
+  margin-top: 0.8rem;
+  padding-top: 0.65rem;
+  border-top: 1px dashed rgba(112, 84, 60, 0.34);
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #433126;
+}
+
+.carmen-artifact-geo-note span {
+  font-weight: 700;
+  color: #6a4528;
+}
+
+.carmen-artifact-back-return {
+  position: absolute;
+  right: 0.55rem;
+  bottom: 0.2rem;
+  font-size: 0.72rem;
+  color: rgba(70, 51, 38, 0.72);
+  font-style: italic;
 }
 
 /* Dog-ear corner fold on front to hint flippability */

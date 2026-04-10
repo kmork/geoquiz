@@ -100,7 +100,6 @@ export function createCarmenUI(container, flagCodes) {
               </div>
               <div class="carmen-artifact-back">
                 <div class="carmen-artifact-summary" id="carmen-artifact-summary"></div>
-                <div class="carmen-artifact-flip-hint">↩</div>
               </div>
             </div>
           </div>
@@ -536,7 +535,7 @@ export function createCarmenUI(container, flagCodes) {
         els.artifactImg.src = imgUrl;
         els.artifactImg.alt = siteName;
       }
-      els.artifactSummary.textContent = artifact.summary || '';
+      els.artifactSummary.innerHTML = formatArtifactBack(artifact);
       els.artifactDisplay.classList.remove('flipped');
       els.notebookTabs.style.display = '';
       els.musicToggle.style.display = '';
@@ -946,4 +945,30 @@ function esc(str) {
   const d = document.createElement('div');
   d.textContent = str;
   return d.innerHTML;
+}
+
+function formatArtifactBack(artifact) {
+  const siteName = artifact.siteName || 'Unknown Site';
+  const country = artifact.country || '';
+  const hint = artifact.hint || '';
+  const summary = (artifact.summary || '').trim();
+  const sentences = summary ? summary.split(/(?<=[.!?])\s+/).filter(Boolean) : [];
+  const lead = sentences.slice(0, 2).join(' ') || 'Reference note unavailable.';
+  const extra = sentences.slice(2).join(' ');
+
+  return `
+    <div class="carmen-artifact-backdrop">
+      <div class="carmen-artifact-back-type">ARCHIVE NOTE</div>
+      <div class="carmen-artifact-back-site">${esc(siteName)}</div>
+      ${country ? `<div class="carmen-artifact-back-origin">${esc(country)}</div>` : ''}
+      <div class="carmen-artifact-note">
+        <div class="carmen-artifact-note-clip"></div>
+        <div class="carmen-artifact-note-label">FIELD NOTE</div>
+        <div class="carmen-artifact-summary">${esc(lead)}</div>
+        ${extra ? `<div class="carmen-artifact-summary carmen-artifact-summary-secondary">${esc(extra)}</div>` : ''}
+        ${hint ? `<div class="carmen-artifact-geo-note"><span>Geo note:</span> ${esc(hint)}</div>` : ''}
+      </div>
+      <div class="carmen-artifact-back-return">↩ back to photo</div>
+    </div>
+  `;
 }
