@@ -355,10 +355,10 @@ export class CarmenGameLogic {
       () => clueFromFact(country, this),
       () => clueFromGeography(country, this, neighborChoices),
       () => clueFromHeritage(country, this),
-      () => clueFromRiverOrMountain(country, this),
+      () => clueFromRiverOrMountain(country, this, neighborChoices),
       () => clueFromEmpire(country, this),
-      () => clueFromFamousFor(country, this),
-      () => clueFromExports(country, this),
+      () => clueFromFamousFor(country, this, neighborChoices),
+      () => clueFromExports(country, this, neighborChoices),
     ];
 
     // Shuffle generators for variety
@@ -501,16 +501,16 @@ export class CarmenGameLogic {
           clue = clueFromHeritage(target, this);
           break;
         case 'river_mountain':
-          clue = clueFromRiverOrMountain(target, this);
+          clue = clueFromRiverOrMountain(target, this, neighborChoices);
           break;
         case 'empire':
           clue = clueFromEmpire(target, this);
           break;
         case 'famous_for':
-          clue = clueFromFamousFor(target, this);
+          clue = clueFromFamousFor(target, this, neighborChoices);
           break;
         case 'exports':
-          clue = clueFromExports(target, this);
+          clue = clueFromExports(target, this, neighborChoices);
           break;
       }
       if (clue && !this.usedClueIds.has(clue.id)) {

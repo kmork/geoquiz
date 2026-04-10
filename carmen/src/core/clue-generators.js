@@ -83,11 +83,15 @@ export function allGeographyClues(country, ctx, neighborChoices = []) {
 
   if (c.capitals && c.capitals[0]) {
     const cap = c.capitals[0];
+    const capMatchCount = neighborChoices.filter(n => {
+      const nc = ctx.countryMap[n];
+      return nc?.capitals?.[0]?.[0]?.toUpperCase() === cap[0].toUpperCase();
+    }).length;
     clues.push({
       id: `geo-capital-letter-${country}`,
       text: `The capital starts with the letter "${cap[0]}".`,
       icon: '🏛️', category: 'geography', subtype: 'capital_letter',
-      data: { letter: cap[0] },
+      data: { letter: cap[0], matchCount: capMatchCount, totalChoices: neighborChoices.length },
     });
   }
 
@@ -95,22 +99,26 @@ export function allGeographyClues(country, ctx, neighborChoices = []) {
     const bracket = popBracket(c.population);
     const neighborBrackets = neighborChoices.map(n => popBracket(ctx.countryMap[n]?.population));
     if (neighborBrackets.some(b => b !== bracket)) {
+      const popMatchCount = neighborBrackets.filter(b => b === bracket).length;
       clues.push({
         id: `geo-pop-${country}`,
         text: `This country has a population of ${bracket}.`,
         icon: '👥', category: 'geography', subtype: 'population',
-        data: { bracket },
+        data: { bracket, matchCount: popMatchCount, totalChoices: neighborChoices.length },
       });
     }
   }
 
   const nbrCount = (ctx.neighborsMap[country] || []).length;
   if (nbrCount > 0) {
+    const nbrMatchCount = neighborChoices.filter(n =>
+      (ctx.neighborsMap[n] || []).length === nbrCount
+    ).length;
     clues.push({
       id: `geo-neighbors-${country}`,
       text: `This country borders ${nbrCount} ${nbrCount === 1 ? 'country' : 'countries'}.`,
       icon: '🌍', category: 'geography', subtype: 'neighbors',
-      data: { count: nbrCount },
+      data: { count: nbrCount, matchCount: nbrMatchCount, totalChoices: neighborChoices.length },
     });
   }
 
@@ -150,7 +158,7 @@ export function clueFromHeritage(country, ctx) {
   return null;
 }
 
-export function clueFromRiverOrMountain(country, ctx) {
+export function clueFromRiverOrMountain(country, ctx, neighborChoices = []) {
   const features = [
     ...(ctx.riversByCountry[country] || []).map(r => ({ ...r, type: 'river' })),
     ...(ctx.mountainsByCountry[country] || []).map(m => ({ ...m, type: 'mountain' })),
@@ -161,12 +169,13 @@ export function clueFromRiverOrMountain(country, ctx) {
     const id = `feature-${f.type}-${f.name}`;
     if (ctx.usedClueIds.has(id)) continue;
     const label = f.type === 'river' ? 'river' : 'mountain range';
+    const matchCount = neighborChoices.filter(n => f.countries?.includes(n)).length;
     return {
       id,
       text: `The ${f.name} ${label} passes through this country.`,
       icon: f.type === 'river' ? '🏞️' : '⛰️',
       category: 'river_mountain',
-      data: { name: f.name, type: f.type },
+      data: { name: f.name, type: f.type, matchCount, totalChoices: neighborChoices.length },
     };
   }
   return null;
@@ -189,7 +198,7 @@ export function clueFromEmpire(country, ctx) {
   return null;
 }
 
-export function clueFromFamousFor(country, ctx) {
+export function clueFromFamousFor(country, ctx, neighborChoices = []) {
   const items = ctx.countryMap[country]?.famousFor;
   if (!items || items.length === 0) return null;
   const templates = [
@@ -204,12 +213,15 @@ export function clueFromFamousFor(country, ctx) {
     const template = templates[Math.floor(Math.random() * templates.length)];
     const text = redactCountryName(template(item), country);
     if (containsCountryName(text, country)) continue;
-    return { id, text, icon: '🌟', category: 'famous_for', data: { item } };
+    const matchCount = neighborChoices.filter(n =>
+      (ctx.countryMap[n]?.famousFor || []).includes(item)
+    ).length;
+    return { id, text, icon: '🌟', category: 'famous_for', data: { item, matchCount, totalChoices: neighborChoices.length } };
   }
   return null;
 }
 
-export function clueFromExports(country, ctx) {
+export function clueFromExports(country, ctx, neighborChoices = []) {
   const items = ctx.countryMap[country]?.exports;
   if (!items || items.length === 0) return null;
   const templates = [
@@ -234,5 +246,9 @@ export function clueFromExports(country, ctx) {
   const template = templates[Math.floor(Math.random() * templates.length)];
   const text = redactCountryName(template(list), country);
   if (containsCountryName(text, country)) return null;
-  return { id, text, icon: '📦', category: 'exports', data: { list, items: subset } };
+  const matchCount = neighborChoices.filter(n => {
+    const nExports = ctx.countryMap[n]?.exports || [];
+    return subset.some(item => nExports.includes(item));
+  }).length;
+  return { id, text, icon: '📦', category: 'exports', data: { list, items: subset, matchCount, totalChoices: neighborChoices.length } };
 }

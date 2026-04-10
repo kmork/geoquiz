@@ -370,6 +370,38 @@ const GENERIC_ACTIONS = [
   `They glance at the door before continuing.`,
 ];
 
+// ─── D. Helpfulness commentary ───────────────────────────────────
+// Appended to the phrasing when the clue data includes matchCount/totalChoices,
+// indicating how many neighbor choices the clue also applies to.
+
+const HELPFUL_SUFFIXES = [
+  `That should narrow it down.`,
+  `Not many places nearby match that.`,
+  `Use that one. It matters.`,
+  `That's a real lead, if you ask me.`,
+  `Worth remembering.`,
+  `Only one answer fits that.`,
+  `That detail stands out around here.`,
+];
+
+const UNHELPFUL_SUFFIXES = [
+  `But I guess that doesn't narrow it down much.`,
+  `Half the places nearby could say the same.`,
+  `Won't help you much, I'm afraid.`,
+  `Don't hang your hat on that one.`,
+  `Doesn't exactly make it obvious, does it.`,
+  `Common enough around here, though.`,
+  `Could be a few places, honestly.`,
+];
+
+function pickHelpfulnessSuffix(matchCount, totalChoices) {
+  if (totalChoices === 0) return null;
+  const ratio = matchCount / totalChoices;
+  if (matchCount === 0) return pick(HELPFUL_SUFFIXES);
+  if (ratio >= 0.5) return pick(UNHELPFUL_SUFFIXES);
+  return null; // neutral — no commentary for in-between cases
+}
+
 function pickAction(informant, locationId) {
   const fromInformant = informant?.emoji && ACTIONS_BY_INFORMANT[informant.emoji];
   if (fromInformant) return pick(fromInformant);
@@ -408,6 +440,12 @@ export function composeClue(clue, informant, locationId, redactFn) {
     inner = phrasing(data);
   } catch {
     inner = clue.text || '';
+  }
+
+  // Helpfulness commentary — append when the clue data carries neighbor-match info.
+  if (data.matchCount !== undefined && data.totalChoices > 0) {
+    const suffix = pickHelpfulnessSuffix(data.matchCount, data.totalChoices);
+    if (suffix) inner = inner + ' ' + suffix;
   }
 
   // 2. Voice wrapper by location.
