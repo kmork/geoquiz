@@ -1,7 +1,9 @@
 /**
- * Carmen Audio — procedural sound effects using Web Audio API.
- * No external audio files needed.
+ * Carmen Audio — procedural sound effects using Web Audio API + file-based music/SFX.
+ * All audio file paths come from playlist.js.
  */
+
+import { BGM_TRACKS, SPECIAL_TRACKS, AMBIENT_SOUNDS } from './playlist.js';
 
 let ctx = null;
 
@@ -49,40 +51,11 @@ export function playStamp() {
 }
 
 /* ── Background music ──────────────────────────────── */
-const TRACKS = [
-  'carmen/audio/Alley Thoughts.mp3',
-  'carmen/audio/Ashtray Alibi 2.mp3',
-  'carmen/audio/Ashtray Alibi.mp3',
-  'carmen/audio/Bass Walker.mp3',
-  'carmen/audio/Black Coffee Stakeout.mp3',
-  'carmen/audio/Broken Casefiles 2.mp3',
-  'carmen/audio/Broken Casefiles.mp3',
-  'carmen/audio/Case Soda Pop.mp3',
-  'carmen/audio/Casefile Chrome.mp3',
-  'carmen/audio/Cigar Ashes 2.mp3',
-  'carmen/audio/Cigar Ashes.mp3',
-  'carmen/audio/Coal-Lit Case.mp3',
-  'carmen/audio/Cobalt Alibi 2.mp3',
-  'carmen/audio/Cobalt Alibi.mp3',
-  'carmen/audio/Cool Vibes.mp3',
-  'carmen/audio/Covert Affair.mp3',
-  'carmen/audio/Fallen Petals.mp3',
-  'carmen/audio/Just As Soon.mp3',
-  'carmen/audio/Lacquered Alibi 2.mp3',
-  'carmen/audio/Lacquered Alibi.mp3',
-  'carmen/audio/Night Walk In Paris.mp3',
-  'carmen/audio/Night Walk Interlude.mp3',
-  'carmen/audio/Noir Alley.mp3',
-  'carmen/audio/Signs To Nowhere.mp3',
-  'carmen/audio/Smoldered Alibis.mp3',
-  'carmen/audio/Tin Stethoscope 2.mp3',
-  'carmen/audio/Tin Stethoscope.mp3',
-];
 
 let bgMusic = null;
 
 function pickRandomTrack() {
-  return TRACKS[Math.floor(Math.random() * TRACKS.length)];
+  return BGM_TRACKS[Math.floor(Math.random() * BGM_TRACKS.length)];
 }
 
 const MUSIC_VOLUME = 0.15;
@@ -148,7 +121,7 @@ export function stopMusic() {
 /** Play the lineup track (replaces background music). */
 export function playLineupMusic() {
   stopMusic();
-  bgMusic = new Audio('carmen/audio/Pressure at 3AM.mp3');
+  bgMusic = new Audio(SPECIAL_TRACKS.lineup);
   bgMusic.loop = true;
   bgMusic.volume = musicMuted ? 0 : 0.5;
   bgMusic.play().catch(() => {});
@@ -157,7 +130,7 @@ export function playLineupMusic() {
 /** Play the victory track (replaces background music). */
 export function playVictoryMusic() {
   stopMusic();
-  bgMusic = new Audio('carmen/audio/Catching The Thief.mp3');
+  bgMusic = new Audio(SPECIAL_TRACKS.victory);
   bgMusic.loop = false;
   bgMusic.volume = MUSIC_VOLUME;
   bgMusic.play().catch(() => {});
@@ -165,7 +138,7 @@ export function playVictoryMusic() {
 
 export function playFailMusic() {
   stopMusic();
-  bgMusic = new Audio('carmen/audio/Midnight Impulse.mp3');
+  bgMusic = new Audio(SPECIAL_TRACKS.fail);
   bgMusic.loop = false;
   bgMusic.volume = MUSIC_VOLUME;
   bgMusic.play().catch(() => {});
@@ -177,7 +150,7 @@ let narratorAudio = null;
 export function playNarratorIntro() {
   return new Promise(resolve => {
     duckMusic();
-    narratorAudio = new Audio('carmen/audio/narrator - intro.mp3');
+    narratorAudio = new Audio(SPECIAL_TRACKS.narrator);
     narratorAudio.volume = 1.0;
     narratorAudio.addEventListener('ended', () => { unduckMusic(); resolve(); }, { once: true });
     narratorAudio.addEventListener('error', () => { unduckMusic(); resolve(); }, { once: true });
@@ -205,15 +178,6 @@ export function stopNarrator() {
 }
 
 /* ── Ambient / SFX sounds ─────────────────────────── */
-const AMBIENT_SOUNDS = {
-  airport:  'carmen/audio/airport-terminal.mp3',
-  market:   'carmen/audio/market-area.mp3',
-  hotel:    'carmen/audio/hotel-bell.mp3',
-  taxi:     'carmen/audio/taxi.mp3',
-  airplane: 'carmen/audio/airplane.mp3',
-  footsteps:'carmen/audio/footsteps.mp3',
-};
-
 const AMBIENT_VOLUME = 0.5;
 let ambientAudio = null;
 
@@ -258,7 +222,7 @@ export function startClockTicking(urgency = 'normal') {
     return;
   }
   const ac = getCtx();
-  clockAudio = new Audio('carmen/audio/clock-ticking.mp3');
+  clockAudio = new Audio(SPECIAL_TRACKS.clock);
   clockAudio.loop = true;
   clockAudio.crossOrigin = 'anonymous';
   try {

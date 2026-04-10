@@ -1,11 +1,18 @@
-import { CarmenGameLogic, SUSPECTS } from './games/carmen-logic.js';
-import { createCarmenUI } from './ui-components/carmen-ui.js';
-import { RouteRenderer } from './ui-components/route-renderer.js';
-import { loadGeoJSON } from './geojson-loader.js';
-import { attachZoomPan } from './map-zoom-pan.js';
-import { saveGameRecord } from './game-records.js';
-import { initConfetti } from './confetti.js';
-import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playLineupMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './carmen-audio.js';
+import { CarmenGameLogic, SUSPECTS } from './core/game-logic.js';
+import { createCarmenUI } from './ui/ui.js';
+import { RouteRenderer } from '../../js/ui-components/route-renderer.js';
+import { loadGeoJSON } from '../../js/geojson-loader.js';
+import { attachZoomPan } from '../../js/map-zoom-pan.js';
+import { saveGameRecord } from '../../js/game-records.js';
+import { initConfetti } from '../../js/confetti.js';
+import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playLineupMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './audio/audio-engine.js';
+import { chooseNarratorScript } from './content/narrator-script.js';
+import { TOTAL_CASES } from './campaign/progression.js';
+import {
+  getMissionHistory, saveMissionResult, getCurrentCase, advanceCase, setCase,
+  markCampaignComplete, resetCampaign, getUnlockedSuspects, unlockSuspect,
+  getTheftHistory, recordTheft, getInterpolViewed, saveInterpolViewed,
+} from './campaign/persistence.js';
 
 const gameId = 'carmen';
 
@@ -17,37 +24,6 @@ const carmenHeader = document.getElementById('carmen-header');
 
 const confetti = initConfetti('confetti');
 
-// Mission history — stored in localStorage
-const MISSION_KEY = 'carmen-missions';
-function getMissionHistory() {
-  try { return JSON.parse(localStorage.getItem(MISSION_KEY)) || []; }
-  catch { return []; }
-}
-function saveMissionResult(result) {
-  const history = getMissionHistory();
-  history.push(result);
-  localStorage.setItem(MISSION_KEY, JSON.stringify(history));
-}
-
-// Campaign progression — current case number (1..10)
-const CAMPAIGN_KEY = 'carmen-campaign-case';
-const CAMPAIGN_COMPLETE_KEY = 'carmen-campaign-complete';
-const TOTAL_CASES = 10;
-function getCurrentCase() {
-  const n = parseInt(localStorage.getItem(CAMPAIGN_KEY), 10);
-  if (!n || n < 1) return 1;
-  return Math.min(n, TOTAL_CASES);
-}
-function advanceCase() {
-  const next = Math.min(getCurrentCase() + 1, TOTAL_CASES);
-  localStorage.setItem(CAMPAIGN_KEY, String(next));
-}
-function setCase(n) {
-  const clamped = Math.max(1, Math.min(TOTAL_CASES, n | 0));
-  localStorage.setItem(CAMPAIGN_KEY, String(clamped));
-  localStorage.removeItem(CAMPAIGN_COMPLETE_KEY);
-  return clamped;
-}
 
 // Debug: ?case=N URL param jumps directly to that case on load.
 const _caseParam = parseInt(new URLSearchParams(location.search).get('case'), 10);
@@ -76,42 +52,7 @@ if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
   });
 })();
 
-// Interpol database — unlocked suspects stored in localStorage
-const INTERPOL_KEY = 'carmen-interpol-unlocked';
 const INTERPOL_COST_HOURS = 3;
-function getUnlockedSuspects() {
-  try { return new Set(JSON.parse(localStorage.getItem(INTERPOL_KEY)) || []); }
-  catch { return new Set(); }
-}
-function unlockSuspect(name) {
-  const unlocked = getUnlockedSuspects();
-  unlocked.add(name);
-  localStorage.setItem(INTERPOL_KEY, JSON.stringify([...unlocked]));
-}
-// Theft history — records of caught suspects and what they stole
-const THEFT_HISTORY_KEY = 'carmen-theft-history';
-function getTheftHistory() {
-  try { return JSON.parse(localStorage.getItem(THEFT_HISTORY_KEY)) || {}; }
-  catch { return {}; }
-}
-function recordTheft(suspectName, artifactName, country) {
-  const history = getTheftHistory();
-  if (!history[suspectName]) history[suspectName] = [];
-  history[suspectName].push({ artifact: artifactName, country, date: new Date().toISOString().slice(0, 10) });
-  localStorage.setItem(THEFT_HISTORY_KEY, JSON.stringify(history));
-}
-
-// Persist which suspects have been viewed across games — free on subsequent views
-const INTERPOL_VIEWED_KEY = 'carmen-interpol-viewed';
-function getInterpolViewed() {
-  try { return new Set(JSON.parse(localStorage.getItem(INTERPOL_VIEWED_KEY)) || []); }
-  catch { return new Set(); }
-}
-function saveInterpolViewed(name) {
-  const viewed = getInterpolViewed();
-  viewed.add(name);
-  localStorage.setItem(INTERPOL_VIEWED_KEY, JSON.stringify([...viewed]));
-}
 
 let interpolViewedThisGame = new Set();
 
@@ -227,47 +168,7 @@ async function handleEndChoice(choice, wasSuccess) {
   await new Promise(r => setTimeout(r, 1500));
 
   const missionCount = getMissionHistory().length;
-  let narratorFile, cues;
-
-  if (missionCount >= 3) {
-    // 3rd attempt and beyond — use mission3 narrator
-    narratorFile = 'carmen/audio/narrator - mission3.mp3';
-    cues = [
-      [0.0,  "Done."],
-      [1.0,  "For now."],
-      [2.5,  "Different country.\nSame kind of landmark."],
-      [5.5,  "I'm starting to think\nthe world's got habits."],
-      [8.5,  "And someone out there\nis taking notes."],
-    ];
-  } else if (wasSuccess) {
-    narratorFile = 'carmen/audio/narrator - mission1 success.mp3';
-    cues = [
-      [0.0,  "Last case\u2026\nwrapped up nicely."],
-      [2.0,  "Caught the thief.\nHandcuffs, paperwork, the whole routine."],
-      [6.5,  "Still don't know\nwho they really were."],
-      [8.5,  "Didn't stick around\nfor introductions."],
-      [9.5, "Figures."],
-      [11.0, "I poured myself a coffee\nthat tasted like regret."],
-      [15.0, "Didn't even finish it."],
-      [16.5, "Because I know\nhow this goes."],
-      [18.5, "You close one case\u2026\nand somewhere out there\u2014"],
-      [21.5, "someone's already\npicking their next target."],
-    ];
-  } else {
-    narratorFile = 'carmen/audio/narrator - mission1 fail.mp3';
-    cues = [
-      [0.0,  "The thief got away."],
-      [1.1,  "Again."],
-      [2.7,  "I replayed it in my head\na dozen times. Maybe more."],
-      [5.5,  "It doesn't get better\nwith repetition."],
-      [7.5,  "No face. No name."],
-      [9.5,  "Just a disappearing act\nthat would make a magician jealous."],
-      [13.0, "Could be anyone."],
-      [14.5, "Which, in my line of work,\nis just saying I've got nothing."],
-      [18.5, "But the next case\nis already knocking."],
-      [20.5, "And I don't intend\nto be the punchline twice."],
-    ];
-  }
+  const { file: narratorFile, cues } = chooseNarratorScript(wasSuccess, missionCount);
 
   // Create subtitle element
   const subtitle = document.createElement('div');
@@ -603,15 +504,14 @@ function handleGuess(country) {
             saveMissionResult('success');
             const isFinaleWin = logic.caseNumber >= TOTAL_CASES;
             if (isFinaleWin) {
-              localStorage.setItem(CAMPAIGN_COMPLETE_KEY, 'true');
+              markCampaignComplete();
             } else {
               advanceCase();
             }
             const choice = await ui.showCaseSolved(logic.suspect.name, ts.hoursRemaining, results.score);
             if (isFinaleWin) {
               await ui.showCampaignComplete(results.score);
-              localStorage.removeItem(CAMPAIGN_KEY);
-              localStorage.removeItem(CAMPAIGN_COMPLETE_KEY);
+              resetCampaign();
             }
             await handleEndChoice(choice, true);
           } else {

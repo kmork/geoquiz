@@ -93,26 +93,56 @@ const VOICE = {
     line => `Yeah… ${line}`,
     line => `Hard to say for sure, but ${line}`,
     line => `Heard it on the terminal floor — ${line}`,
+    line => `Didn’t catch all of it, but ${line}`,
+    line => `People were moving fast. Still — ${line}`,
+    line => `Caught it between announcements. ${line}`,
+    line => `Could’ve sworn I heard — ${line}`,
+    line => `They didn’t stick around long. ${line}`,
+    line => `All I got before they boarded was this: ${line}`,
   ],
   hotel: [
     line => `We don't usually say, but… ${line}`,
     line => `The guest mentioned something odd. ${line}`,
     line => `I wouldn't swear to it, but ${line}`,
+    line => `Guests talk when they think no one’s listening. ${line}`,
+    line => `I remember it because it stood out. ${line}`,
+    line => `It wasn’t typical. ${line}`,
+    line => `Something about that stayed with me. ${line}`,
+    line => `They made a point of asking. ${line}`,
+    line => `Quiet type. Still — ${line}`,
   ],
   market: [
     line => `Listen, friend — ${line}`,
     line => `Everyone around here talks. ${line}`,
     line => `${line} That's what they were after.`,
+    line => `Word travels fast here. ${line}`,
+    line => `Heard it twice already today. ${line}`,
+    line => `You’re not the first to ask. ${line}`,
+    line => `People notice things here. ${line}`,
+    line => `That’s what the talk’s been about. ${line}`,
+    line => `If you listen long enough, you hear everything. ${line}`,
   ],
   library: [
     line => `If you cross-reference the records, ${line}`,
     line => `The sources are clear on this. ${line}`,
     line => `${line} Historically speaking.`,
+    line => `Records indicate that ${line}`,
+    line => `It aligns with documented patterns. ${line}`,
+    line => `That detail appears consistently. ${line}`,
+    line => `There’s agreement across sources. ${line}`,
+    line => `Cross-checking confirms it. ${line}`,
+    line => `The documentation supports that. ${line}`,
   ],
   embassy: [
     line => `Off the record — ${line}`,
     line => `We've heard reports. Unconfirmed. ${line}`,
     line => `${line} You didn't hear it from me.`,
+    line => `Officially, we know nothing. Unofficially… ${line}`,
+    line => `You didn’t get this from me. ${line}`,
+    line => `This hasn’t been confirmed, but ${line}`,
+    line => `There are… indications. ${line}`,
+    line => `I’d be careful repeating this, but ${line}`,
+    line => `That’s all I’m willing to say: ${line}`,
   ],
 };
 
@@ -146,12 +176,20 @@ const ACTIONS_BY_LOCATION = {
   embassy: [`A clock somewhere in the building chimed the hour.`, `The flag in the corner stirred when the door opened.`],
 };
 
+const GENERIC_ACTIONS = [
+  `They take a moment before answering.`,
+  `A pause hangs in the air.`,
+  `They look around before speaking.`,
+  `The answer comes slow, like it matters.`,
+  `They hesitate just a second.`,
+];
+
 function pickAction(informant, locationId) {
   const fromInformant = informant?.emoji && ACTIONS_BY_INFORMANT[informant.emoji];
   if (fromInformant) return pick(fromInformant);
   const fromLocation = ACTIONS_BY_LOCATION[locationId];
   if (fromLocation) return pick(fromLocation);
-  return null;
+  return pick(GENERIC_ACTIONS);
 }
 
 // ─── Composer ─────────────────────────────────────────────────────
@@ -191,7 +229,7 @@ export function composeClue(clue, informant, locationId, redactFn) {
   let voiced = pick(voicePool)(inner);
 
   // Capitalize first letter of the dialogue.
-  if (voiced) voiced = voiced.charAt(0).toUpperCase() + voiced.slice(1);
+  // if (voiced) voiced = voiced.charAt(0).toUpperCase() + voiced.slice(1);
 
   // Run country-name redaction on the final composed line.
   if (redactFn) voiced = redactFn(voiced);

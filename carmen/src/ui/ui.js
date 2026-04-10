@@ -2,44 +2,9 @@
  * Carmen UI — DOM rendering for "Where in the World?" game.
  */
 
-import { playStamp, playTypeKey, startClockTicking, stopClockTicking, toggleMusicMute, isMusicMuted } from '../carmen-audio.js';
-
-/**
- * Typewriter effect — reveals text letter-by-letter with key sounds.
- * Returns a promise that resolves when done. Click skips to full text.
- */
-function typewriter(element, text, speed = 25) {
-  return new Promise(resolve => {
-    element.textContent = '';
-    element.classList.add('typewriter-active');
-    let i = 0;
-    let skip = false;
-    let keyCount = 0;
-
-    function onClick() {
-      skip = true;
-    }
-    element.addEventListener('click', onClick);
-
-    function tick() {
-      if (skip || i >= text.length) {
-        element.textContent = text;
-        element.classList.remove('typewriter-active');
-        element.removeEventListener('click', onClick);
-        resolve();
-        return;
-      }
-      element.textContent += text[i];
-      // Play key sound every 2-3 characters to avoid audio overload
-      if (text[i] !== ' ' && keyCount++ % 2 === 0) {
-        playTypeKey();
-      }
-      i++;
-      setTimeout(tick, speed);
-    }
-    tick();
-  });
-}
+import { playStamp, startClockTicking, stopClockTicking, toggleMusicMute, isMusicMuted } from '../audio/audio-engine.js';
+import { IMG } from '../assets.js';
+import { typewriter } from './typewriter.js';
 
 /**
  * Build the full game UI inside the given container.
@@ -76,7 +41,7 @@ export function createCarmenUI(container, flagCodes) {
       <div class="pill">Score: <b id="carmen-score">0</b></div>
       <div class="carmen-progress" id="carmen-progress"></div>
       <div class="carmen-clock" id="carmen-clock"></div>
-      <div class="carmen-music-toggle" id="carmen-music-toggle" title="Toggle music" style="display:none"><img src="carmen/img/music-icon.png" alt="Music"></div>
+      <div class="carmen-music-toggle" id="carmen-music-toggle" title="Toggle music" style="display:none"><img src="${IMG.musicOn}" alt="Music"></div>
     </div>
     <div class="carmen-intro-row side-by-side" id="carmen-intro-row">
       <div class="carmen-left-panel">
@@ -158,7 +123,7 @@ export function createCarmenUI(container, flagCodes) {
               <div class="carmen-interpol-empty-title">INTERPOL</div>
               <div class="carmen-interpol-empty-full">International Criminal Police Organization</div>
               <div class="carmen-interpol-empty-text">Founded in 1923 in Vienna, INTERPOL is the world's largest international police organization with 196 member countries. Its General Secretariat is headquartered in Lyon, France. INTERPOL facilitates cross-border police cooperation and supports law enforcement worldwide in combating transnational crime.</div>
-              <img src="carmen/img/typewriter.png" alt="" class="carmen-interpol-empty-img">
+              <img src="${IMG.typewriter}" alt="" class="carmen-interpol-empty-img">
               <div class="carmen-interpol-empty-hint">Select a suspect from the list to access their file.</div>
             </div>
           </div>
@@ -275,7 +240,7 @@ export function createCarmenUI(container, flagCodes) {
 
   els.musicToggle.addEventListener('click', () => {
     const muted = toggleMusicMute();
-    els.musicToggle.innerHTML = `<img src="carmen/img/${muted ? 'music-off-icon.png' : 'music-icon.png'}" alt="Music">`;
+    els.musicToggle.innerHTML = `<img src="${muted ? IMG.musicOff : IMG.musicOn}" alt="Music">`;
   });
 
   function renderDossier() {
@@ -575,7 +540,7 @@ export function createCarmenUI(container, flagCodes) {
       els.artifactDisplay.classList.remove('flipped');
       els.notebookTabs.style.display = '';
       els.musicToggle.style.display = '';
-      els.musicToggle.innerHTML = `<img src="carmen/img/${isMusicMuted() ? 'music-off-icon.png' : 'music-icon.png'}" alt="Music">`;
+      els.musicToggle.innerHTML = `<img src="${isMusicMuted() ? IMG.musicOff : IMG.musicOn}" alt="Music">`;
       this._prevHours = null;
       switchTab('case');
       els.narrative.innerHTML = `
@@ -783,7 +748,7 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-lineup-grid">
               ${lineup.map(s => `
                 <button class="carmen-suspect-card" data-name="${esc(s.name)}">
-                  <div class="carmen-suspect-silhouette"><img src="carmen/img/${encodeURIComponent(s.name)}.png" alt="${esc(s.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))"></div>
+                  <div class="carmen-suspect-silhouette"><img src="${IMG.suspect(s.name)}" alt="${esc(s.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))"></div>
                   <div class="carmen-suspect-name">${esc(s.name)}</div>
                   <div class="carmen-suspect-details">
                     <span>Hair: ${esc(s.hair)}</span>
@@ -813,7 +778,7 @@ export function createCarmenUI(container, flagCodes) {
       els.musicToggle.style.display = 'none';
       return new Promise(resolve => {
         const isCarmen = suspectName === 'Carmen Sandiego';
-        const arrestImg = isCarmen ? 'carmen/img/carmen-arrested-2.png' : 'carmen/img/detective-arresting.png';
+        const arrestImg = isCarmen ? IMG.carmenArrested : IMG.detectiveArresting;
         const overlay = document.createElement('div');
         overlay.className = 'carmen-closing-overlay';
         overlay.innerHTML = `
@@ -858,7 +823,7 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-closing-content carmen-closing-failed">
             <div class="carmen-closing-stamp">FAILED</div>
             <div class="carmen-briefing-label">CASE CLOSED</div>
-            <img src="carmen/img/detective-full.png" alt="" class="carmen-closing-detective">
+            <img src="${IMG.detectiveFull}" alt="" class="carmen-closing-detective">
             <div class="carmen-closing-name">${esc(suspectName)}</div>
             <div class="carmen-closing-text"></div>
             <div class="carmen-closing-score">${score} points</div>
