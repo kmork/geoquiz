@@ -82,10 +82,12 @@ export function createCarmenUI(container, flagCodes) {
             </div>
           </div>
           <div class="carmen-panel-view" id="carmen-panel-interpol" style="display:none">
-            <div class="carmen-panel-card">
-              <div class="carmen-panel-badge">🔎 INTERPOL DATABASE</div>
+            <div class="carmen-panel-card carmen-interpol-panel-card">
+              <div class="carmen-interpol-panel-clip" aria-hidden="true"></div>
+              <div class="carmen-panel-badge">INTERPOL ARCHIVE</div>
               <div class="carmen-panel-title">Known Criminals</div>
-              <div class="carmen-panel-desc">Browse criminal profiles. Each lookup costs 3 hours.</div>
+              <div class="carmen-panel-desc">Browse active case files and compare suspect profiles by hand.</div>
+              <div class="carmen-panel-cost">Consult archive: <strong>3 hours</strong> per new file</div>
             </div>
             <div class="carmen-interpol-list" id="carmen-interpol-list"></div>
           </div>
@@ -330,17 +332,26 @@ export function createCarmenUI(container, flagCodes) {
         const hasPhoto = !!s.img;
         const available = isCarmen || hasPhoto;
         const viewed = viewedNames.has(s.name);
+        const initials = s.name.split(/\s+/).map(part => part[0]).slice(0, 2).join('.').toUpperCase();
         if (available) {
           const costLabel = viewed ? 'free' : '3h';
           html += `<button class="carmen-interpol-entry${viewed ? ' viewed' : ''}" data-name="${esc(s.name)}">
+            <span class="carmen-interpol-entry-tab"></span>
             <span class="carmen-interpol-entry-icon">${hasPhoto ? '📷' : '🕵️'}</span>
-            <span class="carmen-interpol-entry-name">${esc(s.name)}</span>
+            <span class="carmen-interpol-entry-meta">
+              <span class="carmen-interpol-entry-name">${esc(s.name)}</span>
+              <span class="carmen-interpol-entry-code">FILE ${esc(initials || '??')}</span>
+            </span>
             <span class="carmen-interpol-entry-cost">${costLabel}</span>
           </button>`;
         } else {
           html += `<div class="carmen-interpol-entry locked">
+            <span class="carmen-interpol-entry-tab"></span>
             <span class="carmen-interpol-entry-icon">🔒</span>
-            <span class="carmen-interpol-entry-name">CLASSIFIED</span>
+            <span class="carmen-interpol-entry-meta">
+              <span class="carmen-interpol-entry-name">CLASSIFIED</span>
+              <span class="carmen-interpol-entry-code">SEALED FILE</span>
+            </span>
           </div>`;
         }
       }
@@ -393,37 +404,41 @@ export function createCarmenUI(container, flagCodes) {
 
       els.interpolProfile.innerHTML = `
         <div class="carmen-interpol-card">
-          <div class="carmen-interpol-header-label">INTERPOL FILE — CLASSIFIED</div>
-          <div class="carmen-interpol-top">
-            <div class="carmen-interpol-photo">
-              <span class="carmen-interpol-clip">📎</span>
-              ${photoHtml}
+          <div class="carmen-interpol-sheet carmen-interpol-sheet-back-1" aria-hidden="true"></div>
+          <div class="carmen-interpol-sheet carmen-interpol-sheet-back-2" aria-hidden="true"></div>
+          <div class="carmen-interpol-file">
+            <div class="carmen-interpol-paperclip" aria-hidden="true"></div>
+            <div class="carmen-interpol-header-label">INTERPOL FILE — CLASSIFIED</div>
+            <div class="carmen-interpol-top">
+              <div class="carmen-interpol-photo">
+                ${photoHtml}
+              </div>
+              <div class="carmen-interpol-info">
+                <div class="carmen-interpol-name">${esc(suspect.name)}</div>
+                <span class="carmen-interpol-entry-status ${statusClass}">${esc(status)}</span>
+                <div class="carmen-interpol-origin">${esc(suspect.origin || 'Unknown')}</div>
+                <div class="carmen-interpol-regions">${(suspect.knownRegions || []).join(', ')}</div>
+              </div>
             </div>
-            <div class="carmen-interpol-info">
-              <div class="carmen-interpol-name">${esc(suspect.name)}</div>
-              <span class="carmen-interpol-entry-status ${statusClass}">${esc(status)}</span>
-              <div class="carmen-interpol-origin">${esc(suspect.origin || 'Unknown')}</div>
-              <div class="carmen-interpol-regions">${(suspect.knownRegions || []).join(', ')}</div>
+            <div class="carmen-interpol-section">
+              <div class="carmen-interpol-section-label">PROFILE</div>
+              <div class="carmen-interpol-trait-row"><span class="carmen-interpol-trait-label">Hair</span><span class="carmen-interpol-detail">${esc(hair)}</span></div>
+              <div class="carmen-interpol-trait-row"><span class="carmen-interpol-trait-label">Accessory</span><span class="carmen-interpol-detail">${esc(accessory)}</span></div>
+              <div class="carmen-interpol-trait-row"><span class="carmen-interpol-trait-label">Hobby</span><span class="carmen-interpol-detail">${esc(hobby)}</span></div>
+              <div class="carmen-interpol-trait-row"><span class="carmen-interpol-trait-label">Vehicle</span><span class="carmen-interpol-detail">${esc(vehicle)}</span></div>
             </div>
-          </div>
-          <div class="carmen-interpol-section">
-            <div class="carmen-interpol-section-label">PROFILE</div>
-            <div class="carmen-interpol-detail">Hair: ${esc(hair)}</div>
-            <div class="carmen-interpol-detail">Accessory: ${esc(accessory)}</div>
-            <div class="carmen-interpol-detail">Hobby: ${esc(hobby)}</div>
-            <div class="carmen-interpol-detail">Vehicle: ${esc(vehicle)}</div>
-          </div>
-          <div class="carmen-interpol-section">
-            <div class="carmen-interpol-section-label">CRIMINAL RECORD</div>
-            ${theftHtml}
-          </div>
-          <div class="carmen-interpol-section">
-            <div class="carmen-interpol-section-label">GEO INTEL</div>
-            <div class="carmen-interpol-geo">"${esc(suspect.geoFact || 'No geographic intelligence on file.')}"</div>
-          </div>
-          <div class="carmen-interpol-section">
-            <div class="carmen-interpol-section-label">NOTES</div>
-            <div class="carmen-interpol-notes">${esc(quirkOverride || suspect.quirk || 'No behavioral notes on file.')}</div>
+            <div class="carmen-interpol-section">
+              <div class="carmen-interpol-section-label">CRIMINAL RECORD</div>
+              ${theftHtml}
+            </div>
+            <div class="carmen-interpol-section">
+              <div class="carmen-interpol-section-label">GEO INTEL</div>
+              <div class="carmen-interpol-geo">"${esc(suspect.geoFact || 'No geographic intelligence on file.')}"</div>
+            </div>
+            <div class="carmen-interpol-section">
+              <div class="carmen-interpol-section-label">NOTES</div>
+              <div class="carmen-interpol-notes">${esc(quirkOverride || suspect.quirk || 'No behavioral notes on file.')}</div>
+            </div>
           </div>
         </div>
       `;
