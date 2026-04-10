@@ -225,11 +225,16 @@ export function composeClue(clue, informant, locationId, redactFn) {
   }
 
   // 2. Voice wrapper by location.
+  // Lowercase the phrasing's first letter so it reads naturally when placed
+  // mid-sentence by a voice wrapper (e.g. "but ${line}"). The final `voiced`
+  // string gets its first character capitalized below, so sentence starts are fine.
+  if (inner) inner = inner.charAt(0).toLowerCase() + inner.slice(1);
+
   const voicePool = VOICE[locationId] || VOICE.library;
   let voiced = pick(voicePool)(inner);
 
-  // Capitalize first letter of the dialogue.
-  // if (voiced) voiced = voiced.charAt(0).toUpperCase() + voiced.slice(1);
+  // Capitalize the very first letter of the speech bubble (always starts a sentence).
+  if (voiced) voiced = voiced.charAt(0).toUpperCase() + voiced.slice(1);
 
   // Run country-name redaction on the final composed line.
   if (redactFn) voiced = redactFn(voiced);
