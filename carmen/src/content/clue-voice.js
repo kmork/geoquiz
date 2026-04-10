@@ -457,8 +457,11 @@ export function composeClue(clue, informant, locationId, redactFn) {
   const voicePool = VOICE[locationId] || VOICE.library;
   let voiced = pick(voicePool)(inner);
 
-  // Capitalize the very first letter of the speech bubble (always starts a sentence).
-  if (voiced) voiced = voiced.charAt(0).toUpperCase() + voiced.slice(1);
+  // Capitalize after sentence boundaries: start of string, and after . ! ? — followed by space.
+  if (voiced) {
+    voiced = voiced.charAt(0).toUpperCase() + voiced.slice(1);
+    voiced = voiced.replace(/([.!?—]\s+)([a-z])/g, (_, sep, ch) => sep + ch.toUpperCase());
+  }
 
   // Run country-name redaction on the final composed line.
   if (redactFn) voiced = redactFn(voiced);

@@ -766,12 +766,6 @@ export function createCarmenUI(container, flagCodes) {
                 <button class="carmen-suspect-card" data-name="${esc(s.name)}">
                   <div class="carmen-suspect-silhouette"><img src="${IMG.suspect(s.name)}" alt="${esc(s.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))"></div>
                   <div class="carmen-suspect-name">${esc(s.name)}</div>
-                  <div class="carmen-suspect-details">
-                    <span>Hair: ${esc(s.hair)}</span>
-                    <span>${esc(s.accessory)}</span>
-                    <span>${esc(s.hobby)}</span>
-                    <span>${esc(s.vehicle)}</span>
-                  </div>
                 </button>
               `).join('')}
             </div>
