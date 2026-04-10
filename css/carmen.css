@@ -1,5 +1,12 @@
 /* Where in the World? — Carmen Sandiego homage */
 
+.wrap > .card {
+  background:
+    linear-gradient(rgba(13, 16, 24, 0.42), rgba(13, 16, 24, 0.5)),
+    url('../img/background-tiles.png') no-repeat center center;
+  background-size: 100% 100%;
+}
+
 /* ── Header Detective Image ───────────────────────── */
 .carmen-header-detective {
   height: 72px;
@@ -230,6 +237,12 @@
 }
 
 /* ── Intro Row (always side-by-side, fixed height) ──── */
+#game-content {
+  padding: 0.85rem;
+  border-radius: 20px;
+  background: transparent;
+}
+
 .carmen-intro-row {
   display: flex;
   flex-direction: row;
@@ -278,7 +291,10 @@
   overflow-y: auto;
   min-height: 0;
   padding: 0.5rem 0.4rem;
-  background: var(--card-bg);
+  background: rgba(37, 43, 57, 0.42);
+  backdrop-filter: blur(1.5px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
 }
 
 .carmen-panel-view {
@@ -300,7 +316,7 @@
   padding: 0.6rem 0.3rem;
   border: 1px solid var(--card-border);
   border-right: none;
-  background: var(--bg-color);
+  background: rgba(23, 28, 39, 0.5);
   color: var(--text-muted);
   font-family: 'Courier New', Courier, monospace;
   font-size: 0.7rem;
@@ -315,14 +331,14 @@
 }
 
 .carmen-notebook-tab.active {
-  background: var(--card-bg);
+  background: rgba(37, 43, 57, 0.62);
   color: var(--text-color);
   position: relative;
   z-index: 3;
 }
 
 .carmen-notebook-tab:hover:not(.active) {
-  background: var(--card-bg);
+  background: rgba(37, 43, 57, 0.56);
 }
 
 /* (Travel panel uses shared .carmen-panel-card styles) */
@@ -332,8 +348,9 @@
   text-align: center;
   padding: 0.85rem 1rem;
   border-radius: 10px;
-  background: var(--card-bg);
+  background: rgba(37, 43, 57, 0.54);
   border: 1px solid var(--card-border);
+  backdrop-filter: blur(1px);
   line-height: 1.5;
 }
 
@@ -353,8 +370,9 @@
   gap: 0.6rem;
   padding: 0.85rem;
   border-radius: 10px;
-  background: var(--card-bg);
+  background: rgba(37, 43, 57, 0.5);
   border: 1px solid var(--card-border);
+  backdrop-filter: blur(1px);
 }
 
 .carmen-panel-badge {
@@ -712,10 +730,11 @@
   height: 100%;
   font-size: 0.85rem;
   line-height: 1.45;
-  background: var(--card-bg);
+  background: rgba(37, 43, 57, 0.46);
   border-radius: 12px;
   border: 1px solid var(--card-border);
   box-sizing: border-box;
+  backdrop-filter: blur(1.5px);
 }
 
 .carmen-dossier-stop {
@@ -776,8 +795,9 @@
   position: relative;
   border-radius: 12px;
   overflow: hidden;
-  background: var(--map-bg);
+  background: rgba(20, 25, 35, 0.42);
   border: 1px solid var(--map-border);
+  backdrop-filter: blur(1px);
 }
 
 .carmen-map-wrap svg {
@@ -1655,7 +1675,8 @@
 #carmen-rv-interpol {
   border-radius: 12px;
   border: 1px solid var(--card-border);
-  background: #2a2520;
+  background: rgba(42, 37, 32, 0.5);
+  backdrop-filter: blur(1.5px);
 }
 
 .carmen-interpol-profile {
@@ -1663,6 +1684,7 @@
   overflow-y: auto;
   height: 100%;
   box-sizing: border-box;
+  background: rgba(42, 37, 32, 0.42);
 }
 
 .carmen-interpol-empty {
@@ -1835,4 +1857,3 @@
   color: var(--text-muted);
   line-height: 1.4;
 }
-
