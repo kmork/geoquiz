@@ -166,6 +166,7 @@ export function createCarmenUI(container, flagCodes) {
             </div>
           </div>
         </div>
+        <div class="carmen-narrator-caption" id="carmen-narrator-caption" aria-live="polite"></div>
       </div>
     </div>
   `;
@@ -198,6 +199,7 @@ export function createCarmenUI(container, flagCodes) {
     rvMap: container.querySelector('#carmen-rv-map'),
     rvDossier: container.querySelector('#carmen-rv-dossier'),
     rvInterpol: container.querySelector('#carmen-rv-interpol'),
+    narratorCaption: container.querySelector('#carmen-narrator-caption'),
     interpolProfile: container.querySelector('#carmen-interpol-profile'),
     artifactImg: container.querySelector('#carmen-artifact-img'),
     artifactDisplay: container.querySelector('#carmen-artifact-display'),
@@ -213,6 +215,8 @@ export function createCarmenUI(container, flagCodes) {
 
   // Save original Interpol intro HTML so we can restore it
   const interpolIntroHtml = els.interpolProfile.innerHTML;
+  let narratorCaptionTimer = null;
+  let narratorCaptionCleanupTimer = null;
 
   // Click the Interpol header card to return to intro view
   if (els.interpolCard) {
@@ -325,12 +329,65 @@ export function createCarmenUI(container, flagCodes) {
     els.dossierBody.scrollTop = els.dossierBody.scrollHeight;
   }
 
+  function clearNarratorCaptionTimers() {
+    if (narratorCaptionTimer) {
+      clearTimeout(narratorCaptionTimer);
+      narratorCaptionTimer = null;
+    }
+    if (narratorCaptionCleanupTimer) {
+      clearTimeout(narratorCaptionCleanupTimer);
+      narratorCaptionCleanupTimer = null;
+    }
+  }
+
+  function hideNarratorCaption(immediate = false) {
+    clearNarratorCaptionTimers();
+    if (!els.narratorCaption) return;
+
+    if (immediate || !els.narratorCaption.classList.contains('is-visible')) {
+      els.narratorCaption.classList.remove('is-visible', 'is-fading');
+      els.narratorCaption.textContent = '';
+      return;
+    }
+
+    els.narratorCaption.classList.add('is-fading');
+    els.narratorCaption.classList.remove('is-visible');
+    narratorCaptionCleanupTimer = setTimeout(() => {
+      els.narratorCaption.classList.remove('is-fading');
+      els.narratorCaption.textContent = '';
+      narratorCaptionCleanupTimer = null;
+    }, 500);
+  }
+
+  function showNarratorCaption(text, duration = 4200) {
+    if (!text || !els.narratorCaption) return;
+
+    clearNarratorCaptionTimers();
+    els.narratorCaption.textContent = text;
+    els.narratorCaption.classList.remove('is-fading');
+    // Restart animation when a new caption arrives quickly after the last one.
+    void els.narratorCaption.offsetWidth;
+    els.narratorCaption.classList.add('is-visible');
+
+    narratorCaptionTimer = setTimeout(() => {
+      hideNarratorCaption();
+    }, duration);
+  }
+
   let detourCounter = 0;
 
   return {
     get mapSvg() { return els.map; },
 
     switchTab(tab) { switchTab(tab); },
+
+    showNarratorCaption(text, duration) {
+      showNarratorCaption(text, duration);
+    },
+
+    hideNarratorCaption(immediate = false) {
+      hideNarratorCaption(immediate);
+    },
 
     /** Add a clue to the dossier. */
     addDossierEntry(stop, clueText, informantPrefix, emoji, country, capital) {
@@ -975,6 +1032,7 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     showDeadEnd(country, onContinue) {
+      hideNarratorCaption(true);
       // Force map visible
       for (const rv of allRightViews) rv.style.display = 'none';
       els.rvMap.style.display = '';
@@ -998,7 +1056,12 @@ export function createCarmenUI(container, flagCodes) {
       });
     },
 
-    showTransition(stopScore, country, taunt, thiefName, onContinue) {
+    showTransition(stopScore, country, taunt, thiefName, narratorLine, onContinue) {
+      if (typeof narratorLine === 'function') {
+        onContinue = narratorLine;
+        narratorLine = '';
+      }
+      hideNarratorCaption(true);
       els.sidebar.innerHTML = '';
       els.reveal.style.display = 'none';
       els.reveal.innerHTML = '';
@@ -1033,7 +1096,12 @@ export function createCarmenUI(container, flagCodes) {
       `;
       els.mapWrap.appendChild(overlay);
 
+      if (narratorLine) {
+        setTimeout(() => showNarratorCaption(narratorLine), 180);
+      }
+
       overlay.querySelector('.carmen-continue-btn').addEventListener('click', () => {
+        hideNarratorCaption(true);
         overlay.remove();
         onContinue();
       });

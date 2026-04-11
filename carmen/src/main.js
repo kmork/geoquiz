@@ -7,6 +7,7 @@ import { saveGameRecord } from '../../js/game-records.js';
 import { initConfetti } from '../../js/confetti.js';
 import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playLineupMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './audio/audio-engine.js';
 import { chooseNarratorScript } from './content/narrator-script.js';
+import { buildCountryEntryMonologue } from './content/country-entry-monologue.js';
 import { TOTAL_CASES } from './campaign/progression.js';
 import {
   getMissionHistory, saveMissionResult, getCurrentCase, advanceCase, setCase,
@@ -191,6 +192,11 @@ function toggleInterpolMark(suspectName) {
     interpolMarkedThisCase.has(suspect.name),
     toggleInterpolMark,
   );
+}
+
+function getCountryEntryMonologue(country) {
+  const historyText = logic?.countryMap?.[country]?.history || '';
+  return buildCountryEntryMonologue(country, historyText);
 }
 
 async function handleEndChoice(choice, wasSuccess) {
@@ -578,6 +584,7 @@ function handleGuess(country) {
     const taunt = logic.getTaunt();
     const fromCountry = playerPosition || progress.route[progress.route.length - 2] || progress.route[0];
     const toCountry = result.country;
+    const narratorLine = getCountryEntryMonologue(result.country);
 
     setTimeout(async () => {
       logic.spendTime(logic.getTravelCost());
@@ -589,7 +596,7 @@ function handleGuess(country) {
       stopAmbient();
       playerPosition = toCountry;
       drawMap(progress.route, result.neighbors);
-      ui.showTransition(result.stopScore, result.country, taunt, 'The thief', () => {
+      ui.showTransition(result.stopScore, result.country, taunt, 'The thief', narratorLine, () => {
         ui.updateProgress(progress.stop, progress.totalStops);
         ui.showStopNarrative(progress.stop, progress.totalStops);
         ui.clearClues();

@@ -353,6 +353,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  position: relative;
 }
 
 .carmen-right-view {
@@ -367,6 +368,57 @@ body {
 .carmen-right-view .carmen-dossier-inline,
 .carmen-right-view .carmen-interpol-profile {
   height: 100%;
+}
+
+.carmen-narrator-caption {
+  position: absolute;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%) translateY(16px);
+  width: min(78%, 42rem);
+  padding: 0.8rem 1rem 0.9rem;
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(14, 11, 10, 0.92), rgba(9, 8, 7, 0.86)),
+    radial-gradient(circle at 50% 0%, rgba(255, 236, 199, 0.08), transparent 55%);
+  border: 1px solid rgba(216, 188, 141, 0.16);
+  box-shadow:
+    0 16px 26px rgba(0, 0, 0, 0.36),
+    inset 0 1px 0 rgba(255, 240, 214, 0.07);
+  color: #efe4d1;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 6;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+
+.carmen-narrator-caption::before {
+  content: "INNER MONOLOGUE";
+  display: block;
+  margin-bottom: 0.38rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.64rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.26em;
+  color: rgba(224, 198, 154, 0.72);
+}
+
+.carmen-narrator-caption.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.carmen-narrator-caption.is-fading {
+  opacity: 0;
+  transform: translateX(-50%) translateY(12px);
 }
 
 .carmen-artifact-img {
@@ -1871,6 +1923,19 @@ body {
 
   .carmen-right-panel {
     height: 280px;
+  }
+
+  .carmen-narrator-caption {
+    width: min(88%, 28rem);
+    bottom: 0.65rem;
+    padding: 0.68rem 0.78rem 0.74rem;
+    font-size: 0.9rem;
+    line-height: 1.38;
+  }
+
+  .carmen-narrator-caption::before {
+    font-size: 0.58rem;
+    letter-spacing: 0.22em;
   }
 
   .carmen-clue-text {
