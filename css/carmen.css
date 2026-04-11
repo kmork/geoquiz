@@ -2012,6 +2012,47 @@ body {
   margin-top: 0.7rem;
 }
 
+.carmen-interpol-interest-strip {
+  padding: 0.7rem 0.8rem 0.75rem;
+  border-radius: 10px;
+  background: rgba(35, 28, 22, 0.22);
+  border: 1px solid rgba(186, 161, 122, 0.12);
+  backdrop-filter: blur(1px);
+}
+
+.carmen-interpol-interest-label {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: rgba(226, 204, 165, 0.74);
+  margin-bottom: 0.5rem;
+}
+
+.carmen-interpol-interest-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.carmen-interpol-interest-chip {
+  border: 1px solid rgba(170, 133, 93, 0.28);
+  background: rgba(92, 66, 45, 0.26);
+  color: #ecdcc8;
+  border-radius: 999px;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.72rem;
+  font-family: 'Courier New', Courier, monospace;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.carmen-interpol-interest-chip:hover {
+  background: rgba(112, 80, 53, 0.34);
+  border-color: rgba(214, 173, 126, 0.42);
+  transform: translateY(-1px);
+}
+
 .carmen-interpol-entry {
   position: relative;
   display: flex;
@@ -2050,6 +2091,13 @@ body {
   border-color: rgba(148, 190, 168, 0.45);
 }
 
+.carmen-interpol-entry.marked {
+  border-color: rgba(181, 134, 83, 0.44);
+  background:
+    linear-gradient(180deg, rgba(122, 88, 58, 0.3), rgba(72, 52, 37, 0.24)),
+    rgba(46, 35, 28, 0.62);
+}
+
 .carmen-interpol-entry-tab {
   position: absolute;
   left: 0;
@@ -2077,6 +2125,22 @@ body {
 .carmen-interpol-entry-name {
   font-weight: 600;
   color: #f4e5d1;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.carmen-interpol-entry-poi {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.56rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: #f2dbc0;
+  background: rgba(132, 84, 45, 0.58);
+  border: 1px solid rgba(214, 171, 126, 0.3);
+  border-radius: 999px;
+  padding: 0.08rem 0.32rem;
 }
 
 .carmen-interpol-entry-code {
@@ -2285,6 +2349,35 @@ body {
   color: #8a3f34;
   text-transform: uppercase;
   margin-bottom: 0.95rem;
+}
+
+.carmen-interpol-mark-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1.15rem;
+  border: 1px solid rgba(131, 97, 66, 0.34);
+  background: rgba(255, 248, 238, 0.36);
+  color: #5b3f29;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.68rem;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 0.3rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.carmen-interpol-mark-btn:hover {
+  background: rgba(255, 248, 238, 0.56);
+  border-color: rgba(131, 97, 66, 0.48);
+  transform: translateY(-1px);
+}
+
+.carmen-interpol-mark-btn.marked {
+  background: rgba(144, 91, 48, 0.16);
+  border-color: rgba(148, 96, 52, 0.42);
+  color: #7a4126;
 }
 
 .carmen-interpol-top {

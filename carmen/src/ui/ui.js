@@ -359,21 +359,31 @@ export function createCarmenUI(container, flagCodes) {
      * @param {Set} viewedNames — names already viewed this game (free re-view)
      * @param {Function} onView — called with (suspect) when player clicks to view
      */
-    showInterpolList(suspects, unlockedNames, viewedNames, onView) {
+    showInterpolList(suspects, unlockedNames, viewedNames, markedNames, onView) {
       let html = '';
+      const markedSuspects = suspects.filter(s => markedNames.has(s.name));
+      if (markedSuspects.length > 0) {
+        html += `<div class="carmen-interpol-interest-strip">
+          <div class="carmen-interpol-interest-label">Suspects of Interest</div>
+          <div class="carmen-interpol-interest-list">
+            ${markedSuspects.map(s => `<button class="carmen-interpol-interest-chip" data-name="${esc(s.name)}">${esc(s.name)}</button>`).join('')}
+          </div>
+        </div>`;
+      }
       for (const s of suspects) {
         const isCarmen = s.name === 'Carmen Sandiego';
         const hasPhoto = !!s.img;
         const available = isCarmen || hasPhoto;
         const viewed = viewedNames.has(s.name);
+        const marked = markedNames.has(s.name);
         const initials = s.name.split(/\s+/).map(part => part[0]).slice(0, 2).join('.').toUpperCase();
         if (available) {
           const costLabel = viewed ? 'free' : '3h';
-          html += `<button class="carmen-interpol-entry${viewed ? ' viewed' : ''}" data-name="${esc(s.name)}">
+          html += `<button class="carmen-interpol-entry${viewed ? ' viewed' : ''}${marked ? ' marked' : ''}" data-name="${esc(s.name)}">
             <span class="carmen-interpol-entry-tab"></span>
             <span class="carmen-interpol-entry-icon">${hasPhoto ? '📷' : '🕵️'}</span>
             <span class="carmen-interpol-entry-meta">
-              <span class="carmen-interpol-entry-name">${esc(s.name)}</span>
+              <span class="carmen-interpol-entry-name">${esc(s.name)}${marked ? '<span class="carmen-interpol-entry-poi">POI</span>' : ''}</span>
               <span class="carmen-interpol-entry-code">FILE ${esc(initials || '??')}</span>
             </span>
             <span class="carmen-interpol-entry-cost">${costLabel}</span>
@@ -391,6 +401,13 @@ export function createCarmenUI(container, flagCodes) {
       }
       els.interpolList.innerHTML = html;
 
+      els.interpolList.querySelectorAll('.carmen-interpol-interest-chip').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const suspect = suspects.find(s => s.name === btn.dataset.name);
+          if (suspect) onView(suspect);
+        });
+      });
+
       els.interpolList.querySelectorAll('.carmen-interpol-entry:not(.locked)').forEach(btn => {
         btn.addEventListener('click', () => {
           const name = btn.dataset.name;
@@ -404,7 +421,7 @@ export function createCarmenUI(container, flagCodes) {
      * Show a suspect's full Interpol profile in the right panel.
      * @param {Object} suspect — suspect object with geographic fields
      */
-    showInterpolProfile(suspect, theftRecords, status, campaignPhase) {
+    showInterpolProfile(suspect, theftRecords, status, campaignPhase, isMarked = false, onToggleMark = null) {
       // Redact Carmen's profile based on campaign progression.
       let hair = suspect.hair, accessory = suspect.accessory, hobby = suspect.hobby, vehicle = suspect.vehicle;
       let quirkOverride = null;
@@ -442,6 +459,7 @@ export function createCarmenUI(container, flagCodes) {
         : '<div class="carmen-interpol-detail">No recorded thefts on file.</div>';
 
       const statusClass = status === 'IN CUSTODY' ? 'in-custody' : 'at-large';
+      const markLabel = isMarked ? 'Remove Mark' : 'Mark as Person of Interest';
 
       els.interpolProfile.innerHTML = `
         <div class="carmen-interpol-card">
@@ -450,6 +468,7 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-interpol-file">
             <div class="carmen-interpol-paperclip" aria-hidden="true"></div>
             <div class="carmen-interpol-header-label">INTERPOL FILE — CLASSIFIED</div>
+            <button class="carmen-interpol-mark-btn${isMarked ? ' marked' : ''}" data-name="${esc(suspect.name)}">${markLabel}</button>
             <div class="carmen-interpol-top">
               <div class="carmen-interpol-photo">
                 ${photoHtml}
@@ -483,6 +502,15 @@ export function createCarmenUI(container, flagCodes) {
           </div>
         </div>
       `;
+
+      const markBtn = els.interpolProfile.querySelector('.carmen-interpol-mark-btn');
+      if (markBtn && onToggleMark) {
+        markBtn.addEventListener('click', (event) => {
+          event.preventDefault();
+          event.stopPropagation();
+          onToggleMark(suspect.name);
+        });
+      }
     },
 
     /** Clear witness reports on Case tab. */

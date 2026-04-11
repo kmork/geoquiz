@@ -55,6 +55,8 @@ if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
 const INTERPOL_COST_HOURS = 3;
 
 let interpolViewedThisGame = new Set();
+let interpolMarkedThisCase = new Set();
+let activeInterpolSuspectName = null;
 
 // Wait for data.js
 while (!window.DATA) await new Promise(r => setTimeout(r, 50));
@@ -121,7 +123,8 @@ function refreshInterpolList() {
     if (b.name === 'Carmen Sandiego') return -1;
     return 0;
   });
-  ui.showInterpolList(sortedSuspects, unlocked, allViewed, (suspect) => {
+  ui.showInterpolList(sortedSuspects, unlocked, allViewed, interpolMarkedThisCase, (suspect) => {
+    activeInterpolSuspectName = suspect.name;
     // All suspects with photos cost time to view — including Carmen.
     const hasPhoto = !!suspect.img;
     const everViewed = getInterpolViewed().has(suspect.name);
@@ -140,7 +143,14 @@ function refreshInterpolList() {
       setTimeout(() => {
         refreshInterpolList();
         const thefts = getTheftHistory()[suspect.name] || [];
-        ui.showInterpolProfile(suspect, thefts, status, logic?.campaignPhase);
+        ui.showInterpolProfile(
+          suspect,
+          thefts,
+          status,
+          logic?.campaignPhase,
+          interpolMarkedThisCase.has(suspect.name),
+          toggleInterpolMark,
+        );
       }, animDuration);
       return;
     }
@@ -148,8 +158,39 @@ function refreshInterpolList() {
     refreshInterpolList(); // update cost labels
 
     const thefts = getTheftHistory()[suspect.name] || [];
-    ui.showInterpolProfile(suspect, thefts, status, logic?.campaignPhase);
+    ui.showInterpolProfile(
+      suspect,
+      thefts,
+      status,
+      logic?.campaignPhase,
+      interpolMarkedThisCase.has(suspect.name),
+      toggleInterpolMark,
+    );
   });
+}
+
+function toggleInterpolMark(suspectName) {
+  if (interpolMarkedThisCase.has(suspectName)) interpolMarkedThisCase.delete(suspectName);
+  else interpolMarkedThisCase.add(suspectName);
+
+  refreshInterpolList();
+
+  if (!activeInterpolSuspectName || activeInterpolSuspectName !== suspectName) return;
+
+  const suspect = SUSPECTS.find(s => s.name === suspectName);
+  if (!suspect) return;
+
+  const unlocked = getUnlockedSuspects();
+  const status = unlocked.has(suspect.name) ? 'IN CUSTODY' : 'AT LARGE';
+  const thefts = getTheftHistory()[suspect.name] || [];
+  ui.showInterpolProfile(
+    suspect,
+    thefts,
+    status,
+    logic?.campaignPhase,
+    interpolMarkedThisCase.has(suspect.name),
+    toggleInterpolMark,
+  );
 }
 
 async function handleEndChoice(choice, wasSuccess) {
@@ -298,6 +339,8 @@ async function startGame() {
   // Reset dossier and interpol for new game
   ui.resetDossier();
   interpolViewedThisGame = new Set();
+  interpolMarkedThisCase = new Set();
+  activeInterpolSuspectName = null;
   refreshInterpolList();
 
   // Clear old clues and witness reports, then show investigation locations
