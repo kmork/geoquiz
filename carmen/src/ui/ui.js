@@ -294,27 +294,32 @@ export function createCarmenUI(container, flagCodes) {
       return;
     }
     // Render entries in order, grouping consecutive entries with the same stopKey
-    let html = '';
+    let html = '<div class="carmen-dossier-page">';
     let currentKey = null;
+    let sectionOpen = false;
     for (const e of dossierEntries) {
       const key = e.stopKey;
       if (key !== currentKey) {
+        if (sectionOpen) html += '</div>';
         currentKey = key;
         const location = e.capital && e.country
           ? ` — ${esc(e.capital)}, ${esc(e.country)}`
           : e.country ? ` — ${esc(e.country)}` : '';
         const detourClass = e.type === 'detour' ? ' carmen-dossier-detour' : '';
         const label = e.type === 'detour' ? 'Dead end' : `Stop ${Number(e.stop) + 1}`;
-        html += `<div class="carmen-dossier-stop${detourClass}">${label}${location}</div>`;
+        html += `<div class="carmen-dossier-section${detourClass}"><div class="carmen-dossier-stop${detourClass}">${label}${location}</div>`;
+        sectionOpen = true;
       }
       const icon = e.emoji || '';
       const entryClass = e.type === 'detour' ? ' carmen-dossier-detour' : '';
       html += `<div class="carmen-dossier-entry${entryClass}">
         ${icon ? `<span class="carmen-dossier-emoji">${icon}</span>` : ''}
         <span class="carmen-dossier-prefix">${esc(e.informantPrefix || 'Clue')}:</span>
-        <span>${esc(e.clueText)}</span>
+        <span class="carmen-dossier-text">${esc(e.clueText)}</span>
       </div>`;
     }
+    if (sectionOpen) html += '</div>';
+    html += '</div>';
     els.dossierBody.innerHTML = html;
     // Auto-scroll to bottom
     els.dossierBody.scrollTop = els.dossierBody.scrollHeight;

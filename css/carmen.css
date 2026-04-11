@@ -1074,25 +1074,44 @@ body {
 }
 
 .carmen-dossier-inline {
-  padding: 0.75rem 1rem;
+  padding: 1rem 1.15rem;
   overflow-y: auto;
   height: 100%;
-  font-size: 0.96rem;
-  line-height: 1.45;
-  background: rgba(37, 43, 57, 0.46);
+  font-size: 1rem;
+  line-height: 1.55;
+  background:
+    linear-gradient(180deg, rgba(58, 46, 35, 0.26), rgba(31, 24, 18, 0.18)),
+    rgba(36, 31, 27, 0.28);
   border-radius: 12px;
-  border: 1px solid var(--card-border);
+  border: 1px solid rgba(199, 176, 138, 0.14);
   box-sizing: border-box;
   backdrop-filter: blur(1.5px);
 }
 
+.carmen-dossier-page {
+  width: min(100%, 58rem);
+  margin: 0 auto;
+  padding: 0.2rem 0 0.4rem;
+}
+
+.carmen-dossier-section {
+  margin-bottom: 1rem;
+  padding: 0.85rem 0.95rem 0.55rem;
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(40, 33, 28, 0.34), rgba(25, 20, 17, 0.26)),
+    rgba(20, 16, 13, 0.08);
+  border: 1px solid rgba(199, 176, 138, 0.1);
+  box-shadow: inset 0 1px 0 rgba(255, 245, 223, 0.03);
+}
+
 .carmen-dossier-stop {
   font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--star-color);
-  letter-spacing: 1px;
-  margin-top: 0.6rem;
-  margin-bottom: 0.25rem;
+  font-size: 1.02rem;
+  color: #e4bf6a;
+  letter-spacing: 1.1px;
+  margin-top: 0;
+  margin-bottom: 0.55rem;
   text-transform: uppercase;
 }
 
@@ -1101,42 +1120,53 @@ body {
 }
 
 .carmen-dossier-entry {
-  padding: 0.25rem 0;
-  border-bottom: 1px solid var(--card-border);
-  font-size: 0.94rem;
-  line-height: 1.4;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr);
+  align-items: start;
+  column-gap: 0.45rem;
+  padding: 0.42rem 0;
+  border-top: 1px solid rgba(199, 176, 138, 0.1);
+  font-size: 0.98rem;
+  line-height: 1.52;
 }
 
 .carmen-dossier-detour.carmen-dossier-stop {
-  color: var(--bad-color);
+  color: #e49b96;
 }
 
 .carmen-dossier-entry.carmen-dossier-detour {
-  color: var(--bad-color);
+  color: #f1b2ae;
   opacity: 0.85;
 }
 
 .carmen-dossier-emoji {
   font-size: 1.1rem;
-  margin-right: 0.25rem;
+  line-height: 1.2;
+  margin-top: 0.05rem;
 }
 
-.carmen-dossier-entry:last-child {
-  border-bottom: none;
+.carmen-dossier-section .carmen-dossier-entry:first-of-type {
+  border-top: none;
 }
 
 .carmen-dossier-prefix {
   font-weight: 600;
-  color: var(--text-muted);
+  color: rgba(224, 213, 196, 0.78);
   font-style: italic;
-  font-size: 0.88rem;
+  font-size: 0.93rem;
+  white-space: nowrap;
+}
+
+.carmen-dossier-text {
+  color: rgba(241, 235, 226, 0.94);
+  max-width: 44rem;
 }
 
 .carmen-dossier-empty {
   color: var(--text-muted);
   font-style: italic;
   text-align: center;
-  padding: 0.5rem 0;
+  padding: 1rem 0;
 }
 
 /* ── Map ─────────────────────────────────────────────── */
