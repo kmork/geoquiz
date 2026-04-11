@@ -1053,8 +1053,8 @@ function formatArtifactBack(artifact) {
   const hint = artifact.hint || '';
   const summary = (artifact.summary || '').trim();
   const sentences = summary ? summary.split(/(?<=[.!?])\s+/).filter(Boolean) : [];
-  const lead = sentences.slice(0, 2).join(' ') || 'Reference note unavailable.';
-  const extra = sentences.slice(2).join(' ');
+  const lead = sentences[0] || 'Reference note unavailable.';
+  const extra = '';
 
   return `
     <div class="carmen-artifact-backdrop">
