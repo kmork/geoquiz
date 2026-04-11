@@ -359,7 +359,7 @@ export function createCarmenUI(container, flagCodes) {
     }, 500);
   }
 
-  function showNarratorCaption(text, duration = 12000) {
+  function showNarratorCaption(text, duration = null) {
     if (!text || !els.narratorCaption) return;
 
     clearNarratorCaptionTimers();
@@ -369,9 +369,15 @@ export function createCarmenUI(container, flagCodes) {
     void els.narratorCaption.offsetWidth;
     els.narratorCaption.classList.add('is-visible');
 
-    narratorCaptionTimer = setTimeout(() => {
-      hideNarratorCaption();
-    }, duration);
+    const resolvedDuration = duration == null
+      ? Math.min(12000, Math.max(6200, 4200 + (text.length * 28)))
+      : duration;
+
+    if (resolvedDuration !== Infinity) {
+      narratorCaptionTimer = setTimeout(() => {
+        hideNarratorCaption();
+      }, resolvedDuration);
+    }
   }
 
   let detourCounter = 0;
@@ -1097,7 +1103,8 @@ export function createCarmenUI(container, flagCodes) {
       els.mapWrap.appendChild(overlay);
 
       if (narratorLine) {
-        setTimeout(() => showNarratorCaption(narratorLine), 180);
+        const captionDuration = narratorLine.length > 150 ? Infinity : null;
+        setTimeout(() => showNarratorCaption(narratorLine, captionDuration), 180);
       }
 
       overlay.querySelector('.carmen-continue-btn').addEventListener('click', () => {

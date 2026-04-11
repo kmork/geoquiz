@@ -239,8 +239,51 @@ const COUNTRY_ENTRY_MONOLOGUES = {
   "Zimbabwe": "Zimbabwe. Nobody here needed noir lighting. It was the British colony of Rhodesia until Robert Mugabe led it to independence in 1980. The script was already overacting.",
 };
 
+const COUNTRY_ENTRY_OVERRIDES = {
+  "Afghanistan": "Afghanistan. Every empire thinks the mountains will listen. Then the mountains answer in rubble and memory. I arrived with a coat, a clue, and the usual bad timing.",
+  "Albania": "Albania. Five centuries of empire, then communism with the curtains drawn. The place had already done the hardboiled routine before I set foot in it.",
+  "Algeria": "Algeria. Empires came through, France stayed too long, and independence had to be taken the violent way. Nobody needed me to add atmosphere.",
+  "Argentina": "Argentina. Independence, generals, disappearances, the whole tragic wardrobe. The streets wore it better than I did.",
+  "Armenia": "Armenia. Old faith, old grief, and a memory that doesn't dilute with time. Some countries don't need noir. They just need a witness.",
+  "Australia": "Australia. Ancient ground, a penal colony, then a federation built at the far end of the map. The file smelled like distance and official mistakes.",
+  "Austria": "Austria. Once the center of an empire, now civilized enough to hide the old grandeur behind good tailoring. Very considerate of it.",
+  "Bangladesh": "Bangladesh. Partition first, war after, independence paid for in blood and stubbornness. The rain wasn't the only thing that had weight here.",
+  "Belgium": "Belgium. Small country, oversized history, and enough imperial paperwork to stain the cuffs. Brussels looked respectable. That's always suspicious.",
+  "Bosnia and Herzegovina": "Bosnia and Herzegovina. Empires passed through, Yugoslavia collapsed, and the war left its fingerprints on the walls. I kept my voice low. The place already knew the genre.",
+  "Brazil": "Brazil. Colony, empire, republic. Big country, bigger appetite, and history that never learned to travel light. Even the shadows took up space.",
+  "Cambodia": "Cambodia. Empire once, colony later, genocide after that. Some files don't read like history. They read like evidence.",
+  "Canada": "Canada. French first, British second, dominion after that. A polite country with imperial bones under the snow. Naturally, that made it interesting.",
+  "Chile": "Chile. Republic, coup, dictatorship, democracy restored with the lights still flickering. The file had a long coastline and a longer memory.",
+  "China": "China. Dynasties, republic, revolution, and a state built on scale alone. Trying to sound mysterious here felt almost insulting.",
+  "Colombia": "Colombia. Empire, republic, insurgency, cartel ghosts, and a country that kept moving anyway. The file was crowded. So was the air.",
+  "Egypt": "Egypt. Pharaohs, empires, occupations, independence. Some places have so much history it starts acting like a local authority.",
+  "France": "France. Kingdom, revolution, republic, empire, republic again. The country changed costumes so often it made my trench coat feel under-rehearsed.",
+  "Germany": "Germany. Empire, collapse, catastrophe, division, reunification. History here doesn't knock. It lets itself in.",
+  "Ghana": "Ghana. Gold, kingdoms, colony, independence, and a new state that learned to stand on old ground. The file had dignity. I tried not to get in its way.",
+  "Greece": "Greece. Democracy, philosophy, empires, occupation, dictatorship. A place so foundational it made every dramatic thought feel plagiarized.",
+  "India": "India. Empire had its turn, then independence arrived with partition and a bill nobody could really pay. The subcontinent didn't need narration. It already had scale.",
+  "Italy": "Italy. Rome, Renaissance, fragmentation, unification. The country carried civilization like it was just another overcoat.",
+  "Japan": "Japan. Empire old enough to sound permanent, defeat sharp enough to prove otherwise, then reinvention at industrial speed. Even my inner monologue felt imported.",
+  "Mexico": "Mexico. Empire, independence, revolution, and a long argument with power. The file came with dust, saints, and a pistol tucked behind the curtain.",
+  "Morocco": "Morocco. Sultanates, protectorates, independence, and trade routes older than my profession's bad habits. The air did half the writing for me.",
+  "Nigeria": "Nigeria. Colony yesterday, giant by force of numbers today, with civil war and oil money in between. The file had muscle and scars.",
+  "Norway": "Norway. Vikings first, unions later, independence eventually. Even the calm looked like it had earned itself the hard way.",
+  "Poland": "Poland. Partitioned, occupied, ravaged, then forced through communism before clawing its way back out. The resilience was doing all the heavy lifting.",
+  "Portugal": "Portugal. An empire with ocean in its bloodstream, then dictatorship, then carnations instead of gunfire. History here had a taste for exits.",
+  "Romania": "Romania. Kingdom, fascism, communism, revolution. By the time Ceaușescu fell, the country had already spent decades practicing grim lighting.",
+  "Russia": "Russia. Tsars, revolution, Soviet steel, collapse, and the old imperial reflex still twitching underneath. The file was large enough to need winter.",
+  "South Africa": "South Africa. Colony, conquest, apartheid, democracy. The record was too raw to romanticize, which of course only made noir look cheap.",
+  "South Korea": "South Korea. War split the peninsula, dictatorship tried to hold it still, and democracy outran both. The file moved faster than my cigarette metaphors.",
+  "Spain": "Spain. Empire abroad, civil war at home, dictatorship after that, democracy restored when the century finally got tired. The drama was not subtle.",
+  "Turkey": "Turkey. Empire gone, republic forged, identity argued over ever since. The country wore history the way some men wear cologne: heavily and on purpose.",
+  "Ukraine": "Ukraine. Empires carved at it, famine scarred it, and the present tense still sounds like artillery. You don't write over that. You just read carefully.",
+  "United Kingdom": "United Kingdom. Four nations, one union, and an empire whose fingerprints still turn up in other people's files. It carried itself like a suspect who'd made partner.",
+  "United States": "United States. Independence in one hand, expansion in the other, and enough contradictions to keep a detective employed for life. The country called itself new with a very straight face.",
+  "Vietnam": "Vietnam. Foreign powers kept arriving, and Vietnam kept teaching them how departure works. The file was concise, which made it sting more.",
+};
+
 export function buildCountryEntryMonologue(country) {
-  return COUNTRY_ENTRY_MONOLOGUES[country] || "";
+  return COUNTRY_ENTRY_OVERRIDES[country] || COUNTRY_ENTRY_MONOLOGUES[country] || "";
 }
 
-export { COUNTRY_ENTRY_MONOLOGUES };
+export { COUNTRY_ENTRY_MONOLOGUES, COUNTRY_ENTRY_OVERRIDES };

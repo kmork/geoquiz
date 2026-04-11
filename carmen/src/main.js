@@ -342,6 +342,13 @@ async function startGame() {
   ui.updateProgress(intro.progress.stop, intro.progress.totalStops);
   updateClock();
 
+  const introNarratorLine = getCountryEntryMonologue(intro.startCountry);
+  if (introNarratorLine) {
+    setTimeout(() => {
+      ui.showNarratorCaption(introNarratorLine);
+    }, 220);
+  }
+
   // Reset dossier and interpol for new game
   ui.resetDossier();
   interpolViewedThisGame = new Set();
