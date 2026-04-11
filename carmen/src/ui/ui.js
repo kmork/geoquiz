@@ -6,6 +6,36 @@ import { playStamp, startClockTicking, stopClockTicking, toggleMusicMute, isMusi
 import { IMG } from '../assets.js';
 import { typewriter } from './typewriter.js';
 
+const INTERPOL_PHOTO_ADJUSTMENTS = {
+  'Count Obsidian': { scaleX: 1.58, scaleY: 1.22, x: '0%', y: '0%' },
+  'Echo': { scaleX: 1.62, scaleY: 1.24, x: '0%', y: '0%' },
+  'The Locksmith': { scaleX: 1.28, scaleY: 1.18, x: '0%', y: '-1%' },
+  'Nova Vex': { scaleX: 1.56, scaleY: 1.24, x: '0%', y: '-4%' },
+  'Shadow Lynx': { scaleX: 1.62, scaleY: 1.24, x: '0%', y: '-2%' },
+  'Copper Sparrow': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
+  'Ghost Mariner': { scaleX: 1.28, scaleY: 1.16, x: '0%', y: '-3%' },
+  'Velvet Cipher': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '0%' },
+  'Phantom Fox': { scaleX: 1.6, scaleY: 1.24, x: '0%', y: '-2%' },
+  'Raven Noir': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
+  'Scarlet Cipher': { scaleX: 1.56, scaleY: 1.22, x: '0%', y: '-1%' },
+  'Ivy Virelli': { scaleX: 1.54, scaleY: 1.2, x: '0%', y: '-1%' },
+  'Saffron Silk': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
+  'Crimson Dagger': { scaleX: 1.56, scaleY: 1.24, x: '0%', y: '-1%' },
+  'Golden Lynx': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
+  'Ivory Whisper': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
+  'Neon Specter': { scaleX: 1.54, scaleY: 1.24, x: '0%', y: '-3%' },
+  'Scarlet Swan': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
+  'Midnight Owl': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-1%' },
+  'Silver Comet': { scaleX: 1.54, scaleY: 1.24, x: '0%', y: '-3%' },
+  'Velvet Raven': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
+  'Amber Fox': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
+  'Storm Herald': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
+  'Crimson Mirage': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
+  'Onyx Panther': { scaleX: 1.6, scaleY: 1.24, x: '0%', y: '-1%' },
+  'Ivory Phantom': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
+  'Emerald Kite': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
+};
+
 /**
  * Build the full game UI inside the given container.
  * Returns an API object with methods to update each section.
@@ -47,49 +77,53 @@ export function createCarmenUI(container, flagCodes) {
     </div>
     <div class="carmen-intro-row side-by-side" id="carmen-intro-row">
       <div class="carmen-left-panel">
-        <div class="carmen-notebook-tabs" id="carmen-notebook-tabs" style="display:none">
-          <button class="carmen-notebook-tab active" data-tab="case">Case</button>
-          <button class="carmen-notebook-tab" data-tab="investigate">Investigate</button>
-          <button class="carmen-notebook-tab" data-tab="travel">Travel</button>
-          <button class="carmen-notebook-tab" data-tab="dossier">Dossier</button>
-          <button class="carmen-notebook-tab" data-tab="interpol">Interpol</button>
-        </div>
-        <div class="carmen-panel-content">
-          <div class="carmen-panel-view" id="carmen-panel-case">
-            <div class="carmen-narrative" id="carmen-narrative"></div>
-            <div class="carmen-witness-report" id="carmen-witness-report"></div>
+        <div class="carmen-notebook-shell">
+          <div class="carmen-notebook-tabs" id="carmen-notebook-tabs" style="display:none">
+            <button class="carmen-notebook-tab active" data-tab="case">Case</button>
+            <button class="carmen-notebook-tab" data-tab="investigate">Investigate</button>
+            <button class="carmen-notebook-tab" data-tab="travel">Travel</button>
+            <button class="carmen-notebook-tab" data-tab="dossier">Dossier</button>
+            <button class="carmen-notebook-tab" data-tab="interpol">Interpol</button>
           </div>
-          <div class="carmen-panel-view" id="carmen-panel-investigate" style="display:none">
-            <div class="carmen-panel-card">
-              <div class="carmen-panel-badge">🔍 INVESTIGATE</div>
-              <div class="carmen-panel-desc" id="carmen-locations-label"></div>
-              <div class="carmen-locations" id="carmen-locations"></div>
+          <div class="carmen-notebook-body">
+            <div class="carmen-panel-content">
+              <div class="carmen-panel-view" id="carmen-panel-case">
+                <div class="carmen-narrative" id="carmen-narrative"></div>
+                <div class="carmen-witness-report" id="carmen-witness-report"></div>
+              </div>
+              <div class="carmen-panel-view" id="carmen-panel-investigate" style="display:none">
+                <div class="carmen-panel-card">
+                  <div class="carmen-panel-badge">🔍 INVESTIGATE</div>
+                  <div class="carmen-panel-desc" id="carmen-locations-label"></div>
+                  <div class="carmen-locations" id="carmen-locations"></div>
+                </div>
+              </div>
+              <div class="carmen-panel-view" id="carmen-panel-travel" style="display:none">
+                <div class="carmen-panel-card">
+                  <div class="carmen-panel-badge">✈️ TRAVEL</div>
+                  <div class="carmen-panel-title">Where did the thief go?</div>
+                  <div class="carmen-panel-desc">Select a neighboring country on the map to follow the trail.</div>
+                  <div class="carmen-panel-cost">⏱️ Travel cost: <strong>5 hours</strong> per trip</div>
+                </div>
+              </div>
+              <div class="carmen-panel-view" id="carmen-panel-dossier" style="display:none">
+                <div class="carmen-panel-card">
+                  <div class="carmen-panel-badge">📋 DOSSIER</div>
+                  <div class="carmen-panel-title">Case Dossier</div>
+                  <div class="carmen-panel-desc">All gathered evidence and witness statements are compiled on the right.</div>
+                </div>
+              </div>
+              <div class="carmen-panel-view" id="carmen-panel-interpol" style="display:none">
+                <div class="carmen-panel-card carmen-interpol-panel-card">
+                  <div class="carmen-interpol-panel-clip" aria-hidden="true"></div>
+                  <div class="carmen-panel-badge">INTERPOL ARCHIVE</div>
+                  <div class="carmen-panel-title">Known Criminals</div>
+                  <div class="carmen-panel-desc">Browse active case files and compare suspect profiles by hand.</div>
+                  <div class="carmen-panel-cost">Consult archive: <strong>3 hours</strong> per new file</div>
+                </div>
+                <div class="carmen-interpol-list" id="carmen-interpol-list"></div>
+              </div>
             </div>
-          </div>
-          <div class="carmen-panel-view" id="carmen-panel-travel" style="display:none">
-            <div class="carmen-panel-card">
-              <div class="carmen-panel-badge">✈️ TRAVEL</div>
-              <div class="carmen-panel-title">Where did the thief go?</div>
-              <div class="carmen-panel-desc">Select a neighboring country on the map to follow the trail.</div>
-              <div class="carmen-panel-cost">⏱️ Travel cost: <strong>5 hours</strong> per trip</div>
-            </div>
-          </div>
-          <div class="carmen-panel-view" id="carmen-panel-dossier" style="display:none">
-            <div class="carmen-panel-card">
-              <div class="carmen-panel-badge">📋 DOSSIER</div>
-              <div class="carmen-panel-title">Case Dossier</div>
-              <div class="carmen-panel-desc">All gathered evidence and witness statements are compiled on the right.</div>
-            </div>
-          </div>
-          <div class="carmen-panel-view" id="carmen-panel-interpol" style="display:none">
-            <div class="carmen-panel-card carmen-interpol-panel-card">
-              <div class="carmen-interpol-panel-clip" aria-hidden="true"></div>
-              <div class="carmen-panel-badge">INTERPOL ARCHIVE</div>
-              <div class="carmen-panel-title">Known Criminals</div>
-              <div class="carmen-panel-desc">Browse active case files and compare suspect profiles by hand.</div>
-              <div class="carmen-panel-cost">Consult archive: <strong>3 hours</strong> per new file</div>
-            </div>
-            <div class="carmen-interpol-list" id="carmen-interpol-list"></div>
           </div>
         </div>
       </div>
@@ -389,8 +423,15 @@ export function createCarmenUI(container, flagCodes) {
           quirkOverride = 'Primary target. All cases lead here.';
         }
       }
+      const photoAdjust = INTERPOL_PHOTO_ADJUSTMENTS[suspect.name] || {};
+      const photoStyle = [
+        `--photo-scale-x:${photoAdjust.scaleX || 1.28}`,
+        `--photo-scale-y:${photoAdjust.scaleY || 1.18}`,
+        `--photo-offset-x:${photoAdjust.x || '0%'}`,
+        `--photo-offset-y:${photoAdjust.y || '0%'}`,
+      ].join(';');
       const photoHtml = suspect.img
-        ? `<img src="${esc(suspect.img)}" alt="${esc(suspect.name)}" class="carmen-interpol-photo-img">`
+        ? `<img src="${esc(suspect.img)}" alt="${esc(suspect.name)}" class="carmen-interpol-photo-img" style="${photoStyle}">`
         : `<div class="carmen-interpol-photo-silhouette">🕵️</div>`;
 
       const thefts = theftRecords || [];

@@ -269,6 +269,84 @@ body {
   height: 100%;
 }
 
+.carmen-notebook-shell {
+  position: relative;
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0.45rem 0.5rem 0.45rem 0.35rem;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(34, 27, 22, 0.52), rgba(18, 14, 11, 0.62)),
+    url('../carmen/img/left-folder.png') center center / cover no-repeat;
+  border: 1px solid rgba(186, 161, 122, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(252, 243, 224, 0.06),
+    inset 0 -1px 0 rgba(11, 8, 6, 0.3),
+    0 18px 32px rgba(7, 7, 8, 0.24);
+  overflow: hidden;
+}
+
+.carmen-notebook-shell::before {
+  content: "";
+  position: absolute;
+  top: 0.9rem;
+  bottom: 0.9rem;
+  left: 2.55rem;
+  width: 12px;
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgba(247, 228, 193, 0.1), rgba(66, 54, 42, 0.08) 30%, rgba(20, 15, 12, 0.28) 100%);
+  box-shadow:
+    inset 1px 0 0 rgba(255, 242, 214, 0.08),
+    inset -1px 0 0 rgba(13, 10, 8, 0.28);
+  pointer-events: none;
+}
+
+.carmen-notebook-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at 14% 26%, rgba(255, 240, 214, 0.05), transparent 18%),
+    radial-gradient(circle at 82% 68%, rgba(255, 232, 189, 0.03), transparent 20%),
+    radial-gradient(circle at 48% 42%, rgba(0, 0, 0, 0.11), transparent 26%);
+  opacity: 0.8;
+  pointer-events: none;
+}
+
+.carmen-notebook-body {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  padding: 0.3rem 0.35rem 0.3rem 0.2rem;
+  background:
+    linear-gradient(180deg, rgba(34, 27, 22, 0.18), rgba(18, 14, 11, 0.22)),
+    url('../carmen/img/left-folder.png') center center / cover no-repeat;
+  border-radius: 18px;
+}
+
+.carmen-notebook-body::before {
+  content: "";
+  position: absolute;
+  top: 0.7rem;
+  bottom: 0.7rem;
+  left: 0.18rem;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(244, 226, 191, 0.02),
+    rgba(244, 226, 191, 0.18),
+    rgba(49, 38, 29, 0.16),
+    rgba(244, 226, 191, 0.03)
+  );
+  pointer-events: none;
+}
+
 .carmen-right-panel {
   flex: 1;
   min-width: 0;
@@ -297,12 +375,21 @@ body {
 
 .carmen-panel-content {
   flex: 1;
+  display: flex;
+  flex-direction: column;
   overflow-y: auto;
   min-height: 0;
-  padding: 0.5rem 0.4rem;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: 12px;
+  padding: 0.7rem 0.55rem;
+  background:
+    linear-gradient(180deg, rgba(52, 43, 34, 0.28), rgba(30, 24, 20, 0.24)),
+    radial-gradient(circle at 50% 0%, rgba(239, 225, 198, 0.03), transparent 34%),
+    url('../carmen/img/left-folder.png') center center / cover no-repeat;
+  border: 1px solid rgba(199, 176, 138, 0.14);
+  border-radius: 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 246, 225, 0.04),
+    inset 0 0 0 1px rgba(17, 12, 9, 0.08);
+  backdrop-filter: blur(1px);
 }
 
 .carmen-panel-view {
@@ -314,39 +401,105 @@ body {
 .carmen-notebook-tabs {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 4px;
   align-self: stretch;
+  position: relative;
+  padding: 0.45rem 0 0.45rem 0.1rem;
+  z-index: 2;
+}
+
+.carmen-notebook-tabs::after {
+  content: "";
+  position: absolute;
+  top: 0.35rem;
+  bottom: 0.35rem;
+  right: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(214, 193, 154, 0.05),
+    rgba(214, 193, 154, 0.18),
+    rgba(214, 193, 154, 0.05)
+  );
+  pointer-events: none;
 }
 
 .carmen-notebook-tab {
   writing-mode: vertical-rl;
   text-orientation: mixed;
-  padding: 0.6rem 0.3rem;
-  border: 1px solid var(--card-border);
+  padding: 0.9rem 0.42rem;
+  min-height: 108px;
+  border: 1px solid rgba(180, 156, 118, 0.16);
   border-right: none;
-  background: rgba(23, 28, 39, 0.5);
-  color: var(--text-muted);
+  background:
+    linear-gradient(180deg, rgba(72, 63, 52, 0.88), rgba(44, 37, 31, 0.9)),
+    radial-gradient(circle at 30% 18%, rgba(229, 211, 176, 0.14), transparent 45%);
+  color: rgba(212, 205, 190, 0.74);
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.7rem;
+  font-size: 0.76rem;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 1.6px;
   text-transform: uppercase;
   cursor: pointer;
-  border-radius: 6px 0 0 6px;
+  border-radius: 10px 0 0 10px;
   margin-right: -1px;
-  transition: background 0.15s, color 0.15s;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 241, 214, 0.08),
+    inset -1px 0 0 rgba(18, 14, 11, 0.42),
+    0 8px 14px rgba(8, 8, 9, 0.18);
+  transition: background 0.16s, color 0.16s, transform 0.16s, box-shadow 0.16s;
   white-space: nowrap;
+  position: relative;
+  overflow: hidden;
+}
+
+.carmen-notebook-tab::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 28%, transparent 72%, rgba(0, 0, 0, 0.16)),
+    radial-gradient(circle at 50% 14%, rgba(222, 201, 162, 0.14), transparent 32%);
+  pointer-events: none;
+}
+
+.carmen-notebook-tab::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  right: 0;
+  width: 1px;
+  background: linear-gradient(
+    to bottom,
+    rgba(245, 227, 192, 0.04),
+    rgba(245, 227, 192, 0.2),
+    rgba(245, 227, 192, 0.04)
+  );
+  pointer-events: none;
 }
 
 .carmen-notebook-tab.active {
-  background: rgba(37, 43, 57, 0.62);
-  color: var(--text-color);
+  background:
+    linear-gradient(180deg, rgba(120, 104, 82, 0.96), rgba(85, 70, 54, 0.94)),
+    radial-gradient(circle at 28% 18%, rgba(248, 230, 194, 0.22), transparent 42%);
+  color: #f1e7d5;
   position: relative;
   z-index: 3;
+  transform: translateX(6px);
+  min-height: 118px;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 243, 220, 0.18),
+    inset -1px 0 0 rgba(35, 26, 19, 0.28),
+    0 14px 20px rgba(10, 9, 8, 0.22);
 }
 
 .carmen-notebook-tab:hover:not(.active) {
-  background: rgba(37, 43, 57, 0.56);
+  background:
+    linear-gradient(180deg, rgba(88, 76, 61, 0.92), rgba(54, 45, 37, 0.92)),
+    radial-gradient(circle at 30% 18%, rgba(236, 214, 174, 0.16), transparent 45%);
+  color: rgba(235, 226, 208, 0.84);
+  transform: translateX(2px);
 }
 
 /* (Travel panel uses shared .carmen-panel-card styles) */
@@ -356,8 +509,8 @@ body {
   text-align: center;
   padding: 0.85rem 1rem;
   border-radius: 10px;
-  background: rgba(37, 43, 57, 0.54);
-  border: 1px solid var(--card-border);
+  background: rgba(33, 27, 22, 0.28);
+  border: 1px solid rgba(199, 176, 138, 0.1);
   backdrop-filter: blur(1px);
   line-height: 1.5;
 }
@@ -378,8 +531,8 @@ body {
   gap: 0.6rem;
   padding: 0.85rem;
   border-radius: 10px;
-  background: rgba(37, 43, 57, 0.5);
-  border: 1px solid var(--card-border);
+  background: rgba(30, 24, 20, 0.24);
+  border: 1px solid rgba(199, 176, 138, 0.1);
   backdrop-filter: blur(1px);
 }
 
@@ -423,9 +576,9 @@ body {
   padding: 1rem 1rem 0.9rem;
   border-radius: 8px;
   background:
-    linear-gradient(180deg, rgba(255,255,255,0.28), rgba(124, 97, 72, 0.1)),
-    linear-gradient(180deg, #deccb4 0%, #c9b08e 100%);
-  border: 1px solid rgba(108, 79, 57, 0.42);
+    linear-gradient(180deg, rgba(255,255,255,0.18), rgba(124, 97, 72, 0.06)),
+    linear-gradient(180deg, rgba(222, 204, 180, 0.64) 0%, rgba(201, 176, 142, 0.54) 100%);
+  border: 1px solid rgba(108, 79, 57, 0.3);
   color: #2c2017;
   box-shadow:
     0 12px 24px rgba(19, 13, 10, 0.16),
@@ -1111,10 +1264,11 @@ body {
 
 .carmen-witness-entry {
   padding: 0.5rem 0.7rem;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  background: rgba(31, 25, 21, 0.24);
+  border: 1px solid rgba(199, 176, 138, 0.1);
   border-radius: 8px;
   margin-bottom: 0.45rem;
+  backdrop-filter: blur(1px);
 }
 
 .carmen-witness-header {
@@ -1609,22 +1763,62 @@ body {
     flex-direction: column;
   }
 
+  .carmen-notebook-shell {
+    flex-direction: column;
+    height: auto;
+    padding: 0.4rem;
+  }
+
+  .carmen-notebook-shell::before {
+    top: 2.65rem;
+    bottom: auto;
+    left: 0.9rem;
+    right: 0.9rem;
+    width: auto;
+    height: 10px;
+  }
+
+  .carmen-notebook-body {
+    padding: 0.2rem 0 0;
+  }
+
+  .carmen-notebook-body::before {
+    top: 0;
+    bottom: auto;
+    left: 0.7rem;
+    right: 0.7rem;
+    width: auto;
+    height: 1px;
+  }
+
   .carmen-notebook-tabs {
     flex-direction: row;
+    padding: 0 0.15rem;
   }
 
   .carmen-notebook-tab {
     writing-mode: horizontal-tb;
-    border-radius: 6px 6px 0 0;
-    border: 1px solid var(--card-border);
+    min-height: auto;
+    padding: 0.8rem 1rem;
+    border-radius: 10px 10px 0 0;
+    border: 1px solid rgba(180, 156, 118, 0.16);
     border-bottom: none;
     margin-right: 0;
     margin-bottom: -1px;
+    transform: none;
+  }
+
+  .carmen-notebook-tab.active,
+  .carmen-notebook-tab:hover:not(.active) {
+    transform: translateY(0);
+  }
+
+  .carmen-notebook-tab.active {
+    min-height: auto;
   }
 
   .carmen-panel-content {
-    border-left: none;
-    border-top: 1px solid var(--card-border);
+    padding: 0.65rem 0.5rem;
   }
 
   .carmen-right-panel {
@@ -1928,8 +2122,8 @@ body {
   border-radius: 12px;
   border: 1px solid var(--card-border);
   background:
-    linear-gradient(180deg, rgba(50, 37, 28, 0.42), rgba(28, 21, 16, 0.38)),
-    rgba(42, 37, 32, 0.5);
+    linear-gradient(180deg, rgba(50, 37, 28, 0.28), rgba(28, 21, 16, 0.24)),
+    rgba(42, 37, 32, 0.34);
   backdrop-filter: blur(1.5px);
 }
 
@@ -1942,51 +2136,57 @@ body {
 }
 
 .carmen-interpol-empty {
-  padding: 1.5rem 1.2rem;
+  padding: 1.8rem 1.5rem 1.5rem;
   text-align: center;
 }
 
 .carmen-interpol-empty-title {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 1.2rem;
-  font-weight: 800;
-  letter-spacing: 4px;
-  color: var(--star-color);
-  margin-bottom: 0.15rem;
+  font-size: 1.22rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: rgba(226, 204, 165, 0.82);
+  margin-bottom: 0.3rem;
 }
 
 .carmen-interpol-empty-full {
   font-family: 'Courier New', Courier, monospace;
-  font-size: 0.72rem;
-  color: var(--text-muted);
-  letter-spacing: 1px;
+  font-size: 0.8rem;
+  color: rgba(212, 196, 171, 0.62);
+  letter-spacing: 1.4px;
   text-transform: uppercase;
-  margin-bottom: 1rem;
+  margin-bottom: 1.3rem;
 }
 
 .carmen-interpol-empty-text {
   font-family: 'Georgia', 'Times New Roman', serif;
-  font-size: 0.82rem;
-  color: var(--text-color);
-  line-height: 1.5;
+  font-size: 0.96rem;
+  color: rgba(236, 225, 209, 0.78);
+  line-height: 1.72;
   text-align: left;
-  margin-bottom: 1.2rem;
+  margin: 0 auto 1.85rem;
+  max-width: 26rem;
 }
 
 .carmen-interpol-empty-img {
-  max-width: 30%;
+  max-width: 18%;
   height: auto;
-  margin: 0.8rem auto 5rem;
+  margin: 1.85rem auto;
   display: block;
-  opacity: 0.85;
+  opacity: 0.56;
   border-radius: 4px;
+  filter: sepia(0.16) saturate(0.82);
 }
 
 .carmen-interpol-empty-hint {
   font-family: 'Georgia', 'Times New Roman', serif;
-  font-size: 0.78rem;
-  color: var(--text-muted);
+  font-size: 0.9rem;
+  color: rgba(222, 206, 181, 0.76);
   font-style: italic;
+  letter-spacing: 0.2px;
+  max-width: 24rem;
+  margin: 0 auto;
+  line-height: 1.55;
 }
 
 .carmen-interpol-card {
