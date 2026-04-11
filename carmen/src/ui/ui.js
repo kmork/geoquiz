@@ -1082,7 +1082,7 @@ export function createCarmenUI(container, flagCodes) {
 
       // Overlay on the map
       const overlay = document.createElement('div');
-      overlay.className = 'carmen-map-overlay';
+      overlay.className = `carmen-map-overlay ${Math.random() < 0.5 ? 'carmen-country-arrival' : 'carmen-country-arrival-alt'}`;
       const tauntHtml = taunt ? `
         <div class="carmen-taunt">
           <div class="carmen-taunt-silhouette">🕵️</div>
