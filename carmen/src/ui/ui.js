@@ -359,7 +359,7 @@ export function createCarmenUI(container, flagCodes) {
     }, 500);
   }
 
-  function showNarratorCaption(text, duration = 4200) {
+  function showNarratorCaption(text, duration = 12000) {
     if (!text || !els.narratorCaption) return;
 
     clearNarratorCaptionTimers();
