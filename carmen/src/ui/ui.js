@@ -70,7 +70,7 @@ export function createCarmenUI(container, flagCodes) {
   container.innerHTML = `
     <div class="carmen-status-bar">
       <div class="carmen-missions" id="carmen-missions"></div>
-      <div class="pill">Score: <b id="carmen-score">0</b></div>
+      <div class="carmen-score-status">Score: <b id="carmen-score">0</b></div>
       <div class="carmen-progress" id="carmen-progress"></div>
       <div class="carmen-clock" id="carmen-clock"></div>
       <div class="carmen-music-toggle" id="carmen-music-toggle" title="Toggle music" style="display:none"><img src="${IMG.musicOn}" alt="Music"></div>
