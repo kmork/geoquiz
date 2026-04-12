@@ -133,7 +133,7 @@ function refreshInterpolList() {
     const everViewed = getInterpolViewed().has(suspect.name);
     const alreadyViewed = interpolViewedThisGame.has(suspect.name) || everViewed;
     const inCustody = unlocked.has(suspect.name);
-    const status = inCustody ? 'IN CUSTODY' : 'AT LARGE';
+    const status = inCustody ? 'IN CUSTODY' : 'ACTIVE';
 
     if (hasPhoto && !alreadyViewed) {
       logic.spendTime(INTERPOL_COST_HOURS);
@@ -188,7 +188,7 @@ function toggleInterpolMark(suspectName) {
   if (!suspect) return;
 
   const unlocked = getUnlockedSuspects();
-  const status = unlocked.has(suspect.name) ? 'IN CUSTODY' : 'AT LARGE';
+  const status = unlocked.has(suspect.name) ? 'IN CUSTODY' : 'ACTIVE';
   const thefts = getTheftHistory()[suspect.name] || [];
   const intel = buildInterpolProfileIntel(suspect, thefts);
   ui.showInterpolProfile(

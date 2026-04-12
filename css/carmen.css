@@ -2228,6 +2228,21 @@ body {
   border-color: rgba(148, 190, 168, 0.45);
 }
 
+.carmen-interpol-entry.in-custody {
+  background:
+    linear-gradient(180deg, rgba(63, 88, 74, 0.28), rgba(35, 57, 48, 0.24)),
+    rgba(30, 40, 35, 0.64);
+  border-color: rgba(100, 153, 124, 0.4);
+}
+
+.carmen-interpol-entry.in-custody .carmen-interpol-entry-tab {
+  background: rgba(89, 150, 118, 0.7);
+}
+
+.carmen-interpol-entry.in-custody .carmen-interpol-entry-name {
+  color: #e6efe7;
+}
+
 .carmen-interpol-entry.marked {
   border-color: rgba(181, 134, 83, 0.44);
   background:
@@ -2309,13 +2324,18 @@ body {
 }
 
 .carmen-interpol-entry-status.in-custody {
-  color: var(--good-color);
-  border: 1px solid var(--good-color);
+  color: #effcf2;
+  background: linear-gradient(180deg, rgba(40, 101, 68, 0.96), rgba(27, 74, 50, 0.96));
+  border: 1px solid rgba(132, 191, 157, 0.52);
+  box-shadow:
+    0 6px 14px rgba(22, 58, 39, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
 .carmen-interpol-entry-status.at-large {
-  color: var(--bad-color);
-  border: 1px solid var(--bad-color);
+  color: #7f251d;
+  background: rgba(182, 72, 59, 0.12);
+  border: 1px solid rgba(174, 62, 49, 0.34);
 }
 
 /* ── Interpol Profile Card ─────────────────────────── */

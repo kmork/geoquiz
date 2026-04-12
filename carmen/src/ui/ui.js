@@ -441,10 +441,11 @@ export function createCarmenUI(container, flagCodes) {
         const available = isCarmen || hasPhoto;
         const viewed = viewedNames.has(s.name);
         const marked = markedNames.has(s.name);
+        const inCustody = unlockedNames.has(s.name);
         const initials = s.name.split(/\s+/).map(part => part[0]).slice(0, 2).join('.').toUpperCase();
         if (available) {
           const costLabel = viewed ? 'free' : '3h';
-          html += `<button class="carmen-interpol-entry${viewed ? ' viewed' : ''}${marked ? ' marked' : ''}" data-name="${esc(s.name)}">
+          html += `<button class="carmen-interpol-entry${viewed ? ' viewed' : ''}${marked ? ' marked' : ''}${inCustody ? ' in-custody' : ''}" data-name="${esc(s.name)}">
             <span class="carmen-interpol-entry-tab"></span>
             <span class="carmen-interpol-entry-icon">${hasPhoto ? '📷' : '🕵️'}</span>
             <span class="carmen-interpol-entry-meta">
