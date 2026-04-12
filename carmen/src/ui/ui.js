@@ -44,8 +44,6 @@ const INTERPOL_PHOTO_ADJUSTMENTS = {
  * @param {Object}      flagCodes — { countryName: isoCode }
  */
 export function createCarmenUI(container, flagCodes) {
-  const ARTIFACT_HINT_KEY = 'carmen-artifact-hint-seen';
-
   // Briefing overlay — appended to body so it's not blocked by hidden gameContent
   const briefingEl = document.createElement('div');
   briefingEl.className = 'carmen-briefing-overlay';
@@ -284,9 +282,6 @@ export function createCarmenUI(container, flagCodes) {
     if (els.artifactFlipLabel) {
       els.artifactFlipLabel.classList.add('hidden');
     }
-    try {
-      localStorage.setItem(ARTIFACT_HINT_KEY, 'true');
-    } catch {}
   });
 
   els.musicToggle.addEventListener('click', () => {
@@ -724,12 +719,8 @@ export function createCarmenUI(container, flagCodes) {
       }
       els.artifactSummary.innerHTML = formatArtifactBack(artifact);
       els.artifactDisplay.classList.remove('flipped');
-      const showArtifactHint = (() => {
-        try { return localStorage.getItem(ARTIFACT_HINT_KEY) !== 'true'; }
-        catch { return true; }
-      })();
       if (els.artifactFlipLabel) {
-        els.artifactFlipLabel.classList.toggle('hidden', !showArtifactHint);
+        els.artifactFlipLabel.classList.remove('hidden');
       }
       els.notebookTabs.style.display = '';
       els.musicToggle.style.display = '';
