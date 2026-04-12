@@ -11,7 +11,7 @@ export const SUSPECTS = [
   { name: 'Carmen Sandiego', hair: 'black', accessory: 'red trench coat', hobby: 'tango dancing', vehicle: 'red convertible',
     origin: 'Buenos Aires, Argentina', knownRegions: ['South America', 'Europe', 'Asia'],
     geoFact: 'Once corrected a customs officer that the Danube flows through 10 countries, not 9.',
-    quirk: 'Cannot resist correcting geography mistakes', img: 'carmen/img/carmen-silhouette2.png' },
+    quirk: 'Cannot resist correcting geography mistakes', img: 'carmen/img/carmen-silhouette.png' },
   { name: 'Viktor Voss', hair: 'blond', accessory: 'monocle', hobby: 'chess', vehicle: 'submarine',
     origin: 'Vienna, Austria', knownRegions: ['Europe', 'North America'],
     geoFact: 'Won a chess tournament in every landlocked country in Europe.',
