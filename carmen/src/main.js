@@ -8,6 +8,7 @@ import { initConfetti } from '../../js/confetti.js';
 import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playLineupMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './audio/audio-engine.js';
 import { chooseNarratorScript } from './content/narrator-script.js';
 import { buildCountryEntryMonologue } from './content/country-entry-monologue.js';
+import { buildCaseBriefingHint, buildInterpolIntel, pickArrivalAmbientHint } from './content/carmen-hints.js';
 import { TOTAL_CASES } from './campaign/progression.js';
 import {
   getMissionHistory, saveMissionResult, getCurrentCase, advanceCase, setCase,
@@ -58,6 +59,7 @@ const INTERPOL_COST_HOURS = 3;
 let interpolViewedThisGame = new Set();
 let interpolMarkedThisCase = new Set();
 let activeInterpolSuspectName = null;
+let ambientHintStopsShown = new Set();
 
 // Wait for data.js
 while (!window.DATA) await new Promise(r => setTimeout(r, 50));
@@ -144,6 +146,7 @@ function refreshInterpolList() {
       setTimeout(() => {
         refreshInterpolList();
         const thefts = getTheftHistory()[suspect.name] || [];
+        const intel = buildInterpolProfileIntel(suspect, thefts);
         ui.showInterpolProfile(
           suspect,
           thefts,
@@ -151,6 +154,7 @@ function refreshInterpolList() {
           logic?.campaignPhase,
           interpolMarkedThisCase.has(suspect.name),
           toggleInterpolMark,
+          intel,
         );
       }, animDuration);
       return;
@@ -159,6 +163,7 @@ function refreshInterpolList() {
     refreshInterpolList(); // update cost labels
 
     const thefts = getTheftHistory()[suspect.name] || [];
+    const intel = buildInterpolProfileIntel(suspect, thefts);
     ui.showInterpolProfile(
       suspect,
       thefts,
@@ -166,6 +171,7 @@ function refreshInterpolList() {
       logic?.campaignPhase,
       interpolMarkedThisCase.has(suspect.name),
       toggleInterpolMark,
+      intel,
     );
   });
 }
@@ -184,6 +190,7 @@ function toggleInterpolMark(suspectName) {
   const unlocked = getUnlockedSuspects();
   const status = unlocked.has(suspect.name) ? 'IN CUSTODY' : 'AT LARGE';
   const thefts = getTheftHistory()[suspect.name] || [];
+  const intel = buildInterpolProfileIntel(suspect, thefts);
   ui.showInterpolProfile(
     suspect,
     thefts,
@@ -191,12 +198,23 @@ function toggleInterpolMark(suspectName) {
     logic?.campaignPhase,
     interpolMarkedThisCase.has(suspect.name),
     toggleInterpolMark,
+    intel,
   );
 }
 
 function getCountryEntryMonologue(country) {
   const historyText = logic?.countryMap?.[country]?.history || '';
   return buildCountryEntryMonologue(country, historyText);
+}
+
+function buildInterpolProfileIntel(suspect, thefts = []) {
+  return buildInterpolIntel(
+    suspect,
+    logic?.campaignPhase,
+    thefts,
+    getMissionHistory(),
+    getTheftHistory(),
+  );
 }
 
 async function handleEndChoice(choice, wasSuccess) {
@@ -325,7 +343,8 @@ async function startGame() {
 
   // Now show the case briefing overlay
   const totalHours = logic.getTimeState().totalHours;
-  await ui.showCaseBriefing(intro.artifact, intro.startCountry, totalHours, intro.caseNumber, intro.totalCases, intro.campaignPhase);
+  const briefingHint = buildCaseBriefingHint(intro.campaignPhase, intro.caseNumber, getMissionHistory());
+  await ui.showCaseBriefing(intro.artifact, intro.startCountry, totalHours, intro.caseNumber, intro.totalCases, intro.campaignPhase, briefingHint);
 
   // Hide the front image, show the header and game
   if (carmenFront) carmenFront.style.display = 'none';
@@ -354,6 +373,7 @@ async function startGame() {
   interpolViewedThisGame = new Set();
   interpolMarkedThisCase = new Set();
   activeInterpolSuspectName = null;
+  ambientHintStopsShown = new Set();
   refreshInterpolList();
 
   // Clear old clues and witness reports, then show investigation locations
@@ -472,6 +492,30 @@ function showInvestigationLocations() {
       ui.addClue(clue, informant);
       const country = logic.route[logic.currentStop];
       ui.addDossierEntry(logic.currentStop, clue.text, informant.prefix, informant.emoji, country, capitalOf[country]);
+      const ambientHint = !ambientHintStopsShown.has(logic.currentStop)
+        ? pickArrivalAmbientHint({
+            phase: logic.campaignPhase,
+            caseNumber: logic.caseNumber,
+            currentStop: logic.currentStop,
+            locationId,
+            missionHistory: getMissionHistory(),
+          })
+        : null;
+      if (ambientHint) {
+        ambientHintStopsShown.add(logic.currentStop);
+        ui.addWitnessReport({ text: ambientHint.text }, {
+          emoji: ambientHint.emoji,
+          prefix: ambientHint.prefix,
+        });
+        ui.addDossierEntry(
+          logic.currentStop,
+          ambientHint.text,
+          ambientHint.prefix,
+          ambientHint.emoji,
+          country,
+          capitalOf[country],
+        );
+      }
     } else {
       ui.addClue(
         { text: 'No new leads here.', icon: '❌' },

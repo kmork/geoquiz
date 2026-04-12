@@ -61,6 +61,7 @@ export function createCarmenUI(container, flagCodes) {
         <div class="carmen-suspect-hint">Gather clues to identify the thief</div>
       </div>
       <div class="carmen-briefing-mission" id="carmen-briefing-mission"></div>
+      <div class="carmen-briefing-note" id="carmen-briefing-note"></div>
       <button class="carmen-briefing-start" id="carmen-briefing-start">Accept Mission →</button>
     </div>
   `;
@@ -175,6 +176,7 @@ export function createCarmenUI(container, flagCodes) {
     briefing: briefingEl,
     briefingArtifact: briefingEl.querySelector('#carmen-briefing-artifact'),
     briefingMission: briefingEl.querySelector('#carmen-briefing-mission'),
+    briefingNote: briefingEl.querySelector('#carmen-briefing-note'),
     briefingStart: briefingEl.querySelector('#carmen-briefing-start'),
     introRow: container.querySelector('#carmen-intro-row'),
     narrative: container.querySelector('#carmen-narrative'),
@@ -489,7 +491,7 @@ export function createCarmenUI(container, flagCodes) {
      * Show a suspect's full Interpol profile in the right panel.
      * @param {Object} suspect — suspect object with geographic fields
      */
-    showInterpolProfile(suspect, theftRecords, status, campaignPhase, isMarked = false, onToggleMark = null) {
+    showInterpolProfile(suspect, theftRecords, status, campaignPhase, isMarked = false, onToggleMark = null, intel = null) {
       // Redact Carmen's profile based on campaign progression.
       let hair = suspect.hair, accessory = suspect.accessory, hobby = suspect.hobby, vehicle = suspect.vehicle;
       let quirkOverride = null;
@@ -528,6 +530,24 @@ export function createCarmenUI(container, flagCodes) {
 
       const statusClass = status === 'IN CUSTODY' ? 'in-custody' : 'at-large';
       const markLabel = isMarked ? 'Remove Mark' : 'Mark as Person of Interest';
+      const anomalySection = intel?.anomaly ? `
+            <div class="carmen-interpol-section">
+              <div class="carmen-interpol-section-label">FILE ANOMALIES</div>
+              <div class="carmen-interpol-notes">${esc(intel.anomaly)}</div>
+            </div>
+          ` : '';
+      const networkSection = intel?.network ? `
+            <div class="carmen-interpol-section">
+              <div class="carmen-interpol-section-label">NETWORK FLAGS</div>
+              <div class="carmen-interpol-notes">${esc(intel.network)}</div>
+            </div>
+          ` : '';
+      const patternSection = intel?.pattern ? `
+            <div class="carmen-interpol-section">
+              <div class="carmen-interpol-section-label">PATTERN NOTE</div>
+              <div class="carmen-interpol-notes">${esc(intel.pattern)}</div>
+            </div>
+          ` : '';
 
       els.interpolProfile.innerHTML = `
         <div class="carmen-interpol-card">
@@ -563,6 +583,9 @@ export function createCarmenUI(container, flagCodes) {
               <div class="carmen-interpol-section-label">GEO INTEL</div>
               <div class="carmen-interpol-geo">"${esc(suspect.geoFact || 'No geographic intelligence on file.')}"</div>
             </div>
+            ${anomalySection}
+            ${networkSection}
+            ${patternSection}
             <div class="carmen-interpol-section">
               <div class="carmen-interpol-section-label">NOTES</div>
               <div class="carmen-interpol-notes">${esc(quirkOverride || suspect.quirk || 'No behavioral notes on file.')}</div>
@@ -645,7 +668,7 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     /** Show dramatic case briefing overlay. Returns a promise that resolves when player clicks start. */
-    showCaseBriefing(artifact, startCountry, totalHours, caseNumber, totalCases, campaignPhase) {
+    showCaseBriefing(artifact, startCountry, totalHours, caseNumber, totalCases, campaignPhase, briefingNote = '') {
       return new Promise(resolve => {
         const siteName = artifact.siteName || 'a priceless artifact';
         const caseLabel = caseNumber
@@ -657,6 +680,8 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-artifact-origin">Last seen in ${esc(startCountry)}</div>
         `;
         els.briefingMission.textContent = '';
+        els.briefingNote.textContent = briefingNote || '';
+        els.briefingNote.style.display = briefingNote ? '' : 'none';
         els.briefing.style.display = 'flex';
 
         // Stamp animation + sound

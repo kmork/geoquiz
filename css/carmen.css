@@ -213,7 +213,17 @@ body {
   font-size: 0.88rem;
   color: var(--text-muted);
   line-height: 1.5;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.9rem;
+}
+
+.carmen-briefing-note {
+  font-size: 0.77rem;
+  line-height: 1.45;
+  color: #c9a55f;
+  font-style: italic;
+  border-left: 2px solid rgba(245, 158, 11, 0.35);
+  padding-left: 0.7rem;
+  margin-bottom: 1.35rem;
 }
 
 .carmen-tap-hint {
