@@ -577,8 +577,8 @@ function handleGuess(country) {
 
     if (result.gameOver && result.won) {
       // Found the thief's location — fly there first
-      const progress = logic.getProgress();
-      ui.updateScore(progress.score);
+      const progress = result.progress;
+      ui.updateScore(logic.score);
 
       const fromCountry = playerPosition || progress.route[progress.route.length - 2];
       const toCountry = result.country;
@@ -639,7 +639,7 @@ function handleGuess(country) {
 
     // Show highlight, then animate travel and show transition overlay
     const progress = result.progress;
-    ui.updateScore(progress.score);
+    ui.updateScore(logic.score);
 
     const taunt = logic.getTaunt();
     const fromCountry = playerPosition || progress.route[progress.route.length - 2] || progress.route[0];
@@ -674,7 +674,7 @@ function handleGuess(country) {
     ui.hideLocations();
 
     const progress = result.progress;
-    ui.updateScore(progress.score);
+    ui.updateScore(logic.score);
     const fromCountry = playerPosition || result.fromCountry;
 
     setTimeout(async () => {

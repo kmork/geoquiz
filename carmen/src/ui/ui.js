@@ -166,6 +166,9 @@ export function createCarmenUI(container, flagCodes) {
             </div>
           </div>
         </div>
+        <div class="carmen-right-view" id="carmen-rv-lineup" style="display:none">
+          <div class="carmen-lineup-stage" id="carmen-lineup-stage"></div>
+        </div>
         <div class="carmen-narrator-caption" id="carmen-narrator-caption" aria-live="polite"></div>
       </div>
     </div>
@@ -201,8 +204,10 @@ export function createCarmenUI(container, flagCodes) {
     rvMap: container.querySelector('#carmen-rv-map'),
     rvDossier: container.querySelector('#carmen-rv-dossier'),
     rvInterpol: container.querySelector('#carmen-rv-interpol'),
+    rvLineup: container.querySelector('#carmen-rv-lineup'),
     narratorCaption: container.querySelector('#carmen-narrator-caption'),
     interpolProfile: container.querySelector('#carmen-interpol-profile'),
+    lineupStage: container.querySelector('#carmen-lineup-stage'),
     artifactImg: container.querySelector('#carmen-artifact-img'),
     artifactDisplay: container.querySelector('#carmen-artifact-display'),
     artifactFlipLabel: container.querySelector('#carmen-artifact-flip-label'),
@@ -225,6 +230,12 @@ export function createCarmenUI(container, flagCodes) {
     thiefName: 'Unknown',
   };
   const witnessReports = [];
+  const lineupState = {
+    active: false,
+    suspects: [],
+    selectedName: '',
+    resolve: null,
+  };
 
   // Click the Interpol header card to return to intro view
   if (els.interpolCard) {
@@ -260,17 +271,38 @@ export function createCarmenUI(container, flagCodes) {
     dossier: els.rvDossier,
     interpol: els.rvInterpol,
   };
-  const allRightViews = [els.rvArtifact, els.rvClues, els.rvMap, els.rvDossier, els.rvInterpol];
+  const allRightViews = [els.rvArtifact, els.rvClues, els.rvMap, els.rvDossier, els.rvInterpol, els.rvLineup];
   let activeTab = 'case';
+  const notebookTabOrder = ['case', 'investigate', 'travel', 'dossier', 'interpol'];
+
+  function getAllowedTabs() {
+    return lineupState.active ? new Set(['case', 'dossier', 'interpol']) : new Set(notebookTabOrder);
+  }
+
+  function getRightViewForTab(tab) {
+    if (lineupState.active && tab === 'case') return els.rvLineup;
+    return rightViewForTab[tab];
+  }
+
+  function renderNotebookTabs() {
+    const allowedTabs = getAllowedTabs();
+    els.notebookTabs.querySelectorAll('.carmen-notebook-tab').forEach((tabEl) => {
+      const enabled = allowedTabs.has(tabEl.dataset.tab);
+      tabEl.classList.toggle('is-disabled', !enabled);
+      tabEl.setAttribute('aria-disabled', enabled ? 'false' : 'true');
+      tabEl.tabIndex = enabled ? 0 : -1;
+    });
+  }
 
   function switchTab(tab) {
+    if (!getAllowedTabs().has(tab)) return;
     activeTab = tab;
     // Left panel
     for (const [key, el] of Object.entries(leftPanels)) {
       el.style.display = key === tab ? '' : 'none';
     }
     // Right panel
-    const targetRight = rightViewForTab[tab];
+    const targetRight = getRightViewForTab(tab);
     for (const rv of allRightViews) {
       rv.style.display = rv === targetRight ? '' : 'none';
     }
@@ -284,6 +316,105 @@ export function createCarmenUI(container, flagCodes) {
     const tab = e.target.closest('.carmen-notebook-tab');
     if (tab) switchTab(tab.dataset.tab);
   });
+
+  function renderLineupCaseSummary() {
+    els.narrative.innerHTML = `
+      <div class="carmen-intro-card">
+        <div class="carmen-intro-badge">FINAL ACCUSATION</div>
+        <div class="carmen-intro-artifact">${esc(caseCardState.siteName)}</div>
+        <div class="carmen-intro-origin">Stolen from <strong>${esc(caseCardState.startCountry)}</strong></div>
+        <div class="carmen-intro-suspect">🔍 Suspect: <span class="thief-name">${lineupState.selectedName ? esc(lineupState.selectedName) : 'Unknown'}</span></div>
+        <div class="carmen-intro-intel">Review the files, then return here to issue the warrant.</div>
+      </div>
+    `;
+  }
+
+  function renderLineupStage() {
+    if (!els.lineupStage) return;
+    const selectedName = lineupState.selectedName;
+    const selectedSuspect = lineupState.suspects.find((suspect) => suspect.name === selectedName) || null;
+    els.lineupStage.innerHTML = `
+      <div class="carmen-lineup-content carmen-lineup-content-panel">
+        <div class="carmen-lineup-title">SUSPECT LINEUP</div>
+        <div class="carmen-lineup-subtitle">Cross-check dossier and Interpol before issuing the warrant.</div>
+        <div class="carmen-lineup-target${selectedSuspect ? ' is-locked' : ''}">
+          <div class="carmen-lineup-target-badge">${selectedSuspect ? 'PRIMARY TARGET' : 'NO TARGET SELECTED'}</div>
+          <div class="carmen-lineup-target-body">
+            <div class="carmen-lineup-target-portrait">
+              ${selectedSuspect
+                ? `<img src="${IMG.suspect(selectedSuspect.name)}" alt="${esc(selectedSuspect.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))">`
+                : '<span aria-hidden="true">🕵️</span>'}
+            </div>
+            <div class="carmen-lineup-target-copy">
+              <div class="carmen-lineup-target-name">${esc(selectedSuspect ? selectedSuspect.name : 'Choose a suspect')}</div>
+              <div class="carmen-lineup-target-text">${esc(selectedSuspect ? 'Warrant target selected. Issue the accusation when the file trail holds together.' : 'Study the four files below, then lock your warrant target here.')}</div>
+            </div>
+            <div class="carmen-lineup-actions">
+              <button class="carmen-lineup-confirm-btn" ${selectedName ? '' : 'disabled'}>Accuse suspect</button>
+            </div>
+          </div>
+        </div>
+        <div class="carmen-lineup-grid-label">Candidate mugshots</div>
+        <div class="carmen-lineup-grid">
+          ${lineupState.suspects.map(s => `
+            <button class="carmen-suspect-card${selectedName === s.name ? ' selected' : ''}" data-name="${esc(s.name)}">
+              <div class="carmen-suspect-card-badge">${selectedName === s.name ? 'TARGET' : 'FILE'}</div>
+              <div class="carmen-suspect-card-body">
+                <div class="carmen-suspect-silhouette"><img src="${IMG.suspect(s.name)}" alt="${esc(s.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))"></div>
+                <div class="carmen-suspect-card-copy">
+                  <div class="carmen-suspect-name">${esc(s.name)}</div>
+                  <div class="carmen-suspect-card-note">${selectedName === s.name ? 'Current warrant target' : 'Review file'}</div>
+                </div>
+              </div>
+            </button>
+          `).join('')}
+        </div>
+      </div>
+    `;
+
+    els.lineupStage.querySelectorAll('.carmen-suspect-card').forEach(card => {
+      card.addEventListener('click', () => {
+        lineupState.selectedName = card.dataset.name;
+        renderLineupCaseSummary();
+        renderLineupStage();
+      });
+    });
+
+    const confirmBtn = els.lineupStage.querySelector('.carmen-lineup-confirm-btn');
+    if (confirmBtn) {
+      confirmBtn.addEventListener('click', () => {
+        if (!lineupState.selectedName || !lineupState.resolve) return;
+        const chosenName = lineupState.selectedName;
+        const resolve = lineupState.resolve;
+        lineupState.active = false;
+        lineupState.suspects = [];
+        lineupState.selectedName = '';
+        lineupState.resolve = null;
+        if (els.lineupStage) {
+          els.lineupStage.innerHTML = '';
+        }
+        renderNotebookTabs();
+        switchTab('case');
+        resolve(chosenName);
+      });
+    }
+  }
+
+  function enterLineupPhase(lineup, resolve) {
+    lineupState.active = true;
+    lineupState.suspects = lineup.slice();
+    lineupState.selectedName = '';
+    lineupState.resolve = resolve;
+    els.locationsLabel.style.display = 'none';
+    els.locations.innerHTML = '';
+    els.reveal.style.display = 'none';
+    els.reveal.innerHTML = '';
+    els.sidebar.innerHTML = '';
+    renderNotebookTabs();
+    renderLineupCaseSummary();
+    renderLineupStage();
+    switchTab('case');
+  }
 
   els.artifactDisplay.addEventListener('click', () => {
     els.artifactDisplay.classList.toggle('flipped');
@@ -764,6 +895,14 @@ export function createCarmenUI(container, flagCodes) {
         els.artifactImg.src = imgUrl;
         els.artifactImg.alt = siteName;
       }
+      lineupState.active = false;
+      lineupState.suspects = [];
+      lineupState.selectedName = '';
+      lineupState.resolve = null;
+      if (els.lineupStage) {
+        els.lineupStage.innerHTML = '';
+      }
+      renderNotebookTabs();
       els.artifactSummary.innerHTML = formatArtifactBack(artifact);
       els.artifactDisplay.classList.remove('flipped');
       if (els.artifactFlipLabel) {
@@ -838,7 +977,8 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     updateProgress(stop, total) {
-      els.progress.textContent = `Stop ${stop + 1} of ${total}`;
+      const displayStop = Math.min(total, stop + 1);
+      els.progress.textContent = `Stop ${displayStop} of ${total}`;
     },
 
     updateClock(hoursRemaining, totalHours) {
@@ -972,38 +1112,7 @@ export function createCarmenUI(container, flagCodes) {
      */
     showSuspectLineup(lineup) {
       return new Promise(resolve => {
-        els.locationsLabel.style.display = 'none';
-        els.locations.innerHTML = '';
-        els.reveal.style.display = 'none';
-        els.sidebar.innerHTML = '';
-
-        const overlay = document.createElement('div');
-        overlay.className = 'carmen-lineup-overlay';
-
-        overlay.innerHTML = `
-          <div class="carmen-lineup-content">
-            <div class="carmen-lineup-title">SUSPECT LINEUP</div>
-            <div class="carmen-lineup-subtitle">Issue a warrant — identify the thief!</div>
-            <div class="carmen-lineup-grid">
-              ${lineup.map(s => `
-                <button class="carmen-suspect-card" data-name="${esc(s.name)}">
-                  <div class="carmen-suspect-silhouette"><img src="${IMG.suspect(s.name)}" alt="${esc(s.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))"></div>
-                  <div class="carmen-suspect-name">${esc(s.name)}</div>
-                </button>
-              `).join('')}
-            </div>
-          </div>
-        `;
-
-        container.appendChild(overlay);
-
-        overlay.querySelectorAll('.carmen-suspect-card').forEach(card => {
-          card.addEventListener('click', () => {
-            const name = card.dataset.name;
-            overlay.remove();
-            resolve(name);
-          });
-        });
+        enterLineupPhase(lineup, resolve);
       });
     },
 
