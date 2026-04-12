@@ -77,6 +77,12 @@ const ARRIVAL_HINTS = {
   },
 };
 
+const FINALE_ALIAS_HINTS = [
+  { prefix: 'Border memo', emoji: '🛂', text: 'The passport was flawless, which was the first problem. Real paperwork carries a little fatigue. This one looked born ironed.' },
+  { prefix: 'Witness report', emoji: '🕶️', text: 'Two clerks described the same woman an hour apart and swore they had seen different people. Same voice, same posture, different story wrapped around it.' },
+  { prefix: 'Hotel note', emoji: '🛎️', text: 'The alias had a full travel history on paper and none in conversation. People who have lived a life usually remember it without rehearsal.' },
+];
+
 const SUSPECT_INTEL = {
   'Viktor Voss': {
     anomaly: 'Financial traces suggest Voss rarely funds his own travel. Someone else seems to buy the opening move.',
@@ -165,6 +171,10 @@ export function pickArrivalAmbientHint({ phase, caseNumber, currentStop, locatio
   return pickDeterministic(pool, stopSeed);
 }
 
+export function pickFinaleAliasHint(currentStop) {
+  return FINALE_ALIAS_HINTS[currentStop] || null;
+}
+
 export function buildInterpolIntel(suspect, phase, theftRecords = [], missionHistory = [], allTheftHistory = {}) {
   const totalSolvedThefts = countRecordedThefts(allTheftHistory);
   const intel = {};
@@ -187,6 +197,8 @@ export function buildInterpolIntel(suspect, phase, theftRecords = [], missionHis
     }
     intel.anomaly = 'The redactions are over. The pattern, the style, and the missing artifacts now belong to one file.';
     intel.network = 'Every lieutenant file eventually points upward. This one does not point anywhere else.';
+    intel.irregularity = 'Older field notes repeatedly mention border work done under borrowed names, costumes, and identities that dissolved as soon as ACME wrote them down.';
+    intel.pattern = 'Carmen’s profile remains the only one in the archive that can survive contradictory witness descriptions without losing coherence.';
     return intel;
   }
 

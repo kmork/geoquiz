@@ -764,6 +764,12 @@ export function createCarmenUI(container, flagCodes) {
               <div class="carmen-interpol-notes">${esc(intel.anomaly)}</div>
             </div>
           ` : '';
+      const irregularitySection = intel?.irregularity ? `
+            <div class="carmen-interpol-section">
+              <div class="carmen-interpol-section-label">RECORD IRREGULARITIES</div>
+              <div class="carmen-interpol-notes">${esc(intel.irregularity)}</div>
+            </div>
+          ` : '';
       const networkSection = intel?.network ? `
             <div class="carmen-interpol-section">
               <div class="carmen-interpol-section-label">NETWORK FLAGS</div>
@@ -854,6 +860,7 @@ export function createCarmenUI(container, flagCodes) {
               <div class="carmen-interpol-geo">"${esc(suspect.geoFact || 'No geographic intelligence on file.')}"</div>
             </div>
             ${anomalySection}
+            ${irregularitySection}
             ${networkSection}
             ${patternSection}
             <div class="carmen-interpol-section">

@@ -8,7 +8,7 @@ import { initConfetti } from '../../js/confetti.js';
 import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playLineupMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './audio/audio-engine.js';
 import { chooseNarratorScript } from './content/narrator-script.js';
 import { buildCountryEntryMonologue } from './content/country-entry-monologue.js';
-import { buildCaseBriefingHint, buildInterpolIntel, pickArrivalAmbientHint } from './content/carmen-hints.js';
+import { buildCaseBriefingHint, buildInterpolIntel, pickArrivalAmbientHint, pickFinaleAliasHint } from './content/carmen-hints.js';
 import { TOTAL_CASES } from './campaign/progression.js';
 import {
   getMissionHistory, saveMissionResult, getCurrentCase, advanceCase, setCase,
@@ -60,6 +60,7 @@ let interpolViewedThisGame = new Set();
 let interpolMarkedThisCase = new Set();
 let activeInterpolSuspectName = null;
 let ambientHintStopsShown = new Set();
+let finaleEvidenceStopsShown = new Set();
 
 // Wait for data.js
 while (!window.DATA) await new Promise(r => setTimeout(r, 50));
@@ -231,6 +232,7 @@ function buildInterpolProfileIntel(suspect, thefts = []) {
   if (suspect?.isFinaleAlias) {
     return {
       anomaly: 'This file appeared intact and professionally indexed far too late in the campaign. ACME does not trust paperwork this tidy.',
+      irregularity: 'Origin, border stamps, and prior sightings all agree a little too neatly. The identity reads like paperwork written to satisfy paperwork.',
       network: 'Border records, witness cadence, and operational style place this identity uncomfortably close to Carmen\'s known pattern.',
       pattern: 'The subject matches Carmen\'s preference for theatrical exits, precise geography, and a profile that feels assembled rather than lived in.',
     };
@@ -405,6 +407,7 @@ async function startGame() {
   interpolMarkedThisCase = new Set();
   activeInterpolSuspectName = null;
   ambientHintStopsShown = new Set();
+  finaleEvidenceStopsShown = new Set();
   refreshInterpolList();
 
   // Clear old clues and witness reports, then show investigation locations
@@ -543,6 +546,24 @@ function showInvestigationLocations() {
           ambientHint.text,
           ambientHint.prefix,
           ambientHint.emoji,
+          country,
+          capitalOf[country],
+        );
+      }
+      const finaleHint = logic.campaignPhase === 'finale' && !finaleEvidenceStopsShown.has(logic.currentStop)
+        ? pickFinaleAliasHint(logic.currentStop)
+        : null;
+      if (finaleHint) {
+        finaleEvidenceStopsShown.add(logic.currentStop);
+        ui.addWitnessReport({ text: finaleHint.text }, {
+          emoji: finaleHint.emoji,
+          prefix: finaleHint.prefix,
+        });
+        ui.addDossierEntry(
+          logic.currentStop,
+          finaleHint.text,
+          finaleHint.prefix,
+          finaleHint.emoji,
           country,
           capitalOf[country],
         );
