@@ -328,8 +328,8 @@ async function startGame() {
     ]);
 
     if (!skipped) {
-      // Play narrator case 1 intro with subtitles
-      const { file: introFile, cues } = chooseNarratorScript(true, 1);
+      // Play narrator for current case with subtitles
+      const { file: introFile, cues } = chooseNarratorScript(true, getCurrentCase());
       const subtitle = document.createElement('div');
       subtitle.className = 'carmen-subtitle';
       carmenFront.appendChild(subtitle);
