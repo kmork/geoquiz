@@ -5,7 +5,7 @@ import { loadGeoJSON } from '../../js/geojson-loader.js';
 import { attachZoomPan } from '../../js/map-zoom-pan.js';
 import { saveGameRecord } from '../../js/game-records.js';
 import { initConfetti } from '../../js/confetti.js';
-import { startMusic, stopMusic, playNarratorIntro, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playLineupMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './audio/audio-engine.js';
+import { startMusic, stopMusic, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playLineupMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './audio/audio-engine.js';
 import { chooseNarratorScript } from './content/narrator-script.js';
 import { buildCountryEntryMonologue } from './content/country-entry-monologue.js';
 import { buildCaseBriefingHint, buildInterpolIntel, pickArrivalAmbientHint, pickFinaleAliasHint } from './content/carmen-hints.js';
@@ -262,7 +262,8 @@ async function handleEndChoice(choice, wasSuccess) {
   await new Promise(r => setTimeout(r, 1500));
 
   const caseJustPlayed = logic?.caseNumber || getCurrentCase();
-  const { file: narratorFile, cues } = chooseNarratorScript(wasSuccess, caseJustPlayed);
+  const nextCase = wasSuccess ? caseJustPlayed + 1 : caseJustPlayed;
+  const { file: narratorFile, cues } = chooseNarratorScript(wasSuccess, nextCase);
 
   // Create subtitle element
   const subtitle = document.createElement('div');
@@ -327,25 +328,11 @@ async function startGame() {
     ]);
 
     if (!skipped) {
-      // Play narrator with subtitles
+      // Play narrator case 1 intro with subtitles
+      const { file: introFile, cues } = chooseNarratorScript(true, 1);
       const subtitle = document.createElement('div');
       subtitle.className = 'carmen-subtitle';
       carmenFront.appendChild(subtitle);
-
-      const cues = [
-        [0.0,  "The world's a big place."],
-        [1.2,  "Too big, if you ask me.\nToo many corners to hide in."],
-        [4.5,  "Too many stories buried\nunder stone, sand, and time."],
-        [7.5,  "Most people pass through it\nwithout noticing a thing."],
-        [10.5, "Snap a picture.\nBuy a postcard. Move on."],
-        [13.0, "Me?"],
-        [14.0, "I notice what's missing."],
-        [15.5, "That's how it starts.\nIt always does."],
-        [18.5, "Something small at first.\nA whisper."],
-        [21.0, "A detail that doesn't sit right."],
-        [23.0, "Then the call comes in."],
-        [24.5, "And suddenly\u2026\na piece of the world is gone."],
-      ];
 
       const cueTimeouts = [];
       for (const [time, text] of cues) {
@@ -360,7 +347,7 @@ async function startGame() {
 
       // Wait for narrator to finish OR user tap to skip
       await Promise.race([
-        playNarratorIntro(),
+        playNarrator(introFile),
         waitForClick(carmenFront),
       ]);
       stopNarrator();
