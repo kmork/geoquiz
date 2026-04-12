@@ -71,7 +71,7 @@ export function createCarmenUI(container, flagCodes) {
       <div class="carmen-missions" id="carmen-missions"></div>
       <div class="carmen-score-status">Score: <b id="carmen-score">0</b></div>
       <div class="carmen-progress" id="carmen-progress"></div>
-      <div class="carmen-clock" id="carmen-clock"></div>
+      <div class="carmen-clock" id="carmen-clock"><span class="carmen-clock-icon" aria-hidden="true">🕰</span><span class="carmen-clock-text"></span></div>
       <div class="carmen-music-toggle" id="carmen-music-toggle" title="Toggle music" style="display:none"><img src="${IMG.musicOn}" alt="Music"></div>
     </div>
     <div class="carmen-intro-row side-by-side" id="carmen-intro-row">
@@ -796,6 +796,11 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     updateClock(hoursRemaining, totalHours) {
+      const clockText = els.clock.querySelector('.carmen-clock-text');
+      const setClockText = (text) => {
+        if (clockText) clockText.textContent = text;
+        else els.clock.textContent = text;
+      };
       const prev = this._prevHours ?? hoursRemaining;
       this._prevHours = hoursRemaining;
 
@@ -803,7 +808,7 @@ export function createCarmenUI(container, flagCodes) {
         // No change — just set it
         const days = Math.floor(hoursRemaining / 24);
         const hours = hoursRemaining % 24;
-        els.clock.textContent = `⏰ ${days}d ${hours}h`;
+        setClockText(`${days}d ${hours}h`);
       } else {
         // Animate countdown from prev to target
         if (this._clockTimer) clearInterval(this._clockTimer);
@@ -815,7 +820,7 @@ export function createCarmenUI(container, flagCodes) {
           current--;
           const d = Math.floor(current / 24);
           const h = current % 24;
-          els.clock.textContent = `⏰ ${d}d ${h}h`;
+          setClockText(`${d}d ${h}h`);
           if (current <= hoursRemaining) {
             clearInterval(this._clockTimer);
             this._clockTimer = null;

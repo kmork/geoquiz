@@ -1059,27 +1059,46 @@ body {
 }
 
 .carmen-clock {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.34rem;
   font-size: 0.88rem;
   font-weight: 600;
   color: var(--text-color);
-  padding: 0.12rem 0.42rem;
-  border-radius: 6px;
-  background: var(--button-bg);
-  border: 1px solid var(--button-border);
-  transition: color 0.3s, border-color 0.3s, background 0.3s;
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  transition: color 0.3s, opacity 0.3s;
+}
+
+.carmen-clock-icon {
+  font-size: 1rem;
+  line-height: 1;
+  color: #9b7a53;
+  filter: saturate(0.72) sepia(0.24);
+}
+
+.carmen-clock-text {
+  line-height: 1.1;
 }
 
 .carmen-clock.low {
   color: var(--star-color);
-  border-color: rgba(251, 191, 36, 0.4);
-  background: rgba(251, 191, 36, 0.1);
+  opacity: 0.96;
+}
+
+.carmen-clock.low .carmen-clock-icon {
+  color: #bf9242;
 }
 
 .carmen-clock.critical {
   color: var(--bad-color);
-  border-color: rgba(239, 68, 68, 0.4);
-  background: rgba(239, 68, 68, 0.1);
   animation: carmen-clock-pulse 1s ease-in-out infinite;
+}
+
+.carmen-clock.critical .carmen-clock-icon {
+  color: #b8483b;
 }
 
 @keyframes carmen-clock-pulse {
