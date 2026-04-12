@@ -2792,10 +2792,46 @@ body {
   color: #7a4126;
 }
 
+.carmen-interpol-page-btn {
+  position: absolute;
+  top: 3.35rem;
+  right: 1.15rem;
+  border: 1px solid rgba(131, 97, 66, 0.28);
+  background: rgba(255, 248, 238, 0.42);
+  color: #5f4127;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.66rem;
+  letter-spacing: 0.75px;
+  text-transform: uppercase;
+  border-radius: 999px;
+  padding: 0.28rem 0.7rem;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, transform 0.15s;
+}
+
+.carmen-interpol-page-btn:hover {
+  background: rgba(255, 248, 238, 0.58);
+  border-color: rgba(131, 97, 66, 0.44);
+  transform: translateY(-1px);
+}
+
 .carmen-interpol-top {
   display: flex;
   gap: 1rem;
   margin-bottom: 1rem;
+}
+
+.carmen-interpol-story-head {
+  padding-right: 8rem;
+  margin-bottom: 1rem;
+}
+
+.carmen-interpol-story-subtitle {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 0.9rem;
+  color: rgba(82, 60, 42, 0.82);
+  font-style: italic;
+  line-height: 1.45;
 }
 
 .carmen-interpol-photo {
@@ -2905,4 +2941,20 @@ body {
   font-size: 0.82rem;
   color: rgba(66, 49, 36, 0.88);
   line-height: 1.5;
+}
+
+.carmen-interpol-story {
+  max-width: 34rem;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 0.98rem;
+  color: rgba(48, 35, 25, 0.9);
+  line-height: 1.72;
+}
+
+.carmen-interpol-story p {
+  margin: 0 0 1rem;
+}
+
+.carmen-interpol-story p:last-child {
+  margin-bottom: 0;
 }

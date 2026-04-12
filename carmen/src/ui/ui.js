@@ -4,6 +4,7 @@
 
 import { playStamp, startClockTicking, stopClockTicking, toggleMusicMute, isMusicMuted } from '../audio/audio-engine.js';
 import { IMG } from '../assets.js';
+import { getInterpolBackgroundStory } from '../content/interpol-backgrounds.js';
 import { typewriter } from './typewriter.js';
 
 const INTERPOL_PHOTO_ADJUSTMENTS = {
@@ -689,7 +690,7 @@ export function createCarmenUI(container, flagCodes) {
      * Show a suspect's full Interpol profile in the right panel.
      * @param {Object} suspect — suspect object with geographic fields
      */
-    showInterpolProfile(suspect, theftRecords, status, campaignPhase, isMarked = false, onToggleMark = null, intel = null) {
+    showInterpolProfile(suspect, theftRecords, status, campaignPhase, isMarked = false, onToggleMark = null, intel = null, page = 'main') {
       // Redact Carmen's profile based on campaign progression.
       let hair = suspect.hair, accessory = suspect.accessory, hobby = suspect.hobby, vehicle = suspect.vehicle;
       let quirkOverride = null;
@@ -731,6 +732,8 @@ export function createCarmenUI(container, flagCodes) {
 
       const statusClass = status === 'IN CUSTODY' ? 'in-custody' : 'at-large';
       const markLabel = isMarked ? 'Remove Mark' : 'Mark as Person of Interest';
+      const backgroundStory = status === 'IN CUSTODY' ? getInterpolBackgroundStory(suspect) : null;
+      const hasBackgroundPage = !!backgroundStory;
       const anomalySection = intel?.anomaly ? `
             <div class="carmen-interpol-section">
               <div class="carmen-interpol-section-label">FILE ANOMALIES</div>
@@ -749,6 +752,47 @@ export function createCarmenUI(container, flagCodes) {
               <div class="carmen-interpol-notes">${esc(intel.pattern)}</div>
             </div>
           ` : '';
+      const pageNavButton = hasBackgroundPage && page === 'main'
+        ? '<button class="carmen-interpol-page-btn" data-page="background">Read Background File →</button>'
+        : page === 'background'
+          ? '<button class="carmen-interpol-page-btn" data-page="main">← Return To Main File</button>'
+          : '';
+
+      if (page === 'background' && hasBackgroundPage) {
+        const storyHtml = backgroundStory
+          .split('\n\n')
+          .map(paragraph => `<p>${esc(paragraph)}</p>`)
+          .join('');
+
+        els.interpolProfile.innerHTML = `
+          <div class="carmen-interpol-card">
+            <div class="carmen-interpol-sheet carmen-interpol-sheet-back-1" aria-hidden="true"></div>
+            <div class="carmen-interpol-sheet carmen-interpol-sheet-back-2" aria-hidden="true"></div>
+            <div class="carmen-interpol-file">
+              <div class="carmen-interpol-paperclip" aria-hidden="true"></div>
+              <div class="carmen-interpol-header-label">INTERPOL FILE — SUPPLEMENTAL NARRATIVE</div>
+              ${pageNavButton}
+              <div class="carmen-interpol-story-head">
+                <div class="carmen-interpol-name">${esc(suspect.name)}</div>
+                <div class="carmen-interpol-story-subtitle">Background history and entry into professional criminal absurdity</div>
+              </div>
+              <div class="carmen-interpol-section">
+                <div class="carmen-interpol-section-label">BACKGROUND HISTORY</div>
+                <div class="carmen-interpol-story">${storyHtml}</div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        const pageBtn = els.interpolProfile.querySelector('.carmen-interpol-page-btn');
+        if (pageBtn) {
+          pageBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            this.showInterpolProfile(suspect, thefts, status, campaignPhase, isMarked, onToggleMark, intel, 'main');
+          });
+        }
+        return;
+      }
 
       els.interpolProfile.innerHTML = `
         <div class="carmen-interpol-card">
@@ -758,6 +802,7 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-interpol-paperclip" aria-hidden="true"></div>
             <div class="carmen-interpol-header-label">INTERPOL FILE — CLASSIFIED</div>
             <button class="carmen-interpol-mark-btn${isMarked ? ' marked' : ''}" data-name="${esc(suspect.name)}">${markLabel}</button>
+            ${pageNavButton}
             <div class="carmen-interpol-top">
               <div class="carmen-interpol-photo">
                 ${photoHtml}
@@ -801,6 +846,13 @@ export function createCarmenUI(container, flagCodes) {
           event.preventDefault();
           event.stopPropagation();
           onToggleMark(suspect.name);
+        });
+      }
+      const pageBtn = els.interpolProfile.querySelector('.carmen-interpol-page-btn');
+      if (pageBtn) {
+        pageBtn.addEventListener('click', (event) => {
+          event.preventDefault();
+          this.showInterpolProfile(suspect, thefts, status, campaignPhase, isMarked, onToggleMark, intel, 'background');
         });
       }
     },
