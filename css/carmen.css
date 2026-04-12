@@ -1391,6 +1391,10 @@ body {
   margin-top: 0.6rem;
 }
 
+.carmen-witness-report-investigate {
+  margin-top: 0.9rem;
+}
+
 .carmen-witness-entry {
   padding: 0.5rem 0.7rem;
   background: rgba(31, 25, 21, 0.24);

@@ -96,6 +96,7 @@ export function createCarmenUI(container, flagCodes) {
                   <div class="carmen-panel-desc" id="carmen-locations-label"></div>
                   <div class="carmen-locations" id="carmen-locations"></div>
                 </div>
+                <div class="carmen-witness-report carmen-witness-report-investigate" id="carmen-witness-report-investigate"></div>
               </div>
               <div class="carmen-panel-view" id="carmen-panel-travel" style="display:none">
                 <div class="carmen-panel-card">
@@ -189,6 +190,7 @@ export function createCarmenUI(container, flagCodes) {
     locationsLabel: container.querySelector('#carmen-locations-label'),
     locations: container.querySelector('#carmen-locations'),
     witnessReport: container.querySelector('#carmen-witness-report'),
+    witnessReportInvestigate: container.querySelector('#carmen-witness-report-investigate'),
     panelTravel: container.querySelector('#carmen-panel-travel'),
     panelDossier: container.querySelector('#carmen-panel-dossier'),
     panelInterpol: container.querySelector('#carmen-panel-interpol'),
@@ -217,6 +219,12 @@ export function createCarmenUI(container, flagCodes) {
   const interpolIntroHtml = els.interpolProfile.innerHTML;
   let narratorCaptionTimer = null;
   let narratorCaptionCleanupTimer = null;
+  const caseCardState = {
+    siteName: 'a priceless artifact',
+    startCountry: '',
+    thiefName: 'Unknown',
+  };
+  const witnessReports = [];
 
   // Click the Interpol header card to return to intro view
   if (els.interpolCard) {
@@ -324,6 +332,67 @@ export function createCarmenUI(container, flagCodes) {
     els.dossierBody.innerHTML = html;
     // Auto-scroll to bottom
     els.dossierBody.scrollTop = els.dossierBody.scrollHeight;
+  }
+
+  function createWitnessEntry(report, includeActions = false) {
+    const entry = document.createElement('div');
+    entry.className = `carmen-witness-entry${report.confirmed ? ' carmen-witness-confirmed' : ''}`;
+    if (report.clueId) entry.dataset.clueId = report.clueId;
+
+    let investigateHtml = '';
+    if (includeActions && report.canInvestigate && report.onInvestigateFurther && !report.confirmed) {
+      const cost = report.investigateCost || 2;
+      investigateHtml = `
+        <button class="carmen-investigate-further-btn">
+          🔎 Investigate further (${cost}h)
+        </button>
+      `;
+    }
+
+    entry.innerHTML = `
+      <div class="carmen-witness-header">
+        <span class="carmen-witness-emoji">${esc(report.emoji)}</span>
+        <span class="carmen-witness-prefix">${esc(report.prefix)}:</span>
+      </div>
+      <div class="carmen-witness-text">"${esc(report.text)}"</div>
+      ${investigateHtml}
+    `;
+
+    if (includeActions && report.confirmedText) {
+      const confirmed = document.createElement('div');
+      confirmed.className = 'carmen-witness-text carmen-witness-specific';
+      confirmed.textContent = `"${report.confirmedText}"`;
+      entry.appendChild(confirmed);
+    }
+
+    if (includeActions && report.onInvestigateFurther && !report.confirmed) {
+      const btn = entry.querySelector('.carmen-investigate-further-btn');
+      if (btn) {
+        btn.addEventListener('click', () => {
+          btn.remove();
+          report.onInvestigateFurther();
+        });
+      }
+    }
+
+    return entry;
+  }
+
+  function renderWitnessReports() {
+    if (els.witnessReport) {
+      els.witnessReport.innerHTML = '';
+      const latest = witnessReports[witnessReports.length - 1];
+      if (latest) {
+        els.witnessReport.appendChild(createWitnessEntry(latest, false));
+      }
+    }
+
+    if (els.witnessReportInvestigate) {
+      els.witnessReportInvestigate.innerHTML = '';
+      for (const report of witnessReports) {
+        els.witnessReportInvestigate.appendChild(createWitnessEntry(report, true));
+      }
+    }
   }
 
   function clearNarratorCaptionTimers() {
@@ -605,65 +674,34 @@ export function createCarmenUI(container, flagCodes) {
 
     /** Clear witness reports on Case tab. */
     clearWitnessReports() {
-      els.witnessReport.innerHTML = '';
+      witnessReports.length = 0;
+      renderWitnessReports();
     },
 
-    /** Show a witness report on the Case tab. Optionally with an "investigate further" button. */
+    /** Show a witness report on Case preview and Investigate workspace. */
     addWitnessReport(clue, informant) {
-      const emoji = informant?.emoji || '🔍';
-      const prefix = informant?.prefix || 'Witness report';
-      const text = clue.text;
-      const clueId = informant?.clueId || '';
-
-      const entry = document.createElement('div');
-      entry.className = 'carmen-witness-entry';
-      if (clueId) entry.dataset.clueId = clueId;
-
-      let investigateHtml = '';
-      if (informant?.canInvestigate && informant?.onInvestigateFurther) {
-        const cost = informant.investigateCost || 2;
-        investigateHtml = `
-          <button class="carmen-investigate-further-btn">
-            🔎 Investigate further (${cost}h)
-          </button>
-        `;
-      }
-
-      entry.innerHTML = `
-        <div class="carmen-witness-header">
-          <span class="carmen-witness-emoji">${emoji}</span>
-          <span class="carmen-witness-prefix">${esc(prefix)}:</span>
-        </div>
-        <div class="carmen-witness-text">"${esc(text)}"</div>
-        ${investigateHtml}
-      `;
-
-      if (informant?.onInvestigateFurther) {
-        const btn = entry.querySelector('.carmen-investigate-further-btn');
-        if (btn) {
-          btn.addEventListener('click', () => {
-            btn.remove();
-            informant.onInvestigateFurther();
-          });
-        }
-      }
-
-      els.witnessReport.appendChild(entry);
+      witnessReports.push({
+        emoji: informant?.emoji || '🔍',
+        prefix: informant?.prefix || 'Witness report',
+        text: clue.text,
+        clueId: informant?.clueId || '',
+        canInvestigate: !!informant?.canInvestigate,
+        investigateCost: informant?.investigateCost || 2,
+        onInvestigateFurther: informant?.onInvestigateFurther || null,
+        confirmed: false,
+        confirmedText: '',
+      });
+      renderWitnessReports();
     },
 
     /** Upgrade a vague witness report to a specific one in-place. */
     upgradeWitnessReport(clueId, specificClue) {
-      const entry = els.witnessReport.querySelector(`[data-clue-id="${clueId}"]`);
-      if (entry) {
-        entry.classList.add('carmen-witness-confirmed');
-        const btn = entry.querySelector('.carmen-investigate-further-btn');
-        if (btn) btn.remove();
-        // Add the confirmed specific clue underneath the vague one
-        const confirmed = document.createElement('div');
-        confirmed.className = 'carmen-witness-text carmen-witness-specific';
-        confirmed.textContent = `"${specificClue.text}"`;
-        entry.appendChild(confirmed);
+      const report = witnessReports.find(r => r.clueId === clueId);
+      if (report) {
+        report.confirmed = true;
+        report.confirmedText = specificClue.text;
       }
+      renderWitnessReports();
     },
 
     /** Show dramatic case briefing overlay. Returns a promise that resolves when player clicks start. */
@@ -716,6 +754,9 @@ export function createCarmenUI(container, flagCodes) {
     showIntro(thiefName, artifact, startCountry) {
       const siteName = artifact.siteName || 'a priceless artifact';
       const imgUrl = artifact.imageUrl || '';
+      caseCardState.siteName = siteName;
+      caseCardState.startCountry = startCountry || '';
+      caseCardState.thiefName = thiefName || 'Unknown';
       // Set artifact image for the right-side display
       if (imgUrl) {
         els.artifactImg.src = imgUrl;
@@ -753,6 +794,9 @@ export function createCarmenUI(container, flagCodes) {
       els.narrative.innerHTML = `
         <div class="carmen-intro-card">
           <div class="carmen-intro-badge">ACTIVE CASE</div>
+          <div class="carmen-intro-artifact">${esc(caseCardState.siteName)}</div>
+          <div class="carmen-intro-origin">Stolen from <strong>${esc(caseCardState.startCountry)}</strong></div>
+          <div class="carmen-intro-suspect">🔍 Suspect: <span class="thief-name">${esc(caseCardState.thiefName)}</span></div>
           <div class="carmen-intro-intel">${intel}</div>
         </div>
       `;
