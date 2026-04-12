@@ -15,10 +15,10 @@ const CASE_CUES = {
   1: [
     [0.0,  "The world's a big place."],
     [2.0,  "Too big, if you ask me."],
-    [4.5,  "You miss one thing\u2026\nand suddenly it matters."],
-    [8.0,  "That's why ACME\nkeeps me on the payroll."],
-    [11.5, "Somewhere, a jazz track\nprobably started playing."],
-    [15.0, "I didn't hear it."],
+    [5.0,  "You miss one thing\u2026\nand suddenly it matters."],
+    [9.0,  "That's why ACME\nkeeps me on the payroll."],
+    [12.0, "Somewhere, a jazz track\nprobably started playing."],
+    [16.0, "I didn't hear it."],
     [17.0, "Phone rang anyway."],
   ],
   2: [
