@@ -147,152 +147,96 @@ The next UI gains should come from stronger narrative usefulness, not more decor
 ### Guiding Principle
 The game should remain a geography-learning game first, with noir flavor and self-ironic detective framing used to make the learning loop more memorable. Every new mechanic should either clarify a geography concept, reward close reading of clues, or increase the emotional payoff of solving the geography puzzle.
 
-### Phase 1: Improve the Narrator Monologues
-The new caption system is the most obvious recent addition, so it should be polished before more systems are added on top.
+### Phase 1: Finish the Narrator System Properly
+The arrival monologues are now a visible part of the game identity, so the remaining work here is editorial and pacing polish rather than new mechanics.
 
 Planned improvements:
 
-- Hand-edit the country-entry monologues so they feel more authored and less like dressed-up summary text.
-- Keep the tone dry, noir, and slightly self-parodic without turning jokey.
-- Tune caption timing and possibly let especially long lines stay visible until the transition button is pressed.
-- Add a few structural variations so not every line starts with the same cadence.
+- Keep tightening the country-entry monologues so they sound authored, overcommitted, and consistently noir-self-aware.
+- Continue handling modern or anachronistic history facts with explicit narrator self-awareness instead of pretending the period mismatch does not exist.
+- Tune where and how narrator beats appear outside country arrivals, especially for repeated dead ends, close calls, and finale-adjacent moments.
+- Keep the narrator useful as atmosphere, not as a hint-delivery system.
 
 Design goal:
-The player should feel that entering a country has mood and narrative identity, not just another stop marker.
+The detective voice should feel like a coherent character layer across the campaign, not just a caption feature.
 
-### Phase 2: Make Interpol Strategically Legible
-Interpol should stop feeling like optional flavor and start acting as a detective's reference cabinet. The key change is not automatic narrowing, but making the files and clues easier to compare by hand.
+### Phase 2: Deepen Interpol as a Flavor Archive
+Interpol is now working best as a detective-fiction reward surface rather than a comparison engine. That direction should be pushed further.
 
 Planned improvements:
 
-- Expose a consistent clue vocabulary across witness reports, dossier entries, and Interpol files.
-- Use player-facing category labels such as `dark hair`, `headwear`, `jewelry`, `land vehicle`, `air vehicle`, `artistic`, `outdoors`, and `collector`.
-- Let the player pin suspects and pin clue entries for manual comparison.
-- Add short detective commentary that suggests how to reason, not who to suspect.
+- Expand the `IN CUSTODY` file concept with more second-page and supplemental material in the same style as the new background stories.
+- Add richer file-only material such as ACME remarks, failed operation summaries, post-arrest habits, or known-associate anecdotes.
+- Keep these additions flavor-first and retrospective; they should add character, not help solve the current suspect lineup.
+- Make the archive feel cumulative across the campaign, so prior arrests gradually become a gallery of Carmen's absurd orbit.
 
 Design goal:
-The player should understand why opening Interpol matters, but should still have to do the deduction work themselves.
+Interpol should reward curiosity and success without doing the detective work for the player.
 
-### Phase 3: Fuse Dossier and Interpol Into One Deduction System
-The dossier should feel like a detective notebook, not a solved spreadsheet. It should support comparison and memory without grading the player's logic in real time.
+### Phase 3: Strengthen Campaign Foreshadowing
+The next major gain should come from making the campaign feel like one growing investigation rather than a chain of disconnected chases.
 
 Planned improvements:
 
-- Let dossier clues and Interpol profiles share the same structured clue language without auto-resolving matches.
-- Add a small working-board concept where pinned clues and pinned suspects can be kept side by side during a case.
-- Add neutral profile fields such as `known regions`, `known associates`, `behavior notes`, and `record irregularities`.
-- Add alias evidence, recurring criminal patterns, and links between suspects.
-- Use prior arrests and theft history to imply that Carmen is connected to the whole network.
-- Seed references in later cases that suggest one unseen mastermind is coordinating the crimes.
+- Add more Carmen-network hints across briefings, taunts, Interpol anomalies, witness-side flavor notes, and dossier-adjacent story beats.
+- Make phase progression more legible through tone:
+  early cases feel like isolated professionals;
+  mid-campaign cases imply a structure;
+  late cases make Carmen's presence unmistakable.
+- Use prior arrests, theft history, and repeated patterns to suggest that the player is slowly surrounding an organization rather than catching random thieves.
+- Keep every hint interpretive rather than mechanical.
 
 Design goal:
-The player should start feeling that they are not only chasing thieves, but slowly uncovering the structure of Carmen's organization.
+The player should feel the net closing around Carmen long before the finale begins.
 
-### Phase 4: Manual-First Dossier Workflow
-The dossier already looks more like a case file than before. The next step is to make it more useful without turning it into an auto-solver.
+### Phase 4: Build the Finale Setup
+The finale should become a distinct payoff, not just a harder standard case. The most important work now is setting up the logic that will make the ending feel earned.
 
 Planned improvements:
 
-- Split dossier entries more clearly into `Witness report`, `Confirmed report`, `Geography clue`, `Behavior clue`, and `Dead end`.
-- Let the player add lightweight manual marks such as `relevant`, `contradiction`, and `check Interpol`.
-- Allow one or more pinned dossier entries to remain visible while browsing Interpol.
-- Keep all marks case-local and player-driven, with no hidden suspect scoring behind them.
+- Seed the Interpol inconsistencies, alias traces, and suspicious file irregularities that will matter in the final reveal.
+- Prepare the campaign so the player already understands Carmen is the mastermind before the last accusation.
+- Make the final geography step depend on a real global concept, with the International Date Line still the strongest current direction.
+- Ensure earlier cases quietly prepare the player for time-order and cross-border logic so the final puzzle feels solvable, not arbitrary.
 
 Design goal:
-The player should feel like they are maintaining a case file by hand, using tools that support attention rather than inference automation.
+The finale should pay off both geography knowledge and accumulated detective interpretation.
 
-### Phase 5: Strengthen Campaign Foreshadowing and Noir Feel
-The atmosphere should become richer without drowning the player in text. The right tone is moody, lightly self-aware, and supportive of the geography puzzle.
+### Phase 5: Upgrade the Finale Lineup Into a Disguise Puzzle
+The lineup should remain the emotional climax, but it should become more specific to Carmen instead of functioning like a normal end-of-case accusation.
 
 Planned improvements:
 
-- Add more variation to case introductions, tuned by campaign phase.
-- Add short mid-case comments after strong deductions, dead ends, and close calls.
-- Introduce recurring references to Carmen before the finale so her reveal feels earned.
-- Lean into noir self-irony: the detective knows the genre is melodramatic, but still lives inside it.
+- Build a fixed finale lineup around Carmen, Carmen's active alias or disguise, and two strong decoys.
+- Make the real question "which identity is Carmen using right now?" rather than "is Carmen present?"
+- Use Interpol irregularities, accumulated campaign knowledge, and final-case evidence to justify the correct choice.
+- Differentiate failure states so misunderstanding the disguise is treated differently from misunderstanding the evidence entirely.
 
 Design goal:
-The player should feel an escalating campaign arc, not ten isolated cases.
+The player should land the final win by solving Carmen's disguise, not merely by clicking the obvious villain.
 
 ### Phase 6: Add Sparse, Targeted Audio Punctuation
-Sound should reinforce important moments, not constantly compete with clue reading and narration.
+Sound should come after the structural campaign work, because it is there to sharpen moments that already function well.
 
 Planned improvements:
 
-- Add subtle one-shot sounds for clue breakthroughs, dossier confirmations, suspect elimination, and dead ends.
-- Add rare travel stingers or ambient accents for especially important transitions.
-- Reserve stronger audio punctuation for lineup tension and finale reveals.
-- Keep all additions sporadic so the geography and text clues remain central.
+- Add restrained one-shot punctuation for breakthroughs, dead ends, file reveals, and lineup locking.
+- Reserve stronger accents for the finale reveal and campaign-complete beats.
+- Keep the mix sparse so clue reading, map interpretation, and narration remain dominant.
 
 Design goal:
-Increase atmosphere and emotional rhythm without making the experience noisy.
+Increase rhythm and payoff without turning the game noisy or overdirected.
 
-### Phase 7: Give the Finale a Distinct Mechanical Identity
-The finale should not just be a harder normal case, because Carmen being the fixed super-villain is already a special narrative event. The recommended direction is a two-phase finale that uses both the dossier and Interpol.
-
-Planned finale structure:
-
-1. The player first solves the final geography and time-order mystery to reach Carmen's true destination.
-2. Once there, the player faces a special finale lineup that includes Carmen, Carmen's active alias or disguise, and two close decoys.
-3. The correct solution is not to click Carmen directly, but to identify which lineup identity is actually Carmen in disguise.
-4. Choosing the alias then triggers the reveal that the alias was Carmen all along.
-
-Core mechanic direction:
-
-- Carmen should be hinted at through earlier cases, especially through linked suspect histories and organizational traces.
-- Previously caught or encountered thieves should imply that they worked for, protected, or feared a larger figure.
-- Interpol should contain the key to the final identity reveal, for example by exposing that one suspect identity has inconsistent history, duplicate traits, or an alias trail that points back to Carmen.
-- The player should already understand that Carmen is the mastermind before the final pick; the deduction challenge is identifying which visible suspect identity she is currently inhabiting.
-
-Design goal:
-The finale should feel like the player is solving both the last geography puzzle and the last disguise puzzle, not merely identifying one more thief.
-
-### Phase 8: Add a Geography Twist to the Final Destination
-Because this is fundamentally a geography game, the final step should require understanding a genuinely interesting global phenomenon. The strongest current direction is an International Date Line puzzle.
-
-Recommended implementation:
-
-- Witnesses in the finale describe sightings that are all locally plausible.
-- Their timestamps appear contradictory if read in local order.
-- The player must infer that Carmen crossed the International Date Line, so the reports must be reordered in global time rather than local time.
-- Earlier cases should lightly prepare the player for this by introducing time zones, border-crossing oddities, or "the story does not add up" style remarks.
-- Solving this puzzle should determine the final travel destination before the alias lineup begins.
-
-Why this works:
-
-- It is geographically educational.
-- It feels like detective work rather than trivia recall.
-- It gives the final route choice a unique logic distinct from normal adjacency chasing.
-- It lets the alias reveal become the final social deduction beat after the geography puzzle has already paid off.
-
-Design goal:
-The player should first earn the finale through a geography insight, then land the final emotional payoff through the disguise reveal.
-
-### Phase 8.5: Preserve and Upgrade the Final Lineup
-The lineup is too strong a payoff moment to remove from the finale. Instead, it should be rewritten to serve the Carmen disguise twist.
+### Phase 7: Final Balancing and Fairness Pass
+Once the campaign arc and finale logic are in place, the remaining job is tuning difficulty, pacing, and readability.
 
 Planned improvements:
 
-- Build a fixed finale lineup with four entries: Carmen, Carmen's alias, and two deliberately similar suspects from the existing roster overlap.
-- Use dossier and Interpol clues so the player can justify why the alias is the correct pick and Carmen's visible profile is the trap.
-- Distinguish failure messaging:
-  choosing Carmen means the player understood the mastermind but missed the disguise;
-  choosing a decoy means the player misread the evidence.
-- Make the reveal cinematic and explicit: the alias portrait or file should collapse into Carmen once the correct choice is made.
+- Tune how quickly Interpol becomes rewarding without becoming too informative too early.
+- Make sure Carmen foreshadowing is satisfying in hindsight but not blunt in the first half of the campaign.
+- Verify that the finale's geography and disguise logic can be solved from in-game evidence alone.
+- Review text density, narration frequency, and archive-reading volume so flavor enriches the game instead of stalling it.
+- Confirm that every new addition still supports geography retention and the manual-deduction philosophy.
 
 Design goal:
-Keep the dramatic satisfaction of the lineup while making it mechanically richer than the standard case-ending suspect pick.
-
-### Phase 9: Final Balancing and Fairness Pass
-Once the strategic and atmospheric layers are in place, the final job is tuning. This stage should focus on fairness, readability, and learning value.
-
-Planned improvements:
-
-- Tune how quickly Interpol becomes useful so it helps without spoiling the answer.
-- Ensure the Carmen foreshadowing is noticeable in hindsight but not obvious too early.
-- Make the finale hints generous enough that players can solve the Date Line logic from in-game evidence.
-- Review text density so narration enriches pacing instead of slowing it down.
-- Verify that every new feature still supports geography retention and clue comprehension.
-
-Design goal:
-Ship a finale and campaign structure that feels richer, smarter, and more memorable without becoming obscure or overdesigned.
+Ship a campaign that feels richer and smarter without becoming overexplained, overassisted, or dramatically heavier than the core geography game can support.

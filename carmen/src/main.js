@@ -117,22 +117,35 @@ attachZoomPan(ui.mapSvg, () => baseViewBox);
 let logic;
 let isFirstGame = true;
 
-function refreshInterpolList() {
+function getVisibleInterpolSuspects() {
   const unlocked = getUnlockedSuspects();
   const allViewed = new Set([...interpolViewedThisGame, ...getInterpolViewed()]);
   const activeArchive = logic?.getInterpolCandidates?.() || [];
+  const finaleAlias = logic?.getFinaleAlias?.();
   const visibleNames = new Set([
     ...activeArchive.map(s => s.name),
     ...allViewed,
     ...unlocked,
     'Carmen Sandiego',
   ]);
-  // Sort Carmen to the bottom of the list so she doesn't stand out as the obvious boss.
-  const sortedSuspects = SUSPECTS.filter(s => visibleNames.has(s.name)).sort((a, b) => {
-    if (a.name === 'Carmen Sandiego') return 1;
-    if (b.name === 'Carmen Sandiego') return -1;
-    return 0;
-  });
+
+  const source = finaleAlias
+    ? [...SUSPECTS, finaleAlias]
+    : SUSPECTS;
+
+  return source
+    .filter(s => visibleNames.has(s.name))
+    .sort((a, b) => {
+      if (a.name === 'Carmen Sandiego') return 1;
+      if (b.name === 'Carmen Sandiego') return -1;
+      return a.name.localeCompare(b.name);
+    });
+}
+
+function refreshInterpolList() {
+  const unlocked = getUnlockedSuspects();
+  const allViewed = new Set([...interpolViewedThisGame, ...getInterpolViewed()]);
+  const sortedSuspects = getVisibleInterpolSuspects();
   ui.showInterpolList(sortedSuspects, unlocked, allViewed, interpolMarkedThisCase, (suspect) => {
     activeInterpolSuspectName = suspect.name;
     // All suspects with photos cost time to view — including Carmen.
@@ -191,7 +204,7 @@ function toggleInterpolMark(suspectName) {
 
   if (!activeInterpolSuspectName || activeInterpolSuspectName !== suspectName) return;
 
-  const suspect = SUSPECTS.find(s => s.name === suspectName);
+  const suspect = getVisibleInterpolSuspects().find(s => s.name === suspectName);
   if (!suspect) return;
 
   const unlocked = getUnlockedSuspects();
@@ -215,6 +228,13 @@ function getCountryEntryMonologue(country) {
 }
 
 function buildInterpolProfileIntel(suspect, thefts = []) {
+  if (suspect?.isFinaleAlias) {
+    return {
+      anomaly: 'This file appeared intact and professionally indexed far too late in the campaign. ACME does not trust paperwork this tidy.',
+      network: 'Border records, witness cadence, and operational style place this identity uncomfortably close to Carmen\'s known pattern.',
+      pattern: 'The subject matches Carmen\'s preference for theatrical exits, precise geography, and a profile that feels assembled rather than lived in.',
+    };
+  }
   return buildInterpolIntel(
     suspect,
     logic?.campaignPhase,
@@ -351,7 +371,10 @@ async function startGame() {
 
   // Now show the case briefing overlay
   const totalHours = logic.getTimeState().totalHours;
-  const briefingHint = buildCaseBriefingHint(intro.campaignPhase, intro.caseNumber, getMissionHistory());
+  let briefingHint = buildCaseBriefingHint(intro.campaignPhase, intro.caseNumber, getMissionHistory());
+  if (intro.campaignPhase === 'finale') {
+    briefingHint = `${briefingHint} ACME believes Carmen is moving under a fresh alias hidden somewhere in the active files.`;
+  }
   await ui.showCaseBriefing(intro.artifact, intro.startCountry, totalHours, intro.caseNumber, intro.totalCases, intro.campaignPhase, briefingHint);
 
   // Hide the front image, show the header and game
@@ -599,7 +622,27 @@ function handleGuess(country) {
           playLineupMusic();
           const lineupPool = logic.getInterpolCandidates();
           const lineup = logic.getSuspectLineup(lineupPool);
-          const chosenName = await ui.showSuspectLineup(lineup);
+          const chosenName = await ui.showSuspectLineup(
+            lineup,
+            logic.campaignPhase === 'finale'
+              ? {
+                  title: 'ALIAS LINEUP',
+                  subtitle: 'Carmen is in the room, but not under her own name. Find the alias and issue the warrant.',
+                  badge: 'FINAL ACCUSATION',
+                  intel: 'ACME believes Carmen is using one of these identities as cover. Review the files, then choose the alias.',
+                  targetBadge: 'ALIAS TARGET',
+                  emptyName: 'Choose Carmen\'s alias',
+                  emptyText: 'One of these identities is a mask. Lock the alias here before issuing the warrant.',
+                  selectedText: 'Alias selected. If the file smells like Carmen, issue the warrant now.',
+                  gridLabel: 'Alias candidates',
+                  confirmLabel: 'Accuse alias',
+                  cardTargetLabel: 'ALIAS',
+                  cardDefaultLabel: 'FILE',
+                  cardTargetNote: 'Current alias target',
+                  cardDefaultNote: 'Review identity',
+                }
+              : undefined,
+          );
           const correct = logic.identifySuspect(chosenName);
 
           const results = logic.getResults();

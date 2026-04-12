@@ -236,7 +236,29 @@ export function createCarmenUI(container, flagCodes) {
     suspects: [],
     selectedName: '',
     resolve: null,
+    options: null,
   };
+
+  function getLineupText() {
+    const options = lineupState.options || {};
+    return {
+      title: options.title || 'SUSPECT LINEUP',
+      subtitle: options.subtitle || 'Cross-check dossier and Interpol before issuing the warrant.',
+      badge: options.badge || 'FINAL ACCUSATION',
+      intel: options.intel || 'Review the files, then return here to issue the warrant.',
+      targetBadge: options.targetBadge || 'PRIMARY TARGET',
+      emptyTargetBadge: options.emptyTargetBadge || 'NO TARGET SELECTED',
+      emptyName: options.emptyName || 'Choose a suspect',
+      emptyText: options.emptyText || 'Study the four files below, then lock your warrant target here.',
+      selectedText: options.selectedText || 'Warrant target selected. Issue the accusation when the file trail holds together.',
+      gridLabel: options.gridLabel || 'Candidate mugshots',
+      confirmLabel: options.confirmLabel || 'Accuse suspect',
+      cardTargetLabel: options.cardTargetLabel || 'TARGET',
+      cardDefaultLabel: options.cardDefaultLabel || 'FILE',
+      cardTargetNote: options.cardTargetNote || 'Current warrant target',
+      cardDefaultNote: options.cardDefaultNote || 'Review file',
+    };
+  }
 
   // Click the Interpol header card to return to intro view
   if (els.interpolCard) {
@@ -319,52 +341,54 @@ export function createCarmenUI(container, flagCodes) {
   });
 
   function renderLineupCaseSummary() {
+    const text = getLineupText();
     els.narrative.innerHTML = `
       <div class="carmen-intro-card">
-        <div class="carmen-intro-badge">FINAL ACCUSATION</div>
+        <div class="carmen-intro-badge">${esc(text.badge)}</div>
         <div class="carmen-intro-artifact">${esc(caseCardState.siteName)}</div>
         <div class="carmen-intro-origin">Stolen from <strong>${esc(caseCardState.startCountry)}</strong></div>
         <div class="carmen-intro-suspect">🔍 Suspect: <span class="thief-name">${lineupState.selectedName ? esc(lineupState.selectedName) : 'Unknown'}</span></div>
-        <div class="carmen-intro-intel">Review the files, then return here to issue the warrant.</div>
+        <div class="carmen-intro-intel">${esc(text.intel)}</div>
       </div>
     `;
   }
 
   function renderLineupStage() {
     if (!els.lineupStage) return;
+    const text = getLineupText();
     const selectedName = lineupState.selectedName;
     const selectedSuspect = lineupState.suspects.find((suspect) => suspect.name === selectedName) || null;
     els.lineupStage.innerHTML = `
       <div class="carmen-lineup-content carmen-lineup-content-panel">
-        <div class="carmen-lineup-title">SUSPECT LINEUP</div>
-        <div class="carmen-lineup-subtitle">Cross-check dossier and Interpol before issuing the warrant.</div>
+        <div class="carmen-lineup-title">${esc(text.title)}</div>
+        <div class="carmen-lineup-subtitle">${esc(text.subtitle)}</div>
         <div class="carmen-lineup-target${selectedSuspect ? ' is-locked' : ''}">
-          <div class="carmen-lineup-target-badge">${selectedSuspect ? 'PRIMARY TARGET' : 'NO TARGET SELECTED'}</div>
+          <div class="carmen-lineup-target-badge">${esc(selectedSuspect ? text.targetBadge : text.emptyTargetBadge)}</div>
           <div class="carmen-lineup-target-body">
             <div class="carmen-lineup-target-portrait">
               ${selectedSuspect
-                ? `<img src="${IMG.suspect(selectedSuspect.name)}" alt="${esc(selectedSuspect.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))">`
+                ? `<img src="${esc(selectedSuspect.img || IMG.suspect(selectedSuspect.name))}" alt="${esc(selectedSuspect.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))">`
                 : '<span aria-hidden="true">🕵️</span>'}
             </div>
             <div class="carmen-lineup-target-copy">
-              <div class="carmen-lineup-target-name">${esc(selectedSuspect ? selectedSuspect.name : 'Choose a suspect')}</div>
-              <div class="carmen-lineup-target-text">${esc(selectedSuspect ? 'Warrant target selected. Issue the accusation when the file trail holds together.' : 'Study the four files below, then lock your warrant target here.')}</div>
+              <div class="carmen-lineup-target-name">${esc(selectedSuspect ? selectedSuspect.name : text.emptyName)}</div>
+              <div class="carmen-lineup-target-text">${esc(selectedSuspect ? text.selectedText : text.emptyText)}</div>
             </div>
             <div class="carmen-lineup-actions">
-              <button class="carmen-lineup-confirm-btn" ${selectedName ? '' : 'disabled'}>Accuse suspect</button>
+              <button class="carmen-lineup-confirm-btn" ${selectedName ? '' : 'disabled'}>${esc(text.confirmLabel)}</button>
             </div>
           </div>
         </div>
-        <div class="carmen-lineup-grid-label">Candidate mugshots</div>
+        <div class="carmen-lineup-grid-label">${esc(text.gridLabel)}</div>
         <div class="carmen-lineup-grid">
           ${lineupState.suspects.map(s => `
             <button class="carmen-suspect-card${selectedName === s.name ? ' selected' : ''}" data-name="${esc(s.name)}">
-              <div class="carmen-suspect-card-badge">${selectedName === s.name ? 'TARGET' : 'FILE'}</div>
+              <div class="carmen-suspect-card-badge">${esc(selectedName === s.name ? text.cardTargetLabel : text.cardDefaultLabel)}</div>
               <div class="carmen-suspect-card-body">
-                <div class="carmen-suspect-silhouette"><img src="${IMG.suspect(s.name)}" alt="${esc(s.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))"></div>
+                <div class="carmen-suspect-silhouette"><img src="${esc(s.img || IMG.suspect(s.name))}" alt="${esc(s.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))"></div>
                 <div class="carmen-suspect-card-copy">
                   <div class="carmen-suspect-name">${esc(s.name)}</div>
-                  <div class="carmen-suspect-card-note">${selectedName === s.name ? 'Current warrant target' : 'Review file'}</div>
+                  <div class="carmen-suspect-card-note">${esc(selectedName === s.name ? text.cardTargetNote : text.cardDefaultNote)}</div>
                 </div>
               </div>
             </button>
@@ -922,7 +946,7 @@ export function createCarmenUI(container, flagCodes) {
         const missionCopy =
           campaignPhase === 'whispers' ? "Track the thief through neighboring countries. Witnesses keep mentioning a shadow behind the shadow — someone bigger is pulling strings." :
           campaignPhase === 'pursuit'  ? "ACME has traced this theft to Carmen Sandiego's network. The thief is one of her lieutenants — every arrest brings you closer to her." :
-          campaignPhase === 'finale'   ? "This is it. Carmen Sandiego herself has surfaced. No more proxies. Track her across the globe and bring her in — or she vanishes forever." :
+          campaignPhase === 'finale'   ? "This is it. ACME believes Carmen Sandiego is moving under an alias. Track her across the globe, expose the false identity, and bring her in before she vanishes again." :
           "Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.";
         typewriter(els.briefingMission, `${missionCopy}${timeText}`, 20)
           .then(() => {
@@ -951,6 +975,7 @@ export function createCarmenUI(container, flagCodes) {
       lineupState.suspects = [];
       lineupState.selectedName = '';
       lineupState.resolve = null;
+      lineupState.options = null;
       if (els.lineupStage) {
         els.lineupStage.innerHTML = '';
       }
@@ -1162,8 +1187,9 @@ export function createCarmenUI(container, flagCodes) {
      * Show suspect lineup for final identification.
      * Returns a promise that resolves with the chosen suspect name.
      */
-    showSuspectLineup(lineup) {
+    showSuspectLineup(lineup, options = null) {
       return new Promise(resolve => {
+        lineupState.options = options || null;
         enterLineupPhase(lineup, resolve);
       });
     },

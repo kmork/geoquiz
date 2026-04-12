@@ -124,7 +124,10 @@ export class CarmenGameLogic {
   get suspect() { return this.suspectEngine.suspect; }
 
   getInterpolCandidates() {
-    return getCaseArchivePool(this.route, this.countryMap, this.excludedSuspects);
+    const pool = getCaseArchivePool(this.route, this.countryMap, this.excludedSuspects);
+    const finaleAlias = this.suspectEngine.getFinaleAlias?.();
+    if (!finaleAlias) return pool;
+    return [...pool, finaleAlias];
   }
 
   /** Generate route and return the intro data. */
@@ -453,6 +456,7 @@ export class CarmenGameLogic {
   investigateSuspectClue() { return this.suspectEngine.investigateSuspectClue(); }
   getSuspectInvestigateCost() { return EXTRA_CLUE_COST_HOURS; }
   getSuspectLineup(candidates = null) { return this.suspectEngine.getSuspectLineup(candidates); }
+  getFinaleAlias() { return this.suspectEngine.getFinaleAlias?.() || null; }
   identifySuspect(name) { return this.suspectEngine.identifySuspect(name); }
   getRevealedSuspectAttrs() { return this.suspectEngine.getRevealedSuspectAttrs(); }
 

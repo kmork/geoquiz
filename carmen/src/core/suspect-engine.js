@@ -9,6 +9,7 @@ import {
   SUSPECTS, SUSPECT_ATTRIBUTES, getAttributeGroup,
   SUSPECT_CLUE_TEMPLATES_VAGUE, SUSPECT_CLUE_TEMPLATES_SPECIFIC,
 } from '../content/suspects.js';
+import { FINALE_ALIAS } from '../content/finale-alias.js';
 
 export { SUSPECTS };
 
@@ -85,6 +86,7 @@ export function getCaseArchivePool(route, countryMap, excludedNames = new Set(),
 export class SuspectEngine {
   constructor() {
     this.suspect = null;
+    this.finaleAlias = null;
     this._suspectClueAttrs = [];
     this._suspectClueIndex = 0;
     this._suspectClueStop = -1;
@@ -94,6 +96,7 @@ export class SuspectEngine {
 
   reset() {
     this.suspect = null;
+    this.finaleAlias = null;
     this._suspectClueAttrs = [...SUSPECT_ATTRIBUTES].sort(() => Math.random() - 0.5);
     this._suspectClueIndex = 0;
     this._suspectClueStop = -1;
@@ -111,7 +114,11 @@ export class SuspectEngine {
   pickSuspect(campaignPhase, route, countryMap, excludedNames = new Set()) {
     if (campaignPhase === 'finale') {
       const carmen = SUSPECTS.find(s => s.name === 'Carmen Sandiego');
-      if (carmen) { this.suspect = carmen; return; }
+      if (carmen) {
+        this.suspect = carmen;
+        this.finaleAlias = { ...FINALE_ALIAS };
+        return;
+      }
     }
     const candidates = getSuspectSelectionPool(route, countryMap, excludedNames);
     if (candidates.length === 0) {
@@ -167,6 +174,9 @@ export class SuspectEngine {
 
   /** Get a lineup of 4 suspects (includes the real one). Decoys match vague clues. */
   getSuspectLineup(candidates = null) {
+    if (this.finaleAlias) {
+      return this.getFinaleLineup(candidates);
+    }
     const real = this.suspect;
     const pool = (candidates && candidates.length > 0 ? candidates : SUSPECTS).filter(s => s.name !== real.name);
     const others = pool.length >= 3 ? pool : SUSPECTS.filter(s => s.name !== real.name);
@@ -194,9 +204,48 @@ export class SuspectEngine {
     return [...decoys, real].sort(() => Math.random() - 0.5);
   }
 
+  getFinaleLineup(candidates = null) {
+    const alias = this.finaleAlias;
+    const real = this.suspect;
+    const pool = (candidates && candidates.length > 0 ? candidates : SUSPECTS)
+      .filter(s => s.name !== real.name && s.name !== alias.name);
+    const others = pool.length >= 3
+      ? pool
+      : SUSPECTS.filter(s => s.name !== real.name && s.name !== alias.name);
+
+    const specificAttrs = new Set(
+      this._revealedAttrs.filter(e => !e.vague).map(e => e.attr)
+    );
+    const vagueEntries = this._revealedAttrs.filter(e => e.vague);
+
+    const scored = others.map(s => {
+      let score = 0;
+      for (const { attr, value: groupName } of vagueEntries) {
+        const candidateGroup = getAttributeGroup(attr, s[attr]);
+        if (candidateGroup === groupName) score += 10;
+      }
+      for (const attr of specificAttrs) {
+        if (s[attr] === real[attr]) score += 15;
+      }
+      score += Math.random() * 2;
+      return { suspect: s, score };
+    });
+
+    scored.sort((a, b) => b.score - a.score);
+    const decoys = scored.slice(0, 3).map(s => s.suspect);
+    return [...decoys, alias].sort(() => Math.random() - 0.5);
+  }
+
   /** Check if the player identified the correct suspect. */
   identifySuspect(name) {
+    if (this.finaleAlias) {
+      return name === this.finaleAlias.name;
+    }
     return name === this.suspect.name;
+  }
+
+  getFinaleAlias() {
+    return this.finaleAlias;
   }
 
   /** Get revealed suspect attributes for the dossier. */
