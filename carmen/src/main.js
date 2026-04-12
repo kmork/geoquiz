@@ -120,8 +120,15 @@ let isFirstGame = true;
 function refreshInterpolList() {
   const unlocked = getUnlockedSuspects();
   const allViewed = new Set([...interpolViewedThisGame, ...getInterpolViewed()]);
+  const activeArchive = logic?.getInterpolCandidates?.() || [];
+  const visibleNames = new Set([
+    ...activeArchive.map(s => s.name),
+    ...allViewed,
+    ...unlocked,
+    'Carmen Sandiego',
+  ]);
   // Sort Carmen to the bottom of the list so she doesn't stand out as the obvious boss.
-  const sortedSuspects = [...SUSPECTS].sort((a, b) => {
+  const sortedSuspects = SUSPECTS.filter(s => visibleNames.has(s.name)).sort((a, b) => {
     if (a.name === 'Carmen Sandiego') return 1;
     if (b.name === 'Carmen Sandiego') return -1;
     return 0;
@@ -131,8 +138,8 @@ function refreshInterpolList() {
     // All suspects with photos cost time to view — including Carmen.
     const hasPhoto = !!suspect.img;
     const everViewed = getInterpolViewed().has(suspect.name);
-    const alreadyViewed = interpolViewedThisGame.has(suspect.name) || everViewed;
     const inCustody = unlocked.has(suspect.name);
+    const alreadyViewed = interpolViewedThisGame.has(suspect.name) || everViewed || inCustody;
     const status = inCustody ? 'IN CUSTODY' : 'ACTIVE';
 
     if (hasPhoto && !alreadyViewed) {
@@ -590,7 +597,8 @@ function handleGuess(country) {
         // Brief pause, then show lineup
         setTimeout(async () => {
           playLineupMusic();
-          const lineup = logic.getSuspectLineup();
+          const lineupPool = logic.getInterpolCandidates();
+          const lineup = logic.getSuspectLineup(lineupPool);
           const chosenName = await ui.showSuspectLineup(lineup);
           const correct = logic.identifySuspect(chosenName);
 

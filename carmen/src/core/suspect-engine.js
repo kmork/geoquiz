@@ -12,6 +12,76 @@ import {
 
 export { SUSPECTS };
 
+const MIN_ARCHIVE_POOL_SIZE = 16;
+
+function hashString(text) {
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) {
+    hash = ((hash << 5) - hash + text.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash);
+}
+
+function normalizeArchiveRegion(region) {
+  if (!region) return null;
+  if (region === 'North America' || region === 'South America' || region === 'Americas') {
+    return 'Americas';
+  }
+  return region;
+}
+
+function getRouteRegions(route, countryMap) {
+  return [...new Set(
+    route
+      .map(country => normalizeArchiveRegion(countryMap[country]?.continent))
+      .filter(Boolean)
+  )];
+}
+
+function getSuspectRegions(suspect) {
+  return [...new Set((suspect.knownRegions || []).map(normalizeArchiveRegion).filter(Boolean))];
+}
+
+function getEligibleSuspects(excludedNames = new Set()) {
+  return SUSPECTS.filter(s => s.name !== 'Carmen Sandiego' && !excludedNames.has(s.name));
+}
+
+function filterByRouteRegions(pool, routeRegions) {
+  const regionMatch = pool.filter(suspect =>
+    getSuspectRegions(suspect).some(region => routeRegions.includes(region))
+  );
+  return regionMatch.length > 0 ? regionMatch : pool;
+}
+
+function padArchivePool(basePool, eligiblePool, route, minSize = MIN_ARCHIVE_POOL_SIZE) {
+  if (basePool.length >= minSize) return basePool;
+
+  const seen = new Set(basePool.map(s => s.name));
+  const seed = route.join('|');
+  const extras = eligiblePool
+    .filter(s => !seen.has(s.name))
+    .sort((a, b) => {
+      const aHash = hashString(`${seed}:${a.name}`);
+      const bHash = hashString(`${seed}:${b.name}`);
+      return aHash - bHash || a.name.localeCompare(b.name);
+    });
+
+  return [...basePool, ...extras.slice(0, Math.max(0, minSize - basePool.length))];
+}
+
+export function getSuspectSelectionPool(route, countryMap, excludedNames = new Set()) {
+  const eligiblePool = getEligibleSuspects(excludedNames);
+  const routeRegions = getRouteRegions(route, countryMap);
+  return filterByRouteRegions(eligiblePool, routeRegions);
+}
+
+export function getCaseArchivePool(route, countryMap, excludedNames = new Set(), minSize = MIN_ARCHIVE_POOL_SIZE) {
+  const eligiblePool = getEligibleSuspects(excludedNames);
+  const routeRegions = getRouteRegions(route, countryMap);
+  const regionPool = filterByRouteRegions(eligiblePool, routeRegions);
+  return padArchivePool(regionPool, eligiblePool, route, minSize);
+}
+
 export class SuspectEngine {
   constructor() {
     this.suspect = null;
@@ -43,16 +113,7 @@ export class SuspectEngine {
       const carmen = SUSPECTS.find(s => s.name === 'Carmen Sandiego');
       if (carmen) { this.suspect = carmen; return; }
     }
-    const pool = SUSPECTS.filter(s =>
-      s.name !== 'Carmen Sandiego' && !excludedNames.has(s.name)
-    );
-    const routeContinents = new Set(
-      route.map(c => countryMap[c]?.continent).filter(Boolean)
-    );
-    const regionMatch = pool.filter(s =>
-      s.knownRegions?.some(r => routeContinents.has(r))
-    );
-    const candidates = regionMatch.length > 0 ? regionMatch : pool;
+    const candidates = getSuspectSelectionPool(route, countryMap, excludedNames);
     if (candidates.length === 0) {
       throw new Error('No eligible suspects remain for case selection.');
     }
@@ -105,9 +166,10 @@ export class SuspectEngine {
   }
 
   /** Get a lineup of 4 suspects (includes the real one). Decoys match vague clues. */
-  getSuspectLineup() {
+  getSuspectLineup(candidates = null) {
     const real = this.suspect;
-    const others = SUSPECTS.filter(s => s.name !== real.name);
+    const pool = (candidates && candidates.length > 0 ? candidates : SUSPECTS).filter(s => s.name !== real.name);
+    const others = pool.length >= 3 ? pool : SUSPECTS.filter(s => s.name !== real.name);
 
     const specificAttrs = new Set(
       this._revealedAttrs.filter(e => !e.vague).map(e => e.attr)

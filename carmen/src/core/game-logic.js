@@ -13,7 +13,7 @@ import {
   clueFromFact, clueFromGeography, clueFromHeritage, clueFromRiverOrMountain,
   clueFromEmpire, clueFromFamousFor, clueFromExports, allGeographyClues, iconForCategory,
 } from './clue-generators.js';
-import { SuspectEngine, SUSPECTS } from './suspect-engine.js';
+import { getCaseArchivePool, SuspectEngine, SUSPECTS } from './suspect-engine.js';
 import { buildCampaignConfig } from '../campaign/progression.js';
 
 // Re-export so existing main.js import surface is preserved.
@@ -42,8 +42,8 @@ export class CarmenGameLogic {
     this.rivers = config.rivers || [];
     this.mountains = config.mountains || [];
     this.empires = config.empires || [];
-   this.caseNumber = config.caseNumber || 1;
-   this.totalCases = config.totalCases || 10;
+    this.caseNumber = config.caseNumber || 1;
+    this.totalCases = config.totalCases || 10;
     this.excludedSuspects = new Set(config.excludedSuspects || []);
     this.campaignPhase =
       this.caseNumber >= 10 ? 'finale' :
@@ -122,6 +122,10 @@ export class CarmenGameLogic {
 
   /** Convenience accessor — the hidden suspect. */
   get suspect() { return this.suspectEngine.suspect; }
+
+  getInterpolCandidates() {
+    return getCaseArchivePool(this.route, this.countryMap, this.excludedSuspects);
+  }
 
   /** Generate route and return the intro data. */
   start() {
@@ -448,7 +452,7 @@ export class CarmenGameLogic {
   getSuspectClue() { return this.suspectEngine.getSuspectClue(this.currentStop); }
   investigateSuspectClue() { return this.suspectEngine.investigateSuspectClue(); }
   getSuspectInvestigateCost() { return EXTRA_CLUE_COST_HOURS; }
-  getSuspectLineup() { return this.suspectEngine.getSuspectLineup(); }
+  getSuspectLineup(candidates = null) { return this.suspectEngine.getSuspectLineup(candidates); }
   identifySuspect(name) { return this.suspectEngine.identifySuspect(name); }
   getRevealedSuspectAttrs() { return this.suspectEngine.getRevealedSuspectAttrs(); }
 

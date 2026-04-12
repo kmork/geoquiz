@@ -118,7 +118,7 @@ export function createCarmenUI(container, flagCodes) {
                   <div class="carmen-interpol-panel-clip" aria-hidden="true"></div>
                   <div class="carmen-panel-badge">INTERPOL ARCHIVE</div>
                   <div class="carmen-panel-title">Known Criminals</div>
-                  <div class="carmen-panel-desc">Browse active case files and compare suspect profiles by hand.</div>
+                  <div class="carmen-panel-desc">Browse current case files and compare suspect profiles by hand.</div>
                   <div class="carmen-panel-cost">Consult archive: <strong>3 hours</strong> per new file</div>
                 </div>
                 <div class="carmen-interpol-list" id="carmen-interpol-list"></div>
@@ -514,8 +514,9 @@ export function createCarmenUI(container, flagCodes) {
         const inCustody = unlockedNames.has(s.name);
         const initials = s.name.split(/\s+/).map(part => part[0]).slice(0, 2).join('.').toUpperCase();
         if (available) {
-          const costLabel = viewed ? 'free' : '3h';
-          html += `<button class="carmen-interpol-entry${viewed ? ' viewed' : ''}${marked ? ' marked' : ''}${inCustody ? ' in-custody' : ''}" data-name="${esc(s.name)}">
+          const freeAccess = viewed || inCustody;
+          const costLabel = freeAccess ? 'free' : '3h';
+          html += `<button class="carmen-interpol-entry${freeAccess ? ' viewed' : ''}${marked ? ' marked' : ''}${inCustody ? ' in-custody' : ''}" data-name="${esc(s.name)}">
             <span class="carmen-interpol-entry-tab"></span>
             <span class="carmen-interpol-entry-icon">${hasPhoto ? '📷' : '🕵️'}</span>
             <span class="carmen-interpol-entry-meta">
