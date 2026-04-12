@@ -1217,12 +1217,19 @@ export function createCarmenUI(container, flagCodes) {
       });
     },
 
-    showDeadEnd(country, onContinue) {
+    showDeadEnd(country, repeatedDeadEnd = false, onContinue) {
+      if (typeof repeatedDeadEnd === 'function') {
+        onContinue = repeatedDeadEnd;
+        repeatedDeadEnd = false;
+      }
       hideNarratorCaption(true);
       // Force map visible
       for (const rv of allRightViews) rv.style.display = 'none';
       els.rvMap.style.display = '';
 
+      const narratorHint = repeatedDeadEnd ? `
+        <div class="carmen-dead-end-narrator">Another dead end. Took the wrong border. Maybe I ought to study the map at <a href="https://geoquiz.info/study.html" target="_blank" rel="noopener noreferrer">geoquiz.info/study.html</a> before this case eats me alive.</div>
+      ` : '';
       const overlay = document.createElement('div');
       overlay.className = 'carmen-map-overlay carmen-dead-end';
       overlay.innerHTML = `
@@ -1232,6 +1239,7 @@ export function createCarmenUI(container, flagCodes) {
           <div>No trace of the thief in <strong>${esc(country)}</strong>!</div>
           <div class="carmen-dead-end-hint">This is a dead end. You've lost precious time.</div>
           <button class="carmen-continue-btn carmen-dead-end-btn">Continue searching →</button>
+          ${narratorHint}
         </div>
       `;
       els.mapWrap.appendChild(overlay);

@@ -690,7 +690,7 @@ function handleGuess(country) {
 
       ui.addDetourEntry(country, capitalOf[country]);
 
-      ui.showDeadEnd(country, () => {
+      ui.showDeadEnd(country, logic.totalWrongGuesses >= 2, () => {
         // Show neighbors of the original stop + the original stop itself
         const neighbors = result.neighbors;
         drawMap(logic.route.slice(0, logic.currentStop + 1), neighbors);
