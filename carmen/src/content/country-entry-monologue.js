@@ -2,249 +2,212 @@
  * Country-entry monologues for Carmen transition captions.
  *
  * Tone rules:
- * - dry first-person detective voice
- * - noir with light self-parody, not jokes
- * - grounded in each country's history without reading like a summary card
+ * - first-person detective voice
+ * - overcommitted noir with self-aware parody
+ * - the joke is usually on the narrator, not the country
+ * - modern/anachronistic facts are acknowledged instead of played straight
  */
 
-const COUNTRY_ENTRY_MONOLOGUES = {
-  "Afghanistan": "Afghanistan. Every empire thinks the mountains will listen. Then the mountains answer in rubble and memory. I arrived with a clue and the usual bad timing.",
-  "Aland": "Aland. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Albania": "Albania. Five centuries of empire, then communism with the curtains drawn. The place had already done the hardboiled routine before I set foot in it.",
-  "Algeria": "Algeria. Empires came through, France stayed too long, and independence had to be taken the violent way. Nobody needed me to add atmosphere.",
-  "American Samoa": "American Samoa. Not much in the folder. Just enough silence to sound expensive.",
-  "Andorra": "Andorra. It has existed since Charlemagne's era and adopted a modern constitution in 1993. The place carried its history like a tailored overcoat.",
-  "Angola": "Angola. Angola was a Portuguese colony for over 400 years and a major source of the Atlantic slave trade. I kept the monologue short. History had already said enough.",
-  "Anguilla": "Anguilla. Not much in the folder. Just enough silence to sound expensive.",
-  "Antigua and Barbuda": "Antigua and Barbuda. Antigua and Barbuda were colonized by the British in the 17th century and became a major…. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Argentina": "Argentina. Independence, generals, disappearances, the whole tragic wardrobe. The streets wore it better than I did.",
-  "Armenia": "Armenia. Old faith, old grief, and a memory that doesn't dilute with time. Some countries don't need noir. They just need a witness.",
-  "Aruba": "Aruba. Barely a page on it. The mood was carrying the casework.",
-  "Australia": "Australia. Ancient ground, a penal colony, then a federation built at the far end of the map. The file smelled like distance and official mistakes.",
-  "Austria": "Austria. Once the center of an empire, now polished enough to hide the old grandeur behind good tailoring. Very considerate of it.",
-  "Azerbaijan": "Azerbaijan. It was the first Muslim-majority democratic republic in 1918 before Soviet annexation. Independence always sounds cleaner on paper than it does in the street.",
-  "Bahamas": "Bahamas. The islands were a British colony and a haven for pirates before becoming a crown colony. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Bahrain": "Bahrain. It became a British protectorate in the 19th century and gained independence in 1971. Independence always sounds cleaner on paper than it does in the street.",
-  "Bangladesh": "Bangladesh. Partition first, war after, independence paid for in blood and stubbornness. The rain wasn't the only thing carrying weight.",
-  "Barbados": "Barbados. Barbados was claimed by the British in 1627 and became a major sugar colony built on enslaved African…. The country earned its future the noisy way.",
-  "Belarus": "Belarus. After independence from the Soviet Union in 1991, it has been governed by the same president since 1994. The place had already done the hardboiled part before I got there.",
-  "Belgium": "Belgium. Small country, oversized history, and enough imperial paperwork to stain the cuffs. Brussels looked respectable. That's always suspicious.",
-  "Belize": "Belize. Belize was part of the ancient Maya civilization and later became the British colony of British Honduras. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Benin": "Benin. It became the French colony of Dahomey and gained independence in 1960. The place had already done the hardboiled part before I got there.",
-  "Bermuda": "Bermuda. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Bhutan": "Bhutan. The monarchy was established in 1907, and the country transitioned to a constitutional monarchy in 2008. The country earned its future the noisy way.",
-  "Bolivia": "Bolivia. Bolivia was part of the Inca Empire and then a Spanish colony known as Upper Peru. The place had already done the hardboiled part before I got there.",
-  "Bosnia and Herzegovina": "Bosnia and Herzegovina. Empires passed through, Yugoslavia collapsed, and the war left its fingerprints on the walls. I kept my voice low. The place already knew the genre.",
-  "Botswana": "Botswana. Botswana was the British protectorate of Bechuanaland and gained independence in 1966 as one of the…. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Brazil": "Brazil. Colony, empire, republic. Big country, bigger appetite, and history that never learned to travel light. Even the shadows took up space.",
-  "British Indian Ocean Territory": "British Indian Ocean Territory. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "British Virgin Islands": "British Virgin Islands. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Brunei": "Brunei. It became a British protectorate in 1888 and gained full independence in 1984. Independence always sounds cleaner on paper than it does in the street.",
-  "Bulgaria": "Bulgaria. After decades of communist rule, it transitioned to democracy in 1989 and joined the European Union in…. Independence always sounds cleaner on paper than it does in the street.",
-  "Burkina Faso": "Burkina Faso. Burkina Faso was the French colony of Upper Volta, gaining independence in 1960. Independence always sounds cleaner on paper than it does in the street.",
-  "Burundi": "Burundi. Burundi was a kingdom for centuries before becoming part of German and then Belgian colonial territories. Independence always sounds cleaner on paper than it does in the street.",
-  "Cabo Verde": "Cabo Verde. Cabo Verde was uninhabited until Portuguese settlers arrived in the 15th century, making it a hub of…. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Cambodia": "Cambodia. Empire once, colony later, genocide after that. Some files don't read like history. They read like evidence.",
-  "Cameroon": "Cameroon. Cameroon was a German colony before being divided between France and Britain after World War I. I kept the monologue short. History had already said enough.",
-  "Canada": "Canada. French first, British second, dominion after that. A polite country with imperial bones under the snow. Naturally, that made it interesting.",
-  "Cayman Islands": "Cayman Islands. Barely a page on it. The mood was carrying the casework.",
-  "Central African Republic": "Central African Republic. The Central African Republic was a French colony known as Ubangi-Shari before gaining independence in…. The file read like a bruise and wore it well.",
-  "Chad": "Chad. Civil wars and conflicts with Libya marked much of its post-independence history, and it remains one of…. The place had already done the hardboiled part before I got there.",
-  "Chile": "Chile. Republic, coup, dictatorship, democracy restored with the lights still flickering. The file had a long coastline and a longer memory.",
-  "China": "China. Dynasties, republic, revolution, and a state built on scale alone. Trying to sound mysterious here felt almost insulting.",
-  "Colombia": "Colombia. Empire, republic, insurgency, cartel ghosts, and a country that kept moving anyway. The file was crowded. So was the air.",
-  "Comoros": "Comoros. They gained independence from France in 1975, though Mayotte voted to remain French. Freedom never seems to arrive quietly in these files.",
-  "Congo": "Congo. The Republic of the Congo was part of French Equatorial Africa and gained independence in 1960. The country earned its future the noisy way.",
-  "Cook Islands": "Cook Islands. The file came up light. Even the mystery looked underfunded.",
-  "Costa Rica": "Costa Rica. Costa Rica gained independence from Spain in 1821 and abolished its military in 1948 after a brief…. The file read like a bruise and wore it well.",
-  "Côte d'Ivoire": "Côte d'Ivoire. A civil war in the 2000s disrupted the country, but it has since recovered as West Africa's largest…. The file read like a bruise and wore it well.",
-  "Croatia": "Croatia. It joined the European Union in 2013 and the eurozone in 2023, and is known for its stunning Adriatic…. Nobody needed me to darken the lighting any further.",
-  "Cuba": "Cuba. Fidel Castro's revolution in 1959 established a communist state allied with the Soviet Union. The file smelled faintly of empire and delayed consequences.",
-  "Curaçao": "Curaçao. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Cyprus": "Cyprus. It gained independence in 1960 but has been divided since Turkey's 1974 invasion of the north. I kept the monologue short. History had already said enough.",
-  "Czechia": "Czechia. The Czech lands were the heart of the Kingdom of Bohemia and later part of the Austro-Hungarian Empire. The place carried its history like a tailored overcoat.",
-  "Democratic Republic of the Congo": "Democratic Republic of the Congo. It gained independence in 1960 and was known as Zaire under Mobutu's dictatorship from 1965 to 1997. The file read like a bruise and wore it well.",
-  "Denmark": "Denmark. Denmark was the center of the Viking world and one of Europe's oldest kingdoms. Empire leaves fingerprints that never quite wash off.",
-  "Djibouti": "Djibouti. Djibouti was the French colony of French Somaliland, gaining independence in 1977. The country earned its future the noisy way.",
-  "Dominica": "Dominica. Dominica was one of the last Caribbean islands to be colonized due to the fierce resistance of the…. Freedom never seems to arrive quietly in these files.",
-  "Dominican Republic": "Dominican Republic. It gained independence from Haiti in 1844 and endured Trujillo's dictatorship from 1930 to 1961. I kept the monologue short. History had already said enough.",
-  "Ecuador": "Ecuador. Ecuador was part of the Inca Empire and then a Spanish colony. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Egypt": "Egypt. Pharaohs, empires, occupations, independence. Some places have so much history it starts acting like local government.",
-  "El Salvador": "El Salvador. It became the smallest and most densely populated Central American nation after independence in 1821. The file read like a bruise and wore it well.",
-  "Equatorial Guinea": "Equatorial Guinea. Equatorial Guinea was a Spanish colony and the only Spanish-speaking country in mainland Africa. I kept the monologue short. History had already said enough.",
-  "Eritrea": "Eritrea. A 30-year war of independence ended in 1993 when Eritrea became Africa's newest nation at the time. I kept the monologue short. History had already said enough.",
-  "Estonia": "Estonia. It first gained independence in 1918, was occupied by the Soviet Union in 1940, and regained…. Independence always sounds cleaner on paper than it does in the street.",
-  "Eswatini": "Eswatini. Eswatini (formerly Swaziland) is one of Africa's last absolute monarchies, with a royal dynasty dating…. Freedom never seems to arrive quietly in these files.",
-  "Ethiopia": "Ethiopia. Ethiopia is one of the oldest nations in the world and was never colonized, except for a brief Italian…. The file read like a bruise and wore it well.",
-  "Falkland Islands": "Falkland Islands. Barely a page on it. The mood was carrying the casework.",
-  "Faroe Islands": "Faroe Islands. Not much in the folder. Just enough silence to sound expensive.",
-  "Fiji": "Fiji. It became a British colony in 1874 and gained independence in 1970. The country earned its future the noisy way.",
-  "Finland": "Finland. It declared independence in 1917 and fought the Soviet Union in the Winter War of 1939. I kept the monologue short. History had already said enough.",
-  "France": "France. Kingdom, revolution, republic, empire, republic again. The country changed costumes so often it made my trench coat feel under-rehearsed.",
-  "French Polynesia": "French Polynesia. The file came up light. Even the mystery looked underfunded.",
-  "Gabon": "Gabon. Gabon was part of French Equatorial Africa and gained independence in 1960. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Gambia": "Gambia. Gambia was a British colony centered on the river of the same name, surrounded by French-controlled…. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Georgia": "Georgia. It was part of the Russian Empire and Soviet Union before regaining independence in 1991. I kept the monologue short. History had already said enough.",
-  "Germany": "Germany. Empire, collapse, catastrophe, division, reunification. History here doesn't knock. It lets itself in.",
-  "Ghana": "Ghana. Gold, kingdoms, colony, independence, and a new state standing on old ground. The file had dignity. I tried not to get in its way.",
-  "Gibraltar": "Gibraltar. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Greece": "Greece. Democracy, philosophy, empires, occupation, dictatorship. A place so foundational it made every dramatic thought feel plagiarized.",
-  "Greenland": "Greenland. The file came up light. Even the mystery looked underfunded.",
-  "Grenada": "Grenada. Grenada was colonized by the French and then the British, gaining independence in 1974. I kept the monologue short. History had already said enough.",
-  "Guam": "Guam. The file came up light. Even the mystery looked underfunded.",
-  "Guatemala": "Guatemala. It gained independence in 1821 and suffered a 36-year civil war from 1960 to 1996. Nobody needed me to darken the lighting any further.",
-  "Guernsey": "Guernsey. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Guinea": "Guinea. It was the first French African colony to gain independence in 1958, voting 'no' in de Gaulle's…. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Guinea-Bissau": "Guinea-Bissau. Guinea-Bissau was a Portuguese colony used heavily in the slave trade. Nobody needed me to darken the lighting any further.",
-  "Guyana": "Guyana. Guyana was colonized by the Dutch and then the British, gaining independence in 1966. Independence always sounds cleaner on paper than it does in the street.",
-  "Haiti": "Haiti. A slave revolt led to independence in 1804, making it the first free Black republic and the second…. Independence always sounds cleaner on paper than it does in the street.",
-  "Honduras": "Honduras. It gained independence in 1821 and became the origin of the term 'banana republic' due to US fruit…. Freedom never seems to arrive quietly in these files.",
-  "Hong Kong": "Hong Kong. Not much in the folder. Just enough silence to sound expensive.",
-  "Hungary": "Hungary. After decades of communist rule under the Soviet Union, it transitioned to democracy in 1989 and joined…. Empire leaves fingerprints that never quite wash off.",
-  "Iceland": "Iceland. It was under Norwegian and then Danish rule before gaining full independence in 1944. The country earned its future the noisy way.",
-  "India": "India. Empire had its turn, then independence arrived with partition and a bill nobody could really pay. The subcontinent didn't need narration. It already had scale.",
-  "Indonesia": "Indonesia. Indonesia was home to powerful maritime empires and was colonized by the Dutch for over 300 years. Freedom never seems to arrive quietly in these files.",
-  "Iran": "Iran. Iran is heir to one of the world's oldest civilizations, the Persian Empire founded by Cyrus the Great…. Empire leaves fingerprints that never quite wash off.",
-  "Iraq": "Iraq. It became a British mandate after World War I and an independent kingdom in 1932. Nobody needed me to darken the lighting any further.",
-  "Ireland": "Ireland. The 'Celtic Tiger' economic boom of the 1990s-2000s transformed it into one of Europe's most prosperous…. Nobody needed me to darken the lighting any further.",
-  "Isle of Man": "Isle of Man. The file came up light. Even the mystery looked underfunded.",
-  "Israel": "Israel. It has developed a highly advanced economy and is known as the 'Startup Nation' for its tech sector. The place had already done the hardboiled part before I got there.",
-  "Italy": "Italy. Rome, Renaissance, fragmentation, unification. The country carried civilization like it was just another overcoat.",
-  "Jamaica": "Jamaica. It gained independence in 1962 and has had an outsized cultural impact through music and athletics. Freedom never seems to arrive quietly in these files.",
-  "Japan": "Japan. Empire old enough to sound permanent, defeat sharp enough to prove otherwise, then reinvention at industrial speed. Even my inner monologue felt imported.",
-  "Jersey": "Jersey. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Jordan": "Jordan. The Hashemite Kingdom was established in 1921 under British mandate and became fully independent in 1946. The place had already done the hardboiled part before I got there.",
-  "Kazakhstan": "Kazakhstan. It was incorporated into the Russian Empire and later the Soviet Union, where it was used for nuclear…. Freedom never seems to arrive quietly in these files.",
-  "Kenya": "Kenya. It was a British colony from the late 19th century, and the Mau Mau uprising played a key role in…. Freedom never seems to arrive quietly in these files.",
-  "Kiribati": "Kiribati. It was a British colony known as the Gilbert Islands and gained independence in 1979. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Kosovo": "Kosovo. Barely a page on it. The mood was carrying the casework.",
-  "Kuwait": "Kuwait. Iraq's invasion in 1990 led to the Gulf War, after which Kuwait was liberated by a US-led coalition. Nobody needed me to darken the lighting any further.",
-  "Kyrgyzstan": "Kyrgyzstan. Kyrgyzstan has a rich nomadic heritage tied to the epic poem 'Manas.' It was absorbed into the Russian…. The country earned its future the noisy way.",
-  "Laos": "Laos. It was a French protectorate until 1953 and was heavily bombed during the Vietnam War, making it the…. Nobody needed me to darken the lighting any further.",
-  "Latvia": "Latvia. Latvia was ruled by German crusaders, Swedes, and Russians before first gaining independence in 1918. Nobody needed me to darken the lighting any further.",
-  "Lebanon": "Lebanon. A devastating 15-year civil war from 1975 to 1990 and the 2020 Beirut port explosion have deeply…. Nobody needed me to darken the lighting any further.",
-  "Lesotho": "Lesotho. It became the British protectorate of Basutoland and gained independence in 1966. I kept the monologue short. History had already said enough.",
-  "Liberia": "Liberia. Two devastating civil wars from 1989 to 2003 killed over 250,000 people, followed by a challenging…. I kept the monologue short. History had already said enough.",
-  "Libya": "Libya. Libya was part of the Roman Empire and later the Ottoman Empire before Italian colonization in 1911. The place carried its history like a tailored overcoat.",
-  "Liechtenstein": "Liechtenstein. It abolished its military in 1868 and has since become a prosperous financial center with very low taxes. The place carried its history like a tailored overcoat.",
-  "Lithuania": "Lithuania. It was the first Soviet republic to declare independence in 1990, joining the EU in 2004. Independence always sounds cleaner on paper than it does in the street.",
-  "Luxembourg": "Luxembourg. Luxembourg has been a duchy since the 10th century and was a founding member of the European Union. It was almost too on-the-nose. Almost.",
-  "Macao": "Macao. Not much in the folder. Just enough silence to sound expensive.",
-  "Madagascar": "Madagascar. The Malagasy kingdom unified the island before French colonization in 1896. Freedom never seems to arrive quietly in these files.",
-  "Malawi": "Malawi. Malawi was the British protectorate of Nyasaland, gaining independence in 1966. Independence always sounds cleaner on paper than it does in the street.",
-  "Malaysia": "Malaysia. The Federation of Malaysia was formed in 1963, and rapid industrialization has made it one of Southeast…. History had a landlord here, and the lease ran long.",
-  "Maldives": "Maldives. It was a sultanate influenced by Arab traders and a British protectorate until independence in 1965. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Mali": "Mali. It was a French colony before gaining independence in 1960 and faces ongoing security challenges. Independence always sounds cleaner on paper than it does in the street.",
-  "Malta": "Malta. John, it became a British colony crucial in World War II. Nobody needed me to darken the lighting any further.",
-  "Marshall Islands": "Marshall Islands. The Marshall Islands were colonized by Spain, Germany, and Japan before US administration after World…. The place had already done the hardboiled part before I got there.",
-  "Mauritania": "Mauritania. It became a French colony and gained independence in 1960. Independence always sounds cleaner on paper than it does in the street.",
-  "Mauritius": "Mauritius. Mauritius was uninhabited until Dutch settlement in the 17th century, followed by French and British…. Independence always sounds cleaner on paper than it does in the street.",
-  "Mexico": "Mexico. Empire, independence, revolution, and a long argument with power. The file came with dust, saints, and a pistol behind the curtain.",
-  "Micronesia": "Micronesia. Independence came in 1986 under a Compact of Free Association with the United States. Freedom never seems to arrive quietly in these files.",
-  "Moldova": "Moldova. It was annexed by Russia in 1812 and later became part of the Soviet Union. The place had already done the hardboiled part before I got there.",
-  "Monaco": "Monaco. Monaco has been ruled by the Grimaldi family since 1297, making it one of the oldest ruling dynasties…. It was all very grand, which is just another word for suspicious.",
-  "Mongolia": "Mongolia. Mongolia was the center of the largest contiguous land empire in history under Genghis Khan in the 13th…. Old power still lingered in the wallpaper.",
-  "Montenegro": "Montenegro. After the peaceful 2006 independence referendum, it became Europe's newest state and an EU candidate…. Freedom never seems to arrive quietly in these files.",
-  "Montserrat": "Montserrat. Not much in the folder. Just enough silence to sound expensive.",
-  "Morocco": "Morocco. Sultanates, protectorates, independence, and trade routes older than my profession's bad habits. The air did half the writing for me.",
-  "Mozambique": "Mozambique. Mozambique was a Portuguese colony for nearly 500 years and a major slave-trading center. I kept the monologue short. History had already said enough.",
-  "Myanmar": "Myanmar. Myanmar was the seat of powerful Burmese kingdoms before British colonization in the 19th century. The file read like a bruise and wore it well.",
-  "Namibia": "Namibia. Namibia was colonized by Germany in the 1880s, which committed a genocide against the Herero and Nama…. Nobody needed me to darken the lighting any further.",
-  "Nauru": "Nauru. German, Japanese, and Australian administration preceded independence in 1968. Independence always sounds cleaner on paper than it does in the street.",
-  "Nepal": "Nepal. A Maoist insurgency and political upheaval led to the abolition of the monarchy in 2008 and…. Old power still lingered in the wallpaper.",
-  "Netherlands": "Netherlands. The Netherlands was a major colonial and trading power during its Golden Age in the 17th century. Money always leaves a draft in the room.",
-  "New Caledonia": "New Caledonia. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "New Zealand": "New Zealand. New Zealand was settled by Polynesian Māori around 1250 AD and colonized by Britain after the 1840…. The file read like a bruise and wore it well.",
-  "Nicaragua": "Nicaragua. The Sandinista revolution overthrew the Somoza dictatorship in 1979, followed by a US-backed Contra war…. Nobody needed me to darken the lighting any further.",
-  "Niger": "Niger. Niger was part of several Saharan empires and kingdoms before French colonization. Independence always sounds cleaner on paper than it does in the street.",
-  "Nigeria": "Nigeria. Colony yesterday, giant by force of numbers today, with civil war and oil money in between. The file had muscle and scars.",
-  "Niue": "Niue. Barely a page on it. The mood was carrying the casework.",
-  "Norfolk Island": "Norfolk Island. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "North Korea": "North Korea. Korea was divided at the 38th parallel after World War II, with the Soviet-backed north becoming the…. The file read like a bruise and wore it well.",
-  "North Macedonia": "North Macedonia. It peacefully declared independence in 1991 but faced a long name dispute with Greece. The country earned its future the noisy way.",
-  "Northern Mariana Islands": "Northern Mariana Islands. Not much in the folder. Just enough silence to sound expensive.",
-  "Norway": "Norway. Vikings first, unions later, independence eventually. Even the calm looked like it had earned itself the hard way.",
-  "Oman": "Oman. Oman was a powerful maritime empire that controlled trading posts from East Africa to India. It was all very grand, which is just another word for suspicious.",
-  "Pakistan": "Pakistan. Pakistan was created in 1947 when British India was partitioned into Hindu-majority India and…. Independence always sounds cleaner on paper than it does in the street.",
-  "Palau": "Palau. Palau was colonized by Spain, Germany, Japan, and then administered by the US after World War II. The file read like a bruise and wore it well.",
-  "Palestine": "Palestine. Barely a page on it. The mood was carrying the casework.",
-  "Panama": "Panama. Panama was part of Colombia until the US supported its independence in 1903 to build the Panama Canal. Freedom never seems to arrive quietly in these files.",
-  "Papua New Guinea": "Papua New Guinea. The eastern half of New Guinea was administered by Australia until independence in 1975. Freedom never seems to arrive quietly in these files.",
-  "Paraguay": "Paraguay. The devastating War of the Triple Alliance (1864-1870) killed up to 90% of its male population. I kept the monologue short. History had already said enough.",
-  "Peru": "Peru. It gained independence in 1821 and holds extraordinary archaeological and natural treasures. Freedom never seems to arrive quietly in these files.",
-  "Philippines": "Philippines. The Philippines was a Spanish colony for over 300 years and then a US territory until independence in…. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Poland": "Poland. Partitioned, occupied, ravaged, then pushed through communism before clawing its way back out. The resilience was doing all the heavy lifting.",
-  "Portugal": "Portugal. An empire with ocean in its bloodstream, then dictatorship, then carnations instead of gunfire. History here had a taste for exits.",
-  "Puerto Rico": "Puerto Rico. The file came up light. Even the mystery looked underfunded.",
-  "Qatar": "Qatar. Qatar was a pearl diving and fishing community before oil was discovered in the 1940s. Independence always sounds cleaner on paper than it does in the street.",
-  "Romania": "Romania. Kingdom, fascism, communism, revolution. By the time Ceaușescu fell, the country had already spent decades practicing grim lighting.",
-  "Russia": "Russia. Tsars, revolution, Soviet steel, collapse, and the old imperial reflex still twitching underneath. The file was large enough to need winter.",
-  "Rwanda": "Rwanda. Rwanda's history was tragically defined by the 1994 genocide, in which an estimated 800,000 Tutsi and…. Nobody needed me to darken the lighting any further.",
-  "Saint Barthelemy": "Saint Barthelemy. The file came up light. Even the mystery looked underfunded.",
-  "Saint Helena": "Saint Helena. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Saint Kitts and Nevis": "Saint Kitts and Nevis. It gained independence in 1983 and is the smallest sovereign state in the Western Hemisphere. The country earned its future the noisy way.",
-  "Saint Lucia": "Saint Lucia. Despite its small size, it has produced two Nobel laureates: economist Arthur Lewis and poet Derek…. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Saint Martin": "Saint Martin. The file came up light. Even the mystery looked underfunded.",
-  "Saint Pierre and Miquelon": "Saint Pierre and Miquelon. Not much in the folder. Just enough silence to sound expensive.",
-  "Saint Vincent and the Grenadines": "Saint Vincent and the Grenadines. It became a British colony dependent on sugar and gained independence in 1979. The country earned its future the noisy way.",
-  "Samoa": "Samoa. Samoa was governed by Germany and then New Zealand before becoming the first Pacific Island nation to…. Independence always sounds cleaner on paper than it does in the street.",
-  "San Marino": "San Marino. Entirely surrounded by Italy, it maintained independence through diplomacy even as Italian states…. Freedom never seems to arrive quietly in these files.",
-  "Sao Tome and Principe": "Sao Tome and Principe. They are Africa's second-smallest nation and lie on the equator in the Gulf of Guinea. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Saudi Arabia": "Saudi Arabia. The discovery of oil in 1938 transformed it from a desert kingdom into a global economic power. Empire leaves fingerprints that never quite wash off.",
-  "Senegal": "Senegal. Senegal was a key departure point for the Atlantic slave trade and a center of French West Africa. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Serbia": "Serbia. It played a key role in both World Wars and was the dominant republic in Yugoslavia. I kept the monologue short. History had already said enough.",
-  "Seychelles": "Seychelles. The Seychelles were uninhabited until French settlement in the 18th century, later becoming a British…. Independence always sounds cleaner on paper than it does in the street.",
-  "Sierra Leone": "Sierra Leone. A devastating civil war fueled by 'blood diamonds' lasted from 1991 to 2002, and the country was later…. Nobody needed me to darken the lighting any further.",
-  "Singapore": "Singapore. It briefly joined Malaysia after independence from Britain but separated in 1965. Freedom never seems to arrive quietly in these files.",
-  "Sint Maarten": "Sint Maarten. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Slovakia": "Slovakia. Slovakia was part of the Kingdom of Hungary for a millennium before Czechoslovakia was created in 1918. Empire leaves fingerprints that never quite wash off.",
-  "Slovenia": "Slovenia. It declared independence in 1991 after a brief 10-day war. The file read like a bruise and wore it well.",
-  "Solomon Islands": "Solomon Islands. The Solomon Islands were the site of fierce World War II fighting, including the Battle of Guadalcanal. Nobody needed me to darken the lighting any further.",
-  "Somalia": "Somalia. The collapse of central government in 1991 led to decades of civil war, piracy, and humanitarian…. The place had already done the hardboiled part before I got there.",
-  "South Africa": "South Africa. Colony, conquest, apartheid, democracy. The record was too raw to romanticize, which of course only made noir look cheap.",
-  "South Korea": "South Korea. War split the peninsula, dictatorship tried to hold it still, and democracy outran both. The file moved faster than my cigarette metaphors.",
-  "South Sudan": "South Sudan. South Sudan gained independence from Sudan in 2011 after decades of civil war, becoming the world's…. The place had already done the hardboiled part before I got there.",
-  "Spain": "Spain. Empire abroad, civil war at home, dictatorship after that, democracy restored when the century finally got tired. The drama was not subtle.",
-  "Sri Lanka": "Sri Lanka. A 26-year civil war between the government and Tamil Tigers ended in 2009. Nobody needed me to darken the lighting any further.",
-  "Sudan": "Sudan. Decades of civil war led to South Sudan's secession in 2011. The file read like a bruise and wore it well.",
-  "Suriname": "Suriname. Suriname was a Dutch colony known for sugar plantations worked by enslaved Africans and later…. Freedom never seems to arrive quietly in these files.",
-  "Sweden": "Sweden. It built a comprehensive welfare state in the 20th century and joined NATO in 2024 after decades of…. The place had already done the hardboiled part before I got there.",
-  "Switzerland": "Switzerland. Switzerland was founded in 1291 as a defensive alliance of cantons and has maintained neutrality since…. I hate when a country makes the trench coat feel appropriate.",
-  "Syria": "Syria. A devastating civil war beginning in 2011 caused massive displacement and destruction, creating one of…. The place had already done the hardboiled part before I got there.",
-  "Taiwan": "Taiwan. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Tajikistan": "Tajikistan. It was incorporated into the Soviet Union and gained independence in 1991, followed by a devastating…. The place had already done the hardboiled part before I got there.",
-  "Tanzania": "Tanzania. It was a German and then British colony before gaining independence in 1961. The country earned its future the noisy way.",
-  "Thailand": "Thailand. Thailand is the only Southeast Asian country never colonized by a European power. It was all very grand, which is just another word for suspicious.",
-  "Timor-Leste": "Timor-Leste. Timor-Leste was a Portuguese colony for over 400 years before Indonesia invaded in 1975. Nobody needed me to darken the lighting any further.",
-  "Togo": "Togo. Togo was a German colony known as Togoland before being divided between France and Britain after World…. The file read like a bruise and wore it well.",
-  "Tonga": "Tonga. It became a British protectorate but maintained self-governance until full independence in 1970. Independence always sounds cleaner on paper than it does in the street.",
-  "Trinidad and Tobago": "Trinidad and Tobago. Trinidad was colonized by Spain and then Britain, while Tobago changed hands multiple times among…. The country earned its future the noisy way.",
-  "Tunisia": "Tunisia. Tunisia was the center of ancient Carthage and later a key part of the Roman Empire. It was all very grand, which is just another word for suspicious.",
-  "Turkey": "Turkey. Empire gone, republic forged, identity argued over ever since. The country wore history the way some men wear cologne: heavily and on purpose.",
-  "Turkmenistan": "Turkmenistan. Since independence in 1991, it has been ruled by authoritarian leaders and sits on one of the world's…. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Turks and Caicos Islands": "Turks and Caicos Islands. The file came up light. Even the mystery looked underfunded.",
-  "Tuvalu": "Tuvalu. It was a British colony as part of the Gilbert and Ellice Islands before independence in 1978. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Uganda": "Uganda. It gained independence in 1962 and endured the brutal dictatorship of Idi Amin in the 1970s. The place had already done the hardboiled part before I got there.",
-  "Ukraine": "Ukraine. Empires carved at it, famine scarred it, and the present tense still sounds like artillery. You don't write over that. You just read carefully.",
-  "United Arab Emirates": "United Arab Emirates. Oil wealth transformed it from a collection of fishing and trading ports into a global hub for…. History had a landlord here, and the lease ran long.",
-  "United Kingdom": "United Kingdom. Four nations, one union, and an empire whose fingerprints still turn up in other people's files. It carried itself like a suspect who'd made partner.",
-  "United States": "United States. Independence in one hand, expansion in the other, and enough contradictions to keep a detective employed for life. The country called itself new with a very straight face.",
-  "United States Virgin Islands": "United States Virgin Islands. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Uruguay": "Uruguay. Uruguay gained independence from Brazil in 1828 and became one of Latin America's first welfare states…. I kept the monologue short. History had already said enough.",
-  "Uzbekistan": "Uzbekistan. After Soviet rule, it gained independence in 1991 and is Central Asia's most populous country. Freedom never seems to arrive quietly in these files.",
-  "Vanuatu": "Vanuatu. Vanuatu was jointly administered by Britain and France as the New Hebrides, one of the few condominiums…. Freedom never seems to arrive quietly in these files.",
-  "Vatican City": "Vatican City. Vatican City is the world's smallest independent state, established by the 1929 Lateran Treaty with…. Somewhere, the genre wanted a trumpet. It had to settle for me.",
-  "Venezuela": "Venezuela. Venezuela was colonized by Spain and liberated by Simón Bolívar in 1821. Nobody needed me to darken the lighting any further.",
-  "Vietnam": "Vietnam. Foreign powers kept arriving, and Vietnam kept teaching them how departure works. The file was concise, which made it sting more.",
-  "Wallis and Futuna": "Wallis and Futuna. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Western Sahara": "Western Sahara. Thin file, long shadows. Sometimes the records know when to keep their mouth shut.",
-  "Yemen": "Yemen. Yemen was home to the ancient Kingdom of Sheba and a center of the frankincense and myrrh trade. I kept the monologue short. History had already said enough.",
-  "Zambia": "Zambia. Zambia was the British protectorate of Northern Rhodesia before gaining independence in 1964 under…. Freedom never seems to arrive quietly in these files.",
-  "Zimbabwe": "Zimbabwe. It was the British colony of Rhodesia until Robert Mugabe led it to independence in 1980. Nobody needed me to darken the lighting any further.",
+const COUNTRY_ENTRY_OVERRIDES = {
+  Afghanistan: "Afghanistan. Empires keep arriving here as if the mountains are taking appointments. They usually leave as a cautionary tale, and I arrived dressed like one.",
+  Andorra: "Andorra. Princes, bishops, mountain air, and a modern constitution in 1993. My inner monologue came prepared for candlelight intrigue and got handed constitutional housekeeping instead.",
+  Argentina: "Argentina. Independence, generals, disappearances, and enough tragic grandeur to make my trench coat feel underdressed. I gave the streets my best hardboiled stare. The streets had seen better performances.",
+  Belgium: "Belgium. Small country, long colonial shadow, and enough diplomacy to make guilt wear a necktie. Brussels looked respectable, which in my line of work is practically a written confession.",
+  "Bosnia and Herzegovina": "Bosnia and Herzegovina. Empires came through, Yugoslavia broke apart, and war left the kind of silence you don't try to improve. I kept the patter low. Even my inner monologue knew when to remove its hat.",
+  France: "France. Kingdom, revolution, republic, empire, republic again. The place changed regimes more often than I change bad habits, and I change those only under administrative pressure.",
+  Germany: "Germany. Empire, collapse, catastrophe, division, reunification. I showed up ready to narrate history like a tough guy. History here already had the stronger jawline.",
+  India: "India. Empire had its turn, then partition came in with the bill and a bloodstain nobody could send back. I reached for atmosphere and found a subcontinent that didn't need my help.",
+  Ireland: "Ireland. The file starts with empire and eventually wanders into an economic boom from the 1990s. My inner monologue was built for rain, guilt, and dockside politics, not growth metrics, but the trench coat stayed on.",
+  Israel: "Israel. The file moves from statehood and conflict to something called a startup nation. I was aiming for smoky postwar intrigue and got handed venture-capital vocabulary instead.",
+  Japan: "Japan. Empire, defeat, reinvention. The country moved faster than my narration could keep up, which was rude, and possibly efficient.",
+  Luxembourg: "Luxembourg. A duchy with banker energy and too much poise for a place that small. I came in expecting a minor-key mystery. The country handed me generational wealth with better tailoring.",
+  Mexico: "Mexico. Empire, independence, revolution, and a long-running argument with power. The file came with saints, dust, and the kind of drama that makes a detective grateful he brought extra adjectives.",
+  Russia: "Russia. Tsars, revolution, Soviet steel, collapse, and the old imperial reflex still twitching under the floorboards. I tried to sound ominous. The file was already doing it professionally.",
+  Singapore: "Singapore. Fishing village, imperial trading post, separation in 1965, and then a leap into modern efficiency so abrupt it bruised the genre. I went looking for fog and bribed stevedores. The file handed me policy success.",
+  "South Africa": "South Africa. Colony, conquest, apartheid, democracy. The record was too raw to romanticize, which meant the noir act had to stop posing and stand still for once.",
+  "South Korea": "South Korea. War, dictatorship, democracy, and then a sprint into modern power that left my 1940s narration wheezing in the alley. I reached for a cigarette metaphor and got handed the future.",
+  Spain: "Spain. Empire abroad, civil war at home, dictatorship after that, democracy when the century finally got tired. The country didn't need atmosphere. It needed a filing cabinet and a long exhale.",
+  Sweden: "Sweden. Great-power past, long neutrality, then NATO in 2024. The file says alliance politics; my inner monologue says 1947 and a saxophone solo. We were both trying our best.",
+  Switzerland: "Switzerland. Medieval alliance, armed neutrality, banking secrecy, and a level of composure that felt frankly theatrical. I hate when a country makes the trench coat look deliberate.",
+  Ukraine: "Ukraine. Empires carved at it, famine scarred it, and the present tense still sounds like artillery. I kept the wisecracks off the page. Some files are already louder than noir.",
+  "United Kingdom": "United Kingdom. Four nations, one union, and an empire whose fingerprints still turn up in other people's files. It carried itself like a suspect who'd made partner and billed the hours.",
+  "United States": "United States. Independence in one hand, expansion in the other, and enough contradictions to keep a detective employed across several lifetimes. The country called itself new with a very straight face, which I almost admired.",
+  "Vatican City": "Vatican City. Tiny state, enormous wardrobe, and a treaty from 1929 trying to keep holiness on speaking terms with property law. I arrived prepared for incense and intrigue. For once, the file cooperated.",
 };
 
-export function buildCountryEntryMonologue(country) {
-  return COUNTRY_ENTRY_MONOLOGUES[country] || "";
+const THIN_FILE_COUNTRIES = new Set([
+  'Aland', 'American Samoa', 'Anguilla', 'Aruba', 'Bermuda', 'British Indian Ocean Territory',
+  'British Virgin Islands', 'Cayman Islands', 'Cook Islands', 'Curaçao', 'Falkland Islands',
+  'Faroe Islands', 'French Polynesia', 'Gibraltar', 'Greenland', 'Guam', 'Guernsey',
+  'Hong Kong', 'Isle of Man', 'Jersey', 'Kosovo', 'Macao', 'Montserrat', 'New Caledonia',
+  'Niue', 'Norfolk Island', 'Northern Mariana Islands', 'Palestine', 'Puerto Rico',
+  'Saint Barthelemy', 'Saint Helena', 'Saint Martin', 'Saint Pierre and Miquelon',
+  'Sint Maarten', 'Taiwan', 'Turks and Caicos Islands', 'United States Virgin Islands',
+  'Wallis and Futuna', 'Western Sahara',
+]);
+
+const TRAGIC_MARKERS = [
+  'genocide', 'civil war', 'world war', 'war of independence', 'famine', 'slave trade',
+  'enslaved', 'occupation', 'dictatorship', 'massive displacement', 'humanitarian crisis',
+  'annexation', 'full-scale invasion', 'devastating', 'atrocities',
+];
+
+const MODERN_MARKERS = [
+  '2024', '2023', '2022', '2021', '2016', '2014', '2013', '2011', '2009', '2008', '2007',
+  '2004', '1995', '1993', '1991', 'nato', 'european union', 'eu ', 'eurozone', 'startup',
+  'tech', 'digital', 'banking', 'financial services', 'tourism', 'gdp', 'economy',
+  'economic powerhouse', 'global hub', 'aviation', 'multiculturalism',
+];
+
+const IMPERIAL_MARKERS = [
+  'empire', 'dynasty', 'kingdom', 'sultanate', 'monarchy', 'colony', 'protectorate',
+  'mandate', 'independence', 'republic', 'revolution', 'union', 'federation',
+];
+
+function hashString(text) {
+  let hash = 0;
+  for (let i = 0; i < text.length; i++) {
+    hash = ((hash << 5) - hash + text.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash);
 }
 
-export { COUNTRY_ENTRY_MONOLOGUES };
+function pick(arr, seed) {
+  return arr[hashString(seed) % arr.length];
+}
+
+function splitSentences(historyText) {
+  return String(historyText || '')
+    .replace(/\s+/g, ' ')
+    .trim()
+    .split(/(?<=[.!?])\s+/)
+    .map(s => s.trim())
+    .filter(Boolean);
+}
+
+function includesAny(text, markers) {
+  const lower = text.toLowerCase();
+  return markers.some(marker => lower.includes(marker));
+}
+
+function detectMode(country, historyText) {
+  if (!historyText || THIN_FILE_COUNTRIES.has(country)) return 'small-state-dry';
+  if (includesAny(historyText, TRAGIC_MARKERS)) return 'tragic-grave';
+  if (includesAny(historyText, MODERN_MARKERS)) return 'modern-anachronistic';
+  if (includesAny(historyText, IMPERIAL_MARKERS)) return 'imperial-decadent';
+  return 'small-state-dry';
+}
+
+function detectModernTopic(historyText) {
+  const lower = historyText.toLowerCase();
+  if (lower.includes('nato') || lower.includes('european union') || lower.includes('eurozone')) {
+    return 'alliance paperwork from the future';
+  }
+  if (lower.includes('startup') || lower.includes('tech') || lower.includes('digital')) {
+    return 'modern success stories with suspiciously good bandwidth';
+  }
+  if (lower.includes('banking') || lower.includes('financial services')) {
+    return 'banking language';
+  }
+  if (lower.includes('tourism')) {
+    return 'tourism statistics';
+  }
+  if (/\b20(0\d|1\d|2[0-4])\b/.test(lower)) {
+    return 'a date far too recent for my emotional arrangement';
+  }
+  return 'this century';
+}
+
+function buildLead(country, historyText, mode) {
+  const lower = historyText.toLowerCase();
+
+  if (!historyText || THIN_FILE_COUNTRIES.has(country)) {
+    return `${country}. Thin file, expensive shadows, and just enough silence to make me overnarrate on instinct.`;
+  }
+  if (mode === 'tragic-grave') {
+    if (lower.includes('genocide')) {
+      return `${country}. The file came stamped with genocide and the kind of memory that refuses to sit quietly.`;
+    }
+    if (lower.includes('slave trade') || lower.includes('enslaved')) {
+      return `${country}. The record carries slavery and extraction in ink that still hasn't dried morally.`;
+    }
+    if (lower.includes('civil war') || lower.includes('war')) {
+      return `${country}. War had already done the lighting here, and better than I ever could.`;
+    }
+    if (lower.includes('dictatorship') || lower.includes('authoritarian')) {
+      return `${country}. Power stayed too long, left bruises on the wallpaper, and called it order.`;
+    }
+    return `${country}. The history file read like evidence, not ambience.`;
+  }
+  if (mode === 'modern-anachronistic') {
+    if (lower.includes('nato') || lower.includes('european union') || lower.includes('eurozone')) {
+      return `${country}. The file starts in old history and ends in membership forms with a better haircut than mine.`;
+    }
+    if (lower.includes('startup') || lower.includes('tech') || lower.includes('digital')) {
+      return `${country}. I came in ready for moody geopolitics and the file answered with modern efficiency and dangerous competence.`;
+    }
+    if (lower.includes('banking') || lower.includes('financial services')) {
+      return `${country}. The history wandered into banking, which is never good news for a man trying to sound like 1947.`;
+    }
+    return `${country}. The facts kept sliding out of period and into the future while I was still buttoning the trench coat.`;
+  }
+  if (mode === 'imperial-decadent') {
+    if (lower.includes('empire') || lower.includes('dynasty')) {
+      return `${country}. Empires had their turn here, which meant the wallpaper still behaved like it had titles.`;
+    }
+    if (lower.includes('colony') || lower.includes('protectorate') || lower.includes('mandate')) {
+      return `${country}. Empire once kept a desk here, and history never fully cleared out the drawers.`;
+    }
+    if (lower.includes('independence') || lower.includes('republic') || lower.includes('revolution')) {
+      return `${country}. Independence showed up eventually, usually carrying broken furniture and a revised flag.`;
+    }
+    return `${country}. Old power still lingered in the wallpaper, charging rent by the century.`;
+  }
+  if (lower.includes('smallest') || lower.includes('tiny')) {
+    return `${country}. Small country, oversized mood, and paperwork dressed like statecraft.`;
+  }
+  return `${country}. The file was short, the atmosphere cooperative, and I committed to the bit immediately.`;
+}
+
+function buildFollowup(country, historyText, mode) {
+  const seed = `${country}:${mode}`;
+  if (mode === 'tragic-grave') {
+    return pick([
+      'I kept the wisecracks off the record. Even my inner monologue knew when to lower its voice.',
+      'The trench coat wanted melodrama. The history insisted on plain respect.',
+      'I let the country keep the last word. It had earned it.',
+    ], seed);
+  }
+  if (mode === 'modern-anachronistic') {
+    const topic = detectModernTopic(historyText);
+    return pick([
+      `Then the file wandered into ${topic}. My inner monologue was built for fog, bribed porters, and another century entirely.`,
+      `I reached for a cigarette metaphor and got handed ${topic} instead. The genre filed a complaint.`,
+      `The trench coat stayed on, even when the facts started sounding like tomorrow's newspaper and better public policy.`,
+    ], seed);
+  }
+  if (mode === 'imperial-decadent') {
+    return pick([
+      'I gave the place my best hardboiled stare. It answered with several centuries of superior production design.',
+      'I tightened the trench coat and tried to look equal to the occasion. The occasion had, naturally, seen empires.',
+      'I arrived ready to narrate history. The country had already hired better writers.',
+    ], seed);
+  }
+  return pick([
+    'The file was short, the shadows were cooperative, and I overcommitted to the performance immediately.',
+    'Small place, big atmosphere. Naturally I behaved as if a saxophone section had followed me in.',
+    'I was prepared to call it understated. Then I remembered understatement has never been my department.',
+  ], seed);
+}
+
+export function buildCountryEntryMonologue(country, historyText = '') {
+  if (!country) return '';
+  if (COUNTRY_ENTRY_OVERRIDES[country]) return COUNTRY_ENTRY_OVERRIDES[country];
+
+  const mode = detectMode(country, historyText);
+  const lead = buildLead(country, historyText, mode);
+  const followup = buildFollowup(country, historyText, mode);
+  return `${lead} ${followup}`;
+}
+
+export { COUNTRY_ENTRY_OVERRIDES };
