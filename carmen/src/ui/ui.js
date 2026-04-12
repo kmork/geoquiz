@@ -505,6 +505,9 @@ export function createCarmenUI(container, flagCodes) {
           quirkOverride = 'Primary target. All cases lead here.';
         }
       }
+      const profileImage = suspect.name === 'Carmen Sandiego' && campaignPhase === 'finale'
+        ? 'carmen/img/carmen-sandiego.png'
+        : suspect.img;
       const photoAdjust = INTERPOL_PHOTO_ADJUSTMENTS[suspect.name] || {};
       const photoStyle = [
         `--photo-scale-x:${photoAdjust.scaleX || 1.28}`,
@@ -512,8 +515,8 @@ export function createCarmenUI(container, flagCodes) {
         `--photo-offset-x:${photoAdjust.x || '0%'}`,
         `--photo-offset-y:${photoAdjust.y || '0%'}`,
       ].join(';');
-      const photoHtml = suspect.img
-        ? `<img src="${esc(suspect.img)}" alt="${esc(suspect.name)}" class="carmen-interpol-photo-img" style="${photoStyle}">`
+      const photoHtml = profileImage
+        ? `<img src="${esc(profileImage)}" alt="${esc(suspect.name)}" class="carmen-interpol-photo-img" style="${photoStyle}">`
         : `<div class="carmen-interpol-photo-silhouette">🕵️</div>`;
 
       const thefts = theftRecords || [];
