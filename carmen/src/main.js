@@ -261,8 +261,8 @@ async function handleEndChoice(choice, wasSuccess) {
   startMusic();
   await new Promise(r => setTimeout(r, 1500));
 
-  const missionCount = getMissionHistory().length;
-  const { file: narratorFile, cues } = chooseNarratorScript(wasSuccess, missionCount);
+  const caseJustPlayed = logic?.caseNumber || getCurrentCase();
+  const { file: narratorFile, cues } = chooseNarratorScript(wasSuccess, caseJustPlayed);
 
   // Create subtitle element
   const subtitle = document.createElement('div');
