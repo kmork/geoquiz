@@ -379,9 +379,10 @@ export function createCarmenUI(container, flagCodes) {
   }
 
   function renderWitnessReports() {
+    const latest = witnessReports[witnessReports.length - 1];
+
     if (els.witnessReport) {
       els.witnessReport.innerHTML = '';
-      const latest = witnessReports[witnessReports.length - 1];
       if (latest) {
         els.witnessReport.appendChild(createWitnessEntry(latest, false));
       }
@@ -389,8 +390,8 @@ export function createCarmenUI(container, flagCodes) {
 
     if (els.witnessReportInvestigate) {
       els.witnessReportInvestigate.innerHTML = '';
-      for (const report of witnessReports) {
-        els.witnessReportInvestigate.appendChild(createWitnessEntry(report, true));
+      if (latest) {
+        els.witnessReportInvestigate.appendChild(createWitnessEntry(latest, true));
       }
     }
   }
