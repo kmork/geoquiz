@@ -12,7 +12,7 @@ body {
 .wrap > .card {
   background:
     linear-gradient(rgba(13, 16, 24, 0.42), rgba(13, 16, 24, 0.5)),
-    url('../img/background-tiles.png') no-repeat center center;
+    url('../carmen/img/background-tiles.png') no-repeat center center;
   background-size: 100% 100%;
 }
 
@@ -752,7 +752,7 @@ body {
   background:
     linear-gradient(rgba(75, 61, 46, 0.18), rgba(40, 30, 22, 0.22)),
     linear-gradient(rgba(214, 194, 167, 0.74), rgba(198, 174, 144, 0.8)),
-    url('../img/heritage-back.png') center/112% 112% no-repeat;
+    url('../carmen/img/heritage-back.png') center/112% 112% no-repeat;
   display: flex;
   align-items: stretch;
   justify-content: stretch;
@@ -1706,14 +1706,14 @@ body {
   background:
     radial-gradient(circle at 50% 40%, rgba(18, 14, 11, 0.06), rgba(6, 5, 4, 0.42) 74%),
     linear-gradient(180deg, rgba(14, 10, 8, 0.42), rgba(8, 7, 6, 0.56)),
-    url('../img/country.png') center/cover no-repeat;
+    url('../carmen/img/country.png') center/cover no-repeat;
 }
 
 .carmen-map-overlay.carmen-country-arrival-alt {
   background:
     radial-gradient(circle at 50% 40%, rgba(18, 14, 11, 0.06), rgba(6, 5, 4, 0.42) 74%),
     linear-gradient(180deg, rgba(14, 10, 8, 0.42), rgba(8, 7, 6, 0.56)),
-    url('../img/country-2.png') center/cover no-repeat;
+    url('../carmen/img/country-2.png') center/cover no-repeat;
 }
 
 .carmen-transition {
