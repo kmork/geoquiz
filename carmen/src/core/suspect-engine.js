@@ -36,13 +36,16 @@ export class SuspectEngine {
    * @param {string}   campaignPhase — 'prelude' | 'whispers' | 'pursuit' | 'finale'
    * @param {string[]} route         — the country route for this case
    * @param {Object}   countryMap    — country name → country data
+   * @param {Set}      excludedNames — suspects already in custody
    */
-  pickSuspect(campaignPhase, route, countryMap) {
+  pickSuspect(campaignPhase, route, countryMap, excludedNames = new Set()) {
     if (campaignPhase === 'finale') {
       const carmen = SUSPECTS.find(s => s.name === 'Carmen Sandiego');
       if (carmen) { this.suspect = carmen; return; }
     }
-    const pool = SUSPECTS.filter(s => s.name !== 'Carmen Sandiego');
+    const pool = SUSPECTS.filter(s =>
+      s.name !== 'Carmen Sandiego' && !excludedNames.has(s.name)
+    );
     const routeContinents = new Set(
       route.map(c => countryMap[c]?.continent).filter(Boolean)
     );
@@ -50,6 +53,9 @@ export class SuspectEngine {
       s.knownRegions?.some(r => routeContinents.has(r))
     );
     const candidates = regionMatch.length > 0 ? regionMatch : pool;
+    if (candidates.length === 0) {
+      throw new Error('No eligible suspects remain for case selection.');
+    }
     this.suspect = candidates[Math.floor(Math.random() * candidates.length)];
   }
 

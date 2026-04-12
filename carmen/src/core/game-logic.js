@@ -42,8 +42,9 @@ export class CarmenGameLogic {
     this.rivers = config.rivers || [];
     this.mountains = config.mountains || [];
     this.empires = config.empires || [];
-    this.caseNumber = config.caseNumber || 1;
-    this.totalCases = config.totalCases || 10;
+   this.caseNumber = config.caseNumber || 1;
+   this.totalCases = config.totalCases || 10;
+    this.excludedSuspects = new Set(config.excludedSuspects || []);
     this.campaignPhase =
       this.caseNumber >= 10 ? 'finale' :
       this.caseNumber >= 7 ? 'pursuit' :
@@ -128,7 +129,12 @@ export class CarmenGameLogic {
     this.route = this._generateRoute(this.diff.stops);
     this.artifact = this._pickArtifact(this.route[0]);
 
-    this.suspectEngine.pickSuspect(this.campaignPhase, this.route, this.countryMap);
+    this.suspectEngine.pickSuspect(
+      this.campaignPhase,
+      this.route,
+      this.countryMap,
+      this.excludedSuspects,
+    );
 
     this.stopStartTime = Date.now();
 

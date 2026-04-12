@@ -278,6 +278,7 @@ async function startGame() {
     empires: empiresData,
     caseNumber: getCurrentCase(),
     totalCases: TOTAL_CASES,
+    excludedSuspects: getUnlockedSuspects(),
   });
 
   const intro = logic.start();
