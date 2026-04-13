@@ -129,48 +129,50 @@ export function createCarmenUI(container, flagCodes) {
         </div>
       </div>
       <div class="carmen-right-panel">
-        <div class="carmen-right-view" id="carmen-rv-artifact">
-          <div class="carmen-artifact-display" id="carmen-artifact-display">
-            <div class="carmen-artifact-inner">
-              <div class="carmen-artifact-front">
-                <img class="carmen-artifact-img" id="carmen-artifact-img" src="" alt="">
-                <div class="carmen-artifact-stamp">STOLEN</div>
-                <div class="carmen-artifact-flip-hint">↩</div>
-                <div class="carmen-artifact-flip-label" id="carmen-artifact-flip-label">Flip for archive note</div>
-              </div>
-              <div class="carmen-artifact-back">
-                <div class="carmen-artifact-summary" id="carmen-artifact-summary"></div>
+        <div class="carmen-right-shell">
+          <div class="carmen-right-view" id="carmen-rv-artifact">
+            <div class="carmen-artifact-display" id="carmen-artifact-display">
+              <div class="carmen-artifact-inner">
+                <div class="carmen-artifact-front">
+                  <img class="carmen-artifact-img" id="carmen-artifact-img" src="" alt="">
+                  <div class="carmen-artifact-stamp">STOLEN</div>
+                  <div class="carmen-artifact-flip-hint">↩</div>
+                  <div class="carmen-artifact-flip-label" id="carmen-artifact-flip-label">Flip for archive note</div>
+                </div>
+                <div class="carmen-artifact-back">
+                  <div class="carmen-artifact-summary" id="carmen-artifact-summary"></div>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class="carmen-right-view" id="carmen-rv-clues" style="display:none">
-          <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
-        </div>
-        <div class="carmen-right-view" id="carmen-rv-map" style="display:none">
-          <div class="carmen-map-wrap" id="carmen-map-wrap">
-            <svg id="carmen-map" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"></svg>
-            <div class="carmen-map-sidebar" id="carmen-map-sidebar"></div>
+          <div class="carmen-right-view" id="carmen-rv-clues" style="display:none">
+            <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
           </div>
-        </div>
-        <div class="carmen-right-view" id="carmen-rv-dossier" style="display:none">
-          <div class="carmen-dossier-inline" id="carmen-dossier-body-inline"></div>
-        </div>
-        <div class="carmen-right-view" id="carmen-rv-interpol" style="display:none">
-          <div class="carmen-interpol-profile" id="carmen-interpol-profile">
-            <div class="carmen-interpol-empty">
-              <div class="carmen-interpol-empty-title">INTERPOL</div>
-              <div class="carmen-interpol-empty-full">International Criminal Police Organization</div>
-              <div class="carmen-interpol-empty-text">Founded in 1923 in Vienna, INTERPOL is the world's largest international police organization with 196 member countries. Its General Secretariat is headquartered in Lyon, France. INTERPOL facilitates cross-border police cooperation and supports law enforcement worldwide in combating transnational crime.</div>
-              <img src="${IMG.typewriter}" alt="" class="carmen-interpol-empty-img">
-              <div class="carmen-interpol-empty-hint">Select a suspect from the list to access their file.</div>
+          <div class="carmen-right-view" id="carmen-rv-map" style="display:none">
+            <div class="carmen-map-wrap" id="carmen-map-wrap">
+              <svg id="carmen-map" viewBox="0 0 600 320" preserveAspectRatio="xMidYMid meet"></svg>
+              <div class="carmen-map-sidebar" id="carmen-map-sidebar"></div>
             </div>
           </div>
+          <div class="carmen-right-view" id="carmen-rv-dossier" style="display:none">
+            <div class="carmen-dossier-inline" id="carmen-dossier-body-inline"></div>
+          </div>
+          <div class="carmen-right-view" id="carmen-rv-interpol" style="display:none">
+            <div class="carmen-interpol-profile" id="carmen-interpol-profile">
+              <div class="carmen-interpol-empty">
+                <div class="carmen-interpol-empty-title">INTERPOL</div>
+                <div class="carmen-interpol-empty-full">International Criminal Police Organization</div>
+                <div class="carmen-interpol-empty-text">Founded in 1923 in Vienna, INTERPOL is the world's largest international police organization with 196 member countries. Its General Secretariat is headquartered in Lyon, France. INTERPOL facilitates cross-border police cooperation and supports law enforcement worldwide in combating transnational crime.</div>
+                <img src="${IMG.typewriter}" alt="" class="carmen-interpol-empty-img">
+                <div class="carmen-interpol-empty-hint">Select a suspect from the list to access their file.</div>
+              </div>
+            </div>
+          </div>
+          <div class="carmen-right-view" id="carmen-rv-lineup" style="display:none">
+            <div class="carmen-lineup-stage" id="carmen-lineup-stage"></div>
+          </div>
+          <div class="carmen-narrator-caption" id="carmen-narrator-caption" aria-live="polite"></div>
         </div>
-        <div class="carmen-right-view" id="carmen-rv-lineup" style="display:none">
-          <div class="carmen-lineup-stage" id="carmen-lineup-stage"></div>
-        </div>
-        <div class="carmen-narrator-caption" id="carmen-narrator-caption" aria-live="polite"></div>
       </div>
     </div>
   `;

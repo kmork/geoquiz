@@ -5,14 +5,41 @@ body {
   background: #000;
 }
 
+:root {
+  --carmen-card-background:
+    linear-gradient(rgba(13, 16, 24, 0.42), rgba(13, 16, 24, 0.5)),
+    url('../carmen/img/background-tiles.png') no-repeat center center;
+  --carmen-right-shell-background:
+    linear-gradient(180deg, rgba(19, 17, 18, 0.34), rgba(10, 10, 13, 0.46)),
+    radial-gradient(circle at 50% 14%, rgba(216, 188, 141, 0.06), transparent 30%),
+    url('../carmen/img/background-tiles.png') center center / cover no-repeat;
+  --carmen-right-shell-border: rgba(186, 161, 122, 0.1);
+  --carmen-right-shell-shadow:
+    inset 0 1px 0 rgba(252, 243, 224, 0.03),
+    inset 0 -1px 0 rgba(11, 8, 6, 0.18),
+    0 18px 32px rgba(7, 7, 8, 0.14);
+}
+
+:root[data-carmen-theme="notebook"] {
+  --carmen-card-background:
+    linear-gradient(rgba(29, 20, 15, 0.44), rgba(22, 17, 13, 0.56)),
+    url('../carmen/img/background-tiles.png') no-repeat center center;
+  --carmen-right-shell-background:
+    linear-gradient(180deg, rgba(34, 27, 22, 0.36), rgba(18, 14, 11, 0.42)),
+    url('../carmen/img/left-folder.png') center center / cover no-repeat;
+  --carmen-right-shell-border: rgba(186, 161, 122, 0.12);
+  --carmen-right-shell-shadow:
+    inset 0 1px 0 rgba(252, 243, 224, 0.04),
+    inset 0 -1px 0 rgba(11, 8, 6, 0.22),
+    0 18px 32px rgba(7, 7, 8, 0.16);
+}
+
 .wrap {
   max-width: min(1560px, calc(100vw - 32px));
 }
 
 .wrap > .card {
-  background:
-    linear-gradient(rgba(13, 16, 24, 0.42), rgba(13, 16, 24, 0.5)),
-    url('../carmen/img/background-tiles.png') no-repeat center center;
+  background: var(--carmen-card-background);
   background-size: 100% 100%;
 }
 
@@ -277,6 +304,7 @@ body {
   flex-direction: row;
   min-width: 0;
   height: 100%;
+  box-sizing: border-box;
 }
 
 .carmen-notebook-shell {
@@ -285,6 +313,7 @@ body {
   flex: 1;
   min-width: 0;
   height: 100%;
+  box-sizing: border-box;
   padding: 0.45rem 0.5rem 0.45rem 0.35rem;
   border-radius: 22px;
   background:
@@ -363,13 +392,34 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
   position: relative;
+}
+
+.carmen-right-shell {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 0.45rem 0.5rem 0.45rem 0.35rem;
+  border-radius: 22px;
+  background: var(--carmen-right-shell-background);
+  border: 1px solid var(--carmen-right-shell-border);
+  box-shadow: var(--carmen-right-shell-shadow);
+  box-sizing: border-box;
+  position: relative;
+  overflow: hidden;
 }
 
 .carmen-right-view {
   flex: 1;
   min-height: 0;
   overflow: hidden;
+  padding: 0.3rem 0.35rem 0.3rem 0.2rem;
+  box-sizing: border-box;
 }
 
 .carmen-right-view .carmen-artifact-display,
@@ -1341,10 +1391,11 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0.65rem 0.85rem;
-  border-radius: 10px;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  padding: 1rem 1.1rem;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
   animation: carmen-clue-in 0.25s ease-out;
   box-sizing: border-box;
 }
@@ -1488,11 +1539,15 @@ body {
 
 .carmen-speech-body {
   flex: 1;
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
+  background:
+    linear-gradient(180deg, rgba(29, 23, 19, 0.9), rgba(17, 14, 12, 0.94));
+  border: 1px solid rgba(199, 176, 138, 0.2);
   border-radius: 12px;
   padding: 0.8rem 1rem;
   position: relative;
+  box-shadow:
+    0 12px 24px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 244, 220, 0.06);
 }
 
 .carmen-speech-body::before {
@@ -1501,7 +1556,7 @@ body {
   left: -8px;
   top: 14px;
   border: 6px solid transparent;
-  border-right-color: var(--card-border);
+  border-right-color: rgba(199, 176, 138, 0.2);
 }
 
 .carmen-speech-body::after {
@@ -1510,13 +1565,13 @@ body {
   left: -6px;
   top: 15px;
   border: 5px solid transparent;
-  border-right-color: var(--card-bg);
+  border-right-color: rgba(29, 23, 19, 0.92);
 }
 
 .carmen-speech-name {
   font-size: 0.78rem;
   font-weight: 700;
-  color: var(--text-muted);
+  color: rgba(212, 185, 143, 0.82);
   margin-bottom: 0.4rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
@@ -1524,7 +1579,7 @@ body {
 
 .carmen-speech-text {
   font-size: 1rem;
-  color: var(--text-color);
+  color: #ecd8c2;
   line-height: 1.5;
   white-space: pre-line;
 }
@@ -1532,8 +1587,8 @@ body {
 .carmen-speech-action {
   font-size: 0.92rem;
   font-style: italic;
-  color: var(--muted-color, var(--text-color));
-  opacity: 0.75;
+  color: rgba(206, 180, 140, 0.78);
+  opacity: 1;
   line-height: 1.4;
   margin-bottom: 0.35rem;
 }
@@ -2158,6 +2213,14 @@ body {
 
   .carmen-right-panel {
     height: 280px;
+  }
+
+  .carmen-right-shell {
+    padding: 0.4rem;
+  }
+
+  .carmen-right-view {
+    padding: 0.2rem 0;
   }
 
   .carmen-narrator-caption {
