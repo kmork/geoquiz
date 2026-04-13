@@ -49,4 +49,8 @@ export const AMBIENT_SOUNDS = {
   taxi:      'carmen/audio/taxi.mp3',
   airplane:  'carmen/audio/airplane.mp3',
   footsteps: 'carmen/audio/footsteps.mp3',
+  rain1:     'carmen/audio/rain1.mp3',
+  rain2:     'carmen/audio/rain2.mp3',
+  siren1:    'carmen/audio/siren1.mp3',
+  siren2:    'carmen/audio/siren2.mp3',
 };

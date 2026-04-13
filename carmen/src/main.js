@@ -5,7 +5,7 @@ import { loadGeoJSON } from '../../js/geojson-loader.js';
 import { attachZoomPan } from '../../js/map-zoom-pan.js';
 import { saveGameRecord } from '../../js/game-records.js';
 import { initConfetti } from '../../js/confetti.js';
-import { startMusic, stopMusic, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playLineupMusic, playAmbient, stopAmbient, startClockTicking, stopClockTicking } from './audio/audio-engine.js';
+import { startMusic, stopMusic, playNarrator, stopNarrator, playVictoryMusic, playFailMusic, playLineupMusic, playAmbient, stopAmbient, playAtmosphere, stopAtmosphere, startClockTicking, stopClockTicking } from './audio/audio-engine.js';
 import { chooseNarratorScript } from './content/narrator-script.js';
 import { buildCountryEntryMonologue } from './content/country-entry-monologue.js';
 import { buildCaseBriefingHint, buildInterpolIntel, pickArrivalAmbientHint, pickFinaleAliasHint } from './content/carmen-hints.js';
@@ -78,6 +78,37 @@ let interpolMarkedThisCase = new Set();
 let activeInterpolSuspectName = null;
 let ambientHintStopsShown = new Set();
 let finaleEvidenceStopsShown = new Set();
+let lastArrivalAtmosphereKind = null;
+
+const ARRIVAL_ATMOSPHERE_RULES = [
+  { limit: 16, key: 'rain1', kind: 'rain', durationMs: 10000 },
+  { limit: 30, key: 'rain2', kind: 'rain', durationMs: 12000 },
+  { limit: 36, key: 'siren1', kind: 'siren', durationMs: 10000 },
+  { limit: 40, key: 'siren2', kind: 'siren', durationMs: 11000 },
+];
+
+function hashSeed(seed) {
+  let hash = 0;
+  for (let i = 0; i < seed.length; i++) {
+    hash = ((hash << 5) - hash + seed.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash);
+}
+
+function chooseArrivalAtmosphere(country, stop) {
+  const roll = hashSeed(`${logic?.mode}:${logic?.caseNumber}:${stop}:${country}`) % 100;
+  const match = ARRIVAL_ATMOSPHERE_RULES.find(rule => roll < rule.limit);
+  if (!match) {
+    lastArrivalAtmosphereKind = null;
+    return null;
+  }
+  if (match.kind === 'siren' && lastArrivalAtmosphereKind === 'siren') {
+    lastArrivalAtmosphereKind = null;
+    return null;
+  }
+  lastArrivalAtmosphereKind = match.kind;
+  return match;
+}
 
 // Wait for data.js
 while (!window.DATA) await new Promise(r => setTimeout(r, 50));
@@ -293,12 +324,14 @@ function buildInterpolProfileIntel(suspect, thefts = []) {
 
 async function handleEndChoice(choice, wasSuccess) {
   if (choice === 'quit') {
+    stopAtmosphere();
     location.href = 'play.html?game=route';
     return;
   }
 
   if (choice === OPEN_CASES_MODE) {
     stopAmbient();
+    stopAtmosphere();
     stopNarrator();
     stopMusic();
     setGameMode(OPEN_CASES_MODE);
@@ -309,6 +342,7 @@ async function handleEndChoice(choice, wasSuccess) {
 
   if (isOpenCasesMode()) {
     stopAmbient();
+    stopAtmosphere();
     stopNarrator();
     stopMusic();
     isFirstGame = false;
@@ -317,6 +351,7 @@ async function handleEndChoice(choice, wasSuccess) {
   }
 
   // Continue — show front image with transition narrator + subtitles
+  stopAtmosphere();
   stopMusic();
   gameContent.style.display = 'none';
   if (carmenHeader) carmenHeader.style.display = 'none';
@@ -475,6 +510,7 @@ async function startGame() {
   activeInterpolSuspectName = null;
   ambientHintStopsShown = new Set();
   finaleEvidenceStopsShown = new Set();
+  lastArrivalAtmosphereKind = null;
   refreshInterpolList();
 
   // Clear old clues and witness reports, then show investigation locations
@@ -523,6 +559,7 @@ function checkTimeExpired() {
     ui.hideLocations();
     setTimeout(async () => {
       stopAmbient();
+      stopAtmosphere();
       stopMusic();
       stopNarrator();
       playFailMusic();
@@ -653,6 +690,7 @@ function showInvestigationLocations() {
 function handleGoBack(fromCountry) {
   // Player chose to go back to the current correct stop for more investigation
   stopAmbient();
+  stopAtmosphere();
   stopMusic();
   const backTo = logic.route[logic.currentStop];
 
@@ -675,6 +713,7 @@ function handleGoBack(fromCountry) {
 
 function handleGuess(country) {
   stopAmbient();
+  stopAtmosphere();
   stopMusic();
 
   // If the player picks the country they're currently at (going back)
@@ -805,7 +844,12 @@ function handleGuess(country) {
       stopAmbient();
       playerPosition = toCountry;
       drawMap(progress.route, result.neighbors);
+      const atmosphere = chooseArrivalAtmosphere(result.country, progress.stop);
+      if (atmosphere) {
+        playAtmosphere(atmosphere.key, atmosphere.durationMs);
+      }
       ui.showTransition(result.stopScore, result.country, taunt, 'The thief', narratorLine, () => {
+        stopAtmosphere();
         ui.updateProgress(progress.stop, progress.totalStops);
         ui.showStopNarrative(progress.stop, progress.totalStops);
         ui.clearClues();
@@ -834,6 +878,7 @@ function handleGuess(country) {
       playAmbient('airplane');
       await renderer.animateTravel(fromCountry, country);
       stopAmbient();
+      stopAtmosphere();
       playerPosition = country;
       drawMap([...logic.route.slice(0, logic.currentStop + 1)], [country]);
 

@@ -179,7 +179,10 @@ export function stopNarrator() {
 
 /* ── Ambient / SFX sounds ─────────────────────────── */
 const AMBIENT_VOLUME = 0.5;
+const ATMOSPHERE_VOLUME = 0.24;
 let ambientAudio = null;
+let atmosphereAudio = null;
+let atmosphereTimer = null;
 
 /** Play an ambient sound by key (on top of background music). Plays once. */
 export function playAmbient(key) {
@@ -199,6 +202,34 @@ export function stopAmbient() {
     ambientAudio.currentTime = 0;
   }
   ambientAudio = null;
+}
+
+/** Play a lower-volume ambient excerpt for a limited duration. */
+export function playAtmosphere(key, durationMs = 10000) {
+  stopAtmosphere();
+  const file = AMBIENT_SOUNDS[key];
+  if (!file) return;
+
+  atmosphereAudio = new Audio(file);
+  atmosphereAudio.volume = ATMOSPHERE_VOLUME;
+  atmosphereAudio.loop = false;
+  atmosphereAudio.play().catch(() => {});
+
+  atmosphereTimer = setTimeout(() => {
+    stopAtmosphere();
+  }, durationMs);
+}
+
+export function stopAtmosphere() {
+  if (atmosphereTimer) {
+    clearTimeout(atmosphereTimer);
+    atmosphereTimer = null;
+  }
+  if (atmosphereAudio && !atmosphereAudio.paused) {
+    atmosphereAudio.pause();
+    atmosphereAudio.currentTime = 0;
+  }
+  atmosphereAudio = null;
 }
 
 /** Start clock ticking sound. Plays on loop until stopClockTicking() is called. */
