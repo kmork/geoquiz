@@ -85,7 +85,7 @@
     + '<div class="pref-row">'
     + '<div class="pref-label">'
     + '<span class="pref-label-title">Game Records</span>'
-    + '<span class="pref-label-desc">Clears all saved best scores and times</span>'
+    + '<span class="pref-label-desc">Clears all saved best scores and times, and Where in the World data</span>'
     + '</div>'
     + '<button id="clear-records-btn" class="clear-records-btn">Clear</button>'
     + '</div>'
@@ -128,9 +128,11 @@
     });
   }
 
-  // Clear game records
+  // Clear game records + carmen state
   clearBtn.addEventListener('click', function () {
-    var keys = Object.keys(localStorage).filter(function (k) { return k.startsWith('geoquiz-record-'); });
+    var keys = Object.keys(localStorage).filter(function (k) {
+      return k.startsWith('geoquiz-record-') || k.startsWith('carmen-');
+    });
     keys.forEach(function (k) { localStorage.removeItem(k); });
     clearBtn.textContent = 'Cleared!';
     setTimeout(function () { clearBtn.textContent = 'Clear'; }, 2000);
