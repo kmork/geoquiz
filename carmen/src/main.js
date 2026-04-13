@@ -431,14 +431,6 @@ async function startGame() {
   let briefingHint = '';
   if (!runConfig.isOpenCases) {
     briefingHint = buildCaseBriefingHint(intro.campaignPhase, intro.caseNumber, getMissionHistory());
-  } else {
-    const openCaseNotes = [
-      'ACME field note: active theft in motion. Border witnesses conflict on the face, not the route discipline.',
-      'ACME field note: the thief is moving now. Follow the border trail before the witness window closes.',
-      'ACME field note: known operators have started resurfacing. Fresh theft, live trail, same bad habits.',
-      'ACME field note: this assignment is active, not archival. The suspect is still ahead of you and still making mistakes.',
-    ];
-    briefingHint = openCaseNotes[(getDisplayedOpenCaseNumber() - 1) % openCaseNotes.length];
   }
   if (intro.campaignPhase === 'finale') {
     briefingHint = `${briefingHint} ACME believes Carmen is moving under a fresh alias hidden somewhere in the active files.`;

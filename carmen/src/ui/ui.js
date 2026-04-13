@@ -964,7 +964,9 @@ export function createCarmenUI(container, flagCodes) {
           campaignPhase === 'pursuit'  ? "ACME has traced this theft to Carmen Sandiego's network. The thief is one of her lieutenants — every arrest brings you closer to her." :
           campaignPhase === 'finale'   ? "This is it. ACME believes Carmen Sandiego is moving under an alias. Track her across the globe, expose the false identity, and bring her in before she vanishes again." :
           "Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.";
-        typewriter(els.briefingMission, `${missionCopy}${timeText}`, 20)
+        typewriter(els.briefingMission, `${missionCopy}${timeText}`, 20, {
+          skipTargets: [els.briefing],
+        })
           .then(() => {
             els.briefingStart.style.display = '';
           });
