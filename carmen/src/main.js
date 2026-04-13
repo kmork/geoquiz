@@ -36,6 +36,8 @@ const _caseParam = parseInt(new URLSearchParams(location.search).get('case'), 10
 if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
   setCase(_caseParam);
   setGameMode('campaign');
+} else if (_caseParam === TOTAL_CASES + 1) {
+  setGameMode(OPEN_CASES_MODE);
 }
 
 // Debug: type "carmen" anywhere to open a case-jump prompt.
@@ -49,11 +51,15 @@ if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
     buf = (buf + k).slice(-secret.length);
     if (buf === secret) {
       buf = '';
-      const answer = window.prompt(`Jump to case (1–${TOTAL_CASES}):`, String(getCurrentCase()));
+      const defaultJump = isOpenCasesMode() ? String(TOTAL_CASES + 1) : String(getCurrentCase());
+      const answer = window.prompt(`Jump to case (1–${TOTAL_CASES + 1}, where ${TOTAL_CASES + 1} = Open Cases):`, defaultJump);
       const n = parseInt(answer, 10);
       if (n >= 1 && n <= TOTAL_CASES) {
         setCase(n);
         setGameMode('campaign');
+        location.reload();
+      } else if (n === TOTAL_CASES + 1) {
+        setGameMode(OPEN_CASES_MODE);
         location.reload();
       }
     }
