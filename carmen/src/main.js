@@ -18,10 +18,6 @@ import {
 } from './campaign/persistence.js';
 
 const gameId = 'carmen';
-const CARMEN_THEME_KEY = 'carmen-theme';
-const CARMEN_THEME_ORIGINAL = 'original';
-const CARMEN_THEME_NOTEBOOK = 'notebook';
-const CARMEN_THEMES = new Set([CARMEN_THEME_ORIGINAL, CARMEN_THEME_NOTEBOOK]);
 
 const gameContent = document.getElementById('game-content');
 const finalOverlay = document.getElementById('finalOverlay');
@@ -39,31 +35,6 @@ function isTypingTarget(target) {
   return target.isContentEditable || /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(target.tagName);
 }
 
-function getStoredCarmenTheme() {
-  try {
-    const theme = localStorage.getItem(CARMEN_THEME_KEY);
-    return CARMEN_THEMES.has(theme) ? theme : CARMEN_THEME_ORIGINAL;
-  } catch {
-    return CARMEN_THEME_ORIGINAL;
-  }
-}
-
-function applyCarmenTheme(theme) {
-  const nextTheme = CARMEN_THEMES.has(theme) ? theme : CARMEN_THEME_ORIGINAL;
-  document.documentElement.dataset.carmenTheme = nextTheme;
-  try {
-    localStorage.setItem(CARMEN_THEME_KEY, nextTheme);
-  } catch {}
-  return nextTheme;
-}
-
-function toggleCarmenTheme() {
-  const currentTheme = document.documentElement.dataset.carmenTheme || getStoredCarmenTheme();
-  return applyCarmenTheme(currentTheme === CARMEN_THEME_NOTEBOOK ? CARMEN_THEME_ORIGINAL : CARMEN_THEME_NOTEBOOK);
-}
-
-applyCarmenTheme(getStoredCarmenTheme());
-
 
 // Debug: ?case=N URL param jumps directly to that case on load.
 const _caseParam = parseInt(new URLSearchParams(location.search).get('case'), 10);
@@ -80,12 +51,6 @@ if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
   let buf = '';
   window.addEventListener('keydown', (e) => {
     if (isTypingTarget(e.target)) return;
-    if (!e.ctrlKey && !e.metaKey && !e.altKey && (e.key || '').toLowerCase() === 'b') {
-      e.preventDefault();
-      toggleCarmenTheme();
-      buf = '';
-      return;
-    }
     const k = (e.key || '').toLowerCase();
     if (k.length !== 1) { buf = ''; return; }
     buf = (buf + k).slice(-secret.length);

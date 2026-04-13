@@ -146,7 +146,9 @@ export function createCarmenUI(container, flagCodes) {
             </div>
           </div>
           <div class="carmen-right-view" id="carmen-rv-clues" style="display:none">
-            <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
+            <div class="carmen-investigate-stage">
+              <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
+            </div>
           </div>
           <div class="carmen-right-view" id="carmen-rv-map" style="display:none">
             <div class="carmen-map-wrap" id="carmen-map-wrap">

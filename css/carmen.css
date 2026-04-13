@@ -7,6 +7,20 @@ body {
 
 :root {
   --carmen-card-background:
+    linear-gradient(rgba(29, 20, 15, 0.44), rgba(22, 17, 13, 0.56)),
+    url('../carmen/img/background-tiles.png') no-repeat center center;
+  --carmen-right-shell-background:
+    linear-gradient(180deg, rgba(34, 27, 22, 0.36), rgba(18, 14, 11, 0.42)),
+    url('../carmen/img/left-folder.png') center center / cover no-repeat;
+  --carmen-right-shell-border: rgba(186, 161, 122, 0.12);
+  --carmen-right-shell-shadow:
+    inset 0 1px 0 rgba(252, 243, 224, 0.04),
+    inset 0 -1px 0 rgba(11, 8, 6, 0.22),
+    0 18px 32px rgba(7, 7, 8, 0.16);
+}
+
+:root[data-carmen-theme="original"] {
+  --carmen-card-background:
     linear-gradient(rgba(13, 16, 24, 0.42), rgba(13, 16, 24, 0.5)),
     url('../carmen/img/background-tiles.png') no-repeat center center;
   --carmen-right-shell-background:
@@ -18,20 +32,6 @@ body {
     inset 0 1px 0 rgba(252, 243, 224, 0.03),
     inset 0 -1px 0 rgba(11, 8, 6, 0.18),
     0 18px 32px rgba(7, 7, 8, 0.14);
-}
-
-:root[data-carmen-theme="notebook"] {
-  --carmen-card-background:
-    linear-gradient(rgba(29, 20, 15, 0.44), rgba(22, 17, 13, 0.56)),
-    url('../carmen/img/background-tiles.png') no-repeat center center;
-  --carmen-right-shell-background:
-    linear-gradient(180deg, rgba(34, 27, 22, 0.36), rgba(18, 14, 11, 0.42)),
-    url('../carmen/img/left-folder.png') center center / cover no-repeat;
-  --carmen-right-shell-border: rgba(186, 161, 122, 0.12);
-  --carmen-right-shell-shadow:
-    inset 0 1px 0 rgba(252, 243, 224, 0.04),
-    inset 0 -1px 0 rgba(11, 8, 6, 0.22),
-    0 18px 32px rgba(7, 7, 8, 0.16);
 }
 
 .wrap {
@@ -418,7 +418,7 @@ body {
   flex: 1;
   min-height: 0;
   overflow: hidden;
-  padding: 0.3rem 0.35rem 0.3rem 0.2rem;
+  padding: 0.42rem 0.5rem 0.42rem 0.3rem;
   box-sizing: border-box;
 }
 
@@ -1375,15 +1375,25 @@ body {
 
 /* ── Investigate right panel background ──────────────── */
 #carmen-rv-clues {
+  background: transparent;
+  border: none;
+}
+
+.carmen-investigate-stage {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 12px;
   background:
-    linear-gradient(to top, rgba(30, 24, 20, 0.8) 0%, rgba(30, 24, 20, 0.52) 14%, rgba(30, 24, 20, 0.2) 30%, rgba(30, 24, 20, 0) 48%),
-    linear-gradient(180deg, rgba(56, 46, 37, 0.1), rgba(28, 22, 18, 0.08)),
-    var(--card-bg) url('../carmen/img/detective-interview-panel.png');
+    linear-gradient(to top, rgba(31, 25, 22, 0.74) 0%, rgba(31, 25, 22, 0.46) 14%, rgba(31, 25, 22, 0.16) 30%, rgba(31, 25, 22, 0) 48%),
+    linear-gradient(180deg, rgba(74, 84, 108, 0.14), rgba(34, 39, 52, 0.12)),
+    rgba(88, 98, 122, 0.12) url('../carmen/img/detective-interview-panel.png');
   background-repeat: no-repeat, no-repeat, no-repeat;
   background-position: center, center, center calc(100% - 20px);
   background-size: 100% 100%, 100% 100%, auto 52%;
-  border-radius: 12px;
   border: 1px solid var(--card-border);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 /* ── Clue Reveal (below map) ────────────────────────── */
@@ -1398,6 +1408,10 @@ body {
   border-radius: 0;
   animation: carmen-clue-in 0.25s ease-out;
   box-sizing: border-box;
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
 }
 
 @keyframes carmen-clue-in {
@@ -2220,7 +2234,11 @@ body {
   }
 
   .carmen-right-view {
-    padding: 0.2rem 0;
+    padding: 0.24rem 0.08rem;
+  }
+
+  #carmen-rv-clues {
+    padding: 0.24rem 0.08rem;
   }
 
   .carmen-narrator-caption {
