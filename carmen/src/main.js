@@ -12,8 +12,9 @@ import { buildCaseBriefingHint, buildInterpolIntel, pickArrivalAmbientHint, pick
 import { TOTAL_CASES } from './campaign/progression.js';
 import {
   getMissionHistory, saveMissionResult, getCurrentCase, advanceCase, setCase,
-  markCampaignComplete, resetCampaign, getUnlockedSuspects, unlockSuspect,
+  markCampaignComplete, getUnlockedSuspects, unlockSuspect,
   getTheftHistory, recordTheft, getInterpolViewed, saveInterpolViewed,
+  getGameMode, setGameMode, getOpenCaseCount, advanceOpenCaseCount,
 } from './campaign/persistence.js';
 
 const gameId = 'carmen';
@@ -25,12 +26,16 @@ const carmenFront = document.getElementById('carmen-front');
 const carmenHeader = document.getElementById('carmen-header');
 
 const confetti = initConfetti('confetti');
+const OPEN_CASES_MODE = 'open_cases';
+const OPEN_CASES_PHASE = 'open_cases';
+const OPEN_CASES_CONFIG_PHASE = 'pursuit';
 
 
 // Debug: ?case=N URL param jumps directly to that case on load.
 const _caseParam = parseInt(new URLSearchParams(location.search).get('case'), 10);
 if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
   setCase(_caseParam);
+  setGameMode('campaign');
 }
 
 // Debug: type "carmen" anywhere to open a case-jump prompt.
@@ -48,6 +53,7 @@ if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
       const n = parseInt(answer, 10);
       if (n >= 1 && n <= TOTAL_CASES) {
         setCase(n);
+        setGameMode('campaign');
         location.reload();
       }
     }
@@ -118,6 +124,32 @@ attachZoomPan(ui.mapSvg, () => baseViewBox);
 let logic;
 let isFirstGame = true;
 
+function isOpenCasesMode(mode = logic?.mode || getGameMode()) {
+  return mode === OPEN_CASES_MODE;
+}
+
+function getDisplayedOpenCaseNumber() {
+  return getOpenCaseCount() + 1;
+}
+
+function getCurrentRunConfig() {
+  const mode = getGameMode();
+  const openCases = isOpenCasesMode(mode);
+  return {
+    mode,
+    isOpenCases: openCases,
+    caseNumber: openCases ? getDisplayedOpenCaseNumber() : getCurrentCase(),
+    totalCases: openCases ? null : TOTAL_CASES,
+    excludedSuspects: openCases ? [] : [...getUnlockedSuspects()],
+    phaseOverride: openCases ? OPEN_CASES_PHASE : null,
+    configPhase: openCases ? OPEN_CASES_CONFIG_PHASE : null,
+  };
+}
+
+function getMissionLabel() {
+  return isOpenCasesMode() ? `Open Case ${getDisplayedOpenCaseNumber()}` : null;
+}
+
 function getVisibleInterpolSuspects() {
   const unlocked = getUnlockedSuspects();
   const allViewed = new Set([...interpolViewedThisGame, ...getInterpolViewed()]);
@@ -127,12 +159,14 @@ function getVisibleInterpolSuspects() {
     ...activeArchive.map(s => s.name),
     ...allViewed,
     ...unlocked,
-    'Carmen Sandiego',
   ]);
+  if (!isOpenCasesMode()) {
+    visibleNames.add('Carmen Sandiego');
+  }
 
   const source = finaleAlias
     ? [...SUSPECTS, finaleAlias]
-    : SUSPECTS;
+    : SUSPECTS.filter(s => isOpenCasesMode() ? s.name !== 'Carmen Sandiego' : true);
 
   return source
     .filter(s => visibleNames.has(s.name))
@@ -252,6 +286,25 @@ async function handleEndChoice(choice, wasSuccess) {
     return;
   }
 
+  if (choice === OPEN_CASES_MODE) {
+    stopAmbient();
+    stopNarrator();
+    stopMusic();
+    setGameMode(OPEN_CASES_MODE);
+    isFirstGame = false;
+    await startGame();
+    return;
+  }
+
+  if (isOpenCasesMode()) {
+    stopAmbient();
+    stopNarrator();
+    stopMusic();
+    isFirstGame = false;
+    await startGame();
+    return;
+  }
+
   // Continue — show front image with transition narrator + subtitles
   stopMusic();
   gameContent.style.display = 'none';
@@ -298,6 +351,7 @@ async function handleEndChoice(choice, wasSuccess) {
 
 async function startGame() {
   finalOverlay.style.display = 'none';
+  const runConfig = getCurrentRunConfig();
 
   logic = new CarmenGameLogic({
     countries: window.DATA,
@@ -306,9 +360,12 @@ async function startGame() {
     rivers: riversData,
     mountains: mountainsData,
     empires: empiresData,
-    caseNumber: getCurrentCase(),
-    totalCases: TOTAL_CASES,
-    excludedSuspects: getUnlockedSuspects(),
+    caseNumber: runConfig.caseNumber,
+    totalCases: runConfig.totalCases || TOTAL_CASES,
+    excludedSuspects: runConfig.excludedSuspects,
+    mode: runConfig.mode,
+    phaseOverride: runConfig.phaseOverride,
+    configPhase: runConfig.configPhase,
   });
 
   const intro = logic.start();
@@ -327,7 +384,7 @@ async function startGame() {
       waitForClick(carmenFront).then(() => { skipped = true; }),
     ]);
 
-    if (!skipped) {
+    if (!skipped && !runConfig.isOpenCases) {
       // Play narrator for current case with subtitles
       const { file: introFile, cues } = chooseNarratorScript(true, getCurrentCase());
       const subtitle = document.createElement('div');
@@ -360,11 +417,31 @@ async function startGame() {
 
   // Now show the case briefing overlay
   const totalHours = logic.getTimeState().totalHours;
-  let briefingHint = buildCaseBriefingHint(intro.campaignPhase, intro.caseNumber, getMissionHistory());
+  let briefingHint = '';
+  if (!runConfig.isOpenCases) {
+    briefingHint = buildCaseBriefingHint(intro.campaignPhase, intro.caseNumber, getMissionHistory());
+  } else {
+    const openCaseNotes = [
+      'ACME field note: active theft in motion. Border witnesses conflict on the face, not the route discipline.',
+      'ACME field note: the thief is moving now. Follow the border trail before the witness window closes.',
+      'ACME field note: known operators have started resurfacing. Fresh theft, live trail, same bad habits.',
+      'ACME field note: this assignment is active, not archival. The suspect is still ahead of you and still making mistakes.',
+    ];
+    briefingHint = openCaseNotes[(getDisplayedOpenCaseNumber() - 1) % openCaseNotes.length];
+  }
   if (intro.campaignPhase === 'finale') {
     briefingHint = `${briefingHint} ACME believes Carmen is moving under a fresh alias hidden somewhere in the active files.`;
   }
-  await ui.showCaseBriefing(intro.artifact, intro.startCountry, totalHours, intro.caseNumber, intro.totalCases, intro.campaignPhase, briefingHint);
+  await ui.showCaseBriefing(
+    intro.artifact,
+    intro.startCountry,
+    totalHours,
+    intro.caseNumber,
+    intro.totalCases,
+    intro.campaignPhase,
+    briefingHint,
+    { mode: logic.mode, openCaseNumber: intro.caseNumber }
+  );
 
   // Hide the front image, show the header and game
   if (carmenFront) carmenFront.style.display = 'none';
@@ -376,7 +453,7 @@ async function startGame() {
 
   // Update UI — thief identity unknown
   ui.showIntro('A mysterious thief', intro.artifact, intro.startCountry);
-  ui.updateMissions(getMissionHistory(), true, logic.caseNumber, logic.totalCases);
+  ui.updateMissions(getMissionHistory(), true, logic.caseNumber, logic.totalCases, getMissionLabel());
   ui.updateScore(intro.progress.score);
   ui.updateProgress(intro.progress.stop, intro.progress.totalStops);
   updateClock();
@@ -449,7 +526,12 @@ function checkTimeExpired() {
       const results = logic.getResults();
       saveGameRecord(gameId, results.score, results.time);
       saveMissionResult('fail');
-      const choice = await ui.showCaseFailed(logic.suspect.name, results.score);
+      if (isOpenCasesMode()) advanceOpenCaseCount();
+      const choice = await ui.showCaseFailed(
+        logic.suspect.name,
+        results.score,
+        isOpenCasesMode() ? { continueLabel: 'Next Open Case →' } : null,
+      );
       await handleEndChoice(choice, false);
     }, 500);
     return true;
@@ -513,7 +595,7 @@ function showInvestigationLocations() {
       ui.addClue(clue, informant);
       const country = logic.route[logic.currentStop];
       ui.addDossierEntry(logic.currentStop, clue.text, informant.prefix, informant.emoji, country, capitalOf[country]);
-      const ambientHint = !ambientHintStopsShown.has(logic.currentStop)
+      const ambientHint = !isOpenCasesMode() && !ambientHintStopsShown.has(logic.currentStop)
         ? pickArrivalAmbientHint({
             phase: logic.campaignPhase,
             caseNumber: logic.caseNumber,
@@ -537,7 +619,7 @@ function showInvestigationLocations() {
           capitalOf[country],
         );
       }
-      const finaleHint = logic.campaignPhase === 'finale' && !finaleEvidenceStopsShown.has(logic.currentStop)
+      const finaleHint = !isOpenCasesMode() && logic.campaignPhase === 'finale' && !finaleEvidenceStopsShown.has(logic.currentStop)
         ? pickFinaleAliasHint(logic.currentStop)
         : null;
       if (finaleHint) {
@@ -662,16 +744,24 @@ function handleGuess(country) {
             unlockSuspect(logic.suspect.name);
             recordTheft(logic.suspect.name, logic.artifact.siteName, logic.artifact.country);
             saveMissionResult('success');
-            const isFinaleWin = logic.caseNumber >= TOTAL_CASES;
+            const isFinaleWin = !isOpenCasesMode() && logic.caseNumber >= TOTAL_CASES;
             if (isFinaleWin) {
               markCampaignComplete();
+              setGameMode(OPEN_CASES_MODE);
             } else {
-              advanceCase();
+              if (isOpenCasesMode()) advanceOpenCaseCount();
+              else advanceCase();
             }
-            const choice = await ui.showCaseSolved(logic.suspect.name, ts.hoursRemaining, results.score);
+            const choice = await ui.showCaseSolved(
+              logic.suspect.name,
+              ts.hoursRemaining,
+              results.score,
+              isOpenCasesMode() ? { continueLabel: 'Next Open Case →' } : null,
+            );
             if (isFinaleWin) {
-              await ui.showCampaignComplete(results.score);
-              resetCampaign();
+              const finalChoice = await ui.showCampaignComplete(results.score);
+              await handleEndChoice(finalChoice, true);
+              return;
             }
             await handleEndChoice(choice, true);
           } else {
@@ -680,7 +770,12 @@ function handleGuess(country) {
             const failResults = logic.getResults();
             saveGameRecord(gameId, failResults.score, failResults.time);
             saveMissionResult('fail');
-            const choice = await ui.showCaseFailed(logic.suspect.name, failResults.score);
+            if (isOpenCasesMode()) advanceOpenCaseCount();
+            const choice = await ui.showCaseFailed(
+              logic.suspect.name,
+              failResults.score,
+              isOpenCasesMode() ? { continueLabel: 'Next Open Case →' } : null,
+            );
             await handleEndChoice(choice, false);
           }
         }, 800);

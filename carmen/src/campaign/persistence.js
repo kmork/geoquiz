@@ -10,6 +10,9 @@ import { TOTAL_CASES } from './progression.js';
 const MISSION_KEY          = 'carmen-missions';
 const CAMPAIGN_KEY         = 'carmen-campaign-case';
 const CAMPAIGN_COMPLETE_KEY = 'carmen-campaign-complete';
+const CAMPAIGN_COMPLETE_ONCE_KEY = 'carmen-campaign-complete-once';
+const GAME_MODE_KEY        = 'carmen-game-mode';
+const OPEN_CASE_COUNT_KEY  = 'carmen-open-case-count';
 const INTERPOL_KEY         = 'carmen-interpol-unlocked';
 const THEFT_HISTORY_KEY    = 'carmen-theft-history';
 const INTERPOL_VIEWED_KEY  = 'carmen-interpol-viewed';
@@ -47,11 +50,41 @@ export function setCase(n) {
 
 export function markCampaignComplete() {
   localStorage.setItem(CAMPAIGN_COMPLETE_KEY, 'true');
+  localStorage.setItem(CAMPAIGN_COMPLETE_ONCE_KEY, 'true');
 }
 
 export function resetCampaign() {
   localStorage.removeItem(CAMPAIGN_KEY);
   localStorage.removeItem(CAMPAIGN_COMPLETE_KEY);
+  localStorage.setItem(GAME_MODE_KEY, 'campaign');
+}
+
+export function hasCompletedCampaignOnce() {
+  return localStorage.getItem(CAMPAIGN_COMPLETE_ONCE_KEY) === 'true';
+}
+
+export function getGameMode() {
+  const mode = localStorage.getItem(GAME_MODE_KEY);
+  if (mode === 'campaign' || mode === 'open_cases') return mode;
+  return hasCompletedCampaignOnce() ? 'open_cases' : 'campaign';
+}
+
+export function setGameMode(mode) {
+  const normalized = mode === 'open_cases' ? 'open_cases' : 'campaign';
+  localStorage.setItem(GAME_MODE_KEY, normalized);
+  return normalized;
+}
+
+export function getOpenCaseCount() {
+  const n = parseInt(localStorage.getItem(OPEN_CASE_COUNT_KEY), 10);
+  if (!n || n < 0) return 0;
+  return n;
+}
+
+export function advanceOpenCaseCount() {
+  const next = getOpenCaseCount() + 1;
+  localStorage.setItem(OPEN_CASE_COUNT_KEY, String(next));
+  return next;
 }
 
 // ─── Interpol database ─────────────────────────────

@@ -44,12 +44,14 @@ export class CarmenGameLogic {
     this.empires = config.empires || [];
     this.caseNumber = config.caseNumber || 1;
     this.totalCases = config.totalCases || 10;
+    this.mode = config.mode || 'campaign';
     this.excludedSuspects = new Set(config.excludedSuspects || []);
-    this.campaignPhase =
+    const derivedPhase =
       this.caseNumber >= 10 ? 'finale' :
       this.caseNumber >= 7 ? 'pursuit' :
       this.caseNumber >= 4 ? 'whispers' : 'prelude';
-    this.config = buildCampaignConfig(this.campaignPhase);
+    this.campaignPhase = config.phaseOverride || derivedPhase;
+    this.config = buildCampaignConfig(config.configPhase || this.campaignPhase);
     // Back-compat alias for any internal reads that still say `this.diff`.
     this.diff = this.config;
 
@@ -159,6 +161,7 @@ export class CarmenGameLogic {
       caseNumber: this.caseNumber,
       totalCases: this.totalCases,
       campaignPhase: this.campaignPhase,
+      mode: this.mode,
     };
   }
 

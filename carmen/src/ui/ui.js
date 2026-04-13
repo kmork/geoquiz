@@ -921,10 +921,14 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     /** Show dramatic case briefing overlay. Returns a promise that resolves when player clicks start. */
-    showCaseBriefing(artifact, startCountry, totalHours, caseNumber, totalCases, campaignPhase, briefingNote = '') {
+    showCaseBriefing(artifact, startCountry, totalHours, caseNumber, totalCases, campaignPhase, briefingNote = '', options = null) {
       return new Promise(resolve => {
         const siteName = artifact.siteName || 'a priceless artifact';
-        const caseLabel = caseNumber
+        const mode = options?.mode || 'campaign';
+        const openCaseNumber = options?.openCaseNumber || caseNumber;
+        const caseLabel = mode === 'open_cases'
+          ? `OPEN CASE — ${openCaseNumber}`
+          : caseNumber
           ? (campaignPhase === 'finale' ? `FINAL CASE — ${caseNumber} / ${totalCases}` : `CASE ${caseNumber} / ${totalCases}`)
           : 'STOLEN ARTIFACT';
         els.briefingArtifact.innerHTML = `
@@ -951,6 +955,7 @@ export function createCarmenUI(container, flagCodes) {
         // Typewriter with sounds
         const timeText = totalHours ? ` You have only ${totalHours} hours to hunt down the criminal!` : '';
         const missionCopy =
+          mode === 'open_cases'       ? "ACME has an active theft on the move. Track the suspect through neighboring countries, gather witness reports, and close the case before the trail breaks." :
           campaignPhase === 'whispers' ? "Track the thief through neighboring countries. Witnesses keep mentioning a shadow behind the shadow — someone bigger is pulling strings." :
           campaignPhase === 'pursuit'  ? "ACME has traced this theft to Carmen Sandiego's network. The thief is one of her lieutenants — every arrest brings you closer to her." :
           campaignPhase === 'finale'   ? "This is it. ACME believes Carmen Sandiego is moving under an alias. Track her across the globe, expose the false identity, and bring her in before she vanishes again." :
@@ -1037,7 +1042,7 @@ export function createCarmenUI(container, flagCodes) {
      * @param {Array} history — array of 'success'|'fail' strings (past missions)
      * @param {boolean} showCurrent — whether to show the current mission marker
      */
-    updateMissions(history, showCurrent = true, caseNumber, totalCases) {
+    updateMissions(history, showCurrent = true, caseNumber, totalCases, labelOverride = '') {
       // Limit to fit: keep last N entries
       const maxMarks = 12;
       const totalNeeded = history.length + (showCurrent ? 1 : 0);
@@ -1045,7 +1050,9 @@ export function createCarmenUI(container, flagCodes) {
       const visible = history.slice(start);
 
       let html = '';
-      if (caseNumber && totalCases) {
+      if (labelOverride) {
+        html += `<span class="carmen-missions-label">${esc(labelOverride)}</span>`;
+      } else if (caseNumber && totalCases) {
         html += `<span class="carmen-missions-label">Case ${caseNumber} / ${totalCases}</span>`;
       } else {
         html += '<span class="carmen-missions-label">Cases solved:</span>';
@@ -1201,9 +1208,10 @@ export function createCarmenUI(container, flagCodes) {
       });
     },
 
-    showCaseSolved(suspectName, hoursLeft, score) {
+    showCaseSolved(suspectName, hoursLeft, score, options = null) {
       els.musicToggle.style.display = 'none';
       return new Promise(resolve => {
+        const continueLabel = options?.continueLabel || 'Next case →';
         const isCarmen = suspectName === 'Carmen Sandiego';
         const arrestImg = isCarmen ? IMG.carmenArrested : IMG.detectiveArresting;
         const overlay = document.createElement('div');
@@ -1218,7 +1226,7 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-closing-score">${score} points</div>
             <div class="carmen-closing-detail">Case completed with ${hoursLeft}h remaining</div>
             <div class="carmen-closing-buttons" style="display:none">
-              <button class="carmen-closing-btn carmen-btn-continue">Next case →</button>
+              <button class="carmen-closing-btn carmen-btn-continue">${esc(continueLabel)}</button>
               <button class="carmen-closing-btn carmen-btn-quit">Quit</button>
             </div>
           </div>
@@ -1241,9 +1249,10 @@ export function createCarmenUI(container, flagCodes) {
       });
     },
 
-    showCaseFailed(suspectName, score) {
+    showCaseFailed(suspectName, score, options = null) {
       els.musicToggle.style.display = 'none';
       return new Promise(resolve => {
+        const continueLabel = options?.continueLabel || 'Next case →';
         const overlay = document.createElement('div');
         overlay.className = 'carmen-closing-overlay';
         overlay.innerHTML = `
@@ -1256,7 +1265,7 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-closing-score">${score} points</div>
             <div class="carmen-closing-detail">The real thief vanished into the shadows...</div>
             <div class="carmen-closing-buttons" style="display:none">
-              <button class="carmen-closing-btn carmen-btn-continue">Next case →</button>
+              <button class="carmen-closing-btn carmen-btn-continue">${esc(continueLabel)}</button>
               <button class="carmen-closing-btn carmen-btn-quit">Quit</button>
             </div>
           </div>
@@ -1289,16 +1298,18 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-briefing-label">CARMEN SANDIEGO — IN CUSTODY</div>
             <div class="carmen-closing-name">The world is safe. For now.</div>
             <div class="carmen-closing-score">${score} points</div>
-            <div class="carmen-closing-detail">Ten cases. Ten artifacts. One detective.</div>
+            <div class="carmen-closing-detail">Ten cases. Ten artifacts. One detective. ACME still has thieves to catch.</div>
             <div class="carmen-closing-buttons">
-              <button class="carmen-closing-btn carmen-btn-continue">Restart campaign</button>
+              <button class="carmen-closing-btn carmen-btn-continue">Open Cases →</button>
+              <button class="carmen-closing-btn carmen-btn-quit">Quit</button>
             </div>
           </div>
         `;
         document.body.appendChild(overlay);
         const stamp = overlay.querySelector('.carmen-closing-stamp');
         setTimeout(() => { stamp.classList.add('animate'); playStamp(); }, 300);
-        overlay.querySelector('.carmen-btn-continue').addEventListener('click', () => { overlay.remove(); resolve(); });
+        overlay.querySelector('.carmen-btn-continue').addEventListener('click', () => { overlay.remove(); resolve('open_cases'); });
+        overlay.querySelector('.carmen-btn-quit').addEventListener('click', () => { overlay.remove(); resolve('quit'); });
       });
     },
 
