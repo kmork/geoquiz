@@ -2941,6 +2941,36 @@ body {
   opacity: 0.6;
 }
 
+.carmen-interpol-photo-redacted {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem;
+  text-align: center;
+  background:
+    radial-gradient(circle at 22% 18%, rgba(255, 248, 236, 0.42), transparent 34%),
+    linear-gradient(180deg, #d6c1a4 0%, #c4ad8d 52%, #b29574 100%);
+  color: rgba(150, 29, 24, 0.92);
+  box-shadow:
+    inset 0 0 0 1px rgba(118, 83, 52, 0.18),
+    inset 0 0 24px rgba(88, 55, 31, 0.08);
+}
+
+.carmen-interpol-photo-redacted-label {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  padding: 0.34rem 0.52rem 0.28rem;
+  border: 2px solid rgba(150, 29, 24, 0.82);
+  border-radius: 2px;
+  transform: rotate(-8deg);
+  box-shadow: 0 1px 0 rgba(255, 245, 233, 0.22);
+  text-shadow: none;
+}
+
 .carmen-interpol-info {
   display: flex;
   flex-direction: column;

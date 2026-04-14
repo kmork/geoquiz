@@ -714,12 +714,17 @@ export function createCarmenUI(container, flagCodes) {
           quirkOverride = 'Primary target. All cases lead here.';
         }
       }
+      const isCarmenPreFinale = suspect.name === 'Carmen Sandiego' && campaignPhase !== 'finale';
       const profileImage = suspect.name === 'Carmen Sandiego' && campaignPhase === 'finale'
         ? 'carmen/img/carmen-sandiego.png'
         : suspect.img;
-      const photoHtml = profileImage
-        ? `<img src="${esc(profileImage)}" alt="${esc(suspect.name)}" class="carmen-interpol-photo-img carmen-portrait-img" style="${getPortraitStyleVars(suspect.name)}">`
-        : `<div class="carmen-interpol-photo-silhouette">🕵️</div>`;
+      const photoHtml = isCarmenPreFinale
+        ? `<div class="carmen-interpol-photo-redacted">
+            <div class="carmen-interpol-photo-redacted-label">NO PHOTO</div>
+          </div>`
+        : profileImage
+          ? `<img src="${esc(profileImage)}" alt="${esc(suspect.name)}" class="carmen-interpol-photo-img carmen-portrait-img" style="${getPortraitStyleVars(suspect.name)}">`
+          : `<div class="carmen-interpol-photo-silhouette">🕵️</div>`;
 
       const thefts = theftRecords || [];
       const theftHtml = thefts.length > 0
