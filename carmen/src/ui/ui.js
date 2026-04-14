@@ -43,6 +43,18 @@ export function createCarmenUI(container, flagCodes) {
   `;
   document.body.appendChild(briefingEl);
 
+  const portraitInspectOverlay = document.createElement('div');
+  portraitInspectOverlay.className = 'carmen-portrait-inspect-overlay';
+  portraitInspectOverlay.innerHTML = `
+    <div class="carmen-portrait-inspect-shell">
+      <button class="carmen-portrait-inspect-close" type="button" aria-label="Close portrait inspection">×</button>
+      <div class="carmen-portrait-inspect-frame">
+        <img src="" alt="" class="carmen-portrait-inspect-img">
+      </div>
+    </div>
+  `;
+  document.body.appendChild(portraitInspectOverlay);
+
   // Build skeleton
   container.innerHTML = `
     <div class="carmen-status-bar">
@@ -211,6 +223,10 @@ export function createCarmenUI(container, flagCodes) {
     startCountry: '',
     thiefName: 'Unknown',
   };
+  const inspectState = {
+    pinnedPhoto: null,
+    overlayOpen: false,
+  };
   const witnessReports = [];
   const lineupState = {
     active: false,
@@ -241,10 +257,154 @@ export function createCarmenUI(container, flagCodes) {
     };
   }
 
+  function supportsHoverInspect() {
+    return typeof window.matchMedia === 'function'
+      && window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  }
+
+  function clearPhotoInspectStyles(photoEl) {
+    if (!photoEl) return;
+    photoEl.classList.remove('is-inspecting', 'is-pinned');
+    photoEl.style.removeProperty('--inspect-pan-x');
+    photoEl.style.removeProperty('--inspect-pan-y');
+    if (inspectState.pinnedPhoto === photoEl) {
+      inspectState.pinnedPhoto = null;
+    }
+  }
+
+  function closePortraitInspectOverlay() {
+    if (!inspectState.overlayOpen) return;
+    inspectState.overlayOpen = false;
+    portraitInspectOverlay.classList.remove('is-open');
+    document.body.classList.remove('carmen-inspect-open');
+  }
+
+  function animatePortraitInspectOpen(sourceEl) {
+    if (!sourceEl || !sourceEl.animate) return;
+    const img = portraitInspectOverlay.querySelector('.carmen-portrait-inspect-img');
+    const sourceRect = sourceEl.getBoundingClientRect();
+    const targetRect = img.getBoundingClientRect();
+    if (!sourceRect.width || !sourceRect.height || !targetRect.width || !targetRect.height) return;
+
+    const deltaX = (sourceRect.left + sourceRect.width / 2) - (targetRect.left + targetRect.width / 2);
+    const deltaY = (sourceRect.top + sourceRect.height / 2) - (targetRect.top + targetRect.height / 2);
+    const scaleX = sourceRect.width / targetRect.width;
+    const scaleY = sourceRect.height / targetRect.height;
+
+    img.animate([
+      {
+        transform: `translate(${deltaX}px, ${deltaY}px) scale(${scaleX}, ${scaleY})`,
+        borderRadius: '3px',
+      },
+      {
+        transform: 'translate(0, 0) scale(1, 1)',
+        borderRadius: '8px',
+      },
+    ], {
+      duration: 240,
+      easing: 'cubic-bezier(0.2, 0.8, 0.2, 1)',
+      fill: 'both',
+    });
+  }
+
+  function openPortraitInspectOverlay(src, alt, style = '', sourceEl = null) {
+    const img = portraitInspectOverlay.querySelector('.carmen-portrait-inspect-img');
+    img.src = src;
+    img.alt = alt;
+    img.style.cssText = style;
+    inspectState.overlayOpen = true;
+    portraitInspectOverlay.classList.add('is-open');
+    document.body.classList.add('carmen-inspect-open');
+    requestAnimationFrame(() => animatePortraitInspectOpen(sourceEl));
+  }
+
+  function resetInterpolPhotoInspect() {
+    clearPhotoInspectStyles(inspectState.pinnedPhoto);
+    closePortraitInspectOverlay();
+  }
+
+  function updateInspectPan(photoEl, clientX, clientY) {
+    const rect = photoEl.getBoundingClientRect();
+    if (!rect.width || !rect.height) return;
+    const normalizedX = ((clientX - rect.left) / rect.width) - 0.5;
+    const normalizedY = ((clientY - rect.top) / rect.height) - 0.5;
+    const panX = Math.max(-18, Math.min(18, normalizedX * -22));
+    const panY = Math.max(-16, Math.min(16, normalizedY * -18));
+    photoEl.style.setProperty('--inspect-pan-x', `${panX}%`);
+    photoEl.style.setProperty('--inspect-pan-y', `${panY}%`);
+  }
+
+  function bindInterpolPhotoInspect(photoEl, suspect, profileImage) {
+    if (!photoEl || !profileImage) return;
+
+    photoEl.addEventListener('pointerenter', (event) => {
+      if (!supportsHoverInspect()) return;
+      photoEl.classList.add('is-inspecting');
+      updateInspectPan(photoEl, event.clientX, event.clientY);
+    });
+
+    photoEl.addEventListener('pointermove', (event) => {
+      if (!supportsHoverInspect()) return;
+      photoEl.classList.add('is-inspecting');
+      updateInspectPan(photoEl, event.clientX, event.clientY);
+    });
+
+    photoEl.addEventListener('pointerleave', () => {
+      if (!photoEl.classList.contains('is-pinned')) {
+        clearPhotoInspectStyles(photoEl);
+      }
+    });
+
+    photoEl.addEventListener('click', (event) => {
+      event.preventDefault();
+      clearPhotoInspectStyles(photoEl);
+      openPortraitInspectOverlay(profileImage, suspect.name, getPortraitStyleVars(suspect.name), photoEl);
+    });
+
+    photoEl.addEventListener('keydown', (event) => {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
+        clearPhotoInspectStyles(photoEl);
+        openPortraitInspectOverlay(profileImage, suspect.name, getPortraitStyleVars(suspect.name), photoEl);
+      } else if (event.key === 'Escape') {
+        clearPhotoInspectStyles(photoEl);
+      }
+    });
+
+    photoEl.addEventListener('blur', () => {
+      if (!photoEl.classList.contains('is-pinned')) {
+        clearPhotoInspectStyles(photoEl);
+      }
+    });
+  }
+
+  portraitInspectOverlay.addEventListener('click', (event) => {
+    if (event.target === portraitInspectOverlay || event.target.closest('.carmen-portrait-inspect-close')) {
+      closePortraitInspectOverlay();
+    }
+  });
+
+  document.addEventListener('pointerdown', (event) => {
+    if (inspectState.overlayOpen) return;
+    if (inspectState.pinnedPhoto && !inspectState.pinnedPhoto.contains(event.target)) {
+      clearPhotoInspectStyles(inspectState.pinnedPhoto);
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    if (inspectState.overlayOpen) {
+      closePortraitInspectOverlay();
+      return;
+    }
+    clearPhotoInspectStyles(inspectState.pinnedPhoto);
+  });
+
   // Click the Interpol header card to return to intro view
   if (els.interpolCard) {
     els.interpolCard.style.cursor = 'pointer';
     els.interpolCard.addEventListener('click', () => {
+      resetInterpolPhotoInspect();
       els.interpolProfile.innerHTML = interpolIntroHtml;
     });
   }
@@ -300,6 +460,9 @@ export function createCarmenUI(container, flagCodes) {
 
   function switchTab(tab) {
     if (!getAllowedTabs().has(tab)) return;
+    if (activeTab === 'interpol' && tab !== 'interpol') {
+      resetInterpolPhotoInspect();
+    }
     activeTab = tab;
     // Left panel
     for (const [key, el] of Object.entries(leftPanels)) {
@@ -696,6 +859,7 @@ export function createCarmenUI(container, flagCodes) {
      * @param {Object} suspect — suspect object with geographic fields
      */
     showInterpolProfile(suspect, theftRecords, status, campaignPhase, isMarked = false, onToggleMark = null, intel = null, page = 'main') {
+      resetInterpolPhotoInspect();
       // Redact Carmen's profile based on campaign progression.
       let hair = suspect.hair, accessory = suspect.accessory, hobby = suspect.hobby, vehicle = suspect.vehicle;
       let quirkOverride = null;
@@ -718,6 +882,8 @@ export function createCarmenUI(container, flagCodes) {
       const profileImage = suspect.name === 'Carmen Sandiego' && campaignPhase === 'finale'
         ? 'carmen/img/carmen-sandiego.png'
         : suspect.img;
+      const inspectablePhoto = !!profileImage && !isCarmenPreFinale;
+      const photoClasses = `carmen-interpol-photo${inspectablePhoto ? ' is-inspectable' : ''}`;
       const photoHtml = isCarmenPreFinale
         ? `<div class="carmen-interpol-photo-redacted">
             <div class="carmen-interpol-photo-redacted-label">NO PHOTO</div>
@@ -813,8 +979,9 @@ export function createCarmenUI(container, flagCodes) {
             <button class="carmen-interpol-mark-btn${isMarked ? ' marked' : ''}" data-name="${esc(suspect.name)}">${markLabel}</button>
             ${pageNavButton}
             <div class="carmen-interpol-top">
-              <div class="carmen-interpol-photo">
+              <div class="${photoClasses}" ${inspectablePhoto ? `tabindex="0" role="button" aria-label="Inspect ${esc(suspect.name)} portrait"` : ''}>
                 ${photoHtml}
+                ${inspectablePhoto ? '<div class="carmen-interpol-photo-hint">Inspect</div>' : ''}
               </div>
               <div class="carmen-interpol-info">
                 <div class="carmen-interpol-name">${esc(suspect.name)}</div>
@@ -864,6 +1031,10 @@ export function createCarmenUI(container, flagCodes) {
           event.preventDefault();
           this.showInterpolProfile(suspect, thefts, status, campaignPhase, isMarked, onToggleMark, intel, 'background');
         });
+      }
+      const inspectPhoto = els.interpolProfile.querySelector('.carmen-interpol-photo.is-inspectable');
+      if (inspectPhoto) {
+        bindInterpolPhotoInspect(inspectPhoto, suspect, profileImage);
       }
     },
 
@@ -954,6 +1125,7 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     showIntro(thiefName, artifact, startCountry) {
+      resetInterpolPhotoInspect();
       const siteName = artifact.siteName || 'a priceless artifact';
       const imgUrl = artifact.imageUrl || '';
       caseCardState.siteName = siteName;

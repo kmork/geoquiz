@@ -2927,6 +2927,47 @@ body {
   box-shadow: 0 10px 16px rgba(31, 21, 15, 0.18);
 }
 
+.carmen-interpol-photo.is-inspectable {
+  cursor: zoom-in;
+  transition: transform 180ms ease, box-shadow 180ms ease, filter 180ms ease;
+}
+
+.carmen-interpol-photo.is-inspectable:focus-visible {
+  outline: 2px solid rgba(156, 39, 27, 0.72);
+  outline-offset: 2px;
+}
+
+.carmen-interpol-photo.is-inspecting {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 16px 28px rgba(31, 21, 15, 0.24);
+  z-index: 2;
+}
+
+.carmen-interpol-photo-hint {
+  position: absolute;
+  right: 0.35rem;
+  bottom: 0.35rem;
+  padding: 0.12rem 0.34rem;
+  border-radius: 999px;
+  background: rgba(31, 21, 15, 0.7);
+  color: rgba(246, 236, 221, 0.92);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(3px);
+  transition: opacity 160ms ease, transform 160ms ease;
+  pointer-events: none;
+}
+
+.carmen-interpol-photo.is-inspectable:hover .carmen-interpol-photo-hint,
+.carmen-interpol-photo.is-inspecting .carmen-interpol-photo-hint,
+.carmen-interpol-photo.is-inspectable:focus-visible .carmen-interpol-photo-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .carmen-portrait-img {
   width: calc(100% * var(--portrait-scale-x, 1));
   height: calc(100% * var(--portrait-scale-y, 1));
@@ -2934,6 +2975,22 @@ body {
   object-position: 50% 18%;
   transform: translate(var(--portrait-offset-x, 0%), var(--portrait-offset-y, 0%)) translateZ(0);
   filter: saturate(0.95) contrast(1.02);
+}
+
+.carmen-interpol-photo .carmen-portrait-img {
+  transition: transform 180ms ease, filter 180ms ease;
+  will-change: transform;
+}
+
+.carmen-interpol-photo.is-inspecting .carmen-portrait-img {
+  transform:
+    translate(
+      calc(var(--portrait-offset-x, 0%) + var(--inspect-pan-x, 0%)),
+      calc(var(--portrait-offset-y, 0%) + var(--inspect-pan-y, 0%))
+    )
+    scale(1.85)
+    translateZ(0);
+  filter: saturate(1.02) contrast(1.08);
 }
 
 .carmen-interpol-photo-silhouette {
@@ -2969,6 +3026,80 @@ body {
   transform: rotate(-8deg);
   box-shadow: 0 1px 0 rgba(255, 245, 233, 0.22);
   text-shadow: none;
+}
+
+.carmen-portrait-inspect-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  background: rgba(47, 35, 26, 0.42);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 180ms ease;
+  z-index: 1500;
+}
+
+.carmen-portrait-inspect-overlay.is-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.carmen-portrait-inspect-shell {
+  position: relative;
+  transform: translateY(16px) scale(0.94);
+  transition: transform 220ms ease;
+}
+
+.carmen-portrait-inspect-overlay.is-open .carmen-portrait-inspect-shell {
+  transform: translateY(0) scale(1);
+}
+
+.carmen-portrait-inspect-close {
+  position: absolute;
+  top: -0.65rem;
+  right: -0.65rem;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(46, 34, 25, 0.88);
+  color: #f8ecdc;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 8px 16px rgba(24, 16, 12, 0.22);
+}
+
+.carmen-portrait-inspect-frame {
+  padding: 0.7rem;
+  border-radius: 14px;
+  background:
+    radial-gradient(circle at 24% 18%, rgba(255, 247, 232, 0.42), transparent 36%),
+    linear-gradient(180deg, rgba(218, 200, 176, 0.98), rgba(192, 168, 138, 0.98));
+  box-shadow:
+    0 26px 50px rgba(27, 19, 14, 0.26),
+    inset 0 0 0 1px rgba(112, 81, 53, 0.18);
+}
+
+.carmen-portrait-inspect-img {
+  display: block;
+  width: min(72vw, 420px);
+  max-width: 100%;
+  height: min(76vh, 680px);
+  max-height: 76vh;
+  object-fit: contain;
+  object-position: 50% 18%;
+  background: rgba(37, 28, 21, 0.86);
+  border-radius: 8px;
+}
+
+body.carmen-inspect-open {
+  overflow: hidden;
 }
 
 .carmen-interpol-info {
