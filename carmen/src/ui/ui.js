@@ -5,37 +5,14 @@
 import { playStamp, startClockTicking, stopClockTicking, toggleMusicMute, isMusicMuted } from '../audio/audio-engine.js';
 import { IMG } from '../assets.js';
 import { getInterpolBackgroundStory } from '../content/interpol-backgrounds.js';
+import { getPortraitStyleVars } from '../content/portrait-specs.js';
 import { typewriter } from './typewriter.js';
 
-const INTERPOL_PHOTO_ADJUSTMENTS = {
-  'Count Obsidian': { scaleX: 1.58, scaleY: 1.22, x: '0%', y: '0%' },
-  'Echo': { scaleX: 1.62, scaleY: 1.24, x: '0%', y: '0%' },
-  'The Locksmith': { scaleX: 1.28, scaleY: 1.18, x: '0%', y: '-1%' },
-  'Nova Vex': { scaleX: 1.56, scaleY: 1.24, x: '0%', y: '-4%' },
-  'Shadow Lynx': { scaleX: 1.62, scaleY: 1.24, x: '0%', y: '-2%' },
-  'Copper Sparrow': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
-  'Ghost Mariner': { scaleX: 1.28, scaleY: 1.16, x: '0%', y: '-3%' },
-  'Velvet Cipher': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '0%' },
-  'Phantom Fox': { scaleX: 1.6, scaleY: 1.24, x: '0%', y: '-2%' },
-  'Raven Noir': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
-  'Scarlet Cipher': { scaleX: 1.56, scaleY: 1.22, x: '0%', y: '-1%' },
-  'Ivy Virelli': { scaleX: 1.54, scaleY: 1.2, x: '0%', y: '-1%' },
-  'Saffron Silk': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
-  'Crimson Dagger': { scaleX: 1.56, scaleY: 1.24, x: '0%', y: '-1%' },
-  'Golden Lynx': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
-  'Ivory Whisper': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
-  'Neon Specter': { scaleX: 1.54, scaleY: 1.24, x: '0%', y: '-3%' },
-  'Scarlet Swan': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
-  'Midnight Owl': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-1%' },
-  'Silver Comet': { scaleX: 1.54, scaleY: 1.24, x: '0%', y: '-3%' },
-  'Velvet Raven': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
-  'Amber Fox': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
-  'Storm Herald': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
-  'Crimson Mirage': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
-  'Onyx Panther': { scaleX: 1.6, scaleY: 1.24, x: '0%', y: '-1%' },
-  'Ivory Phantom': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
-  'Emerald Kite': { scaleX: 1.54, scaleY: 1.22, x: '0%', y: '-2%' },
-};
+function renderPortraitImg(suspect, extraClass = '') {
+  const src = suspect.img || IMG.suspect(suspect.name);
+  const className = extraClass ? `carmen-portrait-img ${extraClass}` : 'carmen-portrait-img';
+  return `<img src="${esc(src)}" alt="${esc(suspect.name)}" class="${className}" style="${getPortraitStyleVars(suspect.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))">`;
+}
 
 /**
  * Build the full game UI inside the given container.
@@ -371,7 +348,7 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-lineup-target-body">
             <div class="carmen-lineup-target-portrait">
               ${selectedSuspect
-                ? `<img src="${esc(selectedSuspect.img || IMG.suspect(selectedSuspect.name))}" alt="${esc(selectedSuspect.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))">`
+                ? renderPortraitImg(selectedSuspect)
                 : '<span aria-hidden="true">🕵️</span>'}
             </div>
             <div class="carmen-lineup-target-copy">
@@ -389,7 +366,7 @@ export function createCarmenUI(container, flagCodes) {
             <button class="carmen-suspect-card${selectedName === s.name ? ' selected' : ''}" data-name="${esc(s.name)}">
               <div class="carmen-suspect-card-badge">${esc(selectedName === s.name ? text.cardTargetLabel : text.cardDefaultLabel)}</div>
               <div class="carmen-suspect-card-body">
-                <div class="carmen-suspect-silhouette"><img src="${esc(s.img || IMG.suspect(s.name))}" alt="${esc(s.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))"></div>
+                <div class="carmen-suspect-silhouette">${renderPortraitImg(s)}</div>
                 <div class="carmen-suspect-card-copy">
                   <div class="carmen-suspect-name">${esc(s.name)}</div>
                   <div class="carmen-suspect-card-note">${esc(selectedName === s.name ? text.cardTargetNote : text.cardDefaultNote)}</div>
@@ -740,15 +717,8 @@ export function createCarmenUI(container, flagCodes) {
       const profileImage = suspect.name === 'Carmen Sandiego' && campaignPhase === 'finale'
         ? 'carmen/img/carmen-sandiego.png'
         : suspect.img;
-      const photoAdjust = INTERPOL_PHOTO_ADJUSTMENTS[suspect.name] || {};
-      const photoStyle = [
-        `--photo-scale-x:${photoAdjust.scaleX || 1.28}`,
-        `--photo-scale-y:${photoAdjust.scaleY || 1.18}`,
-        `--photo-offset-x:${photoAdjust.x || '0%'}`,
-        `--photo-offset-y:${photoAdjust.y || '0%'}`,
-      ].join(';');
       const photoHtml = profileImage
-        ? `<img src="${esc(profileImage)}" alt="${esc(suspect.name)}" class="carmen-interpol-photo-img" style="${photoStyle}">`
+        ? `<img src="${esc(profileImage)}" alt="${esc(suspect.name)}" class="carmen-interpol-photo-img carmen-portrait-img" style="${getPortraitStyleVars(suspect.name)}">`
         : `<div class="carmen-interpol-photo-silhouette">🕵️</div>`;
 
       const thefts = theftRecords || [];

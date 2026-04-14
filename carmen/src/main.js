@@ -114,14 +114,26 @@ function chooseArrivalAtmosphere(country, stop) {
 while (!window.DATA) await new Promise(r => setTimeout(r, 50));
 
 // Load all data in parallel
-const [worldData, factsData, heritageData, riversData, mountainsData, empiresData] = await Promise.all([
+const [worldData, factsData, heritageData, riversData, mountainsData, empiresData, portraitProfileData] = await Promise.all([
   loadGeoJSON('data/ne_10m_admin_0_countries_route.geojson.gz'),
   fetch('data/country-facts.json').then(r => r.json()),
   fetch('data/heritage-sites.json').then(r => r.json()),
   fetch('data/rivers.json').then(r => r.json()),
   fetch('data/mountain-ranges.json').then(r => r.json()),
   fetch('data/empires.json').then(r => r.json()),
+  fetch('carmen/villains_with_face_profiles.json').then(r => r.json()),
 ]);
+
+const portraitProfileByName = new Map(
+  portraitProfileData.map((entry) => [entry.name, entry])
+);
+
+SUSPECTS.forEach((suspect) => {
+  const portraitData = portraitProfileByName.get(suspect.name);
+  if (!portraitData) return;
+  if (portraitData.faceProfile) suspect.faceProfile = portraitData.faceProfile;
+  if (!suspect.img && portraitData.img) suspect.img = portraitData.img;
+});
 
 // Build flag code lookup
 const flagCodes = Object.fromEntries(
