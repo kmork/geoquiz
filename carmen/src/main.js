@@ -209,6 +209,20 @@ function getVisibleInterpolSuspects() {
   const allViewed = new Set([...interpolViewedThisGame, ...getInterpolViewed()]);
   const activeArchive = logic?.getInterpolCandidates?.() || [];
   const finaleAlias = logic?.getFinaleAlias?.();
+  const source = finaleAlias
+    ? [...SUSPECTS, finaleAlias]
+    : SUSPECTS.filter(s => isOpenCasesMode() ? s.name !== 'Carmen Sandiego' : true);
+
+  if (!isOpenCasesMode() && logic?.campaignPhase === 'finale') {
+    return source
+      .slice()
+      .sort((a, b) => {
+        if (a.name === 'Carmen Sandiego') return 1;
+        if (b.name === 'Carmen Sandiego') return -1;
+        return a.name.localeCompare(b.name);
+      });
+  }
+
   const visibleNames = new Set([
     ...activeArchive.map(s => s.name),
     ...allViewed,
@@ -217,10 +231,6 @@ function getVisibleInterpolSuspects() {
   if (!isOpenCasesMode()) {
     visibleNames.add('Carmen Sandiego');
   }
-
-  const source = finaleAlias
-    ? [...SUSPECTS, finaleAlias]
-    : SUSPECTS.filter(s => isOpenCasesMode() ? s.name !== 'Carmen Sandiego' : true);
 
   return source
     .filter(s => visibleNames.has(s.name))
