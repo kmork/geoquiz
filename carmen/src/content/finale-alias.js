@@ -8,6 +8,6 @@ export const FINALE_ALIAS = {
   knownRegions: ['South America', 'Europe', 'Asia'],
   geoFact: 'Travel stamps place the subject in too many cities too quickly to be credible without diplomatic-grade misdirection.',
   quirk: 'The file appeared late, perfectly assembled, and suspiciously free of human error.',
-  img: 'carmen/img/Uten navn 29.png',
+  img: 'carmen/img/Belladonna Vane.png',
   isFinaleAlias: true,
 };

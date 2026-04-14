@@ -290,6 +290,12 @@ Ghost Mariner, gray-haired phantom sailor thief from Bergen with compass, haunte
 Velvet Cipher, black-haired cryptography thief from Tallinn with tattoo, cool and controlled, sharp face, steady gaze, subtle knowing smile, black and muted red-brown palette. Keep the tattoo readable but the portrait restrained.
 ```
 
+### Belladonna Vane
+
+```text
+Belladonna Vane, black-haired international socialite and suspected diplomatic-cover thief, elegant and perfectly composed, tailored deep-red coat with refined rather than theatrical styling, immaculate grooming, controlled posture, intelligent knowing eyes that subtly echo Carmen Sandiego, poised expression, polished false-identity energy, high-class passport-and-consulate world, deep red black and muted wine palette. Keep her portrait-focused and plausible as a separate suspect at first glance, but with a few quiet Carmen cues on closer inspection.
+```
+
 ## Recommended Workflow
 
 Paste prompts in this order:
