@@ -1,13 +1,33 @@
 # Carmen ChatGPT Portrait Prompts
 
-These are shorter prompts meant for direct use in ChatGPT image generation.
+These prompts are rewritten to reduce style drift, realism creep, and busy backgrounds.
 
-## Shared Base
+Use the same three-part structure every time:
 
-Paste this first, then add one suspect block below it:
+1. Paste the `Locked Base Prompt`
+2. Paste one suspect block
+3. Paste the `Locked Avoid Block`
+
+If ChatGPT starts drifting toward realism or scenery, start a fresh generation and paste the full base prompt again instead of only asking for small corrections.
+
+## Locked Base Prompt
 
 ```text
-Create a vertical suspect dossier portrait for the Carmen detective game. Match the visual style of the earlier Dr. Atlas portrait: painterly pulp-noir illustration, grounded facial proportions, retro detective-file character art, textured warm background, strong silhouette, readable accessory, chest-up framing. Keep it stylized but not anime, not manga, not chibi, not glossy mobile-game fantasy art. No decorative border, no parchment frame, no text, no watermark.
+Create a vertical suspect dossier portrait for the Carmen detective game. Painterly pulp-noir illustration, stylized character art, mid-century detective adventure tone, chest-up composition, single subject, portrait-only framing, clean silhouette, subtle brush texture, restrained palette, one readable signature accessory, subdued studio or dossier background only. This must look like illustrated pulp-noir portrait art, not a realistic photo, not a cinematic still, not a full scene. No decorative border, no parchment frame, no text, no watermark.
+```
+
+## Locked Avoid Block
+
+```text
+Avoid photorealism. Avoid realistic photography. Avoid cinematic realism. Avoid movie-still composition. Avoid full body. Avoid action pose. Avoid scenic background. Avoid city streets. Avoid architecture focus. Avoid storytelling environment. Avoid extra props beyond one signature accessory. Avoid anime. Avoid manga. Avoid chibi. Avoid glossy CGI. Avoid fashion-editorial styling. Avoid decorative frame or border.
+```
+
+## Optional Style Reference Line
+
+If you attach the older `Dr. Atlas` portrait as a reference, add this line between the base prompt and the suspect block:
+
+```text
+Match the same painterly dossier style, portrait framing, and restrained background treatment as the attached Dr. Atlas reference.
 ```
 
 ## Prompts
@@ -15,263 +35,274 @@ Create a vertical suspect dossier portrait for the Carmen detective game. Match 
 ### Carmen Sandiego
 
 ```text
-Carmen Sandiego, black-haired woman from Buenos Aires in a red trench coat and hat, glamorous mastermind, elegant and dangerous. Heart-shaped face with dramatic cheekbones, large confident almond eyes, sly glamorous smile, long neck, poised chin, classic leading-lady silhouette. Deep red, black, warm neutral tones. Avoid generic femme fatale, avoid cute expression, avoid teenager look.
+Carmen Sandiego, black-haired woman from Buenos Aires in a red trench coat and hat, glamorous mastermind, elegant and dangerous, poised confident expression, dramatic cheekbones, sly smile, classic leading-lady silhouette, deep red and black palette. Keep it portrait-focused and controlled.
 ```
 
 ### Viktor Voss
 
 ```text
-Viktor Voss, blond aristocratic thief from Vienna with monocle, severe tailored clothing, smug strategic criminal. Long rectangular face, one squinting eye and one monocled eye, thin smug grin, high forehead, rigid jaw, chess-master severity. Muted gold, black, ivory, dark navy. Avoid anime pretty-boy look, avoid heroic captain vibe.
+Viktor Voss, blond aristocratic thief from Vienna with monocle, severe tailored clothing, smug strategic criminal, long severe face, high forehead, thin grin, rigid jaw, muted gold and dark navy accents. Keep him stylized and not pretty-boy realistic.
 ```
 
 ### Natasha Petrova
 
 ```text
-Natasha Petrova, red-haired winter thief from Saint Petersburg, fur hat and winter coat, glamorous but dangerous. Round winter-apple face, intense catlike eyes, playful crooked grin, rosy cheeks, compact head, lively expression. Deep red, cream fur, icy blue accents. Avoid pin-up exaggeration, avoid anime face.
+Natasha Petrova, red-haired winter thief from Saint Petersburg, fur hat and winter coat, glamorous but dangerous, intense eyes, crooked grin, compact lively face, deep red with cream fur and cold blue accents. Keep it as a portrait, not a snow scene.
 ```
 
 ### El Zorro
 
 ```text
-El Zorro, black-haired masked duelist thief from Seville, dramatic cape, elegant rogue energy. Narrow triangular face, mischievous narrow eyes, cocky one-sided smirk, pointed chin, dramatic masked silhouette. Black, crimson accents, dark neutrals. Avoid cartoon swashbuckler look, avoid anime swordsman look.
+El Zorro, black-haired masked duelist thief from Seville, elegant rogue energy, dark cape, narrow face, mischievous eyes, cocky smirk, black with restrained crimson accents. Keep the mask readable and the background subdued.
 ```
 
 ### The Shadow
 
 ```text
-The Shadow, nearly unreadable phantom thief, wrapped in a dark cloak, face mostly concealed, only glowing slit eyes visible. Mysterious wrapped-head silhouette, mouth covered, heavy noir shadow, eerie but grounded. Black, charcoal, muted brown. Avoid superhero look, avoid anime ninja look.
+The Shadow, nearly unreadable phantom thief, wrapped in a dark cloak, face mostly concealed, only slit-like eyes visible, mysterious and grounded, black and charcoal palette. Keep the portrait simple and ominous, not superhero-like.
 ```
 
 ### Lady Crimson
 
 ```text
-Lady Crimson, auburn-haired opera-diva jewel thief from Monte Carlo with ruby necklace, wealthy theatrical criminal presence. Full glamorous oval face, heavy-lidded diva eyes, big theatrical smile, lush cheeks, opera-star drama, beauty-mark energy. Auburn, ruby red, ivory, dark wine tones. Avoid anime idol look, avoid fantasy queen look.
+Lady Crimson, auburn-haired opera-diva jewel thief from Monte Carlo with ruby necklace, wealthy theatrical criminal presence, heavy-lidded diva eyes, lush features, big theatrical smile, ruby and dark wine palette. Keep it portrait-like, not stage scenery.
 ```
 
 ### Phantom Fox
 
 ```text
-Phantom Fox, silver-haired origami thief from Kyoto with fox brooch, elegant, intelligent, quick and precise. Foxlike angular face, quick sly eyes, clever tight grin, sharp cheekbones, alert expression. Silver, charcoal, muted cream. Avoid anime fox-girl look, avoid cosplay look.
+Phantom Fox, silver-haired origami thief from Kyoto with fox brooch, elegant and precise, angular face, sly intelligent eyes, sharp cheekbones, silver and charcoal palette. Keep it grounded and avoid fox-themed fantasy styling.
+```
+
+### Raven
+
+```text
+Raven, black-haired dawn thief from Quito with feathered hat, brooding and elusive, dark romantic face, observant eyes, restrained half-smile, black and muted dawn tones. Keep the hat readable and the background minimal.
 ```
 
 ### Scarlet Cipher
 
 ```text
-Scarlet Cipher, brilliant red-haired cryptography thief from Berlin with coded tattoo detail, razor-sharp intelligence, predatory confidence. Sharp angular face, narrow hyper-alert eyes, smug brilliant smirk, one eyebrow raised. Red, black, steel gray, muted amber highlights. Avoid cyberpunk overload, avoid anime hacker-girl look.
-```
-
-### Professor Paradox
-
-```text
-Professor Paradox, eccentric white-haired criminal scholar from Geneva with pocket watch, absent-minded but dangerous genius. Huge forehead with narrow chin, mismatched distracted eyes, muttering absent-minded mouth, wild eyebrows, eccentric genius proportions. Off-white hair, brown coat, brass details, burgundy accent. Avoid goofy cartoon inventor look, avoid cute nerd energy.
-```
-
-### Golden Seraph
-
-```text
-Golden Seraph, blond antiquities thief from Athens with pendant, classical museum-statue elegance, serene but superior criminal presence. Classical statue face, calm idealized eyes, serene superior smile, symmetrical features, heroic profile, museum-marble elegance. Gold, cream, warm stone tones. Avoid angelic fantasy heroine look, avoid anime beauty look.
+Scarlet Cipher, brilliant red-haired cryptography thief from Berlin with coded tattoo detail, razor-sharp intelligence, angular face, narrow alert eyes, smug smirk, red black and steel-gray palette. Keep it portrait-only and avoid cyberpunk scenery.
 ```
 
 ### Dr. Atlas
 
 ```text
-Dr. Atlas, gray-haired cartography thief from Lisbon with vintage compass, scholarly explorer and old-mapmaker presence. Broad scholarly face, thoughtful tired eyes, kind but stubborn mouth, deep smile lines, weathered intellectual character. Warm browns, muted brass, parchment, deep navy or charcoal accents. Avoid goofy professor look, avoid anime mentor styling, avoid exaggerated adventure-hero glamour.
+Dr. Atlas, gray-haired cartography thief from Lisbon with vintage compass, scholarly explorer and old-mapmaker presence, weathered intellectual face, thoughtful eyes, warm browns and muted brass, rolled maps or compass detail only if needed. Keep this as the core style anchor.
 ```
 
 ### The Cartographer
 
 ```text
-The Cartographer, brown-haired rugged thief from Kathmandu with leather satchel, mountaineer and field explorer energy. Square rugged face, focused practical eyes, firm outdoorsman grin, thick brows, wind-burned cheeks, durable jaw. Earth browns, worn leather, muted mountain tones. Avoid generic action-hero look, avoid anime adventurer look.
+The Cartographer, brown-haired rugged thief from Kathmandu with leather satchel, field explorer energy, square rugged face, focused practical eyes, firm grin, worn leather and earth-brown palette. Keep it portrait-focused, not a mountain scene.
 ```
 
 ### Velvet Mask
 
 ```text
-Velvet Mask, platinum-haired aristocratic thief from Paris with velvet gloves, polished and controlled. Perfect porcelain oval face, masked elegant half-lidded eyes, controlled aristocratic smile, tiny chin, dancer posture, polished symmetry. Pale platinum, black, velvet wine accents. Avoid doll-like anime beauty, avoid fantasy masquerade queen.
+Velvet Mask, platinum-haired aristocratic thief from Paris with velvet gloves, polished and controlled, porcelain oval face, half-lidded eyes, controlled smile, pale platinum with black and wine accents. Keep it restrained and not masquerade-fantasy.
 ```
 
 ### Raven Noir
 
 ```text
-Raven Noir, black-haired thief from Bogotá with feathered hat, goth-romantic and brooding. Thin moon-shaped face, brooding sleepy eyes, melancholy half-smile, slightly hollow cheeks, dark romantic silhouette. Black, charcoal, muted burgundy accents. Avoid cute raven-girl look, avoid anime goth fashion portrait.
+Raven Noir, black-haired thief from Bogotá with feathered hat, goth-romantic and brooding, hollow-cheeked face, melancholy eyes, dark romantic silhouette, charcoal and muted burgundy palette. Keep it as a dossier portrait, not fashion editorial.
+```
+
+### Professor Paradox
+
+```text
+Professor Paradox, eccentric white-haired criminal scholar from Geneva with pocket watch, dangerous genius, wild brows, distracted eyes, narrow chin, off-white hair with brass and burgundy details. Keep him stylized and eccentric, not goofy.
 ```
 
 ### Luna Nocturne
 
 ```text
-Luna Nocturne, silver-haired celestial thief from Reykjavik with moon pendant, ethereal but grounded. Small pointed face, large dreamy upward eyes, soft secret smile, delicate jaw, celestial serenity. Silver, midnight blue, cold moonlit tones. Avoid magical-girl anime look, avoid overly fragile fantasy princess look.
+Luna Nocturne, silver-haired celestial thief from Reykjavik with moon pendant, ethereal but grounded, pointed face, dreamy upward gaze, quiet secret smile, silver and midnight-blue palette. Keep it restrained and not fantasy-princess.
 ```
 
 ### Count Obsidian
 
 ```text
-Count Obsidian, black-haired aristocratic thief from Istanbul with obsidian ring, imposing and disdainful. Heavy aristocratic face, cold hooded eyes, disdainful sneer, strong brow ridge, deep-set eyes, imposing skull. Black, obsidian, muted bronze, dark wine shadows. Avoid anime vampire noble look, avoid comic-book villain excess.
+Count Obsidian, black-haired aristocratic thief from Istanbul with obsidian ring, imposing and disdainful, deep-set eyes, strong brow, heavy severe face, obsidian black with muted bronze accents. Keep him grounded and avoid comic-book villain excess.
 ```
 
 ### Ivy Virelli
 
 ```text
-Ivy Virelli, green-haired botanical thief from Florence with vine bracelet, elegant and mischievous. Leaf-shaped face, bright curious eyes, mischievous garden-smile, freckles, soft cheeks, slightly asymmetrical grin. Green, muted floral tones, warm earth accents. Avoid cute fairy look, avoid anime plant-girl styling.
+Ivy Virelli, green-haired botanical thief from Florence with vine bracelet, elegant and mischievous, bright curious eyes, soft cheeks, asymmetrical grin, green with warm earth accents. Keep it human and grounded, not fairy-like.
 ```
 
 ### Echo
 
 ```text
-Echo, anonymous thief of unknown origin with voice modulator, identity erased under tech gear. Face obscured under equipment, unreadable electronic eyes or visor glow, distorted speaker grille or covered mouth, anonymous silhouette. Black, graphite, muted electric accents. Avoid cyber-ninja anime look, avoid superhero tech suit look.
+Echo, anonymous thief of unknown origin with voice modulator, identity erased under tech gear, obscured face, unreadable visor or speaker detail, anonymous silhouette, black and graphite with restrained electric accents. Keep it portrait-only, not sci-fi action art.
 ```
 
 ### The Locksmith
 
 ```text
-The Locksmith, brown-haired thief from Prague with keychain, compact tradesman criminal energy. Compact blocky face, tiny suspicious eyes, tight-lipped concentration, big ears, stubborn jaw. Brown, iron, brass, worn workwear tones. Avoid comic dwarf look, avoid anime tinkerer style.
+The Locksmith, brown-haired thief from Prague with keychain, compact tradesman criminal energy, blocky stubborn face, suspicious eyes, tight mouth, brass and worn workwear tones. Keep it grounded and dossier-like.
 ```
 
 ### Captain Marlowe
 
 ```text
-Captain Marlowe, gray-haired sea captain thief from Liverpool with captain hat, old navigator presence. Weathered sea-captain face, one stern eye and one squinting eye, pipe-clenched grin, big beard, crow’s feet, barrel-head silhouette. Navy, salt-white, brass, deep red accent. Avoid cartoon pirate look, avoid heroic admiral pose.
+Captain Marlowe, gray-haired sea captain thief from Liverpool with captain hat, weathered navigator presence, stern sea-worn face, beard, crow's feet, navy and brass palette. Keep it portrait-like, not pirate adventure scenery.
 ```
 
 ### Nova Vex
 
 ```text
-Nova Vex, red-haired daredevil thief from Houston with visor, pilot energy and reckless confidence. Sharp comet-shaped face, wide excited eyes behind visor, reckless daredevil grin, lean jaw, energetic asymmetry. Red, steel, dark charcoal, subtle cosmic glow accents. Avoid anime space-pilot look, avoid glossy sci-fi heroine style.
+Nova Vex, red-haired daredevil thief from Houston with visor, reckless pilot energy, sharp face, excited eyes, asymmetrical grin, red and charcoal with restrained steel accents. Keep it painterly and avoid glossy sci-fi realism.
 ```
 
 ### Saffron Silk
 
 ```text
-Saffron Silk, auburn-haired thief from Jaipur with silk fan, refined and teasing. Soft round face, knowing serene eyes, composed teasing smile, plush cheeks, refined elegance. Saffron, auburn, muted gold, deep jewel tones. Avoid anime geisha styling, avoid costume-drama caricature.
+Saffron Silk, auburn-haired thief from Jaipur with silk fan, refined and teasing, serene eyes, composed smile, warm saffron and jewel-tone palette. Keep it elegant and portrait-focused, not costume-drama staging.
 ```
 
 ### Silk Serpent
 
 ```text
-Silk Serpent, black-haired thief from Bangkok with gold earrings, hypnotic and dangerous. Long serpentine face, hypnotic slanted eyes, slow venomous smile, very high cheekbones, narrow chin, dancer neck. Black, gold, dark green or night-market jewel tones. Avoid anime femme-fatale look, avoid fantasy snake-woman styling.
+Silk Serpent, black-haired thief from Bangkok with gold earrings, hypnotic and dangerous, long face, slanted eyes, slow venomous smile, black and gold with dark jewel tones. Keep it grounded and avoid fantasy snake motifs.
 ```
 
 ### Crimson Dagger
 
 ```text
-Crimson Dagger, red-haired duelist thief from Marrakech with dagger, aggressive and competitive. Hard diamond-shaped face, fierce competitive eyes, taunting grin, scarred eyebrow, sharp jaw corners. Crimson, black, warm desert bronze tones. Avoid anime warrior-princess look, avoid exaggerated comic-book assassin style.
+Crimson Dagger, red-haired duelist thief from Marrakech with dagger, aggressive and competitive, hard diamond-shaped face, fierce eyes, taunting grin, crimson and warm bronze palette. Keep the dagger secondary and the portrait primary.
 ```
 
 ### Golden Lynx
 
 ```text
-Golden Lynx, blond gem thief from Antwerp with necklace, sleek and predatory socialite energy. Sleek feline face, large predatory eyes, perfect socialite smile, high forehead, smooth cheeks, catlike glamour. Gold, champagne, black, muted jewel tones. Avoid anime cat-girl look, avoid glossy fashion-doll styling.
+Golden Lynx, blond gem thief from Antwerp with necklace, sleek predatory socialite energy, feline face, polished smile, champagne and black palette. Keep it stylized and not glossy fashion-photography.
 ```
 
 ### Ivory Whisper
 
 ```text
-Ivory Whisper, white-haired pianist thief from Salzburg with gloves, poised and melancholic. Delicate oval face, gentle distant eyes, small melancholic smile, soft jaw, swan-neck silhouette, porcelain calm. Ivory, black, muted silver, cool cream tones. Avoid anime ice-queen styling, avoid fragile porcelain-doll cliché.
+Ivory Whisper, white-haired pianist thief from Salzburg with gloves, poised and melancholic, delicate face, distant eyes, small sad smile, ivory black and cool cream palette. Keep it restrained and avoid porcelain-doll excess.
 ```
 
 ### Neon Specter
 
 ```text
-Neon Specter, green-haired hacker thief from Seoul with visor, restless and sleep-deprived. Thin neon-lit face, restless tech-burned eyes, snarky grin, gaunt cheeks, sleepless expression, cyber edge. Green, black, dark gray, restrained neon accents. Avoid anime cyberpunk idol look, avoid glossy arcade-art style.
+Neon Specter, green-haired hacker thief from Seoul with visor, restless and sleep-deprived, gaunt face, snarky grin, tired eyes, black and dark gray with restrained neon accents. Keep the background plain and avoid cyberpunk city scenes.
 ```
 
 ### Scarlet Swan
 
 ```text
-Scarlet Swan, red-haired ballet thief from Moscow with necklace, elegant and superior. Long elegant ballet face, dramatic stage eyes, refined superior smile, long neck, tiny chin, swanlike poise. Red, ivory, black, muted stage-gold accents. Avoid anime ballerina look, avoid soft romantic heroine styling.
+Scarlet Swan, red-haired ballet thief from Moscow with necklace, elegant and superior, long refined face, dramatic stage eyes, poised smile, red ivory and muted gold palette. Keep it portrait-only and avoid stage scenery.
 ```
 
 ### Midnight Owl
 
 ```text
-Midnight Owl, black-haired literary thief from Oxford with glasses, clever and nocturnal. Round scholarly face, very large magnified eyes behind glasses, quiet amused smile, big forehead, bookish softness, nocturnal mood. Black, brown, parchment, dim midnight blue accents. Avoid cute bookworm anime look, avoid comic librarian caricature.
+Midnight Owl, black-haired literary thief from Oxford with glasses, clever and nocturnal, round scholarly face, amused eyes behind glasses, bookish softness, black brown and parchment palette. Keep it subdued and not quirky cartoonish.
 ```
 
 ### Dusty Nomad
 
 ```text
-Dusty Nomad, brown-haired wanderer thief from Ulaanbaatar with hat, survivalist and weathered. Sun-worn wide face, narrow travel-hardened eyes, crooked survivor grin, wind-cut cheeks, stubble, hat-shadowed brow. Sand, brown, muted denim, dusty earth tones. Avoid anime cowboy styling, avoid post-apocalyptic costume look.
+Dusty Nomad, brown-haired wanderer thief from Ulaanbaatar with hat, weathered survivalist, sun-worn face, narrow hardened eyes, crooked grin, sand and brown palette. Keep it grounded and avoid post-apocalyptic styling.
 ```
 
 ### Silver Comet
 
 ```text
-Silver Comet, silver-haired athletic thief from Nairobi with watch, fast and aerodynamic. Lean aerodynamic face, laser-focused eyes, breathless cocky smile, very tight cheek muscles, streamlined head. Silver, charcoal, muted sport-red or cobalt accents. Avoid anime speedster look, avoid superhero runner costume style.
+Silver Comet, silver-haired athletic thief from Nairobi with watch, fast and aerodynamic, lean face, focused eyes, breathless cocky smile, silver and charcoal palette with restrained accent color. Keep it painterly and not superhero-like.
 ```
 
 ### Velvet Raven
 
 ```text
-Velvet Raven, black-haired poetic thief from Dublin with cloak, dark romantic presence. Deep heart-shaped face, poetic mournful eyes, dark romantic smile, soft shadowed cheeks, dramatic lashes. Black, deep green, wine, muted moonlit tones. Avoid goth-anime heroine look, avoid melodramatic fantasy widow styling.
+Velvet Raven, black-haired poetic thief from Dublin with cloak, dark romantic presence, mournful eyes, soft shadowed cheeks, subtle smile, black deep green and wine palette. Keep it elegant and not fantasy-goth.
 ```
 
 ### Amber Fox
 
 ```text
-Amber Fox, auburn-haired collector thief from Gdańsk with brooch, sly and lively. Compact sly face, sparkling collector eyes, mischief grin, freckles, lifted cheeks, alert expression. Amber, auburn, muted Baltic blue-gray, warm bronze tones. Avoid cute fox-girl look, avoid glossy cartoon charm.
+Amber Fox, auburn-haired collector thief from Gdansk with brooch, sly and lively, sparkling eyes, freckles, lifted cheeks, amber and bronze palette with cool Baltic accents. Keep it portrait-focused and avoid cartoon cuteness.
 ```
 
 ### Storm Herald
 
 ```text
-Storm Herald, gray-haired meteorology thief from Reykjavik with coat, severe and weather-beaten. Craggy storm-beaten face, stormy deep-set eyes, grim weathered mouth, bushy brows, lined forehead, thundercloud mood. Slate gray, storm blue, charcoal, muted silver. Avoid wizard-storm-lord fantasy look, avoid comic-book thunder villain style.
+Storm Herald, gray-haired meteorology thief from Reykjavik with coat, severe and weather-beaten, craggy face, deep-set eyes, grim mouth, slate-gray and storm-blue palette. Keep it grounded and avoid fantasy storm-lord styling.
 ```
 
 ### Crimson Mirage
 
 ```text
-Crimson Mirage, red-haired illusionist thief from Cairo with scarf, theatrical and deceptive. Mirage-thin elongated face, trickster eyes with uneven gaze, illusionist smirk, hollow cheeks, theatrical eyebrows. Crimson, sand, bronze, dark mirror-black accents. Avoid anime desert-dancer styling, avoid fantasy sorceress look.
+Crimson Mirage, red-haired illusionist thief from Cairo with scarf, theatrical and deceptive, elongated face, uneven trickster gaze, illusionist smirk, crimson sand and bronze palette. Keep it as a portrait, not a desert scene.
 ```
 
 ### Onyx Panther
 
 ```text
-Onyx Panther, black-haired stealth thief from Lagos with mask, compact predator energy. Low wide predatory face, glowing panther eyes, barely visible hard line of a mouth, powerful cheekbones, compact skull, stalking posture. Black, onyx, muted gold, deep night tones. Avoid superhero cat-vigilante look, avoid anime beast-man styling.
+Onyx Panther, black-haired stealth thief from Lagos with mask, compact predator energy, low wide face, hard eyes, powerful cheekbones, black and onyx palette with muted gold accents. Keep it grounded and avoid vigilante-comic styling.
+```
+
+### Golden Seraph
+
+```text
+Golden Seraph, blond antiquities thief from Athens with pendant, classical museum-statue elegance, serene superior expression, symmetrical features, gold cream and warm stone palette. Keep it painterly and avoid angelic fantasy styling.
 ```
 
 ### Ivory Phantom
 
 ```text
-Ivory Phantom, white-haired master-of-disguise thief from Venice with cloak, theatrical and elusive. Pale stage-mask face, dramatic expressive eyes, performer’s changing smile, exaggerated brow arches, face designed for disguise. Ivory, black, muted burgundy, old-theater tones. Avoid ghost-anime prince look, avoid carnival-mask cliché overload.
+Ivory Phantom, white-haired master-of-disguise thief from Venice with cloak, theatrical and elusive, expressive eyes, performer smile, pale face built for disguise, ivory black and muted burgundy palette. Keep it portrait-focused and avoid carnival excess.
 ```
 
 ### Emerald Kite
 
 ```text
-Emerald Kite, green-haired adventurous thief from Lahore with ring, bright and skyward. Kite-shaped face with pointed chin, bright skyward eyes, cheeky adventurous grin, light youthful features, lifted brows. Emerald, sky blue, warm tan, muted gold accents. Avoid anime shonen-adventurer look, avoid fantasy sprite styling.
+Emerald Kite, green-haired adventurous thief from Lahore with ring, bright and skyward, pointed chin, lifted brows, cheeky grin, emerald and sky-toned palette. Keep it human and grounded, not youthful adventure-cartoon.
 ```
 
 ### Shadow Lynx
 
 ```text
-Shadow Lynx, black-haired tracker thief from Windhoek with gloves, silent hunter presence. Lean hunter face, narrow observant eyes, silent determined mouth, sunken cheeks, strong brow, feral stillness. Black, brown, muted sand, dry savanna tones. Avoid anime lone-wolf styling, avoid comic-book survivalist look.
+Shadow Lynx, black-haired tracker thief from Windhoek with gloves, silent hunter presence, lean face, observant eyes, determined mouth, black brown and dry savanna palette. Keep it still and portrait-like, not action art.
 ```
 
 ### Copper Sparrow
 
 ```text
-Copper Sparrow, auburn-haired writer thief from Havana with hat, lively and charming. Small chirpy face, quick friendly eyes, chatty grin, freckles, cheek dimples, lively brows. Copper, teal, cream, warm Havana tones. Avoid cute cartoon journalist look, avoid anime slice-of-life styling.
+Copper Sparrow, auburn-haired writer thief from Havana with hat, lively and charming, quick friendly eyes, freckles, chatty grin, copper teal and cream palette. Keep it painterly and avoid slice-of-life cartoon energy.
 ```
 
 ### Ghost Mariner
 
 ```text
-Ghost Mariner, gray-haired phantom sailor thief from Bergen with compass, haunted and severe. Gaunt sea-ghost face, pale haunted eyes, weathered whisper-thin lips, hollow cheeks, foggy beard, spectral severity. Gray, blue-black, sea green, fog-muted tones. Avoid undead pirate fantasy look, avoid comic horror styling.
+Ghost Mariner, gray-haired phantom sailor thief from Bergen with compass, haunted and severe, gaunt face, pale eyes, hollow cheeks, foggy beard, gray sea-green and blue-black palette. Keep it grounded and avoid undead-fantasy or pirate-scene styling.
 ```
 
 ### Velvet Cipher
 
 ```text
-Velvet Cipher, black-haired cryptic thief from Tallinn with tattoo, elegant and controlled. Smooth oval face with sharp chin, calculating elegant eyes, small knowing smile, controlled expression, tattoo-balanced asymmetry. Black, muted crimson, cool gray, restrained gold accents. Avoid anime femme-fatale hacker look, avoid glossy spy-fashion art.
+Velvet Cipher, black-haired cryptography thief from Tallinn with tattoo, cool and controlled, sharp face, steady gaze, subtle knowing smile, black and muted red-brown palette. Keep the tattoo readable but the portrait restrained.
 ```
 
-## Recommended ChatGPT Workflow
+## Recommended Workflow
 
-1. Paste the shared base.
-2. Paste one suspect prompt.
-3. If possible, attach the earlier `Dr. Atlas` portrait as a style reference.
-4. Generate 2-4 variants per suspect.
-5. Keep the version with:
-   - the most distinct face
-   - the clearest accessory
-   - the least anime-like result
-   - no baked border or frame
+Paste prompts in this order:
+
+```text
+[Locked Base Prompt]
+[Optional Dr. Atlas reference line]
+[One suspect block]
+[Locked Avoid Block]
+```
+
+If the result becomes too realistic or too scenic, retry with one extra sentence:
+
+```text
+Push this back toward painterly illustrated pulp-noir dossier art and simplify the background further.
+```
