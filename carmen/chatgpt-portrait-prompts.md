@@ -215,7 +215,7 @@ Dusty Nomad, brown-haired wanderer thief from Ulaanbaatar with hat, weathered su
 ### Silver Comet
 
 ```text
-Silver Comet, silver-haired athletic thief from Nairobi with watch, fast and aerodynamic, lean face, focused eyes, breathless cocky smile, silver and charcoal palette with restrained accent color. Keep it painterly and not superhero-like.
+Silver Comet, silver-haired athletic thief from Nairobi with pocket watch, fast and aerodynamic, lean face, focused eyes, breathless cocky smile, silver and charcoal palette with restrained accent color. Keep it painterly and not superhero-like.
 ```
 
 ### Velvet Raven
