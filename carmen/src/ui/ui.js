@@ -880,7 +880,7 @@ export function createCarmenUI(container, flagCodes) {
       }
       const isCarmenPreFinale = suspect.name === 'Carmen Sandiego' && campaignPhase !== 'finale';
       const profileImage = suspect.name === 'Carmen Sandiego' && campaignPhase === 'finale'
-        ? 'carmen/img/carmen-sandiego.png'
+        ? 'carmen/img/Carmen Sandiego.png'
         : suspect.img;
       const inspectablePhoto = !!profileImage && !isCarmenPreFinale;
       const photoClasses = `carmen-interpol-photo${inspectablePhoto ? ' is-inspectable' : ''}`;
