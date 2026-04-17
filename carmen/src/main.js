@@ -36,8 +36,16 @@ function isTypingTarget(target) {
 }
 
 
+const pageParams = new URLSearchParams(location.search);
+const modeParam = pageParams.get('mode');
+if (modeParam === 'campaign') {
+  setGameMode('campaign');
+} else if (modeParam === OPEN_CASES_MODE) {
+  setGameMode(OPEN_CASES_MODE);
+}
+
 // Debug: ?case=N URL param jumps directly to that case on load.
-const _caseParam = parseInt(new URLSearchParams(location.search).get('case'), 10);
+const _caseParam = parseInt(pageParams.get('case'), 10);
 if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
   setCase(_caseParam);
   setGameMode('campaign');
