@@ -110,6 +110,7 @@ export class CarmenGameLogic {
 
   reset() {
     this.route = [];
+    this.routePatterns = [];
     this.artifact = null;
     this.thiefName = '???'; // Unknown until identified
     this.currentStop = 0;
@@ -146,6 +147,7 @@ export class CarmenGameLogic {
   start() {
     this.reset();
     this.route = this._generateRoute(this.diff.stops);
+    this.routePatterns = this.routeProvider?.analyzeRoutePatterns?.(this.route, this) || [];
     this.artifact = this._pickArtifact(this.route[0]);
 
     this.suspectEngine.pickSuspect(

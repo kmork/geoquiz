@@ -1452,6 +1452,34 @@ body {
   overflow-wrap: anywhere;
 }
 
+.carmen-manifest-patterns {
+  margin-top: 0.7rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 6px;
+  border: 1px solid rgba(228, 191, 106, 0.22);
+  background: rgba(228, 191, 106, 0.06);
+}
+
+.carmen-manifest-patterns-label {
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  color: rgba(228, 191, 106, 0.72);
+  text-transform: uppercase;
+  margin-bottom: 0.35rem;
+}
+
+.carmen-manifest-pattern {
+  color: rgba(228, 191, 106, 0.92);
+  font-size: 0.82rem;
+  font-style: italic;
+  line-height: 1.45;
+}
+
+.carmen-manifest-pattern + .carmen-manifest-pattern {
+  margin-top: 0.2rem;
+}
+
 /* ── Map ─────────────────────────────────────────────── */
 .carmen-map-wrap {
   position: relative;

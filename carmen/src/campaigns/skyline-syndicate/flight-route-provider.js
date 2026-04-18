@@ -1,13 +1,34 @@
 import { SKYLINE_SYNDICATE } from './flight-campaign-config.js';
 import {
+  buildAirportCodeClue,
+  buildCapitalInitialClue,
+  buildCargoClue,
+  buildContinentClue,
   buildFlightClockClue,
   buildFlightDistanceClue,
   buildGatewayConnectivityClue,
+  buildHemisphereClue,
+  buildLandlockedClue,
+  buildLatitudeClue,
   getFlightDistanceBand,
   getGatewayConnectivityBand,
 } from './flight-clues.js';
 
 const MAX_VISIBLE_CHOICES = 8;
+
+const CASE_PATTERN_TYPES = [
+  null,              // index 0 unused
+  'same-continent',  // case 1
+  'same-hemisphere', // case 2
+  'distance-band',   // case 3
+  'same-continent',  // case 4
+  'clock-drift',     // case 5
+  'distance-band',   // case 6
+  'gateway-band',    // case 7
+  'same-hemisphere', // case 8
+  'clock-drift',     // case 9
+  'same-continent',  // case 10
+];
 const EARTH_RADIUS_KM = 6371;
 
 function toRad(degrees) {
@@ -242,7 +263,9 @@ export class CapitalFlightRouteProvider {
 
   generateRoute(numStops, context) {
     const startCountries = this.getStartCountries(context);
+    const requiredPattern = CASE_PATTERN_TYPES[context?.caseNumber] || null;
     let bestRoute = [];
+    let bestPatternRoute = [];
 
     for (let attempt = 0; attempt < 40; attempt++) {
       const start = startCountries[Math.floor(Math.random() * startCountries.length)];
@@ -274,10 +297,146 @@ export class CapitalFlightRouteProvider {
       }
 
       if (route.length > bestRoute.length) bestRoute = route;
-      if (bestRoute.length >= numStops + 1) break;
+
+      if (requiredPattern && route.length >= numStops + 1 &&
+          this._routeMatchesPattern(route, requiredPattern, context)) {
+        bestPatternRoute = route;
+        break;
+      }
+
+      if (!requiredPattern && bestRoute.length >= numStops + 1) break;
     }
 
-    return bestRoute;
+    return bestPatternRoute.length >= numStops + 1 ? bestPatternRoute : bestRoute;
+  }
+
+  _routeMatchesPattern(route, patternType, context) {
+    if (!route || route.length < 3) return false;
+
+    if (patternType === 'same-continent') {
+      const continents = route.map(c => context?.countryMap?.[c]?.continent).filter(Boolean);
+      return continents.length === route.length && continents.every(c => c === continents[0]);
+    }
+
+    if (patternType === 'same-hemisphere') {
+      const hemis = route.map(c => {
+        const gw = this.gatewayByCountry[c];
+        return Number.isFinite(gw?.capitalLat) ? (gw.capitalLat >= 0 ? 'N' : 'S') : null;
+      });
+      return hemis.every(h => h !== null && h === hemis[0]);
+    }
+
+    if (patternType === 'distance-band') {
+      const bands = [];
+      for (let i = 0; i < route.length - 1; i++) {
+        const meta = this.getRouteMeta(route[i], route[i + 1]);
+        const band = getFlightDistanceBand(meta?.distanceKm);
+        if (!band) return false;
+        bands.push(band);
+      }
+      return bands.every(b => b === bands[0]);
+    }
+
+    if (patternType === 'clock-drift') {
+      const deltas = [];
+      for (let i = 0; i < route.length - 1; i++) {
+        const meta = this.getClockMeta(route[i], route[i + 1], context);
+        if (!Number.isFinite(meta?.clockDeltaMinutes) || meta.clockDeltaMinutes === 0) return false;
+        deltas.push(meta.clockDeltaMinutes);
+      }
+      return deltas.every(d => d > 0) || deltas.every(d => d < 0);
+    }
+
+    if (patternType === 'gateway-band') {
+      const bands = route.slice(1).map(c => this.getGatewayConnectivityMeta(c)?.band).filter(Boolean);
+      return bands.length === route.length - 1 && bands.every(b => b === bands[0]);
+    }
+
+    return false;
+  }
+
+  analyzeRoutePatterns(route, context) {
+    if (!route || route.length < 3) return [];
+    const patterns = [];
+
+    // Same continent
+    const continents = route.map(c => context?.countryMap?.[c]?.continent).filter(Boolean);
+    if (continents.length === route.length && continents.every(c => c === continents[0])) {
+      patterns.push({
+        id: 'same-continent',
+        type: 'continent',
+        text: `The Dispatcher keeps the entire route within ${continents[0]}.`,
+        detail: `Every stop on this routing plan is in ${continents[0]}. The next lead will be too.`,
+      });
+    }
+
+    // Same hemisphere
+    const hemis = route.map(c => {
+      const gw = this.gatewayByCountry[c];
+      return Number.isFinite(gw?.capitalLat) ? (gw.capitalLat >= 0 ? 'N' : 'S') : null;
+    }).filter(Boolean);
+    if (hemis.length === route.length && hemis.every(h => h === hemis[0])) {
+      const label = hemis[0] === 'N' ? 'Northern' : 'Southern';
+      patterns.push({
+        id: 'same-hemisphere',
+        type: 'hemisphere',
+        text: `The Dispatcher keeps the route in the ${label} Hemisphere.`,
+        detail: `Every stop is in the ${label} Hemisphere. The next corridor will stay there.`,
+      });
+    }
+
+    // Distance band consistency
+    const bands = [];
+    for (let i = 0; i < route.length - 1; i++) {
+      const meta = this.getRouteMeta(route[i], route[i + 1]);
+      const band = getFlightDistanceBand(meta?.distanceKm);
+      if (band) bands.push(band);
+    }
+    if (bands.length === route.length - 1 && bands.every(b => b === bands[0])) {
+      patterns.push({
+        id: 'distance-band',
+        type: 'distance',
+        text: `The Dispatcher favors ${bands[0]} corridors on this route.`,
+        detail: `Every corridor in this routing plan is classified ${bands[0]}. Expect the same ahead.`,
+      });
+    }
+
+    // Clock drift direction
+    const deltas = [];
+    for (let i = 0; i < route.length - 1; i++) {
+      const meta = this.getClockMeta(route[i], route[i + 1], context);
+      if (Number.isFinite(meta?.clockDeltaMinutes)) deltas.push(meta.clockDeltaMinutes);
+    }
+    if (deltas.length === route.length - 1) {
+      if (deltas.every(d => d > 0)) {
+        patterns.push({
+          id: 'clock-east',
+          type: 'clock',
+          text: 'The Dispatcher pushes the clock forward at every hop.',
+          detail: 'Every corridor shifts the local clock eastward. The next lead will be east of here.',
+        });
+      } else if (deltas.every(d => d < 0)) {
+        patterns.push({
+          id: 'clock-west',
+          type: 'clock',
+          text: 'The Dispatcher rolls the clock back at every hop.',
+          detail: 'Every corridor shifts the local clock westward. The next lead will be west of here.',
+        });
+      }
+    }
+
+    // Gateway band consistency
+    const gwBands = route.slice(1).map(c => this.getGatewayConnectivityMeta(c)?.band).filter(Boolean);
+    if (gwBands.length === route.length - 1 && gwBands.every(b => b === gwBands[0])) {
+      patterns.push({
+        id: 'gateway-band',
+        type: 'gateway',
+        text: `The Dispatcher routes exclusively through ${gwBands[0]} airports.`,
+        detail: `Every destination gateway is a ${gwBands[0]}. The next stop follows the same pattern.`,
+      });
+    }
+
+    return patterns;
   }
 
   generateClues({ target, count, context, choices = [] }) {
@@ -285,31 +444,58 @@ export class CapitalFlightRouteProvider {
     const distanceClue = this._distanceClue(current, target, choices, context);
     const clockClue = this._clockClue(current, target, choices, context);
     const gatewayClue = this._gatewayClue(target, choices, context);
+    const hemisphereClue = this._hemisphereClue(current, target, choices, context);
+    const capitalInitialClue = this._capitalInitialClue(target, choices, context);
+    const continentClue = this._continentClue(current, target, choices, context);
+    const landlockedClue = this._landlockedClue(target, choices, context);
+    const cargoClue = this._cargoClue(target, context);
     const caseNumber = context.caseNumber || 1;
+    const airportCodeClue = caseNumber >= 5 ? this._airportCodeClue(target, choices, context) : null;
     const clues = (
-      caseNumber >= 5 ? [gatewayClue, distanceClue, clockClue] :
-      caseNumber >= 4 ? [clockClue, distanceClue, gatewayClue] :
-      [distanceClue, gatewayClue, clockClue]
+      caseNumber >= 7 ? [gatewayClue, hemisphereClue, continentClue, distanceClue, cargoClue, airportCodeClue, clockClue, capitalInitialClue, landlockedClue] :
+      caseNumber >= 5 ? [clockClue, distanceClue, continentClue, cargoClue, airportCodeClue, hemisphereClue, gatewayClue, landlockedClue, capitalInitialClue] :
+      caseNumber >= 4 ? [clockClue, distanceClue, continentClue, cargoClue, hemisphereClue, gatewayClue, landlockedClue, capitalInitialClue] :
+      [distanceClue, continentClue, cargoClue, gatewayClue, hemisphereClue, clockClue, capitalInitialClue, landlockedClue]
     ).filter(Boolean);
     return clues.length ? clues.slice(0, count) : null;
   }
 
   getLocationClue({ target, currentCountry, locationId, context, choices = [] }) {
+    const caseNum = context?.caseNumber || 1;
     if (locationId === 'airport') {
       return this._distanceClue(currentCountry, target, choices, context) ||
+        this._hemisphereClue(currentCountry, target, choices, context) ||
+        (caseNum >= 5 ? this._airportCodeClue(target, choices, context) : null) ||
+        this._continentClue(currentCountry, target, choices, context) ||
         this._clockClue(currentCountry, target, choices, context) ||
         this._gatewayClue(target, choices, context);
     }
     if (locationId === 'hotel') {
       return this._clockClue(currentCountry, target, choices, context) ||
-        this._gatewayClue(target, choices, context);
+        this._capitalInitialClue(target, choices, context) ||
+        this._cargoClue(target, context) ||
+        this._gatewayClue(target, choices, context) ||
+        this._landlockedClue(target, choices, context);
     }
     if (locationId === 'embassy') {
-      return this._clockClue(currentCountry, target, choices, context) ||
+      return this._continentClue(currentCountry, target, choices, context) ||
+        this._hemisphereClue(currentCountry, target, choices, context) ||
+        this._clockClue(currentCountry, target, choices, context) ||
+        this._landlockedClue(target, choices, context) ||
         this._gatewayClue(target, choices, context);
     }
     if (locationId === 'library') {
-      return this._gatewayClue(target, choices, context);
+      return this._capitalInitialClue(target, choices, context) ||
+        this._gatewayClue(target, choices, context) ||
+        this._hemisphereClue(currentCountry, target, choices, context) ||
+        this._landlockedClue(target, choices, context);
+    }
+    if (locationId === 'market') {
+      return this._cargoClue(target, context) ||
+        this._landlockedClue(target, choices, context) ||
+        this._continentClue(currentCountry, target, choices, context) ||
+        this._distanceClue(currentCountry, target, choices, context) ||
+        this._gatewayClue(target, choices, context);
     }
     return null;
   }
@@ -335,6 +521,55 @@ export class CapitalFlightRouteProvider {
       isolated,
       weak,
     };
+  }
+
+  getHemisphereChoiceSummaries(from, choices = []) {
+    const fromGateway = this.gatewayByCountry[from];
+    if (!Number.isFinite(fromGateway?.capitalLat)) return [];
+    const fromNorth = fromGateway.capitalLat >= 0;
+    return choices
+      .map(country => {
+        const gw = this.gatewayByCountry[country];
+        if (!Number.isFinite(gw?.capitalLat)) return null;
+        const toNorth = gw.capitalLat >= 0;
+        return { country, sameHemisphereMatch: fromNorth !== toNorth };
+      })
+      .filter(Boolean);
+  }
+
+  getLatitudeChoiceSummaries(choices = []) {
+    return choices
+      .map(country => {
+        const gw = this.gatewayByCountry[country];
+        if (!Number.isFinite(gw?.capitalLat)) return null;
+        const lat = gw.capitalLat;
+        const band =
+          lat > 66.5 ? 'above the Arctic Circle' :
+          lat > 23.4 ? 'north of the Tropic of Cancer' :
+          lat > 0 ? 'between the equator and the Tropic of Cancer' :
+          lat > -23.4 ? 'between the equator and the Tropic of Capricorn' :
+          lat > -66.5 ? 'south of the Tropic of Capricorn' :
+          'below the Antarctic Circle';
+        return { country, band };
+      })
+      .filter(Boolean);
+  }
+
+  _hemisphereClue(current, target, choices, context) {
+    if (!current || !target) return null;
+    const fromGateway = this.gatewayByCountry[current];
+    const toGateway = this.gatewayByCountry[target];
+    if (!fromGateway || !toGateway) return null;
+    const crossing = fromGateway.capitalLat >= 0 !== toGateway.capitalLat >= 0;
+    if (crossing) {
+      const summaries = this.getHemisphereChoiceSummaries(current, choices);
+      const clue = buildHemisphereClue(fromGateway, toGateway, summaries);
+      if (clue && !context?.usedClueIds?.has(clue.id)) return clue;
+    }
+    const latSummaries = this.getLatitudeChoiceSummaries(choices);
+    const latClue = buildLatitudeClue(toGateway, latSummaries);
+    if (latClue && !context?.usedClueIds?.has(latClue.id)) return latClue;
+    return null;
   }
 
   _distanceClue(current, target, choices, context) {
@@ -364,6 +599,78 @@ export class CapitalFlightRouteProvider {
     if (!meta) return null;
     const summaries = this.getGatewayChoiceSummaries(choices);
     const clue = buildGatewayConnectivityClue(meta, summaries);
+    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
+    return clue;
+  }
+
+  _capitalInitialClue(target, choices, context) {
+    if (!target) return null;
+    const toGateway = this.gatewayByCountry[target];
+    if (!toGateway?.capital) return null;
+    const initial = toGateway.capital[0].toUpperCase();
+    const summaries = choices.map(country => {
+      const gw = this.gatewayByCountry[country];
+      return gw?.capital ? { country, initial: gw.capital[0].toUpperCase() } : null;
+    }).filter(Boolean);
+    const clue = buildCapitalInitialClue(toGateway, summaries);
+    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
+    return clue;
+  }
+
+  _continentClue(current, target, choices, context) {
+    if (!current || !target) return null;
+    const countryMap = context?.countryMap;
+    if (!countryMap) return null;
+    const fromContinent = countryMap[current]?.continent;
+    const toContinent = countryMap[target]?.continent;
+    if (!fromContinent || !toContinent) return null;
+    const summaries = choices.map(country => {
+      const c = countryMap[country];
+      return c?.continent ? { country, continent: c.continent } : null;
+    }).filter(Boolean);
+    const clue = buildContinentClue(fromContinent, toContinent, target, summaries);
+    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
+    return clue;
+  }
+
+  _landlockedClue(target, choices, context) {
+    if (!target) return null;
+    const countryMap = context?.countryMap;
+    if (!countryMap) return null;
+    const targetData = countryMap[target];
+    if (!targetData || targetData.landlocked === undefined) return null;
+    const summaries = choices.map(country => {
+      const c = countryMap[country];
+      return c ? { country, landlocked: !!c.landlocked } : null;
+    }).filter(Boolean);
+    const clue = buildLandlockedClue(targetData, summaries);
+    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
+    return clue;
+  }
+
+  _cargoClue(target, context) {
+    if (!target) return null;
+    const countryMap = context?.countryMap;
+    if (!countryMap) return null;
+    const targetData = countryMap[target];
+    if (!targetData?.exports?.length) return null;
+    const clue = buildCargoClue(targetData);
+    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
+    return clue;
+  }
+
+  _airportCodeClue(target, choices, context) {
+    if (!target) return null;
+    const toGateway = this.gatewayByCountry[target];
+    if (!toGateway?.airport?.iata) return null;
+    const revealFirst = Math.random() < 0.5;
+    const summaries = choices.map(country => {
+      const gw = this.gatewayByCountry[country];
+      if (!gw?.airport?.iata) return null;
+      const letter = revealFirst ? gw.airport.iata[0] : gw.airport.iata[2];
+      return { country, letter };
+    }).filter(Boolean);
+    const clue = buildAirportCodeClue(toGateway, revealFirst, summaries);
     if (!clue || context?.usedClueIds?.has(clue.id)) return null;
     return clue;
   }

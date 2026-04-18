@@ -607,6 +607,9 @@ async function startGame() {
     totalCases: logic.totalCases,
   });
   ui.resetManifestBoard();
+  if (logic.routePatterns?.length) {
+    ui.setManifestPatterns(logic.routePatterns);
+  }
   ui.resetDossier();
   interpolViewedThisGame = new Set();
   interpolMarkedThisCase = new Set();

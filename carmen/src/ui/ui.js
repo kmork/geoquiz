@@ -425,6 +425,7 @@ export function createCarmenUI(container, flagCodes) {
     caseNumber: null,
     totalCases: null,
     segments: [],
+    routePatterns: [],
   };
 
   // ── Tab switching ──
@@ -606,6 +607,14 @@ export function createCarmenUI(container, flagCodes) {
     els.musicToggle.innerHTML = `<img src="${muted ? IMG.musicOff : IMG.musicOn}" alt="Music">`;
   });
 
+  function getRevealedPatterns() {
+    const confirmed = manifestState.segments.length;
+    const patterns = manifestState.routePatterns;
+    if (!patterns.length || confirmed < 3) return [];
+    const maxRevealed = confirmed <= 3 ? 1 : patterns.length;
+    return patterns.slice(0, maxRevealed).map(p => confirmed >= 4 ? p.detail : p.text);
+  }
+
   function renderManifestBoard() {
     if (!manifestState.enabled) return '';
     const caseLabel = manifestState.caseNumber && manifestState.totalCases
@@ -637,6 +646,13 @@ export function createCarmenUI(container, flagCodes) {
           `;
         }).join('')
       : '<div class="carmen-manifest-empty">No confirmed corridors yet.</div>';
+    const patterns = getRevealedPatterns();
+    const patternHtml = patterns.length
+      ? `<div class="carmen-manifest-patterns">
+          <div class="carmen-manifest-patterns-label">DISPATCHER SIGNATURE</div>
+          ${patterns.map(p => `<div class="carmen-manifest-pattern">${esc(p)}</div>`).join('')}
+        </div>`
+      : '';
     return `
       <div class="carmen-manifest-board">
         <div class="carmen-manifest-header">
@@ -647,6 +663,7 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-manifest-count">${manifestState.segments.length} recovered</div>
         </div>
         ${segmentHtml}
+        ${patternHtml}
       </div>
     `;
   }
@@ -862,7 +879,12 @@ export function createCarmenUI(container, flagCodes) {
 
     resetManifestBoard() {
       manifestState.segments.length = 0;
+      manifestState.routePatterns = [];
       renderDossier();
+    },
+
+    setManifestPatterns(patterns) {
+      manifestState.routePatterns = patterns || [];
     },
 
     addManifestSegment(segment) {
