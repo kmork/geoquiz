@@ -9,6 +9,7 @@ import { startMusic, stopMusic, playNarrator, stopNarrator, playVictoryMusic, pl
 import { chooseNarratorScript } from './content/narrator-script.js';
 import { buildCountryEntryMonologue } from './content/country-entry-monologue.js';
 import { buildCaseBriefingHint, buildInterpolIntel, pickArrivalAmbientHint, pickFinaleAliasHint } from './content/carmen-hints.js';
+import { IMG } from './assets.js';
 import { TOTAL_CASES } from './campaign/progression.js';
 import {
   OPEN_CASES_MODE,
@@ -33,6 +34,7 @@ const gameContent = document.getElementById('game-content');
 const finalOverlay = document.getElementById('finalOverlay');
 const initOverlay = document.getElementById('init-overlay');
 const carmenFront = document.getElementById('carmen-front');
+const carmenFrontImg = document.getElementById('carmen-front-img');
 const carmenHeader = document.getElementById('carmen-header');
 
 const confetti = initConfetti('confetti');
@@ -47,6 +49,13 @@ const pageParams = new URLSearchParams(location.search);
 const modeParam = pageParams.get('mode');
 if (modeParam) setGameMode(modeParam);
 
+function updateFrontImageForMode(mode = getGameMode()) {
+  if (!carmenFrontImg) return;
+  const skyline = isSkylineSyndicateMode(mode);
+  carmenFrontImg.src = skyline ? IMG.skylineFront : IMG.carmenFront;
+  carmenFrontImg.alt = skyline ? 'Skyline Syndicate' : 'Where in the World?';
+}
+
 // Debug: ?case=N URL param jumps directly to that case on load.
 const _caseParam = parseInt(pageParams.get('case'), 10);
 if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
@@ -55,6 +64,8 @@ if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
 } else if (_caseParam === TOTAL_CASES + 1) {
   setGameMode(OPEN_CASES_MODE);
 }
+
+updateFrontImageForMode();
 
 // Debug: type "carmen" anywhere to open a case-jump prompt.
 (() => {
@@ -138,6 +149,7 @@ const [worldData, factsData, heritageData, riversData, mountainsData, empiresDat
 
 const playableMode = getPlayableGameMode(getGameMode(), campaignModeData);
 if (playableMode !== getGameMode()) setGameMode(playableMode);
+updateFrontImageForMode(playableMode);
 
 const portraitProfileByName = new Map(
   portraitProfileData.map((entry) => [entry.name, entry])
