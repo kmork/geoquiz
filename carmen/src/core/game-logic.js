@@ -20,7 +20,7 @@ import { buildCampaignConfig } from '../campaign/progression.js';
 export { SUSPECTS };
 
 const INVESTIGATION_COST_HOURS = 3; // hours per investigation
-const TRAVEL_COST_HOURS = 5;        // hours per travel between stops
+const TRAVEL_COST_HOURS = 5;        // hours per ACME redeployment between confirmed leads
 const EXTRA_CLUE_COST_HOURS = 2;    // hours per extra clue
 const TIME_BONUS_HOURS_PER_POINT = 2;
 const MAX_TIME_BONUS = 50;
@@ -168,7 +168,7 @@ export class CarmenGameLogic {
     };
   }
 
-  /** Player guesses where the thief went. */
+  /** Player guesses which neighboring country confirms the next border lead. */
   guess(country) {
     if (this.gameOver) return { correct: false, gameOver: true };
 
@@ -222,7 +222,7 @@ export class CarmenGameLogic {
       };
     }
 
-    // Wrong guess — player travels there and discovers a dead end
+    // Wrong guess — ACME redeploys there and discovers a dead end
     this.wrongGuessesThisStop++;
     this.totalWrongGuesses++;
     this.score = Math.max(0, this.score - 25);
@@ -452,7 +452,7 @@ export class CarmenGameLogic {
   /** Cost for investigating a location. */
   getInvestigationCost() { return INVESTIGATION_COST_HOURS; }
 
-  /** Cost for traveling to next stop. */
+  /** Cost for redeploying to the next lead. */
   getTravelCost() { return TRAVEL_COST_HOURS; }
 
   /** Cost for requesting an extra clue. */

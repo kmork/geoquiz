@@ -70,7 +70,7 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-notebook-tabs" id="carmen-notebook-tabs" style="display:none">
             <button class="carmen-notebook-tab active" data-tab="case">Case</button>
             <button class="carmen-notebook-tab" data-tab="investigate">Investigate</button>
-            <button class="carmen-notebook-tab" data-tab="travel">Travel</button>
+            <button class="carmen-notebook-tab" data-tab="travel">Trail</button>
             <button class="carmen-notebook-tab" data-tab="dossier">Dossier</button>
             <button class="carmen-notebook-tab" data-tab="interpol">Interpol</button>
           </div>
@@ -90,10 +90,10 @@ export function createCarmenUI(container, flagCodes) {
               </div>
               <div class="carmen-panel-view" id="carmen-panel-travel" style="display:none">
                 <div class="carmen-panel-card">
-                  <div class="carmen-panel-badge">✈️ TRAVEL</div>
-                  <div class="carmen-panel-title">Where did the thief go?</div>
-                  <div class="carmen-panel-desc">Select a neighboring country on the map to follow the trail.</div>
-                  <div class="carmen-panel-cost">⏱️ Travel cost: <strong>5 hours</strong> per trip</div>
+                  <div class="carmen-panel-badge">✈️ TRAIL</div>
+                  <div class="carmen-panel-title">Where does the border trail lead?</div>
+                  <div class="carmen-panel-desc">Select a neighboring country on the map to confirm the next border lead.</div>
+                  <div class="carmen-panel-cost">⏱️ Redeployment cost: <strong>5 hours</strong> per lead</div>
                 </div>
               </div>
               <div class="carmen-panel-view" id="carmen-panel-dossier" style="display:none">
@@ -1103,13 +1103,13 @@ export function createCarmenUI(container, flagCodes) {
         els.briefingStart.style.display = 'none';
 
         // Typewriter with sounds
-        const timeText = totalHours ? ` You have only ${totalHours} hours to hunt down the criminal!` : '';
+        const timeText = totalHours ? ` You have only ${totalHours} hours before the case goes cold.` : '';
         const missionCopy =
-          mode === 'open_cases'       ? "ACME has an active theft on the move. Track the suspect through neighboring countries, gather witness reports, and close the case before the trail breaks." :
-          campaignPhase === 'whispers' ? "Track the thief through neighboring countries. Witnesses keep mentioning a shadow behind the shadow — someone bigger is pulling strings." :
-          campaignPhase === 'pursuit'  ? "ACME has traced this theft to Carmen Sandiego's network. The thief is one of her lieutenants — every arrest brings you closer to her." :
-          campaignPhase === 'finale'   ? "This is it. ACME believes Carmen Sandiego is moving under an alias. Track her across the globe, expose the false identity, and bring her in before she vanishes again." :
-          "Track the thief through neighboring countries. Investigate locations, gather clues, and identify the suspect to make your arrest.";
+          mode === 'open_cases'       ? "ACME has narrowed this active theft to a chain of border crossings. Reconstruct the trail from country to country, gather witness reports, and close the file before the trail breaks." :
+          campaignPhase === 'whispers' ? "ACME has narrowed the escape to a chain of border crossings. Witnesses keep mentioning a shadow behind the shadow — someone bigger is pulling strings." :
+          campaignPhase === 'pursuit'  ? "ACME has traced this border trail to Carmen Sandiego's network. The thief is one of her lieutenants — every arrest brings you closer to her." :
+          campaignPhase === 'finale'   ? "This is it. ACME believes Carmen Sandiego is moving under an alias. Reconstruct the border trail, expose the false identity, and bring her in before the file goes cold." :
+          "ACME has narrowed the escape to a chain of border crossings. Investigate locations, gather clues, and identify the suspect to make your arrest.";
         typewriter(els.briefingMission, `${missionCopy}${timeText}`, 20, {
           skipTargets: [els.briefing],
         })
@@ -1161,7 +1161,7 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-intro-artifact">${esc(siteName)}</div>
           <div class="carmen-intro-origin">Stolen from <strong>${esc(startCountry)}</strong></div>
           <div class="carmen-intro-suspect">🔍 Suspect: <span class="thief-name">Unknown</span></div>
-          <div class="carmen-intro-mission">Investigate locations, gather clues, and follow the trail.</div>
+          <div class="carmen-intro-mission">Investigate locations, gather clues, and confirm the border trail.</div>
         </div>
       `;
     },
@@ -1489,9 +1489,9 @@ export function createCarmenUI(container, flagCodes) {
         <div class="carmen-transition">
           <div class="carmen-dead-end-icon">❌</div>
           <div class="score-lost">-25 points</div>
-          <div>No trace of the thief in <strong>${esc(country)}</strong>!</div>
-          <div class="carmen-dead-end-hint">This is a dead end. You've lost precious time.</div>
-          <button class="carmen-continue-btn carmen-dead-end-btn">Continue searching →</button>
+          <div>No confirmed border lead in <strong>${esc(country)}</strong>!</div>
+          <div class="carmen-dead-end-hint">This lead went cold. You've lost precious time.</div>
+          <button class="carmen-continue-btn carmen-dead-end-btn">Return to the trail →</button>
           ${narratorHint}
         </div>
       `;
@@ -1536,9 +1536,9 @@ export function createCarmenUI(container, flagCodes) {
       overlay.innerHTML = `
         <div class="carmen-transition">
           <div class="score-gained">+${stopScore} points</div>
-          <div>The thief was spotted in <strong>${esc(country)}</strong>!</div>
+          <div>Border lead confirmed in <strong>${esc(country)}</strong>!</div>
           ${tauntHtml}
-          <button class="carmen-continue-btn">Continue the chase →</button>
+          <button class="carmen-continue-btn">Continue the trail →</button>
         </div>
       `;
       els.mapWrap.appendChild(overlay);

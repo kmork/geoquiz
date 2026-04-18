@@ -33,7 +33,7 @@ const THIEF_TAUNTS = {
   wrongGuess: [
     "Ha! Wrong turn, detective!",
     "You just wasted precious time. Thanks!",
-    "That's not where I went. Try again!",
+    "That's not where the trail leads. Try again!",
     "Cold, very cold!",
     "My grandmother could track better than you!",
   ],

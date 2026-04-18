@@ -9,12 +9,14 @@ The Carmen mode is now two related games built on the same route-chase engine:
 
 At the mechanical center, each case is still a constrained geography deduction game. The player starts in a country, investigates local sources, reads clues about the thief's next destination, and chooses from neighboring countries on the map. The design works because the player is not guessing from the whole world; every clue is interpreted against a visible border-neighbor choice set.
 
+The fiction model is now deliberately framed as **ACME reconstructing a border trail**, not a literal transport simulation. The thief's route is a chain of suspected border crossings; the detective redeploys through ACME transport to confirm or reject each lead. Suspect vehicles describe known getaway signatures and identity habits, not necessarily the exact vehicle used for every border crossing.
+
 The game has also grown into a parallel detective system. The player is solving two problems at once:
 
 1. Where did the thief go next?
 2. Which suspect should be arrested at the end?
 
-Those two problems share the same scarce resource: time. Geography clues, suspect clues, Interpol browsing, travel, detours, and final certainty all compete against the case clock.
+Those two problems share the same scarce resource: time. Geography clues, suspect clues, Interpol browsing, redeployments, detours, and final certainty all compete against the case clock.
 
 ## Current Case Loop
 
@@ -26,12 +28,12 @@ The player's stop loop is:
 - read the automatic suspect witness report for this stop;
 - optionally spend time to refine that suspect report from vague to specific;
 - investigate up to the stop's investigation limit across fixed locations;
-- choose a neighboring country on the map;
+- choose a neighboring country on the map to confirm the next border lead;
 - resolve a correct route advance, a dead end, or final suspect lineup.
 
-Wrong country choices are not instant failure. They create a detour: the player flies to the wrong country, loses score, spends travel time, gets a dead-end presentation, and must recover by returning to the real current stop or continuing from a worse information state. This is important because it keeps the map spatial and physical instead of turning wrong answers into abstract button errors.
+Wrong country choices are not instant failure. They create a detour: ACME redeploys to the wrong country, the player loses score, spends time, gets a dead-end presentation, and must recover by returning to the real current lead or continuing from a worse information state. This is important because it keeps the map spatial and physical instead of turning wrong answers into abstract button errors.
 
-Correct travel has a strong presentation beat: map animation, airplane audio, optional atmosphere, score feedback, a thief taunt, and a noir country-entry monologue. That makes route progress feel like a chase rather than a quiz page refresh.
+Correct trail confirmation has a strong presentation beat: map animation, ACME transport audio, optional atmosphere, score feedback, a thief taunt, and a noir country-entry monologue. That makes route progress feel like an investigation rather than a quiz page refresh.
 
 ## Geography Clue System
 
@@ -87,13 +89,13 @@ Visible Interpol files come from several sources:
 - Carmen during campaign play;
 - the finale alias during the finale.
 
-Viewing a new photo profile costs 3 in-game hours unless the suspect has already been viewed or is already in custody. That turns archive browsing into an explicit risk. The player can spend time to improve suspect certainty, but doing so can cost the time needed to finish the route.
+Viewing a new photo profile costs 3 in-game hours unless the suspect has already been viewed, is in custody, or has been previously arrested in Open Cases. That turns archive browsing into an explicit risk. The player can spend time to improve suspect certainty, but doing so can cost the time needed to finish the route.
 
 The archive also supports manual reasoning:
 
 - suspects can be marked as persons of interest;
 - marked suspects stay surfaced in the Interpol list;
-- viewed and in-custody status are persisted;
+- viewed, in-custody, and previously-arrested status are persisted;
 - theft history accumulates after successful arrests;
 - profiles receive contextual intel based on phase, theft history, and Carmen-network foreshadowing.
 
@@ -131,7 +133,7 @@ Mechanically, Open Cases use the pursuit-style configuration:
 - 3 investigations;
 - 64 hours.
 
-They do not exclude previously arrested suspects, and Carmen is removed from the normal Open Cases suspect list. That makes Open Cases cleaner as repeatable standalone detective puzzles. They keep the pressure and richer rules of late campaign play without requiring the player to be inside the campaign narrative.
+They do not exclude previously arrested suspects, and Carmen is removed from the normal Open Cases suspect list. Previously arrested suspects remain reusable for repeatable play, but Interpol labels them as `PREVIOUSLY ARRESTED` instead of `IN CUSTODY` so the archive does not imply they are unavailable. That makes Open Cases cleaner as standalone detective puzzles while preserving the pressure and richer rules of late campaign play.
 
 This split is good product structure. Campaign play is about escalation and payoff; Open Cases are about replayable geography-deduction cases.
 
@@ -142,11 +144,11 @@ Time is the main loss condition and the most important strategic resource.
 Current costs:
 
 - investigation: 3 hours;
-- travel: 5 hours;
+- ACME redeployment: 5 hours;
 - suspect clue refinement: 2 hours;
 - new Interpol photo profile: 3 hours.
 
-Time is spent on route confidence, suspect confidence, and map movement. That creates meaningful tradeoffs. The player can over-investigate and run out of time, under-investigate and choose wrong routes, or ignore suspect work and fail the final lineup.
+Time is spent on route confidence, suspect confidence, and ACME redeployment. That creates meaningful tradeoffs. The player can over-investigate and run out of time, under-investigate and choose wrong routes, or ignore suspect work and fail the final lineup.
 
 Time now affects both survival and final score, but only lightly. A solved case receives a small speed bonus based on hours remaining, which makes efficient play matter without letting the clock dominate route accuracy.
 
@@ -162,7 +164,7 @@ The score model is intentionally simple:
 - extra clue request: -20 points;
 - wrong final suspect: -200 points.
 
-Manual investigation, suspect refinement, Interpol browsing, and travel still do not directly reduce score. They reduce the clock, which can lower or erase the speed bonus and can still cause outright failure.
+Manual investigation, suspect refinement, Interpol browsing, and redeployment still do not directly reduce score. They reduce the clock, which can lower or erase the speed bonus and can still cause outright failure.
 
 The current model remains readable: score primarily rewards accuracy, while the speed bonus gives clean, confident play a modest extra payoff.
 
@@ -175,14 +177,14 @@ Important feedback systems include:
 - the case briefing overlay with phase-specific mission copy;
 - campaign-only briefing hints that foreshadow Carmen;
 - typewriter text and stamp effects for case framing;
-- route animation and airplane sound for travel;
+- route animation and ACME transport sound for redeployment;
 - ambient sounds for locations and arrivals;
 - narrator captions based on country-entry monologues;
 - dead-end overlays and dossier detour entries;
 - solved/failed closing overlays;
 - special campaign-complete transition into Open Cases.
 
-These are not just decoration. They help the player understand state transitions: investigation, travel, arrival, dead end, final accusation, and campaign progression. The noir layer works best when it reinforces the geography chase rather than replacing it.
+These are not just decoration. They help the player understand state transitions: investigation, redeployment, lead confirmation, dead end, final accusation, and campaign progression. The noir layer works best when it reinforces the geography chase rather than replacing it.
 
 The audio model is also intentionally gated by the front-screen tap, which avoids browser autoplay issues and makes the opening feel deliberate.
 
@@ -203,7 +205,7 @@ The audio model is also intentionally gated by the front-screen tap, which avoid
 - The route and suspect puzzles can compete for attention, especially for first-time players who do not yet know how important suspect clues are.
 - Interpol profile browsing costs time, but the value of browsing is not always predictable before spending that time.
 - Investigation location strategy is present but still partly opaque; players may not fully understand why airport, library, market, hotel, and embassy differ.
-- Score does not account for hours remaining, so fast successful play has limited extra payoff.
+- The hours-remaining bonus is intentionally small, so fast successful play has some extra payoff but route accuracy still dominates.
 - Wrong-route recovery is mechanically interesting, but the available options after a dead end can be mentally confusing because the player position and logical route position diverge.
 - Campaign foreshadowing is strong in tone, but much of it is interpretive rather than mechanically inspectable.
 - Open Cases inherit pursuit difficulty, which is good for engaged players but may be sharp for someone using Open Cases as their first Carmen experience.

@@ -254,15 +254,15 @@ export const SUSPECT_CLUE_TEMPLATES_VAGUE = {
   })[group] || `The thief reportedly enjoys ${group} activities.`,
 
   vehicle: (group) => ({
-    air: 'The getaway involved something that flies.',
-    land: 'The thief escaped by land vehicle.',
-    sea: 'The thief was last seen heading toward the water.',
-  })[group] || `The getaway was by ${group}.`,
+    air: 'A witness tied the suspect to aerial getaways.',
+    land: 'A witness tied the suspect to land-based getaways.',
+    sea: 'A witness tied the suspect to waterborne getaways.',
+  })[group] || `The suspect is known for ${group} getaways.`,
 };
 
 export const SUSPECT_CLUE_TEMPLATES_SPECIFIC = {
   hair:      (val) => `A witness positively identified the suspect as having ${val} hair.`,
   accessory: (val) => `The suspect was confirmed to be wearing a ${val}.`,
   hobby:     (val) => `A reliable source confirms the thief is known for ${val}.`,
-  vehicle:   (val) => `The getaway vehicle has been identified as a ${val}.`,
+  vehicle:   (val) => `A reliable source confirms the suspect is known for using a ${val}.`,
 };

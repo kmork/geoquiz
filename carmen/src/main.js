@@ -722,7 +722,7 @@ function showInvestigationLocations() {
 
 
 function handleGoBack(fromCountry) {
-  // Player chose to go back to the current correct stop for more investigation
+  // Player chose to return to the current confirmed lead for more investigation
   stopAmbient();
   stopAtmosphere();
   stopMusic();
@@ -765,7 +765,7 @@ function handleGuess(country) {
     }
 
     if (result.gameOver && result.won) {
-      // Found the thief's location — fly there first
+      // Found the thief's location — redeploy there before the lineup
       const progress = result.progress;
       ui.updateScore(logic.score);
 
@@ -863,7 +863,7 @@ function handleGuess(country) {
       return;
     }
 
-    // Show highlight, then animate travel and show transition overlay
+    // Show highlight, then animate redeployment and show transition overlay
     const progress = result.progress;
     ui.updateScore(logic.score);
 
@@ -897,7 +897,7 @@ function handleGuess(country) {
     }, 600);
 
   } else {
-    // Wrong guess — travel to the dead end
+    // Wrong guess — redeploy to the dead end
     if (activeNeighborChoices) {
       activeNeighborChoices.highlight(country, false);
       activeNeighborChoices.disableAll();
