@@ -1076,7 +1076,9 @@ export function createCarmenUI(container, flagCodes) {
         const siteName = artifact.siteName || 'a priceless artifact';
         const mode = options?.mode || 'campaign';
         const openCaseNumber = options?.openCaseNumber || caseNumber;
-        const caseLabel = mode === 'open_cases'
+        const caseLabel = mode === 'skyline_syndicate'
+          ? `SKYLINE CASE — ${caseNumber} / ${totalCases}`
+          : mode === 'open_cases'
           ? `OPEN CASE — ${openCaseNumber}`
           : caseNumber
           ? (campaignPhase === 'finale' ? `FINAL CASE — ${caseNumber} / ${totalCases}` : `CASE ${caseNumber} / ${totalCases}`)
@@ -1104,12 +1106,13 @@ export function createCarmenUI(container, flagCodes) {
 
         // Typewriter with sounds
         const timeText = totalHours ? ` You have only ${totalHours} hours before the case goes cold.` : '';
-        const missionCopy =
+        const missionCopy = options?.missionCopy || (
           mode === 'open_cases'       ? "ACME has narrowed this active theft to a chain of border crossings. Reconstruct the trail from country to country, gather witness reports, and close the file before the trail breaks." :
           campaignPhase === 'whispers' ? "ACME has narrowed the escape to a chain of border crossings. Witnesses keep mentioning a shadow behind the shadow — someone bigger is pulling strings." :
           campaignPhase === 'pursuit'  ? "ACME has traced this border trail to Carmen Sandiego's network. The thief is one of her lieutenants — every arrest brings you closer to her." :
           campaignPhase === 'finale'   ? "This is it. ACME believes Carmen Sandiego is moving under an alias. Reconstruct the border trail, expose the false identity, and bring her in before the file goes cold." :
-          "ACME has narrowed the escape to a chain of border crossings. Investigate locations, gather clues, and identify the suspect to make your arrest.";
+          "ACME has narrowed the escape to a chain of border crossings. Investigate locations, gather clues, and identify the suspect to make your arrest."
+        );
         typewriter(els.briefingMission, `${missionCopy}${timeText}`, 20, {
           skipTargets: [els.briefing],
         })

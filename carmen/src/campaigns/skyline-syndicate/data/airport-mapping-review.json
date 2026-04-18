@@ -1,0 +1,5030 @@
+{
+  "schemaVersion": 1,
+  "campaign": "skyline_syndicate",
+  "importedAt": "2026-04-18T01:39:59.979Z",
+  "summary": {
+    "provider": "openflights",
+    "inputRecords": 67663,
+    "acceptedRoutes": 981,
+    "reviewRecords": 1005,
+    "countriesWithFewerThanThreeRoutes": 0
+  },
+  "weakCountries": [],
+  "review": [
+    {
+      "reason": "external-gateway-used",
+      "country": "Andorra",
+      "capital": "Andorra la Vella",
+      "airport": "Pirineus - la Seu d'Urgel Airport",
+      "airportCountry": "ES",
+      "distanceKm": 20
+    },
+    {
+      "reason": "external-gateway-used",
+      "country": "Liechtenstein",
+      "capital": "Vaduz",
+      "airport": "Sankt Gallen Altenrhein Airport",
+      "airportCountry": "CH",
+      "distanceKm": 39
+    },
+    {
+      "reason": "external-gateway-used",
+      "country": "Monaco",
+      "capital": "Monaco",
+      "airport": "Nice-Côte d'Azur Airport",
+      "airportCountry": "FR",
+      "distanceKm": 18
+    },
+    {
+      "reason": "external-gateway-used",
+      "country": "San Marino",
+      "capital": "San Marino",
+      "airport": "Federico Fellini International Airport",
+      "airportCountry": "IT",
+      "distanceKm": 17
+    },
+    {
+      "reason": "external-gateway-used",
+      "country": "Vatican City",
+      "capital": "Vatican City",
+      "airport": "Ciampino–G. B. Pastine International Airport",
+      "airportCountry": "IT",
+      "distanceKm": 17
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "AER",
+      "destination": "KZN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ASF",
+      "destination": "KZN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ASF",
+      "destination": "MRV"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CEK",
+      "destination": "KZN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CEK",
+      "destination": "OVB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "KZN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "NBC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "TGK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "UUA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "EGO",
+      "destination": "KGD"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "EGO",
+      "destination": "KZN"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "GYD",
+      "destination": "NBC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KGD",
+      "destination": "EGO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KZN",
+      "destination": "AER"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KZN",
+      "destination": "ASF"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KZN",
+      "destination": "CEK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KZN",
+      "destination": "DME"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KZN",
+      "destination": "EGO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KZN",
+      "destination": "LED"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KZN",
+      "destination": "SVX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LED",
+      "destination": "KZN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LED",
+      "destination": "NBC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LED",
+      "destination": "UUA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MRV",
+      "destination": "ASF"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NBC",
+      "destination": "DME"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "NBC",
+      "destination": "GYD"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NBC",
+      "destination": "LED"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NBC",
+      "destination": "SVX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NJC",
+      "destination": "SVX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NJC",
+      "destination": "UUA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NUX",
+      "destination": "SVX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "OVB",
+      "destination": "CEK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "OVB",
+      "destination": "SVX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SVX",
+      "destination": "KZN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SVX",
+      "destination": "NBC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SVX",
+      "destination": "NJC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SVX",
+      "destination": "NUX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SVX",
+      "destination": "OVB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TGK",
+      "destination": "DME"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UUA",
+      "destination": "DME"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UUA",
+      "destination": "LED"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UUA",
+      "destination": "NJC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BTK",
+      "destination": "IKT"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BTK",
+      "destination": "OVB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CEK",
+      "destination": "OVB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HTA",
+      "destination": "IKT"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "IKT",
+      "destination": "BTK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "IKT",
+      "destination": "HTA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "IKT",
+      "destination": "KCK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "IKT",
+      "destination": "ODO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "IKT",
+      "destination": "OVB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "IKT",
+      "destination": "UKX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "IKT",
+      "destination": "ULK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "IKT",
+      "destination": "YKS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KCK",
+      "destination": "IKT"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MJZ",
+      "destination": "OVB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ODO",
+      "destination": "IKT"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "OVB",
+      "destination": "BTK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "OVB",
+      "destination": "CEK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "OVB",
+      "destination": "IKT"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UKX",
+      "destination": "IKT"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ULK",
+      "destination": "IKT"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YKS",
+      "destination": "IKT"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "AYP",
+      "destination": "LIM"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "CUZ",
+      "destination": "LIM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CUZ",
+      "destination": "PEM"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "HUU",
+      "destination": "LIM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "IQT",
+      "destination": "PCL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "IQT",
+      "destination": "TPP"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "LIM",
+      "destination": "AYP"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "LIM",
+      "destination": "CUZ"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "LIM",
+      "destination": "HUU"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "LIM",
+      "destination": "PCL"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "LIM",
+      "destination": "TPP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PCL",
+      "destination": "IQT"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "PCL",
+      "destination": "LIM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PCL",
+      "destination": "TPP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PEM",
+      "destination": "CUZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TPP",
+      "destination": "IQT"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "TPP",
+      "destination": "LIM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TPP",
+      "destination": "PCL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ABJ",
+      "destination": "BOY"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "ABJ",
+      "destination": "OUA"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "BKO",
+      "destination": "ABJ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BOY",
+      "destination": "ABJ"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "BOY",
+      "destination": "OUA"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "OUA",
+      "destination": "ABJ"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "OUA",
+      "destination": "BOY"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "BOG",
+      "destination": "GYE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CLO",
+      "destination": "GYE"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "GYE",
+      "destination": "BOG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GYE",
+      "destination": "CLO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GYE",
+      "destination": "SCY"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "GYE",
+      "destination": "UIO"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "OCC",
+      "destination": "UIO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SCY",
+      "destination": "GYE"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "UIO",
+      "destination": "GYE"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "UIO",
+      "destination": "OCC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BDS",
+      "destination": "ZRH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BOD",
+      "destination": "ZRH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BRS",
+      "destination": "ZRH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GVA",
+      "destination": "LPA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LCA",
+      "destination": "ZRH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LPA",
+      "destination": "ZRH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "RMF",
+      "destination": "ZRH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TFS",
+      "destination": "GVA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZRH",
+      "destination": "BDS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZRH",
+      "destination": "BOD"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZRH",
+      "destination": "BRS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZRH",
+      "destination": "LCA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZRH",
+      "destination": "LPA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZRH",
+      "destination": "RMF"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "AJR",
+      "destination": "LYC"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "GEV"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "HAD"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "JKG"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "KRF"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "KSD"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "LYC"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "MHQ"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "OER"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "POR"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "TRF"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "VBY"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "VHM"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ARN",
+      "destination": "VXO"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "GEV",
+      "destination": "ARN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GEV",
+      "destination": "KRF"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "HAD",
+      "destination": "ARN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HAD",
+      "destination": "JKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HAD",
+      "destination": "VXO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HMV",
+      "destination": "VHM"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "JKG",
+      "destination": "ARN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "JKG",
+      "destination": "HAD"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KOK",
+      "destination": "POR"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "KRF",
+      "destination": "ARN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KRF",
+      "destination": "GEV"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "KSD",
+      "destination": "ARN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LYC",
+      "destination": "AJR"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "LYC",
+      "destination": "ARN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "MHQ",
+      "destination": "ARN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MHQ",
+      "destination": "TKU"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "OER",
+      "destination": "ARN"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "OSL",
+      "destination": "VXO"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "POR",
+      "destination": "ARN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "POR",
+      "destination": "KOK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TKU",
+      "destination": "MHQ"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "TRF",
+      "destination": "ARN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "VBY",
+      "destination": "ARN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "VHM",
+      "destination": "ARN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "VHM",
+      "destination": "HMV"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "VXO",
+      "destination": "ARN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "VXO",
+      "destination": "OSL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ADQ",
+      "destination": "AOS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ADQ",
+      "destination": "KKB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ADQ",
+      "destination": "KLN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ADQ",
+      "destination": "KOZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ADQ",
+      "destination": "OLH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "AOS",
+      "destination": "KZB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KKB",
+      "destination": "SYB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KLN",
+      "destination": "KYK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KOZ",
+      "destination": "ORI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SYB",
+      "destination": "KPR"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "BSO",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "BXU",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "CBO",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "CGY",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "CRM",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "DGT",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "DWC",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "GES",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "KLO",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "LGP",
+      "destination": "MNL"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "BSO"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "BXU"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "CBO"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "CGY"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "CRM"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "DGT"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "DWC"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "GES"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "KLO"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "LGP"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "MPH"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "OZC"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "PPS"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "RXS"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "SUG"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "TUG"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "ZAM"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "MPH",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "OZC",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "PPS",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "RXS",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "SUG",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "TUG",
+      "destination": "MNL"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "ZAM",
+      "destination": "MNL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "AUX",
+      "destination": "PMW"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "BRA",
+      "destination": "BSB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BRA",
+      "destination": "SSA"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "BSB",
+      "destination": "BRA"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "BSB",
+      "destination": "OPS"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "BSB",
+      "destination": "RAO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CAC",
+      "destination": "GRU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGB",
+      "destination": "GYN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGB",
+      "destination": "OPS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGR",
+      "destination": "DOU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DOU",
+      "destination": "CGR"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DOU",
+      "destination": "GRU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GIG",
+      "destination": "RAO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GRU",
+      "destination": "CAC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GRU",
+      "destination": "DOU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GRU",
+      "destination": "RAO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GRU",
+      "destination": "UBA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GRU",
+      "destination": "UDI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GRU",
+      "destination": "VDC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GYN",
+      "destination": "CGB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GYN",
+      "destination": "PMW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GYN",
+      "destination": "RAO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GYN",
+      "destination": "UDI"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "OPS",
+      "destination": "BSB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "OPS",
+      "destination": "CGB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PLU",
+      "destination": "RAO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PMW",
+      "destination": "AUX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PMW",
+      "destination": "GYN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "RAO",
+      "destination": "BSB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "RAO",
+      "destination": "GIG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "RAO",
+      "destination": "GRU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "RAO",
+      "destination": "GYN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "RAO",
+      "destination": "PLU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "RAO",
+      "destination": "SJP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "RAO",
+      "destination": "UDI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SJP",
+      "destination": "RAO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SSA",
+      "destination": "BRA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SSA",
+      "destination": "VDC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UBA",
+      "destination": "GRU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UBA",
+      "destination": "UDI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UDI",
+      "destination": "GRU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UDI",
+      "destination": "GYN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UDI",
+      "destination": "RAO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UDI",
+      "destination": "UBA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "VDC",
+      "destination": "GRU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "VDC",
+      "destination": "SSA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BRL",
+      "destination": "ORD"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BRL",
+      "destination": "STL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DEC",
+      "destination": "ORD"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DEC",
+      "destination": "STL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "JBR",
+      "destination": "STL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ORD",
+      "destination": "BRL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ORD",
+      "destination": "DEC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "STL",
+      "destination": "BRL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "STL",
+      "destination": "DEC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "STL",
+      "destination": "JBR"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGA",
+      "destination": "HYL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGA",
+      "destination": "KTN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HYL",
+      "destination": "CGA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HYL",
+      "destination": "KTB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HYL",
+      "destination": "KTN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KTB",
+      "destination": "HYL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KTB",
+      "destination": "KTN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KTN",
+      "destination": "CGA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KTN",
+      "destination": "HYL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KTN",
+      "destination": "KTB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KTN",
+      "destination": "MTM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MTM",
+      "destination": "KTN"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ACC",
+      "destination": "LOS"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ACC",
+      "destination": "ROB"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "BCN",
+      "destination": "BJL"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "BJL",
+      "destination": "BCN"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "DKR",
+      "destination": "DLA"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "DKR",
+      "destination": "LOS"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "DLA",
+      "destination": "DKR"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DLA",
+      "destination": "LOS"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "FNA",
+      "destination": "LGW"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "FNA",
+      "destination": "ROB"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "LGW",
+      "destination": "FNA"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "LOS",
+      "destination": "ACC"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "LOS",
+      "destination": "DKR"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LOS",
+      "destination": "DLA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LOS",
+      "destination": "ROB"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "ROB",
+      "destination": "ACC"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "ROB",
+      "destination": "FNA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ROB",
+      "destination": "LOS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "AKV",
+      "destination": "YIK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "AKV",
+      "destination": "YPX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XGR",
+      "destination": "YVP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YGL",
+      "destination": "YGW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YGL",
+      "destination": "YPX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YGL",
+      "destination": "YUL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YGW",
+      "destination": "YGL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YGW",
+      "destination": "YPH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YGW",
+      "destination": "YSK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YGW",
+      "destination": "YUD"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YGW",
+      "destination": "YUL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YGW",
+      "destination": "YUY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YIK",
+      "destination": "AKV"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YIK",
+      "destination": "YZG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YKG",
+      "destination": "YPJ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YKG",
+      "destination": "YQC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YKG",
+      "destination": "YVP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YKL",
+      "destination": "YQB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YKL",
+      "destination": "YVP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YKL",
+      "destination": "YWK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YKL",
+      "destination": "YZV"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YPH",
+      "destination": "YPX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YPH",
+      "destination": "YUD"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YPH",
+      "destination": "YVP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YPJ",
+      "destination": "YKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YPJ",
+      "destination": "YTQ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YPJ",
+      "destination": "YVP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YPX",
+      "destination": "AKV"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YPX",
+      "destination": "YGL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YPX",
+      "destination": "YPH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YPX",
+      "destination": "YVP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YQB",
+      "destination": "YKL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YQB",
+      "destination": "YUL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YQC",
+      "destination": "YKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YQC",
+      "destination": "YWB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YSK",
+      "destination": "YGW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YSK",
+      "destination": "YUD"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YTQ",
+      "destination": "YPJ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YTQ",
+      "destination": "YVP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YUD",
+      "destination": "YGW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YUD",
+      "destination": "YPH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YUD",
+      "destination": "YSK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YUL",
+      "destination": "YGL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YUL",
+      "destination": "YGW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YUL",
+      "destination": "YQB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YUL",
+      "destination": "YUY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YUY",
+      "destination": "YGW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YUY",
+      "destination": "YUL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YVP",
+      "destination": "XGR"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YVP",
+      "destination": "YGW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YVP",
+      "destination": "YKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YVP",
+      "destination": "YKL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YVP",
+      "destination": "YPH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YVP",
+      "destination": "YPJ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YVP",
+      "destination": "YPX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YVP",
+      "destination": "YTQ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YWB",
+      "destination": "YQC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YWB",
+      "destination": "YZG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YWK",
+      "destination": "YKL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YWK",
+      "destination": "YZV"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YZG",
+      "destination": "YIK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YZG",
+      "destination": "YWB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YZV",
+      "destination": "YKL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YZV",
+      "destination": "YWK"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "JIB",
+      "destination": "DXB"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "JIB",
+      "destination": "JED"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "BKK",
+      "destination": "SIN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "DRW",
+      "destination": "SIN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "HAK",
+      "destination": "SIN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "HGH",
+      "destination": "SIN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "HKG",
+      "destination": "SIN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "HKT",
+      "destination": "SIN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "KIX",
+      "destination": "MNL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KIX",
+      "destination": "TPE"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "KUL",
+      "destination": "SIN"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "MNL",
+      "destination": "KIX"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "PEN",
+      "destination": "SIN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "PER",
+      "destination": "SIN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "PNH",
+      "destination": "SIN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "REP",
+      "destination": "SIN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "SGN",
+      "destination": "SIN"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "BKK"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "DRW"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "HAK"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "HGH"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "HKG"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "HKT"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "KUL"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "PEN"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "PER"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "PNH"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "REP"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "SGN"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "SWA"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SIN",
+      "destination": "TPE"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "SWA",
+      "destination": "SIN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TPE",
+      "destination": "KIX"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "TPE",
+      "destination": "SIN"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ACH",
+      "destination": "EBA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DRS",
+      "destination": "ZRH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DUS",
+      "destination": "FDH"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "EBA",
+      "destination": "ACH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "EBA",
+      "destination": "FDH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "EBA",
+      "destination": "MUC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "EBA",
+      "destination": "ZRH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FDH",
+      "destination": "DUS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FDH",
+      "destination": "EBA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FDH",
+      "destination": "HAM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FDH",
+      "destination": "OLB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FDH",
+      "destination": "TXL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FDH",
+      "destination": "ZAD"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FMM",
+      "destination": "NAP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GRZ",
+      "destination": "ZRH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HAM",
+      "destination": "FDH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MUC",
+      "destination": "EBA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NAP",
+      "destination": "FMM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "OLB",
+      "destination": "FDH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SZG",
+      "destination": "ZRH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TXL",
+      "destination": "FDH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZAD",
+      "destination": "FDH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZRH",
+      "destination": "DRS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZRH",
+      "destination": "EBA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZRH",
+      "destination": "GRZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZRH",
+      "destination": "SZG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ATL",
+      "destination": "LWB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ATL",
+      "destination": "MCN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ATL",
+      "destination": "MEI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ATL",
+      "destination": "MSL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ATL",
+      "destination": "PIB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ATL",
+      "destination": "TUP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BIM",
+      "destination": "FLL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ELH",
+      "destination": "FLL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ELH",
+      "destination": "PBI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "EYW",
+      "destination": "FLL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "EYW",
+      "destination": "RSW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "EYW",
+      "destination": "TPA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FLL",
+      "destination": "BIM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FLL",
+      "destination": "ELH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FLL",
+      "destination": "EYW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FLL",
+      "destination": "FPO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FLL",
+      "destination": "GGT"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FLL",
+      "destination": "GHB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FLL",
+      "destination": "MCO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FLL",
+      "destination": "MHH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FLL",
+      "destination": "TCB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FLL",
+      "destination": "TPA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FPO",
+      "destination": "FLL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GGT",
+      "destination": "FLL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GGT",
+      "destination": "GHB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GHB",
+      "destination": "FLL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GLH",
+      "destination": "TUP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GNV",
+      "destination": "MCO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GNV",
+      "destination": "TPA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "JAX",
+      "destination": "MHH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "JAX",
+      "destination": "TPA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LWB",
+      "destination": "ATL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MCN",
+      "destination": "ATL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MCN",
+      "destination": "MCO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MCO",
+      "destination": "FLL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MCO",
+      "destination": "GNV"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MCO",
+      "destination": "MCN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MCO",
+      "destination": "MHH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MCO",
+      "destination": "PNS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MCO",
+      "destination": "RSW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MCO",
+      "destination": "TLH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MEI",
+      "destination": "ATL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MHH",
+      "destination": "FLL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MHH",
+      "destination": "JAX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MHH",
+      "destination": "MCO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MHH",
+      "destination": "PBI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MSL",
+      "destination": "ATL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PBI",
+      "destination": "ELH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PBI",
+      "destination": "MHH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PBI",
+      "destination": "TPA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PIB",
+      "destination": "ATL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PNS",
+      "destination": "MCO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PNS",
+      "destination": "TPA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "RSW",
+      "destination": "EYW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "RSW",
+      "destination": "MCO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TCB",
+      "destination": "FLL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TLH",
+      "destination": "MCO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TLH",
+      "destination": "TPA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TPA",
+      "destination": "EYW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TPA",
+      "destination": "FLL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TPA",
+      "destination": "GNV"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TPA",
+      "destination": "JAX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TPA",
+      "destination": "PBI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TPA",
+      "destination": "PNS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TPA",
+      "destination": "TLH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TUP",
+      "destination": "ATL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TUP",
+      "destination": "GLH"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "AMS",
+      "destination": "NDR"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "AMS",
+      "destination": "TNG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BCN",
+      "destination": "CMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BCN",
+      "destination": "NDR"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BCN",
+      "destination": "TNG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BGY",
+      "destination": "CMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BLQ",
+      "destination": "CMN"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "BRU",
+      "destination": "CMN"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "BRU",
+      "destination": "NDR"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "BRU",
+      "destination": "TNG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGN",
+      "destination": "NDR"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CMN",
+      "destination": "BCN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CMN",
+      "destination": "BGY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CMN",
+      "destination": "BLQ"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "CMN",
+      "destination": "BRU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CMN",
+      "destination": "CUF"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CMN",
+      "destination": "LGW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CMN",
+      "destination": "LYS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CMN",
+      "destination": "MPL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CMN",
+      "destination": "SAW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CMN",
+      "destination": "TLS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CMN",
+      "destination": "TSF"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CUF",
+      "destination": "CMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FEZ",
+      "destination": "MPL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LGW",
+      "destination": "CMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LGW",
+      "destination": "TNG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LYS",
+      "destination": "CMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MPL",
+      "destination": "CMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MPL",
+      "destination": "FEZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MPL",
+      "destination": "NDR"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "NDR",
+      "destination": "AMS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NDR",
+      "destination": "BCN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "NDR",
+      "destination": "BRU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NDR",
+      "destination": "CGN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NDR",
+      "destination": "MPL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NDR",
+      "destination": "PMI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PMI",
+      "destination": "NDR"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SAW",
+      "destination": "CMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TLS",
+      "destination": "CMN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "TNG",
+      "destination": "AMS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TNG",
+      "destination": "BCN"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "TNG",
+      "destination": "BRU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TNG",
+      "destination": "LGW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TSF",
+      "destination": "CMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "AUA",
+      "destination": "LSP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "AUA",
+      "destination": "MAR"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BON",
+      "destination": "CUR"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CUR",
+      "destination": "AUA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LSP",
+      "destination": "AUA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MAR",
+      "destination": "AUA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ASF",
+      "destination": "DME"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ASF",
+      "destination": "LED"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BHK",
+      "destination": "DME"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "ASF"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "BHK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "EGO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "FEG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "KSQ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "NMA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "NVI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "SKD"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DME",
+      "destination": "TIV"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "EGO",
+      "destination": "DME"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FEG",
+      "destination": "DME"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KSQ",
+      "destination": "DME"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LED",
+      "destination": "ASF"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NMA",
+      "destination": "DME"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NVI",
+      "destination": "DME"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SKD",
+      "destination": "DME"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TIV",
+      "destination": "DME"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "ANU",
+      "destination": "PTP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CAY",
+      "destination": "FDF"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "CUR",
+      "destination": "SDQ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DOM",
+      "destination": "PTP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DOM",
+      "destination": "SXM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FDF",
+      "destination": "CAY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FDF",
+      "destination": "PTP"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "FDF",
+      "destination": "SDQ"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "FDF",
+      "destination": "SLU"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "PTP",
+      "destination": "ANU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PTP",
+      "destination": "DOM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PTP",
+      "destination": "FDF"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PTP",
+      "destination": "SBH"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "PTP",
+      "destination": "SDQ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PTP",
+      "destination": "SFG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PTP",
+      "destination": "SXM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SBH",
+      "destination": "PTP"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SDQ",
+      "destination": "PTP"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SDQ",
+      "destination": "SXM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SFG",
+      "destination": "PTP"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "SLU",
+      "destination": "FDF"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SXM",
+      "destination": "DOM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SXM",
+      "destination": "PTP"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "SXM",
+      "destination": "SDQ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "BHY",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CAN",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CAN",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CAN",
+      "destination": "SPN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGO",
+      "destination": "CGQ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGO",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGO",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGO",
+      "destination": "HGH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGO",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGO",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGO",
+      "destination": "URC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGQ",
+      "destination": "CGO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGQ",
+      "destination": "NKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGQ",
+      "destination": "TNA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGQ",
+      "destination": "TSN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "CAN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "CGO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "CSX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "CZX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "DLC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "DYG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "HAK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "HGH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "HKT"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "INC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "KHN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "LHW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "LJG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "LXA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "NGB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "NKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "NNG"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "CKG",
+      "destination": "PEK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "PVG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "PZI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "SWA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "SYD"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "SYX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "SZX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "TNA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "TSA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "TSN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "TYN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "URC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "WUH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "WUX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "XNN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "YIH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CKG",
+      "destination": "ZHA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CSX",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CSX",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CSX",
+      "destination": "FOC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CSX",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CSX",
+      "destination": "SHE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CSX",
+      "destination": "WNZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CSX",
+      "destination": "XMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "CAN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "CGO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "CSX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "DCY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "DSN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "HAK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "HDG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "HET"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "HFE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "HGH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "HKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "HKT"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "ICN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "INC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "JHG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "JIQ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "JZH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "KHN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "KOW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "KWE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "LHW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "LJG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "LUM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "LXA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "LZY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "MEL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "NKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "NNG"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "CTU",
+      "destination": "PEK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "PVG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "PZI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "SHE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "SJW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "SYX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "SZX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "TAO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "TNA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "TSA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "TSN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "TYN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "URC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "WNZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "WUH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "WUX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "WXN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "XIC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "XMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "XNN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "XUZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "YIH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CTU",
+      "destination": "YTY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CZX",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CZX",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CZX",
+      "destination": "XMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CZX",
+      "destination": "ZUH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DAT",
+      "destination": "TYN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DCY",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DLC",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DLC",
+      "destination": "HGH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DLC",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DLC",
+      "destination": "TNA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DLC",
+      "destination": "XUZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DNH",
+      "destination": "LHW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DSN",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DSN",
+      "destination": "SHE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DYG",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "DYG",
+      "destination": "NKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FOC",
+      "destination": "CSX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "FOC",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GXH",
+      "destination": "LXA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "GXH",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HAK",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HAK",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HAK",
+      "destination": "HGH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HAK",
+      "destination": "NGB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HAK",
+      "destination": "ZUH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HDG",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HET",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HFE",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HGH",
+      "destination": "CGO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HGH",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HGH",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HGH",
+      "destination": "DLC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HGH",
+      "destination": "HAK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HGH",
+      "destination": "KWE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HGH",
+      "destination": "TSN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HGH",
+      "destination": "TYN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HKG",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HKG",
+      "destination": "YIH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HKG",
+      "destination": "ZHA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HKT",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HKT",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "CGO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "CZX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "DLC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "INC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "NGB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "NKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "NZH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "SJW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "TNA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "TSN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "WNZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "WUH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "HRB",
+      "destination": "XUZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ICN",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "INC",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "INC",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "INC",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "INC",
+      "destination": "KWL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "JGN",
+      "destination": "LHW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "JHG",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "JHG",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "JIQ",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "JJN",
+      "destination": "KWE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "JJN",
+      "destination": "WUH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "JZH",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KHG",
+      "destination": "URC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KHN",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KHN",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KHN",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KHN",
+      "destination": "NGB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "CGO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "CSX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "JHG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "KHN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "KWE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "LUM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "NGB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "NKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "TAO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "TNA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "TPE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "WXN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "XMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KMG",
+      "destination": "XUZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KOW",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KOW",
+      "destination": "XMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KWE",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KWE",
+      "destination": "HGH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KWE",
+      "destination": "JJN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KWE",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KWE",
+      "destination": "LHW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KWE",
+      "destination": "SYX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KWE",
+      "destination": "WNZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KWE",
+      "destination": "XUZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KWL",
+      "destination": "INC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KWL",
+      "destination": "SJW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "KWL",
+      "destination": "SYX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LHW",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LHW",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LHW",
+      "destination": "DNH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LHW",
+      "destination": "JGN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LHW",
+      "destination": "KWE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LHW",
+      "destination": "TSN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LJG",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LJG",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LJG",
+      "destination": "MIG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LUM",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LUM",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LXA",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LXA",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LXA",
+      "destination": "GXH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LXA",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LXA",
+      "destination": "XNN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LYI",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LZY",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MEL",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MIG",
+      "destination": "LJG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MIG",
+      "destination": "NKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MIG",
+      "destination": "SYX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MIG",
+      "destination": "XNN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NGB",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NGB",
+      "destination": "HAK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NGB",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NGB",
+      "destination": "KHN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NGB",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NGB",
+      "destination": "SHE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NGB",
+      "destination": "SYX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NKG",
+      "destination": "CGQ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NKG",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NKG",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NKG",
+      "destination": "DYG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NKG",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NKG",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NKG",
+      "destination": "MIG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NKG",
+      "destination": "SYX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NNG",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NNG",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NNG",
+      "destination": "SGN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NNG",
+      "destination": "WUH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NTG",
+      "destination": "WUH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NZH",
+      "destination": "HRB"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "PEK",
+      "destination": "CKG"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "PEK",
+      "destination": "CTU"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "PEK",
+      "destination": "WXN"
+    },
+    {
+      "reason": "destination-not-capital-gateway",
+      "source": "PEK",
+      "destination": "ZHY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PVG",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PVG",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PVG",
+      "destination": "SPN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PZI",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "PZI",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SGN",
+      "destination": "NNG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SHE",
+      "destination": "CSX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SHE",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SHE",
+      "destination": "DSN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SHE",
+      "destination": "NGB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SHE",
+      "destination": "TYN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SHE",
+      "destination": "XUZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SHE",
+      "destination": "YVR"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SJW",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SJW",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SJW",
+      "destination": "KWL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SPN",
+      "destination": "CAN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SPN",
+      "destination": "PVG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SWA",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SYD",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SYX",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SYX",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SYX",
+      "destination": "KWE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SYX",
+      "destination": "KWL"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SYX",
+      "destination": "MIG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SYX",
+      "destination": "NGB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SYX",
+      "destination": "NKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SYX",
+      "destination": "TNA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SYX",
+      "destination": "WNZ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SYX",
+      "destination": "YBP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SZX",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SZX",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SZX",
+      "destination": "WXN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TAO",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TAO",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TNA",
+      "destination": "CGQ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TNA",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TNA",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TNA",
+      "destination": "DLC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TNA",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TNA",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TNA",
+      "destination": "SYX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TNA",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TPE",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TSA",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TSA",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TSN",
+      "destination": "CGQ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TSN",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TSN",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TSN",
+      "destination": "HGH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TSN",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TSN",
+      "destination": "LHW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TVS",
+      "destination": "TYN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TYN",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TYN",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TYN",
+      "destination": "DAT"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TYN",
+      "destination": "HGH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TYN",
+      "destination": "SHE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TYN",
+      "destination": "TVS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "URC",
+      "destination": "CGO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "URC",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "URC",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "URC",
+      "destination": "KHG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "URC",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UYN",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WNZ",
+      "destination": "CSX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WNZ",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WNZ",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WNZ",
+      "destination": "KWE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WNZ",
+      "destination": "SYX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WUH",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WUH",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WUH",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WUH",
+      "destination": "JJN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WUH",
+      "destination": "NNG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WUH",
+      "destination": "NTG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WUX",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WUX",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WXN",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WXN",
+      "destination": "KMG"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "WXN",
+      "destination": "PEK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "WXN",
+      "destination": "SZX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIC",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "BHY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "FOC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "GXH"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "LXA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "LYI"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "TNA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "URC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "UYN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "XMN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "XNN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XIY",
+      "destination": "YBP"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XMN",
+      "destination": "CSX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XMN",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XMN",
+      "destination": "CZX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XMN",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XMN",
+      "destination": "KOW"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XMN",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XNN",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XNN",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XNN",
+      "destination": "LXA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XNN",
+      "destination": "MIG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XNN",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XNN",
+      "destination": "ZHY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XUZ",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XUZ",
+      "destination": "DLC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XUZ",
+      "destination": "HRB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XUZ",
+      "destination": "KMG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XUZ",
+      "destination": "KWE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "XUZ",
+      "destination": "SHE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YBP",
+      "destination": "SYX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YBP",
+      "destination": "XIY"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YIH",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YIH",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YIH",
+      "destination": "HKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YTY",
+      "destination": "CTU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "YVR",
+      "destination": "SHE"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZHA",
+      "destination": "CKG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZHA",
+      "destination": "HKG"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "ZHY",
+      "destination": "PEK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZHY",
+      "destination": "XNN"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZUH",
+      "destination": "CZX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "ZUH",
+      "destination": "HAK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LAS",
+      "destination": "LAX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "LAX",
+      "destination": "LAS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MCG",
+      "destination": "NIB"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "MCG",
+      "destination": "TCT"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NIB",
+      "destination": "MCG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TCT",
+      "destination": "TLJ"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TLJ",
+      "destination": "MCG"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "EYK",
+      "destination": "VKO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NCU",
+      "destination": "VKO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NUX",
+      "destination": "TJM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NUX",
+      "destination": "UFA"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NUX",
+      "destination": "VKO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NYM",
+      "destination": "OVS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "NYM",
+      "destination": "VKO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "OVS",
+      "destination": "NYM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "OVS",
+      "destination": "SVX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "OVS",
+      "destination": "VKO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "SVX",
+      "destination": "OVS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "TJM",
+      "destination": "NUX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UCT",
+      "destination": "VKO"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "UFA",
+      "destination": "NUX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "VKO",
+      "destination": "EYK"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "VKO",
+      "destination": "NCU"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "VKO",
+      "destination": "NUX"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "VKO",
+      "destination": "NYM"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "VKO",
+      "destination": "OVS"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "VKO",
+      "destination": "UCT"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "BKK",
+      "destination": "DAC"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "BZL",
+      "destination": "DAC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CCU",
+      "destination": "CGP"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "CCU",
+      "destination": "DAC"
+    },
+    {
+      "reason": "route-not-between-capital-gateways",
+      "source": "CGP",
+      "destination": "CCU"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "CGP",
+      "destination": "DAC"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "CGP",
+      "destination": "MCT"
+    },
+    {
+      "reason": "origin-not-capital-gateway",
+      "source": "CXB",
+      "destination": "DAC"
+    }
+  ]
+}

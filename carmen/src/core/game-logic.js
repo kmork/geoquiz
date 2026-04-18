@@ -63,6 +63,13 @@ export class CarmenGameLogic {
     this.neighborsMap = Object.fromEntries(
       this.countries.map(c => [c.country, (c.neighbors || []).filter(n => this.countrySet.has(n))])
     );
+    this.routeProvider = config.routeProvider || null;
+    if (this.routeProvider?.choiceMap) {
+      this.neighborsMap = Object.fromEntries(
+        Object.entries(this.routeProvider.choiceMap)
+          .map(([country, choices]) => [country, choices.filter(n => this.countrySet.has(n))])
+      );
+    }
 
     // Heritage sites indexed by country
     this.heritagByCountry = {};
@@ -297,6 +304,10 @@ export class CarmenGameLogic {
   // ─── Route Generation ────────────────────────────────────────
 
   _generateRoute(numStops) {
+    if (this.routeProvider?.generateRoute) {
+      return this.routeProvider.generateRoute(numStops, this);
+    }
+
     // Pick start country: must have heritage site + neighbors
     const heritageCountries = [...new Set(this.heritageSites.map(s => s.country))]
       .filter(c => this.countrySet.has(c) && (this.neighborsMap[c] || []).length >= 2);
@@ -356,6 +367,10 @@ export class CarmenGameLogic {
   // ─── Neighbor Choices ────────────────────────────────────────
 
   _getNeighborChoices(country) {
+    if (this.routeProvider?.getChoices) {
+      return this.routeProvider.getChoices(country, this);
+    }
+
     const neighbors = (this.neighborsMap[country] || []).slice();
     // Shuffle
     for (let i = neighbors.length - 1; i > 0; i--) {

@@ -5,6 +5,7 @@
  */
 
 import { TOTAL_CASES } from './progression.js';
+import { normalizeGameMode, isKnownGameMode, CAMPAIGN_MODE } from './modes.js';
 
 // ─── Keys ──────────────────────────────────────────
 const MISSION_KEY          = 'carmen-missions';
@@ -65,12 +66,12 @@ export function hasCompletedCampaignOnce() {
 
 export function getGameMode() {
   const mode = localStorage.getItem(GAME_MODE_KEY);
-  if (mode === 'campaign' || mode === 'open_cases') return mode;
+  if (isKnownGameMode(mode)) return mode;
   return hasCompletedCampaignOnce() ? 'open_cases' : 'campaign';
 }
 
 export function setGameMode(mode) {
-  const normalized = mode === 'open_cases' ? 'open_cases' : 'campaign';
+  const normalized = normalizeGameMode(mode) || CAMPAIGN_MODE;
   localStorage.setItem(GAME_MODE_KEY, normalized);
   return normalized;
 }

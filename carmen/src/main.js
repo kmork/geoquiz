@@ -11,6 +11,14 @@ import { buildCountryEntryMonologue } from './content/country-entry-monologue.js
 import { buildCaseBriefingHint, buildInterpolIntel, pickArrivalAmbientHint, pickFinaleAliasHint } from './content/carmen-hints.js';
 import { TOTAL_CASES } from './campaign/progression.js';
 import {
+  OPEN_CASES_MODE,
+  getMissionLabelForMode,
+  getPlayableGameMode,
+  getRunConfigForMode,
+  isOpenCasesMode as isOpenCasesGameMode,
+  loadCampaignModeData,
+} from './campaign/modes.js';
+import {
   getMissionHistory, saveMissionResult, getCurrentCase, advanceCase, setCase,
   markCampaignComplete, getUnlockedSuspects, unlockSuspect,
   getTheftHistory, recordTheft, getInterpolViewed, saveInterpolViewed,
@@ -26,9 +34,6 @@ const carmenFront = document.getElementById('carmen-front');
 const carmenHeader = document.getElementById('carmen-header');
 
 const confetti = initConfetti('confetti');
-const OPEN_CASES_MODE = 'open_cases';
-const OPEN_CASES_PHASE = 'open_cases';
-const OPEN_CASES_CONFIG_PHASE = 'pursuit';
 
 function isTypingTarget(target) {
   if (!(target instanceof HTMLElement)) return false;
@@ -38,11 +43,7 @@ function isTypingTarget(target) {
 
 const pageParams = new URLSearchParams(location.search);
 const modeParam = pageParams.get('mode');
-if (modeParam === 'campaign') {
-  setGameMode('campaign');
-} else if (modeParam === OPEN_CASES_MODE) {
-  setGameMode(OPEN_CASES_MODE);
-}
+if (modeParam) setGameMode(modeParam);
 
 // Debug: ?case=N URL param jumps directly to that case on load.
 const _caseParam = parseInt(pageParams.get('case'), 10);
@@ -122,7 +123,7 @@ function chooseArrivalAtmosphere(country, stop) {
 while (!window.DATA) await new Promise(r => setTimeout(r, 50));
 
 // Load all data in parallel
-const [worldData, factsData, heritageData, riversData, mountainsData, empiresData, portraitProfileData] = await Promise.all([
+const [worldData, factsData, heritageData, riversData, mountainsData, empiresData, portraitProfileData, campaignModeData] = await Promise.all([
   loadGeoJSON('data/ne_10m_admin_0_countries_route.geojson.gz'),
   fetch('data/country-facts.json').then(r => r.json()),
   fetch('data/heritage-sites.json').then(r => r.json()),
@@ -130,7 +131,11 @@ const [worldData, factsData, heritageData, riversData, mountainsData, empiresDat
   fetch('data/mountain-ranges.json').then(r => r.json()),
   fetch('data/empires.json').then(r => r.json()),
   fetch('carmen/villains_with_face_profiles.json').then(r => r.json()),
+  loadCampaignModeData(),
 ]);
+
+const playableMode = getPlayableGameMode(getGameMode(), campaignModeData);
+if (playableMode !== getGameMode()) setGameMode(playableMode);
 
 const portraitProfileByName = new Map(
   portraitProfileData.map((entry) => [entry.name, entry])
@@ -187,7 +192,7 @@ let logic;
 let isFirstGame = true;
 
 function isOpenCasesMode(mode = logic?.mode || getGameMode()) {
-  return mode === OPEN_CASES_MODE;
+  return isOpenCasesGameMode(mode);
 }
 
 function getDisplayedOpenCaseNumber() {
@@ -196,20 +201,18 @@ function getDisplayedOpenCaseNumber() {
 
 function getCurrentRunConfig() {
   const mode = getGameMode();
-  const openCases = isOpenCasesMode(mode);
-  return {
+  return getRunConfigForMode({
     mode,
-    isOpenCases: openCases,
-    caseNumber: openCases ? getDisplayedOpenCaseNumber() : getCurrentCase(),
-    totalCases: openCases ? null : TOTAL_CASES,
-    excludedSuspects: openCases ? [] : [...getUnlockedSuspects()],
-    phaseOverride: openCases ? OPEN_CASES_PHASE : null,
-    configPhase: openCases ? OPEN_CASES_CONFIG_PHASE : null,
-  };
+    currentCase: getCurrentCase(),
+    openCaseNumber: getDisplayedOpenCaseNumber(),
+    totalCases: TOTAL_CASES,
+    unlockedSuspects: getUnlockedSuspects(),
+    modeData: campaignModeData,
+  });
 }
 
 function getMissionLabel() {
-  return isOpenCasesMode() ? `Open Case ${getDisplayedOpenCaseNumber()}` : null;
+  return getMissionLabelForMode(logic?.mode || getGameMode(), getDisplayedOpenCaseNumber());
 }
 
 function getVisibleInterpolSuspects() {
@@ -446,6 +449,7 @@ async function startGame() {
     mode: runConfig.mode,
     phaseOverride: runConfig.phaseOverride,
     configPhase: runConfig.configPhase,
+    routeProvider: runConfig.routeProvider,
   });
 
   const intro = logic.start();
@@ -512,7 +516,7 @@ async function startGame() {
     intro.totalCases,
     intro.campaignPhase,
     briefingHint,
-    { mode: logic.mode, openCaseNumber: intro.caseNumber }
+    { mode: logic.mode, openCaseNumber: intro.caseNumber, missionCopy: runConfig.briefingCopy }
   );
 
   // Hide the front image, show the header and game
