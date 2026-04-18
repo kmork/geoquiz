@@ -544,6 +544,9 @@ async function startGame() {
   if (logic.routeProvider?.getBriefingHint) {
     briefingHint = [briefingHint, logic.routeProvider.getBriefingHint(logic)].filter(Boolean).join(' ');
   }
+  if (runConfig.briefingNote) {
+    briefingHint = [briefingHint, runConfig.briefingNote].filter(Boolean).join(' ');
+  }
   if (isCrimsonCampaignMode(logic.mode) && intro.campaignPhase === 'finale') {
     briefingHint = `${briefingHint} ACME believes Carmen is moving under a fresh alias hidden somewhere in the active files.`;
   }
@@ -650,7 +653,10 @@ function checkTimeExpired() {
         isOpenCasesMode()
           ? { continueLabel: 'Next Open Case →' }
           : isSkylineMode()
-            ? { continueLabel: 'Retry Skyline Case →' }
+            ? {
+                continueLabel: 'Retry Skyline Case →',
+                failedDetail: getCurrentRunConfig().closingCopy?.failed,
+              }
             : null,
       );
       await handleEndChoice(choice, false);
@@ -884,6 +890,7 @@ function handleGuess(country) {
               {
                 ...(isOpenCasesMode() ? { continueLabel: 'Next Open Case →' } : {}),
                 ...(isSkylineMode() ? { continueLabel: 'Next Skyline Case →' } : {}),
+                ...(runConfig.closingCopy?.solved ? { solvedText: runConfig.closingCopy.solved } : {}),
                 timeBonus,
               },
             );
@@ -906,7 +913,10 @@ function handleGuess(country) {
               isOpenCasesMode()
                 ? { continueLabel: 'Next Open Case →' }
                 : isSkylineMode()
-                  ? { continueLabel: 'Retry Skyline Case →' }
+                  ? {
+                      continueLabel: 'Retry Skyline Case →',
+                      failedDetail: runConfig.closingCopy?.failed,
+                    }
                   : null,
             );
             await handleEndChoice(choice, false);
@@ -946,7 +956,7 @@ function handleGuess(country) {
         ui.clearClues();
         showInvestigationLocations();
         showNeighborsOnMap(result.neighbors);
-      });
+      }, { mode: logic.mode });
     }, 600);
 
   } else {

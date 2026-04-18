@@ -1,6 +1,26 @@
 import { SKYLINE_SYNDICATE } from './flight-campaign-config.js';
+import { buildFlightDistanceClue, getFlightDistanceBand } from './flight-clues.js';
 
 const MAX_VISIBLE_CHOICES = 8;
+const EARTH_RADIUS_KM = 6371;
+
+function toRad(degrees) {
+  return degrees * Math.PI / 180;
+}
+
+function haversineKm(a, b) {
+  if (!Number.isFinite(a?.lat) || !Number.isFinite(a?.lon) ||
+      !Number.isFinite(b?.lat) || !Number.isFinite(b?.lon)) {
+    return null;
+  }
+  const dLat = toRad(b.lat - a.lat);
+  const dLon = toRad(b.lon - a.lon);
+  const lat1 = toRad(a.lat);
+  const lat2 = toRad(b.lat);
+  const h = Math.sin(dLat / 2) ** 2 +
+    Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
+  return 2 * EARTH_RADIUS_KM * Math.asin(Math.sqrt(h));
+}
 
 function shuffle(values) {
   const copy = values.slice();
@@ -27,7 +47,30 @@ export class CapitalFlightRouteProvider {
     this.title = SKYLINE_SYNDICATE.title;
     this.routeData = routeData;
     this.choiceScores = {};
+    this.gatewayByCountry = this._buildGatewayMap(routeData);
+    this.routeMetaByPair = this._buildRouteMetaMap(routeData);
     this.choiceMap = this._buildChoiceMap(routeData);
+  }
+
+  _buildGatewayMap(routeData) {
+    return Object.fromEntries(
+      (routeData.gateways || [])
+        .filter(gateway => gateway?.country)
+        .map(gateway => [gateway.country, gateway])
+    );
+  }
+
+  _buildRouteMetaMap(routeData) {
+    const map = {};
+    for (const edge of routeData.routes || []) {
+      if (!edge?.from || !edge?.to) continue;
+      const meta = this._withDistance(edge);
+      map[`${edge.from}::${edge.to}`] = meta;
+      if (edge.bidirectional !== false) {
+        map[`${edge.to}::${edge.from}`] = { ...meta, from: edge.to, to: edge.from };
+      }
+    }
+    return map;
   }
 
   _buildChoiceMap(routeData) {
@@ -65,11 +108,42 @@ export class CapitalFlightRouteProvider {
     );
   }
 
+  _withDistance(edge) {
+    if (edge.distanceKm) return edge;
+    const fromGateway = this.gatewayByCountry[edge.from];
+    const toGateway = this.gatewayByCountry[edge.to];
+    const distanceKm = haversineKm(
+      fromGateway ? { lat: fromGateway.capitalLat, lon: fromGateway.capitalLon } : null,
+      toGateway ? { lat: toGateway.capitalLat, lon: toGateway.capitalLon } : null,
+    );
+    return distanceKm ? { ...edge, distanceKm } : edge;
+  }
+
+  getRouteMeta(from, to) {
+    return this.routeMetaByPair[`${from}::${to}`] || null;
+  }
+
+  getDistanceChoiceSummaries(from, choices = []) {
+    return choices
+      .map(country => {
+        const meta = this.getRouteMeta(from, country);
+        const band = getFlightDistanceBand(meta?.distanceKm);
+        return band ? { country, band, distanceKm: meta.distanceKm } : null;
+      })
+      .filter(Boolean);
+  }
+
   getChoices(country, context = null) {
     const countrySet = context?.countrySet;
     const choices = (this.choiceMap[country] || []).slice(0, MAX_VISIBLE_CHOICES);
     const valid = countrySet ? choices.filter(c => countrySet.has(c)) : choices;
     return shuffle(valid);
+  }
+
+  getChoicesForClues(country, context = null) {
+    const countrySet = context?.countrySet;
+    const choices = (this.choiceMap[country] || []).slice(0, MAX_VISIBLE_CHOICES);
+    return countrySet ? choices.filter(c => countrySet.has(c)) : choices;
   }
 
   getChoiceCount(country) {
@@ -123,6 +197,26 @@ export class CapitalFlightRouteProvider {
     return bestRoute;
   }
 
+  generateClues({ target, count, context, choices = [] }) {
+    const current = context.route?.[context.currentStop];
+    const distanceClue = this._distanceClue(current, target, choices, context);
+    return distanceClue ? [distanceClue].slice(0, count) : null;
+  }
+
+  getLocationClue({ target, currentCountry, locationId, context, choices = [] }) {
+    if (locationId !== 'airport') return null;
+    return this._distanceClue(currentCountry, target, choices, context);
+  }
+
+  getBriefingHint() {
+    const summary = this.getValidationSummary();
+    if (!summary.routes) return '';
+    const weakText = summary.weak.length
+      ? ` ${summary.weak.length} gateways remain thinly sourced, so ACME labels uncertain corridors inside the file.`
+      : '';
+    return `Skyline file: ${summary.routes} reconstructed capital corridors are active in ACME's manifest.${weakText}`;
+  }
+
   getValidationSummary() {
     const countries = Object.keys(this.choiceMap);
     const isolated = countries.filter(country => this.getChoiceCount(country) === 0);
@@ -138,5 +232,15 @@ export class CapitalFlightRouteProvider {
       isolated,
       weak,
     };
+  }
+
+  _distanceClue(current, target, choices, context) {
+    if (!current || !target) return null;
+    const meta = this.getRouteMeta(current, target);
+    if (!meta?.distanceKm) return null;
+    const summaries = this.getDistanceChoiceSummaries(current, choices);
+    const clue = buildFlightDistanceClue(meta, summaries);
+    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
+    return clue;
   }
 }

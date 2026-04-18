@@ -56,6 +56,12 @@ const PHRASINGS = {
     d => `They were asking about ${d.list}. Specific. Targeted.`,
     d => `The economy out there runs on ${d.list}. Always has.`,
   ],
+  flight: [
+    d => d.text,
+    d => `The manifest clerk had one clean note: ${d.text}`,
+    d => `ACME's corridor file agrees on this much: ${d.text}`,
+    d => `The gate record didn't give a country, but it did give this: ${d.text}`,
+  ],
   famous_for: [
     d => `Famous for ${d.item}, if that means anything to you.`,
     d => `People come from all over for ${d.item}. Maybe the thief did too.`,

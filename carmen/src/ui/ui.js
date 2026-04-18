@@ -762,6 +762,7 @@ export function createCarmenUI(container, flagCodes) {
         travelTitle: 'Where does the air trail lead?',
         travelDesc: 'Select a capital flight lead on the map to confirm the next corridor.',
         introMission: 'Investigate locations, gather clues, and confirm the air trail.',
+        confirmedLead: 'Air corridor confirmed',
         deadEndLead: 'No confirmed flight lead',
         deadEndNarrator: 'Another dead end. Took the wrong flight corridor. Maybe I ought to study the map at <a href="https://geoquiz.info/study.html" target="_blank" rel="noopener noreferrer">geoquiz.info/study.html</a> before this case eats me alive.',
       };
@@ -770,6 +771,7 @@ export function createCarmenUI(container, flagCodes) {
       travelTitle: 'Where does the border trail lead?',
       travelDesc: 'Select a neighboring country on the map to confirm the next border lead.',
       introMission: 'Investigate locations, gather clues, and confirm the border trail.',
+      confirmedLead: 'Border lead confirmed',
       deadEndLead: 'No confirmed border lead',
       deadEndNarrator: 'Another dead end. Took the wrong border. Maybe I ought to study the map at <a href="https://geoquiz.info/study.html" target="_blank" rel="noopener noreferrer">geoquiz.info/study.html</a> before this case eats me alive.',
     };
@@ -1439,7 +1441,7 @@ export function createCarmenUI(container, flagCodes) {
 
         setTimeout(() => { stamp.classList.add('animate'); playStamp(); }, 300);
         setTimeout(() => {
-          typewriter(textEl, 'has been arrested!', 30).then(() => {
+          typewriter(textEl, options?.solvedText || 'has been arrested!', 30).then(() => {
             buttons.style.display = '';
           });
         }, 800);
@@ -1453,6 +1455,7 @@ export function createCarmenUI(container, flagCodes) {
       els.musicToggle.style.display = 'none';
       return new Promise(resolve => {
         const continueLabel = options?.continueLabel || 'Next case →';
+        const failedDetail = options?.failedDetail || 'The real thief vanished into the shadows...';
         const overlay = document.createElement('div');
         overlay.className = 'carmen-closing-overlay';
         overlay.innerHTML = `
@@ -1463,7 +1466,7 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-closing-name">${esc(suspectName)}</div>
             <div class="carmen-closing-text"></div>
             <div class="carmen-closing-score">${score} points</div>
-            <div class="carmen-closing-detail">The real thief vanished into the shadows...</div>
+            <div class="carmen-closing-detail">${esc(failedDetail)}</div>
             <div class="carmen-closing-buttons" style="display:none">
               <button class="carmen-closing-btn carmen-btn-continue">${esc(continueLabel)}</button>
               <button class="carmen-closing-btn carmen-btn-quit">Quit</button>
@@ -1549,11 +1552,16 @@ export function createCarmenUI(container, flagCodes) {
       });
     },
 
-    showTransition(stopScore, country, taunt, thiefName, narratorLine, onContinue) {
+    showTransition(stopScore, country, taunt, thiefName, narratorLine, onContinue, options = null) {
       if (typeof narratorLine === 'function') {
         onContinue = narratorLine;
         narratorLine = '';
       }
+      if (typeof onContinue !== 'function' && typeof options === 'function') {
+        onContinue = options;
+        options = null;
+      }
+      const copy = getRouteCopy(options?.mode || caseCardState.mode);
       hideNarratorCaption(true);
       els.sidebar.innerHTML = '';
       els.reveal.style.display = 'none';
@@ -1582,7 +1590,7 @@ export function createCarmenUI(container, flagCodes) {
       overlay.innerHTML = `
         <div class="carmen-transition">
           <div class="score-gained">+${stopScore} points</div>
-          <div>Border lead confirmed in <strong>${esc(country)}</strong>!</div>
+          <div>${esc(copy.confirmedLead)} in <strong>${esc(country)}</strong>!</div>
           ${tauntHtml}
           <button class="carmen-continue-btn">Continue the trail →</button>
         </div>

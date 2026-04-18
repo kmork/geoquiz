@@ -1,5 +1,5 @@
 import { CrimsonTrailFinaleRouteProvider } from '../campaigns/crimson-trail/finale-route-provider.js';
-import { SKYLINE_SYNDICATE_MODE, SKYLINE_SYNDICATE } from '../campaigns/skyline-syndicate/flight-campaign-config.js';
+import { SKYLINE_SYNDICATE_MODE, SKYLINE_SYNDICATE, getSkylineCaseNarrative } from '../campaigns/skyline-syndicate/flight-campaign-config.js';
 import { CapitalFlightRouteProvider } from '../campaigns/skyline-syndicate/flight-route-provider.js';
 import { TOTAL_CASES } from './progression.js';
 
@@ -70,6 +70,7 @@ export function getRunConfigForMode({
   const runCase = skylineSyndicate ? skylineCase : openCases ? openCaseNumber : currentCase;
   const runTotalCases = openCases ? null : totalCases;
   const skylinePhase = skylineSyndicate ? getSkylinePhase(runCase) : null;
+  const skylineNarrative = skylineSyndicate ? getSkylineCaseNarrative(runCase) : null;
   return {
     mode,
     isOpenCases: openCases,
@@ -84,6 +85,10 @@ export function getRunConfigForMode({
       : crimsonFinale
         ? crimsonFinaleRouteProvider
         : null,
-    briefingCopy: skylineSyndicate ? SKYLINE_SYNDICATE.briefing : null,
+    briefingCopy: skylineSyndicate ? skylineNarrative?.briefing || SKYLINE_SYNDICATE.briefing : null,
+    briefingNote: skylineNarrative?.note || null,
+    closingCopy: skylineNarrative
+      ? { solved: skylineNarrative.solved, failed: skylineNarrative.failed }
+      : null,
   };
 }
