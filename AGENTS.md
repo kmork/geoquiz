@@ -24,6 +24,9 @@ Follow `.editorconfig`: UTF-8, LF endings, 2-space indentation, and trimmed trai
 ## Testing Guidelines
 There is no automated test suite in this repository. Verify changes manually in the browser against the affected pages and flows. Check desktop and mobile layouts, dark and light themes, keyboard/touch interactions, and any related daily challenge or continent-filter behavior before opening a PR.
 
+## Carmen Mechanics Documentation
+When changing Carmen game mechanics, scoring, campaign progression, Open Cases behavior, suspect deduction, Interpol behavior, clue generation, or other player-facing Carmen rules, keep `carmen/game-mechanic.md` up to date in the same change. To save tokens and avoid re-deriving the game model, consult and cite that file first when Carmen mechanics context is needed.
+
 ## Commit & Pull Request Guidelines
 Recent history uses short, direct commit subjects such as `Fix difficulty level...` and `Added profile picture...`. Prefer brief imperative summaries focused on one change. Pull requests should explain gameplay or UI impact, link related issues when relevant, and include screenshots or short recordings for visible changes.
 

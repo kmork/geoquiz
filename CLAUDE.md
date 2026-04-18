@@ -114,6 +114,7 @@ This separation allows games to be reused inside the Daily Challenge without UI 
 
 - **Styles in CSS files, not HTML.** Do not add `<style>` blocks or inline `style` attributes in HTML files. All styling goes in the appropriate CSS file under `css/`.
 - **Use CSS variables for colors.** Never hardcode color values; use the existing custom properties (e.g., `var(--bg-color)`, `var(--text-color)`, `var(--good-color)`, `var(--bad-color)`). This ensures dark/light mode works correctly.
+- **Keep Carmen mechanics documented.** When changing Carmen game mechanics, scoring, campaign progression, Open Cases behavior, suspect deduction, Interpol behavior, clue generation, or other player-facing Carmen rules, update `carmen/game-mechanic.md` in the same change. To save tokens and avoid re-deriving the game model, consult and cite that file first when Carmen mechanics context is needed.
 
 ## Creating New Games — Checklist
 
