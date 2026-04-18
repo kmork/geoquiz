@@ -1,242 +1,224 @@
 # Carmen Game Mechanic Analysis
 
 ## Overview
-The Carmen mode is a route-chase detective game layered on top of the repository's border-neighbor map system. Mechanically, it combines three loops:
 
-1. Investigate the current country for destination clues.
-2. Spend time to travel to a neighboring country.
-3. Build enough suspect evidence to win the final lineup.
+The Carmen mode is now two related games built on the same route-chase engine:
 
-The design is structurally strong because the player is always balancing two scarce resources: time and certainty. The campaign framing adds long-term pressure without requiring complex progression systems. The current implementation also leans harder into a detective-notebook presentation than before: dossier entries are grouped by stop, Interpol supports manual marking of persons of interest, and successful country transitions now carry a short inner-monologue caption drawn from each country's historical profile.
+- **The Crimson Trail**: a 10-case campaign with escalating difficulty, recurring narrative foreshadowing, cumulative Interpol state, and a finale where Carmen appears through an alias.
+- **Open Cases**: repeatable standalone cases that use the late-campaign pursuit rules without the campaign-only Carmen arc.
 
-## Core Loop
-Each case begins in a country that has both a heritage site and enough border connections to support route generation. The game then generates a non-repeating route of connected countries. The player is never choosing from the whole world; every move is constrained to neighboring countries, which keeps the search space readable and makes every clue actionable.
+At the mechanical center, each case is still a constrained geography deduction game. The player starts in a country, investigates local sources, reads clues about the thief's next destination, and chooses from neighboring countries on the map. The design works because the player is not guessing from the whole world; every clue is interpreted against a visible border-neighbor choice set.
 
-At each stop, the player can investigate five fixed locations: airport, hotel, market, library, and embassy. Each location is associated with clue categories, so the choice is not cosmetic. Airport and embassy favor geography; library leans toward heritage and history; market leans toward exports and terrain-adjacent clues. This gives the investigation phase a light deduction flavor even before the player interprets the clue itself.
+The game has also grown into a parallel detective system. The player is solving two problems at once:
 
-After gathering clues, the player travels by selecting a neighboring country on the map. Correct guesses advance the chase. Wrong guesses create a dead-end trip, cost time, subtract score, and force the player to return or continue from a worse information state.
+1. Where did the thief go next?
+2. Which suspect should be arrested at the end?
 
-What has improved recently is the clarity of the transition between stops. A correct travel choice now resolves as a short three-part beat:
+Those two problems share the same scarce resource: time. Geography clues, suspect clues, Interpol browsing, travel, detours, and final certainty all compete against the case clock.
 
-- the route animation lands in the next country;
-- the player gets the usual score and thief-spotted confirmation;
-- a noir detective inner-monologue line appears at the bottom, themed to that country's `history` field.
+## Current Case Loop
 
-This gives the country arrival more identity without changing the mechanical logic of the chase.
+Each case begins by generating a non-repeating land route. The start country must have a heritage artifact and enough neighbors to make the opening playable. Later route choices prefer countries with stronger fact coverage and more onward neighbors, which quietly improves clue quality and reduces dead routes.
+
+The player's stop loop is:
+
+- review the stolen artifact and current country;
+- read the automatic suspect witness report for this stop;
+- optionally spend time to refine that suspect report from vague to specific;
+- investigate up to the stop's investigation limit across fixed locations;
+- choose a neighboring country on the map;
+- resolve a correct route advance, a dead end, or final suspect lineup.
+
+Wrong country choices are not instant failure. They create a detour: the player flies to the wrong country, loses score, spends travel time, gets a dead-end presentation, and must recover by returning to the real current stop or continuing from a worse information state. This is important because it keeps the map spatial and physical instead of turning wrong answers into abstract button errors.
+
+Correct travel has a strong presentation beat: map animation, airplane audio, optional atmosphere, score feedback, a thief taunt, and a noir country-entry monologue. That makes route progress feel like a chase rather than a quiz page refresh.
+
+## Geography Clue System
+
+Clues are generated from several data pools:
+
+- country facts;
+- geography;
+- heritage sites;
+- rivers and mountains;
+- empires;
+- famous-for tags;
+- exports.
+
+Investigation locations are not cosmetic. Each one biases the clue categories:
+
+- **Airport**: geography, rivers, mountains.
+- **Hotel**: famous-for and general facts.
+- **Market**: exports, facts, rivers, mountains.
+- **Library**: empires, heritage, famous-for, facts.
+- **Embassy**: heritage and geography.
+
+This gives the player a light strategy layer before reading the clue. The player can choose sources based on what kind of clue they need. If geography already narrowed the answer, the library or market may be better. If the neighbor set is visually confusing, airport or embassy clues may be more direct.
+
+The clue generator tracks used clue IDs across the case, so the same clue does not repeat. It also has useful fallback behavior: try thematic generators, then unused facts, then generic geography. The game is therefore resilient to uneven data coverage, which matters because country datasets are naturally inconsistent.
+
+Clue redaction is important. The engine actively prevents generated or narrated clues from naming the target country. If the noir rewrite accidentally reintroduces the answer, the game falls back to the safer raw clue.
+
+## Suspect Deduction
+
+The suspect layer is now a real second puzzle, not just end-of-case flavor.
+
+At each stop, the game can surface one vague identity clue about the hidden suspect. These clues use grouped traits, such as a broad hair/accessory/hobby/vehicle category. The player can spend extra time to refine the latest vague clue into a specific trait.
+
+This creates a good tension:
+
+- vague clues preserve uncertainty and keep multiple suspects plausible;
+- specific clues make the final lineup safer;
+- refinement costs time that could have been spent on route clues or Interpol files.
+
+The final lineup is adversarially useful. Decoys are scored to overlap with the revealed vague and specific traits, so the lineup is not filled with obviously wrong suspects. The player is rewarded for paying attention to the witness reports and not just for reaching the final country.
+
+In the campaign finale, the suspect system changes shape. Carmen is the true target, but the player is asked to identify her active alias. The lineup becomes an alias accusation rather than a normal suspect accusation. This is the strongest current narrative-mechanical integration in the game because the final click asks the player to resolve a disguise, not merely pick the famous villain.
+
+## Interpol Archive
+
+Interpol has become a cumulative detective surface with real mechanical pressure.
+
+Visible Interpol files come from several sources:
+
+- suspects relevant to the current route's regions;
+- suspects already viewed;
+- suspects already arrested and unlocked;
+- Carmen during campaign play;
+- the finale alias during the finale.
+
+Viewing a new photo profile costs 3 in-game hours unless the suspect has already been viewed or is already in custody. That turns archive browsing into an explicit risk. The player can spend time to improve suspect certainty, but doing so can cost the time needed to finish the route.
+
+The archive also supports manual reasoning:
+
+- suspects can be marked as persons of interest;
+- marked suspects stay surfaced in the Interpol list;
+- viewed and in-custody status are persisted;
+- theft history accumulates after successful arrests;
+- profiles receive contextual intel based on phase, theft history, and Carmen-network foreshadowing.
+
+This system is strongest when treated as a manual case notebook, not an automatic solver. It gives the player memory aids and flavor evidence while preserving the need to compare evidence by hand.
+
+## Campaign Structure
+
+The Crimson Trail uses four campaign phases:
+
+- **Cases 1-3, prelude**: 4 stops, 3 clues per stop, 4 investigations, 72 hours.
+- **Cases 4-6, whispers**: 5 stops, 2 clues per stop, 3 investigations, 72 hours.
+- **Cases 7-9, pursuit**: 5 stops, 2 clues per stop, 3 investigations, 64 hours.
+- **Case 10, finale**: 5 stops, 1 clue per stop, 3 investigations, 56 hours.
+
+The difficulty curve mostly reduces information instead of increasing punishment. That is the right direction for this game. Later cases feel harder because the player has fewer clues, fewer investigations, and less time, not because the interface becomes more hostile.
+
+Campaign persistence matters mechanically:
+
+- successful campaign cases advance the saved case number;
+- arrested suspects become excluded from later campaign suspect selection;
+- mission history affects some deterministic campaign flavor;
+- campaign completion unlocks the natural transition into Open Cases;
+- the campaign and Open Cases can now be launched explicitly from the Play page.
+
+The campaign's main strength is that it makes individual cases feel like part of a larger investigation. Briefing marginalia, arrival hints, Interpol anomalies, and the eventual alias finale all point toward Carmen without changing the core route logic.
+
+## Open Cases
+
+Open Cases are now a distinct entry point rather than just post-campaign residue. They use `open_cases` mode and present cases as an indefinite sequence.
+
+Mechanically, Open Cases use the pursuit-style configuration:
+
+- 5 stops;
+- 2 clues per stop;
+- 3 investigations;
+- 64 hours.
+
+They do not exclude previously arrested suspects, and Carmen is removed from the normal Open Cases suspect list. That makes Open Cases cleaner as repeatable standalone detective puzzles. They keep the pressure and richer rules of late campaign play without requiring the player to be inside the campaign narrative.
+
+This split is good product structure. Campaign play is about escalation and payoff; Open Cases are about replayable geography-deduction cases.
 
 ## Time Economy
-Time is the primary failure pressure:
 
-- Travel costs `5` hours.
-- Each investigation costs `3` hours.
-- Refining a suspect clue costs `2` hours.
-- Viewing a new Interpol profile with a photo costs `3` hours.
+Time is the main loss condition and the most important strategic resource.
 
-Campaign pacing is controlled by phase-based modifiers:
+Current costs:
 
-- Cases 1-3 (`prelude`): 4 stops, 3 clues per stop, 4 investigations, 72 hours.
-- Cases 4-6 (`whispers`): 5 stops, 2 clues per stop, 3 investigations, 72 hours.
-- Cases 7-9 (`pursuit`): 5 stops, 2 clues per stop, 3 investigations, 64 hours.
-- Case 10 (`finale`): 5 stops, 1 clue per stop, 3 investigations, 56 hours.
+- investigation: 3 hours;
+- travel: 5 hours;
+- suspect clue refinement: 2 hours;
+- new Interpol photo profile: 3 hours.
 
-This is a good pressure curve. Early cases allow experimentation, while later cases reduce clue density and compress the time budget. The strongest mechanical idea here is that difficulty rises mostly by restricting information, not by adding arbitrary punishment.
+Time is spent on route confidence, suspect confidence, and map movement. That creates meaningful tradeoffs. The player can over-investigate and run out of time, under-investigate and choose wrong routes, or ignore suspect work and fail the final lineup.
 
-## Clue System
-Clues are drawn from multiple content pools: country facts, geography, heritage, rivers or mountains, empires, famous-for tags, and exports. The generator tracks used clue IDs globally inside a case, which prevents repeated clue spam and helps the route feel like a coherent investigation instead of a slot machine.
-
-A notable strength is that clue generation falls back gracefully:
-
-- Try thematic generators first.
-- Retry unused country facts if needed.
-- Fall back to geography clues as a last resort.
-
-That means the game is resilient to uneven data coverage. Route generation also favors countries with more facts and more neighbors, which quietly improves clue quality and future route viability.
-
-## Suspect Identification Layer
-The suspect system creates a second puzzle running in parallel with the route chase. Each stop can reveal one vague clue about hair, accessory, hobby, or vehicle. The player can then spend extra time to upgrade that clue from a grouped description to a specific fact.
-
-This is mechanically effective for two reasons:
-
-- Vague clues support deduction without collapsing the lineup too early.
-- Specific clues increase confidence but cost time, so the player must decide when certainty is worth the expense.
-
-The final lineup intentionally chooses decoys that overlap with both vague and confirmed attributes. That is a good anti-bruteforce mechanic. It ensures the suspect phase is not just flavor text attached to the route game.
-
-This layer has become more legible through UI changes already in place:
-
-- Interpol files can now be manually marked as persons of interest.
-- The Interpol list surfaces those marked suspects in a separate strip for quick recall.
-- The dossier is visually grouped by stop, which makes clue chronology easier to reconstruct during a case.
-
-These are not full deduction mechanics yet, but they are strong manual-support tools and move the game closer to a real detective workflow.
+A subtle issue remains: time affects survival but not score. The score function receives elapsed stop time but does not use it. This is not necessarily wrong, because it keeps score readable, but it means the clock and score measure different skills. The clock measures efficiency under pressure; score mostly measures clean routing and final correctness.
 
 ## Scoring Model
-The score model is simple:
 
-- Base correct stop: `100`
-- First-try bonus: `+50`
-- Perfect case bonus: `+200`
-- Wrong destination guess: `-25`
-- Extra clue request: `-20`
-- Wrong final suspect: `-200`
+The score model is intentionally simple:
 
-One important implementation detail: stop score currently ignores time taken. The score function receives time but does not use it. That means the hour clock governs win/loss tension, while score mainly rewards clean routing and punishes mistakes. This is clear and readable, but it also means fast play is not meaningfully differentiated from merely successful play.
+- correct stop: 100 points;
+- first-try stop bonus: 50 points;
+- perfect route bonus: 200 points;
+- wrong destination: -25 points;
+- extra clue request: -20 points;
+- wrong final suspect: -200 points.
+
+Manual investigation, suspect refinement, Interpol browsing, and time spent do not directly reduce score. They reduce the clock instead. This separation is clear: score rewards accuracy; time governs survival.
+
+The current model is easy to understand, but it also under-rewards fast, confident play. A player who solves with many spare hours gets the same route score as a player who barely survives, provided both avoided wrong guesses.
+
+## Presentation And Feedback
+
+The presentation layer now does more mechanical work than before.
+
+Important feedback systems include:
+
+- the case briefing overlay with phase-specific mission copy;
+- campaign-only briefing hints that foreshadow Carmen;
+- typewriter text and stamp effects for case framing;
+- route animation and airplane sound for travel;
+- ambient sounds for locations and arrivals;
+- narrator captions based on country-entry monologues;
+- dead-end overlays and dossier detour entries;
+- solved/failed closing overlays;
+- special campaign-complete transition into Open Cases.
+
+These are not just decoration. They help the player understand state transitions: investigation, travel, arrival, dead end, final accusation, and campaign progression. The noir layer works best when it reinforces the geography chase rather than replacing it.
+
+The audio model is also intentionally gated by the front-screen tap, which avoids browser autoplay issues and makes the opening feel deliberate.
 
 ## What Works Well
-- The route constraint makes geography knowledge and clue reading feel tightly connected.
-- Investigation locations create controlled clue specialization without overwhelming the player.
-- Time pressure is legible because every major action has a fixed cost.
-- The campaign ramp is easy to understand and easy to tune.
-- The suspect layer gives the finale of each case a second form of tension beyond just reaching the last country.
-- The grouped dossier and marked-suspect Interpol flow now support manual reasoning better than the earlier flat presentation.
-- Country-entry monologues give each arrival more personality and help the geography feel less abstract.
+
+- The neighboring-country constraint makes every geography clue actionable.
+- Location-specific clue categories give investigation choices real texture.
+- Time pressure ties together route deduction, suspect deduction, and archive browsing.
+- The campaign difficulty ramp is simple and effective.
+- The suspect lineup uses overlapping decoys, which prevents trivial final accusations.
+- Interpol has become a useful manual reasoning surface without solving the case for the player.
+- The finale alias mechanic gives the campaign a distinct payoff.
+- Open Cases cleanly separate replayable cases from campaign progression.
+- Presentation beats make case state changes legible and atmospheric.
 
 ## Friction Points
-- Investigations are limited by time but not by per-location exhaustion rules beyond clue reuse, so some player choices may feel trial-and-error rather than strategic.
-- Interpol browsing costs time, but its payoff depends on how well the player remembers prior suspects. That is interesting for campaign play, but potentially opaque for first-time players.
-- The extra clue system exists in logic but is less central than the location investigation loop, so its role in the decision space may feel underdeveloped.
-- Because wrong guesses always cost the same `-25` and `5` hours, the tension comes more from route uncertainty than from contextual risk.
-- The new country-entry monologues are flavorful, but at the moment they are still close to paraphrased history text. They need more authored personality and stronger rhythm.
-- The narrator caption currently fades automatically, which is stylish, but it can still feel too brief or too detached from the continue flow if the player is reading slowly.
-- The top-level status row has been visually tightened, but it still does mostly functional work; it does not yet contribute much to the detective fiction.
+
+- The route and suspect puzzles can compete for attention, especially for first-time players who do not yet know how important suspect clues are.
+- Interpol profile browsing costs time, but the value of browsing is not always predictable before spending that time.
+- Investigation location strategy is present but still partly opaque; players may not fully understand why airport, library, market, hotel, and embassy differ.
+- Score does not account for hours remaining, so fast successful play has limited extra payoff.
+- Wrong-route recovery is mechanically interesting, but the available options after a dead end can be mentally confusing because the player position and logical route position diverge.
+- Campaign foreshadowing is strong in tone, but much of it is interpretive rather than mechanically inspectable.
+- Open Cases inherit pursuit difficulty, which is good for engaged players but may be sharp for someone using Open Cases as their first Carmen experience.
 
 ## Design Opportunities
-- Tie scoring partly to hours remaining if you want speed to matter beyond survival.
-- Differentiate location value further by making some clue categories rarer but stronger.
-- Make Interpol more explicitly strategic by signaling when dossier evidence has narrowed the viable suspect pool.
-- Consider giving the finale a slightly different mechanical rule, since Carmen being fixed as the final thief is already a narrative escalation.
-- Push the narrator system from "country fact with voice" toward "short authored beat with attitude," while still keeping it grounded in real country history.
-- Use the improved dossier and Interpol layout as a base for stronger manual comparison rather than jumping immediately to automatic suspect narrowing.
+
+- Add a subtle UI cue showing each investigation location's clue tendency without turning it into tutorial text.
+- Consider a small end-of-case hours-remaining bonus if speed should matter in score.
+- Make Interpol browsing value more legible, for example by distinguishing active-case candidates from broader archive files.
+- Strengthen dead-end recovery messaging so the player understands when they are physically in the wrong country versus logically still solving the current stop.
+- Give Open Cases a short first-run framing that explains they are standalone pursuit cases.
+- Continue making campaign hints more inspectable through dossier/Interpol artifacts, not only transient flavor text.
+- Expand the finale alias puzzle with more evidence that directly rewards comparing file irregularities.
 
 ## Conclusion
-The current Carmen game has a solid mechanical backbone: constrained map pursuit, readable time costs, data-backed clue generation, and a suspect-identification subgame that meaningfully affects the ending. Its best quality is that nearly all pressure comes from information management. The next level of improvement is not more content volume, but sharper differentiation between clue sources, stronger payoffs for good deduction, and clearer signaling around when to spend time on suspect certainty versus route certainty.
 
-## Current Implemented State
+The current Carmen game has matured from a themed route quiz into a hybrid geography chase and detective notebook game. Its best mechanic is still constrained movement: every clue matters because every answer must be a neighboring country. The newer systems work when they serve that core: suspect clues add a second deduction track, Interpol adds memory and risk, campaign phases add pressure, and the finale alias gives long-term play a concrete payoff.
 
-### Manual Deduction Support
-The game now has the beginning of a usable casework surface:
-
-- dossier entries are grouped by stop instead of appearing as one long flat log;
-- dead ends are logged as their own dossier sections;
-- Interpol profiles can be marked manually as persons of interest;
-- marked suspects are surfaced separately in the Interpol list.
-
-This is enough to support "compare by hand" play, which fits the design better than instant automation.
-
-### Country Arrival Presentation
-Country-to-country travel now has more narrative identity:
-
-- successful arrivals trigger a bottom-screen caption;
-- the caption is written as the detective's inner monologue;
-- its content is sourced from the destination country's `history` in `countries.json`;
-- there is now a specific monologue entry for every country in the dataset, including a fallback tone for entries with thin or missing history.
-
-This is a meaningful atmospheric improvement, but the content still needs editorial sharpening.
-
-### UI Tone Direction
-The current visual direction is clearly detective-noir with some self-aware pulp framing:
-
-- the status row has been tightened and simplified;
-- the heritage archive backside uses a more authored paper/record look;
-- dossier and Interpol panels now feel more like case materials than generic game widgets.
-
-The next UI gains should come from stronger narrative usefulness, not more decoration.
-
-## Improvement Roadmap
-
-### Guiding Principle
-The game should remain a geography-learning game first, with noir flavor and self-ironic detective framing used to make the learning loop more memorable. Every new mechanic should either clarify a geography concept, reward close reading of clues, or increase the emotional payoff of solving the geography puzzle.
-
-### Phase 1: Finish the Narrator System Properly
-The arrival monologues are now a visible part of the game identity, so the remaining work here is editorial and pacing polish rather than new mechanics.
-
-Planned improvements:
-
-- Keep tightening the country-entry monologues so they sound authored, overcommitted, and consistently noir-self-aware.
-- Continue handling modern or anachronistic history facts with explicit narrator self-awareness instead of pretending the period mismatch does not exist.
-- Tune where and how narrator beats appear outside country arrivals, especially for repeated dead ends, close calls, and finale-adjacent moments.
-- Keep the narrator useful as atmosphere, not as a hint-delivery system.
-
-Design goal:
-The detective voice should feel like a coherent character layer across the campaign, not just a caption feature.
-
-### Phase 2: Deepen Interpol as a Flavor Archive
-Interpol is now working best as a detective-fiction reward surface rather than a comparison engine. That direction should be pushed further.
-
-Planned improvements:
-
-- Expand the `IN CUSTODY` file concept with more second-page and supplemental material in the same style as the new background stories.
-- Add richer file-only material such as ACME remarks, failed operation summaries, post-arrest habits, or known-associate anecdotes.
-- Keep these additions flavor-first and retrospective; they should add character, not help solve the current suspect lineup.
-- Make the archive feel cumulative across the campaign, so prior arrests gradually become a gallery of Carmen's absurd orbit.
-
-Design goal:
-Interpol should reward curiosity and success without doing the detective work for the player.
-
-### Phase 3: Strengthen Campaign Foreshadowing
-The next major gain should come from making the campaign feel like one growing investigation rather than a chain of disconnected chases.
-
-Planned improvements:
-
-- Add more Carmen-network hints across briefings, taunts, Interpol anomalies, witness-side flavor notes, and dossier-adjacent story beats.
-- Make phase progression more legible through tone:
-  early cases feel like isolated professionals;
-  mid-campaign cases imply a structure;
-  late cases make Carmen's presence unmistakable.
-- Use prior arrests, theft history, and repeated patterns to suggest that the player is slowly surrounding an organization rather than catching random thieves.
-- Keep every hint interpretive rather than mechanical.
-
-Design goal:
-The player should feel the net closing around Carmen long before the finale begins.
-
-### Phase 4: Build the Finale Setup
-The finale should become a distinct payoff, not just a harder standard case. The most important work now is setting up the logic that will make the ending feel earned.
-
-Planned improvements:
-
-- Seed the Interpol inconsistencies, alias traces, and suspicious file irregularities that will matter in the final reveal.
-- Prepare the campaign so the player already understands Carmen is the mastermind before the last accusation.
-- Make the final geography step depend on a real global concept, with the International Date Line still the strongest current direction.
-- Ensure earlier cases quietly prepare the player for time-order and cross-border logic so the final puzzle feels solvable, not arbitrary.
-
-Design goal:
-The finale should pay off both geography knowledge and accumulated detective interpretation.
-
-### Phase 5: Upgrade the Finale Lineup Into a Disguise Puzzle
-The lineup should remain the emotional climax, but it should become more specific to Carmen instead of functioning like a normal end-of-case accusation.
-
-Planned improvements:
-
-- Build a fixed finale lineup around Carmen, Carmen's active alias or disguise, and two strong decoys.
-- Make the real question "which identity is Carmen using right now?" rather than "is Carmen present?"
-- Use Interpol irregularities, accumulated campaign knowledge, and final-case evidence to justify the correct choice.
-- Differentiate failure states so misunderstanding the disguise is treated differently from misunderstanding the evidence entirely.
-
-Design goal:
-The player should land the final win by solving Carmen's disguise, not merely by clicking the obvious villain.
-
-### Phase 6: Add Sparse, Targeted Audio Punctuation
-Sound should come after the structural campaign work, because it is there to sharpen moments that already function well.
-
-Planned improvements:
-
-- Add restrained one-shot punctuation for breakthroughs, dead ends, file reveals, and lineup locking.
-- Reserve stronger accents for the finale reveal and campaign-complete beats.
-- Keep the mix sparse so clue reading, map interpretation, and narration remain dominant.
-
-Design goal:
-Increase rhythm and payoff without turning the game noisy or overdirected.
-
-### Phase 7: Final Balancing and Fairness Pass
-Once the campaign arc and finale logic are in place, the remaining job is tuning difficulty, pacing, and readability.
-
-Planned improvements:
-
-- Tune how quickly Interpol becomes rewarding without becoming too informative too early.
-- Make sure Carmen foreshadowing is satisfying in hindsight but not blunt in the first half of the campaign.
-- Verify that the finale's geography and disguise logic can be solved from in-game evidence alone.
-- Review text density, narration frequency, and archive-reading volume so flavor enriches the game instead of stalling it.
-- Confirm that every new addition still supports geography retention and the manual-deduction philosophy.
-
-Design goal:
-Ship a campaign that feels richer and smarter without becoming overexplained, overassisted, or dramatically heavier than the core geography game can support.
+The next improvements should focus less on adding more systems and more on clarifying the systems already present. Players should better understand why investigation locations differ, when Interpol is worth the time, how dead-end recovery works, and how campaign evidence points toward the finale. The game has enough mechanical depth now; the highest-value work is making that depth easier to read while preserving the manual detective feel.
