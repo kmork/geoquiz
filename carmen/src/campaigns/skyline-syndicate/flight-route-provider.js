@@ -1,8 +1,11 @@
 import { SKYLINE_SYNDICATE } from './flight-campaign-config.js';
 import {
   buildFlightClockClue,
+  buildFlightConfidenceClue,
   buildFlightDistanceClue,
+  buildGatewayConnectivityClue,
   getFlightDistanceBand,
+  getGatewayConnectivityBand,
 } from './flight-clues.js';
 
 const MAX_VISIBLE_CHOICES = 8;
@@ -202,6 +205,27 @@ export class CapitalFlightRouteProvider {
       .filter(Boolean);
   }
 
+  getConfidenceChoiceSummaries(from, choices = []) {
+    return choices
+      .map(country => {
+        const meta = this.getRouteMeta(from, country);
+        return meta?.confidence ? { country, confidence: meta.confidence } : null;
+      })
+      .filter(Boolean);
+  }
+
+  getGatewayConnectivityMeta(country) {
+    const connectionCount = this.getChoiceCount(country);
+    const band = getGatewayConnectivityBand(connectionCount);
+    return band ? { country, connectionCount, band } : null;
+  }
+
+  getGatewayChoiceSummaries(choices = []) {
+    return choices
+      .map(country => this.getGatewayConnectivityMeta(country))
+      .filter(Boolean);
+  }
+
   getChoices(country, context = null) {
     const countrySet = context?.countrySet;
     const choices = (this.choiceMap[country] || []).slice(0, MAX_VISIBLE_CHOICES);
@@ -270,9 +294,14 @@ export class CapitalFlightRouteProvider {
     const current = context.route?.[context.currentStop];
     const distanceClue = this._distanceClue(current, target, choices, context);
     const clockClue = this._clockClue(current, target, choices, context);
-    const clues = (context.caseNumber >= 4
-      ? [clockClue, distanceClue]
-      : [distanceClue, clockClue]
+    const confidenceClue = this._confidenceClue(current, target, choices, context);
+    const gatewayClue = this._gatewayClue(target, choices, context);
+    const caseNumber = context.caseNumber || 1;
+    const clues = (
+      caseNumber >= 8 ? [confidenceClue, clockClue, gatewayClue, distanceClue] :
+      caseNumber >= 5 ? [gatewayClue, confidenceClue, distanceClue, clockClue] :
+      caseNumber >= 4 ? [clockClue, distanceClue, gatewayClue, confidenceClue] :
+      [distanceClue, gatewayClue, clockClue, confidenceClue]
     ).filter(Boolean);
     return clues.length ? clues.slice(0, count) : null;
   }
@@ -280,10 +309,21 @@ export class CapitalFlightRouteProvider {
   getLocationClue({ target, currentCountry, locationId, context, choices = [] }) {
     if (locationId === 'airport') {
       return this._distanceClue(currentCountry, target, choices, context) ||
-        this._clockClue(currentCountry, target, choices, context);
+        this._confidenceClue(currentCountry, target, choices, context) ||
+        this._clockClue(currentCountry, target, choices, context) ||
+        this._gatewayClue(target, choices, context);
     }
     if (locationId === 'hotel') {
-      return this._clockClue(currentCountry, target, choices, context);
+      return this._clockClue(currentCountry, target, choices, context) ||
+        this._gatewayClue(target, choices, context);
+    }
+    if (locationId === 'embassy') {
+      return this._confidenceClue(currentCountry, target, choices, context) ||
+        this._clockClue(currentCountry, target, choices, context);
+    }
+    if (locationId === 'library') {
+      return this._gatewayClue(target, choices, context) ||
+        this._confidenceClue(currentCountry, target, choices, context);
     }
     return null;
   }
@@ -331,6 +371,26 @@ export class CapitalFlightRouteProvider {
     if (!routeMeta || !clockMeta) return null;
     const summaries = this.getClockChoiceSummaries(current, choices, context);
     const clue = buildFlightClockClue({ ...routeMeta, ...clockMeta }, summaries);
+    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
+    return clue;
+  }
+
+  _confidenceClue(current, target, choices, context) {
+    if (!current || !target) return null;
+    const meta = this.getRouteMeta(current, target);
+    if (!meta?.confidence) return null;
+    const summaries = this.getConfidenceChoiceSummaries(current, choices);
+    const clue = buildFlightConfidenceClue(meta, summaries);
+    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
+    return clue;
+  }
+
+  _gatewayClue(target, choices, context) {
+    if (!target) return null;
+    const meta = this.getGatewayConnectivityMeta(target);
+    if (!meta) return null;
+    const summaries = this.getGatewayChoiceSummaries(choices);
+    const clue = buildGatewayConnectivityClue(meta, summaries);
     if (!clue || context?.usedClueIds?.has(clue.id)) return null;
     return clue;
   }
