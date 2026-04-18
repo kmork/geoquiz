@@ -1,5 +1,9 @@
 import { SKYLINE_SYNDICATE } from './flight-campaign-config.js';
-import { buildFlightDistanceClue, getFlightDistanceBand } from './flight-clues.js';
+import {
+  buildFlightClockClue,
+  buildFlightDistanceClue,
+  getFlightDistanceBand,
+} from './flight-clues.js';
 
 const MAX_VISIBLE_CHOICES = 8;
 const EARTH_RADIUS_KM = 6371;
@@ -20,6 +24,34 @@ function haversineKm(a, b) {
   const h = Math.sin(dLat / 2) ** 2 +
     Math.cos(lat1) * Math.cos(lat2) * Math.sin(dLon / 2) ** 2;
   return 2 * EARTH_RADIUS_KM * Math.asin(Math.sqrt(h));
+}
+
+function getTimeZoneOffsetMinutes(timeZone, date = new Date()) {
+  if (!timeZone) return null;
+  try {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hourCycle: 'h23',
+    }).formatToParts(date);
+    const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+    const asUtc = Date.UTC(
+      Number(values.year),
+      Number(values.month) - 1,
+      Number(values.day),
+      Number(values.hour),
+      Number(values.minute),
+      Number(values.second),
+    );
+    return Math.round((asUtc - date.getTime()) / 60000);
+  } catch {
+    return null;
+  }
 }
 
 function shuffle(values) {
@@ -109,14 +141,16 @@ export class CapitalFlightRouteProvider {
   }
 
   _withDistance(edge) {
-    if (edge.distanceKm) return edge;
     const fromGateway = this.gatewayByCountry[edge.from];
     const toGateway = this.gatewayByCountry[edge.to];
-    const distanceKm = haversineKm(
+    const distanceKm = edge.distanceKm || haversineKm(
       fromGateway ? { lat: fromGateway.capitalLat, lon: fromGateway.capitalLon } : null,
       toGateway ? { lat: toGateway.capitalLat, lon: toGateway.capitalLon } : null,
     );
-    return distanceKm ? { ...edge, distanceKm } : edge;
+    return {
+      ...edge,
+      ...(distanceKm ? { distanceKm } : {}),
+    };
   }
 
   getRouteMeta(from, to) {
@@ -129,6 +163,41 @@ export class CapitalFlightRouteProvider {
         const meta = this.getRouteMeta(from, country);
         const band = getFlightDistanceBand(meta?.distanceKm);
         return band ? { country, band, distanceKm: meta.distanceKm } : null;
+      })
+      .filter(Boolean);
+  }
+
+  getCapitalTimeZone(country, context = null) {
+    return context?.countryMap?.[country]?.capitalTimeZone ||
+      context?.countryMap?.[country]?.timeZones?.[0] ||
+      null;
+  }
+
+  getClockMeta(from, to, context = null) {
+    const fromTimeZone = this.getCapitalTimeZone(from, context);
+    const toTimeZone = this.getCapitalTimeZone(to, context);
+    const date = context?.clockReferenceDate || new Date();
+    const fromUtcOffsetMinutes = getTimeZoneOffsetMinutes(fromTimeZone, date);
+    const toUtcOffsetMinutes = getTimeZoneOffsetMinutes(toTimeZone, date);
+    if (!Number.isFinite(fromUtcOffsetMinutes) || !Number.isFinite(toUtcOffsetMinutes)) return null;
+    return {
+      from,
+      to,
+      fromTimeZone,
+      toTimeZone,
+      fromUtcOffsetMinutes,
+      toUtcOffsetMinutes,
+      clockDeltaMinutes: toUtcOffsetMinutes - fromUtcOffsetMinutes,
+    };
+  }
+
+  getClockChoiceSummaries(from, choices = [], context = null) {
+    return choices
+      .map(country => {
+        const meta = this.getClockMeta(from, country, context);
+        return Number.isFinite(meta?.clockDeltaMinutes)
+          ? { country, clockDeltaMinutes: meta.clockDeltaMinutes }
+          : null;
       })
       .filter(Boolean);
   }
@@ -200,12 +269,23 @@ export class CapitalFlightRouteProvider {
   generateClues({ target, count, context, choices = [] }) {
     const current = context.route?.[context.currentStop];
     const distanceClue = this._distanceClue(current, target, choices, context);
-    return distanceClue ? [distanceClue].slice(0, count) : null;
+    const clockClue = this._clockClue(current, target, choices, context);
+    const clues = (context.caseNumber >= 4
+      ? [clockClue, distanceClue]
+      : [distanceClue, clockClue]
+    ).filter(Boolean);
+    return clues.length ? clues.slice(0, count) : null;
   }
 
   getLocationClue({ target, currentCountry, locationId, context, choices = [] }) {
-    if (locationId !== 'airport') return null;
-    return this._distanceClue(currentCountry, target, choices, context);
+    if (locationId === 'airport') {
+      return this._distanceClue(currentCountry, target, choices, context) ||
+        this._clockClue(currentCountry, target, choices, context);
+    }
+    if (locationId === 'hotel') {
+      return this._clockClue(currentCountry, target, choices, context);
+    }
+    return null;
   }
 
   getBriefingHint() {
@@ -240,6 +320,17 @@ export class CapitalFlightRouteProvider {
     if (!meta?.distanceKm) return null;
     const summaries = this.getDistanceChoiceSummaries(current, choices);
     const clue = buildFlightDistanceClue(meta, summaries);
+    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
+    return clue;
+  }
+
+  _clockClue(current, target, choices, context) {
+    if (!current || !target) return null;
+    const routeMeta = this.getRouteMeta(current, target);
+    const clockMeta = this.getClockMeta(current, target, context);
+    if (!routeMeta || !clockMeta) return null;
+    const summaries = this.getClockChoiceSummaries(current, choices, context);
+    const clue = buildFlightClockClue({ ...routeMeta, ...clockMeta }, summaries);
     if (!clue || context?.usedClueIds?.has(clue.id)) return null;
     return clue;
   }

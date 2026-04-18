@@ -165,7 +165,14 @@ Skyline wording must stay flight-corridor oriented. Briefings, travel prompts, d
 
 Skyline now has case-specific campaign copy in `carmen/src/campaigns/skyline-syndicate/flight-campaign-config.js`. The 10-case arc centers on **The Dispatcher**, a logistics controller who moves artifacts through corrupted manifests, cargo seals, and capital gateways. Each Skyline case can provide its own briefing, ACME note, solved text, and failed-case text while still using the shared Carmen route and suspect systems.
 
-The first Skyline-only geography clue family is **distance band**. `CapitalFlightRouteProvider` calculates capital-to-capital great-circle distance from the static gateway snapshot and can produce clues such as short-hop, regional, and long-haul capital connections. These clues are generated from the active route provider and compared against the visible flight choices, so they behave like route-deduction clues rather than general trivia.
+The first Skyline-only geography clue families are **distance band** and **legal time-zone shift**. `CapitalFlightRouteProvider` calculates capital-to-capital great-circle distance from the static gateway snapshot and can produce clues such as short-hop, regional, and long-haul capital connections. It also compares the current legal IANA time zone for the departure and destination capitals using the shared `capitalTimeZone` data in `data/countries.json`, producing clues such as the next capital being several hours ahead of or behind departure. These clues are generated from the active route provider and compared against the visible flight choices, so they behave like route-deduction clues rather than general trivia.
+
+Country time-zone data is stored on each `data/countries.json` entry as:
+
+- `timeZones`: all IANA zones for that country or territory in the local tzdb source;
+- `capitalTimeZone`: the IANA zone used for the capital, chosen directly for single-zone entries and by nearest tzdb representative coordinate for multi-zone countries.
+
+Study Mode can display these shared legal time zones, and Skyline uses `capitalTimeZone` for manifest-clock clues.
 
 Campaign-specific launch behavior is now centralized in `carmen/src/campaign/modes.js`. The main Carmen entrypoint loads generic game data and asks this module for the active run configuration, mission label, route provider, and briefing copy. New campaigns should add their mode-specific data and provider wiring there or in their own campaign folder, rather than adding new direct campaign branches to `carmen/src/main.js`.
 

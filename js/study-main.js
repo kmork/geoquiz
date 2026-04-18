@@ -651,6 +651,58 @@ function formatPop(pop) {
   return `${pop}`;
 }
 
+function getTimeZoneOffsetMinutes(timeZone, date = new Date()) {
+  if (!timeZone) return null;
+  try {
+    const parts = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hourCycle: 'h23',
+    }).formatToParts(date);
+    const values = Object.fromEntries(parts.map(part => [part.type, part.value]));
+    const asUtc = Date.UTC(
+      Number(values.year),
+      Number(values.month) - 1,
+      Number(values.day),
+      Number(values.hour),
+      Number(values.minute),
+      Number(values.second),
+    );
+    return Math.round((asUtc - date.getTime()) / 60000);
+  } catch {
+    return null;
+  }
+}
+
+function formatUtcOffset(minutes) {
+  if (!Number.isFinite(minutes)) return '';
+  const sign = minutes >= 0 ? '+' : '-';
+  const abs = Math.abs(minutes);
+  const hh = String(Math.floor(abs / 60)).padStart(2, '0');
+  const mm = String(abs % 60).padStart(2, '0');
+  return `UTC${sign}${hh}:${mm}`;
+}
+
+function formatTimeZoneLabel(timeZone) {
+  const offset = formatUtcOffset(getTimeZoneOffsetMinutes(timeZone));
+  return offset ? `${timeZone} (${offset})` : timeZone;
+}
+
+function formatCountryTimeZones(entry) {
+  const zones = entry?.timeZones || [];
+  if (!zones.length) return '';
+  if (zones.length === 1) return formatTimeZoneLabel(zones[0]);
+  const capitalZone = entry.capitalTimeZone ? formatTimeZoneLabel(entry.capitalTimeZone) : '';
+  return capitalZone
+    ? `Capital: ${capitalZone}; ${zones.length} legal zones`
+    : `${zones.length} legal zones`;
+}
+
 function updateInfoPanel(dataName) {
   if (!dataName) {
     hideInfoPanel();
@@ -680,8 +732,12 @@ function updateInfoPanel(dataName) {
   const famousFor = entry?.famousFor || [];
   const exports = entry?.exports || [];
   const history = entry?.history || '';
+  const timeZones = formatCountryTimeZones(entry);
 
   let extraRows = '';
+  if (timeZones) {
+    extraRows += `<div class="study-info-row study-info-borders"><span>Time zones</span><span>${timeZones}</span></div>`;
+  }
   if (climate) {
     extraRows += `<div class="study-info-row"><span>Climate</span><span>${climate}</span></div>`;
   }
