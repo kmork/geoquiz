@@ -1365,6 +1365,10 @@ export function createCarmenUI(container, flagCodes) {
       els.musicToggle.style.display = 'none';
       return new Promise(resolve => {
         const continueLabel = options?.continueLabel || 'Next case →';
+        const timeBonus = options?.timeBonus || 0;
+        const timeDetail = timeBonus > 0
+          ? `Case completed with ${hoursLeft}h remaining · +${timeBonus} speed bonus`
+          : `Case completed with ${hoursLeft}h remaining`;
         const isCarmen = suspectName === 'Carmen Sandiego';
         const arrestImg = isCarmen ? IMG.carmenArrested : IMG.detectiveArresting;
         const overlay = document.createElement('div');
@@ -1377,7 +1381,7 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-closing-name">${esc(suspectName)}</div>
             <div class="carmen-closing-text"></div>
             <div class="carmen-closing-score">${score} points</div>
-            <div class="carmen-closing-detail">Case completed with ${hoursLeft}h remaining</div>
+            <div class="carmen-closing-detail">${esc(timeDetail)}</div>
             <div class="carmen-closing-buttons" style="display:none">
               <button class="carmen-closing-btn carmen-btn-continue">${esc(continueLabel)}</button>
               <button class="carmen-closing-btn carmen-btn-quit">Quit</button>

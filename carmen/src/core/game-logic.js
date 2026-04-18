@@ -22,6 +22,8 @@ export { SUSPECTS };
 const INVESTIGATION_COST_HOURS = 3; // hours per investigation
 const TRAVEL_COST_HOURS = 5;        // hours per travel between stops
 const EXTRA_CLUE_COST_HOURS = 2;    // hours per extra clue
+const TIME_BONUS_HOURS_PER_POINT = 2;
+const MAX_TIME_BONUS = 50;
 
 
 export class CarmenGameLogic {
@@ -114,6 +116,7 @@ export class CarmenGameLogic {
     this.stopStartTime = null;
     this.gameOver = false;
     this.won = false;
+    this.timeBonusAwarded = false;
 
     this.suspectEngine.reset();
 
@@ -266,7 +269,10 @@ export class CarmenGameLogic {
 
   getResults() {
     const elapsed = (Date.now() - this.gameStartTime) / 1000;
-    const maxScore = (this.route.length - 1) * 150 + 200; // max per stop + perfect bonus
+    const maxTimeBonus = this._calculateTimeBonus(
+      Math.max(0, this.diff.totalHours - ((this.route.length - 1) * TRAVEL_COST_HOURS))
+    );
+    const maxScore = (this.route.length - 1) * 150 + 200 + maxTimeBonus;
     return {
       won: this.won,
       score: this.score,
@@ -278,6 +284,14 @@ export class CarmenGameLogic {
       totalWrongGuesses: this.totalWrongGuesses,
       route: this.route,
     };
+  }
+
+  awardTimeBonus() {
+    if (!this.won || this.timeBonusAwarded) return 0;
+    const bonus = this._calculateTimeBonus(this.hoursRemaining);
+    this.score += bonus;
+    this.timeBonusAwarded = true;
+    return bonus;
   }
 
   // ─── Route Generation ────────────────────────────────────────
@@ -569,5 +583,9 @@ export class CarmenGameLogic {
     let score = 100;
     if (firstTry) score += 50;
     return score;
+  }
+
+  _calculateTimeBonus(hoursRemaining) {
+    return Math.min(MAX_TIME_BONUS, Math.floor(hoursRemaining / TIME_BONUS_HOURS_PER_POINT));
   }
 }

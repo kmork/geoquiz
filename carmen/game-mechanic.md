@@ -148,7 +148,7 @@ Current costs:
 
 Time is spent on route confidence, suspect confidence, and map movement. That creates meaningful tradeoffs. The player can over-investigate and run out of time, under-investigate and choose wrong routes, or ignore suspect work and fail the final lineup.
 
-A subtle issue remains: time affects survival but not score. The score function receives elapsed stop time but does not use it. This is not necessarily wrong, because it keeps score readable, but it means the clock and score measure different skills. The clock measures efficiency under pressure; score mostly measures clean routing and final correctness.
+Time now affects both survival and final score, but only lightly. A solved case receives a small speed bonus based on hours remaining, which makes efficient play matter without letting the clock dominate route accuracy.
 
 ## Scoring Model
 
@@ -157,13 +157,14 @@ The score model is intentionally simple:
 - correct stop: 100 points;
 - first-try stop bonus: 50 points;
 - perfect route bonus: 200 points;
+- hours-remaining speed bonus: 1 point per 2 hours left, capped at 50 points;
 - wrong destination: -25 points;
 - extra clue request: -20 points;
 - wrong final suspect: -200 points.
 
-Manual investigation, suspect refinement, Interpol browsing, and time spent do not directly reduce score. They reduce the clock instead. This separation is clear: score rewards accuracy; time governs survival.
+Manual investigation, suspect refinement, Interpol browsing, and travel still do not directly reduce score. They reduce the clock, which can lower or erase the speed bonus and can still cause outright failure.
 
-The current model is easy to understand, but it also under-rewards fast, confident play. A player who solves with many spare hours gets the same route score as a player who barely survives, provided both avoided wrong guesses.
+The current model remains readable: score primarily rewards accuracy, while the speed bonus gives clean, confident play a modest extra payoff.
 
 ## Presentation And Feedback
 
@@ -210,7 +211,7 @@ The audio model is also intentionally gated by the front-screen tap, which avoid
 ## Design Opportunities
 
 - Add a subtle UI cue showing each investigation location's clue tendency without turning it into tutorial text.
-- Consider a small end-of-case hours-remaining bonus if speed should matter in score.
+- Monitor whether the hours-remaining bonus is visible enough to influence play without making players avoid useful investigation.
 - Make Interpol browsing value more legible, for example by distinguishing active-case candidates from broader archive files.
 - Strengthen dead-end recovery messaging so the player understands when they are physically in the wrong country versus logically still solving the current stop.
 - Give Open Cases a short first-run framing that explains they are standalone pursuit cases.

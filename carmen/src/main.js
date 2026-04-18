@@ -807,10 +807,11 @@ function handleGuess(country) {
           );
           const correct = logic.identifySuspect(chosenName);
 
-          const results = logic.getResults();
           if (correct) {
             playVictoryMusic();
             confetti?.burst?.({ x: window.innerWidth / 2, y: window.innerHeight / 2, count: 100 });
+            const timeBonus = logic.awardTimeBonus();
+            const results = logic.getResults();
             const ts = logic.getTimeState();
             saveGameRecord(gameId, results.score, results.time);
             unlockSuspect(logic.suspect.name);
@@ -828,7 +829,10 @@ function handleGuess(country) {
               logic.suspect.name,
               ts.hoursRemaining,
               results.score,
-              isOpenCasesMode() ? { continueLabel: 'Next Open Case →' } : null,
+              {
+                ...(isOpenCasesMode() ? { continueLabel: 'Next Open Case →' } : {}),
+                timeBonus,
+              },
             );
             if (isFinaleWin) {
               const finalChoice = await ui.showCampaignComplete(results.score);
