@@ -204,8 +204,8 @@ export function stopAmbient() {
   ambientAudio = null;
 }
 
-/** Play a lower-volume ambient excerpt for a limited duration. */
-export function playAtmosphere(key, durationMs = 10000) {
+/** Play a lower-volume ambient sound. Plays once to natural end. */
+export function playAtmosphere(key) {
   stopAtmosphere();
   const file = AMBIENT_SOUNDS[key];
   if (!file) return;
@@ -214,10 +214,6 @@ export function playAtmosphere(key, durationMs = 10000) {
   atmosphereAudio.volume = ATMOSPHERE_VOLUME;
   atmosphereAudio.loop = false;
   atmosphereAudio.play().catch(() => {});
-
-  atmosphereTimer = setTimeout(() => {
-    stopAtmosphere();
-  }, durationMs);
 }
 
 export function stopAtmosphere() {

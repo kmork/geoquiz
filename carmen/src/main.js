@@ -92,10 +92,10 @@ let finaleEvidenceStopsShown = new Set();
 let lastArrivalAtmosphereKind = null;
 
 const ARRIVAL_ATMOSPHERE_RULES = [
-  { limit: 16, key: 'rain1', kind: 'rain', durationMs: 10000 },
-  { limit: 30, key: 'rain2', kind: 'rain', durationMs: 12000 },
-  { limit: 36, key: 'siren1', kind: 'siren', durationMs: 10000 },
-  { limit: 40, key: 'siren2', kind: 'siren', durationMs: 11000 },
+  { limit: 16, key: 'rain1', kind: 'rain' },
+  { limit: 30, key: 'rain2', kind: 'rain' },
+  { limit: 36, key: 'siren1', kind: 'siren' },
+  { limit: 40, key: 'siren2', kind: 'siren' },
 ];
 
 function hashSeed(seed) {
@@ -947,7 +947,7 @@ function handleGuess(country) {
       drawMap(progress.route, result.neighbors);
       const atmosphere = chooseArrivalAtmosphere(result.country, progress.stop);
       if (atmosphere) {
-        playAtmosphere(atmosphere.key, atmosphere.durationMs);
+        playAtmosphere(atmosphere.key);
       }
       ui.showTransition(result.stopScore, result.country, taunt, 'The thief', narratorLine, () => {
         stopAtmosphere();
