@@ -505,6 +505,9 @@ async function startGame() {
   if (!runConfig.isOpenCases) {
     briefingHint = buildCaseBriefingHint(intro.campaignPhase, intro.caseNumber, getMissionHistory());
   }
+  if (logic.routeProvider?.getBriefingHint) {
+    briefingHint = [briefingHint, logic.routeProvider.getBriefingHint(logic)].filter(Boolean).join(' ');
+  }
   if (intro.campaignPhase === 'finale') {
     briefingHint = `${briefingHint} ACME believes Carmen is moving under a fresh alias hidden somewhere in the active files.`;
   }

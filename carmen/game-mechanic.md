@@ -4,7 +4,7 @@
 
 The Carmen mode is now two related games built on the same route-chase engine:
 
-- **The Crimson Trail**: a 10-case campaign with escalating difficulty, recurring narrative foreshadowing, cumulative Interpol state, and a finale where Carmen appears through an alias.
+- **The Crimson Trail**: a 10-case campaign with escalating difficulty, recurring narrative foreshadowing, cumulative Interpol state, and a finale where Carmen appears through an alias after a special South America route puzzle.
 - **Open Cases**: repeatable standalone cases that use the late-campaign pursuit rules without the campaign-only Carmen arc.
 
 A third campaign, **Skyline Syndicate**, has been added as a separate implementation path for capital-area flight routes. It uses free-source aviation data: OurAirports for airport gateway matching and OpenFlights for historical route structure, with explicitly marked inferred fallback corridors where needed for playability.
@@ -122,7 +122,11 @@ Campaign persistence matters mechanically:
 - campaign completion unlocks the natural transition into Open Cases;
 - the campaign and Open Cases can now be launched explicitly from the Play page.
 
-The campaign's main strength is that it makes individual cases feel like part of a larger investigation. Briefing marginalia, arrival hints, Interpol anomalies, and the eventual alias finale all point toward Carmen without changing the core route logic.
+The campaign's main strength is that it makes individual cases feel like part of a larger investigation. Briefing marginalia, arrival hints, Interpol anomalies, and the eventual alias finale all point toward Carmen without changing the core route logic until the finale deliberately changes shape.
+
+Case 10 is now a distinct Crimson Trail finale. It uses `carmen/src/campaigns/crimson-trail/finale-route-provider.js` only for campaign case 10; cases 1-9, Open Cases, and Skyline Syndicate keep their normal route behavior. The theft starts in a random South American country, then the required route is Colombia, Uruguay, Brazil, Argentina, and Cuba. Each stop exposes the full South America choice set rather than only land neighbors, and Cuba appears as a visible decoy after Colombia and Uruguay have been confirmed. It remains wrong until the player reaches Argentina.
+
+Before Argentina, the finale still uses normal investigation locations and normal geography/fact clue style, but weak clues are filtered more aggressively against the broad South America choice pool. Curated fallback clues for Colombia, Uruguay, Brazil, and Argentina keep the 12-country challenge difficult rather than random. In Argentina, clues shift from normal factual hints to subtle acrostic hints: the player is expected to read the first letters of the confirmed countries, C-U-B-A, and infer the final destination. Reaching Cuba still leads into the existing Carmen alias lineup.
 
 ## Open Cases
 

@@ -1,3 +1,4 @@
+import { CrimsonTrailFinaleRouteProvider } from '../campaigns/crimson-trail/finale-route-provider.js';
 import { SKYLINE_SYNDICATE_MODE, SKYLINE_SYNDICATE } from '../campaigns/skyline-syndicate/flight-campaign-config.js';
 import { CapitalFlightRouteProvider } from '../campaigns/skyline-syndicate/flight-route-provider.js';
 
@@ -5,6 +6,9 @@ export const CAMPAIGN_MODE = 'campaign';
 export const OPEN_CASES_MODE = 'open_cases';
 export const OPEN_CASES_PHASE = 'open_cases';
 export const OPEN_CASES_CONFIG_PHASE = 'pursuit';
+
+const CRIMSON_FINALE_CASE = 10;
+const crimsonFinaleRouteProvider = new CrimsonTrailFinaleRouteProvider();
 
 export function isKnownGameMode(mode) {
   return mode === CAMPAIGN_MODE || mode === OPEN_CASES_MODE || mode === SKYLINE_SYNDICATE_MODE;
@@ -54,6 +58,7 @@ export function getRunConfigForMode({
 }) {
   const openCases = isOpenCasesMode(mode);
   const skylineSyndicate = isSkylineSyndicateMode(mode);
+  const crimsonFinale = mode === CAMPAIGN_MODE && currentCase === CRIMSON_FINALE_CASE;
   return {
     mode,
     isOpenCases: openCases,
@@ -63,8 +68,11 @@ export function getRunConfigForMode({
     excludedSuspects: openCases ? [] : [...unlockedSuspects],
     phaseOverride: openCases ? OPEN_CASES_PHASE : null,
     configPhase: openCases ? OPEN_CASES_CONFIG_PHASE : null,
-    routeProvider: skylineSyndicate ? modeData?.skylineRouteProvider : null,
+    routeProvider: skylineSyndicate
+      ? modeData?.skylineRouteProvider
+      : crimsonFinale
+        ? crimsonFinaleRouteProvider
+        : null,
     briefingCopy: skylineSyndicate ? SKYLINE_SYNDICATE.briefing : null,
   };
 }
-

@@ -22,13 +22,10 @@ gzip -9 -k data/ne_10m_admin_0_countries_route.geojson
 Follow `.editorconfig`: UTF-8, LF endings, 2-space indentation, and trimmed trailing whitespace. Use vanilla ES modules and keep filenames in kebab-case, e.g. `heritage-locate-main.js`. New games should follow the existing three-layer pattern: pure logic in `js/games/`, DOM or canvas UI in `js/ui-components/`, and a small page entry module in `js/`. Keep styles in `css/` files, not inline HTML.
 
 ## Testing Guidelines
-There is no automated test suite in this repository. Verify changes manually in the browser against the affected pages and flows. Check desktop and mobile layouts, dark and light themes, keyboard/touch interactions, and any related daily challenge or continent-filter behavior before opening a PR.
+There is no automated test suite in this repository. Verify changes manually in the browser against the affected pages and flows. Check desktop and mobile layouts, dark theme only, keyboard/touch interactions, and any related daily challenge or continent-filter behavior before opening a PR.
 
 ## Carmen Mechanics Documentation
 When changing Carmen game mechanics, scoring, campaign progression, Open Cases behavior, suspect deduction, Interpol behavior, clue generation, or other player-facing Carmen rules, keep `carmen/game-mechanic.md` up to date in the same change. To save tokens and avoid re-deriving the game model, consult and cite that file first when Carmen mechanics context is needed.
-
-## Commit & Pull Request Guidelines
-Recent history uses short, direct commit subjects such as `Fix difficulty level...` and `Added profile picture...`. Prefer brief imperative summaries focused on one change. Pull requests should explain gameplay or UI impact, link related issues when relevant, and include screenshots or short recordings for visible changes.
 
 ## Data & Asset Notes
 Large generated assets and reference data already live in-repo. When changing map data, keep the compressed `data/*.geojson.gz` files in sync. When adding media, use repository conventions and place files alongside similar assets in `img/`, `img/heritage/`, or `carmen/`.

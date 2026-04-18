@@ -390,12 +390,52 @@ export class CarmenGameLogic {
 
   // ─── Clue Generation ────────────────────────────────────────
 
+  _getChoiceSetForClues(currentCountry) {
+    if (this.routeProvider?.getChoicesForClues) {
+      return this.routeProvider.getChoicesForClues(currentCountry, this);
+    }
+    return this.neighborsMap[currentCountry] || [];
+  }
+
+  _shouldUseClue(clue, target, locationId = null, clueType = null) {
+    if (!clue) return false;
+    if (!this.routeProvider?.shouldUseClue) return true;
+    return this.routeProvider.shouldUseClue({
+      clue,
+      target,
+      locationId,
+      clueType,
+      context: this,
+      choices: this._getChoiceSetForClues(this.route[this.currentStop]),
+    }) !== false;
+  }
+
+  _claimClue(clue) {
+    if (!clue || this.usedClueIds.has(clue.id)) return false;
+    this.usedClueIds.add(clue.id);
+    return true;
+  }
+
   _generateClues(country, count) {
+    const clues = [];
+    const providerClues = this.routeProvider?.generateClues?.({
+      target: country,
+      count,
+      context: this,
+      choices: this._getChoiceSetForClues(this.route[this.currentStop]),
+    });
+    if (providerClues?.length) {
+      for (const clue of providerClues) {
+        if (clues.length >= count) break;
+        if (this._claimClue(clue)) clues.push(clue);
+      }
+      if (clues.length >= count) return clues;
+    }
+
     // Gather the neighbor choices for this stop so we can filter unhelpful clues
     const currentCountry = this.route[this.currentStop];
-    const neighborChoices = this.neighborsMap[currentCountry] || [];
+    const neighborChoices = this._getChoiceSetForClues(currentCountry);
 
-    const clues = [];
     const generators = [
       () => clueFromFact(country, this),
       () => clueFromGeography(country, this, neighborChoices),
@@ -415,10 +455,19 @@ export class CarmenGameLogic {
     for (const gen of generators) {
       if (clues.length >= count) break;
       const clue = gen();
-      if (clue && !this.usedClueIds.has(clue.id)) {
-        this.usedClueIds.add(clue.id);
+      if (this._shouldUseClue(clue, country) && this._claimClue(clue)) {
         clues.push(clue);
       }
+    }
+
+    while (clues.length < count && this.routeProvider?.getFallbackClue) {
+      const clue = this.routeProvider.getFallbackClue({
+        target: country,
+        context: this,
+        choices: neighborChoices,
+      });
+      if (!this._claimClue(clue)) break;
+      clues.push(clue);
     }
 
     // If we still need more, try facts again (multiple facts per country)
@@ -430,8 +479,8 @@ export class CarmenGameLogic {
         if (this.usedClueIds.has(id)) continue;
         const redacted = redactCountryName(f.fact, country);
         if (redacted === f.fact || !redacted.includes(country)) {
-          this.usedClueIds.add(id);
-          clues.push({ id, text: redacted, icon: iconForCategory(f.category), category: f.category });
+          const clue = { id, text: redacted, icon: iconForCategory(f.category), category: f.category };
+          if (this._shouldUseClue(clue, country) && this._claimClue(clue)) clues.push(clue);
         }
       }
     }
@@ -441,8 +490,7 @@ export class CarmenGameLogic {
       const geoClues = allGeographyClues(country, this);
       for (const c of geoClues) {
         if (clues.length >= count) break;
-        if (!this.usedClueIds.has(c.id)) {
-          this.usedClueIds.add(c.id);
+        if (this._shouldUseClue(c, country) && this._claimClue(c)) {
           clues.push(c);
         }
       }
@@ -529,7 +577,17 @@ export class CarmenGameLogic {
 
     const target = this.route[this.currentStop + 1];
     const currentCountry = this.route[this.currentStop];
-    const neighborChoices = this.neighborsMap[currentCountry] || [];
+    const neighborChoices = this._getChoiceSetForClues(currentCountry);
+
+    const providerClue = this.routeProvider?.getLocationClue?.({
+      target,
+      currentCountry,
+      locationId,
+      location,
+      context: this,
+      choices: neighborChoices,
+    });
+    if (this._claimClue(providerClue)) return providerClue;
 
     // Try each clue type the location provides (thematically matched)
     // Shuffle so repeated visits to the same location type vary
@@ -559,11 +617,20 @@ export class CarmenGameLogic {
           clue = clueFromExports(target, this, neighborChoices);
           break;
       }
-      if (clue && !this.usedClueIds.has(clue.id)) {
-        this.usedClueIds.add(clue.id);
+      if (this._shouldUseClue(clue, target, locationId, clueType) && this._claimClue(clue)) {
         return clue;
       }
     }
+
+    const fallbackClue = this.routeProvider?.getFallbackLocationClue?.({
+      target,
+      currentCountry,
+      locationId,
+      location,
+      context: this,
+      choices: neighborChoices,
+    });
+    if (this._claimClue(fallbackClue)) return fallbackClue;
 
     // No leads at this location for this destination
     return null;

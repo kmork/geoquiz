@@ -138,4 +138,4 @@ Follow these steps to avoid recurring mistakes:
 
 9. **Styles in CSS files.** Add all game-specific styles to `css/styles.css` (or a dedicated CSS file if large). Do not put styles in the HTML.
 
-10. **Test both themes.** Verify the game looks correct in both dark and light mode using CSS variables.
+10. **Test only dark theme.** Verify the game looks correct only in dark mode using CSS variables.
