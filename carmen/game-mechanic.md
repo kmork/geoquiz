@@ -9,7 +9,7 @@ The Carmen mode is now two related games built on the same route-chase engine:
 
 A third campaign, **Skyline Syndicate**, has been added as a separate implementation path for capital-area flight routes. It uses free-source aviation data: OurAirports for airport gateway matching and OpenFlights for historical route structure, with explicitly marked inferred fallback corridors where needed for playability.
 
-At the mechanical center, each case is still a constrained geography deduction game. The player starts in a country, investigates local sources, reads clues about the thief's next destination, and chooses from neighboring countries on the map. The design works because the player is not guessing from the whole world; every clue is interpreted against a visible border-neighbor choice set.
+At the mechanical center, each case is still a constrained geography deduction game. The player starts in a country, investigates local sources, reads clues about the thief's next destination, and chooses from a visible set of map choices. In The Crimson Trail and Open Cases those choices are neighboring countries; in Skyline Syndicate they are capital-area flight connections. The design works because the player is not guessing from the whole world; every clue is interpreted against the active visible choice set.
 
 The fiction model is now deliberately framed as **ACME reconstructing a border trail**, not a literal transport simulation. The thief's route is a chain of suspected border crossings; the detective redeploys through ACME transport to confirm or reject each lead. Suspect vehicles describe known getaway signatures and identity habits, not necessarily the exact vehicle used for every border crossing.
 
@@ -24,7 +24,7 @@ Those two problems share the same scarce resource: time. Geography clues, suspec
 
 Each case begins by generating a non-repeating land route. The start country must have a heritage artifact and enough neighbors to make the opening playable. Later route choices prefer countries with stronger fact coverage and more onward neighbors, which quietly improves clue quality and reduces dead routes.
 
-The player's stop loop is:
+The player's Crimson Trail and Open Cases stop loop is:
 
 - review the stolen artifact and current country;
 - read the automatic suspect witness report for this stop;
@@ -32,6 +32,8 @@ The player's stop loop is:
 - investigate up to the stop's investigation limit across fixed locations;
 - choose a neighboring country on the map to confirm the next border lead;
 - resolve a correct route advance, a dead end, or final suspect lineup.
+
+Skyline Syndicate follows the same stop loop, but the map choices confirm capital flight leads instead of border leads.
 
 Wrong country choices are not instant failure. They create a detour: ACME redeploys to the wrong country, the player loses score, spends time, gets a dead-end presentation, and must recover by returning to the real current lead or continuing from a worse information state. This is important because it keeps the map spatial and physical instead of turning wrong answers into abstract button errors.
 
@@ -156,6 +158,10 @@ The importer lives at `carmen/scripts/import-capital-flight-routes.js`. It suppo
 Mechanically, Skyline Syndicate uses the same Carmen case loop, scoring, suspect deduction, Interpol archive, map renderer, and clue workflow. The difference is the route provider: instead of land-border neighbors, a `CapitalFlightRouteProvider` supplies country choices from capital-area flight connections. This keeps the new campaign separate while allowing clue generators to continue evaluating facts against the visible choice set.
 
 The Play page exposes Skyline Syndicate as `carmen.html?mode=skyline_syndicate`. The provider caps visible route choices to eight countries per stop, while the generated graph ensures every UN country has at least three available choices. This includes island and no-land-border countries that the border-trail campaign cannot naturally support.
+
+Skyline Syndicate has its own campaign progression state. Its current case is stored separately from `carmen-campaign-case`, mission history is stored separately from The Crimson Trail history, and successful Skyline cases advance only the Skyline counter. Failed Skyline cases replay the same Skyline case number with fresh randomness. The Crimson Trail finale, Carmen alias accusation, campaign-complete overlay, and automatic transition into Open Cases do not apply to Skyline.
+
+Skyline wording must stay flight-corridor oriented. Briefings, travel prompts, dead-end overlays, case cards, and narrated clues should refer to air trails, capital connections, corridors, or active destination choices rather than neighboring countries, border trails, border crossings, or land-border counts.
 
 Campaign-specific launch behavior is now centralized in `carmen/src/campaign/modes.js`. The main Carmen entrypoint loads generic game data and asks this module for the active run configuration, mission label, route provider, and briefing copy. New campaigns should add their mode-specific data and provider wiring there or in their own campaign folder, rather than adding new direct campaign branches to `carmen/src/main.js`.
 

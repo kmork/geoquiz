@@ -91,8 +91,8 @@ export function createCarmenUI(container, flagCodes) {
               <div class="carmen-panel-view" id="carmen-panel-travel" style="display:none">
                 <div class="carmen-panel-card">
                   <div class="carmen-panel-badge">✈️ TRAIL</div>
-                  <div class="carmen-panel-title">Where does the border trail lead?</div>
-                  <div class="carmen-panel-desc">Select a neighboring country on the map to confirm the next border lead.</div>
+                  <div class="carmen-panel-title" id="carmen-travel-title">Where does the border trail lead?</div>
+                  <div class="carmen-panel-desc" id="carmen-travel-desc">Select a neighboring country on the map to confirm the next border lead.</div>
                   <div class="carmen-panel-cost">⏱️ Travel cost: <strong>5 hours</strong> per lead</div>
                 </div>
               </div>
@@ -179,6 +179,8 @@ export function createCarmenUI(container, flagCodes) {
     notebookTabs: container.querySelector('#carmen-notebook-tabs'),
     panelCase: container.querySelector('#carmen-panel-case'),
     panelInvestigate: container.querySelector('#carmen-panel-investigate'),
+    travelTitle: container.querySelector('#carmen-travel-title'),
+    travelDesc: container.querySelector('#carmen-travel-desc'),
     missions: container.querySelector('#carmen-missions'),
     score: container.querySelector('#carmen-score'),
     progress: container.querySelector('#carmen-progress'),
@@ -222,6 +224,7 @@ export function createCarmenUI(container, flagCodes) {
     siteName: 'a priceless artifact',
     startCountry: '',
     thiefName: 'Unknown',
+    mode: 'campaign',
   };
   const inspectState = {
     pinnedPhoto: null,
@@ -749,6 +752,35 @@ export function createCarmenUI(container, flagCodes) {
 
   let detourCounter = 0;
 
+  function isSkylineMode(mode) {
+    return mode === 'skyline_syndicate';
+  }
+
+  function getRouteCopy(mode = caseCardState.mode) {
+    if (isSkylineMode(mode)) {
+      return {
+        travelTitle: 'Where does the air trail lead?',
+        travelDesc: 'Select a capital flight lead on the map to confirm the next corridor.',
+        introMission: 'Investigate locations, gather clues, and confirm the air trail.',
+        deadEndLead: 'No confirmed flight lead',
+        deadEndNarrator: 'Another dead end. Took the wrong flight corridor. Maybe I ought to study the map at <a href="https://geoquiz.info/study.html" target="_blank" rel="noopener noreferrer">geoquiz.info/study.html</a> before this case eats me alive.',
+      };
+    }
+    return {
+      travelTitle: 'Where does the border trail lead?',
+      travelDesc: 'Select a neighboring country on the map to confirm the next border lead.',
+      introMission: 'Investigate locations, gather clues, and confirm the border trail.',
+      deadEndLead: 'No confirmed border lead',
+      deadEndNarrator: 'Another dead end. Took the wrong border. Maybe I ought to study the map at <a href="https://geoquiz.info/study.html" target="_blank" rel="noopener noreferrer">geoquiz.info/study.html</a> before this case eats me alive.',
+    };
+  }
+
+  function applyRouteCopy(mode) {
+    const copy = getRouteCopy(mode);
+    if (els.travelTitle) els.travelTitle.textContent = copy.travelTitle;
+    if (els.travelDesc) els.travelDesc.textContent = copy.travelDesc;
+  }
+
   return {
     get mapSvg() { return els.map; },
 
@@ -769,11 +801,11 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     /** Add a dead-end detour entry to the dossier. */
-    addDetourEntry(country, capital) {
+    addDetourEntry(country, capital, options = null) {
       const key = `detour-${detourCounter++}`;
       dossierEntries.push({
         stop: -1, stopKey: key, type: 'detour',
-        clueText: 'No witnesses, no clues. A dead end.',
+        clueText: isSkylineMode(options?.mode) ? 'No manifest match, no corridor confirmation. A dead end.' : 'No witnesses, no clues. A dead end.',
         informantPrefix: 'Dead end', emoji: '❌',
         country, capital,
       });
@@ -1127,13 +1159,17 @@ export function createCarmenUI(container, flagCodes) {
       });
     },
 
-    showIntro(thiefName, artifact, startCountry) {
+    showIntro(thiefName, artifact, startCountry, options = null) {
+      const mode = options?.mode || 'campaign';
+      const copy = getRouteCopy(mode);
       resetInterpolPhotoInspect();
       const siteName = artifact.siteName || 'a priceless artifact';
       const imgUrl = artifact.imageUrl || '';
       caseCardState.siteName = siteName;
       caseCardState.startCountry = startCountry || '';
       caseCardState.thiefName = thiefName || 'Unknown';
+      caseCardState.mode = mode;
+      applyRouteCopy(mode);
       // Set artifact image for the right-side display
       if (imgUrl) {
         els.artifactImg.src = imgUrl;
@@ -1164,12 +1200,16 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-intro-artifact">${esc(siteName)}</div>
           <div class="carmen-intro-origin">Stolen from <strong>${esc(startCountry)}</strong></div>
           <div class="carmen-intro-suspect">🔍 Suspect: <span class="thief-name">Unknown</span></div>
-          <div class="carmen-intro-mission">Investigate locations, gather clues, and confirm the border trail.</div>
+          <div class="carmen-intro-mission">${esc(copy.introMission)}</div>
         </div>
       `;
     },
 
-    showStopNarrative(stopIndex, totalStops) {
+    showStopNarrative(stopIndex, totalStops, options = null) {
+      if (options?.mode) {
+        caseCardState.mode = options.mode;
+        applyRouteCopy(options.mode);
+      }
       const remaining = totalStops - stopIndex;
       let intel;
       if (remaining <= 1) {
@@ -1473,26 +1513,29 @@ export function createCarmenUI(container, flagCodes) {
       });
     },
 
-    showDeadEnd(country, repeatedDeadEnd = false, onContinue) {
+    showDeadEnd(country, repeatedDeadEnd = false, options = null, onContinue) {
       if (typeof repeatedDeadEnd === 'function') {
         onContinue = repeatedDeadEnd;
         repeatedDeadEnd = false;
       }
+      if (typeof options === 'function') {
+        onContinue = options;
+        options = null;
+      }
+      const copy = getRouteCopy(options?.mode || caseCardState.mode);
       hideNarratorCaption(true);
       // Force map visible
       for (const rv of allRightViews) rv.style.display = 'none';
       els.rvMap.style.display = '';
 
-      const narratorHint = repeatedDeadEnd ? `
-        <div class="carmen-dead-end-narrator">Another dead end. Took the wrong border. Maybe I ought to study the map at <a href="https://geoquiz.info/study.html" target="_blank" rel="noopener noreferrer">geoquiz.info/study.html</a> before this case eats me alive.</div>
-      ` : '';
+      const narratorHint = repeatedDeadEnd ? `<div class="carmen-dead-end-narrator">${copy.deadEndNarrator}</div>` : '';
       const overlay = document.createElement('div');
       overlay.className = 'carmen-map-overlay carmen-dead-end';
       overlay.innerHTML = `
         <div class="carmen-transition">
           <div class="carmen-dead-end-icon">❌</div>
           <div class="score-lost">-25 points</div>
-          <div>No confirmed border lead in <strong>${esc(country)}</strong>!</div>
+          <div>${esc(copy.deadEndLead)} in <strong>${esc(country)}</strong>!</div>
           <div class="carmen-dead-end-hint">This lead went cold. You've lost precious time.</div>
           <button class="carmen-continue-btn carmen-dead-end-btn">Return to the trail →</button>
           ${narratorHint}

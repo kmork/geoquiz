@@ -9,9 +9,11 @@ import { normalizeGameMode, isKnownGameMode, CAMPAIGN_MODE } from './modes.js';
 
 // ─── Keys ──────────────────────────────────────────
 const MISSION_KEY          = 'carmen-missions';
+const SKYLINE_MISSION_KEY  = 'carmen-skyline-syndicate-missions';
 const CAMPAIGN_KEY         = 'carmen-campaign-case';
 const CAMPAIGN_COMPLETE_KEY = 'carmen-campaign-complete';
 const CAMPAIGN_COMPLETE_ONCE_KEY = 'carmen-campaign-complete-once';
+const SKYLINE_CASE_KEY     = 'carmen-skyline-syndicate-case';
 const GAME_MODE_KEY        = 'carmen-game-mode';
 const OPEN_CASE_COUNT_KEY  = 'carmen-open-case-count';
 const INTERPOL_KEY         = 'carmen-interpol-unlocked';
@@ -28,6 +30,17 @@ export function saveMissionResult(result) {
   const history = getMissionHistory();
   history.push(result);
   localStorage.setItem(MISSION_KEY, JSON.stringify(history));
+}
+
+export function getSkylineMissionHistory() {
+  try { return JSON.parse(localStorage.getItem(SKYLINE_MISSION_KEY)) || []; }
+  catch { return []; }
+}
+
+export function saveSkylineMissionResult(result) {
+  const history = getSkylineMissionHistory();
+  history.push(result);
+  localStorage.setItem(SKYLINE_MISSION_KEY, JSON.stringify(history));
 }
 
 // ─── Campaign case progression ─────────────────────
@@ -47,6 +60,25 @@ export function setCase(n) {
   localStorage.setItem(CAMPAIGN_KEY, String(clamped));
   localStorage.removeItem(CAMPAIGN_COMPLETE_KEY);
   return clamped;
+}
+
+// ─── Skyline Syndicate progression ─────────────────────────────
+export function getSkylineCase() {
+  const n = parseInt(localStorage.getItem(SKYLINE_CASE_KEY), 10);
+  if (!n || n < 1) return 1;
+  return Math.min(n, TOTAL_CASES);
+}
+
+export function advanceSkylineCase() {
+  const next = Math.min(getSkylineCase() + 1, TOTAL_CASES);
+  localStorage.setItem(SKYLINE_CASE_KEY, String(next));
+  return next;
+}
+
+export function resetSkylineCampaign() {
+  localStorage.removeItem(SKYLINE_CASE_KEY);
+  localStorage.removeItem(SKYLINE_MISSION_KEY);
+  localStorage.setItem(GAME_MODE_KEY, 'skyline_syndicate');
 }
 
 export function markCampaignComplete() {

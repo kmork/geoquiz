@@ -548,7 +548,9 @@ export class CarmenGameLogic {
     if (!clue) return clue;
     const country = this.route[this.currentStop + 1];
     const redact = (text) => redactCountryName(text, country);
-    const { dialogue, action } = composeClue(clue, informant, locationId, redact);
+    const { dialogue, action } = composeClue(clue, informant, locationId, redact, {
+      routeKind: this.routeProvider?.id || 'border',
+    });
     if (dialogue && !containsCountryName(dialogue, country) &&
         (!action || !containsCountryName(action, country))) {
       return { ...clue, text: dialogue, action };

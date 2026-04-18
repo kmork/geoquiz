@@ -110,7 +110,7 @@ export function allGeographyClues(country, ctx, neighborChoices = []) {
   }
 
   const nbrCount = (ctx.neighborsMap[country] || []).length;
-  if (nbrCount > 0) {
+  if (!ctx.routeProvider && nbrCount > 0) {
     const nbrMatchCount = neighborChoices.filter(n =>
       (ctx.neighborsMap[n] || []).length === nbrCount
     ).length;

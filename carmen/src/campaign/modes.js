@@ -1,6 +1,7 @@
 import { CrimsonTrailFinaleRouteProvider } from '../campaigns/crimson-trail/finale-route-provider.js';
 import { SKYLINE_SYNDICATE_MODE, SKYLINE_SYNDICATE } from '../campaigns/skyline-syndicate/flight-campaign-config.js';
 import { CapitalFlightRouteProvider } from '../campaigns/skyline-syndicate/flight-route-provider.js';
+import { TOTAL_CASES } from './progression.js';
 
 export const CAMPAIGN_MODE = 'campaign';
 export const OPEN_CASES_MODE = 'open_cases';
@@ -48,9 +49,16 @@ export function getMissionLabelForMode(mode, openCaseNumber) {
   return null;
 }
 
+function getSkylinePhase(caseNumber) {
+  if (caseNumber >= 7) return 'pursuit';
+  if (caseNumber >= 4) return 'whispers';
+  return 'prelude';
+}
+
 export function getRunConfigForMode({
   mode,
   currentCase,
+  skylineCase,
   openCaseNumber,
   totalCases,
   unlockedSuspects,
@@ -59,15 +67,18 @@ export function getRunConfigForMode({
   const openCases = isOpenCasesMode(mode);
   const skylineSyndicate = isSkylineSyndicateMode(mode);
   const crimsonFinale = mode === CAMPAIGN_MODE && currentCase === CRIMSON_FINALE_CASE;
+  const runCase = skylineSyndicate ? skylineCase : openCases ? openCaseNumber : currentCase;
+  const runTotalCases = openCases ? null : totalCases;
+  const skylinePhase = skylineSyndicate ? getSkylinePhase(runCase) : null;
   return {
     mode,
     isOpenCases: openCases,
     isSkylineSyndicate: skylineSyndicate,
-    caseNumber: openCases ? openCaseNumber : currentCase,
-    totalCases: openCases ? null : totalCases,
-    excludedSuspects: openCases ? [] : [...unlockedSuspects],
-    phaseOverride: openCases ? OPEN_CASES_PHASE : null,
-    configPhase: openCases ? OPEN_CASES_CONFIG_PHASE : null,
+    caseNumber: runCase || 1,
+    totalCases: runTotalCases || TOTAL_CASES,
+    excludedSuspects: (openCases || skylineSyndicate) ? [] : [...unlockedSuspects],
+    phaseOverride: openCases ? OPEN_CASES_PHASE : skylinePhase,
+    configPhase: openCases ? OPEN_CASES_CONFIG_PHASE : skylinePhase,
     routeProvider: skylineSyndicate
       ? modeData?.skylineRouteProvider
       : crimsonFinale

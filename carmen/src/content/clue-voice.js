@@ -84,6 +84,26 @@ const PHRASINGS = {
   ],
 };
 
+const SKYLINE_PHRASINGS = {
+  geography: {
+    continent: [
+      d => `The corridor stayed inside ${d.continent}. No ocean-spanning escape this time.`,
+      d => `Still in ${d.continent}. The flight file keeps the next lead in that region.`,
+      d => `The next capital connection points somewhere in ${d.continent}.`,
+    ],
+    landlocked: [
+      () => `No coastline on that file. The destination sits inland.`,
+      () => `Landlocked country. The manifest still points there.`,
+      () => `No seaport angle. The lead is inland.`,
+    ],
+    peak: [
+      d => `Mountains over there scrape the sky. ${d.name} tops out at ${d.elev.toLocaleString()} meters.`,
+      d => `Highest point's ${d.name}. ${d.elev.toLocaleString()} meters straight up.`,
+      d => `${d.name}. ${d.elev.toLocaleString()} meters. A useful landmark from the air.`,
+    ],
+  },
+};
+
 // ─── B. Location voice wrappers ───────────────────────────────────
 // Each voice takes the inner phrasing and wraps it in a tone consistent
 // with the kind of person at that location.
@@ -384,6 +404,16 @@ const HELPFUL_SUFFIXES = [
   `That detail stands out around here.`,
 ];
 
+const SKYLINE_HELPFUL_SUFFIXES = [
+  `That should narrow the corridor.`,
+  `Not many active choices match that.`,
+  `Use that one. It matters.`,
+  `That's a real flight lead, if you ask me.`,
+  `Worth remembering.`,
+  `Only one destination fits that.`,
+  `That detail stands out in this file.`,
+];
+
 const UNHELPFUL_SUFFIXES = [
   `But I guess that doesn't narrow it down much.`,
   `Half the places nearby could say the same.`,
@@ -394,11 +424,23 @@ const UNHELPFUL_SUFFIXES = [
   `Could be a few places, honestly.`,
 ];
 
-function pickHelpfulnessSuffix(matchCount, totalChoices) {
+const SKYLINE_UNHELPFUL_SUFFIXES = [
+  `But I guess that doesn't narrow the corridor much.`,
+  `Half the active choices could say the same.`,
+  `Won't help you much, I'm afraid.`,
+  `Don't hang your hat on that one.`,
+  `Doesn't exactly make it obvious, does it.`,
+  `Common enough in this file, though.`,
+  `Could be a few destinations, honestly.`,
+];
+
+function pickHelpfulnessSuffix(matchCount, totalChoices, routeKind = 'border') {
   if (totalChoices === 0) return null;
   const ratio = matchCount / totalChoices;
-  if (matchCount === 0) return pick(HELPFUL_SUFFIXES);
-  if (ratio >= 0.5) return pick(UNHELPFUL_SUFFIXES);
+  const helpful = routeKind === 'capital_flights' ? SKYLINE_HELPFUL_SUFFIXES : HELPFUL_SUFFIXES;
+  const unhelpful = routeKind === 'capital_flights' ? SKYLINE_UNHELPFUL_SUFFIXES : UNHELPFUL_SUFFIXES;
+  if (matchCount === 0) return pick(helpful);
+  if (ratio >= 0.5) return pick(unhelpful);
   return null; // neutral — no commentary for in-between cases
 }
 
@@ -421,10 +463,14 @@ function pickAction(informant, locationId) {
  * @param {Function} redactFn  — (text) => text — runs country-name redaction
  * @returns {string} The full speech-bubble text (may include a leading micro-action line + newline).
  */
-export function composeClue(clue, informant, locationId, redactFn) {
+export function composeClue(clue, informant, locationId, redactFn, options = null) {
+  const routeKind = options?.routeKind || 'border';
   // 1. Pick a phrasing.
   let pool = null;
-  if (clue.category === 'geography' && clue.subtype && PHRASINGS.geography[clue.subtype]) {
+  const skylineGeoPool = SKYLINE_PHRASINGS.geography[clue.subtype];
+  if (routeKind === 'capital_flights' && clue.category === 'geography' && clue.subtype && skylineGeoPool) {
+    pool = skylineGeoPool;
+  } else if (clue.category === 'geography' && clue.subtype && PHRASINGS.geography[clue.subtype]) {
     pool = PHRASINGS.geography[clue.subtype];
   } else if (PHRASINGS[clue.category]) {
     pool = PHRASINGS[clue.category];
@@ -444,7 +490,7 @@ export function composeClue(clue, informant, locationId, redactFn) {
 
   // Helpfulness commentary — append when the clue data carries neighbor-match info.
   if (data.matchCount !== undefined && data.totalChoices > 0) {
-    const suffix = pickHelpfulnessSuffix(data.matchCount, data.totalChoices);
+    const suffix = pickHelpfulnessSuffix(data.matchCount, data.totalChoices, routeKind);
     if (suffix) inner = inner + ' ' + suffix;
   }
 

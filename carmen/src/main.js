@@ -16,6 +16,7 @@ import {
   getPlayableGameMode,
   getRunConfigForMode,
   isOpenCasesMode as isOpenCasesGameMode,
+  isSkylineSyndicateMode,
   loadCampaignModeData,
 } from './campaign/modes.js';
 import {
@@ -23,6 +24,7 @@ import {
   markCampaignComplete, getUnlockedSuspects, unlockSuspect,
   getTheftHistory, recordTheft, getInterpolViewed, saveInterpolViewed,
   getGameMode, setGameMode, getOpenCaseCount, advanceOpenCaseCount,
+  getSkylineCase, advanceSkylineCase, getSkylineMissionHistory, saveSkylineMissionResult,
 } from './campaign/persistence.js';
 
 const gameId = 'carmen';
@@ -195,6 +197,23 @@ function isOpenCasesMode(mode = logic?.mode || getGameMode()) {
   return isOpenCasesGameMode(mode);
 }
 
+function isSkylineMode(mode = logic?.mode || getGameMode()) {
+  return isSkylineSyndicateMode(mode);
+}
+
+function isCrimsonCampaignMode(mode = logic?.mode || getGameMode()) {
+  return !isOpenCasesMode(mode) && !isSkylineMode(mode);
+}
+
+function getActiveMissionHistory(mode = logic?.mode || getGameMode()) {
+  return isSkylineMode(mode) ? getSkylineMissionHistory() : getMissionHistory();
+}
+
+function saveActiveMissionResult(result, mode = logic?.mode || getGameMode()) {
+  if (isSkylineMode(mode)) saveSkylineMissionResult(result);
+  else saveMissionResult(result);
+}
+
 function getDisplayedOpenCaseNumber() {
   return getOpenCaseCount() + 1;
 }
@@ -204,6 +223,7 @@ function getCurrentRunConfig() {
   return getRunConfigForMode({
     mode,
     currentCase: getCurrentCase(),
+    skylineCase: getSkylineCase(),
     openCaseNumber: getDisplayedOpenCaseNumber(),
     totalCases: TOTAL_CASES,
     unlockedSuspects: getUnlockedSuspects(),
@@ -212,7 +232,13 @@ function getCurrentRunConfig() {
 }
 
 function getMissionLabel() {
-  return getMissionLabelForMode(logic?.mode || getGameMode(), getDisplayedOpenCaseNumber());
+  const mode = logic?.mode || getGameMode();
+  if (isSkylineMode(mode)) {
+    const caseNumber = logic?.caseNumber || getSkylineCase();
+    const totalCases = logic?.totalCases || TOTAL_CASES;
+    return `Skyline Case ${caseNumber} / ${totalCases}`;
+  }
+  return getMissionLabelForMode(mode, getDisplayedOpenCaseNumber());
 }
 
 function getVisibleInterpolSuspects() {
@@ -224,7 +250,7 @@ function getVisibleInterpolSuspects() {
     ? [...SUSPECTS, finaleAlias]
     : SUSPECTS.filter(s => isOpenCasesMode() ? s.name !== 'Carmen Sandiego' : true);
 
-  if (!isOpenCasesMode() && logic?.campaignPhase === 'finale') {
+  if (isCrimsonCampaignMode() && logic?.campaignPhase === 'finale') {
     return source
       .slice()
       .sort((a, b) => {
@@ -354,7 +380,7 @@ function buildInterpolProfileIntel(suspect, thefts = []) {
     suspect,
     logic?.campaignPhase,
     thefts,
-    getMissionHistory(),
+    getActiveMissionHistory(),
     getTheftHistory(),
   );
 }
@@ -372,6 +398,16 @@ async function handleEndChoice(choice, wasSuccess) {
     stopNarrator();
     stopMusic();
     setGameMode(OPEN_CASES_MODE);
+    isFirstGame = false;
+    await startGame();
+    return;
+  }
+
+  if (isSkylineMode()) {
+    stopAmbient();
+    stopAtmosphere();
+    stopNarrator();
+    stopMusic();
     isFirstGame = false;
     await startGame();
     return;
@@ -468,7 +504,7 @@ async function startGame() {
       waitForClick(carmenFront).then(() => { skipped = true; }),
     ]);
 
-    if (!skipped && !runConfig.isOpenCases) {
+    if (!skipped && !runConfig.isOpenCases && !runConfig.isSkylineSyndicate) {
       // Play narrator for current case with subtitles
       const { file: introFile, cues } = chooseNarratorScript(true, getCurrentCase());
       const subtitle = document.createElement('div');
@@ -502,13 +538,13 @@ async function startGame() {
   // Now show the case briefing overlay
   const totalHours = logic.getTimeState().totalHours;
   let briefingHint = '';
-  if (!runConfig.isOpenCases) {
-    briefingHint = buildCaseBriefingHint(intro.campaignPhase, intro.caseNumber, getMissionHistory());
+  if (!runConfig.isOpenCases && !runConfig.isSkylineSyndicate) {
+    briefingHint = buildCaseBriefingHint(intro.campaignPhase, intro.caseNumber, getActiveMissionHistory(logic.mode));
   }
   if (logic.routeProvider?.getBriefingHint) {
     briefingHint = [briefingHint, logic.routeProvider.getBriefingHint(logic)].filter(Boolean).join(' ');
   }
-  if (intro.campaignPhase === 'finale') {
+  if (isCrimsonCampaignMode(logic.mode) && intro.campaignPhase === 'finale') {
     briefingHint = `${briefingHint} ACME believes Carmen is moving under a fresh alias hidden somewhere in the active files.`;
   }
   await ui.showCaseBriefing(
@@ -531,8 +567,8 @@ async function startGame() {
   drawMap(intro.progress.route, intro.neighbors);
 
   // Update UI — thief identity unknown
-  ui.showIntro('A mysterious thief', intro.artifact, intro.startCountry);
-  ui.updateMissions(getMissionHistory(), true, logic.caseNumber, logic.totalCases, getMissionLabel());
+  ui.showIntro('A mysterious thief', intro.artifact, intro.startCountry, { mode: logic.mode });
+  ui.updateMissions(getActiveMissionHistory(logic.mode), true, logic.caseNumber, logic.totalCases, getMissionLabel());
   ui.updateScore(intro.progress.score);
   ui.updateProgress(intro.progress.stop, intro.progress.totalStops);
   updateClock();
@@ -606,12 +642,16 @@ function checkTimeExpired() {
       playFailMusic();
       const results = logic.getResults();
       saveGameRecord(gameId, results.score, results.time);
-      saveMissionResult('fail');
+      saveActiveMissionResult('fail');
       if (isOpenCasesMode()) advanceOpenCaseCount();
       const choice = await ui.showCaseFailed(
         logic.suspect.name,
         results.score,
-        isOpenCasesMode() ? { continueLabel: 'Next Open Case →' } : null,
+        isOpenCasesMode()
+          ? { continueLabel: 'Next Open Case →' }
+          : isSkylineMode()
+            ? { continueLabel: 'Retry Skyline Case →' }
+            : null,
       );
       await handleEndChoice(choice, false);
     }, 500);
@@ -676,13 +716,13 @@ function showInvestigationLocations() {
       ui.addClue(clue, informant);
       const country = logic.route[logic.currentStop];
       ui.addDossierEntry(logic.currentStop, clue.text, informant.prefix, informant.emoji, country, capitalOf[country]);
-      const ambientHint = !isOpenCasesMode() && !ambientHintStopsShown.has(logic.currentStop)
+      const ambientHint = isCrimsonCampaignMode() && !ambientHintStopsShown.has(logic.currentStop)
         ? pickArrivalAmbientHint({
             phase: logic.campaignPhase,
             caseNumber: logic.caseNumber,
             currentStop: logic.currentStop,
             locationId,
-            missionHistory: getMissionHistory(),
+            missionHistory: getActiveMissionHistory(logic.mode),
           })
         : null;
       if (ambientHint) {
@@ -700,7 +740,7 @@ function showInvestigationLocations() {
           capitalOf[country],
         );
       }
-      const finaleHint = !isOpenCasesMode() && logic.campaignPhase === 'finale' && !finaleEvidenceStopsShown.has(logic.currentStop)
+      const finaleHint = isCrimsonCampaignMode() && logic.campaignPhase === 'finale' && !finaleEvidenceStopsShown.has(logic.currentStop)
         ? pickFinaleAliasHint(logic.currentStop)
         : null;
       if (finaleHint) {
@@ -797,7 +837,7 @@ function handleGuess(country) {
           const lineup = logic.getSuspectLineup(lineupPool);
           const chosenName = await ui.showSuspectLineup(
             lineup,
-            logic.campaignPhase === 'finale'
+            isCrimsonCampaignMode() && logic.campaignPhase === 'finale'
               ? {
                   title: 'ALIAS LINEUP',
                   subtitle: 'Carmen is in the room, but not under her own name. Find the alias and issue the warrant.',
@@ -827,13 +867,14 @@ function handleGuess(country) {
             saveGameRecord(gameId, results.score, results.time);
             unlockSuspect(logic.suspect.name);
             recordTheft(logic.suspect.name, logic.artifact.siteName, logic.artifact.country);
-            saveMissionResult('success');
-            const isFinaleWin = !isOpenCasesMode() && logic.caseNumber >= TOTAL_CASES;
+            saveActiveMissionResult('success');
+            const isFinaleWin = isCrimsonCampaignMode() && logic.caseNumber >= TOTAL_CASES;
             if (isFinaleWin) {
               markCampaignComplete();
               setGameMode(OPEN_CASES_MODE);
             } else {
               if (isOpenCasesMode()) advanceOpenCaseCount();
+              else if (isSkylineMode()) advanceSkylineCase();
               else advanceCase();
             }
             const choice = await ui.showCaseSolved(
@@ -842,6 +883,7 @@ function handleGuess(country) {
               results.score,
               {
                 ...(isOpenCasesMode() ? { continueLabel: 'Next Open Case →' } : {}),
+                ...(isSkylineMode() ? { continueLabel: 'Next Skyline Case →' } : {}),
                 timeBonus,
               },
             );
@@ -856,12 +898,16 @@ function handleGuess(country) {
             logic.score = Math.max(0, logic.score - 200);
             const failResults = logic.getResults();
             saveGameRecord(gameId, failResults.score, failResults.time);
-            saveMissionResult('fail');
+            saveActiveMissionResult('fail');
             if (isOpenCasesMode()) advanceOpenCaseCount();
             const choice = await ui.showCaseFailed(
               logic.suspect.name,
               failResults.score,
-              isOpenCasesMode() ? { continueLabel: 'Next Open Case →' } : null,
+              isOpenCasesMode()
+                ? { continueLabel: 'Next Open Case →' }
+                : isSkylineMode()
+                  ? { continueLabel: 'Retry Skyline Case →' }
+                  : null,
             );
             await handleEndChoice(choice, false);
           }
@@ -896,7 +942,7 @@ function handleGuess(country) {
       ui.showTransition(result.stopScore, result.country, taunt, 'The thief', narratorLine, () => {
         stopAtmosphere();
         ui.updateProgress(progress.stop, progress.totalStops);
-        ui.showStopNarrative(progress.stop, progress.totalStops);
+        ui.showStopNarrative(progress.stop, progress.totalStops, { mode: logic.mode });
         ui.clearClues();
         showInvestigationLocations();
         showNeighborsOnMap(result.neighbors);
@@ -927,9 +973,9 @@ function handleGuess(country) {
       playerPosition = country;
       drawMap([...logic.route.slice(0, logic.currentStop + 1)], [country]);
 
-      ui.addDetourEntry(country, capitalOf[country]);
+      ui.addDetourEntry(country, capitalOf[country], { mode: logic.mode });
 
-      ui.showDeadEnd(country, logic.totalWrongGuesses >= 2, () => {
+      ui.showDeadEnd(country, logic.totalWrongGuesses >= 2, { mode: logic.mode }, () => {
         // Show neighbors of the original stop + the original stop itself
         const neighbors = result.neighbors;
         drawMap(logic.route.slice(0, logic.currentStop + 1), neighbors);
