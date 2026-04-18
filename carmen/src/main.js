@@ -10,6 +10,7 @@ import { chooseNarratorScript } from './content/narrator-script.js';
 import { buildCountryEntryMonologue } from './content/country-entry-monologue.js';
 import { buildCaseBriefingHint, buildInterpolIntel, pickArrivalAmbientHint, pickFinaleAliasHint } from './content/carmen-hints.js';
 import { IMG } from './assets.js';
+import { getFlightDistanceBand } from './campaigns/skyline-syndicate/flight-clues.js';
 import { TOTAL_CASES } from './campaign/progression.js';
 import {
   OPEN_CASES_MODE,
@@ -25,7 +26,7 @@ import {
   markCampaignComplete, getUnlockedSuspects, unlockSuspect,
   getTheftHistory, recordTheft, getInterpolViewed, saveInterpolViewed,
   getGameMode, setGameMode, getOpenCaseCount, advanceOpenCaseCount,
-  getSkylineCase, advanceSkylineCase, getSkylineMissionHistory, saveSkylineMissionResult,
+  getSkylineCase, advanceSkylineCase, setSkylineCase, getSkylineMissionHistory, saveSkylineMissionResult,
 } from './campaign/persistence.js';
 
 const gameId = 'carmen';
@@ -59,8 +60,13 @@ function updateFrontImageForMode(mode = getGameMode()) {
 // Debug: ?case=N URL param jumps directly to that case on load.
 const _caseParam = parseInt(pageParams.get('case'), 10);
 if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
-  setCase(_caseParam);
-  setGameMode('campaign');
+  if (isSkylineSyndicateMode(getGameMode())) {
+    setSkylineCase(_caseParam);
+    setGameMode('skyline_syndicate');
+  } else {
+    setCase(_caseParam);
+    setGameMode('campaign');
+  }
 } else if (_caseParam === TOTAL_CASES + 1) {
   setGameMode(OPEN_CASES_MODE);
 }
@@ -596,6 +602,11 @@ async function startGame() {
   }
 
   // Reset dossier and interpol for new game
+  ui.setManifestMode(isSkylineMode(logic.mode), {
+    caseNumber: logic.caseNumber,
+    totalCases: logic.totalCases,
+  });
+  ui.resetManifestBoard();
   ui.resetDossier();
   interpolViewedThisGame = new Set();
   interpolMarkedThisCase = new Set();
@@ -810,6 +821,55 @@ function handleGoBack(fromCountry) {
   }, 300);
 }
 
+function formatManifestClockDelta(deltaMinutes) {
+  if (!Number.isFinite(deltaMinutes)) return '';
+  if (deltaMinutes === 0) return 'same legal clock';
+  const abs = Math.abs(deltaMinutes);
+  const hours = Math.floor(abs / 60);
+  const minutes = abs % 60;
+  const parts = [];
+  if (hours) parts.push(`${hours}h`);
+  if (minutes) parts.push(`${minutes}m`);
+  return `${parts.join(' ')} ${deltaMinutes > 0 ? 'ahead' : 'behind'}`;
+}
+
+function getManifestFragmentText(caseNumber, stopIndex) {
+  if (caseNumber >= 10) return `GATE ZERO TRACE ${stopIndex}`;
+  if (caseNumber >= 8) return `MANIFEST CHAIN VERIFIED ${stopIndex}`;
+  if (caseNumber >= 5) return `FALSE HUB FLAGGED ${stopIndex}`;
+  if (caseNumber >= 4) return `ARRIVAL BOARD OFFSET VERIFIED ${stopIndex}`;
+  return `SKYLINE TRANSFER AUTHORIZED ${stopIndex}`;
+}
+
+function addSkylineManifestSegmentForConfirmedStop() {
+  if (!isSkylineMode() || !logic?.routeProvider) return;
+  const confirmedStop = logic.currentStop;
+  if (confirmedStop <= 0) return;
+  const fromCountry = logic.route[confirmedStop - 1];
+  const toCountry = logic.route[confirmedStop];
+  if (!fromCountry || !toCountry) return;
+
+  const routeMeta = logic.routeProvider.getRouteMeta?.(fromCountry, toCountry) || null;
+  const gatewayMeta = logic.routeProvider.getGatewayConnectivityMeta?.(toCountry) || null;
+  const clockMeta = logic.routeProvider.getClockMeta?.(fromCountry, toCountry, logic) || null;
+  const distanceBand = getFlightDistanceBand(routeMeta?.distanceKm);
+
+  ui.addManifestSegment({
+    stopIndex: confirmedStop,
+    fromCountry,
+    toCountry,
+    fromCapital: capitalOf[fromCountry] || '',
+    toCapital: capitalOf[toCountry] || '',
+    gatewayBand: gatewayMeta?.band || '',
+    connectionCount: gatewayMeta?.connectionCount || null,
+    distanceBand,
+    distanceKm: routeMeta?.distanceKm ? Math.round(routeMeta.distanceKm) : null,
+    clockDeltaMinutes: clockMeta?.clockDeltaMinutes ?? null,
+    clockLabel: formatManifestClockDelta(clockMeta?.clockDeltaMinutes),
+    fragmentText: getManifestFragmentText(logic.caseNumber, confirmedStop),
+  });
+}
+
 function handleGuess(country) {
   stopAmbient();
   stopAtmosphere();
@@ -847,6 +907,7 @@ function handleGuess(country) {
         playerPosition = toCountry;
         drawMap(logic.route);
         ui.updateProgress(progress.stop, progress.totalStops);
+        addSkylineManifestSegmentForConfirmedStop();
 
         // Brief pause, then show lineup
         setTimeout(async () => {
@@ -957,6 +1018,7 @@ function handleGuess(country) {
       stopAmbient();
       playerPosition = toCountry;
       drawMap(progress.route, result.neighbors);
+      addSkylineManifestSegmentForConfirmedStop();
       const atmosphere = chooseArrivalAtmosphere(result.country, progress.stop);
       if (atmosphere) {
         playAtmosphere(atmosphere.key);

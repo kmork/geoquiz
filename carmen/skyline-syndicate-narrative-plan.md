@@ -6,7 +6,7 @@ Skyline Syndicate should feel like ACME's aviation desk reconstructing a crimina
 
 The recommended antagonist is **The Dispatcher**: a remote logistics controller who does not steal artifacts personally, but routes thieves, cargo, and aliases through a hidden capital-gateway network. The player is not following a literal airline itinerary in real time. They are using ACME intelligence, historical route records, airport witnesses, and geography clues to identify the next confirmed handoff country.
 
-The campaign should keep the existing Carmen loop intact: investigate, gather geography clues, confirm the route choice, and identify the suspect. Skyline's distinct identity should come from its narrative wrapper and from new geography puzzles based on flight corridors, capitals, time zones, distance bands, route confidence, and airport records.
+The campaign should keep the existing Carmen loop intact: investigate, gather geography clues, confirm the route choice, and identify the suspect. Skyline's distinct identity should come from its narrative wrapper and from new geography puzzles based on flight corridors, capitals, time zones, distance bands, gateway roles, and airport records.
 
 ## Narrative Direction
 
@@ -31,7 +31,7 @@ Core framing:
 - ACME's **Skyline Desk** catches a stolen artifact moving under false capital-airport records.
 - Each stop leaves fragments: a manifest entry, a cargo tag, a witness report, or a corrupted gate change.
 - The Dispatcher appears first as a pattern in the data, then as a suspected controller, and finally as the campaign target.
-- The route graph should be described as ACME's reconstructed corridor file, not as a guarantee of current real-world airline schedules.
+- The route graph should be described as ACME's capital corridor file, not as a guarantee of current real-world airline schedules.
 
 Example briefing tone:
 
@@ -53,7 +53,6 @@ Add Skyline-only clue families that make the flight-corridor mode feel mechanica
 - **Distance band clues:** use route metadata or calculated capital distance to describe short-hop, regional, long-haul, or transcontinental corridors.
 - **Capital comparison clues:** compare visible choices by capital initial, capital word count, elevation, coastal proximity, population bracket, latitude, or hemisphere.
 - **Hub logic clues:** use the route graph to distinguish high-connectivity gateways from quieter endpoints. Example: "The next lead is not the busiest gateway in the file."
-- **Route-confidence clues:** turn `historical_openflights` and `inferred_fallback` into ACME file language. Historical corridors can be "confirmed in old route records"; inferred fallback corridors can be "reconstructed from gateway behavior."
 - **Airport record clues:** use airport codes, gateway names, cargo tags, gate changes, and baggage labels as flavor. Keep airport-code clues optional or late-campaign because most players will not know them.
 - **Hemisphere and latitude clues:** support map reasoning. Example: "The flight crossed into the Southern Hemisphere" or "The next capital sits north of the Tropic of Cancer."
 - **Cargo-type clues:** connect the artifact and country data to the aviation fiction. Example: "The crate was relabeled as coffee exports" or "The transfer paperwork referenced a cultural delegation."
@@ -134,19 +133,19 @@ Arc reveal: An Interpol note suggests The Dispatcher may have access to airline,
 
 ### Case 8: The Inferred Corridor
 
-Story hook: ACME's file includes one route reconstructed from weak intelligence rather than confirmed historical route records.
+Story hook: ACME's file includes a transfer page edited after the artifact moved.
 
-Puzzle focus: Route-confidence clues. Let the player reason from a mix of confirmed corridors and inferred fallback links.
+Puzzle focus: Manifest consistency. Let the player compare the active capital gateways, distance bands, time-zone shifts, and ordinary country clues to recover the next handoff.
 
-Briefing tone: Be transparent: ACME has a reconstructed corridor, not a perfect airline schedule.
+Briefing tone: The file is damaged, but the visible capital connections are still usable facts for the case.
 
-Arc reveal: The Dispatcher relies on weak corridors because they know ACME hesitates when the data is uncertain.
+Arc reveal: The Dispatcher edits paperwork after each handoff, but cannot erase the geography of the route.
 
 ### Case 9: Gate Zero
 
 Story hook: Every clue points to a hidden controller who can erase gate changes before ACME receives the file.
 
-Puzzle focus: Combine several Skyline clue families: time zone, hub logic, capital comparison, and route confidence.
+Puzzle focus: Combine several Skyline clue families: time zone, hub logic, capital comparison, and manifest fragments.
 
 Briefing tone: The case should feel like a direct hunt for the control point behind the network.
 
@@ -174,16 +173,15 @@ Keep the first implementation small:
 - add Skyline-specific briefing and closing copy before adding new mechanics;
 - add one or two clue families first, preferably distance band and time zone;
 - use the existing route provider and visible choice set for all clue comparisons;
-- surface route confidence only as ACME file language, not as factual present-day flight certainty;
 - avoid a separate UI until there are enough manifest fragments to justify a Manifest Board.
 
-A later **Manifest Board** could become Skyline's signature campaign surface. It would show confirmed capitals, corridor metadata, route-confidence labels, and recovered manifest fragments. It should help players notice patterns without replacing manual deduction.
+A later **Manifest Board** could become Skyline's signature campaign surface. It would show confirmed capitals, useful corridor metadata, and recovered manifest fragments. It should help players notice patterns without replacing manual deduction.
 
 ## Test And Review Checklist
 
 - Confirm Skyline copy avoids border, land-neighbor, and overland wording.
 - Confirm every clue is interpreted against the active visible route choices.
-- Confirm no narrative claims that OpenFlights or inferred fallback links are current airline schedules.
+- Confirm no narrative claims that the route snapshot is a current airline schedule.
 - Confirm the campaign arc does not reuse The Crimson Trail finale, Carmen alias accusation, or Open Cases transition.
 - Confirm failed Skyline cases do not advance narrative reveals that imply a solved case.
 

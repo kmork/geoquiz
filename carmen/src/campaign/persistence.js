@@ -75,6 +75,12 @@ export function advanceSkylineCase() {
   return next;
 }
 
+export function setSkylineCase(n) {
+  const clamped = Math.max(1, Math.min(TOTAL_CASES, n | 0));
+  localStorage.setItem(SKYLINE_CASE_KEY, String(clamped));
+  return clamped;
+}
+
 export function resetSkylineCampaign() {
   localStorage.removeItem(SKYLINE_CASE_KEY);
   localStorage.removeItem(SKYLINE_MISSION_KEY);

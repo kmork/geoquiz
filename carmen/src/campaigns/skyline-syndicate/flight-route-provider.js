@@ -1,7 +1,6 @@
 import { SKYLINE_SYNDICATE } from './flight-campaign-config.js';
 import {
   buildFlightClockClue,
-  buildFlightConfidenceClue,
   buildFlightDistanceClue,
   buildGatewayConnectivityClue,
   getFlightDistanceBand,
@@ -205,15 +204,6 @@ export class CapitalFlightRouteProvider {
       .filter(Boolean);
   }
 
-  getConfidenceChoiceSummaries(from, choices = []) {
-    return choices
-      .map(country => {
-        const meta = this.getRouteMeta(from, country);
-        return meta?.confidence ? { country, confidence: meta.confidence } : null;
-      })
-      .filter(Boolean);
-  }
-
   getGatewayConnectivityMeta(country) {
     const connectionCount = this.getChoiceCount(country);
     const band = getGatewayConnectivityBand(connectionCount);
@@ -294,14 +284,12 @@ export class CapitalFlightRouteProvider {
     const current = context.route?.[context.currentStop];
     const distanceClue = this._distanceClue(current, target, choices, context);
     const clockClue = this._clockClue(current, target, choices, context);
-    const confidenceClue = this._confidenceClue(current, target, choices, context);
     const gatewayClue = this._gatewayClue(target, choices, context);
     const caseNumber = context.caseNumber || 1;
     const clues = (
-      caseNumber >= 8 ? [confidenceClue, clockClue, gatewayClue, distanceClue] :
-      caseNumber >= 5 ? [gatewayClue, confidenceClue, distanceClue, clockClue] :
-      caseNumber >= 4 ? [clockClue, distanceClue, gatewayClue, confidenceClue] :
-      [distanceClue, gatewayClue, clockClue, confidenceClue]
+      caseNumber >= 5 ? [gatewayClue, distanceClue, clockClue] :
+      caseNumber >= 4 ? [clockClue, distanceClue, gatewayClue] :
+      [distanceClue, gatewayClue, clockClue]
     ).filter(Boolean);
     return clues.length ? clues.slice(0, count) : null;
   }
@@ -309,7 +297,6 @@ export class CapitalFlightRouteProvider {
   getLocationClue({ target, currentCountry, locationId, context, choices = [] }) {
     if (locationId === 'airport') {
       return this._distanceClue(currentCountry, target, choices, context) ||
-        this._confidenceClue(currentCountry, target, choices, context) ||
         this._clockClue(currentCountry, target, choices, context) ||
         this._gatewayClue(target, choices, context);
     }
@@ -318,12 +305,11 @@ export class CapitalFlightRouteProvider {
         this._gatewayClue(target, choices, context);
     }
     if (locationId === 'embassy') {
-      return this._confidenceClue(currentCountry, target, choices, context) ||
-        this._clockClue(currentCountry, target, choices, context);
+      return this._clockClue(currentCountry, target, choices, context) ||
+        this._gatewayClue(target, choices, context);
     }
     if (locationId === 'library') {
-      return this._gatewayClue(target, choices, context) ||
-        this._confidenceClue(currentCountry, target, choices, context);
+      return this._gatewayClue(target, choices, context);
     }
     return null;
   }
@@ -331,10 +317,7 @@ export class CapitalFlightRouteProvider {
   getBriefingHint() {
     const summary = this.getValidationSummary();
     if (!summary.routes) return '';
-    const weakText = summary.weak.length
-      ? ` ${summary.weak.length} gateways remain thinly sourced, so ACME labels uncertain corridors inside the file.`
-      : '';
-    return `Skyline file: ${summary.routes} reconstructed capital corridors are active in ACME's manifest.${weakText}`;
+    return `Skyline file: ${summary.routes} capital flight corridors are active in ACME's manifest.`;
   }
 
   getValidationSummary() {
@@ -371,16 +354,6 @@ export class CapitalFlightRouteProvider {
     if (!routeMeta || !clockMeta) return null;
     const summaries = this.getClockChoiceSummaries(current, choices, context);
     const clue = buildFlightClockClue({ ...routeMeta, ...clockMeta }, summaries);
-    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
-    return clue;
-  }
-
-  _confidenceClue(current, target, choices, context) {
-    if (!current || !target) return null;
-    const meta = this.getRouteMeta(current, target);
-    if (!meta?.confidence) return null;
-    const summaries = this.getConfidenceChoiceSummaries(current, choices);
-    const clue = buildFlightConfidenceClue(meta, summaries);
     if (!clue || context?.usedClueIds?.has(clue.id)) return null;
     return clue;
   }

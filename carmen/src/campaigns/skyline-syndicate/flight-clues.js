@@ -13,19 +13,6 @@ export function getGatewayConnectivityBand(connectionCount) {
   return 'thin gateway';
 }
 
-function describeRouteConfidence(confidence) {
-  switch (confidence) {
-    case 'historical_openflights':
-      return 'confirmed from historical route records';
-    case 'current_provider':
-      return 'confirmed from provider records';
-    case 'inferred_fallback':
-      return 'an inferred corridor in ACME\'s file';
-    default:
-      return 'a reconstructed corridor in ACME\'s file';
-  }
-}
-
 function formatMinuteDelta(deltaMinutes) {
   const abs = Math.abs(deltaMinutes);
   const hours = Math.floor(abs / 60);
@@ -83,26 +70,6 @@ export function buildFlightClockClue(routeMeta, choices = []) {
       toUtcOffsetMinutes: routeMeta.toUtcOffsetMinutes,
       fromTimeZone: routeMeta.fromTimeZone,
       toTimeZone: routeMeta.toTimeZone,
-      matchCount,
-      totalChoices: choices.length,
-    },
-  };
-}
-
-export function buildFlightConfidenceClue(routeMeta, choices = []) {
-  if (!routeMeta?.confidence) return null;
-  const confidenceLabel = describeRouteConfidence(routeMeta.confidence);
-  const matchCount = choices.filter(choice => choice.confidence === routeMeta.confidence).length;
-  const text = `ACME labels the next capital corridor as ${confidenceLabel}.`;
-  return {
-    id: `flight-confidence-${routeMeta.from}-${routeMeta.to}`,
-    icon: '🧾',
-    category: 'flight',
-    text,
-    data: {
-      text,
-      confidence: routeMeta.confidence,
-      confidenceLabel,
       matchCount,
       totalChoices: choices.length,
     },

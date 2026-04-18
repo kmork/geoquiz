@@ -420,6 +420,12 @@ export function createCarmenUI(container, flagCodes) {
 
   // Dossier state
   const dossierEntries = []; // [{stop, clueText, informantPrefix}]
+  const manifestState = {
+    enabled: false,
+    caseNumber: null,
+    totalCases: null,
+    segments: [],
+  };
 
   // ── Tab switching ──
   // Left panels + right views mapping
@@ -600,13 +606,64 @@ export function createCarmenUI(container, flagCodes) {
     els.musicToggle.innerHTML = `<img src="${muted ? IMG.musicOff : IMG.musicOn}" alt="Music">`;
   });
 
+  function renderManifestBoard() {
+    if (!manifestState.enabled) return '';
+    const caseLabel = manifestState.caseNumber && manifestState.totalCases
+      ? `Skyline Case ${manifestState.caseNumber} / ${manifestState.totalCases}`
+      : 'Skyline Case';
+    const segmentHtml = manifestState.segments.length
+      ? manifestState.segments.map((segment, index) => {
+          const chips = [
+            segment.gatewayBand ? `Gateway: ${segment.gatewayBand}` : '',
+            segment.distanceBand ? `Range: ${segment.distanceBand}` : '',
+            segment.clockLabel ? `Clock: ${segment.clockLabel}` : '',
+          ].filter(Boolean);
+          const fromLabel = [segment.fromCapital, segment.fromCountry].filter(Boolean).join(', ');
+          const toLabel = [segment.toCapital, segment.toCountry].filter(Boolean).join(', ');
+          return `
+            <div class="carmen-manifest-segment">
+              <div class="carmen-manifest-segment-top">
+                <span class="carmen-manifest-step">SEGMENT ${index + 1}</span>
+                <span class="carmen-manifest-route">${esc(fromLabel || segment.fromCountry || 'Unknown')} -> ${esc(toLabel || segment.toCountry || 'Unknown')}</span>
+              </div>
+              <div class="carmen-manifest-chips">
+                ${chips.map(chip => `<span class="carmen-manifest-chip">${esc(chip)}</span>`).join('')}
+              </div>
+              <div class="carmen-manifest-fragment">
+                <span class="carmen-manifest-fragment-label">Recovered fragment</span>
+                <span class="carmen-manifest-fragment-text">${esc(segment.fragmentText || 'MANIFEST ENTRY RECOVERED')}</span>
+              </div>
+            </div>
+          `;
+        }).join('')
+      : '<div class="carmen-manifest-empty">No confirmed corridors yet.</div>';
+    return `
+      <div class="carmen-manifest-board">
+        <div class="carmen-manifest-header">
+          <div>
+            <div class="carmen-manifest-kicker">ACME MANIFEST BOARD</div>
+            <div class="carmen-manifest-title">${esc(caseLabel)}</div>
+          </div>
+          <div class="carmen-manifest-count">${manifestState.segments.length} recovered</div>
+        </div>
+        ${segmentHtml}
+      </div>
+    `;
+  }
+
   function renderDossier() {
-    if (dossierEntries.length === 0) {
+    if (dossierEntries.length === 0 && !manifestState.enabled) {
       els.dossierBody.innerHTML = '<div class="carmen-dossier-empty">No clues gathered yet. Investigate locations to find leads.</div>';
       return;
     }
     // Render entries in order, grouping consecutive entries with the same stopKey
-    let html = '<div class="carmen-dossier-page">';
+    let html = `<div class="carmen-dossier-page">${renderManifestBoard()}`;
+    if (dossierEntries.length === 0) {
+      html += '<div class="carmen-dossier-empty">No clues gathered yet. Investigate locations to find leads.</div>';
+      html += '</div>';
+      els.dossierBody.innerHTML = html;
+      return;
+    }
     let currentKey = null;
     let sectionOpen = false;
     for (const e of dossierEntries) {
@@ -794,6 +851,30 @@ export function createCarmenUI(container, flagCodes) {
 
     hideNarratorCaption(immediate = false) {
       hideNarratorCaption(immediate);
+    },
+
+    setManifestMode(enabled, options = null) {
+      manifestState.enabled = !!enabled;
+      manifestState.caseNumber = options?.caseNumber || null;
+      manifestState.totalCases = options?.totalCases || null;
+      renderDossier();
+    },
+
+    resetManifestBoard() {
+      manifestState.segments.length = 0;
+      renderDossier();
+    },
+
+    addManifestSegment(segment) {
+      if (!manifestState.enabled || !segment) return;
+      const duplicate = manifestState.segments.some(existing =>
+        existing.fromCountry === segment.fromCountry &&
+        existing.toCountry === segment.toCountry &&
+        existing.stopIndex === segment.stopIndex
+      );
+      if (duplicate) return;
+      manifestState.segments.push(segment);
+      renderDossier();
     },
 
     /** Add a clue to the dossier. */

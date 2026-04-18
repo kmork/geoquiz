@@ -89,15 +89,15 @@ export const SKYLINE_CASE_NARRATIVE = [
       'The fake layover held, and the real route slipped out under a clean connection.',
   },
   {
-    title: 'The Inferred Corridor',
+    title: 'The Broken Manifest',
     briefing:
-      'One corridor in ACME\'s file is reconstructed from weak intelligence instead of confirmed old route records. Treat the manifest as evidence, not certainty, and find the next handoff.',
+      'A transfer page in ACME\'s file has been edited after the artifact moved. Compare the capital gateways, follow the remaining geography, and find the next handoff.',
     note:
-      'Skyline Desk note: The Dispatcher relies on weak corridors because ACME hesitates when the data is uncertain.',
+      'Skyline Desk note: The Dispatcher is cutting pieces out of the manifest after each handoff.',
     solved:
-      'The inferred corridor was enough. ACME has learned how The Dispatcher hides inside uncertainty.',
+      'The broken manifest is patched. ACME can read the route chain even when The Dispatcher edits the paperwork.',
     failed:
-      'The uncertain corridor bought the Syndicate time, and the manifest no longer separates signal from noise.',
+      'The edited page held long enough for the Syndicate to move the artifact again.',
   },
   {
     title: 'Gate Zero',
