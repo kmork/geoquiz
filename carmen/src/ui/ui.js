@@ -899,7 +899,7 @@ export function createCarmenUI(container, flagCodes) {
           ).join('')
         : '<div class="carmen-interpol-detail">No recorded thefts on file.</div>';
 
-      const statusClass = status === 'IN CUSTODY' ? 'in-custody' : 'at-large';
+      const statusClass = status === 'ACTIVE' ? 'at-large' : 'in-custody';
       const markLabel = isMarked ? 'Remove Mark' : 'Mark as Person of Interest';
       const backgroundStory = status === 'IN CUSTODY' ? getInterpolBackgroundStory(suspect) : null;
       const hasBackgroundPage = !!backgroundStory;
