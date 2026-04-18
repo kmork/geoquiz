@@ -155,6 +155,8 @@ The Play page exposes Skyline Syndicate as `carmen.html?mode=skyline_syndicate`.
 
 Campaign-specific launch behavior is now centralized in `carmen/src/campaign/modes.js`. The main Carmen entrypoint loads generic game data and asks this module for the active run configuration, mission label, route provider, and briefing copy. New campaigns should add their mode-specific data and provider wiring there or in their own campaign folder, rather than adding new direct campaign branches to `carmen/src/main.js`.
 
+Small-island usability is handled inside Carmen only, not by changing shared map modules. `carmen/src/ui/carmen-route-renderer.js` wraps the shared route renderer and draws destination choices as the real country polygons. Carmen should not add visible circular proxy markers, separate ledger entries, or other off-country click targets when the country can be reached by zooming and panning the map. Labels are only shown when the projected country shape is large enough for the label to fit; tiny islands and microstates rely on zoom so the player clicks the geography itself. Long but narrow countries such as Panama should remain polygon-first. Shared files such as `js/ui-components/route-renderer.js` and `js/canvas-map-engine.js` should remain untouched for this behavior.
+
 ## Time Economy
 
 Time is the main loss condition and the most important strategic resource.

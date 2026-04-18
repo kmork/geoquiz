@@ -1766,6 +1766,15 @@ body {
   transition: fill 0.15s, stroke 0.15s;
 }
 
+@media (max-width: 720px) {
+  .carmen-map-sidebar {
+    left: 8px;
+    right: 8px;
+    top: auto;
+    bottom: 8px;
+  }
+}
+
 /* ── Map Overlay (correct guess transition) ──────────── */
 .carmen-map-overlay {
   position: absolute;

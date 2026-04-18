@@ -1,6 +1,6 @@
 import { CarmenGameLogic, SUSPECTS } from './core/game-logic.js';
 import { createCarmenUI } from './ui/ui.js';
-import { RouteRenderer } from '../../js/ui-components/route-renderer.js';
+import { CarmenRouteRenderer } from './ui/carmen-route-renderer.js';
 import { loadGeoJSON } from '../../js/geojson-loader.js';
 import { attachZoomPan } from '../../js/map-zoom-pan.js';
 import { saveGameRecord } from '../../js/game-records.js';
@@ -184,7 +184,7 @@ gameContent.style.display = 'none';
 const ui = createCarmenUI(gameContent, flagCodes);
 
 // Create map renderer
-let renderer = new RouteRenderer(ui.mapSvg, worldData);
+let renderer = new CarmenRouteRenderer(ui.mapSvg, worldData);
 let baseViewBox = { x: 0, y: 0, w: 600, h: 320 };
 attachZoomPan(ui.mapSvg, () => baseViewBox);
 

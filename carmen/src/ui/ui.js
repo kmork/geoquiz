@@ -93,7 +93,7 @@ export function createCarmenUI(container, flagCodes) {
                   <div class="carmen-panel-badge">✈️ TRAIL</div>
                   <div class="carmen-panel-title">Where does the border trail lead?</div>
                   <div class="carmen-panel-desc">Select a neighboring country on the map to confirm the next border lead.</div>
-                  <div class="carmen-panel-cost">⏱️ Redeployment cost: <strong>5 hours</strong> per lead</div>
+                  <div class="carmen-panel-cost">⏱️ Travel cost: <strong>5 hours</strong> per lead</div>
                 </div>
               </div>
               <div class="carmen-panel-view" id="carmen-panel-dossier" style="display:none">
