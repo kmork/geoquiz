@@ -1383,6 +1383,14 @@ body {
   border-top: 1px solid rgba(143, 210, 221, 0.14);
 }
 
+.carmen-manifest-segment-redacted {
+  margin-top: 0.25rem;
+  padding-inline: 0.55rem;
+  border: 1px solid rgba(228, 96, 96, 0.24);
+  border-radius: 6px;
+  background: rgba(76, 20, 24, 0.18);
+}
+
 .carmen-manifest-segment:last-child {
   padding-bottom: 0;
 }
@@ -1426,6 +1434,19 @@ body {
   color: rgba(236, 246, 247, 0.88);
   font-size: 0.74rem;
   line-height: 1.25;
+}
+
+.carmen-manifest-redaction-note {
+  margin-bottom: 0.55rem;
+  padding: 0.4rem 0.5rem;
+  border-radius: 4px;
+  border: 1px dashed rgba(228, 96, 96, 0.4);
+  color: #f1a8a8;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .carmen-manifest-fragment {
@@ -2719,6 +2740,192 @@ body {
   z-index: 300;
   animation: carmen-fade-in 0.4s ease-out;
   cursor: pointer;
+}
+
+.carmen-final-proof-overlay {
+  cursor: default;
+}
+
+.carmen-final-proof-content {
+  width: min(760px, 92vw);
+  max-height: 88vh;
+  overflow: auto;
+  padding: 1.3rem;
+  border-radius: 12px;
+  border: 2px solid rgba(143, 210, 221, 0.36);
+  background:
+    linear-gradient(180deg, rgba(25, 32, 38, 0.96), rgba(15, 17, 20, 0.96)),
+    var(--card-bg);
+  box-shadow: 0 28px 70px rgba(0, 0, 0, 0.48);
+  animation: carmen-briefing-slide 0.5s ease-out;
+}
+
+.carmen-final-proof-title {
+  margin-top: 0.3rem;
+  color: #f2f8f8;
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+.carmen-final-proof-subtitle {
+  margin-top: 0.45rem;
+  color: rgba(231, 241, 241, 0.78);
+  line-height: 1.45;
+}
+
+.carmen-final-proof-route {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+  margin-top: 0.85rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 6px;
+  background: rgba(143, 210, 221, 0.08);
+  border: 1px solid rgba(143, 210, 221, 0.2);
+  color: rgba(239, 247, 247, 0.9);
+}
+
+.carmen-final-proof-route strong {
+  color: #e4bf6a;
+}
+
+.carmen-final-proof-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 0.45rem;
+  margin-top: 0.85rem;
+}
+
+.carmen-final-proof-strip-row {
+  padding: 0.55rem;
+  border-radius: 5px;
+  border: 1px solid rgba(143, 210, 221, 0.18);
+  background: rgba(143, 210, 221, 0.07);
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.carmen-final-proof-strip-row span {
+  display: block;
+  color: rgba(143, 210, 221, 0.8);
+  font-size: 0.66rem;
+  font-weight: 800;
+}
+
+.carmen-final-proof-strip-row b {
+  display: block;
+  margin-top: 0.15rem;
+  color: #f0eee4;
+  font-size: 0.86rem;
+}
+
+.carmen-final-proof-strip-row.is-redacted {
+  border-color: rgba(228, 96, 96, 0.36);
+  background: rgba(76, 20, 24, 0.2);
+}
+
+.carmen-final-proof-strip-row.is-redacted b {
+  color: #f1a8a8;
+}
+
+.carmen-final-proof-grid-label {
+  margin-top: 1rem;
+  color: rgba(228, 191, 106, 0.8);
+  font-size: 0.72rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.carmen-final-proof-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin-top: 0.55rem;
+}
+
+.carmen-final-proof-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  min-height: 10rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid rgba(143, 210, 221, 0.22);
+  background: rgba(17, 22, 27, 0.78);
+  color: #edf4f4;
+  text-align: left;
+  cursor: pointer;
+}
+
+.carmen-final-proof-card:hover,
+.carmen-final-proof-card.selected {
+  border-color: rgba(228, 191, 106, 0.72);
+  background: rgba(228, 191, 106, 0.08);
+}
+
+.carmen-final-proof-card span {
+  color: rgba(143, 210, 221, 0.82);
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.carmen-final-proof-card b {
+  color: #e4bf6a;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 1rem;
+}
+
+.carmen-final-proof-facts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.24rem;
+}
+
+.carmen-final-proof-facts span {
+  color: rgba(236, 246, 247, 0.84);
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.carmen-final-proof-feedback {
+  min-height: 1.35rem;
+  margin-top: 0.75rem;
+  color: #f1a8a8;
+  font-weight: 700;
+}
+
+.carmen-final-proof-feedback:not(.is-visible) {
+  visibility: hidden;
+}
+
+.carmen-final-proof-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.4rem;
+}
+
+.carmen-final-proof-confirm {
+  padding: 0.58rem 1rem;
+  border-radius: 6px;
+  border: 1px solid rgba(228, 191, 106, 0.7);
+  background: rgba(228, 191, 106, 0.16);
+  color: #f6df9d;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.carmen-final-proof-confirm:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+@media (max-width: 760px) {
+  .carmen-final-proof-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .carmen-closing-content {

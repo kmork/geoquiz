@@ -11,6 +11,10 @@ import { buildCountryEntryMonologue } from './content/country-entry-monologue.js
 import { buildCaseBriefingHint, buildInterpolIntel, pickArrivalAmbientHint, pickFinaleAliasHint } from './content/carmen-hints.js';
 import { IMG } from './assets.js';
 import { getFlightDistanceBand } from './campaigns/skyline-syndicate/flight-clues.js';
+import {
+  buildSkylineFinalManifestProof,
+  getSkylineFinalManifestRedactedSegmentIndex,
+} from './campaigns/skyline-syndicate/final-manifest-proof.js';
 import { TOTAL_CASES } from './campaign/progression.js';
 import {
   OPEN_CASES_MODE,
@@ -84,16 +88,34 @@ updateFrontImageForMode();
     buf = (buf + k).slice(-secret.length);
     if (buf === secret) {
       buf = '';
-      const defaultJump = isOpenCasesMode() ? String(TOTAL_CASES + 1) : String(getCurrentCase());
-      const answer = window.prompt(`Jump to case (1–${TOTAL_CASES + 1}, where ${TOTAL_CASES + 1} = Open Cases):`, defaultJump);
+      const activeMode = getGameMode();
+      const skyline = isSkylineSyndicateMode(activeMode);
+      const defaultJump = isOpenCasesMode()
+        ? String(TOTAL_CASES + 1)
+        : skyline
+          ? String(getSkylineCase())
+          : String(getCurrentCase());
+      const modeLabel = skyline ? 'Skyline case' : 'case';
+      const answer = window.prompt(`Jump to ${modeLabel} (1–${TOTAL_CASES + 1}, where ${TOTAL_CASES + 1} = Open Cases):`, defaultJump);
       const n = parseInt(answer, 10);
+      const nextParams = new URLSearchParams(location.search);
       if (n >= 1 && n <= TOTAL_CASES) {
-        setCase(n);
-        setGameMode('campaign');
-        location.reload();
+        if (skyline) {
+          setSkylineCase(n);
+          setGameMode('skyline_syndicate');
+          nextParams.set('mode', 'skyline_syndicate');
+        } else {
+          setCase(n);
+          setGameMode('campaign');
+          nextParams.set('mode', 'campaign');
+        }
+        nextParams.set('case', String(n));
+        location.search = nextParams.toString();
       } else if (n === TOTAL_CASES + 1) {
         setGameMode(OPEN_CASES_MODE);
-        location.reload();
+        nextParams.set('mode', OPEN_CASES_MODE);
+        nextParams.set('case', String(TOTAL_CASES + 1));
+        location.search = nextParams.toString();
       }
     }
   });
@@ -117,6 +139,7 @@ updateFrontImageForMode();
 })();
 
 const INTERPOL_COST_HOURS = 3;
+const SKYLINE_FINAL_PROOF_PENALTY_HOURS = 4;
 
 let interpolViewedThisGame = new Set();
 let interpolMarkedThisCase = new Set();
@@ -879,6 +902,10 @@ function addSkylineManifestSegmentForConfirmedStop() {
   const gatewayMeta = logic.routeProvider.getGatewayConnectivityMeta?.(toCountry) || null;
   const clockMeta = logic.routeProvider.getClockMeta?.(fromCountry, toCountry, logic) || null;
   const distanceBand = getFlightDistanceBand(routeMeta?.distanceKm);
+  const redactedSegmentIndex = logic.caseNumber >= TOTAL_CASES
+    ? getSkylineFinalManifestRedactedSegmentIndex(logic.route)
+    : null;
+  const redacted = confirmedStop === redactedSegmentIndex;
 
   ui.addManifestSegment({
     stopIndex: confirmedStop,
@@ -893,7 +920,28 @@ function addSkylineManifestSegmentForConfirmedStop() {
     clockDeltaMinutes: clockMeta?.clockDeltaMinutes ?? null,
     clockLabel: formatManifestClockDelta(clockMeta?.clockDeltaMinutes),
     fragmentText: getManifestFragmentText(logic.caseNumber, confirmedStop),
+    redacted,
+    checksumToken: redacted ? 'GATE ZERO / CHECKSUM ROW ERASED' : '',
+    redactionText: redacted ? 'CHECKSUM ROW ERASED BY GATE ZERO' : '',
   });
+}
+
+async function runSkylineFinalManifestProofIfNeeded() {
+  if (!isSkylineMode() || logic.caseNumber < TOTAL_CASES) return true;
+
+  const proof = buildSkylineFinalManifestProof(logic);
+  const result = await ui.showSkylineFinalManifestProof(proof, {
+    wrongPenaltyHours: SKYLINE_FINAL_PROOF_PENALTY_HOURS,
+    onWrongSelection: async () => {
+      logic.spendTime(SKYLINE_FINAL_PROOF_PENALTY_HOURS);
+      updateClock();
+      return !checkTimeExpired();
+    },
+  });
+
+  if (!result?.correct) return false;
+  ui.recoverManifestRedaction(proof.redactedSegmentIndex);
+  return true;
 }
 
 function handleGuess(country) {
@@ -937,6 +985,9 @@ function handleGuess(country) {
 
         // Brief pause, then show lineup
         setTimeout(async () => {
+          const manifestLocked = await runSkylineFinalManifestProofIfNeeded();
+          if (!manifestLocked) return;
+
           playLineupMusic();
           const lineupPool = logic.getInterpolCandidates();
           const lineup = logic.getSuspectLineup(lineupPool);

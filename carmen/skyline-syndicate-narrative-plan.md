@@ -155,16 +155,11 @@ Arc reveal: ACME identifies **Gate Zero** as the Dispatcher's command pattern: a
 
 Story hook: The Dispatcher sends one final route through capital gateways that spell out their operating pattern.
 
-Puzzle focus: Finale pattern puzzle. Options:
-
-- first letters of confirmed capitals reveal a call sign;
-- time zone shifts reveal a numeric route code;
-- the route alternates hemispheres or continents in a deliberate pattern;
-- each confirmed stop unlocks a manifest fragment that identifies the final suspect.
+Puzzle focus: Final Manifest Proof. The Dispatcher erases one middle manifest row, leaving ACME with the capital pair but not the checksum. After the route is reconstructed, the player chooses the checksum row that matches the missing segment's distance band, gateway band, legal clock shift, and destination hemisphere before the normal suspect lineup can proceed.
 
 Briefing tone: ACME has one clean shot before The Dispatcher wipes the Skyline file.
 
-Arc payoff: The final suspect accusation should ask the player to identify the person whose Interpol file matches the route pattern, not just the person with matching visual traits.
+Arc payoff: The Dispatcher is exposed as a logistics-pattern proof rather than an alias. The player locks the final manifest, then makes the normal suspect accusation against the thief who carried the final handoff.
 
 ## Implementation Notes For Later
 

@@ -193,6 +193,8 @@ Each Skyline case is assigned a specific pattern type via `CASE_PATTERN_TYPES` i
 
 The pattern section is hidden until 3 segments are confirmed (showing a short atmospheric text), then reveals more specific detail at 4+ segments. This gives the player 1-2 stops of predictive value — enough to be useful for deduction but not given too early to be obvious. The label "DISPATCHER SIGNATURE" frames the analysis as intelligence about The Dispatcher's routing habits being exposed through accumulated evidence.
 
+Skyline Case 10 adds a **Final Manifest Proof** before the normal suspect lineup. One middle route segment is shown on the Manifest Board as a Gate Zero redaction: the country pair is known, but its checksum row is erased. After the final corridor is confirmed, the player must choose the checksum row that matches the missing segment's distance band, gateway band, legal clock shift, and destination hemisphere. A wrong proof choice costs 4 in-game hours and lets the player retry; if time expires, the case fails through the normal Skyline failure path. A correct proof locks the final manifest, reveals the redacted board row, and then proceeds to the regular suspect accusation. This makes The Dispatcher payoff a logistics-pattern proof rather than another alias accusation.
+
 Country time-zone data is stored on each `data/countries.json` entry as:
 
 - `timeZones`: all IANA zones for that country or territory in the local tzdb source;

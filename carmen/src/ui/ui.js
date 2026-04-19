@@ -625,25 +625,32 @@ export function createCarmenUI(container, flagCodes) {
       : 'Skyline Case';
     const segmentHtml = manifestState.segments.length
       ? manifestState.segments.map((segment, index) => {
-          const chips = [
+          const redacted = segment.redacted && !segment.recoveredAfterFinale;
+          const chips = redacted ? [] : [
             segment.gatewayBand ? `Gateway: ${segment.gatewayBand}` : '',
             segment.distanceBand ? `Range: ${segment.distanceBand}` : '',
             segment.clockLabel ? `Clock: ${segment.clockLabel}` : '',
           ].filter(Boolean);
           const fromLabel = [segment.fromCapital, segment.fromCountry].filter(Boolean).join(', ');
           const toLabel = [segment.toCapital, segment.toCountry].filter(Boolean).join(', ');
+          const fragmentLabel = redacted ? 'Gate Zero redaction' : 'Recovered fragment';
+          const fragmentText = redacted
+            ? (segment.redactionText || 'CHECKSUM ROW ERASED')
+            : (segment.fragmentText || 'MANIFEST ENTRY RECOVERED');
           return `
-            <div class="carmen-manifest-segment">
+            <div class="carmen-manifest-segment${redacted ? ' carmen-manifest-segment-redacted' : ''}">
               <div class="carmen-manifest-segment-top">
                 <span class="carmen-manifest-step">SEGMENT ${index + 1}</span>
                 <span class="carmen-manifest-route">${esc(fromLabel || segment.fromCountry || 'Unknown')} -> ${esc(toLabel || segment.toCountry || 'Unknown')}</span>
               </div>
-              <div class="carmen-manifest-chips">
-                ${chips.map(chip => `<span class="carmen-manifest-chip">${esc(chip)}</span>`).join('')}
-              </div>
+              ${redacted
+                ? `<div class="carmen-manifest-redaction-note">${esc(segment.checksumToken || 'Gate Zero checksum unavailable')}</div>`
+                : `<div class="carmen-manifest-chips">
+                    ${chips.map(chip => `<span class="carmen-manifest-chip">${esc(chip)}</span>`).join('')}
+                  </div>`}
               <div class="carmen-manifest-fragment">
-                <span class="carmen-manifest-fragment-label">Recovered fragment</span>
-                <span class="carmen-manifest-fragment-text">${esc(segment.fragmentText || 'MANIFEST ENTRY RECOVERED')}</span>
+                <span class="carmen-manifest-fragment-label">${esc(fragmentLabel)}</span>
+                <span class="carmen-manifest-fragment-text">${esc(fragmentText)}</span>
               </div>
             </div>
           `;
@@ -868,6 +875,105 @@ export function createCarmenUI(container, flagCodes) {
     if (els.travelDesc) els.travelDesc.textContent = copy.travelDesc;
   }
 
+  function renderProofFactList(facts) {
+    return `
+      <div class="carmen-final-proof-facts">
+        <span>${esc(facts.distanceBand || 'unknown range')}</span>
+        <span>${esc(facts.gatewayBand || 'unknown gateway')}</span>
+        <span>${esc(facts.clockLabel || 'clock record unavailable')}</span>
+        <span>${esc(facts.hemisphere || 'unknown hemisphere')}</span>
+      </div>
+    `;
+  }
+
+  function showSkylineFinalManifestProof(proof, options = null) {
+    return new Promise(resolve => {
+      const overlay = document.createElement('div');
+      overlay.className = 'carmen-closing-overlay carmen-final-proof-overlay';
+      let selectedId = '';
+      let busy = false;
+      let attempts = 0;
+
+      const render = (message = '') => {
+        const selected = proof.candidates.find(candidate => candidate.id === selectedId);
+        overlay.innerHTML = `
+          <div class="carmen-final-proof-content">
+            <div class="carmen-briefing-label">FINAL MANIFEST PROOF</div>
+            <div class="carmen-final-proof-title">${esc(proof.title || 'Gate Zero Redaction')}</div>
+            <div class="carmen-final-proof-subtitle">${esc(proof.subtitle || '')}</div>
+            <div class="carmen-final-proof-route">
+              <span>Redacted segment ${esc(String(proof.redactedSegmentIndex))}</span>
+              <strong>${esc([proof.fromCapital, proof.fromCountry].filter(Boolean).join(', ') || proof.fromCountry || 'Unknown')}</strong>
+              <span>to</span>
+              <strong>${esc([proof.toCapital, proof.toCountry].filter(Boolean).join(', ') || proof.toCountry || 'Unknown')}</strong>
+            </div>
+            <div class="carmen-final-proof-strip">
+              ${proof.segments.map(segment => `
+                <div class="carmen-final-proof-strip-row${segment.redacted ? ' is-redacted' : ''}">
+                  <span>SEG ${segment.index}</span>
+                  <b>${esc(segment.redacted ? 'GATE ZERO' : segment.checksumToken)}</b>
+                </div>
+              `).join('')}
+            </div>
+            <div class="carmen-final-proof-grid-label">Choose the checksum row The Dispatcher erased</div>
+            <div class="carmen-final-proof-grid">
+              ${proof.candidates.map(candidate => `
+                <button class="carmen-final-proof-card${candidate.id === selectedId ? ' selected' : ''}" data-id="${esc(candidate.id)}">
+                  <span>${esc(candidate.label)}</span>
+                  <b>${esc(candidate.checksumToken)}</b>
+                  ${renderProofFactList(candidate.facts)}
+                </button>
+              `).join('')}
+            </div>
+            <div class="carmen-final-proof-feedback${message ? ' is-visible' : ''}">
+              ${esc(message)}
+            </div>
+            <div class="carmen-final-proof-actions">
+              <button class="carmen-final-proof-confirm" ${selected ? '' : 'disabled'}>Lock manifest row</button>
+            </div>
+          </div>
+        `;
+
+        overlay.querySelectorAll('.carmen-final-proof-card').forEach(card => {
+          card.addEventListener('click', () => {
+            if (busy) return;
+            selectedId = card.dataset.id;
+            render(message);
+          });
+        });
+
+        const confirm = overlay.querySelector('.carmen-final-proof-confirm');
+        if (confirm) {
+          confirm.addEventListener('click', async () => {
+            if (busy || !selectedId) return;
+            const candidate = proof.candidates.find(item => item.id === selectedId);
+            if (!candidate) return;
+            if (candidate.correct) {
+              overlay.remove();
+              resolve({ correct: true, candidateId: candidate.id, attempts });
+              return;
+            }
+            attempts++;
+            busy = true;
+            const penalty = options?.wrongPenaltyHours || proof.wrongPenaltyHours || 4;
+            const canRetry = await options?.onWrongSelection?.(candidate, attempts);
+            busy = false;
+            if (canRetry === false) {
+              overlay.remove();
+              resolve({ correct: false, candidateId: candidate.id, attempts, aborted: true });
+              return;
+            }
+            selectedId = '';
+            render(`Manifest mismatch. ACME loses ${penalty}h rebuilding the checksum; choose again.`);
+          });
+        }
+      };
+
+      render();
+      document.body.appendChild(overlay);
+    });
+  }
+
   return {
     get mapSvg() { return els.map; },
 
@@ -910,6 +1016,17 @@ export function createCarmenUI(container, flagCodes) {
       if (duplicate) return;
       manifestState.segments.push(segment);
       renderDossier();
+    },
+
+    recoverManifestRedaction(stopIndex) {
+      const segment = manifestState.segments.find(item => item.stopIndex === stopIndex);
+      if (!segment) return;
+      segment.recoveredAfterFinale = true;
+      renderDossier();
+    },
+
+    showSkylineFinalManifestProof(proof, options = null) {
+      return showSkylineFinalManifestProof(proof, options);
     },
 
     /** Add a clue to the dossier. */

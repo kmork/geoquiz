@@ -7,6 +7,7 @@ import {
   CapitalFlightRouteProvider,
   CASE_PATTERN_TYPES,
 } from './src/campaigns/skyline-syndicate/flight-route-provider.js';
+import { buildSkylineFinalManifestProof } from './src/campaigns/skyline-syndicate/final-manifest-proof.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(__dirname, '..');
@@ -72,6 +73,39 @@ function validateRun({ logic, caseNumber, runNumber }) {
       actualPatterns,
       route: logic.route,
     });
+  }
+
+  if (caseNumber === 10 && !errors.length) {
+    try {
+      const proof = buildSkylineFinalManifestProof(logic);
+      const correctCount = proof.candidates.filter(candidate => candidate.correct).length;
+      const redactedCount = proof.segments.filter(segment => segment.redacted).length;
+      const candidateKeys = new Set(proof.candidates.map(candidate => candidate.key));
+
+      if (redactedCount !== 1) {
+        errors.push({
+          type: 'invalid-final-proof-redaction',
+          redactedCount,
+          route: logic.route,
+        });
+      }
+
+      if (proof.candidates.length !== 3 || correctCount !== 1 || candidateKeys.size !== 3) {
+        errors.push({
+          type: 'invalid-final-proof-candidates',
+          candidateCount: proof.candidates.length,
+          correctCount,
+          uniqueCandidateCount: candidateKeys.size,
+          route: logic.route,
+        });
+      }
+    } catch (error) {
+      errors.push({
+        type: 'final-proof-build-failed',
+        message: error.message,
+        route: logic.route,
+      });
+    }
   }
 
   return {
