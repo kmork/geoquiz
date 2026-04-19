@@ -1829,6 +1829,32 @@ export function createCarmenUI(container, flagCodes) {
       });
     },
 
+    showSkylineCampaignComplete(score, suspectName) {
+      return new Promise(resolve => {
+        const overlay = document.createElement('div');
+        overlay.className = 'carmen-closing-overlay';
+        overlay.innerHTML = `
+          <div class="carmen-closing-content carmen-closing-solved carmen-campaign-complete">
+            <div class="carmen-closing-stamp">MANIFEST LOCKED</div>
+            <div class="carmen-briefing-label">SKYLINE SYNDICATE — MANIFEST LOCKED</div>
+            <div class="carmen-closing-name">Gate Zero is exposed.</div>
+            <div class="carmen-closing-text">The thief is in custody. Gate Zero can no longer hide The Dispatcher's hand.</div>
+            <div class="carmen-closing-score">${score} points</div>
+            <div class="carmen-closing-detail">ACME did not catch The Dispatcher in person; it proved the command pattern, locked the final manifest, and exposed the network's signature. Final operative: ${esc(suspectName)}.</div>
+            <div class="carmen-closing-buttons">
+              <button class="carmen-closing-btn carmen-btn-continue">Back to Play</button>
+              <button class="carmen-closing-btn carmen-btn-quit">Quit</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+        const stamp = overlay.querySelector('.carmen-closing-stamp');
+        setTimeout(() => { stamp.classList.add('animate'); playStamp(); }, 300);
+        overlay.querySelector('.carmen-btn-continue').addEventListener('click', () => { overlay.remove(); resolve('play'); });
+        overlay.querySelector('.carmen-btn-quit').addEventListener('click', () => { overlay.remove(); resolve('quit'); });
+      });
+    },
+
     showDeadEnd(country, repeatedDeadEnd = false, options = null, onContinue) {
       if (typeof repeatedDeadEnd === 'function') {
         onContinue = repeatedDeadEnd;

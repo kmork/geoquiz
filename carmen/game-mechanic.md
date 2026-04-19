@@ -159,7 +159,7 @@ Mechanically, Skyline Syndicate uses the same Carmen case loop, scoring, suspect
 
 The Play page exposes Skyline Syndicate as `carmen.html?mode=skyline_syndicate`. The provider caps visible route choices to eight countries per stop, while the generated graph ensures every UN country has at least three available choices. This includes island and no-land-border countries that the border-trail campaign cannot naturally support.
 
-Skyline Syndicate has its own campaign progression state. Its current case is stored separately from `carmen-campaign-case`, mission history is stored separately from The Crimson Trail history, and successful Skyline cases advance only the Skyline counter. Failed Skyline cases replay the same Skyline case number with fresh randomness. The Crimson Trail finale, Carmen alias accusation, campaign-complete overlay, and automatic transition into Open Cases do not apply to Skyline.
+Skyline Syndicate has its own campaign progression state. Its current case is stored separately from `carmen-campaign-case`, mission history is stored separately from The Crimson Trail history, and successful Skyline cases 1-9 advance only the Skyline counter. Failed Skyline cases replay the same Skyline case number with fresh randomness. The Crimson Trail finale, Carmen alias accusation, and automatic transition into Open Cases do not apply to Skyline.
 
 Skyline wording must stay flight-corridor oriented. Briefings, travel prompts, dead-end overlays, case cards, and narrated clues should refer to air trails, capital connections, corridors, or active destination choices rather than neighboring countries, border trails, border crossings, or land-border counts.
 
@@ -194,6 +194,8 @@ Each Skyline case is assigned a specific pattern type via `CASE_PATTERN_TYPES` i
 The pattern section is hidden until 3 segments are confirmed (showing a short atmospheric text), then reveals more specific detail at 4+ segments. This gives the player 1-2 stops of predictive value — enough to be useful for deduction but not given too early to be obvious. The label "DISPATCHER SIGNATURE" frames the analysis as intelligence about The Dispatcher's routing habits being exposed through accumulated evidence.
 
 Skyline Case 10 adds a **Final Manifest Proof** before the normal suspect lineup. One middle route segment is shown on the Manifest Board as a Gate Zero redaction: the country pair is known, but its checksum row is erased. After the final corridor is confirmed, the player must choose the checksum row that matches the missing segment's distance band, gateway band, legal clock shift, and destination hemisphere. A wrong proof choice costs 4 in-game hours and lets the player retry; if time expires, the case fails through the normal Skyline failure path. A correct proof locks the final manifest, reveals the redacted board row, and then proceeds to the regular suspect accusation. This makes The Dispatcher payoff a logistics-pattern proof rather than another alias accusation.
+
+After a successful Skyline Case 10 suspect accusation, Skyline shows its own campaign-complete overlay instead of advancing into another case. The overlay states that the final operative is in custody and that ACME has exposed The Dispatcher's Gate Zero command pattern, but it does not claim The Dispatcher was arrested in person. The primary action returns to the Play page, and saved Skyline progress remains at case 10.
 
 Country time-zone data is stored on each `data/countries.json` entry as:
 

@@ -447,7 +447,7 @@ function buildInterpolProfileIntel(suspect, thefts = []) {
 }
 
 async function handleEndChoice(choice, wasSuccess) {
-  if (choice === 'quit') {
+  if (choice === 'quit' || choice === 'play') {
     stopAtmosphere();
     location.href = 'play.html?game=route';
     return;
@@ -1044,9 +1044,12 @@ function handleGuess(country) {
             recordTheft(logic.suspect.name, logic.artifact.siteName, logic.artifact.country);
             saveActiveMissionResult('success');
             const isFinaleWin = isCrimsonCampaignMode() && logic.caseNumber >= TOTAL_CASES;
+            const isSkylineFinaleWin = isSkylineMode() && logic.caseNumber >= TOTAL_CASES;
             if (isFinaleWin) {
               markCampaignComplete();
               setGameMode(OPEN_CASES_MODE);
+            } else if (isSkylineFinaleWin) {
+              // Keep Skyline progress at case 10; the completion overlay ends the campaign.
             } else {
               if (isOpenCasesMode()) advanceOpenCaseCount();
               else if (isSkylineMode()) advanceSkylineCase();
@@ -1058,13 +1061,18 @@ function handleGuess(country) {
               results.score,
               {
                 ...(isOpenCasesMode() ? { continueLabel: 'Next Open Case →' } : {}),
-                ...(isSkylineMode() ? { continueLabel: 'Next Skyline Case →' } : {}),
+                ...(isSkylineMode() ? { continueLabel: isSkylineFinaleWin ? 'Complete Skyline File →' : 'Next Skyline Case →' } : {}),
                 ...(getCurrentRunConfig().closingCopy?.solved ? { solvedText: getCurrentRunConfig().closingCopy.solved } : {}),
                 timeBonus,
               },
             );
             if (isFinaleWin) {
               const finalChoice = await ui.showCampaignComplete(results.score);
+              await handleEndChoice(finalChoice, true);
+              return;
+            }
+            if (isSkylineFinaleWin) {
+              const finalChoice = await ui.showSkylineCampaignComplete(results.score, logic.suspect.name);
               await handleEndChoice(finalChoice, true);
               return;
             }
