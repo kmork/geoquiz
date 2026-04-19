@@ -19,17 +19,17 @@ import {
 
 const MAX_VISIBLE_CHOICES = 8;
 
-const CASE_PATTERN_TYPES = [
+export const CASE_PATTERN_TYPES = [
   null,              // index 0 unused
   'same-continent',  // case 1
   'same-hemisphere', // case 2
   'distance-band',   // case 3
   'same-continent',  // case 4
-  'clock-drift',     // case 5
+  'gateway-band',    // case 5
   'distance-band',   // case 6
   'gateway-band',    // case 7
   'same-hemisphere', // case 8
-  'clock-drift',     // case 9
+  'distance-band',   // case 9
   'same-continent',  // case 10
 ];
 const EARTH_RADIUS_KM = 6371;
@@ -270,7 +270,9 @@ export class CapitalFlightRouteProvider {
     let bestRoute = [];
     let bestPatternRoute = [];
 
-    for (let attempt = 0; attempt < 40; attempt++) {
+    const maxAttempts = requiredPattern ? 120 : 40;
+
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
       const start = startCountries[Math.floor(Math.random() * startCountries.length)];
       if (!start) break;
 
@@ -284,7 +286,13 @@ export class CapitalFlightRouteProvider {
 
         if (candidates.length === 0) break;
 
-        const scored = candidates
+        const patternCandidates = requiredPattern
+          ? candidates.filter(country => this._candidateKeepsPattern(route, country, requiredPattern, context))
+          : candidates;
+
+        if (patternCandidates.length === 0) break;
+
+        const scored = patternCandidates
           .map(country => ({
             country,
             weight: ((context.facts[country] || []).length + 1) * this.getChoiceCount(country),
@@ -311,6 +319,59 @@ export class CapitalFlightRouteProvider {
     }
 
     return bestPatternRoute.length >= numStops + 1 ? bestPatternRoute : bestRoute;
+  }
+
+  _candidateKeepsPattern(route, candidate, patternType, context) {
+    if (!route?.length || !candidate) return false;
+
+    if (patternType === 'same-continent') {
+      const startContinent = context?.countryMap?.[route[0]]?.continent;
+      const candidateContinent = context?.countryMap?.[candidate]?.continent;
+      return !!startContinent && candidateContinent === startContinent;
+    }
+
+    if (patternType === 'same-hemisphere') {
+      const startGateway = this.gatewayByCountry[route[0]];
+      const candidateGateway = this.gatewayByCountry[candidate];
+      if (!Number.isFinite(startGateway?.capitalLat) || !Number.isFinite(candidateGateway?.capitalLat)) {
+        return false;
+      }
+      return (startGateway.capitalLat >= 0) === (candidateGateway.capitalLat >= 0);
+    }
+
+    if (patternType === 'distance-band') {
+      const current = route[route.length - 1];
+      const nextMeta = this.getRouteMeta(current, candidate);
+      const nextBand = getFlightDistanceBand(nextMeta?.distanceKm);
+      if (!nextBand) return false;
+      if (route.length === 1) return true;
+
+      const firstMeta = this.getRouteMeta(route[0], route[1]);
+      const firstBand = getFlightDistanceBand(firstMeta?.distanceKm);
+      return !!firstBand && nextBand === firstBand;
+    }
+
+    if (patternType === 'clock-drift') {
+      const current = route[route.length - 1];
+      const nextClock = this.getClockMeta(current, candidate, context);
+      if (!Number.isFinite(nextClock?.clockDeltaMinutes) || nextClock.clockDeltaMinutes === 0) return false;
+      if (route.length === 1) return true;
+
+      const firstClock = this.getClockMeta(route[0], route[1], context);
+      if (!Number.isFinite(firstClock?.clockDeltaMinutes) || firstClock.clockDeltaMinutes === 0) return false;
+      return Math.sign(nextClock.clockDeltaMinutes) === Math.sign(firstClock.clockDeltaMinutes);
+    }
+
+    if (patternType === 'gateway-band') {
+      const nextBand = this.getGatewayConnectivityMeta(candidate)?.band;
+      if (!nextBand) return false;
+      if (route.length === 1) return true;
+
+      const firstBand = this.getGatewayConnectivityMeta(route[1])?.band;
+      return !!firstBand && nextBand === firstBand;
+    }
+
+    return true;
   }
 
   _routeMatchesPattern(route, patternType, context) {
