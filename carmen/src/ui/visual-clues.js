@@ -10,6 +10,28 @@
 
 import { OutlinesRenderer } from '../../../js/ui-components/outlines-renderer.js';
 
+// ── Flag tear patterns ──────────────────────────────────────────
+// Each pattern is a clip-path polygon showing roughly 50% of the flag
+// with jagged edges to simulate a torn fragment.
+
+const FLAG_TEAR_PATTERNS = [
+  // Top-left fragment (diagonal tear from top-right to bottom-left)
+  'polygon(0% 0%, 65% 0%, 58% 12%, 62% 24%, 55% 38%, 60% 52%, 48% 65%, 52% 78%, 45% 100%, 0% 100%)',
+  // Bottom-right fragment (diagonal tear from top-left to bottom-right)
+  'polygon(100% 100%, 35% 100%, 42% 88%, 38% 76%, 45% 62%, 40% 48%, 52% 35%, 48% 22%, 55% 0%, 100% 0%)',
+  // Left half with jagged right edge
+  'polygon(0% 0%, 55% 0%, 50% 10%, 58% 22%, 52% 35%, 56% 48%, 48% 60%, 54% 74%, 50% 88%, 55% 100%, 0% 100%)',
+  // Top half with jagged bottom edge
+  'polygon(0% 0%, 100% 0%, 100% 55%, 88% 50%, 76% 58%, 62% 52%, 48% 56%, 35% 48%, 22% 54%, 10% 50%, 0% 55%)',
+];
+
+const FLAG_TEAR_HOVER = [
+  'polygon(0% 0%, 82% 0%, 78% 12%, 82% 24%, 76% 38%, 80% 52%, 72% 65%, 76% 78%, 70% 100%, 0% 100%)',
+  'polygon(100% 100%, 18% 100%, 22% 88%, 18% 76%, 24% 62%, 20% 48%, 28% 35%, 24% 22%, 30% 0%, 100% 0%)',
+  'polygon(0% 0%, 75% 0%, 70% 10%, 78% 22%, 72% 35%, 76% 48%, 68% 60%, 74% 74%, 70% 88%, 75% 100%, 0% 100%)',
+  'polygon(0% 0%, 100% 0%, 100% 75%, 88% 70%, 76% 78%, 62% 72%, 48% 76%, 35% 68%, 22% 74%, 10% 70%, 0% 75%)',
+];
+
 function esc(str) {
   const d = document.createElement('div');
   d.textContent = str;
@@ -184,4 +206,36 @@ export function renderOutline(container, country, worldData) {
   const features = worldData.features || worldData;
   const renderer = new OutlinesRenderer(svgEl, features);
   renderer.drawCountries(country);
+}
+
+// ── Flag renderer ───────────────────────────────────────────────
+
+/**
+ * Render a torn flag fragment into a container element.
+ *
+ * @param {HTMLElement} container — the element to render into
+ * @param {string}      country   — target country name
+ * @param {Object}      flagCodes — map of country name → flag code
+ */
+export function renderFlag(container, country, flagCodes) {
+  const code = flagCodes?.[country];
+  if (!code) return;
+
+  const card = document.createElement('div');
+  card.className = 'carmen-evidence-card carmen-evidence-flag';
+  container.appendChild(card);
+
+  const patternIdx = Math.floor(Math.random() * FLAG_TEAR_PATTERNS.length);
+
+  const wrapper = document.createElement('div');
+  wrapper.className = 'carmen-visual-flag';
+  wrapper.style.setProperty('--tear-clip', FLAG_TEAR_PATTERNS[patternIdx]);
+  wrapper.style.setProperty('--tear-clip-hover', FLAG_TEAR_HOVER[patternIdx]);
+  card.appendChild(wrapper);
+
+  const img = document.createElement('img');
+  img.src = `img/flags/${code}.svg`;
+  img.alt = '';
+  img.draggable = false;
+  wrapper.appendChild(img);
 }

@@ -7,7 +7,7 @@ import { IMG } from '../assets.js';
 import { getInterpolBackgroundStory } from '../content/interpol-backgrounds.js';
 import { getPortraitStyleVars } from '../content/portrait-specs.js';
 import { typewriter } from './typewriter.js';
-import { renderScramble, renderOutline } from './visual-clues.js';
+import { renderScramble, renderOutline, renderFlag } from './visual-clues.js';
 
 function renderPortraitImg(suspect, extraClass = '') {
   const src = suspect.img || IMG.suspect(suspect.name);
@@ -1462,7 +1462,8 @@ export function createCarmenUI(container, flagCodes) {
 
         const isScramble = clue.data.visualType === 'scramble';
         const isOutline = clue.data.visualType === 'outline' && worldDataRef;
-        if (!isScramble && !isOutline) return;
+        const isFlag = clue.data.visualType === 'flag';
+        if (!isScramble && !isOutline && !isFlag) return;
 
         const btn = document.createElement('button');
         btn.className = 'carmen-evidence-btn';
@@ -1478,6 +1479,8 @@ export function createCarmenUI(container, flagCodes) {
 
           if (isScramble) {
             renderScramble(evidenceWrap, clue.data, (monologue) => showNarratorCaption(monologue));
+          } else if (isFlag) {
+            renderFlag(evidenceWrap, clue.data.targetCountry, flagCodes);
           } else {
             renderOutline(evidenceWrap, clue.data.targetCountry, worldDataRef);
           }

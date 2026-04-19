@@ -12,6 +12,7 @@ import {
   buildLatitudeClue,
   buildScrambleClue,
   buildOutlineClue,
+  buildFlagClue,
   getFlightDistanceBand,
   getGatewayConnectivityBand,
 } from './flight-clues.js';
@@ -505,6 +506,10 @@ export class CapitalFlightRouteProvider {
         this._landlockedClue(target, choices, context);
     }
     if (locationId === 'market') {
+      if ((forceVisual || caseNum >= 4) && (forceVisual || Math.random() < 0.4)) {
+        const flag = this._flagClue(target, context);
+        if (flag) return flag;
+      }
       return this._cargoClue(target, context) ||
         this._landlockedClue(target, choices, context) ||
         this._continentClue(currentCountry, target, choices, context) ||
@@ -703,6 +708,15 @@ export class CapitalFlightRouteProvider {
     const toGateway = this.gatewayByCountry[target];
     if (!toGateway) return null;
     const clue = buildOutlineClue(toGateway);
+    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
+    return clue;
+  }
+
+  _flagClue(target, context) {
+    if (!target) return null;
+    const toGateway = this.gatewayByCountry[target];
+    if (!toGateway) return null;
+    const clue = buildFlagClue(toGateway);
     if (!clue || context?.usedClueIds?.has(clue.id)) return null;
     return clue;
   }

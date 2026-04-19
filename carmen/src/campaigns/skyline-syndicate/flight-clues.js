@@ -293,6 +293,25 @@ export function buildOutlineClue(toGateway) {
   };
 }
 
+const FLAG_INTROS = [
+  'A torn flag pinned to a market stall. Only part of it remains.',
+  'Someone left a ripped banner behind. The colors are faded but recognizable.',
+  'A fragment of a national flag, stuffed into a crate. Weathered and torn.',
+  'Half a flag, folded into a newspaper. The edges are singed.',
+];
+
+export function buildFlagClue(toGateway) {
+  if (!toGateway?.country) return null;
+  const text = FLAG_INTROS[Math.floor(Math.random() * FLAG_INTROS.length)];
+  return {
+    id: `visual-flag-${toGateway.country}`,
+    icon: '🏳️',
+    category: 'visual',
+    text,
+    data: { text, visualType: 'flag', targetCountry: toGateway.country },
+  };
+}
+
 export function buildGatewayConnectivityClue(gatewayMeta, choices = []) {
   const band = getGatewayConnectivityBand(gatewayMeta?.connectionCount);
   if (!band) return null;
