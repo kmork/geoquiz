@@ -1772,13 +1772,8 @@ body {
 .carmen-evidence-panel {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-  gap: 0.8rem;
   height: 100%;
   box-sizing: border-box;
-  overflow: auto;
   animation: carmen-evidence-fade-in 0.4s ease;
 }
 .carmen-evidence-card {
@@ -1792,22 +1787,19 @@ body {
     0 8px 24px rgba(0, 0, 0, 0.4),
     0 2px 8px rgba(0, 0, 0, 0.2);
   width: 100%;
-}
-.carmen-evidence-scramble {
-  background-image: url('../carmen/img/boarding-pass.jpg');
-  padding: 2.5rem 1.5rem 2.2rem;
-  aspect-ratio: 16 / 9;
+  flex: 1;
+  min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.carmen-evidence-scramble {
+  background-image: url('../carmen/img/boarding-pass.jpg');
+  padding: 2rem 1.5rem;
 }
 .carmen-evidence-outline {
   background-image: url('../carmen/img/outline.jpg');
   padding: 2rem 2.5rem;
-  aspect-ratio: 4 / 3;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .carmen-evidence-back-btn {
   position: absolute;
