@@ -1422,9 +1422,21 @@ export function createCarmenUI(container, flagCodes) {
       els.sidebar.innerHTML = '';
       els.reveal.style.display = 'none';
       els.reveal.innerHTML = '';
+      this._dismissEvidence();
+    },
+
+    /** Remove any active evidence panel and restore the clue view. */
+    _dismissEvidence() {
+      const panel = els.rvClues.querySelector('.carmen-evidence-panel');
+      if (panel) panel.remove();
+      const stage = els.rvClues.querySelector('.carmen-investigate-stage');
+      if (stage) stage.style.display = '';
     },
 
     addClue(clue, informant) {
+      // Dismiss any open evidence panel first
+      this._dismissEvidence();
+
       const emoji = informant ? informant.emoji : (clue.icon || '💬');
       const prefix = informant ? informant.prefix : 'Intel';
       els.reveal.innerHTML = `
@@ -1443,16 +1455,43 @@ export function createCarmenUI(container, flagCodes) {
       els.rvClues.style.display = '';
       // Typewriter the clue text
       const textEl = els.reveal.querySelector('.carmen-speech-text');
-      typewriter(textEl, `"${clue.text}"`, 20);
+      typewriter(textEl, `"${clue.text}"`, 20).then(() => {
+        // Visual clue: show "Examine Evidence" button after text completes
+        const speechBody = els.reveal.querySelector('.carmen-speech-body');
+        if (!speechBody || !clue.data?.visualType) return;
 
-      // Visual clue rendering
-      const speechBody = els.reveal.querySelector('.carmen-speech-body');
-      if (clue.data?.visualType === 'scramble' && speechBody) {
-        renderScramble(speechBody, clue.data, (monologue) => showNarratorCaption(monologue));
-      }
-      if (clue.data?.visualType === 'outline' && speechBody && worldDataRef) {
-        renderOutline(speechBody, clue.data.targetCountry, worldDataRef);
-      }
+        const isScramble = clue.data.visualType === 'scramble';
+        const isOutline = clue.data.visualType === 'outline' && worldDataRef;
+        if (!isScramble && !isOutline) return;
+
+        const btn = document.createElement('button');
+        btn.className = 'carmen-evidence-btn';
+        btn.innerHTML = '🔍 Examine Evidence';
+        btn.addEventListener('click', () => {
+          // Hide the clue stage, show evidence panel as sibling
+          const stage = els.rvClues.querySelector('.carmen-investigate-stage');
+          if (stage) stage.style.display = 'none';
+
+          const evidenceWrap = document.createElement('div');
+          evidenceWrap.className = 'carmen-evidence-panel';
+          els.rvClues.appendChild(evidenceWrap);
+
+          if (isScramble) {
+            renderScramble(evidenceWrap, clue.data, (monologue) => showNarratorCaption(monologue));
+          } else {
+            renderOutline(evidenceWrap, clue.data.targetCountry, worldDataRef);
+          }
+
+          // Place back button inside the evidence card (top-right corner)
+          const card = evidenceWrap.querySelector('.carmen-evidence-card');
+          const backBtn = document.createElement('button');
+          backBtn.className = 'carmen-evidence-back-btn';
+          backBtn.textContent = '✕';
+          backBtn.addEventListener('click', () => this._dismissEvidence());
+          if (card) card.appendChild(backBtn);
+        });
+        speechBody.appendChild(btn);
+      });
     },
 
     /**

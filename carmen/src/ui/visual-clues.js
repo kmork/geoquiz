@@ -4,6 +4,7 @@
  * - Scramble: interactive letter tiles on a boarding-pass evidence card.
  * - Outline: country silhouette on a torn atlas-page evidence card.
  *
+ * Both render inside the right panel, replacing the current view.
  * Pure UI — no game state, no DOM outside the provided container.
  */
 
@@ -33,21 +34,21 @@ function pickScrambleMonologue() {
 // ── Scramble renderer ────────────────────────────────────────────
 
 /**
- * Render interactive scramble tiles on a boarding-pass evidence card.
+ * Render interactive scramble tiles into a container element.
  *
- * @param {HTMLElement} container — element to append the evidence card into
+ * @param {HTMLElement} container — the element to render into
  * @param {Object}      data     — { letters: string[], fixed: boolean[], answer: string }
- * @param {Function}    onSolved — called with the monologue string when the player solves it
+ * @param {Function}    onSolved — called with the monologue string when solved
  */
 export function renderScramble(container, data, onSolved) {
+  const card = document.createElement('div');
+  card.className = 'carmen-evidence-card carmen-evidence-scramble';
+  container.appendChild(card);
+
   const slotChars = data.letters.slice();
   const fixedFlags = data.fixed;
   const answer = data.answer;
   let solved = false;
-
-  // Evidence card wrapper with boarding-pass background
-  const card = document.createElement('div');
-  card.className = 'carmen-evidence-card carmen-evidence-scramble';
 
   const tilesEl = document.createElement('div');
   tilesEl.className = 'carmen-visual-scramble';
@@ -55,7 +56,6 @@ export function renderScramble(container, data, onSolved) {
     `<span class="carmen-scramble-tile${fixedFlags[i] ? ' fixed' : ''}" data-index="${i}"${fixedFlags[i] ? '' : ' style="touch-action:none;cursor:grab"'}>${esc(ch)}</span>`
   ).join('');
   card.appendChild(tilesEl);
-  container.appendChild(card);
 
   function checkSolved() {
     if (solved) return;
@@ -163,24 +163,23 @@ export function renderScramble(container, data, onSolved) {
 // ── Outline renderer ─────────────────────────────────────────────
 
 /**
- * Render a country outline silhouette on a torn atlas-page evidence card.
+ * Render a country outline silhouette into a container element.
  *
- * @param {HTMLElement} container   — element to append the evidence card into
- * @param {string}      country    — target country name
- * @param {Object}      worldData  — GeoJSON FeatureCollection or features array
+ * @param {HTMLElement} container — the element to render into
+ * @param {string}      country   — target country name
+ * @param {Object}      worldData — GeoJSON FeatureCollection or features array
  */
 export function renderOutline(container, country, worldData) {
   if (!worldData) return;
 
-  // Evidence card wrapper with atlas-page background
   const card = document.createElement('div');
   card.className = 'carmen-evidence-card carmen-evidence-outline';
+  container.appendChild(card);
 
   const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svgEl.classList.add('carmen-visual-outline');
   svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
   card.appendChild(svgEl);
-  container.appendChild(card);
 
   const features = worldData.features || worldData;
   const renderer = new OutlinesRenderer(svgEl, features);
