@@ -678,6 +678,20 @@ export function createCarmenUI(container, flagCodes) {
     `;
   }
 
+  function hydrateDossierVisualEvidence() {
+    els.dossierBody.querySelectorAll('[data-dossier-visual-id]').forEach((slot) => {
+      const id = slot.dataset.dossierVisualId;
+      const entry = dossierEntries.find(item => item.visualEvidence?.id === id);
+      if (!entry) return;
+      slot.innerHTML = '';
+      if (entry.visualEvidence.type === 'flag') {
+        renderFlag(slot, entry.visualEvidence.targetCountry, flagCodes);
+      } else if (entry.visualEvidence.type === 'outline' && worldDataRef) {
+        renderOutline(slot, entry.visualEvidence.targetCountry, worldDataRef);
+      }
+    });
+  }
+
   function renderDossier() {
     if (dossierEntries.length === 0 && !manifestState.enabled) {
       els.dossierBody.innerHTML = '<div class="carmen-dossier-empty">No clues gathered yet. Investigate locations to find leads.</div>';
@@ -713,10 +727,14 @@ export function createCarmenUI(container, flagCodes) {
         <span class="carmen-dossier-prefix">${esc(e.informantPrefix || 'Clue')}:</span>
         <span class="carmen-dossier-text">${esc(e.clueText)}</span>
       </div>`;
+      if (e.visualEvidence) {
+        html += `<div class="carmen-dossier-visual" data-dossier-visual-id="${esc(e.visualEvidence.id)}"></div>`;
+      }
     }
     if (sectionOpen) html += '</div>';
     html += '</div>';
     els.dossierBody.innerHTML = html;
+    hydrateDossierVisualEvidence();
     // Auto-scroll to bottom
     els.dossierBody.scrollTop = els.dossierBody.scrollHeight;
   }
@@ -1030,8 +1048,17 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     /** Add a clue to the dossier. */
-    addDossierEntry(stop, clueText, informantPrefix, emoji, country, capital) {
-      dossierEntries.push({ stop, stopKey: `stop-${stop}`, clueText, informantPrefix, emoji, country, capital });
+    addDossierEntry(stop, clueText, informantPrefix, emoji, country, capital, options = null) {
+      dossierEntries.push({
+        stop,
+        stopKey: `stop-${stop}`,
+        clueText,
+        informantPrefix,
+        emoji,
+        country,
+        capital,
+        visualEvidence: options?.visualEvidence || null,
+      });
       renderDossier();
     },
 
@@ -1550,9 +1577,15 @@ export function createCarmenUI(container, flagCodes) {
       dismissEvidence();
     },
 
-    addClue(clue, informant, onVisualSolved) {
+    addClue(clue, informant, visualCallbacks = null) {
       // Dismiss any open evidence panel first
       dismissEvidence();
+      const onVisualSolved = typeof visualCallbacks === 'function'
+        ? visualCallbacks
+        : visualCallbacks?.onVisualSolved;
+      const onVisualExamined = typeof visualCallbacks === 'object'
+        ? visualCallbacks?.onVisualExamined
+        : null;
 
       const emoji = informant ? informant.emoji : (clue.icon || '💬');
       const prefix = informant ? informant.prefix : 'Intel';
@@ -1601,8 +1634,10 @@ export function createCarmenUI(container, flagCodes) {
             });
           } else if (isFlag) {
             renderFlag(evidenceWrap, clue.data.targetCountry, flagCodes);
+            if (onVisualExamined) onVisualExamined({ type: 'flag', targetCountry: clue.data.targetCountry });
           } else {
             renderOutline(evidenceWrap, clue.data.targetCountry, worldDataRef);
+            if (onVisualExamined) onVisualExamined({ type: 'outline', targetCountry: clue.data.targetCountry });
           }
 
           // Place back button inside the evidence panel (top-right corner, above card)

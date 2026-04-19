@@ -790,8 +790,27 @@ function showInvestigationLocations() {
       const clue = logic.narrateClue(rawClue, informant, locationId);
       const country = logic.route[logic.currentStop];
       const stop = logic.currentStop;
-      ui.addClue(clue, informant, (solvedAnswer) => {
-        ui.addDossierEntry(stop, `Decoded capital: ${solvedAnswer}`, 'Evidence', '🧩', country, capitalOf[country]);
+      const visualDossierIds = new Set();
+      ui.addClue(clue, informant, {
+        onVisualSolved: (solvedAnswer) => {
+          ui.addDossierEntry(stop, `Decoded capital: ${solvedAnswer}`, 'Evidence', '🧩', country, capitalOf[country]);
+        },
+        onVisualExamined: (evidence) => {
+          if (!evidence?.type || !evidence?.targetCountry) return;
+          const entryId = `${stop}-${evidence.type}-${evidence.targetCountry}`;
+          if (visualDossierIds.has(entryId)) return;
+          visualDossierIds.add(entryId);
+          const label = evidence.type === 'flag'
+            ? 'Torn flag fragment examined.'
+            : 'Country outline evidence examined.';
+          ui.addDossierEntry(stop, label, 'Evidence', '🧩', country, capitalOf[country], {
+            visualEvidence: {
+              id: entryId,
+              type: evidence.type,
+              targetCountry: evidence.targetCountry,
+            },
+          });
+        },
       });
       ui.addDossierEntry(stop, clue.text, informant.prefix, informant.emoji, country, capitalOf[country]);
       const ambientHint = isCrimsonCampaignMode() && !ambientHintStopsShown.has(logic.currentStop)

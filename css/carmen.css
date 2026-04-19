@@ -1314,6 +1314,29 @@ body {
   max-width: 44rem;
 }
 
+.carmen-dossier-visual {
+  margin: 0.2rem 0 0.75rem 1.55rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(143, 210, 221, 0.16);
+  background: rgba(9, 12, 15, 0.28);
+}
+
+.carmen-dossier-visual .carmen-evidence-card {
+  min-height: 9rem;
+  margin: 0;
+  padding: 0.65rem;
+}
+
+.carmen-dossier-visual .carmen-visual-outline {
+  height: 8rem;
+}
+
+.carmen-dossier-visual .carmen-visual-flag {
+  max-width: 12rem;
+  margin-inline: auto;
+}
+
 .carmen-dossier-empty {
   color: var(--text-muted);
   font-style: italic;
