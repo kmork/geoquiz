@@ -1770,6 +1770,7 @@ body {
 
 /* ── Evidence Panel (visual clues in right panel) ──────── */
 .carmen-evidence-panel {
+  position: relative;
   display: flex;
   flex-direction: column;
   height: 100%;
@@ -1817,7 +1818,7 @@ body {
   font-size: 0.9rem;
   cursor: pointer;
   transition: background 0.15s;
-  z-index: 1;
+  z-index: 10;
   backdrop-filter: blur(4px);
 }
 .carmen-evidence-back-btn:hover {

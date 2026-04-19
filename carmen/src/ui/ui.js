@@ -1485,13 +1485,12 @@ export function createCarmenUI(container, flagCodes) {
             renderOutline(evidenceWrap, clue.data.targetCountry, worldDataRef);
           }
 
-          // Place back button inside the evidence card (top-right corner)
-          const card = evidenceWrap.querySelector('.carmen-evidence-card');
+          // Place back button inside the evidence panel (top-right corner, above card)
           const backBtn = document.createElement('button');
           backBtn.className = 'carmen-evidence-back-btn';
           backBtn.textContent = '✕';
           backBtn.addEventListener('click', () => dismissEvidence());
-          if (card) card.appendChild(backBtn);
+          evidenceWrap.appendChild(backBtn);
         });
         speechBody.appendChild(btn);
       });
