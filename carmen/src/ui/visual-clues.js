@@ -1,8 +1,8 @@
 /**
  * Visual clue renderers for Carmen investigations.
  *
- * - Scramble: interactive letter tiles with drag-and-drop.
- * - Outline: country silhouette via OutlinesRenderer.
+ * - Scramble: interactive letter tiles on a boarding-pass evidence card.
+ * - Outline: country silhouette on a torn atlas-page evidence card.
  *
  * Pure UI — no game state, no DOM outside the provided container.
  */
@@ -33,9 +33,9 @@ function pickScrambleMonologue() {
 // ── Scramble renderer ────────────────────────────────────────────
 
 /**
- * Render interactive scramble tiles into a container.
+ * Render interactive scramble tiles on a boarding-pass evidence card.
  *
- * @param {HTMLElement} container — element to append the tile grid into
+ * @param {HTMLElement} container — element to append the evidence card into
  * @param {Object}      data     — { letters: string[], fixed: boolean[], answer: string }
  * @param {Function}    onSolved — called with the monologue string when the player solves it
  */
@@ -45,18 +45,23 @@ export function renderScramble(container, data, onSolved) {
   const answer = data.answer;
   let solved = false;
 
-  const el = document.createElement('div');
-  el.className = 'carmen-visual-scramble';
-  el.innerHTML = slotChars.map((ch, i) =>
+  // Evidence card wrapper with boarding-pass background
+  const card = document.createElement('div');
+  card.className = 'carmen-evidence-card carmen-evidence-scramble';
+
+  const tilesEl = document.createElement('div');
+  tilesEl.className = 'carmen-visual-scramble';
+  tilesEl.innerHTML = slotChars.map((ch, i) =>
     `<span class="carmen-scramble-tile${fixedFlags[i] ? ' fixed' : ''}" data-index="${i}"${fixedFlags[i] ? '' : ' style="touch-action:none;cursor:grab"'}>${esc(ch)}</span>`
   ).join('');
-  container.appendChild(el);
+  card.appendChild(tilesEl);
+  container.appendChild(card);
 
   function checkSolved() {
     if (solved) return;
     if (slotChars.join('') === answer) {
       solved = true;
-      el.querySelectorAll('.carmen-scramble-tile:not(.fixed)').forEach(t => {
+      tilesEl.querySelectorAll('.carmen-scramble-tile:not(.fixed)').forEach(t => {
         t.classList.add('solved');
         t.style.cursor = '';
       });
@@ -68,8 +73,8 @@ export function renderScramble(container, data, onSolved) {
     const tmp = slotChars[a];
     slotChars[a] = slotChars[b];
     slotChars[b] = tmp;
-    const elA = el.querySelector(`[data-index="${a}"]`);
-    const elB = el.querySelector(`[data-index="${b}"]`);
+    const elA = tilesEl.querySelector(`[data-index="${a}"]`);
+    const elB = tilesEl.querySelector(`[data-index="${b}"]`);
     if (elA) elA.textContent = slotChars[a];
     if (elB) elB.textContent = slotChars[b];
     checkSolved();
@@ -79,7 +84,7 @@ export function renderScramble(container, data, onSolved) {
 
   let dragIndex = null, ghost = null, dragStarted = false, startX = 0, startY = 0;
   const DRAG_THRESHOLD = 5;
-  const movableSlots = el.querySelectorAll('.carmen-scramble-tile:not(.fixed)');
+  const movableSlots = tilesEl.querySelectorAll('.carmen-scramble-tile:not(.fixed)');
 
   function getSlotAtPoint(x, y) {
     for (const slot of movableSlots) {
@@ -112,7 +117,7 @@ export function renderScramble(container, data, onSolved) {
     if (!dragStarted) {
       if (Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
       dragStarted = true;
-      const slot = el.querySelector(`[data-index="${dragIndex}"]`);
+      const slot = tilesEl.querySelector(`[data-index="${dragIndex}"]`);
       if (slot) {
         slot.classList.add('dragging');
         ghost = document.createElement('div');
@@ -127,14 +132,14 @@ export function renderScramble(container, data, onSolved) {
     movableSlots.forEach(s => s.classList.remove('drop-target'));
     const targetIdx = getSlotAtPoint(e.clientX, e.clientY);
     if (targetIdx !== null && targetIdx !== dragIndex) {
-      const t = el.querySelector(`[data-index="${targetIdx}"]`);
+      const t = tilesEl.querySelector(`[data-index="${targetIdx}"]`);
       if (t) t.classList.add('drop-target');
     }
   }
 
   function onPointerUp(e) {
     if (dragIndex === null) return;
-    const slot = el.querySelector(`[data-index="${dragIndex}"]`);
+    const slot = tilesEl.querySelector(`[data-index="${dragIndex}"]`);
     if (slot) {
       slot.releasePointerCapture(e.pointerId);
       slot.removeEventListener('pointermove', onPointerMove);
@@ -152,24 +157,31 @@ export function renderScramble(container, data, onSolved) {
     dragStarted = false;
   }
 
-  el.addEventListener('pointerdown', onPointerDown);
+  tilesEl.addEventListener('pointerdown', onPointerDown);
 }
 
 // ── Outline renderer ─────────────────────────────────────────────
 
 /**
- * Render a country outline silhouette into a container.
+ * Render a country outline silhouette on a torn atlas-page evidence card.
  *
- * @param {HTMLElement} container   — element to append the SVG into
+ * @param {HTMLElement} container   — element to append the evidence card into
  * @param {string}      country    — target country name
  * @param {Object}      worldData  — GeoJSON FeatureCollection or features array
  */
 export function renderOutline(container, country, worldData) {
   if (!worldData) return;
+
+  // Evidence card wrapper with atlas-page background
+  const card = document.createElement('div');
+  card.className = 'carmen-evidence-card carmen-evidence-outline';
+
   const svgEl = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
   svgEl.classList.add('carmen-visual-outline');
   svgEl.setAttribute('preserveAspectRatio', 'xMidYMid meet');
-  container.appendChild(svgEl);
+  card.appendChild(svgEl);
+  container.appendChild(card);
+
   const features = worldData.features || worldData;
   const renderer = new OutlinesRenderer(svgEl, features);
   renderer.drawCountries(country);
