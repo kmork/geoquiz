@@ -7,6 +7,7 @@ import { IMG } from '../assets.js';
 import { getInterpolBackgroundStory } from '../content/interpol-backgrounds.js';
 import { getPortraitStyleVars } from '../content/portrait-specs.js';
 import { typewriter } from './typewriter.js';
+import { renderScramble, renderOutline } from './visual-clues.js';
 
 function renderPortraitImg(suspect, extraClass = '') {
   const src = suspect.img || IMG.suspect(suspect.name);
@@ -22,6 +23,8 @@ function renderPortraitImg(suspect, extraClass = '') {
  * @param {Object}      flagCodes — { countryName: isoCode }
  */
 export function createCarmenUI(container, flagCodes) {
+  let worldDataRef = null;
+
   // Briefing overlay — appended to body so it's not blocked by hidden gameContent
   const briefingEl = document.createElement('div');
   briefingEl.className = 'carmen-briefing-overlay';
@@ -860,6 +863,8 @@ export function createCarmenUI(container, flagCodes) {
   return {
     get mapSvg() { return els.map; },
 
+    setWorldData(data) { worldDataRef = data; },
+
     switchTab(tab) { switchTab(tab); },
 
     showNarratorCaption(text, duration) {
@@ -1439,6 +1444,15 @@ export function createCarmenUI(container, flagCodes) {
       // Typewriter the clue text
       const textEl = els.reveal.querySelector('.carmen-speech-text');
       typewriter(textEl, `"${clue.text}"`, 20);
+
+      // Visual clue rendering
+      const speechBody = els.reveal.querySelector('.carmen-speech-body');
+      if (clue.data?.visualType === 'scramble' && speechBody) {
+        renderScramble(speechBody, clue.data, (monologue) => showNarratorCaption(monologue));
+      }
+      if (clue.data?.visualType === 'outline' && speechBody && worldDataRef) {
+        renderOutline(speechBody, clue.data.targetCountry, worldDataRef);
+      }
     },
 
     /**

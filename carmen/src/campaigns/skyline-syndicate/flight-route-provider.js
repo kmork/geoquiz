@@ -10,6 +10,8 @@ import {
   buildHemisphereClue,
   buildLandlockedClue,
   buildLatitudeClue,
+  buildScrambleClue,
+  buildOutlineClue,
   getFlightDistanceBand,
   getGatewayConnectivityBand,
 } from './flight-clues.js';
@@ -462,6 +464,18 @@ export class CapitalFlightRouteProvider {
 
   getLocationClue({ target, currentCountry, locationId, context, choices = [] }) {
     const caseNum = context?.caseNumber || 1;
+    // Visual puzzle clues: case 3+, ~40% chance, at airport (scramble) and library (outline)
+    const forceVisual = !!window._forceVisualClues;
+    if (forceVisual || caseNum >= 3) {
+      if (locationId === 'airport' && (forceVisual || Math.random() < 0.4)) {
+        const scramble = this._scrambleClue(target, context);
+        if (scramble) return scramble;
+      }
+      if (locationId === 'library' && (forceVisual || Math.random() < 0.4)) {
+        const outline = this._outlineClue(target, context);
+        if (outline) return outline;
+      }
+    }
     if (locationId === 'airport') {
       return this._distanceClue(currentCountry, target, choices, context) ||
         this._hemisphereClue(currentCountry, target, choices, context) ||
@@ -671,6 +685,24 @@ export class CapitalFlightRouteProvider {
       return { country, letter };
     }).filter(Boolean);
     const clue = buildAirportCodeClue(toGateway, revealFirst, summaries);
+    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
+    return clue;
+  }
+
+  _scrambleClue(target, context) {
+    if (!target) return null;
+    const toGateway = this.gatewayByCountry[target];
+    if (!toGateway) return null;
+    const clue = buildScrambleClue(toGateway);
+    if (!clue || context?.usedClueIds?.has(clue.id)) return null;
+    return clue;
+  }
+
+  _outlineClue(target, context) {
+    if (!target) return null;
+    const toGateway = this.gatewayByCountry[target];
+    if (!toGateway) return null;
+    const clue = buildOutlineClue(toGateway);
     if (!clue || context?.usedClueIds?.has(clue.id)) return null;
     return clue;
   }

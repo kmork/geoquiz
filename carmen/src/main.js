@@ -99,6 +99,23 @@ updateFrontImageForMode();
   });
 })();
 
+// Debug: type "clues" anywhere to toggle forced visual clues (scramble + outline).
+(() => {
+  const secret = 'clues';
+  let buf = '';
+  window.addEventListener('keydown', (e) => {
+    if (isTypingTarget(e.target)) return;
+    const k = (e.key || '').toLowerCase();
+    if (k.length !== 1) { buf = ''; return; }
+    buf = (buf + k).slice(-secret.length);
+    if (buf === secret) {
+      buf = '';
+      window._forceVisualClues = !window._forceVisualClues;
+      console.log(`[Carmen] Visual clues ${window._forceVisualClues ? 'ON' : 'OFF'} — airport → scramble, library → outline`);
+    }
+  });
+})();
+
 const INTERPOL_COST_HOURS = 3;
 
 let interpolViewedThisGame = new Set();
@@ -202,6 +219,9 @@ function waitForClick(el) {
 // Create UI (hidden until briefing is dismissed)
 gameContent.style.display = 'none';
 const ui = createCarmenUI(gameContent, flagCodes);
+
+// Share world data with UI for visual clues (outlines)
+ui.setWorldData(worldData);
 
 // Create map renderer
 let renderer = new CarmenRouteRenderer(ui.mapSvg, worldData);

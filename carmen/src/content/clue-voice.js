@@ -88,6 +88,10 @@ const PHRASINGS = {
     d => `Word on the ground: ${d.text}`,
     d => `Locals keep saying the same thing — ${d.text}`,
   ],
+  // Visual clues (scramble tiles, country outlines) — raw text only, no narrative wrapping.
+  visual: [
+    d => d.text,
+  ],
 };
 
 const SKYLINE_PHRASINGS = {
