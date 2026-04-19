@@ -765,9 +765,12 @@ function showInvestigationLocations() {
     const rawClue = logic.investigateLocation(locationId);
     if (rawClue) {
       const clue = logic.narrateClue(rawClue, informant, locationId);
-      ui.addClue(clue, informant);
       const country = logic.route[logic.currentStop];
-      ui.addDossierEntry(logic.currentStop, clue.text, informant.prefix, informant.emoji, country, capitalOf[country]);
+      const stop = logic.currentStop;
+      ui.addClue(clue, informant, (solvedAnswer) => {
+        ui.addDossierEntry(stop, `Decoded capital: ${solvedAnswer}`, 'Evidence', '🧩', country, capitalOf[country]);
+      });
+      ui.addDossierEntry(stop, clue.text, informant.prefix, informant.emoji, country, capitalOf[country]);
       const ambientHint = isCrimsonCampaignMode() && !ambientHintStopsShown.has(logic.currentStop)
         ? pickArrivalAmbientHint({
             phase: logic.campaignPhase,

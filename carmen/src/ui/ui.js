@@ -1433,7 +1433,7 @@ export function createCarmenUI(container, flagCodes) {
       dismissEvidence();
     },
 
-    addClue(clue, informant) {
+    addClue(clue, informant, onVisualSolved) {
       // Dismiss any open evidence panel first
       dismissEvidence();
 
@@ -1478,7 +1478,10 @@ export function createCarmenUI(container, flagCodes) {
           els.rvClues.appendChild(evidenceWrap);
 
           if (isScramble) {
-            renderScramble(evidenceWrap, clue.data, (monologue) => showNarratorCaption(monologue));
+            renderScramble(evidenceWrap, clue.data, (monologue) => {
+              showNarratorCaption(monologue);
+              if (onVisualSolved) onVisualSolved(clue.data.answer);
+            });
           } else if (isFlag) {
             renderFlag(evidenceWrap, clue.data.targetCountry, flagCodes);
           } else {
