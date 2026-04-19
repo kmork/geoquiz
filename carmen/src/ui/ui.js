@@ -806,6 +806,14 @@ export function createCarmenUI(container, flagCodes) {
     }, 500);
   }
 
+  /** Remove any active evidence panel and restore the clue view. */
+  function dismissEvidence() {
+    const panel = els.rvClues.querySelector('.carmen-evidence-panel');
+    if (panel) panel.remove();
+    const stage = els.rvClues.querySelector('.carmen-investigate-stage');
+    if (stage) stage.style.display = '';
+  }
+
   function showNarratorCaption(text, duration = null) {
     if (!text || !els.narratorCaption) return;
 
@@ -1422,20 +1430,12 @@ export function createCarmenUI(container, flagCodes) {
       els.sidebar.innerHTML = '';
       els.reveal.style.display = 'none';
       els.reveal.innerHTML = '';
-      this._dismissEvidence();
-    },
-
-    /** Remove any active evidence panel and restore the clue view. */
-    _dismissEvidence() {
-      const panel = els.rvClues.querySelector('.carmen-evidence-panel');
-      if (panel) panel.remove();
-      const stage = els.rvClues.querySelector('.carmen-investigate-stage');
-      if (stage) stage.style.display = '';
+      dismissEvidence();
     },
 
     addClue(clue, informant) {
       // Dismiss any open evidence panel first
-      this._dismissEvidence();
+      dismissEvidence();
 
       const emoji = informant ? informant.emoji : (clue.icon || '💬');
       const prefix = informant ? informant.prefix : 'Intel';
@@ -1487,7 +1487,7 @@ export function createCarmenUI(container, flagCodes) {
           const backBtn = document.createElement('button');
           backBtn.className = 'carmen-evidence-back-btn';
           backBtn.textContent = '✕';
-          backBtn.addEventListener('click', () => this._dismissEvidence());
+          backBtn.addEventListener('click', () => dismissEvidence());
           if (card) card.appendChild(backBtn);
         });
         speechBody.appendChild(btn);
@@ -1683,6 +1683,7 @@ export function createCarmenUI(container, flagCodes) {
       }
       const copy = getRouteCopy(options?.mode || caseCardState.mode);
       hideNarratorCaption(true);
+      dismissEvidence();
       // Force map visible
       for (const rv of allRightViews) rv.style.display = 'none';
       els.rvMap.style.display = '';
@@ -1719,6 +1720,7 @@ export function createCarmenUI(container, flagCodes) {
       }
       const copy = getRouteCopy(options?.mode || caseCardState.mode);
       hideNarratorCaption(true);
+      dismissEvidence();
       els.sidebar.innerHTML = '';
       els.reveal.style.display = 'none';
       els.reveal.innerHTML = '';

@@ -986,7 +986,7 @@ function handleGuess(country) {
               {
                 ...(isOpenCasesMode() ? { continueLabel: 'Next Open Case →' } : {}),
                 ...(isSkylineMode() ? { continueLabel: 'Next Skyline Case →' } : {}),
-                ...(runConfig.closingCopy?.solved ? { solvedText: runConfig.closingCopy.solved } : {}),
+                ...(getCurrentRunConfig().closingCopy?.solved ? { solvedText: getCurrentRunConfig().closingCopy.solved } : {}),
                 timeBonus,
               },
             );
@@ -1011,7 +1011,7 @@ function handleGuess(country) {
                 : isSkylineMode()
                   ? {
                       continueLabel: 'Retry Skyline Case →',
-                      failedDetail: runConfig.closingCopy?.failed,
+                      failedDetail: getCurrentRunConfig().closingCopy?.failed,
                     }
                   : null,
             );
