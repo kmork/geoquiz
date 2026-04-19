@@ -219,7 +219,7 @@ export function buildGatewayConnectivityClue(gatewayMeta, choices = []) {
   const band = getGatewayConnectivityBand(gatewayMeta?.connectionCount);
   if (!band) return null;
   const matchCount = choices.filter(choice => choice.band === band).length;
-  const text = `The destination capital is marked as a ${band} in ACME's corridor file.`;
+  const text = `The destination capital is known as a ${band} for air traffic.`;
   return {
     id: `flight-gateway-${gatewayMeta.country}-${band}`,
     icon: '🛫',

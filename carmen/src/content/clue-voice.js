@@ -58,9 +58,9 @@ const PHRASINGS = {
   ],
   flight: [
     d => d.text,
-    d => `The manifest clerk had one clean note: ${d.text}`,
-    d => `ACME's corridor file agrees on this much: ${d.text}`,
-    d => `The gate record didn't give a country, but it did give this: ${d.text}`,
+    d => `Someone at the gate mentioned this: ${d.text}`,
+    d => `One thing stood out from the flight records: ${d.text}`,
+    d => `The departure log didn't give a country, but it did give this: ${d.text}`,
   ],
   famous_for: [
     d => `Famous for ${d.item}, if that means anything to you.`,
