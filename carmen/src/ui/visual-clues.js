@@ -11,25 +11,26 @@
 import { OutlinesRenderer } from '../../../js/ui-components/outlines-renderer.js';
 
 // ── Flag tear patterns ──────────────────────────────────────────
-// Each pattern is a clip-path polygon showing roughly 50% of the flag
-// with jagged edges to simulate a torn fragment.
+// Every edge is jagged — no straight sides. Each polygon traces an
+// irregular torn shape showing roughly 45-55% of the flag.
+// Paired hover variants expand the visible area to ~65-70%.
 
 const FLAG_TEAR_PATTERNS = [
-  // Top-left fragment (diagonal tear from top-right to bottom-left)
-  'polygon(0% 0%, 65% 0%, 58% 12%, 62% 24%, 55% 38%, 60% 52%, 48% 65%, 52% 78%, 45% 100%, 0% 100%)',
-  // Bottom-right fragment (diagonal tear from top-left to bottom-right)
-  'polygon(100% 100%, 35% 100%, 42% 88%, 38% 76%, 45% 62%, 40% 48%, 52% 35%, 48% 22%, 55% 0%, 100% 0%)',
-  // Left half with jagged right edge
-  'polygon(0% 0%, 55% 0%, 50% 10%, 58% 22%, 52% 35%, 56% 48%, 48% 60%, 54% 74%, 50% 88%, 55% 100%, 0% 100%)',
-  // Top half with jagged bottom edge
-  'polygon(0% 0%, 100% 0%, 100% 55%, 88% 50%, 76% 58%, 62% 52%, 48% 56%, 35% 48%, 22% 54%, 10% 50%, 0% 55%)',
+  // Diagonal fragment, top-left heavy
+  'polygon(4% 6%, 12% 3%, 28% 7%, 42% 2%, 58% 5%, 68% 3%, 62% 14%, 66% 26%, 58% 38%, 63% 50%, 55% 62%, 60% 74%, 52% 85%, 48% 95%, 38% 92%, 24% 96%, 12% 90%, 5% 94%, 3% 78%, 6% 62%, 2% 48%, 5% 32%, 3% 18%)',
+  // Diagonal fragment, bottom-right heavy
+  'polygon(96% 94%, 88% 97%, 72% 93%, 58% 98%, 42% 95%, 32% 97%, 38% 86%, 34% 74%, 42% 62%, 37% 50%, 45% 38%, 40% 26%, 48% 15%, 52% 5%, 62% 8%, 76% 4%, 88% 10%, 95% 6%, 97% 22%, 94% 38%, 98% 52%, 95% 68%, 97% 82%)',
+  // Center-left irregular chunk
+  'polygon(6% 8%, 14% 4%, 30% 8%, 48% 3%, 55% 6%, 58% 18%, 54% 30%, 60% 42%, 56% 55%, 62% 68%, 55% 78%, 58% 88%, 52% 96%, 40% 93%, 26% 97%, 14% 92%, 5% 96%, 3% 82%, 7% 66%, 2% 52%, 6% 38%, 3% 22%)',
+  // Upper-center torn piece
+  'polygon(8% 5%, 18% 3%, 32% 7%, 48% 2%, 65% 6%, 78% 3%, 92% 7%, 96% 18%, 93% 32%, 97% 46%, 92% 58%, 95% 68%, 88% 72%, 74% 68%, 60% 73%, 48% 66%, 34% 72%, 22% 67%, 10% 70%, 4% 62%, 7% 48%, 3% 34%, 6% 20%)',
 ];
 
 const FLAG_TEAR_HOVER = [
-  'polygon(0% 0%, 82% 0%, 78% 12%, 82% 24%, 76% 38%, 80% 52%, 72% 65%, 76% 78%, 70% 100%, 0% 100%)',
-  'polygon(100% 100%, 18% 100%, 22% 88%, 18% 76%, 24% 62%, 20% 48%, 28% 35%, 24% 22%, 30% 0%, 100% 0%)',
-  'polygon(0% 0%, 75% 0%, 70% 10%, 78% 22%, 72% 35%, 76% 48%, 68% 60%, 74% 74%, 70% 88%, 75% 100%, 0% 100%)',
-  'polygon(0% 0%, 100% 0%, 100% 75%, 88% 70%, 76% 78%, 62% 72%, 48% 76%, 35% 68%, 22% 74%, 10% 70%, 0% 75%)',
+  'polygon(3% 4%, 10% 2%, 24% 5%, 40% 1%, 56% 4%, 72% 2%, 78% 5%, 76% 16%, 80% 30%, 74% 44%, 78% 58%, 72% 70%, 76% 82%, 68% 92%, 56% 96%, 40% 93%, 26% 97%, 14% 92%, 5% 96%, 2% 82%, 5% 66%, 1% 50%, 4% 34%, 2% 18%)',
+  'polygon(97% 96%, 90% 98%, 76% 95%, 60% 99%, 44% 96%, 28% 98%, 22% 95%, 24% 84%, 20% 70%, 26% 56%, 22% 42%, 28% 30%, 24% 18%, 32% 8%, 44% 4%, 60% 7%, 74% 3%, 86% 8%, 95% 4%, 98% 18%, 95% 34%, 99% 50%, 96% 66%, 98% 82%)',
+  'polygon(4% 5%, 12% 2%, 28% 6%, 46% 1%, 60% 5%, 68% 3%, 72% 14%, 68% 28%, 74% 42%, 70% 56%, 76% 68%, 70% 80%, 72% 90%, 64% 97%, 48% 94%, 32% 98%, 18% 93%, 6% 97%, 2% 84%, 6% 68%, 1% 54%, 5% 40%, 2% 24%)',
+  'polygon(6% 3%, 16% 1%, 30% 5%, 46% 1%, 62% 4%, 76% 2%, 90% 5%, 97% 16%, 94% 30%, 98% 46%, 93% 60%, 96% 74%, 90% 82%, 76% 78%, 62% 83%, 48% 76%, 34% 82%, 22% 78%, 10% 82%, 3% 74%, 6% 58%, 2% 42%, 5% 26%, 2% 12%)',
 ];
 
 function esc(str) {
@@ -226,11 +227,13 @@ export function renderFlag(container, country, flagCodes) {
   container.appendChild(card);
 
   const patternIdx = Math.floor(Math.random() * FLAG_TEAR_PATTERNS.length);
+  const rotation = (Math.random() * 8 - 4).toFixed(1); // -4 to +4 degrees
 
   const wrapper = document.createElement('div');
   wrapper.className = 'carmen-visual-flag';
   wrapper.style.setProperty('--tear-clip', FLAG_TEAR_PATTERNS[patternIdx]);
   wrapper.style.setProperty('--tear-clip-hover', FLAG_TEAR_HOVER[patternIdx]);
+  wrapper.style.setProperty('--flag-rotate', `${rotation}deg`);
   card.appendChild(wrapper);
 
   const img = document.createElement('img');

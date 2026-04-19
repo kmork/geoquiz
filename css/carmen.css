@@ -1904,21 +1904,40 @@ body {
   padding: 2rem 2.5rem;
 }
 .carmen-visual-flag {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
+  transform: rotate(var(--flag-rotate, 0deg));
 }
 .carmen-visual-flag img {
   max-width: 280px;
   width: 100%;
   height: auto;
-  filter: sepia(0.4) brightness(0.95) contrast(1.05);
+  filter: sepia(0.35) brightness(0.88) contrast(0.95) saturate(0.7);
   clip-path: var(--tear-clip);
   transition: clip-path 0.8s ease;
 }
 .carmen-visual-flag:hover img {
+  clip-path: var(--tear-clip-hover);
+}
+/* Weathering overlay — stains, creases, faded patches */
+.carmen-visual-flag::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: var(--tear-clip);
+  transition: clip-path 0.8s ease;
+  background:
+    radial-gradient(ellipse 40% 30% at 25% 35%, rgba(89, 66, 38, 0.25), transparent),
+    radial-gradient(ellipse 35% 45% at 70% 60%, rgba(62, 44, 28, 0.2), transparent),
+    radial-gradient(ellipse 50% 25% at 50% 80%, rgba(42, 31, 23, 0.18), transparent),
+    linear-gradient(135deg, transparent 30%, rgba(89, 66, 38, 0.12) 50%, transparent 70%);
+  pointer-events: none;
+}
+.carmen-visual-flag:hover::after {
   clip-path: var(--tear-clip-hover);
 }
 
