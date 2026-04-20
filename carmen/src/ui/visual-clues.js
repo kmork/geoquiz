@@ -3,6 +3,7 @@
  *
  * - Scramble: interactive letter tiles on a boarding-pass evidence card.
  * - Outline: country silhouette on a torn atlas-page evidence card.
+ * - Flag: worn evidence fragments laid out on a desk.
  *
  * Both render inside the right panel, replacing the current view.
  * Pure UI — no game state, no DOM outside the provided container.
@@ -11,26 +12,35 @@
 import { OutlinesRenderer } from '../../../js/ui-components/outlines-renderer.js';
 
 // ── Flag tear patterns ──────────────────────────────────────────
-// Every edge is jagged — no straight sides. Each polygon traces an
-// irregular torn shape showing roughly 45-55% of the flag.
-// Paired hover variants expand the visible area to ~65-70%.
+// Each clue shows several fragments from the same flag image. The polygons
+// partition the flag into distinct regions so the pieces read as one torn flag,
+// not multiple copies of the same fragment.
 
 const FLAG_TEAR_PATTERNS = [
-  // Diagonal fragment, top-left heavy
-  'polygon(4% 6%, 12% 3%, 28% 7%, 42% 2%, 58% 5%, 68% 3%, 62% 14%, 66% 26%, 58% 38%, 63% 50%, 55% 62%, 60% 74%, 52% 85%, 48% 95%, 38% 92%, 24% 96%, 12% 90%, 5% 94%, 3% 78%, 6% 62%, 2% 48%, 5% 32%, 3% 18%)',
-  // Diagonal fragment, bottom-right heavy
-  'polygon(96% 94%, 88% 97%, 72% 93%, 58% 98%, 42% 95%, 32% 97%, 38% 86%, 34% 74%, 42% 62%, 37% 50%, 45% 38%, 40% 26%, 48% 15%, 52% 5%, 62% 8%, 76% 4%, 88% 10%, 95% 6%, 97% 22%, 94% 38%, 98% 52%, 95% 68%, 97% 82%)',
-  // Center-left irregular chunk
-  'polygon(6% 8%, 14% 4%, 30% 8%, 48% 3%, 55% 6%, 58% 18%, 54% 30%, 60% 42%, 56% 55%, 62% 68%, 55% 78%, 58% 88%, 52% 96%, 40% 93%, 26% 97%, 14% 92%, 5% 96%, 3% 82%, 7% 66%, 2% 52%, 6% 38%, 3% 22%)',
-  // Upper-center torn piece
-  'polygon(8% 5%, 18% 3%, 32% 7%, 48% 2%, 65% 6%, 78% 3%, 92% 7%, 96% 18%, 93% 32%, 97% 46%, 92% 58%, 95% 68%, 88% 72%, 74% 68%, 60% 73%, 48% 66%, 34% 72%, 22% 67%, 10% 70%, 4% 62%, 7% 48%, 3% 34%, 6% 20%)',
+  // Left third, ragged right edge
+  'polygon(4% 7%, 15% 3%, 28% 6%, 33% 4%, 35% 16%, 30% 28%, 36% 43%, 31% 58%, 35% 73%, 29% 92%, 18% 96%, 6% 91%, 3% 76%, 6% 60%, 2% 44%, 5% 27%)',
+  // Middle third, ragged on both sides
+  'polygon(39% 5%, 52% 2%, 62% 5%, 65% 18%, 60% 33%, 66% 49%, 61% 65%, 65% 82%, 61% 96%, 47% 93%, 39% 96%, 43% 76%, 38% 59%, 44% 43%, 38% 27%, 42% 14%)',
+  // Right third, ragged left edge
+  'polygon(70% 6%, 82% 3%, 95% 8%, 98% 24%, 94% 42%, 98% 59%, 94% 78%, 97% 93%, 83% 96%, 70% 92%, 74% 81%, 69% 65%, 75% 50%, 69% 34%, 73% 19%)',
 ];
 
-const FLAG_TEAR_HOVER = [
-  'polygon(3% 4%, 10% 2%, 24% 5%, 40% 1%, 56% 4%, 72% 2%, 78% 5%, 76% 16%, 80% 30%, 74% 44%, 78% 58%, 72% 70%, 76% 82%, 68% 92%, 56% 96%, 40% 93%, 26% 97%, 14% 92%, 5% 96%, 2% 82%, 5% 66%, 1% 50%, 4% 34%, 2% 18%)',
-  'polygon(97% 96%, 90% 98%, 76% 95%, 60% 99%, 44% 96%, 28% 98%, 22% 95%, 24% 84%, 20% 70%, 26% 56%, 22% 42%, 28% 30%, 24% 18%, 32% 8%, 44% 4%, 60% 7%, 74% 3%, 86% 8%, 95% 4%, 98% 18%, 95% 34%, 99% 50%, 96% 66%, 98% 82%)',
-  'polygon(4% 5%, 12% 2%, 28% 6%, 46% 1%, 60% 5%, 68% 3%, 72% 14%, 68% 28%, 74% 42%, 70% 56%, 76% 68%, 70% 80%, 72% 90%, 64% 97%, 48% 94%, 32% 98%, 18% 93%, 6% 97%, 2% 84%, 6% 68%, 1% 54%, 5% 40%, 2% 24%)',
-  'polygon(6% 3%, 16% 1%, 30% 5%, 46% 1%, 62% 4%, 76% 2%, 90% 5%, 97% 16%, 94% 30%, 98% 46%, 93% 60%, 96% 74%, 90% 82%, 76% 78%, 62% 83%, 48% 76%, 34% 82%, 22% 78%, 10% 82%, 3% 74%, 6% 58%, 2% 42%, 5% 26%, 2% 12%)',
+const FLAG_FRAGMENT_LAYOUTS = [
+  [
+    { pattern: 1, x: '-34%', y: '2%', rotate: '3deg', scale: '0.97', z: 2 },
+    { pattern: 2, x: '-27%', y: '-7%', rotate: '-5deg', scale: '0.98', z: 1 },
+    { pattern: 0, x: '43%', y: '8%', rotate: '5deg', scale: '0.96', z: 3 },
+  ],
+  [
+    { pattern: 2, x: '-62%', y: '7%', rotate: '5deg', scale: '0.96', z: 2 },
+    { pattern: 0, x: '31%', y: '-8%', rotate: '-3deg', scale: '0.98', z: 3 },
+    { pattern: 1, x: '24%', y: '5%', rotate: '4deg', scale: '0.96', z: 1 },
+  ],
+  [
+    { pattern: 1, x: '-34%', y: '-8%', rotate: '-2deg', scale: '0.96', z: 2 },
+    { pattern: 0, x: '30%', y: '8%', rotate: '4deg', scale: '0.98', z: 3 },
+    { pattern: 2, x: '-6%', y: '-4%', rotate: '-5deg', scale: '0.96', z: 1 },
+  ],
 ];
 
 function esc(str) {
@@ -226,19 +236,40 @@ export function renderFlag(container, country, flagCodes) {
   card.className = 'carmen-evidence-card carmen-evidence-flag';
   container.appendChild(card);
 
-  const patternIdx = Math.floor(Math.random() * FLAG_TEAR_PATTERNS.length);
-  const rotation = (Math.random() * 8 - 4).toFixed(1); // -4 to +4 degrees
+  const layout = FLAG_FRAGMENT_LAYOUTS[Math.floor(Math.random() * FLAG_FRAGMENT_LAYOUTS.length)];
 
   const wrapper = document.createElement('div');
   wrapper.className = 'carmen-visual-flag';
-  wrapper.style.setProperty('--tear-clip', FLAG_TEAR_PATTERNS[patternIdx]);
-  wrapper.style.setProperty('--tear-clip-hover', FLAG_TEAR_HOVER[patternIdx]);
-  wrapper.style.setProperty('--flag-rotate', `${rotation}deg`);
   card.appendChild(wrapper);
 
-  const img = document.createElement('img');
-  img.src = `img/flags/${code}.svg`;
-  img.alt = '';
-  img.draggable = false;
-  wrapper.appendChild(img);
+  const tapeA = document.createElement('span');
+  tapeA.className = 'carmen-flag-tape carmen-flag-tape-a';
+  wrapper.appendChild(tapeA);
+
+  const tapeB = document.createElement('span');
+  tapeB.className = 'carmen-flag-tape carmen-flag-tape-b';
+  wrapper.appendChild(tapeB);
+
+  for (const fragment of layout) {
+    const piece = document.createElement('div');
+    piece.className = 'carmen-flag-piece';
+    piece.style.setProperty('--tear-clip', FLAG_TEAR_PATTERNS[fragment.pattern]);
+    piece.style.setProperty('--piece-x', fragment.x);
+    piece.style.setProperty('--piece-y', fragment.y);
+    piece.style.setProperty('--piece-rotate', fragment.rotate);
+    piece.style.setProperty('--piece-scale', fragment.scale);
+    piece.style.setProperty('--piece-z', fragment.z);
+    wrapper.appendChild(piece);
+
+    const img = document.createElement('img');
+    img.src = `img/flags/${code}.svg`;
+    img.alt = '';
+    img.draggable = false;
+    piece.appendChild(img);
+  }
+
+  const label = document.createElement('div');
+  label.className = 'carmen-flag-evidence-label';
+  label.textContent = 'Recovered flag fragments';
+  card.appendChild(label);
 }
