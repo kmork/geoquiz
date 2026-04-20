@@ -308,6 +308,11 @@ function getMissionLabel() {
     const totalCases = logic?.totalCases || TOTAL_CASES;
     return `Skyline Case ${caseNumber} / ${totalCases}`;
   }
+  if (!isOpenCasesMode(mode)) {
+    const caseNumber = logic?.caseNumber || getCurrentCase();
+    const totalCases = logic?.totalCases || TOTAL_CASES;
+    return `The Crimson Trail ${caseNumber} / ${totalCases}`;
+  }
   return getMissionLabelForMode(mode, getDisplayedOpenCaseNumber());
 }
 

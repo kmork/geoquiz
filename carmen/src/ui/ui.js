@@ -1384,7 +1384,7 @@ export function createCarmenUI(container, flagCodes) {
           : mode === 'open_cases'
           ? `OPEN CASE — ${openCaseNumber}`
           : caseNumber
-          ? (campaignPhase === 'finale' ? `FINAL CASE — ${caseNumber} / ${totalCases}` : `CASE ${caseNumber} / ${totalCases}`)
+          ? (campaignPhase === 'finale' ? `THE CRIMSON TRAIL — FINAL CASE ${caseNumber} / ${totalCases}` : `THE CRIMSON TRAIL — CASE ${caseNumber} / ${totalCases}`)
           : 'STOLEN ARTIFACT';
         els.briefingArtifact.innerHTML = `
           <div class="carmen-artifact-label">${esc(caseLabel)}</div>
