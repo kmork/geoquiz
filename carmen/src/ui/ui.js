@@ -100,11 +100,7 @@ export function createCarmenUI(container, flagCodes) {
                 </div>
               </div>
               <div class="carmen-panel-view" id="carmen-panel-dossier" style="display:none">
-                <div class="carmen-panel-card">
-                  <div class="carmen-panel-badge">📋 DOSSIER</div>
-                  <div class="carmen-panel-title">Case Dossier</div>
-                  <div class="carmen-panel-desc">All gathered evidence and witness statements are compiled on the right.</div>
-                </div>
+                <div class="carmen-dossier-selectors" id="carmen-dossier-selectors"></div>
               </div>
               <div class="carmen-panel-view" id="carmen-panel-interpol" style="display:none">
                 <div class="carmen-panel-card carmen-interpol-panel-card">
@@ -195,6 +191,7 @@ export function createCarmenUI(container, flagCodes) {
     witnessReportInvestigate: container.querySelector('#carmen-witness-report-investigate'),
     panelTravel: container.querySelector('#carmen-panel-travel'),
     panelDossier: container.querySelector('#carmen-panel-dossier'),
+    dossierSelectors: container.querySelector('#carmen-dossier-selectors'),
     panelInterpol: container.querySelector('#carmen-panel-interpol'),
     interpolList: container.querySelector('#carmen-interpol-list'),
     // Right panel views
@@ -430,6 +427,7 @@ export function createCarmenUI(container, flagCodes) {
     segments: [],
     routePatterns: [],
   };
+  let dossierSubview = 'case';
 
   // ── Tab switching ──
   // Left panels + right views mapping
@@ -473,8 +471,13 @@ export function createCarmenUI(container, flagCodes) {
 
   function switchTab(tab) {
     if (!getAllowedTabs().has(tab)) return;
+    const previousTab = activeTab;
     if (activeTab === 'interpol' && tab !== 'interpol') {
       resetInterpolPhotoInspect();
+    }
+    if (tab === 'dossier' && previousTab !== 'dossier') {
+      dossierSubview = 'case';
+      renderDossier();
     }
     activeTab = tab;
     // Left panel
@@ -495,6 +498,16 @@ export function createCarmenUI(container, flagCodes) {
   els.notebookTabs.addEventListener('click', (e) => {
     const tab = e.target.closest('.carmen-notebook-tab');
     if (tab) switchTab(tab.dataset.tab);
+  });
+
+  els.dossierSelectors.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-dossier-view]');
+    if (!btn) return;
+    const view = btn.dataset.dossierView;
+    if (view !== 'case' && view !== 'manifest') return;
+    if (view === 'manifest' && !manifestState.enabled) return;
+    dossierSubview = view;
+    renderDossier();
   });
 
   function renderLineupCaseSummary() {
@@ -678,6 +691,27 @@ export function createCarmenUI(container, flagCodes) {
     `;
   }
 
+  function renderDossierSelectors() {
+    const activeView = manifestState.enabled ? dossierSubview : 'case';
+    const recovered = manifestState.segments.length;
+    const manifestStatus = recovered === 1 ? '1 recovered' : `${recovered} recovered`;
+    els.dossierSelectors.innerHTML = `
+      <button type="button" class="carmen-panel-card carmen-dossier-selector${activeView === 'case' ? ' active' : ''}" data-dossier-view="case">
+        <div class="carmen-panel-badge">📋 DOSSIER</div>
+        <div class="carmen-panel-title">Case Dossier</div>
+        <div class="carmen-panel-desc">Gathered evidence, witness statements, detours, and visual clues are compiled on the right.</div>
+      </button>
+      ${manifestState.enabled ? `
+        <button type="button" class="carmen-panel-card carmen-dossier-selector carmen-dossier-selector-manifest${activeView === 'manifest' ? ' active' : ''}" data-dossier-view="manifest">
+          <div class="carmen-panel-badge">ACME MANIFEST</div>
+          <div class="carmen-panel-title">Manifest Board</div>
+          <div class="carmen-panel-desc">Recovered capital corridors, gateway bands, legal clock shifts, and Dispatcher Signature.</div>
+          <div class="carmen-panel-cost"><strong>${esc(manifestStatus)}</strong></div>
+        </button>
+      ` : ''}
+    `;
+  }
+
   function hydrateDossierVisualEvidence() {
     els.dossierBody.querySelectorAll('[data-dossier-visual-id]').forEach((slot) => {
       const id = slot.dataset.dossierVisualId;
@@ -693,18 +727,23 @@ export function createCarmenUI(container, flagCodes) {
   }
 
   function renderDossier() {
-    if (dossierEntries.length === 0 && !manifestState.enabled) {
+    if (!manifestState.enabled && dossierSubview === 'manifest') {
+      dossierSubview = 'case';
+    }
+    renderDossierSelectors();
+
+    if (manifestState.enabled && dossierSubview === 'manifest') {
+      els.dossierBody.innerHTML = `<div class="carmen-dossier-page">${renderManifestBoard()}</div>`;
+      els.dossierBody.scrollTop = 0;
+      return;
+    }
+
+    if (dossierEntries.length === 0) {
       els.dossierBody.innerHTML = '<div class="carmen-dossier-empty">No clues gathered yet. Investigate locations to find leads.</div>';
       return;
     }
     // Render entries in order, grouping consecutive entries with the same stopKey
-    let html = `<div class="carmen-dossier-page">${renderManifestBoard()}`;
-    if (dossierEntries.length === 0) {
-      html += '<div class="carmen-dossier-empty">No clues gathered yet. Investigate locations to find leads.</div>';
-      html += '</div>';
-      els.dossierBody.innerHTML = html;
-      return;
-    }
+    let html = '<div class="carmen-dossier-page">';
     let currentKey = null;
     let sectionOpen = false;
     for (const e of dossierEntries) {
@@ -1011,6 +1050,7 @@ export function createCarmenUI(container, flagCodes) {
       manifestState.enabled = !!enabled;
       manifestState.caseNumber = options?.caseNumber || null;
       manifestState.totalCases = options?.totalCases || null;
+      if (!manifestState.enabled) dossierSubview = 'case';
       renderDossier();
     },
 
@@ -1022,6 +1062,7 @@ export function createCarmenUI(container, flagCodes) {
 
     setManifestPatterns(patterns) {
       manifestState.routePatterns = patterns || [];
+      renderDossier();
     },
 
     addManifestSegment(segment) {
@@ -1078,6 +1119,7 @@ export function createCarmenUI(container, flagCodes) {
     resetDossier() {
       dossierEntries.length = 0;
       detourCounter = 0;
+      dossierSubview = 'case';
       renderDossier();
     },
 
