@@ -39,6 +39,7 @@ export function renderHeritageUI(container, site, options = {}) {
       <div id="pg-loading" class="image-loading">
         <div class="spinner"></div>
       </div>
+      ${site.credit ? `<span class="picture-credit">${site.credit}</span>` : ''}
       ${showHint ? `<button id="pg-hint-btn" class="picture-hint-btn" type="button" title="Show hint">💡</button>` : ''}
     </div>
 

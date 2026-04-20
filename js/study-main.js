@@ -989,6 +989,9 @@ function showHeritagePopup(site) {
   const typeLabel = site.type === 'natural' ? 'Natural' : 'Cultural';
   heritagePopupMeta.textContent = `${site.country} · ${typeLabel} · ${site.year}`;
   heritagePopupSummary.textContent = site.summary || '';
+  const creditEl = document.getElementById('heritage-popup-credit');
+  if (site.credit) { creditEl.textContent = site.credit; creditEl.style.display = ''; }
+  else { creditEl.textContent = ''; creditEl.style.display = 'none'; }
   heritagePopup.style.display = 'block';
   heritagePopupVisible = true;
 }

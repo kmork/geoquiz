@@ -1706,6 +1706,17 @@ html.light-mode .geo-bonus-overlay.wrong {
   transition: opacity 0.3s ease;
 }
 
+.picture-credit {
+  position: absolute;
+  bottom: 6px;
+  left: 8px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+  z-index: 1;
+}
+
 .picture-hint-btn {
   position: absolute;
   bottom: 12px;

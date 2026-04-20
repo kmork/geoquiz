@@ -65,7 +65,7 @@ export async function createHeritageLocateGame({
   // Image overlay panel — clickable: expanded ↔ collapsed thumbnail
   const imagePanel = document.createElement('div');
   imagePanel.className = 'heritage-locate-image-panel';
-  imagePanel.innerHTML = '<img alt=""><div class="heritage-locate-image-name"></div>';
+  imagePanel.innerHTML = '<img alt=""><span class="picture-credit" style="display:none"></span><div class="heritage-locate-image-name"></div>';
   mapwrap.appendChild(imagePanel);
 
   // Three states: 'normal' → 'expanded' → 'collapsed' → 'normal' → …
@@ -367,6 +367,9 @@ export async function createHeritageLocateGame({
     img.src = site.imageUrl;
     img.alt = site.siteName;
     imagePanel.querySelector('.heritage-locate-image-name').textContent = site.siteName;
+    const creditEl = imagePanel.querySelector('.picture-credit');
+    if (site.credit) { creditEl.textContent = site.credit; creditEl.style.display = ''; }
+    else { creditEl.style.display = 'none'; }
     imageState = 'normal';
     imagePanel.classList.remove('expanded', 'collapsed');
     imagePanel.style.display = '';
