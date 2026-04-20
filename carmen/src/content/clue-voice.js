@@ -358,13 +358,13 @@ const ACTIONS_BY_LOCATION = {
     `A key card beeped somewhere on the second floor.`,
   ],
   market: [
-    `Smoke from a nearby grill curled past you.`,
+    `Smoke from a street grill curled past you.`,
     `A radio played somewhere behind the stalls.`,
     `Haggling voices rose and fell like waves.`,
     `A crate of oranges tipped. Nobody moved to fix it.`,
     `Incense mixed with diesel in the afternoon heat.`,
     `A motorcycle threaded through the crowd, engine coughing.`,
-    `Someone was frying something sweet nearby.`,
+    `Someone at the next stall was frying something sweet.`,
   ],
   library: [
     `Pages turned in the next aisle.`,
@@ -402,7 +402,7 @@ const GENERIC_ACTIONS = [
 
 // ─── D. Helpfulness commentary ───────────────────────────────────
 // Appended to the phrasing when the clue data includes matchCount/totalChoices,
-// indicating how many neighbor choices the clue also applies to.
+// indicating how many visible choices the clue also applies to.
 
 const HELPFUL_SUFFIXES = [
   `That should narrow it down.`,
@@ -498,7 +498,7 @@ export function composeClue(clue, informant, locationId, redactFn, options = nul
     inner = clue.text || '';
   }
 
-  // Helpfulness commentary — append when the clue data carries neighbor-match info.
+  // Helpfulness commentary — append when the clue data carries choice-match info.
   if (data.matchCount !== undefined && data.totalChoices > 0) {
     const suffix = pickHelpfulnessSuffix(data.matchCount, data.totalChoices, routeKind);
     if (suffix) inner = inner + ' ' + suffix;

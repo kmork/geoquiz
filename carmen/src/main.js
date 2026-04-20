@@ -619,7 +619,12 @@ async function startGame() {
     intro.totalCases,
     intro.campaignPhase,
     briefingHint,
-    { mode: logic.mode, openCaseNumber: intro.caseNumber, missionCopy: runConfig.briefingCopy }
+    {
+      mode: logic.mode,
+      openCaseNumber: intro.caseNumber,
+      missionCopy: runConfig.briefingCopy,
+      caseTitle: runConfig.caseTitle,
+    }
   );
 
   // Hide the front image, show the header and game

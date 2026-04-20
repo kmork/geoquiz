@@ -85,6 +85,7 @@ export function getRunConfigForMode({
       : crimsonFinale
         ? crimsonFinaleRouteProvider
         : null,
+    caseTitle: skylineNarrative?.title || null,
     briefingCopy: skylineSyndicate ? skylineNarrative?.briefing || SKYLINE_SYNDICATE.briefing : null,
     briefingNote: skylineNarrative?.note || null,
     closingCopy: skylineNarrative

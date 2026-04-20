@@ -18,6 +18,54 @@ import {
 } from './flight-clues.js';
 
 const MAX_VISIBLE_CHOICES = 8;
+const VISUAL_CLUE_CHANCE = 0.4;
+
+const CASE_CLUE_PRIORITY = [
+  null,
+  ['distance', 'continent', 'capitalInitial', 'hemisphere', 'cargo', 'gateway', 'clock', 'landlocked'],
+  ['distance', 'continent', 'capitalInitial', 'cargo', 'hemisphere', 'gateway', 'clock', 'landlocked'],
+  ['distance', 'continent', 'hemisphere', 'capitalInitial', 'cargo', 'gateway', 'clock', 'landlocked'],
+  ['clock', 'distance', 'continent', 'cargo', 'hemisphere', 'gateway', 'capitalInitial', 'landlocked'],
+  ['clock', 'cargo', 'distance', 'continent', 'hemisphere', 'gateway', 'airportCode', 'capitalInitial', 'landlocked'],
+  ['clock', 'distance', 'continent', 'cargo', 'hemisphere', 'gateway', 'airportCode', 'capitalInitial', 'landlocked'],
+  ['gateway', 'hemisphere', 'distance', 'continent', 'cargo', 'clock', 'airportCode', 'capitalInitial', 'landlocked'],
+  ['gateway', 'distance', 'hemisphere', 'continent', 'cargo', 'clock', 'airportCode', 'capitalInitial', 'landlocked'],
+  ['gateway', 'distance', 'hemisphere', 'continent', 'clock', 'cargo', 'airportCode', 'capitalInitial', 'landlocked'],
+  ['distance', 'gateway', 'clock', 'hemisphere', 'continent', 'cargo', 'capitalInitial', 'airportCode', 'landlocked'],
+];
+
+const LOCATION_CLUE_PRIORITY = {
+  airport: {
+    default: ['distance', 'scramble', 'hemisphere', 'continent', 'clock', 'gateway'],
+    5: ['distance', 'hemisphere', 'airportCode', 'continent', 'clock', 'gateway', 'scramble'],
+    7: ['gateway', 'hemisphere', 'distance', 'continent', 'clock', 'airportCode', 'scramble'],
+    10: ['distance', 'gateway', 'clock', 'hemisphere', 'continent', 'scramble', 'airportCode'],
+  },
+  hotel: {
+    default: ['clock', 'capitalInitial', 'cargo', 'gateway', 'landlocked'],
+    1: ['capitalInitial', 'distance', 'cargo', 'clock', 'gateway', 'landlocked'],
+    4: ['clock', 'capitalInitial', 'cargo', 'gateway', 'landlocked'],
+    7: ['gateway', 'clock', 'capitalInitial', 'cargo', 'landlocked'],
+    10: ['clock', 'gateway', 'capitalInitial', 'cargo', 'landlocked'],
+  },
+  embassy: {
+    default: ['continent', 'hemisphere', 'clock', 'landlocked', 'gateway'],
+    7: ['hemisphere', 'gateway', 'continent', 'clock', 'landlocked'],
+    10: ['hemisphere', 'continent', 'clock', 'gateway', 'landlocked'],
+  },
+  library: {
+    default: ['capitalInitial', 'outline', 'gateway', 'hemisphere', 'landlocked'],
+    1: ['capitalInitial', 'outline', 'hemisphere', 'gateway', 'landlocked'],
+    7: ['gateway', 'outline', 'hemisphere', 'capitalInitial', 'landlocked'],
+    10: ['hemisphere', 'outline', 'capitalInitial', 'gateway', 'landlocked'],
+  },
+  market: {
+    default: ['cargo', 'flag', 'landlocked', 'continent', 'distance', 'gateway'],
+    1: ['cargo', 'flag', 'continent', 'distance', 'landlocked', 'gateway'],
+    7: ['gateway', 'flag', 'cargo', 'landlocked', 'continent', 'distance'],
+    10: ['distance', 'gateway', 'clock', 'flag', 'continent', 'cargo', 'landlocked'],
+  },
+};
 
 export const CASE_PATTERN_TYPES = [
   null,              // index 0 unused
@@ -97,6 +145,11 @@ function pickWeighted(scored) {
     if (roll <= 0) return item.country;
   }
   return scored[0]?.country || null;
+}
+
+function getCasePriority(table, caseNumber) {
+  const key = caseNumber >= 10 ? 10 : caseNumber >= 7 ? 7 : caseNumber >= 5 ? 5 : caseNumber >= 4 ? 4 : 1;
+  return table[key] || table.default || [];
 }
 
 export class CapitalFlightRouteProvider {
@@ -503,87 +556,63 @@ export class CapitalFlightRouteProvider {
     return patterns;
   }
 
+  _buildClueMap(current, target, choices, context) {
+    const caseNumber = context.caseNumber || 1;
+    return {
+      distance: () => this._distanceClue(current, target, choices, context),
+      clock: () => this._clockClue(current, target, choices, context),
+      gateway: () => this._gatewayClue(target, choices, context),
+      hemisphere: () => this._hemisphereClue(current, target, choices, context),
+      capitalInitial: () => this._capitalInitialClue(target, choices, context),
+      continent: () => this._continentClue(current, target, choices, context),
+      landlocked: () => this._landlockedClue(target, choices, context),
+      cargo: () => this._cargoClue(target, context),
+      airportCode: () => caseNumber >= 5 ? this._airportCodeClue(target, choices, context) : null,
+      scramble: () => this._scrambleClue(target, context),
+      outline: () => this._outlineClue(target, context),
+      flag: () => this._flagClue(target, context),
+    };
+  }
+
+  _collectClues(priority, clueMap, limit = Infinity) {
+    const clues = [];
+    const seen = new Set();
+    for (const id of priority) {
+      if (seen.has(id)) continue;
+      seen.add(id);
+      const clue = clueMap[id]?.();
+      if (!clue) continue;
+      clues.push(clue);
+      if (clues.length >= limit) break;
+    }
+    return clues;
+  }
+
   generateClues({ target, count, context, choices = [] }) {
     const current = context.route?.[context.currentStop];
-    const distanceClue = this._distanceClue(current, target, choices, context);
-    const clockClue = this._clockClue(current, target, choices, context);
-    const gatewayClue = this._gatewayClue(target, choices, context);
-    const hemisphereClue = this._hemisphereClue(current, target, choices, context);
-    const capitalInitialClue = this._capitalInitialClue(target, choices, context);
-    const continentClue = this._continentClue(current, target, choices, context);
-    const landlockedClue = this._landlockedClue(target, choices, context);
-    const cargoClue = this._cargoClue(target, context);
     const caseNumber = context.caseNumber || 1;
-    const airportCodeClue = caseNumber >= 5 ? this._airportCodeClue(target, choices, context) : null;
-    const clues = (
-      caseNumber >= 7 ? [gatewayClue, hemisphereClue, continentClue, distanceClue, cargoClue, airportCodeClue, clockClue, capitalInitialClue, landlockedClue] :
-      caseNumber >= 5 ? [clockClue, distanceClue, continentClue, cargoClue, airportCodeClue, hemisphereClue, gatewayClue, landlockedClue, capitalInitialClue] :
-      caseNumber >= 4 ? [clockClue, distanceClue, continentClue, cargoClue, hemisphereClue, gatewayClue, landlockedClue, capitalInitialClue] :
-      [distanceClue, continentClue, cargoClue, gatewayClue, hemisphereClue, clockClue, capitalInitialClue, landlockedClue]
-    ).filter(Boolean);
+    const clueMap = this._buildClueMap(current, target, choices, context);
+    const priority = CASE_CLUE_PRIORITY[caseNumber] || CASE_CLUE_PRIORITY[10];
+    const clues = this._collectClues(priority, clueMap, count);
     return clues.length ? clues.slice(0, count) : null;
   }
 
   getLocationClue({ target, currentCountry, locationId, context, choices = [] }) {
     const caseNum = context?.caseNumber || 1;
-    // Visual puzzle clues: case 3+, ~40% chance, at airport (scramble) and library (outline)
-    const forceVisual = !!window._forceVisualClues;
-    if (forceVisual || caseNum >= 3) {
-      if (locationId === 'airport' && (forceVisual || Math.random() < 0.4)) {
-        const scramble = this._scrambleClue(target, context);
-        if (scramble) return scramble;
-      }
-      if (locationId === 'library' && (forceVisual || Math.random() < 0.4)) {
-        const outline = this._outlineClue(target, context);
-        if (outline) return outline;
-      }
-    }
-    if (locationId === 'airport') {
-      return this._distanceClue(currentCountry, target, choices, context) ||
-        this._hemisphereClue(currentCountry, target, choices, context) ||
-        (caseNum >= 5 ? this._airportCodeClue(target, choices, context) : null) ||
-        this._continentClue(currentCountry, target, choices, context) ||
-        this._clockClue(currentCountry, target, choices, context) ||
-        this._gatewayClue(target, choices, context);
-    }
-    if (locationId === 'hotel') {
-      return this._clockClue(currentCountry, target, choices, context) ||
-        this._capitalInitialClue(target, choices, context) ||
-        this._cargoClue(target, context) ||
-        this._gatewayClue(target, choices, context) ||
-        this._landlockedClue(target, choices, context);
-    }
-    if (locationId === 'embassy') {
-      return this._continentClue(currentCountry, target, choices, context) ||
-        this._hemisphereClue(currentCountry, target, choices, context) ||
-        this._clockClue(currentCountry, target, choices, context) ||
-        this._landlockedClue(target, choices, context) ||
-        this._gatewayClue(target, choices, context);
-    }
-    if (locationId === 'library') {
-      return this._capitalInitialClue(target, choices, context) ||
-        this._gatewayClue(target, choices, context) ||
-        this._hemisphereClue(currentCountry, target, choices, context) ||
-        this._landlockedClue(target, choices, context);
-    }
-    if (locationId === 'market') {
-      if ((forceVisual || caseNum >= 4) && (forceVisual || Math.random() < 0.4)) {
-        const flag = this._flagClue(target, context);
-        if (flag) return flag;
-      }
-      return this._cargoClue(target, context) ||
-        this._landlockedClue(target, choices, context) ||
-        this._continentClue(currentCountry, target, choices, context) ||
-        this._distanceClue(currentCountry, target, choices, context) ||
-        this._gatewayClue(target, choices, context);
-    }
-    return null;
-  }
-
-  getBriefingHint() {
-    const summary = this.getValidationSummary();
-    if (!summary.routes) return '';
-    return `Skyline file: ${summary.routes} capital flight corridors are active in ACME's manifest.`;
+    const forceVisual = typeof window !== 'undefined' && !!window._forceVisualClues;
+    const locationPriority = getCasePriority(LOCATION_CLUE_PRIORITY[locationId] || {}, caseNum);
+    const visualType = locationId === 'airport' ? 'scramble' :
+      locationId === 'library' ? 'outline' :
+      locationId === 'market' ? 'flag' :
+      null;
+    const visualAllowed = forceVisual || Math.random() < VISUAL_CLUE_CHANCE;
+    const priority = forceVisual && visualType
+      ? [visualType, ...locationPriority.filter(id => id !== visualType)]
+      : visualAllowed
+        ? locationPriority
+        : locationPriority.filter(id => id !== visualType);
+    const clueMap = this._buildClueMap(currentCountry, target, choices, context);
+    return this._collectClues(priority, clueMap, 1)[0] || null;
   }
 
   getValidationSummary() {

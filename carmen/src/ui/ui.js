@@ -1370,6 +1370,7 @@ export function createCarmenUI(container, flagCodes) {
         const siteName = artifact.siteName || 'a priceless artifact';
         const mode = options?.mode || 'campaign';
         const openCaseNumber = options?.openCaseNumber || caseNumber;
+        const caseTitle = options?.caseTitle || '';
         const caseLabel = mode === 'skyline_syndicate'
           ? `SKYLINE CASE — ${caseNumber} / ${totalCases}`
           : mode === 'open_cases'
@@ -1379,6 +1380,7 @@ export function createCarmenUI(container, flagCodes) {
           : 'STOLEN ARTIFACT';
         els.briefingArtifact.innerHTML = `
           <div class="carmen-artifact-label">${esc(caseLabel)}</div>
+          ${caseTitle ? `<div class="carmen-case-title">${esc(caseTitle)}</div>` : ''}
           <div class="carmen-artifact-name">${esc(siteName)}</div>
           <div class="carmen-artifact-origin">Last seen in ${esc(startCountry)}</div>
         `;

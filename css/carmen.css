@@ -200,6 +200,14 @@ body {
   margin-bottom: 0.3rem;
 }
 
+.carmen-case-title {
+  margin-bottom: 0.45rem;
+  color: #f3dcc0;
+  font-size: 1.35rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+
 .carmen-artifact-name {
   font-size: 1.15rem;
   font-weight: 700;

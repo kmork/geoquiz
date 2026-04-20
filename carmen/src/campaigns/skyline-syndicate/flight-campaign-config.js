@@ -113,11 +113,11 @@ export const SKYLINE_CASE_NARRATIVE = [
   {
     title: 'The Final Manifest',
     briefing:
-      'The Dispatcher has sent one final chain through the capital gateways. Reconstruct the air trail, read the manifest pattern, and identify the controller before the Skyline file is wiped.',
+      'The Dispatcher has sent one final chain through the capital gateways. Reconstruct the air trail, lock the manifest pattern, and expose the controller before the Skyline file is wiped.',
     note:
       'Final note: the route is no longer just a chase. It is The Dispatcher\'s signature.',
     solved:
-      'The final manifest is locked. The Dispatcher\'s network has been pulled out of the clouds and into evidence.',
+      'The final manifest is locked. The final operative is in custody, and The Dispatcher\'s Gate Zero pattern has been pulled out of the clouds and into evidence.',
     failed:
       'The final manifest burned clean, leaving only blank gates and a missing controller.',
   },
