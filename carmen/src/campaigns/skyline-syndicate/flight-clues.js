@@ -1,3 +1,5 @@
+export { buildScrambleClue, buildOutlineClue, buildFlagClue } from '../../core/visual-clues.js';
+
 export function getFlightDistanceBand(distanceKm) {
   if (!distanceKm) return null;
   if (distanceKm >= 5000) return 'long-haul';
@@ -212,103 +214,6 @@ export function buildAirportCodeClue(toGateway, revealFirst, choices = []) {
     category: 'flight',
     text,
     data: { text, letter, revealFirst, iata, matchCount, totalChoices: choices.length },
-  };
-}
-
-// ── Visual clue builders ──────────────────────────────────────────
-
-function shuffleLetters(arr) {
-  const copy = arr.slice();
-  for (let i = copy.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [copy[i], copy[j]] = [copy[j], copy[i]];
-  }
-  return copy;
-}
-
-const SCRAMBLE_INTROS = [
-  'A crumpled note was stuffed behind the seat. The letters were all wrong.',
-  'Someone left a torn boarding pass. The destination was scrambled.',
-  'A napkin with hastily written letters — rearranged, unreadable at first glance.',
-  'The gate receipt had a name on it, but the letters were jumbled.',
-];
-
-export function buildScrambleClue(toGateway) {
-  const capital = toGateway?.capital;
-  if (!capital || capital.length < 5) return null;
-
-  const letters = [];
-  const fixed = [];
-  const letterIndices = [];
-  for (let i = 0; i < capital.length; i++) {
-    const ch = capital[i];
-    if (ch === ' ' || ch === '-' || ch === "'" || ch === '.') {
-      letters.push(ch);
-      fixed.push(true);
-    } else {
-      letters.push(ch.toUpperCase());
-      fixed.push(false);
-      letterIndices.push(i);
-    }
-  }
-
-  // Shuffle only non-fixed letters, ensure different from original
-  const originalLetters = letterIndices.map(i => letters[i]);
-  let shuffled;
-  let attempts = 0;
-  do {
-    shuffled = shuffleLetters(originalLetters);
-    attempts++;
-  } while (shuffled.join('') === originalLetters.join('') && attempts < 50);
-
-  const result = letters.slice();
-  letterIndices.forEach((idx, i) => { result[idx] = shuffled[i]; });
-
-  const text = SCRAMBLE_INTROS[Math.floor(Math.random() * SCRAMBLE_INTROS.length)];
-  return {
-    id: `visual-scramble-${toGateway.country}`,
-    icon: '🧩',
-    category: 'visual',
-    text,
-    data: { text, visualType: 'scramble', letters: result, fixed, answer: capital.toUpperCase() },
-  };
-}
-
-const OUTLINE_INTROS = [
-  'A torn page from an atlas. No labels, just the shape of a country.',
-  'Someone ripped a map and left this behind. Just a silhouette.',
-  'A folded paper with a country outline sketched in pencil. No name.',
-  'The page was torn from a reference book. Only the shape remains.',
-];
-
-export function buildOutlineClue(toGateway) {
-  if (!toGateway?.country) return null;
-  const text = OUTLINE_INTROS[Math.floor(Math.random() * OUTLINE_INTROS.length)];
-  return {
-    id: `visual-outline-${toGateway.country}`,
-    icon: '🗺️',
-    category: 'visual',
-    text,
-    data: { text, visualType: 'outline', targetCountry: toGateway.country },
-  };
-}
-
-const FLAG_INTROS = [
-  'A torn flag pinned to a market stall. Only part of it remains.',
-  'Someone left a ripped banner behind. The colors are faded but recognizable.',
-  'A fragment of a national flag, stuffed into a crate. Weathered and torn.',
-  'Half a flag, folded into a newspaper. The edges are singed.',
-];
-
-export function buildFlagClue(toGateway) {
-  if (!toGateway?.country) return null;
-  const text = FLAG_INTROS[Math.floor(Math.random() * FLAG_INTROS.length)];
-  return {
-    id: `visual-flag-${toGateway.country}`,
-    icon: '🏳️',
-    category: 'visual',
-    text,
-    data: { text, visualType: 'flag', targetCountry: toGateway.country },
   };
 }
 

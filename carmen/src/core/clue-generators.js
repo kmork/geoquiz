@@ -10,6 +10,8 @@
 
 import { redactCountryName, containsCountryName } from './redaction.js';
 
+export { clueFromVisual } from './visual-clues.js';
+
 const CATEGORY_ICONS = {
   culture: '🎭',
   landmarks: '🏛️',

@@ -121,7 +121,7 @@ updateFrontImageForMode();
   });
 })();
 
-// Debug: type "clues" anywhere to toggle forced visual clues (scramble + outline).
+// Debug: type "clues" anywhere to toggle forced visual clues.
 (() => {
   const secret = 'clues';
   let buf = '';
@@ -133,7 +133,7 @@ updateFrontImageForMode();
     if (buf === secret) {
       buf = '';
       window._forceVisualClues = !window._forceVisualClues;
-      console.log(`[Carmen] Visual clues ${window._forceVisualClues ? 'ON' : 'OFF'} — airport → scramble, library → outline`);
+      console.log(`[Carmen] Visual clues ${window._forceVisualClues ? 'ON' : 'OFF'} — airport → scramble, library → outline, market → flag`);
     }
   });
 })();

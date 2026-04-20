@@ -11,7 +11,8 @@ import { pickTaunt } from '../content/taunts.js';
 import { redactCountryName, containsCountryName } from './redaction.js';
 import {
   clueFromFact, clueFromGeography, clueFromHeritage, clueFromRiverOrMountain,
-  clueFromEmpire, clueFromFamousFor, clueFromExports, allGeographyClues, iconForCategory,
+  clueFromEmpire, clueFromFamousFor, clueFromExports, clueFromVisual,
+  allGeographyClues, iconForCategory,
 } from './clue-generators.js';
 import { getCaseArchivePool, SuspectEngine, SUSPECTS } from './suspect-engine.js';
 import { buildCampaignConfig } from '../campaign/progression.js';
@@ -24,6 +25,7 @@ const TRAVEL_COST_HOURS = 5;        // hours per ACME redeployment between confi
 const EXTRA_CLUE_COST_HOURS = 2;    // hours per extra clue
 const TIME_BONUS_HOURS_PER_POINT = 2;
 const MAX_TIME_BONUS = 50;
+const VISUAL_CLUE_CHANCE = 0.4;
 
 
 export class CarmenGameLogic {
@@ -418,6 +420,16 @@ export class CarmenGameLogic {
     return true;
   }
 
+  _isSharedVisualClueLocation(locationId) {
+    if (this.routeProvider?.id === 'capital_flights') return false;
+    return ['airport', 'library', 'market'].includes(locationId);
+  }
+
+  _shouldOfferSharedVisualClue(locationId) {
+    if (!this._isSharedVisualClueLocation(locationId)) return false;
+    return Math.random() < VISUAL_CLUE_CHANCE;
+  }
+
   _generateClues(country, count) {
     const clues = [];
     const providerClues = this.routeProvider?.generateClues?.({
@@ -582,6 +594,15 @@ export class CarmenGameLogic {
     const target = this.route[this.currentStop + 1];
     const currentCountry = this.route[this.currentStop];
     const neighborChoices = this._getChoiceSetForClues(currentCountry);
+    const forceSharedVisual = this._isSharedVisualClueLocation(locationId) && Boolean(globalThis._forceVisualClues);
+    const offerSharedVisual = this._shouldOfferSharedVisualClue(locationId);
+
+    if (forceSharedVisual || (offerSharedVisual && this.routeProvider)) {
+      const visualClue = clueFromVisual(target, this, locationId);
+      if (this._shouldUseClue(visualClue, target, locationId, 'visual') && this._claimClue(visualClue)) {
+        return visualClue;
+      }
+    }
 
     const providerClue = this.routeProvider?.getLocationClue?.({
       target,
@@ -595,7 +616,10 @@ export class CarmenGameLogic {
 
     // Try each clue type the location provides (thematically matched)
     // Shuffle so repeated visits to the same location type vary
-    const shuffledTypes = [...location.clueTypes].sort(() => Math.random() - 0.5);
+    const clueTypes = offerSharedVisual && !this.routeProvider
+      ? [...location.clueTypes, 'visual']
+      : [...location.clueTypes];
+    const shuffledTypes = clueTypes.sort(() => Math.random() - 0.5);
     for (const clueType of shuffledTypes) {
       let clue = null;
       switch (clueType) {
@@ -619,6 +643,9 @@ export class CarmenGameLogic {
           break;
         case 'exports':
           clue = clueFromExports(target, this, neighborChoices);
+          break;
+        case 'visual':
+          clue = clueFromVisual(target, this, locationId);
           break;
       }
       if (this._shouldUseClue(clue, target, locationId, clueType) && this._claimClue(clue)) {
