@@ -640,9 +640,9 @@ export function createCarmenUI(container, flagCodes) {
       ? manifestState.segments.map((segment, index) => {
           const redacted = segment.redacted && !segment.recoveredAfterFinale;
           const chips = redacted ? [] : [
-            segment.gatewayBand ? `Gateway: ${segment.gatewayBand}` : '',
-            segment.distanceBand ? `Range: ${segment.distanceBand}` : '',
-            segment.clockLabel ? `Clock: ${segment.clockLabel}` : '',
+            segment.gatewayBand ? `Airport traffic: ${segment.gatewayBand}` : '',
+            segment.distanceBand ? `Route length: ${segment.distanceBand}` : '',
+            segment.clockLabel ? `Time difference: ${segment.clockLabel}` : '',
           ].filter(Boolean);
           const fromLabel = [segment.fromCapital, segment.fromCountry].filter(Boolean).join(', ');
           const toLabel = [segment.toCapital, segment.toCountry].filter(Boolean).join(', ');
@@ -668,7 +668,7 @@ export function createCarmenUI(container, flagCodes) {
             </div>
           `;
         }).join('')
-      : '<div class="carmen-manifest-empty">No confirmed corridors yet.</div>';
+      : '<div class="carmen-manifest-empty">No confirmed flight routes yet.</div>';
     const patterns = getRevealedPatterns();
     const patternHtml = patterns.length
       ? `<div class="carmen-manifest-patterns">
@@ -705,7 +705,7 @@ export function createCarmenUI(container, flagCodes) {
         <button type="button" class="carmen-panel-card carmen-dossier-selector carmen-dossier-selector-manifest${activeView === 'manifest' ? ' active' : ''}" data-dossier-view="manifest">
           <div class="carmen-panel-badge">ACME MANIFEST</div>
           <div class="carmen-panel-title">Manifest Board</div>
-          <div class="carmen-panel-desc">Recovered capital corridors, gateway bands, legal clock shifts, and Dispatcher Signature.</div>
+          <div class="carmen-panel-desc">Recovered flight routes, route length, airport traffic, time differences, and Dispatcher Signature.</div>
           <div class="carmen-panel-cost"><strong>${esc(manifestStatus)}</strong></div>
         </button>
       ` : ''}
@@ -909,11 +909,11 @@ export function createCarmenUI(container, flagCodes) {
     if (isSkylineMode(mode)) {
       return {
         travelTitle: 'Where does the air trail lead?',
-        travelDesc: 'Select a capital flight lead on the map to confirm the next corridor.',
+        travelDesc: 'Select a capital flight lead on the map to confirm the next flight route.',
         introMission: 'Investigate locations, gather clues, and confirm the air trail.',
-        confirmedLead: 'Air corridor confirmed',
+        confirmedLead: 'Flight route confirmed',
         deadEndLead: 'No confirmed flight lead',
-        deadEndNarrator: 'Another dead end. Took the wrong flight corridor. Maybe I ought to study the map at <a href="https://geoquiz.info/study.html" target="_blank" rel="noopener noreferrer">geoquiz.info/study.html</a> before this case eats me alive.',
+        deadEndNarrator: 'Another dead end. Took the wrong flight route. Maybe I ought to study the map at <a href="https://geoquiz.info/study.html" target="_blank" rel="noopener noreferrer">geoquiz.info/study.html</a> before this case eats me alive.',
       };
     }
     return {
@@ -935,9 +935,9 @@ export function createCarmenUI(container, flagCodes) {
   function renderProofFactList(facts) {
     return `
       <div class="carmen-final-proof-facts">
-        <span>${esc(facts.distanceBand || 'unknown range')}</span>
-        <span>${esc(facts.gatewayBand || 'unknown gateway')}</span>
-        <span>${esc(facts.clockLabel || 'clock record unavailable')}</span>
+        <span>Route length: ${esc(facts.distanceBand || 'unknown route length')}</span>
+        <span>Airport traffic: ${esc(facts.gatewayBand || 'unknown airport traffic')}</span>
+        <span>Time difference: ${esc(facts.clockLabel || 'time difference unavailable')}</span>
         <span>${esc(facts.hemisphere || 'unknown hemisphere')}</span>
       </div>
     `;
@@ -1108,7 +1108,7 @@ export function createCarmenUI(container, flagCodes) {
       const key = `detour-${detourCounter++}`;
       dossierEntries.push({
         stop: -1, stopKey: key, type: 'detour',
-        clueText: isSkylineMode(options?.mode) ? 'No manifest match, no corridor confirmation. A dead end.' : 'No witnesses, no clues. A dead end.',
+        clueText: isSkylineMode(options?.mode) ? 'No manifest match, no flight route confirmed. A dead end.' : 'No witnesses, no clues. A dead end.',
         informantPrefix: 'Dead end', emoji: '❌',
         country, capital,
       });

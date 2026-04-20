@@ -13,7 +13,9 @@ import {
   buildScrambleClue,
   buildOutlineClue,
   buildFlagClue,
+  getAirportTrafficLabel,
   getFlightDistanceBand,
+  getFlightDistanceLabel,
   getGatewayConnectivityBand,
 } from './flight-clues.js';
 
@@ -498,7 +500,7 @@ export class CapitalFlightRouteProvider {
         id: 'same-hemisphere',
         type: 'hemisphere',
         text: `The Dispatcher keeps the route in the ${label} Hemisphere.`,
-        detail: `Every stop is in the ${label} Hemisphere. The next corridor will stay there.`,
+        detail: `Every stop is in the ${label} Hemisphere. The next flight route will stay there.`,
       });
     }
 
@@ -510,11 +512,12 @@ export class CapitalFlightRouteProvider {
       if (band) bands.push(band);
     }
     if (bands.length === route.length - 1 && bands.every(b => b === bands[0])) {
+      const label = getFlightDistanceLabel(bands[0]);
       patterns.push({
         id: 'distance-band',
         type: 'distance',
-        text: `The Dispatcher favors ${bands[0]} corridors on this route.`,
-        detail: `Every corridor in this routing plan is classified ${bands[0]}. Expect the same ahead.`,
+        text: `The Dispatcher favors ${label} flights on this route.`,
+        detail: `Every flight route in this plan is ${label}. Expect the same ahead.`,
       });
     }
 
@@ -529,15 +532,15 @@ export class CapitalFlightRouteProvider {
         patterns.push({
           id: 'clock-east',
           type: 'clock',
-          text: 'The Dispatcher pushes the clock forward at every hop.',
-          detail: 'Every corridor shifts the local clock eastward. The next lead will be east of here.',
+          text: 'The Dispatcher moves to a later local time at every hop.',
+          detail: 'Every flight route moves to a later local time. The next lead will be east of here.',
         });
       } else if (deltas.every(d => d < 0)) {
         patterns.push({
           id: 'clock-west',
           type: 'clock',
-          text: 'The Dispatcher rolls the clock back at every hop.',
-          detail: 'Every corridor shifts the local clock westward. The next lead will be west of here.',
+          text: 'The Dispatcher moves to an earlier local time at every hop.',
+          detail: 'Every flight route moves to an earlier local time. The next lead will be west of here.',
         });
       }
     }
@@ -545,11 +548,12 @@ export class CapitalFlightRouteProvider {
     // Gateway band consistency
     const gwBands = route.slice(1).map(c => this.getGatewayConnectivityMeta(c)?.band).filter(Boolean);
     if (gwBands.length === route.length - 1 && gwBands.every(b => b === gwBands[0])) {
+      const label = getAirportTrafficLabel(gwBands[0]);
       patterns.push({
         id: 'gateway-band',
         type: 'gateway',
-        text: `The Dispatcher routes exclusively through ${gwBands[0]} airports.`,
-        detail: `Every destination gateway is a ${gwBands[0]}. The next stop follows the same pattern.`,
+        text: `The Dispatcher uses airports with ${label} traffic.`,
+        detail: `Every destination airport has ${label} traffic. The next stop follows the same pattern.`,
       });
     }
 

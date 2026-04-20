@@ -14,18 +14,18 @@ export const SKYLINE_CASE_NARRATIVE = [
   {
     title: 'The Misprinted Boarding Pass',
     briefing:
-      'ACME\'s Skyline Desk caught the artifact moving under a passenger alias with a misprinted boarding pass. Reconstruct the first air trail from capital gateway to capital gateway before the false ticket disappears from the file.',
+      'ACME\'s Skyline Desk caught the artifact moving under a passenger alias with a misprinted boarding pass. Reconstruct the first air trail from one capital flight record to the next before the false ticket disappears from the file.',
     note:
       'Skyline Desk note: the first false manifest carries a recurring stamp — SKYLINE TRANSFER AUTHORIZED.',
     solved:
-      'The false ticket is in evidence. ACME has its first clean look at the Syndicate\'s capital-gateway routing pattern.',
+      'The false ticket is in evidence. ACME has its first clean look at the Syndicate\'s flight-route pattern.',
     failed:
-      'The boarding pass was scrubbed from the file before ACME could pin the next gateway.',
+      'The boarding pass was scrubbed from the file before ACME could pin the next destination.',
   },
   {
     title: 'Cargo Hold 17',
     briefing:
-      'The thief has moved the artifact as sealed cultural freight. Cargo handlers remember the crate, the seal, and the rush order, but the destination is buried in the transfer corridor.',
+      'The thief has moved the artifact as sealed cultural freight. Cargo handlers remember the crate, the seal, and the rush order, but the destination is buried in the flight record.',
     note:
       'Cargo note: the crate was routed by an unknown desk code, D-0.',
     solved:
@@ -47,7 +47,7 @@ export const SKYLINE_CASE_NARRATIVE = [
   {
     title: 'The Red-Eye Chain',
     briefing:
-      'Witnesses keep mentioning night flights, but the arrival times only make sense if the trail jumps across time zones. Use the airport chatter to find the next capital gateway.',
+      'Witnesses keep mentioning night flights, but the arrival times only make sense if the trail jumps across time zones. Use the airport chatter to find the next destination.',
     note:
       'Skyline Desk note: ACME is no longer treating these as isolated thefts. Someone is dispatching the handoffs.',
     solved:
@@ -69,7 +69,7 @@ export const SKYLINE_CASE_NARRATIVE = [
   {
     title: 'Weather Over the Meridian',
     briefing:
-      'Bad weather forced a route adjustment, leaving ACME with a rare clean trace of the real corridor. Use the capital geography before the Syndicate repairs the manifest.',
+      'Bad weather forced a route adjustment, leaving ACME with a rare clean trace of the real flight route. Use the capital geography before the Syndicate repairs the manifest.',
     note:
       'Weather note: the route change exposed a repeated cargo relabel before the final flight.',
     solved:
@@ -80,7 +80,7 @@ export const SKYLINE_CASE_NARRATIVE = [
   {
     title: 'The Missing Layover',
     briefing:
-      'The file includes a layover that never happened. Reject the fake stop, compare the active gateways, and identify the country that fits the remaining air trail.',
+      'The file includes a layover that never happened. Reject the fake stop, compare the active destinations, and identify the country that fits the remaining air trail.',
     note:
       'Interpol note: The Dispatcher may have access to airline, customs, or cultural-freight systems.',
     solved:
@@ -91,7 +91,7 @@ export const SKYLINE_CASE_NARRATIVE = [
   {
     title: 'The Broken Manifest',
     briefing:
-      'A transfer page in ACME\'s file has been edited after the artifact moved. Compare the capital gateways, follow the remaining geography, and find the next handoff.',
+      'A transfer page in ACME\'s file has been edited after the artifact moved. Compare the capital flight records, follow the remaining geography, and find the next handoff.',
     note:
       'Skyline Desk note: The Dispatcher is cutting pieces out of the manifest after each handoff.',
     solved:
@@ -113,7 +113,7 @@ export const SKYLINE_CASE_NARRATIVE = [
   {
     title: 'The Final Manifest',
     briefing:
-      'The Dispatcher has sent one final chain through the capital gateways. Reconstruct the air trail, lock the manifest pattern, and expose the controller before the Skyline file is wiped.',
+      'The Dispatcher has sent one final chain through the capital flight routes. Reconstruct the air trail, lock the manifest pattern, and expose the controller before the Skyline file is wiped.',
     note:
       'Final note: the route is no longer just a chase. It is The Dispatcher\'s signature.',
     solved:

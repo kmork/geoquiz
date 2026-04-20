@@ -7,12 +7,27 @@ export function getFlightDistanceBand(distanceKm) {
   return 'short-hop';
 }
 
+export function getFlightDistanceLabel(band) {
+  if (band === 'long-haul') return 'long';
+  if (band === 'regional') return 'medium';
+  if (band === 'short-hop') return 'short';
+  return band || '';
+}
+
 export function getGatewayConnectivityBand(connectionCount) {
   if (!Number.isFinite(connectionCount)) return null;
   if (connectionCount >= 25) return 'major gateway';
   if (connectionCount >= 10) return 'well-connected gateway';
   if (connectionCount >= 5) return 'limited gateway';
   return 'thin gateway';
+}
+
+export function getAirportTrafficLabel(band) {
+  if (band === 'major gateway') return 'very busy';
+  if (band === 'well-connected gateway') return 'busy';
+  if (band === 'limited gateway') return 'modest';
+  if (band === 'thin gateway') return 'low';
+  return band || '';
 }
 
 function formatMinuteDelta(deltaMinutes) {
@@ -30,7 +45,7 @@ function describeClockShift(deltaMinutes) {
   if (!Number.isFinite(deltaMinutes)) return null;
   if (deltaMinutes > 0) return `${formatMinuteDelta(deltaMinutes)} ahead of departure`;
   if (deltaMinutes < 0) return `${formatMinuteDelta(deltaMinutes)} behind departure`;
-  return 'on the same legal clock as departure';
+  return 'using the same time as departure';
 }
 
 export function buildFlightDistanceClue(routeMeta, choices = []) {
@@ -38,7 +53,8 @@ export function buildFlightDistanceClue(routeMeta, choices = []) {
   const band = getFlightDistanceBand(routeMeta.distanceKm);
   if (!band) return null;
   const matchCount = choices.filter(choice => choice.band === band).length;
-  const text = `The flight desk tagged the next lead as a ${band} capital connection.`;
+  const label = getFlightDistanceLabel(band);
+  const text = `The flight desk marked the next route as a ${label} flight.`;
   return {
     id: `flight-distance-${routeMeta.from}-${routeMeta.to}`,
     icon: '✈️',
@@ -59,7 +75,7 @@ export function buildFlightClockClue(routeMeta, choices = []) {
   const description = describeClockShift(routeMeta.clockDeltaMinutes);
   if (!description) return null;
   const matchCount = choices.filter(choice => choice.clockDeltaMinutes === routeMeta.clockDeltaMinutes).length;
-  const text = `The legal time-zone record puts the next capital ${description}.`;
+  const text = `The destination capital is ${description}.`;
   return {
     id: `flight-clock-${routeMeta.from}-${routeMeta.to}`,
     icon: '🕰',
@@ -221,7 +237,8 @@ export function buildGatewayConnectivityClue(gatewayMeta, choices = []) {
   const band = getGatewayConnectivityBand(gatewayMeta?.connectionCount);
   if (!band) return null;
   const matchCount = choices.filter(choice => choice.band === band).length;
-  const text = `The destination capital is known as a ${band} for air traffic.`;
+  const label = getAirportTrafficLabel(band);
+  const text = `The destination airport has ${label} traffic in ACME's file.`;
   return {
     id: `flight-gateway-${gatewayMeta.country}-${band}`,
     icon: '🛫',

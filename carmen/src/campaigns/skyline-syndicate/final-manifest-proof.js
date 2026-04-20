@@ -1,5 +1,7 @@
 import {
   getFlightDistanceBand,
+  getFlightDistanceLabel,
+  getAirportTrafficLabel,
   getGatewayConnectivityBand,
 } from './flight-clues.js';
 
@@ -12,8 +14,8 @@ function hashString(text) {
 }
 
 function formatClockDelta(deltaMinutes) {
-  if (!Number.isFinite(deltaMinutes)) return 'clock record unavailable';
-  if (deltaMinutes === 0) return 'same legal clock';
+  if (!Number.isFinite(deltaMinutes)) return 'time difference unavailable';
+  if (deltaMinutes === 0) return 'same time';
   const abs = Math.abs(deltaMinutes);
   const hours = Math.floor(abs / 60);
   const minutes = abs % 60;
@@ -42,9 +44,11 @@ function buildSegmentFacts(routeProvider, fromCountry, toCountry, context) {
   const clockMeta = routeProvider.getClockMeta?.(fromCountry, toCountry, context) || null;
   const gatewayMeta = routeProvider.getGatewayConnectivityMeta?.(toCountry) || null;
   const gateway = routeProvider.gatewayByCountry?.[toCountry] || null;
+  const distanceBand = getFlightDistanceBand(routeMeta?.distanceKm);
+  const gatewayBand = gatewayMeta?.band || getGatewayConnectivityBand(gatewayMeta?.connectionCount);
   return {
-    distanceBand: getFlightDistanceBand(routeMeta?.distanceKm) || 'unknown range',
-    gatewayBand: gatewayMeta?.band || getGatewayConnectivityBand(gatewayMeta?.connectionCount) || 'unknown gateway',
+    distanceBand: getFlightDistanceLabel(distanceBand) || 'unknown route length',
+    gatewayBand: getAirportTrafficLabel(gatewayBand) || 'unknown airport traffic',
     clockLabel: formatClockDelta(clockMeta?.clockDeltaMinutes),
     hemisphere: hemisphereForGateway(gateway),
   };

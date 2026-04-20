@@ -10,7 +10,11 @@ import { chooseNarratorScript } from './content/narrator-script.js';
 import { buildCountryEntryMonologue } from './content/country-entry-monologue.js';
 import { buildCaseBriefingHint, buildInterpolIntel, pickArrivalAmbientHint, pickFinaleAliasHint } from './content/carmen-hints.js';
 import { IMG } from './assets.js';
-import { getFlightDistanceBand } from './campaigns/skyline-syndicate/flight-clues.js';
+import {
+  getAirportTrafficLabel,
+  getFlightDistanceBand,
+  getFlightDistanceLabel,
+} from './campaigns/skyline-syndicate/flight-clues.js';
 import {
   buildSkylineFinalManifestProof,
   getSkylineFinalManifestRedactedSegmentIndex,
@@ -920,7 +924,7 @@ function handleGoBack(fromCountry) {
 
 function formatManifestClockDelta(deltaMinutes) {
   if (!Number.isFinite(deltaMinutes)) return '';
-  if (deltaMinutes === 0) return 'same legal clock';
+  if (deltaMinutes === 0) return 'same time';
   const abs = Math.abs(deltaMinutes);
   const hours = Math.floor(abs / 60);
   const minutes = abs % 60;
@@ -950,6 +954,8 @@ function addSkylineManifestSegmentForConfirmedStop() {
   const gatewayMeta = logic.routeProvider.getGatewayConnectivityMeta?.(toCountry) || null;
   const clockMeta = logic.routeProvider.getClockMeta?.(fromCountry, toCountry, logic) || null;
   const distanceBand = getFlightDistanceBand(routeMeta?.distanceKm);
+  const routeLength = getFlightDistanceLabel(distanceBand);
+  const airportTraffic = getAirportTrafficLabel(gatewayMeta?.band || '');
   const redactedSegmentIndex = logic.caseNumber >= TOTAL_CASES
     ? getSkylineFinalManifestRedactedSegmentIndex(logic.route)
     : null;
@@ -961,9 +967,9 @@ function addSkylineManifestSegmentForConfirmedStop() {
     toCountry,
     fromCapital: capitalOf[fromCountry] || '',
     toCapital: capitalOf[toCountry] || '',
-    gatewayBand: gatewayMeta?.band || '',
+    gatewayBand: airportTraffic,
     connectionCount: gatewayMeta?.connectionCount || null,
-    distanceBand,
+    distanceBand: routeLength,
     distanceKm: routeMeta?.distanceKm ? Math.round(routeMeta.distanceKm) : null,
     clockDeltaMinutes: clockMeta?.clockDeltaMinutes ?? null,
     clockLabel: formatManifestClockDelta(clockMeta?.clockDeltaMinutes),
