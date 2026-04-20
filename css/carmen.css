@@ -3344,6 +3344,12 @@ body {
   border: 1px solid rgba(174, 62, 49, 0.34);
 }
 
+.carmen-interpol-entry-status.archive-cleared {
+  color: #223047;
+  background: rgba(143, 210, 221, 0.24);
+  border: 1px solid rgba(93, 162, 181, 0.42);
+}
+
 /* ── Interpol Profile Card ─────────────────────────── */
 #carmen-rv-interpol {
   border-radius: 12px;

@@ -1170,10 +1170,13 @@ export function createCarmenUI(container, flagCodes) {
           quirkOverride = 'Confirmed mastermind. Currently operating through a network of known associates.';
         } else if (campaignPhase === 'finale') {
           quirkOverride = 'Primary target. All cases lead here.';
+        } else if (campaignPhase === 'archive_cleared') {
+          quirkOverride = 'Crimson archive clearance granted. Full historical file available for cross-case review.';
         }
       }
-      const isCarmenPreFinale = suspect.name === 'Carmen Sandiego' && campaignPhase !== 'finale';
-      const profileImage = suspect.name === 'Carmen Sandiego' && campaignPhase === 'finale'
+      const hasCarmenClearance = campaignPhase === 'finale' || campaignPhase === 'archive_cleared';
+      const isCarmenPreFinale = suspect.name === 'Carmen Sandiego' && !hasCarmenClearance;
+      const profileImage = suspect.name === 'Carmen Sandiego' && hasCarmenClearance
         ? 'carmen/img/Carmen Sandiego.png'
         : suspect.img;
       const inspectablePhoto = !!profileImage && !isCarmenPreFinale;
@@ -1193,9 +1196,14 @@ export function createCarmenUI(container, flagCodes) {
           ).join('')
         : '<div class="carmen-interpol-detail">No recorded thefts on file.</div>';
 
-      const statusClass = status === 'ACTIVE' ? 'at-large' : 'in-custody';
+      const statusClass = status === 'ACTIVE'
+        ? 'at-large'
+        : status === 'ARCHIVE CLEARED'
+          ? 'archive-cleared'
+          : 'in-custody';
       const markLabel = isMarked ? 'Remove Mark' : 'Mark as Person of Interest';
-      const backgroundStory = status === 'IN CUSTODY' ? getInterpolBackgroundStory(suspect) : null;
+      const canReadBackground = status === 'IN CUSTODY' || status === 'ARCHIVE CLEARED';
+      const backgroundStory = canReadBackground ? getInterpolBackgroundStory(suspect) : null;
       const hasBackgroundPage = !!backgroundStory;
       const anomalySection = intel?.anomaly ? `
             <div class="carmen-interpol-section">

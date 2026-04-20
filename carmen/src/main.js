@@ -31,6 +31,7 @@ import {
   getTheftHistory, recordTheft, getInterpolViewed, saveInterpolViewed,
   getGameMode, setGameMode, getOpenCaseCount, advanceOpenCaseCount,
   getSkylineCase, advanceSkylineCase, setSkylineCase, getSkylineMissionHistory, saveSkylineMissionResult,
+  hasCompletedCampaignOnce,
 } from './campaign/persistence.js';
 
 const gameId = 'carmen';
@@ -279,6 +280,14 @@ function getDisplayedOpenCaseNumber() {
   return getOpenCaseCount() + 1;
 }
 
+function getEffectiveInterpolViewed() {
+  const viewed = new Set([...interpolViewedThisGame, ...getInterpolViewed()]);
+  if (isSkylineMode() && hasCompletedCampaignOnce()) {
+    for (const suspect of SUSPECTS) viewed.add(suspect.name);
+  }
+  return viewed;
+}
+
 function getCurrentRunConfig() {
   const mode = getGameMode();
   return getRunConfigForMode({
@@ -304,7 +313,7 @@ function getMissionLabel() {
 
 function getVisibleInterpolSuspects() {
   const unlocked = getUnlockedSuspects();
-  const allViewed = new Set([...interpolViewedThisGame, ...getInterpolViewed()]);
+  const allViewed = getEffectiveInterpolViewed();
   const activeArchive = logic?.getInterpolCandidates?.() || [];
   const finaleAlias = logic?.getFinaleAlias?.();
   const source = finaleAlias
@@ -340,13 +349,23 @@ function getVisibleInterpolSuspects() {
 }
 
 function getInterpolStatus(suspectName) {
+  if (suspectName === 'Carmen Sandiego' && isSkylineMode() && hasCompletedCampaignOnce()) {
+    return 'ARCHIVE CLEARED';
+  }
   if (!getUnlockedSuspects().has(suspectName)) return 'ACTIVE';
   return isOpenCasesMode() ? 'PREVIOUSLY ARRESTED' : 'IN CUSTODY';
 }
 
+function getInterpolProfilePhase(suspectName) {
+  if (suspectName === 'Carmen Sandiego' && isSkylineMode() && hasCompletedCampaignOnce()) {
+    return 'archive_cleared';
+  }
+  return logic?.campaignPhase;
+}
+
 function refreshInterpolList() {
   const unlocked = getUnlockedSuspects();
-  const allViewed = new Set([...interpolViewedThisGame, ...getInterpolViewed()]);
+  const allViewed = getEffectiveInterpolViewed();
   const sortedSuspects = getVisibleInterpolSuspects();
   ui.showInterpolList(sortedSuspects, unlocked, allViewed, interpolMarkedThisCase, (suspect) => {
     activeInterpolSuspectName = suspect.name;
@@ -373,7 +392,7 @@ function refreshInterpolList() {
           suspect,
           thefts,
           status,
-          logic?.campaignPhase,
+          getInterpolProfilePhase(suspect.name),
           interpolMarkedThisCase.has(suspect.name),
           toggleInterpolMark,
           intel,
@@ -390,7 +409,7 @@ function refreshInterpolList() {
       suspect,
       thefts,
       status,
-      logic?.campaignPhase,
+      getInterpolProfilePhase(suspect.name),
       interpolMarkedThisCase.has(suspect.name),
       toggleInterpolMark,
       intel,
@@ -416,7 +435,7 @@ function toggleInterpolMark(suspectName) {
     suspect,
     thefts,
     status,
-    logic?.campaignPhase,
+    getInterpolProfilePhase(suspect.name),
     interpolMarkedThisCase.has(suspect.name),
     toggleInterpolMark,
     intel,
@@ -439,7 +458,7 @@ function buildInterpolProfileIntel(suspect, thefts = []) {
   }
   return buildInterpolIntel(
     suspect,
-    logic?.campaignPhase,
+    getInterpolProfilePhase(suspect.name),
     thefts,
     getActiveMissionHistory(),
     getTheftHistory(),

@@ -91,7 +91,10 @@ Visible Interpol files come from several sources:
 - suspects already viewed;
 - suspects already arrested and unlocked;
 - Carmen during campaign play;
+- all standard Carmen suspect files in Skyline Syndicate after The Crimson Trail has been completed once;
 - the finale alias during the finale.
+
+After The Crimson Trail has been completed once, Carmen's Interpol profile in Skyline uses the `ARCHIVE CLEARED` status. This grants the unredacted historical profile and background file for cross-case review without treating Carmen as newly arrested by the Skyline campaign.
 
 Viewing a new photo profile costs 3 in-game hours unless the suspect has already been viewed, is in custody, or has been previously arrested in Open Cases. That turns archive browsing into an explicit risk. The player can spend time to improve suspect certainty, but doing so can cost the time needed to finish the route.
 
