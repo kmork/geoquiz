@@ -349,14 +349,14 @@ GeoQuiz/
 
 ```bash
 # Regenerate cleaned route map data
-node process-countries.js
+node script/process-countries.js
 
 # Compress GeoJSON after modifications
 cd data/ && gzip -9 -k ne_10m_admin_0_countries.geojson
 cd data/ && gzip -9 -k ne_10m_admin_0_countries_route.geojson
 
 # Download flag SVGs from flagcdn.com (skips existing)
-node download-flags.js
+node script/download-flags.js
 
 # Optimize heritage images (90% size reduction)
 cd img/heritage/ && sips --resampleWidth 1920 --setProperty formatOptions 85 *.jpg

@@ -2,11 +2,13 @@
  * One-time script to add "summary" field to all 116 heritage sites
  * in data/heritage-sites.json.
  *
- * Usage: node generate-heritage-summaries.js
+ * Usage: node script/generate-heritage-summaries.js
  */
 
 const fs = require('fs');
 const path = require('path');
+
+const ROOT = path.resolve(__dirname, '..');
 
 const SUMMARIES = {
   "Great Wall of China": "Built over many centuries starting from the 7th century BC, the Great Wall stretches over 20,000 km across northern China. It was constructed to protect Chinese states from nomadic invasions and is the largest military structure ever built, representing extraordinary feats of ancient engineering.",
@@ -243,7 +245,7 @@ const SUMMARIES = {
 };
 
 // Read, update, write
-const filePath = path.join(__dirname, 'data', 'heritage-sites.json');
+const filePath = path.join(ROOT, 'data', 'heritage-sites.json');
 const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 
 let updated = 0;

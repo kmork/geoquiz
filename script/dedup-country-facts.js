@@ -6,7 +6,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const factsPath = path.join(__dirname, 'data', 'country-facts.json');
+const ROOT = path.resolve(__dirname, '..');
+const factsPath = path.join(ROOT, 'data', 'country-facts.json');
 const facts = JSON.parse(fs.readFileSync(factsPath, 'utf-8'));
 
 // Map of country → array of fact texts to remove (exact match)

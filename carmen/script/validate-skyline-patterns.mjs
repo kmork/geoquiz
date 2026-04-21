@@ -2,15 +2,15 @@ import { readFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { CarmenGameLogic } from './src/core/game-logic.js';
+import { CarmenGameLogic } from '../src/core/game-logic.js';
 import {
   CapitalFlightRouteProvider,
   CASE_PATTERN_TYPES,
-} from './src/campaigns/skyline-syndicate/flight-route-provider.js';
-import { buildSkylineFinalManifestProof } from './src/campaigns/skyline-syndicate/final-manifest-proof.js';
+} from '../src/campaigns/skyline-syndicate/flight-route-provider.js';
+import { buildSkylineFinalManifestProof } from '../src/campaigns/skyline-syndicate/final-manifest-proof.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const repoRoot = resolve(__dirname, '..');
+const repoRoot = resolve(__dirname, '..', '..');
 const runsPerCase = Number.parseInt(process.argv[2] || '50', 10);
 
 async function readJson(path) {
@@ -120,7 +120,7 @@ function validateRun({ logic, caseNumber, runNumber }) {
 
 async function main() {
   if (!Number.isInteger(runsPerCase) || runsPerCase < 1) {
-    throw new Error('Usage: node carmen/validate-skyline-patterns.mjs [runsPerCase]');
+    throw new Error('Usage: node carmen/script/validate-skyline-patterns.mjs [runsPerCase]');
   }
 
   const [countries, facts, heritageSites, routeData] = await Promise.all([

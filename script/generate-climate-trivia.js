@@ -3,11 +3,13 @@
  * 1. Add "climate" field to all 194 UN countries in data/countries.json
  * 2. Add one geographical trivia fact to each country in data/country-facts.json
  *
- * Usage: node generate-climate-trivia.js
+ * Usage: node script/generate-climate-trivia.js
  */
 
 const fs = require('fs');
 const path = require('path');
+
+const ROOT = path.resolve(__dirname, '..');
 
 const DATA = {
   "Afghanistan": {
@@ -789,7 +791,7 @@ const DATA = {
 };
 
 // --- Update countries.json with climate ---
-const countriesPath = path.join(__dirname, 'data', 'countries.json');
+const countriesPath = path.join(ROOT, 'data', 'countries.json');
 const countries = JSON.parse(fs.readFileSync(countriesPath, 'utf-8'));
 
 let climateCount = 0;
@@ -807,7 +809,7 @@ fs.writeFileSync(countriesPath, JSON.stringify(countries, null, 2) + '\n', 'utf-
 console.log(`✅ Added climate to ${climateCount}/194 countries in countries.json`);
 
 // --- Update country-facts.json with geo trivia ---
-const factsPath = path.join(__dirname, 'data', 'country-facts.json');
+const factsPath = path.join(ROOT, 'data', 'country-facts.json');
 const facts = JSON.parse(fs.readFileSync(factsPath, 'utf-8'));
 
 let triviaCount = 0;

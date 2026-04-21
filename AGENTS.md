@@ -13,7 +13,7 @@ python3 -m http.server 8080
 Open `http://localhost:8080`. Use Node scripts at the repo root for data maintenance, for example:
 
 ```bash
-node process-countries.js
+node script/process-countries.js
 gzip -9 -k data/ne_10m_admin_0_countries.geojson
 gzip -9 -k data/ne_10m_admin_0_countries_route.geojson
 ```

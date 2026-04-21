@@ -23,7 +23,7 @@ Then open `http://localhost:8080`.
 
 ```bash
 # Regenerate cleaned route map data (removes overseas territories)
-node process-countries.js
+node script/process-countries.js
 
 # Compress GeoJSON after modifications
 cd data/ && gzip -9 -k ne_10m_admin_0_countries.geojson

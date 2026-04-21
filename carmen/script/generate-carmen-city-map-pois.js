@@ -5,17 +5,17 @@
  * clue truth without human curation.
  *
  * Usage:
- *   node generate-carmen-city-map-pois.js
- *   node generate-carmen-city-map-pois.js --limit 10
- *   node generate-carmen-city-map-pois.js --refresh --delay 1200
- *   node generate-carmen-city-map-pois.js --offline
+ *   node carmen/script/generate-carmen-city-map-pois.js
+ *   node carmen/script/generate-carmen-city-map-pois.js --limit 10
+ *   node carmen/script/generate-carmen-city-map-pois.js --refresh --delay 1200
+ *   node carmen/script/generate-carmen-city-map-pois.js --offline
  */
 
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
 
-const ROOT = __dirname;
+const ROOT = path.resolve(__dirname, '..', '..');
 const FLIGHT_ROUTES_PATH = path.join(ROOT, 'data', 'capital-flight-routes.json');
 const OUTPUT_PATH = path.join(ROOT, 'data', 'carmen-city-map-pois.json');
 const CACHE_DIR = path.join(ROOT, 'data', 'generated-cache', 'carmen-city-map-pois');

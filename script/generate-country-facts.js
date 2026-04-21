@@ -2,11 +2,13 @@
  * One-time script to add famousFor, exports, and history fields
  * to all 194 UN member countries in data/countries.json.
  *
- * Usage: node generate-country-facts.js
+ * Usage: node script/generate-country-facts.js
  */
 
 const fs = require('fs');
 const path = require('path');
+
+const ROOT = path.resolve(__dirname, '..');
 
 const FACTS = {
   "Afghanistan": {
@@ -982,7 +984,7 @@ const FACTS = {
 };
 
 // Read, update, write
-const filePath = path.join(__dirname, 'data', 'countries.json');
+const filePath = path.join(ROOT, 'data', 'countries.json');
 const data = JSON.parse(fs.readFileSync(filePath, 'utf-8'));
 
 let updated = 0;

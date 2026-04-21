@@ -1,15 +1,16 @@
-/**
+ /**
  * download-flags.js
  * Downloads SVG flag images from flagcdn.com for all countries in the mapping.
- * Run with: node download-flags.js
+ * Run with: node script/download-flags.js
  */
 
 const https = require('https');
 const fs = require('fs');
 const path = require('path');
 
-const flagsData = require('./data/countries-flags.json');
-const outputDir = path.join(__dirname, 'img', 'flags');
+const ROOT = path.resolve(__dirname, '..');
+const flagsData = require(path.join(ROOT, 'data', 'countries-flags.json'));
+const outputDir = path.join(ROOT, 'img', 'flags');
 
 // Create output directory if it doesn't exist
 if (!fs.existsSync(outputDir)) {

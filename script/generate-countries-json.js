@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // One-time script to merge country data from 4 sources into data/countries.json
-// Usage: node generate-countries-json.js
+// Usage: node script/generate-countries-json.js
 
 import { readFileSync, writeFileSync, readdirSync } from 'fs';
 

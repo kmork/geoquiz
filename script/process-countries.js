@@ -13,10 +13,12 @@
 const fs = require('fs');
 const path = require('path');
 
+const ROOT = path.resolve(__dirname, '..');
+
 // Load the original GeoJSON
-const inputFile = path.join(__dirname, 'data', 'ne_10m_admin_0_countries.geojson');
-const outputFile = path.join(__dirname, 'data', 'ne_10m_admin_0_countries_route.geojson');
-const backupFile = path.join(__dirname, 'data', 'ne_10m_admin_0_countries_route.geojson.bak');
+const inputFile = path.join(ROOT, 'data', 'ne_10m_admin_0_countries.geojson');
+const outputFile = path.join(ROOT, 'data', 'ne_10m_admin_0_countries_route.geojson');
+const backupFile = path.join(ROOT, 'data', 'ne_10m_admin_0_countries_route.geojson.bak');
 
 console.log('Loading GeoJSON data...');
 const geojson = JSON.parse(fs.readFileSync(inputFile, 'utf8'));

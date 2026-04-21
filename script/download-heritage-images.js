@@ -1,14 +1,15 @@
-/**
+ /**
  * download-heritage-images.js
  * Downloads heritage site images from Wikipedia's pageimages API.
- * Run with: node download-heritage-images.js
+ * Run with: node script/download-heritage-images.js
  */
 
 const https = require('https');
 const fs    = require('fs');
 const path  = require('path');
 
-const outputDir = path.join(__dirname, 'img', 'heritage');
+const ROOT = path.resolve(__dirname, '..');
+const outputDir = path.join(ROOT, 'img', 'heritage');
 
 // Wikipedia article title → local filename
 const sites = [
