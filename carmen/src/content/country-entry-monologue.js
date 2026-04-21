@@ -49,7 +49,7 @@ const THIN_FILE_COUNTRIES = new Set([
 const TRAGIC_MARKERS = [
   'genocide', 'civil war', 'world war', 'war of independence', 'famine', 'slave trade',
   'enslaved', 'occupation', 'dictatorship', 'massive displacement', 'humanitarian crisis',
-  'annexation', 'full-scale invasion', 'devastating', 'atrocities',
+  'annexation', 'full-scale invasion', 'devastating', 'atrocities', 'heavily bombed',
 ];
 
 const MODERN_MARKERS = [
@@ -79,10 +79,31 @@ function pick(arr, seed) {
 function splitSentences(historyText) {
   return String(historyText || '')
     .replace(/\s+/g, ' ')
+    .replace(/\bSt\.\s/g, 'St<dot> ')
+    .replace(/\bU\.S\.\s/g, 'U<dot>S<dot> ')
+    .replace(/\bU\.K\.\s/g, 'U<dot>K<dot> ')
     .trim()
     .split(/(?<=[.!?])\s+/)
     .map(s => s.trim())
+    .map(s => s.replace(/<dot>/g, '.'))
     .filter(Boolean);
+}
+
+function normalizeCountryData(country, source) {
+  if (source && typeof source === 'object' && !Array.isArray(source)) {
+    return {
+      ...source,
+      history: String(source.history || ''),
+      famousFor: Array.isArray(source.famousFor) ? source.famousFor : [],
+      exports: Array.isArray(source.exports) ? source.exports : [],
+    };
+  }
+  return {
+    country,
+    history: String(source || ''),
+    famousFor: [],
+    exports: [],
+  };
 }
 
 function includesAny(text, markers) {
@@ -98,116 +119,148 @@ function detectMode(country, historyText) {
   return 'small-state-dry';
 }
 
-function detectModernTopic(historyText) {
-  const lower = historyText.toLowerCase();
-  if (lower.includes('nato') || lower.includes('european union') || lower.includes('eurozone')) {
-    return 'alliance paperwork from the future';
-  }
-  if (lower.includes('startup') || lower.includes('tech') || lower.includes('digital')) {
-    return 'modern success stories with suspiciously good bandwidth';
-  }
-  if (lower.includes('banking') || lower.includes('financial services')) {
-    return 'banking language';
-  }
-  if (lower.includes('tourism')) {
-    return 'tourism statistics';
-  }
-  if (/\b20(0\d|1\d|2[0-4])\b/.test(lower)) {
-    return 'a date far too recent for my emotional arrangement';
-  }
-  return 'this century';
+function shortenSentence(sentence, maxLength = 180) {
+  const clean = String(sentence || '').replace(/\s+/g, ' ').trim();
+  if (clean.length <= maxLength) return clean;
+
+  const cut = clean.slice(0, maxLength + 1);
+  const lastComma = cut.lastIndexOf(',');
+  const lastSpace = cut.lastIndexOf(' ');
+  const endAt = lastComma > 80 ? lastComma : lastSpace;
+  return `${clean.slice(0, endAt).replace(/[,:;]\s*$/, '')}.`;
 }
 
-function buildLead(country, historyText, mode) {
-  const lower = historyText.toLowerCase();
-
-  if (!historyText || THIN_FILE_COUNTRIES.has(country)) {
-    return `${country}. Thin file, expensive shadows, and just enough silence to make me overnarrate on instinct.`;
-  }
-  if (mode === 'tragic-grave') {
-    if (lower.includes('genocide')) {
-      return `${country}. The file came stamped with genocide and the kind of memory that refuses to sit quietly.`;
-    }
-    if (lower.includes('slave trade') || lower.includes('enslaved')) {
-      return `${country}. The record carries slavery and extraction in ink that still hasn't dried morally.`;
-    }
-    if (lower.includes('civil war') || lower.includes('war')) {
-      return `${country}. War had already done the lighting here, and better than I ever could.`;
-    }
-    if (lower.includes('dictatorship') || lower.includes('authoritarian')) {
-      return `${country}. Power stayed too long, left bruises on the wallpaper, and called it order.`;
-    }
-    return `${country}. The history file read like evidence, not ambience.`;
-  }
-  if (mode === 'modern-anachronistic') {
-    if (lower.includes('nato') || lower.includes('european union') || lower.includes('eurozone')) {
-      return `${country}. The file starts in old history and ends in membership forms with a better haircut than mine.`;
-    }
-    if (lower.includes('startup') || lower.includes('tech') || lower.includes('digital')) {
-      return `${country}. I came in ready for moody geopolitics and the file answered with modern efficiency and dangerous competence.`;
-    }
-    if (lower.includes('banking') || lower.includes('financial services')) {
-      return `${country}. The history wandered into banking, which is never good news for a man trying to sound like 1947.`;
-    }
-    return `${country}. The facts kept sliding out of period and into the future while I was still buttoning the trench coat.`;
-  }
-  if (mode === 'imperial-decadent') {
-    if (lower.includes('empire') || lower.includes('dynasty')) {
-      return `${country}. Empires had their turn here, which meant the wallpaper still behaved like it had titles.`;
-    }
-    if (lower.includes('colony') || lower.includes('protectorate') || lower.includes('mandate')) {
-      return `${country}. Empire once kept a desk here, and history never fully cleared out the drawers.`;
-    }
-    if (lower.includes('independence') || lower.includes('republic') || lower.includes('revolution')) {
-      return `${country}. Independence showed up eventually, usually carrying broken furniture and a revised flag.`;
-    }
-    return `${country}. Old power still lingered in the wallpaper, charging rent by the century.`;
-  }
-  if (lower.includes('smallest') || lower.includes('tiny')) {
-    return `${country}. Small country, oversized mood, and paperwork dressed like statecraft.`;
-  }
-  return `${country}. The file was short, the atmosphere cooperative, and I committed to the bit immediately.`;
+function scoreHistorySentence(sentence) {
+  const lower = sentence.toLowerCase();
+  let score = 0;
+  if (/\b(1[5-9]\d{2}|20\d{2})\b/.test(lower)) score += 5;
+  if (includesAny(lower, IMPERIAL_MARKERS)) score += 4;
+  if (includesAny(lower, MODERN_MARKERS)) score += 3;
+  if (includesAny(lower, TRAGIC_MARKERS)) score += 3;
+  if (lower.includes('independence')) score += 4;
+  if (lower.includes('colon')) score += 3;
+  if (lower.includes('modern') || lower.includes('became') || lower.includes('joined')) score += 2;
+  if (sentence.length > 240) score -= 2;
+  if (sentence.length < 45) score -= 1;
+  return score;
 }
 
-function buildFollowup(country, historyText, mode) {
-  const seed = `${country}:${mode}`;
+function selectHistoryFacts(country, historyText, mode) {
+  const sentences = splitSentences(historyText);
+  if (!sentences.length) return [];
+
+  const ranked = sentences
+    .map((sentence, index) => ({
+      sentence,
+      index,
+      score: scoreHistorySentence(sentence) + ((hashString(`${country}:${index}`) % 3) * 0.1),
+    }))
+    .sort((a, b) => b.score - a.score || a.index - b.index);
+
+  const primary = ranked[0];
+  const secondary = ranked.find(item => item.index !== primary.index);
+  const facts = [primary, secondary].filter(Boolean).sort((a, b) => a.index - b.index);
+  const maxFacts = mode === 'small-state-dry' ? 1 : 2;
+
+  return facts.slice(0, maxFacts).map(item => shortenSentence(item.sentence));
+}
+
+function overlapsHistoryFact(item, historyFacts) {
+  const itemLower = String(item || '').toLowerCase();
+  const words = itemLower
+    .replace(/[^a-z0-9\s]/g, ' ')
+    .split(/\s+/)
+    .filter(word => word.length >= 4 && !['known', 'heritage', 'tradition'].includes(word));
+  return historyFacts.some(fact => {
+    const factLower = fact.toLowerCase();
+    if (factLower.includes(itemLower)) return true;
+    const matches = words.filter(word => factLower.includes(word)).length;
+    return words.length >= 2 && matches >= 2;
+  });
+}
+
+function buildSupportFact(country, data, historyFacts = []) {
+  const seed = `${country}:support`;
+  const famousFor = data.famousFor.filter(item => item && !overlapsHistoryFact(item, historyFacts));
+  const exports = data.exports.filter(Boolean);
+
+  if (famousFor.length && (!exports.length || hashString(seed) % 3 !== 0)) {
+    const picked = pick(famousFor, seed);
+    return pick([
+      `A margin note adds ${picked}.`,
+      `The short cultural note points to ${picked}.`,
+      `ACME's quick reference flags ${picked}.`,
+    ], `${seed}:famous:${picked}`);
+  }
+  if (exports.length) {
+    const picked = exports.slice(0, 2).join(' and ');
+    return pick([
+      `The export ledger starts with ${picked}.`,
+      `The trade note begins with ${picked}.`,
+      `Its export file opens on ${picked}.`,
+    ], `${seed}:exports:${picked}`);
+  }
+  if (famousFor.length) {
+    return `A margin note adds ${famousFor[0]}.`;
+  }
+  return '';
+}
+
+function buildNoirTag(country, mode) {
+  const seed = `${country}:${mode}:tag`;
   if (mode === 'tragic-grave') {
     return pick([
-      'I kept the wisecracks off the record. Even my inner monologue knew when to lower its voice.',
-      'The trench coat wanted melodrama. The history insisted on plain respect.',
-      'I let the country keep the last word. It had earned it.',
+      'I kept the wisecracks off the record.',
+      'The file did not need embroidery.',
+      'Some history asks for a lower voice.',
     ], seed);
   }
   if (mode === 'modern-anachronistic') {
-    const topic = detectModernTopic(historyText);
     return pick([
-      `Then the file wandered into ${topic}. My inner monologue was built for fog, bribed porters, and another century entirely.`,
-      `I reached for a cigarette metaphor and got handed ${topic} instead. The genre filed a complaint.`,
-      `The trench coat stayed on, even when the facts started sounding like tomorrow's newspaper and better public policy.`,
+      'My 1940s vocabulary took notes and looked nervous.',
+      'The trench coat stayed on, even after the facts left my century.',
+      'The genre filed a quiet complaint.',
     ], seed);
   }
   if (mode === 'imperial-decadent') {
     return pick([
-      'I gave the place my best hardboiled stare. It answered with several centuries of superior production design.',
-      'I tightened the trench coat and tried to look equal to the occasion. The occasion had, naturally, seen empires.',
-      'I arrived ready to narrate history. The country had already hired better writers.',
+      'I let the centuries do most of the talking.',
+      'The old power had already supplied the shadows.',
+      'My narration kept its hat in its hands.',
     ], seed);
   }
   return pick([
-    'The file was short, the shadows were cooperative, and I overcommitted to the performance immediately.',
-    'Small place, big atmosphere. Naturally I behaved as if a saxophone section had followed me in.',
-    'I was prepared to call it understated. Then I remembered understatement has never been my department.',
+    'I saved the dramatic lighting for the margins.',
+    'The case file stayed factual; I tried to behave.',
+    'Even my inner monologue learned to keep it brief.',
   ], seed);
 }
 
-export function buildCountryEntryMonologue(country, historyText = '') {
+function buildThinFileMonologue(country, data) {
+  const supportFact = buildSupportFact(country, data);
+  const base = supportFact
+    ? `${country}. ACME has a thin history file here. ${supportFact}`
+    : `${country}. ACME has a thin history file here, so the background arrives in fragments rather than chapters.`;
+  return `${base} I kept the noir routine in the margins.`;
+}
+
+export function buildCountryEntryMonologue(country, countryData = '') {
   if (!country) return '';
   if (COUNTRY_ENTRY_OVERRIDES[country]) return COUNTRY_ENTRY_OVERRIDES[country];
 
+  const data = normalizeCountryData(country, countryData);
+  const historyText = data.history;
   const mode = detectMode(country, historyText);
-  const lead = buildLead(country, historyText, mode);
-  const followup = buildFollowup(country, historyText, mode);
-  return `${lead} ${followup}`;
+  const historyFacts = selectHistoryFacts(country, historyText, mode);
+
+  if (!historyFacts.length || THIN_FILE_COUNTRIES.has(country)) {
+    return buildThinFileMonologue(country, data);
+  }
+
+  const supportFact = buildSupportFact(country, data, historyFacts);
+  const factText = historyFacts.join(' ');
+  const supportText = supportFact ? ` ${supportFact}` : '';
+  return `${country}. ${factText}${supportText} ${buildNoirTag(country, mode)}`;
 }
 
 export { COUNTRY_ENTRY_OVERRIDES };

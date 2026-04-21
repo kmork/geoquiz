@@ -903,7 +903,7 @@ export function createCarmenUI(container, flagCodes) {
     els.narratorCaption.classList.add('is-visible');
 
     const resolvedDuration = duration == null
-      ? Math.min(12000, Math.max(6200, 4200 + (text.length * 28)))
+      ? Math.min(10500, Math.max(5600, 3800 + (text.length * 24)))
       : duration;
 
     if (resolvedDuration !== Infinity) {

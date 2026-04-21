@@ -487,8 +487,8 @@ function toggleInterpolMark(suspectName) {
 }
 
 function getCountryEntryMonologue(country) {
-  const historyText = logic?.countryMap?.[country]?.history || '';
-  return buildCountryEntryMonologue(country, historyText);
+  const countryData = logic?.countryMap?.[country] || {};
+  return buildCountryEntryMonologue(country, countryData);
 }
 
 function buildInterpolProfileIntel(suspect, thefts = []) {
