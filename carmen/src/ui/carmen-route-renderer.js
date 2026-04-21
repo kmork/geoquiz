@@ -10,6 +10,19 @@ function callAll(entry, callback) {
 export class CarmenRouteRenderer extends RouteRenderer {
   constructor(svgElement, worldData, options = {}) {
     super(svgElement, worldData, options);
+    this.airportByCountry = options.airportByCountry || {};
+  }
+
+  // Hook used by the base RouteRenderer.animateTravel() to draw Carmen planes
+  // between capital-area airports instead of country centroids.
+  getTravelPoint(countryName) {
+    const airport = this.airportByCountry?.[countryName];
+    const lat = Number(airport?.lat);
+    const lon = Number(airport?.lon);
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) {
+      return this.getCentroid(countryName);
+    }
+    return this.proj([lon, lat]);
   }
 
   _projectedBBoxSize(feature) {

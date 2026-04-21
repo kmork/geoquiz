@@ -40,6 +40,8 @@ Wrong country choices are not instant failure. They create a detour: ACME redepl
 
 Correct trail confirmation has a strong presentation beat: map animation, ACME transport audio, optional atmosphere, score feedback, a thief taunt, and a noir country-entry monologue. That makes route progress feel like an investigation rather than a quiz page refresh.
 
+In every Carmen variant, the travel plane animation uses the capital gateway airport coordinates from `data/capital-flight-routes.json` when available. Country highlighting and route choices still operate on countries, but the visible plane travels from the current capital-area airport to the next capital-area airport instead of from country centroid to country centroid. If a country has no usable airport coordinate, the renderer falls back to the country centroid.
+
 ## Geography Clue System
 
 Clues are generated from several data pools:

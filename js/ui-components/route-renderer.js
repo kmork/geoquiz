@@ -499,8 +499,8 @@ export class RouteRenderer {
    */
   animateTravel(fromCountry, toCountry, duration = 1200) {
     return new Promise(resolve => {
-      const from = this.getCentroid(fromCountry);
-      const to = this.getCentroid(toCountry);
+      const from = this.getTravelPoint?.(fromCountry) || this.getCentroid(fromCountry);
+      const to = this.getTravelPoint?.(toCountry) || this.getCentroid(toCountry);
       if (!from || !to) { resolve(); return; }
 
       const ns = "http://www.w3.org/2000/svg";

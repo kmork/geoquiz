@@ -236,6 +236,17 @@ const capitalOf = Object.fromEntries(
   window.DATA.map(c => [c.country, c.capitals?.[0] || ''])
 );
 
+const capitalAirportByCountry = Object.fromEntries(
+  (campaignModeData.skylineRouteData?.gateways || [])
+    .filter(gateway => gateway?.country && Number.isFinite(gateway?.airport?.lat) && Number.isFinite(gateway?.airport?.lon))
+    .map(gateway => [gateway.country, {
+      name: gateway.airport.name,
+      iata: gateway.airport.iata || gateway.airport.ident || '',
+      lat: gateway.airport.lat,
+      lon: gateway.airport.lon,
+    }])
+);
+
 // Data loaded — hide the loading text, show tap hint
 if (carmenFront) {
   const loadingText = carmenFront.querySelector('.carmen-init-loading');
@@ -265,7 +276,9 @@ const ui = createCarmenUI(gameContent, flagCodes);
 ui.setWorldData(worldData);
 
 // Create map renderer
-let renderer = new CarmenRouteRenderer(ui.mapSvg, worldData);
+let renderer = new CarmenRouteRenderer(ui.mapSvg, worldData, {
+  airportByCountry: capitalAirportByCountry,
+});
 let baseViewBox = { x: 0, y: 0, w: 600, h: 320 };
 attachZoomPan(ui.mapSvg, () => baseViewBox);
 
