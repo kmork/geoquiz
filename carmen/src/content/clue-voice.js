@@ -62,6 +62,12 @@ const PHRASINGS = {
     d => `One thing stood out from the flight records: ${d.text}`,
     d => `The departure log didn't give a country, but it did give this: ${d.text}`,
   ],
+  cargo_label: [
+    () => 'A crate was left behind with one clean cargo label still attached.',
+    () => 'The freight room held one crate nobody claimed. Its label is still readable.',
+    () => 'Someone forgot to strip the cargo label from a box in the corner.',
+    () => 'There is a sealed box still sitting by the freight desk, label intact.',
+  ],
   famous_for: [
     d => `Famous for ${d.item}, if that means anything to you.`,
     d => `People come from all over for ${d.item}. Maybe the thief did too.`,
@@ -480,6 +486,8 @@ export function composeClue(clue, informant, locationId, redactFn, options = nul
   const skylineGeoPool = SKYLINE_PHRASINGS.geography[clue.subtype];
   if (routeKind === 'capital_flights' && clue.category === 'geography' && clue.subtype && skylineGeoPool) {
     pool = skylineGeoPool;
+  } else if (clue.data?.visualType === 'cargo-label') {
+    pool = PHRASINGS.cargo_label;
   } else if (clue.category === 'geography' && clue.subtype && PHRASINGS.geography[clue.subtype]) {
     pool = PHRASINGS.geography[clue.subtype];
   } else if (PHRASINGS[clue.category]) {
