@@ -1940,6 +1940,63 @@ body {
   background-image: url('../carmen/img/outline.jpg');
   padding: 0;
 }
+.carmen-evidence-cargo {
+  background: #090806;
+  padding: 0;
+  isolation: isolate;
+}
+.carmen-cargo-label-image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  filter: sepia(0.12) contrast(1.04) brightness(0.94);
+  user-select: none;
+  pointer-events: none;
+}
+.carmen-cargo-label-text {
+  position: absolute;
+  left: 34.5%;
+  top: 65%;
+  width: 34.3%;
+  height: 18.1%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  padding: 0.45rem 0.7rem;
+  color: rgba(44, 29, 19, 0.78);
+  font-family: 'Courier New', monospace;
+  font-size: var(--cargo-label-size, clamp(0.9rem, 3vw, 1.6rem));
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: 0.06em;
+  text-align: center;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  transform: rotate(-0.7deg);
+  mix-blend-mode: multiply;
+  text-shadow:
+    0.02em 0.02em 0 rgba(116, 84, 52, 0.22),
+    -0.015em 0 0 rgba(255, 245, 220, 0.12);
+  z-index: 2;
+}
+.carmen-cargo-label-text::after {
+  content: '';
+  position: absolute;
+  inset: 4%;
+  background:
+    repeating-linear-gradient(
+      100deg,
+      rgba(70, 46, 28, 0.05) 0 1px,
+      transparent 1px 5px
+    ),
+    radial-gradient(circle at 28% 32%, rgba(83, 55, 31, 0.12), transparent 20%),
+    radial-gradient(circle at 70% 62%, rgba(245, 225, 180, 0.16), transparent 18%);
+  pointer-events: none;
+}
 .carmen-evidence-back-btn {
   position: absolute;
   top: 0.5rem;

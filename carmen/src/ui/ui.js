@@ -7,7 +7,7 @@ import { IMG } from '../assets.js';
 import { getInterpolBackgroundStory } from '../content/interpol-backgrounds.js';
 import { getPortraitStyleVars } from '../content/portrait-specs.js';
 import { typewriter } from './typewriter.js';
-import { renderScramble, renderOutline, renderFlag } from './visual-clues.js';
+import { renderScramble, renderOutline, renderFlag, renderCargoLabel } from './visual-clues.js';
 import { createCityInvestigationMap } from './city-investigation-map.js';
 
 function renderPortraitImg(suspect, extraClass = '') {
@@ -1685,11 +1685,12 @@ export function createCarmenUI(container, flagCodes) {
         const isScramble = clue.data.visualType === 'scramble';
         const isOutline = clue.data.visualType === 'outline' && worldDataRef;
         const isFlag = clue.data.visualType === 'flag';
-        if (!isScramble && !isOutline && !isFlag) return;
+        const isCargoLabel = clue.data.visualType === 'cargo-label';
+        if (!isScramble && !isOutline && !isFlag && !isCargoLabel) return;
 
         const btn = document.createElement('button');
         btn.className = 'carmen-evidence-btn';
-        btn.innerHTML = '🔍 Examine Evidence';
+        btn.innerHTML = isCargoLabel ? '🔍 Examine Cargo Label' : '🔍 Examine Evidence';
         btn.addEventListener('click', () => {
           // Hide the clue stage, show evidence panel as sibling
           const stage = els.rvClues.querySelector('.carmen-investigate-stage');
@@ -1707,6 +1708,8 @@ export function createCarmenUI(container, flagCodes) {
           } else if (isFlag) {
             renderFlag(evidenceWrap, clue.data.targetCountry, flagCodes);
             if (onVisualExamined) onVisualExamined({ type: 'flag', targetCountry: clue.data.targetCountry });
+          } else if (isCargoLabel) {
+            renderCargoLabel(evidenceWrap, clue.data);
           } else {
             renderOutline(evidenceWrap, clue.data.targetCountry, worldDataRef);
             if (onVisualExamined) onVisualExamined({ type: 'outline', targetCountry: clue.data.targetCountry });

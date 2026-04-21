@@ -4,6 +4,7 @@
  * - Scramble: interactive letter tiles on a boarding-pass evidence card.
  * - Outline: country silhouette on a torn atlas-page evidence card.
  * - Flag: worn evidence fragments laid out on a desk.
+ * - Cargo label: Skyline freight-room image with a dynamic export label.
  *
  * Both render inside the right panel, replacing the current view.
  * Pure UI — no game state, no DOM outside the provided container.
@@ -271,5 +272,39 @@ export function renderFlag(container, country, flagCodes) {
   const label = document.createElement('div');
   label.className = 'carmen-flag-evidence-label';
   label.textContent = 'Recovered flag fragments';
+  card.appendChild(label);
+}
+
+// ── Cargo label renderer ────────────────────────────────────────
+
+/**
+ * Render a cargo evidence image with the export article stamped on the label.
+ *
+ * @param {HTMLElement} container — the element to render into
+ * @param {Object}      data      — { exportItem: string, cargoImage: string }
+ */
+export function renderCargoLabel(container, data) {
+  const exportItem = String(data?.exportItem || '').trim();
+  const cargoImage = data?.cargoImage || 'carmen/img/cargo-crate-label.png';
+  if (!exportItem) return;
+
+  const card = document.createElement('div');
+  card.className = 'carmen-evidence-card carmen-evidence-cargo';
+  container.appendChild(card);
+
+  const img = document.createElement('img');
+  img.className = 'carmen-cargo-label-image';
+  img.src = cargoImage;
+  img.alt = '';
+  img.draggable = false;
+  card.appendChild(img);
+
+  const label = document.createElement('div');
+  label.className = 'carmen-cargo-label-text';
+  label.textContent = exportItem.toUpperCase();
+  const size = exportItem.length > 24 ? 'clamp(0.78rem, 2.4vw, 1.2rem)'
+    : exportItem.length > 14 ? 'clamp(0.9rem, 3vw, 1.45rem)'
+      : 'clamp(1.05rem, 3.8vw, 2rem)';
+  label.style.setProperty('--cargo-label-size', size);
   card.appendChild(label);
 }

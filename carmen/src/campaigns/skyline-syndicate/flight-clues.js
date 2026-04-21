@@ -213,7 +213,13 @@ export function buildCargoClue(targetCountryData, choices = []) {
     icon: '📦',
     category: 'flight',
     text,
-    data: { text, exportItem, country: targetCountryData.country },
+    data: {
+      text,
+      exportItem,
+      country: targetCountryData.country,
+      visualType: 'cargo-label',
+      cargoImage: 'carmen/img/cargo-crate-label.png',
+    },
   };
 }
 
