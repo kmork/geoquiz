@@ -433,6 +433,7 @@ body {
 .carmen-right-view .carmen-artifact-display,
 .carmen-right-view .carmen-map-wrap,
 .carmen-right-view .carmen-clue-reveal,
+.carmen-right-view .carmen-city-map-stage,
 .carmen-right-view .carmen-dossier-inline,
 .carmen-right-view .carmen-interpol-profile,
 .carmen-right-view .carmen-lineup-stage {
@@ -1658,6 +1659,40 @@ body {
   box-sizing: border-box;
 }
 
+.carmen-city-map-stage {
+  display: none;
+}
+
+#carmen-rv-clues.has-city-map .carmen-investigate-stage {
+  background: #1d1a17;
+  border: none;
+  border-radius: 0;
+}
+
+#carmen-rv-clues.has-city-map .carmen-city-map-stage {
+  display: block;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+#carmen-rv-clues.has-city-map {
+  padding: 0;
+}
+
+#carmen-rv-clues.has-city-map .carmen-clue-reveal {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: auto;
+  min-height: 32%;
+  align-items: flex-end;
+  padding: 1rem 1.15rem 1.2rem;
+  background:
+    linear-gradient(0deg, rgba(16, 13, 11, 0.92) 0%, rgba(16, 13, 11, 0.66) 58%, rgba(16, 13, 11, 0) 100%);
+}
+
 /* ── Clue Reveal (below map) ────────────────────────── */
 .carmen-clue-reveal {
   display: flex;
@@ -2191,6 +2226,251 @@ body {
   gap: 0.45rem;
 }
 
+.carmen-location-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.carmen-city-map {
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: none;
+  border-radius: 0;
+  background: #d7d2c4;
+  box-shadow: none;
+}
+
+.carmen-city-map-head {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  right: auto;
+  z-index: 4;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.45rem;
+  width: min(260px, calc(100% - 1.5rem));
+  padding: 0.42rem 0.5rem;
+  border: 1px solid rgba(238, 201, 139, 0.22);
+  border-radius: 8px;
+  background:
+    linear-gradient(180deg, rgba(35, 25, 18, 0.9), rgba(18, 14, 11, 0.88));
+  box-shadow: 0 10px 22px rgba(8, 6, 4, 0.34);
+  pointer-events: none;
+}
+
+.carmen-city-map-title {
+  color: #f2dcc4;
+  font-family: 'Courier New', monospace;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0;
+  text-transform: uppercase;
+  line-height: 1.12;
+}
+
+.carmen-city-map-subtitle,
+.carmen-city-map-country {
+  color: rgba(232, 211, 188, 0.72);
+  font-size: 0.58rem;
+  line-height: 1.25;
+}
+
+.carmen-city-map-country {
+  max-width: 32%;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.carmen-city-map-wrap {
+  position: absolute;
+  inset: 0;
+  height: 100%;
+  min-height: 0;
+  background: #d7d2c4;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.carmen-city-map-wrap.is-dragging {
+  cursor: grabbing;
+}
+
+.carmen-city-map-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-width: 100%;
+  min-height: 100%;
+  filter: none;
+}
+
+.carmen-city-map-pins {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.carmen-city-map-controls {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.carmen-city-map-control {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid rgba(238, 201, 139, 0.32);
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgba(35, 25, 18, 0.92), rgba(18, 14, 11, 0.9));
+  color: #f2dcc4;
+  box-shadow: 0 8px 18px rgba(8, 6, 4, 0.3);
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.carmen-city-map-control:hover:not(:disabled),
+.carmen-city-map-control:active:not(:disabled) {
+  border-color: rgba(255, 228, 171, 0.62);
+  background:
+    linear-gradient(180deg, rgba(58, 39, 25, 0.94), rgba(29, 20, 14, 0.92));
+  box-shadow: 0 8px 18px rgba(8, 6, 4, 0.3);
+  transform: none;
+}
+
+.carmen-city-map-pin {
+  position: absolute;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  gap: 0.22rem;
+  min-width: 34px;
+  max-width: 112px;
+  min-height: 30px;
+  padding: 0.22rem 0.42rem;
+  border: 1px solid rgba(246, 207, 143, 0.58);
+  border-radius: 7px;
+  background:
+    linear-gradient(180deg, rgba(78, 48, 28, 0.98), rgba(43, 29, 21, 0.96));
+  color: #fff2dc;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.34);
+  cursor: pointer;
+  font-size: 0.64rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  transform: translate(-50%, -50%);
+  pointer-events: auto;
+}
+
+.carmen-city-map-pin.real-place {
+  border-color: rgba(129, 201, 157, 0.68);
+}
+
+.carmen-city-map-pin.real-place::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(129, 201, 157, 0.95);
+  box-shadow: 0 0 8px rgba(129, 201, 157, 0.45);
+}
+
+.carmen-city-map-pin::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: -7px;
+  width: 10px;
+  height: 10px;
+  border-right: 1px solid rgba(246, 207, 143, 0.58);
+  border-bottom: 1px solid rgba(246, 207, 143, 0.58);
+  background: rgba(43, 29, 21, 0.96);
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.carmen-city-map-pin:hover:not(:disabled) {
+  border-color: rgba(255, 228, 171, 0.86);
+  background:
+    linear-gradient(180deg, rgba(79, 55, 36, 0.98), rgba(45, 31, 22, 0.96));
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.34);
+  transform: translate(-50%, -50%);
+}
+
+.carmen-city-map-pin:active:not(:disabled) {
+  transform: translate(-50%, -50%);
+}
+
+.carmen-city-map-pin-icon {
+  flex: 0 0 auto;
+  font-size: 0.92rem;
+}
+
+.carmen-city-map-pin-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.carmen-city-map-pin.investigated {
+  border-color: rgba(148, 190, 168, 0.62);
+  color: rgba(232, 220, 204, 0.78);
+  opacity: 0.7;
+}
+
+.carmen-city-map-pin.investigated::before {
+  content: '✓';
+  position: absolute;
+  top: -7px;
+  right: -7px;
+  display: grid;
+  place-items: center;
+  width: 15px;
+  height: 15px;
+  border-radius: 999px;
+  background: var(--good-color);
+  color: #1a1511;
+  font-size: 0.6rem;
+  font-weight: 900;
+}
+
+.carmen-city-map-pin.exhausted {
+  opacity: 0.42;
+  cursor: not-allowed;
+}
+
+.carmen-city-map-attribution {
+  position: absolute;
+  right: 6px;
+  bottom: 5px;
+  z-index: 1;
+  padding: 0.12rem 0.28rem;
+  border-radius: 3px;
+  background: rgba(9, 10, 12, 0.72);
+  color: rgba(245, 235, 220, 0.74);
+  font-size: 0.55rem;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
 .carmen-location-btn {
   position: relative;
   display: flex;
@@ -2206,7 +2486,7 @@ body {
   color: #ecd8c2;
   cursor: pointer;
   font-size: 0.84rem;
-  transition: background 0.15s, border-color 0.2s, transform 0.15s, opacity 0.2s;
+  transition: background 0.15s, border-color 0.2s, opacity 0.2s;
   text-align: left;
   box-shadow: 0 8px 18px rgba(12, 8, 6, 0.14);
 }
@@ -2227,11 +2507,14 @@ body {
     linear-gradient(180deg, rgba(126, 94, 66, 0.34), rgba(72, 52, 38, 0.28)),
     rgba(50, 38, 29, 0.64);
   border-color: rgba(229, 190, 132, 0.4);
-  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(12, 8, 6, 0.14);
+  transform: none;
 }
 
 .carmen-location-btn:active:not(:disabled) {
-  transform: translateY(0);
+  border-color: rgba(229, 190, 132, 0.5);
+  box-shadow: 0 8px 18px rgba(12, 8, 6, 0.14);
+  transform: none;
 }
 
 .carmen-location-emoji {
@@ -2276,6 +2559,24 @@ body {
 }
 
 @media (max-width: 720px) {
+  .carmen-city-map-wrap {
+    height: 168px;
+  }
+
+  #carmen-rv-clues.has-city-map .carmen-city-map-wrap {
+    height: auto;
+    min-height: 240px;
+  }
+
+  .carmen-city-map-pin {
+    max-width: 42px;
+    padding: 0.24rem 0.34rem;
+  }
+
+  .carmen-city-map-pin-label {
+    display: none;
+  }
+
   .carmen-map-sidebar {
     left: 8px;
     right: 8px;

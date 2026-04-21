@@ -12,8 +12,10 @@ const MAX_CACHE = 200;
 
 // Tile URL templates (CartoDB)
 const TILE_URLS = {
+  standard: (z, x, y) => `https://tile.openstreetmap.org/${z}/${x}/${y}.png`,
   dark:  (z, x, y) => `https://${'abc'[Math.abs(x + y) % 3]}.basemaps.cartocdn.com/dark_all/${z}/${x}/${y}@2x.png`,
   light: (z, x, y) => `https://${'abc'[Math.abs(x + y) % 3]}.basemaps.cartocdn.com/light_all/${z}/${x}/${y}@2x.png`,
+  voyager: (z, x, y) => `https://${'abc'[Math.abs(x + y) % 3]}.basemaps.cartocdn.com/rastertiles/voyager/${z}/${x}/${y}@2x.png`,
 };
 
 // LRU tile cache: key "z/x/y/theme" → { img, status: 'loading'|'loaded'|'error', lastUsed }

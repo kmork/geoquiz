@@ -5,14 +5,23 @@ import { TOTAL_CASES } from './progression.js';
 
 export const CAMPAIGN_MODE = 'campaign';
 export const OPEN_CASES_MODE = 'open_cases';
+export const CITY_OPEN_CASE_MODE = 'city_open_case';
 export const OPEN_CASES_PHASE = 'open_cases';
 export const OPEN_CASES_CONFIG_PHASE = 'pursuit';
 
 const CRIMSON_FINALE_CASE = 10;
 const crimsonFinaleRouteProvider = new CrimsonTrailFinaleRouteProvider();
 
+const CITY_OPEN_CASE_NARRATIVE = {
+  title: 'The Street-Level File',
+  briefing: 'ACME is testing a street-level city desk. Follow leads, then work the local map when you arrive.',
+  note: 'Experiment note: the city map marks ACME field stops. Location uses real location near capital center of the specified type, airport pin uses known gateway airport coordinates.',
+  solved: 'The street-level file is closed. ACME has enough field notes to keep testing city-map investigations.',
+  failed: 'The street-level file stays open. ACME marks the experiment for another run through the same desk.',
+};
+
 export function isKnownGameMode(mode) {
-  return mode === CAMPAIGN_MODE || mode === OPEN_CASES_MODE || mode === SKYLINE_SYNDICATE_MODE;
+  return mode === CAMPAIGN_MODE || mode === OPEN_CASES_MODE || mode === CITY_OPEN_CASE_MODE || mode === SKYLINE_SYNDICATE_MODE;
 }
 
 export function normalizeGameMode(mode) {
@@ -21,6 +30,10 @@ export function normalizeGameMode(mode) {
 
 export function isOpenCasesMode(mode) {
   return mode === OPEN_CASES_MODE;
+}
+
+export function isCityOpenCaseMode(mode) {
+  return mode === CITY_OPEN_CASE_MODE;
 }
 
 export function isSkylineSyndicateMode(mode) {
@@ -36,8 +49,8 @@ export async function loadCampaignModeData() {
 }
 
 export function getPlayableGameMode(mode, modeData) {
-  if (isSkylineSyndicateMode(mode) && !modeData?.skylineRouteData?.routes?.length) {
-    console.warn(`${SKYLINE_SYNDICATE.title} has no imported flight routes yet; falling back to The Crimson Trail.`);
+  if ((isSkylineSyndicateMode(mode) || isCityOpenCaseMode(mode)) && !modeData?.skylineRouteData?.routes?.length) {
+    console.warn(`${mode === CITY_OPEN_CASE_MODE ? 'City Map Open Case' : SKYLINE_SYNDICATE.title} has no imported flight routes yet; falling back to The Crimson Trail.`);
     return CAMPAIGN_MODE;
   }
   return normalizeGameMode(mode);
@@ -45,6 +58,7 @@ export function getPlayableGameMode(mode, modeData) {
 
 export function getMissionLabelForMode(mode, openCaseNumber) {
   if (isSkylineSyndicateMode(mode)) return SKYLINE_SYNDICATE.title;
+  if (isCityOpenCaseMode(mode)) return 'City Map Open Case';
   if (isOpenCasesMode(mode)) return `Open Case ${openCaseNumber}`;
   return null;
 }
@@ -65,31 +79,39 @@ export function getRunConfigForMode({
   modeData,
 }) {
   const openCases = isOpenCasesMode(mode);
+  const cityOpenCase = isCityOpenCaseMode(mode);
   const skylineSyndicate = isSkylineSyndicateMode(mode);
   const crimsonFinale = mode === CAMPAIGN_MODE && currentCase === CRIMSON_FINALE_CASE;
-  const runCase = skylineSyndicate ? skylineCase : openCases ? openCaseNumber : currentCase;
-  const runTotalCases = openCases ? null : totalCases;
+  const runCase = skylineSyndicate ? skylineCase : openCases ? openCaseNumber : cityOpenCase ? 1 : currentCase;
+  const runTotalCases = (openCases || cityOpenCase) ? null : totalCases;
   const skylinePhase = skylineSyndicate ? getSkylinePhase(runCase) : null;
   const skylineNarrative = skylineSyndicate ? getSkylineCaseNarrative(runCase) : null;
   return {
     mode,
     isOpenCases: openCases,
+    isCityOpenCase: cityOpenCase,
     isSkylineSyndicate: skylineSyndicate,
     caseNumber: runCase || 1,
     totalCases: runTotalCases || TOTAL_CASES,
-    excludedSuspects: (openCases || skylineSyndicate) ? [] : [...unlockedSuspects],
-    phaseOverride: openCases ? OPEN_CASES_PHASE : skylinePhase,
-    configPhase: openCases ? OPEN_CASES_CONFIG_PHASE : skylinePhase,
-    routeProvider: skylineSyndicate
+    excludedSuspects: (openCases || cityOpenCase || skylineSyndicate) ? [] : [...unlockedSuspects],
+    phaseOverride: (openCases || cityOpenCase) ? OPEN_CASES_PHASE : skylinePhase,
+    configPhase: (openCases || cityOpenCase) ? OPEN_CASES_CONFIG_PHASE : skylinePhase,
+    routeProvider: (skylineSyndicate || cityOpenCase)
       ? modeData?.skylineRouteProvider
       : crimsonFinale
         ? crimsonFinaleRouteProvider
         : null,
-    caseTitle: skylineNarrative?.title || null,
-    briefingCopy: skylineSyndicate ? skylineNarrative?.briefing || SKYLINE_SYNDICATE.briefing : null,
-    briefingNote: skylineNarrative?.note || null,
-    closingCopy: skylineNarrative
-      ? { solved: skylineNarrative.solved, failed: skylineNarrative.failed }
-      : null,
+    caseTitle: cityOpenCase ? CITY_OPEN_CASE_NARRATIVE.title : skylineNarrative?.title || null,
+    briefingCopy: cityOpenCase
+      ? CITY_OPEN_CASE_NARRATIVE.briefing
+      : skylineSyndicate
+        ? skylineNarrative?.briefing || SKYLINE_SYNDICATE.briefing
+        : null,
+    briefingNote: cityOpenCase ? CITY_OPEN_CASE_NARRATIVE.note : skylineNarrative?.note || null,
+    closingCopy: cityOpenCase
+      ? { solved: CITY_OPEN_CASE_NARRATIVE.solved, failed: CITY_OPEN_CASE_NARRATIVE.failed }
+      : skylineNarrative
+        ? { solved: skylineNarrative.solved, failed: skylineNarrative.failed }
+        : null,
   };
 }

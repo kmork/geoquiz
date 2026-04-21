@@ -8,6 +8,7 @@ import { getInterpolBackgroundStory } from '../content/interpol-backgrounds.js';
 import { getPortraitStyleVars } from '../content/portrait-specs.js';
 import { typewriter } from './typewriter.js';
 import { renderScramble, renderOutline, renderFlag } from './visual-clues.js';
+import { createCityInvestigationMap } from './city-investigation-map.js';
 
 function renderPortraitImg(suspect, extraClass = '') {
   const src = suspect.img || IMG.suspect(suspect.name);
@@ -135,6 +136,7 @@ export function createCarmenUI(container, flagCodes) {
           </div>
           <div class="carmen-right-view" id="carmen-rv-clues" style="display:none">
             <div class="carmen-investigate-stage">
+              <div class="carmen-city-map-stage" id="carmen-city-map-stage"></div>
               <div class="carmen-clue-reveal" id="carmen-clue-reveal"></div>
             </div>
           </div>
@@ -202,6 +204,7 @@ export function createCarmenUI(container, flagCodes) {
     rvInterpol: container.querySelector('#carmen-rv-interpol'),
     rvLineup: container.querySelector('#carmen-rv-lineup'),
     narratorCaption: container.querySelector('#carmen-narrator-caption'),
+    cityMapStage: container.querySelector('#carmen-city-map-stage'),
     interpolProfile: container.querySelector('#carmen-interpol-profile'),
     lineupStage: container.querySelector('#carmen-lineup-stage'),
     artifactImg: container.querySelector('#carmen-artifact-img'),
@@ -231,6 +234,7 @@ export function createCarmenUI(container, flagCodes) {
     overlayOpen: false,
   };
   const witnessReports = [];
+  let cityInvestigationMap = null;
   const lineupState = {
     active: false,
     suspects: [],
@@ -258,6 +262,16 @@ export function createCarmenUI(container, flagCodes) {
       cardTargetNote: options.cardTargetNote || 'Current warrant target',
       cardDefaultNote: options.cardDefaultNote || 'Review file',
     };
+  }
+
+  function clearCityInvestigationMap() {
+    cityInvestigationMap?.destroy?.();
+    cityInvestigationMap = null;
+    els.rvClues.classList.remove('has-city-map');
+    if (els.cityMapStage) {
+      els.cityMapStage.innerHTML = '';
+      els.cityMapStage.style.display = 'none';
+    }
   }
 
   function supportsHoverInspect() {
@@ -905,8 +919,12 @@ export function createCarmenUI(container, flagCodes) {
     return mode === 'skyline_syndicate';
   }
 
+  function isCapitalFlightMode(mode) {
+    return mode === 'skyline_syndicate' || mode === 'city_open_case';
+  }
+
   function getRouteCopy(mode = caseCardState.mode) {
-    if (isSkylineMode(mode)) {
+    if (isCapitalFlightMode(mode)) {
       return {
         travelTitle: 'Where does the air trail lead?',
         travelDesc: 'Select a capital flight lead on the map to confirm the next flight route.',
@@ -1423,6 +1441,8 @@ export function createCarmenUI(container, flagCodes) {
         const caseTitle = options?.caseTitle || '';
         const caseLabel = mode === 'skyline_syndicate'
           ? `SKYLINE CASE — ${caseNumber} / ${totalCases}`
+          : mode === 'city_open_case'
+          ? 'CITY MAP OPEN CASE'
           : mode === 'open_cases'
           ? `OPEN CASE — ${openCaseNumber}`
           : caseNumber
@@ -1708,46 +1728,72 @@ export function createCarmenUI(container, flagCodes) {
      * @param {Array} locations — [{id, emoji, name}]
      * @param {number} maxInvestigations — how many the player can pick
      * @param {Function} onInvestigate — called with (locationId) when player picks a location
+     * @param {Object|null} options — optional city map configuration
      */
-    showLocations(locations, maxInvestigations, onInvestigate) {
+    showLocations(locations, maxInvestigations, onInvestigate, options = null) {
+      clearCityInvestigationMap();
       this._investigationsLeft = maxInvestigations;
       this._investigatedIds = new Set();
       els.locationsLabel.style.display = '';
       els.locationsLabel.textContent = `Investigate a location (${this._investigationsLeft} remaining):`;
-      els.locations.innerHTML = locations.map(loc => `
-        <button class="carmen-location-btn" data-location="${loc.id}">
-          <span class="carmen-location-emoji">${loc.emoji}</span>
-          <span class="carmen-location-name">${loc.name}</span>
-        </button>
-      `).join('');
+      els.locations.innerHTML = `
+        <div class="carmen-location-list">
+          ${locations.map(loc => `
+            <button class="carmen-location-btn" data-location="${loc.id}">
+              <span class="carmen-location-emoji">${loc.emoji}</span>
+              <span class="carmen-location-name">${loc.name}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+
+      const markExhausted = () => {
+        els.locations.querySelectorAll('.carmen-location-btn:not(.investigated)').forEach(b => {
+          b.disabled = true;
+          b.classList.add('exhausted');
+        });
+        cityInvestigationMap?.exhaustUnvisited?.(this._investigatedIds);
+      };
+
+      const pickLocation = (locId) => {
+        if (this._investigatedIds.has(locId) || this._investigationsLeft <= 0) return;
+        const btn = Array.from(els.locations.querySelectorAll('.carmen-location-btn'))
+          .find(candidate => candidate.dataset.location === locId);
+        this._investigatedIds.add(locId);
+        this._investigationsLeft--;
+        if (btn) {
+          btn.classList.add('investigated');
+          btn.disabled = true;
+        }
+        cityInvestigationMap?.setLocationState?.(locId, 'investigated');
+        els.locationsLabel.textContent = this._investigationsLeft > 0
+          ? `Investigate a location (${this._investigationsLeft} remaining):`
+          : 'No investigations left — make your guess!';
+
+        onInvestigate(locId);
+
+        if (this._investigationsLeft <= 0) {
+          markExhausted();
+        }
+      };
+
+      if (options?.cityMap) {
+        if (els.cityMapStage) {
+          els.rvClues.classList.add('has-city-map');
+          els.cityMapStage.style.display = '';
+          cityInvestigationMap = createCityInvestigationMap(els.cityMapStage, locations, options, pickLocation);
+        }
+      }
 
       els.locations.querySelectorAll('.carmen-location-btn').forEach(btn => {
         btn.addEventListener('click', () => {
-          const locId = btn.dataset.location;
-          if (this._investigatedIds.has(locId) || this._investigationsLeft <= 0) return;
-
-          this._investigatedIds.add(locId);
-          this._investigationsLeft--;
-          btn.classList.add('investigated');
-          btn.disabled = true;
-          els.locationsLabel.textContent = this._investigationsLeft > 0
-            ? `Investigate a location (${this._investigationsLeft} remaining):`
-            : 'No investigations left — make your guess!';
-
-          onInvestigate(locId);
-
-          // Disable all if no investigations left
-          if (this._investigationsLeft <= 0) {
-            els.locations.querySelectorAll('.carmen-location-btn:not(.investigated)').forEach(b => {
-              b.disabled = true;
-              b.classList.add('exhausted');
-            });
-          }
+          pickLocation(btn.dataset.location);
         });
       });
     },
 
     hideLocations() {
+      clearCityInvestigationMap();
       els.locations.innerHTML = '';
       els.locationsLabel.textContent = '';
     },

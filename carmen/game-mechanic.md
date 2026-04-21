@@ -2,10 +2,11 @@
 
 ## Overview
 
-The Carmen mode is now two related games built on the same route-chase engine:
+The Carmen mode is now several related games built on the same route-chase engine:
 
 - **The Crimson Trail**: a 10-case campaign with escalating difficulty, recurring narrative foreshadowing, cumulative Interpol state, and a finale where Carmen appears through an alias after a special South America route puzzle.
 - **Open Cases**: repeatable standalone cases that use the late-campaign pursuit rules without the campaign-only Carmen arc.
+- **City Map Open Case**: an experimental standalone case that keeps capital-to-capital travel but replaces the investigation surface with a street-map panel for the current capital.
 
 A third campaign, **Skyline Syndicate**, has been added as a separate implementation path for capital-area flight routes. It uses free-source aviation data: OurAirports for airport gateway matching and OpenFlights for route structure, with internal fallback links where needed for playability.
 
@@ -33,7 +34,7 @@ The player's Crimson Trail and Open Cases stop loop is:
 - choose a neighboring country on the map to confirm the next border lead;
 - resolve a correct route advance, a dead end, or final suspect lineup.
 
-Skyline Syndicate follows the same stop loop, but the map choices confirm capital flight leads instead of border leads.
+Skyline Syndicate follows the same stop loop, but the map choices confirm capital flight leads instead of border leads. City Map Open Case uses that same capital-flight route provider while keeping its progress completely separate from Skyline and Open Cases.
 
 Wrong country choices are not instant failure. They create a detour: ACME redeploys to the wrong country, the player loses score, spends time, gets a dead-end presentation, and must recover by returning to the real current lead or continuing from a worse information state. This is important because it keeps the map spatial and physical instead of turning wrong answers into abstract button errors.
 
@@ -147,6 +148,27 @@ Mechanically, Open Cases use the pursuit-style configuration:
 They do not exclude previously arrested suspects, and Carmen is removed from the normal Open Cases suspect list. Previously arrested suspects remain reusable for repeatable play, but Interpol labels them as `PREVIOUSLY ARRESTED` instead of `IN CUSTODY` so the archive does not imply they are unavailable. That makes Open Cases cleaner as standalone detective puzzles while preserving the pressure and richer rules of late campaign play.
 
 This split is good product structure. Campaign play is about escalation and payoff; Open Cases are about replayable geography-deduction cases.
+
+## City Map Open Case
+
+City Map Open Case is exposed from the Play page as `carmen.html?mode=city_open_case`. It is an experimental standalone mode, not a campaign and not part of the normal Open Cases counter.
+
+Mechanically, it uses the same pursuit-style configuration as Open Cases:
+
+- 5 stops;
+- 2 clues per stop;
+- 3 investigations;
+- 64 hours;
+- no campaign suspect exclusions;
+- Carmen removed from the ordinary suspect pool.
+
+The route provider is the same `CapitalFlightRouteProvider` used by Skyline Syndicate, so travel is capital-to-capital instead of land-border travel. Skyline-specific progression, mission history, Manifest Board, final proof, campaign-complete overlay, and Dispatcher storyline do not apply.
+
+The Investigate tab adds a city map for the current capital. The map uses the same OpenStreetMap-compatible canvas tile system as Study Mode and includes visible tile attribution. It shows five clickable field stops: Airport, Hotel, Market, Library, and Embassy. Clicking a map pin performs the same investigation as clicking the ordinary location button; the button and pin share investigated/exhausted state.
+
+The Airport pin is treated as a factual coordinate when the active capital gateway has known airport data. Hotel, Market, Library, and Embassy can use real OpenStreetMap category matches from `data/carmen-city-map-pois.json` when available. Those coordinates are used only for map placement, not for geography clue truth. If a category has no usable OSM match, the pin falls back to a deterministic ACME field stop near the capital center and is not presented as a real place.
+
+The city map starts with an auto-fit view that includes the available field stops. The player can pan, mouse-wheel zoom, pinch zoom, or use the compact zoom/reset controls to inspect the city map. Reset returns to the auto-fit view. Map navigation does not change investigation costs, clue generation, scoring, or route choices.
 
 ## Skyline Syndicate
 

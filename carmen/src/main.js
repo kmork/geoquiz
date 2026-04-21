@@ -21,10 +21,12 @@ import {
 } from './campaigns/skyline-syndicate/final-manifest-proof.js';
 import { TOTAL_CASES } from './campaign/progression.js';
 import {
+  CITY_OPEN_CASE_MODE,
   OPEN_CASES_MODE,
   getMissionLabelForMode,
   getPlayableGameMode,
   getRunConfigForMode,
+  isCityOpenCaseMode as isCityOpenCaseGameMode,
   isOpenCasesMode as isOpenCasesGameMode,
   isSkylineSyndicateMode,
   loadCampaignModeData,
@@ -69,7 +71,9 @@ function updateFrontImageForMode(mode = getGameMode()) {
 // Debug: ?case=N URL param jumps directly to that case on load.
 const _caseParam = parseInt(pageParams.get('case'), 10);
 if (_caseParam >= 1 && _caseParam <= TOTAL_CASES) {
-  if (isSkylineSyndicateMode(getGameMode())) {
+  if (isCityOpenCaseGameMode(getGameMode())) {
+    setGameMode(CITY_OPEN_CASE_MODE);
+  } else if (isSkylineSyndicateMode(getGameMode())) {
     setSkylineCase(_caseParam);
     setGameMode('skyline_syndicate');
   } else {
@@ -95,26 +99,34 @@ updateFrontImageForMode();
       buf = '';
       const activeMode = getGameMode();
       const skyline = isSkylineSyndicateMode(activeMode);
+      const cityOpenCase = isCityOpenCaseGameMode(activeMode);
       const defaultJump = isOpenCasesMode()
         ? String(TOTAL_CASES + 1)
-        : skyline
+        : cityOpenCase
+          ? '1'
+          : skyline
           ? String(getSkylineCase())
           : String(getCurrentCase());
-      const modeLabel = skyline ? 'Skyline case' : 'case';
+      const modeLabel = cityOpenCase ? 'City Map Open Case' : skyline ? 'Skyline case' : 'case';
       const answer = window.prompt(`Jump to ${modeLabel} (1–${TOTAL_CASES + 1}, where ${TOTAL_CASES + 1} = Open Cases):`, defaultJump);
       const n = parseInt(answer, 10);
       const nextParams = new URLSearchParams(location.search);
       if (n >= 1 && n <= TOTAL_CASES) {
-        if (skyline) {
+        if (cityOpenCase) {
+          setGameMode(CITY_OPEN_CASE_MODE);
+          nextParams.set('mode', CITY_OPEN_CASE_MODE);
+          nextParams.delete('case');
+        } else if (skyline) {
           setSkylineCase(n);
           setGameMode('skyline_syndicate');
           nextParams.set('mode', 'skyline_syndicate');
+          nextParams.set('case', String(n));
         } else {
           setCase(n);
           setGameMode('campaign');
           nextParams.set('mode', 'campaign');
+          nextParams.set('case', String(n));
         }
-        nextParams.set('case', String(n));
         location.search = nextParams.toString();
       } else if (n === TOTAL_CASES + 1) {
         setGameMode(OPEN_CASES_MODE);
@@ -187,7 +199,7 @@ function chooseArrivalAtmosphere(country, stop) {
 while (!window.DATA) await new Promise(r => setTimeout(r, 50));
 
 // Load all data in parallel
-const [worldData, factsData, heritageData, riversData, mountainsData, empiresData, portraitProfileData, campaignModeData] = await Promise.all([
+const [worldData, factsData, heritageData, riversData, mountainsData, empiresData, portraitProfileData, campaignModeData, cityMapPoiData] = await Promise.all([
   loadGeoJSON('data/ne_10m_admin_0_countries_route.geojson.gz'),
   fetch('data/country-facts.json').then(r => r.json()),
   fetch('data/heritage-sites.json').then(r => r.json()),
@@ -196,6 +208,7 @@ const [worldData, factsData, heritageData, riversData, mountainsData, empiresDat
   fetch('data/empires.json').then(r => r.json()),
   fetch('carmen/villains_with_face_profiles.json').then(r => r.json()),
   loadCampaignModeData(),
+  fetch('data/carmen-city-map-pois.json').then(r => r.ok ? r.json() : null).catch(() => null),
 ]);
 
 const playableMode = getPlayableGameMode(getGameMode(), campaignModeData);
@@ -267,15 +280,21 @@ function isSkylineMode(mode = logic?.mode || getGameMode()) {
   return isSkylineSyndicateMode(mode);
 }
 
+function isCityOpenCaseMode(mode = logic?.mode || getGameMode()) {
+  return isCityOpenCaseGameMode(mode);
+}
+
 function isCrimsonCampaignMode(mode = logic?.mode || getGameMode()) {
-  return !isOpenCasesMode(mode) && !isSkylineMode(mode);
+  return !isOpenCasesMode(mode) && !isSkylineMode(mode) && !isCityOpenCaseMode(mode);
 }
 
 function getActiveMissionHistory(mode = logic?.mode || getGameMode()) {
+  if (isCityOpenCaseMode(mode)) return [];
   return isSkylineMode(mode) ? getSkylineMissionHistory() : getMissionHistory();
 }
 
 function saveActiveMissionResult(result, mode = logic?.mode || getGameMode()) {
+  if (isCityOpenCaseMode(mode)) return;
   if (isSkylineMode(mode)) saveSkylineMissionResult(result);
   else saveMissionResult(result);
 }
@@ -312,6 +331,9 @@ function getMissionLabel() {
     const totalCases = logic?.totalCases || TOTAL_CASES;
     return `Skyline Case ${caseNumber} / ${totalCases}`;
   }
+  if (isCityOpenCaseMode(mode)) {
+    return getMissionLabelForMode(mode, 1);
+  }
   if (!isOpenCasesMode(mode)) {
     const caseNumber = logic?.caseNumber || getCurrentCase();
     const totalCases = logic?.totalCases || TOTAL_CASES;
@@ -327,7 +349,7 @@ function getVisibleInterpolSuspects() {
   const finaleAlias = logic?.getFinaleAlias?.();
   const source = finaleAlias
     ? [...SUSPECTS, finaleAlias]
-    : SUSPECTS.filter(s => isOpenCasesMode() ? s.name !== 'Carmen Sandiego' : true);
+    : SUSPECTS.filter(s => (isOpenCasesMode() || isCityOpenCaseMode()) ? s.name !== 'Carmen Sandiego' : true);
 
   if (isCrimsonCampaignMode() && logic?.campaignPhase === 'finale') {
     return source
@@ -502,7 +524,7 @@ async function handleEndChoice(choice, wasSuccess) {
     return;
   }
 
-  if (isOpenCasesMode()) {
+  if (isOpenCasesMode() || isCityOpenCaseMode()) {
     stopAmbient();
     stopAtmosphere();
     stopNarrator();
@@ -627,10 +649,10 @@ async function startGame() {
   // Now show the case briefing overlay
   const totalHours = logic.getTimeState().totalHours;
   let briefingHint = '';
-  if (!runConfig.isOpenCases && !runConfig.isSkylineSyndicate) {
+  if (!runConfig.isOpenCases && !runConfig.isCityOpenCase && !runConfig.isSkylineSyndicate) {
     briefingHint = buildCaseBriefingHint(intro.campaignPhase, intro.caseNumber, getActiveMissionHistory(logic.mode));
   }
-  if (logic.routeProvider?.getBriefingHint) {
+  if (!runConfig.isCityOpenCase && logic.routeProvider?.getBriefingHint) {
     briefingHint = [briefingHint, logic.routeProvider.getBriefingHint(logic)].filter(Boolean).join(' ');
   }
   if (runConfig.briefingNote) {
@@ -752,7 +774,12 @@ function checkTimeExpired() {
       const choice = await ui.showCaseFailed(
         logic.suspect.name,
         results.score,
-        isOpenCasesMode()
+        isCityOpenCaseMode()
+          ? {
+              continueLabel: 'Replay Experiment →',
+              failedDetail: getCurrentRunConfig().closingCopy?.failed,
+            }
+          : isOpenCasesMode()
           ? { continueLabel: 'Next Open Case →' }
           : isSkylineMode()
             ? {
@@ -801,6 +828,8 @@ function showInvestigationLocations() {
     });
     ui.addDossierEntry(logic.currentStop, suspectClue.text, 'Witness report', '🔍', country, capitalOf[country]);
   }
+
+  const cityMapOptions = buildCityMapOptions();
 
   ui.showLocations(locations, maxInvestigations, (locationId) => {
     // Each investigation costs time
@@ -894,7 +923,35 @@ function showInvestigationLocations() {
         informant
       );
     }
-  });
+  }, cityMapOptions);
+}
+
+function buildCityMapOptions() {
+  if (!isCityOpenCaseMode() || !logic?.routeProvider?.gatewayByCountry) return null;
+  const country = logic.route[logic.currentStop];
+  const gateway = logic.routeProvider.gatewayByCountry[country] || null;
+  const capital = gateway?.capital || capitalOf[country] || country;
+  const capitalLat = Number(gateway?.capitalLat);
+  const capitalLon = Number(gateway?.capitalLon);
+  const airportLat = Number(gateway?.airport?.lat);
+  const airportLon = Number(gateway?.airport?.lon);
+  const cityPoiEntry = cityMapPoiData?.capitals?.[country] || null;
+  if (!Number.isFinite(capitalLat) || !Number.isFinite(capitalLon)) return null;
+  return {
+    cityMap: true,
+    country,
+    capital,
+    center: { lat: capitalLat, lon: capitalLon },
+    airport: Number.isFinite(airportLat) && Number.isFinite(airportLon)
+      ? {
+          name: gateway.airport.name,
+          iata: gateway.airport.iata || gateway.airport.ident || '',
+          lat: airportLat,
+          lon: airportLon,
+        }
+      : null,
+    pois: cityPoiEntry?.pois || null,
+  };
 }
 
 
@@ -1087,6 +1144,9 @@ function handleGuess(country) {
               // Keep Skyline progress at case 10; the completion overlay ends the campaign.
             } else {
               if (isOpenCasesMode()) advanceOpenCaseCount();
+              else if (isCityOpenCaseMode()) {
+                // The experimental city case is standalone and does not advance a campaign counter.
+              }
               else if (isSkylineMode()) advanceSkylineCase();
               else advanceCase();
             }
@@ -1095,6 +1155,7 @@ function handleGuess(country) {
               ts.hoursRemaining,
               results.score,
               {
+                ...(isCityOpenCaseMode() ? { continueLabel: 'Replay Experiment →' } : {}),
                 ...(isOpenCasesMode() ? { continueLabel: 'Next Open Case →' } : {}),
                 ...(isSkylineMode() ? { continueLabel: isSkylineFinaleWin ? 'Complete Skyline File →' : 'Next Skyline Case →' } : {}),
                 ...(getCurrentRunConfig().closingCopy?.solved ? { solvedText: getCurrentRunConfig().closingCopy.solved } : {}),
@@ -1122,7 +1183,12 @@ function handleGuess(country) {
             const choice = await ui.showCaseFailed(
               logic.suspect.name,
               failResults.score,
-              isOpenCasesMode()
+              isCityOpenCaseMode()
+                ? {
+                    continueLabel: 'Replay Experiment →',
+                    failedDetail: getCurrentRunConfig().closingCopy?.failed,
+                  }
+                : isOpenCasesMode()
                 ? { continueLabel: 'Next Open Case →' }
                 : isSkylineMode()
                   ? {

@@ -21,3 +21,6 @@ img/heritage-backup/
 *.log
 diagnostic-plan.md
 /.idea/
+
+# Raw API response cache for generated datasets
+data/generated-cache/
