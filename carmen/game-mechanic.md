@@ -7,6 +7,7 @@ The Carmen mode is now several related games built on the same route-chase engin
 - **The Crimson Trail**: a 10-case campaign with escalating difficulty, recurring narrative foreshadowing, cumulative Interpol state, and a finale where Carmen appears through an alias after a special South America route puzzle.
 - **Open Cases**: repeatable standalone cases that use the late-campaign pursuit rules without the campaign-only Carmen arc.
 - **City Map Open Case**: an experimental standalone case that keeps capital-to-capital travel but replaces the investigation surface with a street-map panel for the current capital.
+- **World Case Files**: an experimental cultural-evidence case mode with whole-world travel, no hard clock, candidate-map highlighting, backtracking, and final proof requirements.
 
 A third campaign, **Skyline Syndicate**, has been added as a separate implementation path for capital-area flight routes. It uses free-source aviation data: OurAirports for airport gateway matching and OpenFlights for route structure, with internal fallback links where needed for playability.
 
@@ -171,6 +172,34 @@ The Investigate tab adds a city map for the current capital. The map uses the sa
 The Airport pin is treated as a factual coordinate when the active capital gateway has known airport data. Hotel, Market, Library, and Embassy can use real OpenStreetMap category matches from `data/carmen-city-map-pois.json` when available. Those coordinates are used only for map placement, not for geography clue truth. If a category has no usable OSM match, the pin falls back to a deterministic ACME field stop near the capital center and is not presented as a real place.
 
 The city map starts with an auto-fit view that includes the available field stops. The player can pan, mouse-wheel zoom, pinch zoom, or use the compact zoom/reset controls to inspect the city map. Reset returns to the auto-fit view. Map navigation does not change investigation costs, clue generation, scoring, or route choices.
+
+## World Case Files
+
+World Case Files is exposed from the Play page as `carmen.html?mode=world_case_files`. It is a longer-form experiment and is deliberately isolated from The Crimson Trail, Open Cases, Skyline Syndicate, and City Map Open Case.
+
+The first curated case is **The Louvre Vanishing**. The stolen object is the Mona Lisa from the Louvre in Paris. The fiction frames the theft as cultural provenance laundering: the thief is not only moving the painting, but also altering catalogue cards, conservation notes, shipping sleeves, and museum records that explain where the object belongs.
+
+Mechanically, World Case Files does not use the constrained route-choice loop. The player can travel to any supported country from the world atlas. The mode has no hard countdown failure. Instead, progress is represented by evidence confidence:
+
+- lead found;
+- pattern supported;
+- contradictions checked;
+- destination likely;
+- evidence ready.
+
+Each city scene lets the player investigate Airport, Hotel, Market, Library, and Embassy sources freely. The Investigate tab reuses the OpenStreetMap-compatible city map and POI placement from City Map Open Case, with an added curated scene marker when the case supplies exact coordinates. In The Louvre Vanishing, the first scene marker places the Louvre in Paris. Evidence is curated per case rather than generated from OSM truth. Evidence can be route-oriented, cultural, or confirmatory. Cultural evidence may reference art history, museum provenance, exports, language, old collection routes, or historic trade context. OSM and city map data remain placement/context only, not clue truth.
+
+The world map colors possible countries by how strongly they match collected evidence:
+
+- partial clue match;
+- cultural-pattern match;
+- strong candidate;
+- contradicted candidate;
+- current scene.
+
+The travel desk also provides country/capital search and an evidence comparison panel. Wrong travel is allowed and produces a dead-end explanation that says which evidence failed. The player can backtrack to previous cities; some follow-up evidence can unlock after later travel.
+
+Advancing to the next city requires more than choosing the right destination. The player needs enough evidence on the board: route evidence, cultural-pattern evidence, and confirmation/contradiction evidence. When the destination is ready, ACME shows a proof review overlay so the player locks the evidence before the case advances. This makes the mode slower and more detective-like than the chase modes.
 
 ## Skyline Syndicate
 

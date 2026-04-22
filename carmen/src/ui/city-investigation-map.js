@@ -32,6 +32,9 @@ function zoomForOsmLevel(level) {
 
 function getGeoPoints(options) {
   const points = [options.center];
+  if (options.scene && Number.isFinite(options.scene.lat) && Number.isFinite(options.scene.lon)) {
+    points.push({ lat: options.scene.lat, lon: options.scene.lon });
+  }
   if (options.airport) points.push({ lat: options.airport.lat, lon: options.airport.lon });
   for (const poi of Object.values(options.pois || {})) {
     if (Number.isFinite(poi?.lat) && Number.isFinite(poi?.lon)) {
@@ -121,6 +124,7 @@ export function createCityInvestigationMap(container, locations, options, onPick
   const pinsLayer = container.querySelector('.carmen-city-map-pins');
   const ctx = canvas.getContext('2d');
   const pinButtons = new Map();
+  let scenePin = null;
   let viewport = null;
   let initialViewport = null;
   let resizeObserver = null;
@@ -211,6 +215,15 @@ export function createCityInvestigationMap(container, locations, options, onPick
   function positionPins(width, height) {
     if (!viewport) return;
     const centerPoint = projectToScreen(options.center.lat, options.center.lon, viewport);
+
+    if (scenePin && Number.isFinite(options.scene?.lat) && Number.isFinite(options.scene?.lon)) {
+      const point = projectToScreen(options.scene.lat, options.scene.lon, viewport);
+      const margin = 18;
+      const onScreen = point.x >= -margin && point.x <= width + margin && point.y >= -margin && point.y <= height + margin;
+      scenePin.style.display = onScreen ? '' : 'none';
+      scenePin.style.left = `${point.x}px`;
+      scenePin.style.top = `${point.y}px`;
+    }
 
     for (const loc of locations) {
       const button = pinButtons.get(loc.id);
@@ -316,6 +329,19 @@ export function createCityInvestigationMap(container, locations, options, onPick
       dragState = null;
       mapWrap.classList.remove('is-dragging');
     }
+  }
+
+  if (Number.isFinite(options.scene?.lat) && Number.isFinite(options.scene?.lon)) {
+    scenePin = document.createElement('div');
+    scenePin.className = 'carmen-city-map-scene-pin';
+    const sceneTitle = options.scene.name || options.scene.label || 'Case scene';
+    scenePin.title = sceneTitle;
+    scenePin.setAttribute('aria-label', sceneTitle);
+    scenePin.innerHTML = `
+      <span class="carmen-city-map-scene-icon">${esc(options.scene.emoji || '◆')}</span>
+      <span class="carmen-city-map-scene-label">${esc(sceneTitle)}</span>
+    `;
+    pinsLayer.appendChild(scenePin);
   }
 
   for (const loc of locations) {

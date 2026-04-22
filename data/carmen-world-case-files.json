@@ -1,0 +1,239 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "louvre-vanishing",
+      "title": "The Louvre Vanishing",
+      "artifact": {
+        "siteName": "Mona Lisa",
+        "country": "France",
+        "hint": "Leonardo da Vinci's portrait vanished from the Louvre with its provenance card, shipping sleeve, and conservation notes.",
+        "imageUrl": "carmen/img/mona_lisa_noir.png"
+      },
+      "start": {
+        "country": "France",
+        "city": "Paris",
+        "scene": "Louvre",
+        "lat": 48.8606,
+        "lon": 2.3376
+      },
+      "suspect": "The Cartographer",
+      "pattern": {
+        "label": "Renaissance provenance route",
+        "summary": "The thief is laundering the painting through places tied to Renaissance art, museum catalogues, and old European collection routes."
+      },
+      "route": [
+        {
+          "country": "France",
+          "city": "Paris",
+          "scene": "Louvre",
+          "lat": 48.8606,
+          "lon": 2.3376
+        },
+        {
+          "country": "Italy",
+          "city": "Florence",
+          "scene": "Uffizi archive",
+          "lat": 43.7687,
+          "lon": 11.2550
+        },
+        {
+          "country": "Netherlands",
+          "city": "Amsterdam",
+          "scene": "Rijksmuseum restoration studio",
+          "lat": 52.3600,
+          "lon": 4.8852
+        },
+        {
+          "country": "Spain",
+          "city": "Madrid",
+          "scene": "Prado museum freight office",
+          "lat": 40.4138,
+          "lon": -3.6921
+        }
+      ],
+      "legs": [
+        {
+          "from": "France",
+          "to": "Italy",
+          "sceneTitle": "A missing portrait trail",
+          "clues": [
+            {
+              "id": "louvre-airport-southeast-europe",
+              "locationId": "airport",
+              "action": "Inspect arrivals desk",
+              "title": "Baggage direction",
+              "text": "A private crate left Paris for a European country southeast of the Louvre. The handler remembered a destination tied to Leonardo, not to a modern auction house.",
+              "tags": ["continent:Europe", "direction:southeast", "culture:Renaissance"],
+              "strength": 2
+            },
+            {
+              "id": "louvre-library-renaissance",
+              "locationId": "library",
+              "action": "Consult art archive",
+              "title": "Renaissance catalogue card",
+              "text": "The torn catalogue card references Renaissance workshop records and portrait studies, pointing toward the country most directly associated with Leonardo's early career.",
+              "tags": ["culture:Renaissance", "famous:Renaissance art"],
+              "strength": 3
+            },
+            {
+              "id": "louvre-market-wine-cloth",
+              "locationId": "market",
+              "action": "Inspect crate packing",
+              "title": "Trade packing",
+              "text": "The crate padding used a wine merchant's sleeve and clothing-house inventory paper. It looks like cover cargo from a country known for wine and fashion exports.",
+              "tags": ["export:wine", "export:clothing"],
+              "strength": 2
+            },
+            {
+              "id": "louvre-embassy-romance",
+              "locationId": "embassy",
+              "action": "Verify export permit",
+              "title": "Romance-language permit",
+              "text": "The permit translation stayed inside the Romance-language corridor, but the seal did not match France, Spain, or Portugal. ACME flags Italy as the cleanest fit.",
+              "tags": ["exclude:France", "exclude:Spain", "exclude:Portugal", "country:Italy"],
+              "strength": 3
+            },
+            {
+              "id": "louvre-hotel-conservator",
+              "locationId": "hotel",
+              "action": "Question concierge",
+              "title": "Conservator request",
+              "text": "A guest asked for a late train to a city with portrait conservation labs and Renaissance archives. The city name was not written down, but the question sounded like Florence.",
+              "tags": ["city:Florence", "country:Italy"],
+              "strength": 3
+            }
+          ],
+          "followups": [
+            {
+              "afterCountry": "Italy",
+              "locationId": "library",
+              "text": "Back in Paris, the Louvre archivist confirms the missing shelf mark belonged to a Florence loan file, not a Paris exhibition file.",
+              "tags": ["country:Italy", "confirmation"]
+            }
+          ]
+        },
+        {
+          "from": "Italy",
+          "to": "Netherlands",
+          "sceneTitle": "The varnish ledger",
+          "clues": [
+            {
+              "id": "florence-library-northern-restoration",
+              "locationId": "library",
+              "action": "Read restoration ledger",
+              "title": "Northern studio note",
+              "text": "The Uffizi archive ledger mentions a northern European restoration studio famous for canal freight and old-master trade records.",
+              "tags": ["continent:Europe", "culture:old-master", "climate:Temperate"],
+              "strength": 2
+            },
+            {
+              "id": "florence-market-pharma-machinery",
+              "locationId": "market",
+              "action": "Inspect solvent invoice",
+              "title": "Solvent invoice",
+              "text": "A solvent invoice was bundled with machinery and pharmaceutical export paperwork, a better fit for the Netherlands than the Mediterranean decoys.",
+              "tags": ["export:machinery", "export:pharmaceuticals", "country:Netherlands"],
+              "strength": 3
+            },
+            {
+              "id": "florence-airport-northwest",
+              "locationId": "airport",
+              "action": "Check air cargo desk",
+              "title": "Northwest transfer",
+              "text": "The next crate moved northwest from Italy, still inside Europe, toward a low-lying country with a major capital-area airport.",
+              "tags": ["continent:Europe", "direction:northwest", "lowland"],
+              "strength": 2
+            },
+            {
+              "id": "florence-hotel-canal",
+              "locationId": "hotel",
+              "action": "Interview night clerk",
+              "title": "Canal booking",
+              "text": "The thief asked for a hotel near canals and a restoration studio, then corrected the clerk when he suggested Venice.",
+              "tags": ["city:Amsterdam", "country:Netherlands", "exclude:Italy"],
+              "strength": 3
+            },
+            {
+              "id": "florence-embassy-low-country",
+              "locationId": "embassy",
+              "action": "Compare transit seal",
+              "title": "Low-country seal",
+              "text": "The diplomatic pouch number points to the Low Countries, but the language mark is not Belgian. That leaves the Dutch file brightest on ACME's board.",
+              "tags": ["country:Netherlands", "exclude:Belgium"],
+              "strength": 3
+            }
+          ],
+          "followups": [
+            {
+              "afterCountry": "Netherlands",
+              "locationId": "hotel",
+              "text": "The Florence clerk remembers the thief rejecting Venice because the next stop had canals and northern old-master dealers, not Italian Renaissance galleries.",
+              "tags": ["country:Netherlands", "confirmation"]
+            }
+          ]
+        },
+        {
+          "from": "Netherlands",
+          "to": "Spain",
+          "sceneTitle": "The final catalogue swap",
+          "clues": [
+            {
+              "id": "amsterdam-library-habsburg",
+              "locationId": "library",
+              "action": "Check collection history",
+              "title": "Royal collection trail",
+              "text": "The altered provenance page points to a royal collection city with deep Habsburg-era paperwork and major European museum records.",
+              "tags": ["continent:Europe", "history:Habsburg", "culture:museum"],
+              "strength": 2
+            },
+            {
+              "id": "amsterdam-market-olive-wine",
+              "locationId": "market",
+              "action": "Read cargo relabel",
+              "title": "Mediterranean cargo relabel",
+              "text": "The fake cargo relabel lists wine, vehicles, and Mediterranean food shipments. It is too southern for the Low Countries and too western for Italy.",
+              "tags": ["export:wine", "export:vehicles", "climate:Mediterranean", "exclude:Italy"],
+              "strength": 2
+            },
+            {
+              "id": "amsterdam-airport-southwest",
+              "locationId": "airport",
+              "action": "Match flight sleeve",
+              "title": "Southwest sleeve",
+              "text": "The cargo sleeve shows a southwest route inside Europe, toward a capital whose name starts with M.",
+              "tags": ["continent:Europe", "direction:southwest", "capital:M"],
+              "strength": 3
+            },
+            {
+              "id": "amsterdam-hotel-prado",
+              "locationId": "hotel",
+              "action": "Question courier",
+              "title": "Museum nickname",
+              "text": "A courier kept saying 'the meadow file' in bad translation. ACME thinks that is a clumsy hint at the Prado.",
+              "tags": ["city:Madrid", "country:Spain", "culture:museum"],
+              "strength": 3
+            },
+            {
+              "id": "amsterdam-embassy-spanish",
+              "locationId": "embassy",
+              "action": "Verify seal language",
+              "title": "Spanish seal",
+              "text": "The replacement export seal is Spanish, but the stated artwork origin is false. That contradiction is strong enough for a warrant in Madrid.",
+              "tags": ["country:Spain", "city:Madrid", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        }
+      ],
+      "deadEnds": {
+        "default": "The field office found no match for the cultural pattern. At least one strong clue contradicts this destination.",
+        "France": "The trail began in France, but the collected evidence points away from the Louvre after the theft.",
+        "Portugal": "Portugal fits part of the Romance-language trail, but the Renaissance and export evidence do not support it.",
+        "Belgium": "Belgium fits the Low Countries clue, but the language and canal-restoration evidence point farther north.",
+        "Italy": "Italy is already part of the route. For this leg, the later evidence points beyond the Renaissance archive."
+      }
+    }
+  ]
+}

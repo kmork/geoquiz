@@ -16,6 +16,10 @@ function renderPortraitImg(suspect, extraClass = '') {
   return `<img src="${esc(src)}" alt="${esc(suspect.name)}" class="${className}" style="${getPortraitStyleVars(suspect.name)}" onerror="this.replaceWith(Object.assign(document.createElement('span'),{textContent:'🕵️'}))">`;
 }
 
+function normalizeForUi(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
 /**
  * Build the full game UI inside the given container.
  * Returns an API object with methods to update each section.
@@ -234,6 +238,7 @@ export function createCarmenUI(container, flagCodes) {
     overlayOpen: false,
   };
   const witnessReports = [];
+  let worldCaseBoardState = null;
   let cityInvestigationMap = null;
   const lineupState = {
     active: false,
@@ -491,7 +496,7 @@ export function createCarmenUI(container, flagCodes) {
     }
     if (tab === 'dossier' && previousTab !== 'dossier') {
       dossierSubview = 'case';
-      renderDossier();
+      if (!worldCaseBoardState) renderDossier();
     }
     activeTab = tab;
     // Left panel
@@ -924,6 +929,16 @@ export function createCarmenUI(container, flagCodes) {
   }
 
   function getRouteCopy(mode = caseCardState.mode) {
+    if (mode === 'world_case_files') {
+      return {
+        travelTitle: 'Where does the world case lead?',
+        travelDesc: 'Search the whole atlas, compare evidence, and travel when the lead is strong enough.',
+        introMission: 'Investigate scenes, gather cultural evidence, narrow the world map, and prove each destination.',
+        confirmedLead: 'World lead confirmed',
+        deadEndLead: 'Evidence contradiction',
+        deadEndNarrator: 'Wrong lead. The map can take me anywhere, but the evidence still has to carry the case.',
+      };
+    }
     if (isCapitalFlightMode(mode)) {
       return {
         travelTitle: 'Where does the air trail lead?',
@@ -1083,6 +1098,238 @@ export function createCarmenUI(container, flagCodes) {
       renderDossier();
     },
 
+    setFreeInvestigationClock(label = 'No case clock') {
+      const clockText = els.clock.querySelector('.carmen-clock-text');
+      if (clockText) clockText.textContent = label;
+      else els.clock.textContent = label;
+      els.clock.classList.remove('low', 'critical');
+    },
+
+    showWorldCaseIntro(state) {
+      applyRouteCopy('world_case_files');
+      const current = state?.current || {};
+      const pattern = state?.pattern || {};
+      els.narrative.innerHTML = `
+        <div class="carmen-intro-card carmen-world-case-card">
+          <div class="carmen-intro-badge">WORLD CASE FILES</div>
+          <div class="carmen-intro-artifact">${esc(state?.caseTitle || 'Open cultural theft')}</div>
+          <div class="carmen-intro-origin">Current scene: <strong>${esc(current.city || current.country || '')}</strong></div>
+          <div class="carmen-intro-suspect">🔎 Pattern: <span class="thief-name">${esc(pattern.label || 'Unknown')}</span></div>
+          <div class="carmen-intro-mission">${esc(pattern.summary || 'Gather evidence, narrow the world atlas, and travel when the case is strong enough.')}</div>
+        </div>
+      `;
+      els.notebookTabs.style.display = '';
+      els.musicToggle.style.display = '';
+      switchTab('case');
+    },
+
+    updateWorldCaseBoard(state) {
+      worldCaseBoardState = state || null;
+      const confidence = state?.confidence || {};
+      const summary = state?.summary || {};
+      const steps = [
+        ['Lead found', confidence.leadFound],
+        ['Pattern supported', confidence.patternSupported],
+        ['Contradictions checked', confidence.contradictionsChecked],
+        ['Destination likely', confidence.destinationLikely],
+        ['Evidence ready', confidence.evidenceReady],
+      ];
+      const evidence = state?.evidence || [];
+      const deadEnds = state?.deadEnds || [];
+      const evidenceHtml = evidence.length
+        ? evidence.slice().reverse().map(item => `
+          <div class="carmen-world-evidence-card">
+            <div class="carmen-world-evidence-type">${esc(item.category || 'Evidence')}</div>
+            <div class="carmen-world-evidence-title">${esc(item.title || item.action || 'Field note')}</div>
+            <div class="carmen-world-evidence-text">${esc(item.text || '')}</div>
+            <div class="carmen-world-evidence-meta">${esc(item.foundInCity || '')}, ${esc(item.foundInCountry || '')}</div>
+          </div>
+        `).join('')
+        : '<div class="carmen-dossier-empty">No evidence gathered yet.</div>';
+      const deadEndHtml = deadEnds.length
+        ? deadEnds.slice().reverse().map(item => `
+          <div class="carmen-world-dead-end">❌ ${esc(item.country)} — ${esc(item.explanation)}</div>
+        `).join('')
+        : '';
+      els.dossierBody.innerHTML = `
+        <div class="carmen-world-board">
+          <div class="carmen-world-board-head">
+            <div>
+              <div class="carmen-panel-badge">EVIDENCE BOARD</div>
+              <div class="carmen-panel-title">${esc(state?.caseTitle || 'World Case Files')}</div>
+            </div>
+            <div class="carmen-world-candidate-count">
+              <b>${summary.strong || 0}</b> strong
+              <span>${summary.pattern || 0} pattern</span>
+              <span>${summary.partial || 0} partial</span>
+            </div>
+          </div>
+          <div class="carmen-world-confidence">
+            ${steps.map(([label, active]) => `
+              <span class="carmen-world-confidence-step${active ? ' active' : ''}">${esc(label)}</span>
+            `).join('')}
+          </div>
+          <div class="carmen-world-board-section">
+            <div class="carmen-world-section-title">Collected Evidence</div>
+            ${evidenceHtml}
+          </div>
+          ${deadEndHtml ? `<div class="carmen-world-board-section"><div class="carmen-world-section-title">Contradictions</div>${deadEndHtml}</div>` : ''}
+        </div>
+      `;
+    },
+
+    showWorldCaseLocations(locations, onInvestigate, state, options = null) {
+      clearCityInvestigationMap();
+      this._worldInvestigatedIds = new Set(options?.investigatedIds || []);
+      const current = state?.current || {};
+      els.locationsLabel.style.display = '';
+      els.locationsLabel.textContent = `Investigate freely in ${current.city || current.country || 'the current city'}:`;
+      els.locations.innerHTML = `
+        <div class="carmen-location-list carmen-world-location-list">
+          ${locations.map(loc => `
+            <button class="carmen-location-btn" data-location="${loc.id}">
+              <span class="carmen-location-emoji">${loc.emoji}</span>
+              <span class="carmen-location-name">${loc.name}</span>
+            </button>
+          `).join('')}
+        </div>
+      `;
+      const pickLocation = (locId) => {
+        this._worldInvestigatedIds.add(locId);
+        const btn = Array.from(els.locations.querySelectorAll('.carmen-location-btn'))
+          .find(candidate => candidate.dataset.location === locId);
+        if (btn) btn.classList.add('investigated');
+        cityInvestigationMap?.setLocationState?.(locId, 'investigated');
+        onInvestigate(locId);
+      };
+
+      for (const locId of this._worldInvestigatedIds) {
+        const btn = Array.from(els.locations.querySelectorAll('.carmen-location-btn'))
+          .find(candidate => candidate.dataset.location === locId);
+        if (btn) btn.classList.add('investigated');
+      }
+
+      if (options?.cityMap && els.cityMapStage) {
+        els.rvClues.classList.add('has-city-map');
+        els.cityMapStage.style.display = '';
+        cityInvestigationMap = createCityInvestigationMap(els.cityMapStage, locations, options, pickLocation);
+        for (const locId of this._worldInvestigatedIds) {
+          cityInvestigationMap?.setLocationState?.(locId, 'investigated');
+        }
+      }
+
+      els.locations.querySelectorAll('.carmen-location-btn').forEach(btn => {
+        btn.addEventListener('click', () => pickLocation(btn.dataset.location));
+      });
+    },
+
+    showWorldTravelDesk(candidates, onTravel, onInspect, options = null) {
+      const top = candidates
+        .filter(item => item.state !== 'unknown')
+        .sort((a, b) => (b.strength - a.strength) || a.country.localeCompare(b.country))
+        .slice(0, 18);
+      els.travelTitle.textContent = 'Where does the world case lead?';
+      els.travelDesc.textContent = 'Search the atlas or use the colored map. You can travel anywhere, but ACME will only advance on proven evidence.';
+      const cost = els.panelTravel.querySelector('.carmen-panel-cost');
+      if (cost) cost.innerHTML = 'No hard clock: <strong>case rating tracks evidence quality</strong>';
+      els.sidebar.innerHTML = `
+        <div class="carmen-world-travel-desk">
+          <div class="carmen-world-search">
+            <input type="search" placeholder="Search country or capital" aria-label="Search country or capital">
+          </div>
+          <div class="carmen-world-map-legend">
+            <span class="partial">one clue</span>
+            <span class="pattern">pattern</span>
+            <span class="strong">strong</span>
+            <span class="contradicted">contradicted</span>
+          </div>
+          <div class="carmen-world-candidate-list"></div>
+        </div>
+      `;
+      const input = els.sidebar.querySelector('input');
+      const list = els.sidebar.querySelector('.carmen-world-candidate-list');
+      const render = () => {
+        const q = normalizeForUi(input.value);
+        const source = q
+          ? candidates.filter(item => normalizeForUi(`${item.country} ${item.capital}`).includes(q)).slice(0, 24)
+          : top;
+        list.innerHTML = source.map(item => `
+          <div class="carmen-world-candidate ${esc(item.state)}">
+            <button type="button" class="carmen-world-candidate-main" data-country="${esc(item.country)}">
+              <b>${esc(item.country)}</b>
+              <span>${esc(item.capital || '')}</span>
+            </button>
+            <button type="button" class="carmen-world-candidate-travel" data-travel="${esc(item.country)}">Travel</button>
+          </div>
+        `).join('') || '<div class="carmen-dossier-empty">No countries match that search.</div>';
+        list.querySelectorAll('[data-country]').forEach(btn => {
+          btn.addEventListener('click', () => onInspect(btn.dataset.country));
+        });
+        list.querySelectorAll('[data-travel]').forEach(btn => {
+          btn.addEventListener('click', () => onTravel(btn.dataset.travel));
+        });
+      };
+      input.addEventListener('input', render);
+      render();
+      if (options?.switchToTravel !== false) switchTab('travel');
+    },
+
+    showWorldCandidateDetails(candidate, onTravel) {
+      const matched = candidate?.matchedEvidence || [];
+      const contradicted = candidate?.contradictedEvidence || [];
+      els.sidebar.innerHTML = `
+        <div class="carmen-world-candidate-detail">
+          <div class="carmen-panel-badge">ATLAS COMPARISON</div>
+          <div class="carmen-panel-title">${esc(candidate?.country || 'Unknown')}</div>
+          <div class="carmen-panel-desc">${esc(candidate?.capital || '')}</div>
+          <div class="carmen-world-candidate-state ${esc(candidate?.state || 'unknown')}">${esc(candidate?.state || 'unknown')}</div>
+          <button type="button" class="carmen-world-travel-now">Travel to ${esc(candidate?.country || 'destination')}</button>
+          <div class="carmen-world-section-title">Matches</div>
+          ${matched.length ? matched.map(item => `<div class="carmen-world-mini-card">✓ ${esc(item.title || item.text)}</div>`).join('') : '<div class="carmen-dossier-empty">No collected clue points here yet.</div>'}
+          <div class="carmen-world-section-title">Contradictions</div>
+          ${contradicted.length ? contradicted.map(item => `<div class="carmen-world-mini-card contradicted">× ${esc(item.title || item.text)}</div>`).join('') : '<div class="carmen-dossier-empty">No direct contradiction found.</div>'}
+        </div>
+      `;
+      const btn = els.sidebar.querySelector('.carmen-world-travel-now');
+      if (btn && candidate?.country) btn.addEventListener('click', () => onTravel(candidate.country));
+    },
+
+    showWorldProofReview(cards, destination) {
+      return new Promise(resolve => {
+        const overlay = document.createElement('div');
+        overlay.className = 'carmen-briefing-overlay carmen-world-proof-overlay';
+        const cardHtml = (cards || []).map(card => `
+          <div class="carmen-world-evidence-card">
+            <div class="carmen-world-evidence-type">${esc(card.category || 'Evidence')}</div>
+            <div class="carmen-world-evidence-title">${esc(card.title || 'Field note')}</div>
+            <div class="carmen-world-evidence-text">${esc(card.text || '')}</div>
+          </div>
+        `).join('');
+        overlay.innerHTML = `
+          <div class="carmen-briefing-content carmen-world-proof-content">
+            <div class="carmen-briefing-stamp">PROOF</div>
+            <div class="carmen-briefing-label">ACME EVIDENCE REVIEW</div>
+            <div class="carmen-case-title">${esc(destination?.city || destination?.country || 'Destination')}</div>
+            <div class="carmen-briefing-note">Lock these evidence cards to advance the case file.</div>
+            <div class="carmen-world-proof-cards">${cardHtml}</div>
+            <div class="carmen-closing-buttons">
+              <button class="carmen-closing-btn carmen-btn-continue">Lock Proof</button>
+              <button class="carmen-closing-btn carmen-btn-quit">Review More</button>
+            </div>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+        overlay.querySelector('.carmen-btn-continue').addEventListener('click', () => {
+          overlay.remove();
+          resolve(true);
+        });
+        overlay.querySelector('.carmen-btn-quit').addEventListener('click', () => {
+          overlay.remove();
+          resolve(false);
+        });
+      });
+    },
+
     addManifestSegment(segment) {
       if (!manifestState.enabled || !segment) return;
       const duplicate = manifestState.segments.some(existing =>
@@ -1135,6 +1382,7 @@ export function createCarmenUI(container, flagCodes) {
 
     /** Reset the dossier for a new game. */
     resetDossier() {
+      worldCaseBoardState = null;
       dossierEntries.length = 0;
       detourCounter = 0;
       dossierSubview = 'case';
@@ -1443,6 +1691,8 @@ export function createCarmenUI(container, flagCodes) {
           ? `SKYLINE CASE — ${caseNumber} / ${totalCases}`
           : mode === 'city_open_case'
           ? 'CITY MAP OPEN CASE'
+          : mode === 'world_case_files'
+          ? 'WORLD CASE FILES'
           : mode === 'open_cases'
           ? `OPEN CASE — ${openCaseNumber}`
           : caseNumber

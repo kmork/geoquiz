@@ -177,4 +177,44 @@ export class CarmenRouteRenderer extends RouteRenderer {
       },
     };
   }
+
+  drawWorldCandidates(candidates, onClick) {
+    const group = document.createElementNS(SVG_NS, 'g');
+    group.setAttribute('class', 'carmen-world-candidates');
+    this.svg.appendChild(group);
+
+    const palette = {
+      unknown: { fill: 'rgba(100, 116, 139, 0.08)', stroke: 'rgba(100, 116, 139, 0.22)' },
+      partial: { fill: 'rgba(245, 158, 11, 0.28)', stroke: 'rgba(245, 158, 11, 0.75)' },
+      pattern: { fill: 'rgba(168, 85, 247, 0.28)', stroke: 'rgba(168, 85, 247, 0.8)' },
+      strong: { fill: 'rgba(34, 197, 94, 0.34)', stroke: 'rgba(34, 197, 94, 0.9)' },
+      contradicted: { fill: 'rgba(239, 68, 68, 0.08)', stroke: 'rgba(239, 68, 68, 0.85)' },
+      current: { fill: 'rgba(251, 191, 36, 0.42)', stroke: 'rgba(251, 191, 36, 1)' },
+    };
+    const candidateByCountry = Object.fromEntries((candidates || []).map(item => [item.country, item]));
+
+    for (const candidate of candidates || []) {
+      if (candidate.state === 'unknown') continue;
+      const features = findGeoFeatures(this.worldFeatures, candidate.country);
+      if (!features.length) continue;
+      const color = palette[candidate.state] || palette.unknown;
+      for (const feature of features) {
+        const path = document.createElementNS(SVG_NS, 'path');
+        path.setAttribute('d', this.pathFromFeature(feature));
+        path.setAttribute('fill', color.fill);
+        path.setAttribute('stroke', color.stroke);
+        path.setAttribute('stroke-width', candidate.state === 'strong' || candidate.state === 'current' ? '1.8' : '1.1');
+        path.setAttribute('vector-effect', 'non-scaling-stroke');
+        path.setAttribute('cursor', 'pointer');
+        path.setAttribute('class', `carmen-world-map-candidate ${candidate.state}`);
+        path.setAttribute('data-country', candidate.country);
+        path.addEventListener('click', () => onClick?.(candidate.country, candidateByCountry[candidate.country]));
+        group.appendChild(path);
+      }
+    }
+
+    return {
+      remove: () => group.remove(),
+    };
+  }
 }

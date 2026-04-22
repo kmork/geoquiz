@@ -6,6 +6,7 @@ import { TOTAL_CASES } from './progression.js';
 export const CAMPAIGN_MODE = 'campaign';
 export const OPEN_CASES_MODE = 'open_cases';
 export const CITY_OPEN_CASE_MODE = 'city_open_case';
+export const WORLD_CASE_FILES_MODE = 'world_case_files';
 export const OPEN_CASES_PHASE = 'open_cases';
 export const OPEN_CASES_CONFIG_PHASE = 'pursuit';
 
@@ -21,7 +22,7 @@ const CITY_OPEN_CASE_NARRATIVE = {
 };
 
 export function isKnownGameMode(mode) {
-  return mode === CAMPAIGN_MODE || mode === OPEN_CASES_MODE || mode === CITY_OPEN_CASE_MODE || mode === SKYLINE_SYNDICATE_MODE;
+  return mode === CAMPAIGN_MODE || mode === OPEN_CASES_MODE || mode === CITY_OPEN_CASE_MODE || mode === WORLD_CASE_FILES_MODE || mode === SKYLINE_SYNDICATE_MODE;
 }
 
 export function normalizeGameMode(mode) {
@@ -34,6 +35,10 @@ export function isOpenCasesMode(mode) {
 
 export function isCityOpenCaseMode(mode) {
   return mode === CITY_OPEN_CASE_MODE;
+}
+
+export function isWorldCaseFilesMode(mode) {
+  return mode === WORLD_CASE_FILES_MODE;
 }
 
 export function isSkylineSyndicateMode(mode) {
@@ -59,6 +64,7 @@ export function getPlayableGameMode(mode, modeData) {
 export function getMissionLabelForMode(mode, openCaseNumber) {
   if (isSkylineSyndicateMode(mode)) return SKYLINE_SYNDICATE.title;
   if (isCityOpenCaseMode(mode)) return 'City Map Open Case';
+  if (isWorldCaseFilesMode(mode)) return 'World Case Files';
   if (isOpenCasesMode(mode)) return `Open Case ${openCaseNumber}`;
   return null;
 }
@@ -80,35 +86,43 @@ export function getRunConfigForMode({
 }) {
   const openCases = isOpenCasesMode(mode);
   const cityOpenCase = isCityOpenCaseMode(mode);
+  const worldCaseFiles = isWorldCaseFilesMode(mode);
   const skylineSyndicate = isSkylineSyndicateMode(mode);
   const crimsonFinale = mode === CAMPAIGN_MODE && currentCase === CRIMSON_FINALE_CASE;
-  const runCase = skylineSyndicate ? skylineCase : openCases ? openCaseNumber : cityOpenCase ? 1 : currentCase;
-  const runTotalCases = (openCases || cityOpenCase) ? null : totalCases;
+  const runCase = skylineSyndicate ? skylineCase : openCases ? openCaseNumber : (cityOpenCase || worldCaseFiles) ? 1 : currentCase;
+  const runTotalCases = (openCases || cityOpenCase || worldCaseFiles) ? null : totalCases;
   const skylinePhase = skylineSyndicate ? getSkylinePhase(runCase) : null;
   const skylineNarrative = skylineSyndicate ? getSkylineCaseNarrative(runCase) : null;
   return {
     mode,
     isOpenCases: openCases,
     isCityOpenCase: cityOpenCase,
+    isWorldCaseFiles: worldCaseFiles,
     isSkylineSyndicate: skylineSyndicate,
     caseNumber: runCase || 1,
     totalCases: runTotalCases || TOTAL_CASES,
-    excludedSuspects: (openCases || cityOpenCase || skylineSyndicate) ? [] : [...unlockedSuspects],
-    phaseOverride: (openCases || cityOpenCase) ? OPEN_CASES_PHASE : skylinePhase,
-    configPhase: (openCases || cityOpenCase) ? OPEN_CASES_CONFIG_PHASE : skylinePhase,
+    excludedSuspects: (openCases || cityOpenCase || worldCaseFiles || skylineSyndicate) ? [] : [...unlockedSuspects],
+    phaseOverride: (openCases || cityOpenCase || worldCaseFiles) ? OPEN_CASES_PHASE : skylinePhase,
+    configPhase: (openCases || cityOpenCase || worldCaseFiles) ? OPEN_CASES_CONFIG_PHASE : skylinePhase,
     routeProvider: (skylineSyndicate || cityOpenCase)
       ? modeData?.skylineRouteProvider
       : crimsonFinale
         ? crimsonFinaleRouteProvider
         : null,
-    caseTitle: cityOpenCase ? CITY_OPEN_CASE_NARRATIVE.title : skylineNarrative?.title || null,
-    briefingCopy: cityOpenCase
+    caseTitle: cityOpenCase ? CITY_OPEN_CASE_NARRATIVE.title : worldCaseFiles ? 'The Louvre Vanishing' : skylineNarrative?.title || null,
+    briefingCopy: worldCaseFiles
+      ? 'ACME is opening the whole world desk. Investigate the cultural theft, gather enough evidence to narrow the atlas, travel when ready, and prove each destination before advancing.'
+      : cityOpenCase
       ? CITY_OPEN_CASE_NARRATIVE.briefing
       : skylineSyndicate
         ? skylineNarrative?.briefing || SKYLINE_SYNDICATE.briefing
         : null,
-    briefingNote: cityOpenCase ? CITY_OPEN_CASE_NARRATIVE.note : skylineNarrative?.note || null,
-    closingCopy: cityOpenCase
+    briefingNote: worldCaseFiles
+      ? 'Experiment note: there is no hard case clock. Candidate colors show how strongly countries match the collected evidence.'
+      : cityOpenCase ? CITY_OPEN_CASE_NARRATIVE.note : skylineNarrative?.note || null,
+    closingCopy: worldCaseFiles
+      ? { solved: 'The world case file is ready for ACME review.', failed: 'The world case file remains open.' }
+      : cityOpenCase
       ? { solved: CITY_OPEN_CASE_NARRATIVE.solved, failed: CITY_OPEN_CASE_NARRATIVE.failed }
       : skylineNarrative
         ? { solved: skylineNarrative.solved, failed: skylineNarrative.failed }

@@ -1,4 +1,5 @@
 import { CarmenGameLogic, SUSPECTS } from './core/game-logic.js';
+import { WorldCaseFilesLogic } from './experiments/world-case-files/world-case-logic.js';
 import { createCarmenUI } from './ui/ui.js';
 import { CarmenRouteRenderer } from './ui/carmen-route-renderer.js';
 import { loadGeoJSON } from '../../js/geojson-loader.js';
@@ -23,11 +24,13 @@ import { TOTAL_CASES } from './campaign/progression.js';
 import {
   CITY_OPEN_CASE_MODE,
   OPEN_CASES_MODE,
+  WORLD_CASE_FILES_MODE,
   getMissionLabelForMode,
   getPlayableGameMode,
   getRunConfigForMode,
   isCityOpenCaseMode as isCityOpenCaseGameMode,
   isOpenCasesMode as isOpenCasesGameMode,
+  isWorldCaseFilesMode as isWorldCaseFilesGameMode,
   isSkylineSyndicateMode,
   loadCampaignModeData,
 } from './campaign/modes.js';
@@ -199,7 +202,7 @@ function chooseArrivalAtmosphere(country, stop) {
 while (!window.DATA) await new Promise(r => setTimeout(r, 50));
 
 // Load all data in parallel
-const [worldData, factsData, heritageData, riversData, mountainsData, empiresData, portraitProfileData, campaignModeData, cityMapPoiData] = await Promise.all([
+const [worldData, factsData, heritageData, riversData, mountainsData, empiresData, portraitProfileData, campaignModeData, cityMapPoiData, worldCaseFilesData] = await Promise.all([
   loadGeoJSON('data/ne_10m_admin_0_countries_route.geojson.gz'),
   fetch('data/country-facts.json').then(r => r.json()),
   fetch('data/heritage-sites.json').then(r => r.json()),
@@ -209,6 +212,7 @@ const [worldData, factsData, heritageData, riversData, mountainsData, empiresDat
   fetch('carmen/villains_with_face_profiles.json').then(r => r.json()),
   loadCampaignModeData(),
   fetch('data/carmen-city-map-pois.json').then(r => r.ok ? r.json() : null).catch(() => null),
+  fetch('data/carmen-world-case-files.json').then(r => r.ok ? r.json() : null).catch(() => null),
 ]);
 
 const playableMode = getPlayableGameMode(getGameMode(), campaignModeData);
@@ -283,6 +287,7 @@ let baseViewBox = { x: 0, y: 0, w: 600, h: 320 };
 attachZoomPan(ui.mapSvg, () => baseViewBox);
 
 let logic;
+let worldCase = null;
 let isFirstGame = true;
 
 function isOpenCasesMode(mode = logic?.mode || getGameMode()) {
@@ -297,17 +302,21 @@ function isCityOpenCaseMode(mode = logic?.mode || getGameMode()) {
   return isCityOpenCaseGameMode(mode);
 }
 
+function isWorldCaseFilesMode(mode = logic?.mode || worldCase?.mode || getGameMode()) {
+  return isWorldCaseFilesGameMode(mode);
+}
+
 function isCrimsonCampaignMode(mode = logic?.mode || getGameMode()) {
-  return !isOpenCasesMode(mode) && !isSkylineMode(mode) && !isCityOpenCaseMode(mode);
+  return !isOpenCasesMode(mode) && !isSkylineMode(mode) && !isCityOpenCaseMode(mode) && !isWorldCaseFilesMode(mode);
 }
 
 function getActiveMissionHistory(mode = logic?.mode || getGameMode()) {
-  if (isCityOpenCaseMode(mode)) return [];
+  if (isCityOpenCaseMode(mode) || isWorldCaseFilesMode(mode)) return [];
   return isSkylineMode(mode) ? getSkylineMissionHistory() : getMissionHistory();
 }
 
 function saveActiveMissionResult(result, mode = logic?.mode || getGameMode()) {
-  if (isCityOpenCaseMode(mode)) return;
+  if (isCityOpenCaseMode(mode) || isWorldCaseFilesMode(mode)) return;
   if (isSkylineMode(mode)) saveSkylineMissionResult(result);
   else saveMissionResult(result);
 }
@@ -338,7 +347,10 @@ function getCurrentRunConfig() {
 }
 
 function getMissionLabel() {
-  const mode = logic?.mode || getGameMode();
+  const mode = logic?.mode || worldCase?.mode || getGameMode();
+  if (isWorldCaseFilesMode(mode)) {
+    return getMissionLabelForMode(mode, 1);
+  }
   if (isSkylineMode(mode)) {
     const caseNumber = logic?.caseNumber || getSkylineCase();
     const totalCases = logic?.totalCases || TOTAL_CASES;
@@ -362,7 +374,7 @@ function getVisibleInterpolSuspects() {
   const finaleAlias = logic?.getFinaleAlias?.();
   const source = finaleAlias
     ? [...SUSPECTS, finaleAlias]
-    : SUSPECTS.filter(s => (isOpenCasesMode() || isCityOpenCaseMode()) ? s.name !== 'Carmen Sandiego' : true);
+    : SUSPECTS.filter(s => (isOpenCasesMode() || isCityOpenCaseMode() || isWorldCaseFilesMode()) ? s.name !== 'Carmen Sandiego' : true);
 
   if (isCrimsonCampaignMode() && logic?.campaignPhase === 'finale') {
     return source
@@ -537,7 +549,7 @@ async function handleEndChoice(choice, wasSuccess) {
     return;
   }
 
-  if (isOpenCasesMode() || isCityOpenCaseMode()) {
+  if (isOpenCasesMode() || isCityOpenCaseMode() || isWorldCaseFilesMode()) {
     stopAmbient();
     stopAtmosphere();
     stopNarrator();
@@ -595,6 +607,11 @@ async function handleEndChoice(choice, wasSuccess) {
 async function startGame() {
   finalOverlay.style.display = 'none';
   const runConfig = getCurrentRunConfig();
+
+  if (runConfig.isWorldCaseFiles) {
+    await startWorldCaseFiles(runConfig);
+    return;
+  }
 
   logic = new CarmenGameLogic({
     countries: window.DATA,
@@ -806,6 +823,213 @@ function checkTimeExpired() {
     return true;
   }
   return false;
+}
+
+let activeWorldCandidateLayer = null;
+
+function getWorldCaseData() {
+  return worldCaseFilesData?.cases?.[0] || null;
+}
+
+function drawWorldCaseMap() {
+  if (!worldCase) return;
+  const candidates = worldCase.analyzeCandidates();
+  const highlightedVisited = worldCase.visited.map((country, index) => ({
+    country,
+    color: index === 0 ? 'start' : country === worldCase.currentCountry ? 'end' : 'path',
+  }));
+  renderer.drawRoute(highlightedVisited, []);
+  ui.mapSvg.setAttribute('viewBox', '0 0 600 320');
+  baseViewBox = { x: 0, y: 0, w: 600, h: 320 };
+  if (activeWorldCandidateLayer) {
+    activeWorldCandidateLayer.remove();
+    activeWorldCandidateLayer = null;
+  }
+  activeWorldCandidateLayer = renderer.drawWorldCandidates(candidates, (country, candidate) => {
+    ui.showWorldCandidateDetails(candidate, handleWorldTravel);
+  });
+  ui.showWorldTravelDesk(candidates, handleWorldTravel, (country) => {
+    const candidate = candidates.find(item => item.country === country);
+    if (candidate) ui.showWorldCandidateDetails(candidate, handleWorldTravel);
+  }, { switchToTravel: false });
+}
+
+function refreshWorldCaseUi() {
+  if (!worldCase) return;
+  const state = worldCase.getBoardState();
+  ui.updateMissions([], true, 1, 1, getMissionLabel());
+  ui.updateScore(Math.max(0, 5000 - (worldCase.evidence.length * 75) - (worldCase.deadEnds.length * 250)));
+  ui.updateProgress(worldCase.currentLeg, worldCase.totalLegs + 1);
+  ui.setFreeInvestigationClock('No case clock');
+  ui.updateWorldCaseBoard(state);
+  ui.showWorldCaseLocations(worldCase.getLocations(), handleWorldInvestigation, state, buildWorldCaseCityMapOptions());
+  drawWorldCaseMap();
+}
+
+function buildWorldCaseCityMapOptions() {
+  if (!worldCase) return null;
+  const country = worldCase.currentCountry;
+  const scene = worldCase.getSceneForCountry(country);
+  const cityPoiEntry = cityMapPoiData?.capitals?.[country] || null;
+  const gateway = campaignModeData.skylineRouteProvider?.gatewayByCountry?.[country] || null;
+  const sceneLat = Number(scene?.lat);
+  const sceneLon = Number(scene?.lon);
+  const capitalLat = Number(gateway?.capitalLat ?? cityPoiEntry?.lat);
+  const capitalLon = Number(gateway?.capitalLon ?? cityPoiEntry?.lon);
+  const centerLat = Number.isFinite(sceneLat) ? sceneLat : capitalLat;
+  const centerLon = Number.isFinite(sceneLon) ? sceneLon : capitalLon;
+  if (!Number.isFinite(centerLat) || !Number.isFinite(centerLon)) return null;
+  const airportLat = Number(gateway?.airport?.lat);
+  const airportLon = Number(gateway?.airport?.lon);
+  return {
+    cityMap: true,
+    country,
+    capital: scene?.city || gateway?.capital || cityPoiEntry?.capital || capitalOf[country] || country,
+    center: { lat: centerLat, lon: centerLon },
+    scene: Number.isFinite(sceneLat) && Number.isFinite(sceneLon)
+      ? {
+          name: scene.scene ? `${scene.scene}, ${scene.city || country}` : scene.city || country,
+          emoji: '◆',
+          lat: sceneLat,
+          lon: sceneLon,
+        }
+      : null,
+    airport: Number.isFinite(airportLat) && Number.isFinite(airportLon)
+      ? {
+          name: gateway.airport.name,
+          iata: gateway.airport.iata || gateway.airport.ident || '',
+          lat: airportLat,
+          lon: airportLon,
+        }
+      : null,
+    pois: cityPoiEntry?.pois || null,
+    investigatedIds: worldCase.getInvestigatedLocationIds(),
+  };
+}
+
+function handleWorldInvestigation(locationId) {
+  if (!worldCase) return;
+  const informant = worldCase.getInformant(locationId);
+  const evidence = worldCase.investigate(locationId);
+  if (!evidence) {
+    ui.addClue({ text: 'No new evidence from this scene yet.', icon: '❌' }, informant);
+    return;
+  }
+  ui.addClue({ text: evidence.text, icon: '🧾' }, {
+    emoji: informant.emoji,
+    prefix: `${informant.prefix} — ${evidence.title}`,
+  });
+  ui.addDossierEntry(
+    evidence.legIndex,
+    evidence.text,
+    evidence.category,
+    evidence.category === 'Cultural Evidence' ? '🎭' : evidence.category === 'Confirmation' ? '✅' : '🧭',
+    evidence.foundInCountry,
+    evidence.foundInCity,
+  );
+  ui.updateWorldCaseBoard(worldCase.getBoardState());
+  drawWorldCaseMap();
+}
+
+async function handleWorldTravel(country) {
+  if (!worldCase || !country) return;
+  const target = worldCase.targetRouteStop;
+  if (country === target?.country && worldCase.canSubmitProof(country)) {
+    const locked = await ui.showWorldProofReview(worldCase.getProofCards(), target);
+    if (!locked) return;
+  }
+  stopAmbient();
+  const from = worldCase.currentCountry;
+  playAmbient('airplane');
+  await renderer.animateTravel(from, country);
+  stopAmbient();
+  const result = worldCase.travelTo(country);
+
+  if (result.type === 'dead_end' || result.type === 'arrived_unproven') {
+    ui.addDetourEntry(country, capitalOf[country], { mode: WORLD_CASE_FILES_MODE });
+    ui.showNarratorCaption(result.explanation, 9000);
+    ui.addClue({ text: result.explanation, icon: '❌' }, { emoji: '❌', prefix: result.type === 'dead_end' ? 'Dead-end report' : 'Proof required' });
+    refreshWorldCaseUi();
+    return;
+  }
+
+  if (result.type === 'revisited') {
+    ui.showNarratorCaption(result.explanation, 7200);
+    ui.clearClues();
+    refreshWorldCaseUi();
+    return;
+  }
+
+  if (result.type === 'advanced') {
+    ui.showNarratorCaption(`Lead proven. ACME opens the next scene in ${result.scene.city}, ${result.scene.country}.`, 7200);
+    ui.clearClues();
+    ui.showWorldCaseIntro(worldCase.getBoardState());
+    refreshWorldCaseUi();
+    return;
+  }
+
+  if (result.type === 'case_ready') {
+    playVictoryMusic();
+    const score = Math.max(1000, 5000 - (worldCase.evidence.length * 75) - (worldCase.deadEnds.length * 250));
+    saveGameRecord(gameId, score, 0);
+    const choice = await ui.showCaseSolved(
+      worldCase.caseData.suspect || 'Unknown suspect',
+      'no clock',
+      score,
+      {
+        continueLabel: 'Replay Experiment →',
+        solvedText: `${worldCase.caseData.pattern.label} proven. ACME has enough evidence to recover the Mona Lisa file and issue the warrant.`,
+      },
+    );
+    await handleEndChoice(choice, true);
+  }
+}
+
+async function startWorldCaseFiles(runConfig) {
+  logic = null;
+  const caseData = getWorldCaseData();
+  if (!caseData) {
+    throw new Error('World Case Files data is missing.');
+  }
+  worldCase = new WorldCaseFilesLogic({
+    caseData,
+    countries: window.DATA,
+  });
+  const intro = worldCase.start();
+
+  if (isFirstGame) {
+    await waitForClick(carmenFront);
+    startMusic();
+  }
+
+  await ui.showCaseBriefing(
+    intro.artifact,
+    `${caseData.start.scene}, ${caseData.start.city}, ${caseData.start.country}`,
+    null,
+    1,
+    1,
+    'world_case_files',
+    runConfig.briefingNote,
+    {
+      mode: WORLD_CASE_FILES_MODE,
+      missionCopy: runConfig.briefingCopy,
+      caseTitle: caseData.title,
+    }
+  );
+
+  if (carmenFront) carmenFront.style.display = 'none';
+  if (carmenHeader) carmenHeader.style.display = '';
+  gameContent.style.display = '';
+
+  ui.showIntro('Unknown cultural thief', intro.artifact, `${caseData.start.scene}, ${caseData.start.city}`, {
+    mode: WORLD_CASE_FILES_MODE,
+  });
+  ui.resetDossier();
+  ui.setManifestMode(false);
+  ui.clearClues();
+  ui.clearWitnessReports();
+  ui.showWorldCaseIntro(worldCase.getBoardState());
+  refreshWorldCaseUi();
 }
 
 function showInvestigationLocations() {
