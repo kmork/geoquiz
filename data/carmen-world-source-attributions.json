@@ -1,0 +1,84 @@
+{
+  "schemaVersion": 1,
+  "sources": [
+    {
+      "id": "wikidata",
+      "name": "Wikidata",
+      "license": "CC0",
+      "url": "https://www.wikidata.org",
+      "usedFor": [
+        "object metadata",
+        "place metadata",
+        "creator and vocabulary links"
+      ]
+    },
+    {
+      "id": "wikimedia-commons",
+      "name": "Wikimedia Commons",
+      "license": "per-file; see image entries",
+      "url": "https://commons.wikimedia.org",
+      "usedFor": [
+        "image URLs",
+        "image license metadata",
+        "image attribution"
+      ]
+    },
+    {
+      "id": "openstreetmap",
+      "name": "OpenStreetMap",
+      "license": "ODbL",
+      "url": "https://www.openstreetmap.org",
+      "usedFor": [
+        "map tiles",
+        "city POI placement"
+      ]
+    }
+  ],
+  "images": [
+    {
+      "objectId": "louvre-vanishing",
+      "title": "Mona Lisa",
+      "commonsFile": "Mona Lisa, by Leonardo da Vinci, from C2RMF natural color.jpg",
+      "licenseShortName": "Public domain",
+      "licenseUrl": "",
+      "credit": "Natural colors from <a class=\"external text\" href=\"https://upload.wikimedia.org/wikipedia/commons/archive/e/ec/20110818173258%21Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg\">17:19, 18 August 2011 (UTC) version</a> by <a href=\"//commons.wikimedia.org/wiki/User:Cybershot800i\" title=\"User:Cybershot800i\">Cybershot800i</a> of <a href=\"//commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg\" title=\"File:Mona Lisa, by Leonardo da Vinci, from C2RMF retouched.jpg\">File:Mona Lisa, by Leonardo da Vinci, from C2RMF retouched.jpg</a> per <a class=\"external text\" href=\"https://commons.wikimedia.org/w/index.php?title=File_talk:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg&amp;oldid=58394818\">this discussion</a>. Cropped and relevelled from <a href=\"//commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF.jpg\" title=\"File:Mona Lisa, by Leonardo da Vinci, from C2RMF.jpg\">File:Mona Lisa, by Leonardo da Vinci, from C2RMF.jpg</a>. Originally C2RMF: <a rel=\"nofollow\" class=\"external text\" href=\"http://web.archive.org/web/20120524155855/http://www.technologies.c2rmf.fr/imaging/showcase\">Galerie de tableaux en très haute définition</a>: <a rel=\"nofollow\" class=\"external text\" href=\"http://www.technologies.c2rmf.fr/iipimage/showcase/zoom/cop29\">image page</a>.",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_natural_color.jpg"
+    },
+    {
+      "objectId": "rosetta-cipher",
+      "title": "Rosetta Stone",
+      "commonsFile": "Rosetta Stone - front face - corrected image.jpg",
+      "licenseShortName": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Rosetta_Stone_-_front_face_-_corrected_image.jpg"
+    },
+    {
+      "objectId": "parthenon-fragments",
+      "title": "Elgin Marbles",
+      "commonsFile": "Elgin Marbles British Museum.jpg",
+      "licenseShortName": "CC BY-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+      "credit": "",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Elgin_Marbles_British_Museum.jpg"
+    },
+    {
+      "objectId": "great-wave-ledger",
+      "title": "The Great Wave off Kanagawa",
+      "commonsFile": "Katsushika Hokusai - The Great Wave off the Coast of Kanagawa LCCN2008660568.jpg",
+      "licenseShortName": "Public domain",
+      "licenseUrl": "",
+      "credit": "<p>Library of Congress\n</p>\n<ul><li><i>Catalog:</i> <a rel=\"nofollow\" class=\"external free\" href=\"https://lccn.loc.gov/2008660568\">https://lccn.loc.gov/2008660568</a></li>\n<li><i>Image download:</i> <a rel=\"nofollow\" class=\"external free\" href=\"https://cdn.loc.gov/service/pnp/jpd/02000/02018v.jpg\">https://cdn.loc.gov/service/pnp/jpd/02000/02018v.jpg</a></li>\n<li><i>Original url:</i> <a rel=\"nofollow\" class=\"external free\" href=\"https://www.loc.gov/pictures/item/2008660568/\">https://www.loc.gov/pictures/item/2008660568/</a></li></ul>",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Katsushika_Hokusai_-_The_Great_Wave_off_the_Coast_of_Kanagawa_LCCN2008660568.jpg"
+    },
+    {
+      "objectId": "sun-stone-calendar",
+      "title": "Aztec sun stone",
+      "commonsFile": "Piedra del Sol.tif",
+      "licenseShortName": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "credit": "<a href=\"//commons.wikimedia.org/wiki/User:ProtoplasmaKid\" title=\"User:ProtoplasmaKid\">ProtoplasmaKid</a>",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Piedra_del_Sol.tif"
+    }
+  ]
+}

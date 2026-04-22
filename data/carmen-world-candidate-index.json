@@ -1,0 +1,5627 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "generatedBy": "carmen/script/import-world-cultural-data.mjs"
+  },
+  "countries": {
+    "Afghanistan": {
+      "country": "Afghanistan",
+      "capital": "Kabul",
+      "majorCities": [
+        "Kandahar",
+        "Herat",
+        "Mazar-i-Sharif"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "dried fruits",
+        "carpets",
+        "precious stones",
+        "medicinal herbs"
+      ],
+      "climate": "Arid continental",
+      "famousFor": [
+        "Hindu Kush mountains",
+        "ancient Silk Road trade routes",
+        "lapis lazuli gemstones"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Aland": {
+      "country": "Aland",
+      "capital": "Mariehamn",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Albania": {
+      "country": "Albania",
+      "capital": "Tirana",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "footwear",
+        "textiles",
+        "chromium ore",
+        "crude oil"
+      ],
+      "climate": "Mediterranean",
+      "famousFor": [
+        "Albanian Riviera coastline",
+        "ancient Butrint ruins",
+        "mountain villages"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Algeria": {
+      "country": "Algeria",
+      "capital": "Algiers",
+      "majorCities": [
+        "Oran",
+        "Constantine"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "petroleum",
+        "natural gas",
+        "phosphates"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "Sahara Desert",
+        "Roman ruins at Timgad and Djémila",
+        "Casbah of Algiers"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "American Samoa": {
+      "country": "American Samoa",
+      "capital": "Pago Pago",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Andorra": {
+      "country": "Andorra",
+      "capital": "Andorra la Vella",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "electrical equipment",
+        "tobacco products",
+        "furniture"
+      ],
+      "climate": "Alpine",
+      "famousFor": [
+        "Pyrenees skiing",
+        "duty-free shopping"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Angola": {
+      "country": "Angola",
+      "capital": "Luanda",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "crude oil",
+        "diamonds",
+        "refined petroleum",
+        "coffee"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Kalandula Falls",
+        "diverse wildlife",
+        "Atlantic coastline"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Anguilla": {
+      "country": "Anguilla",
+      "capital": "The Valley",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Antigua and Barbuda": {
+      "country": "Antigua and Barbuda",
+      "capital": "Saint John's",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "petroleum products",
+        "transport equipment",
+        "electronics"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "365 beaches",
+        "English Harbour and Nelson's Dockyard"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Argentina": {
+      "country": "Argentina",
+      "capital": "Buenos Aires",
+      "majorCities": [
+        "Córdoba",
+        "Mendoza",
+        "Ushuaia",
+        "Rosario",
+        "Mar del Plata"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "soybeans",
+        "corn",
+        "beef",
+        "petroleum",
+        "vehicles"
+      ],
+      "climate": "Varied (subtropical to subpolar)",
+      "famousFor": [
+        "tango",
+        "Patagonia",
+        "beef and wine"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Armenia": {
+      "country": "Armenia",
+      "capital": "Yerevan",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "copper ore",
+        "gold",
+        "diamonds",
+        "tobacco"
+      ],
+      "climate": "Continental highland",
+      "famousFor": [
+        "Mount Ararat views",
+        "ancient monasteries",
+        "first nation to adopt Christianity"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Aruba": {
+      "country": "Aruba",
+      "capital": "Oranjestad",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Australia": {
+      "country": "Australia",
+      "capital": "Canberra",
+      "majorCities": [
+        "Sydney",
+        "Melbourne",
+        "Brisbane",
+        "Perth",
+        "Gold Coast",
+        "Adelaide",
+        "Cairns"
+      ],
+      "continent": "Oceania",
+      "exports": [
+        "iron ore",
+        "coal",
+        "natural gas",
+        "gold",
+        "wheat"
+      ],
+      "climate": "Varied (tropical to arid)",
+      "famousFor": [
+        "Great Barrier Reef",
+        "Sydney Opera House",
+        "unique wildlife"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Austria": {
+      "country": "Austria",
+      "capital": "Vienna",
+      "majorCities": [
+        "Salzburg",
+        "Innsbruck",
+        "Graz"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "machinery",
+        "vehicles",
+        "pharmaceuticals",
+        "electrical equipment"
+      ],
+      "climate": "Alpine continental",
+      "famousFor": [
+        "Alpine skiing",
+        "classical music heritage",
+        "Viennese coffee houses"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Azerbaijan": {
+      "country": "Azerbaijan",
+      "capital": "Baku",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "crude oil",
+        "natural gas",
+        "fruits",
+        "cotton"
+      ],
+      "climate": "Semi-arid to subtropical",
+      "famousFor": [
+        "mud volcanoes",
+        "Flame Towers of Baku",
+        "ancient fire temples"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Bahamas": {
+      "country": "Bahamas",
+      "capital": "Nassau",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "crawfish",
+        "salt",
+        "polystyrene products",
+        "rum"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "crystal-clear turquoise waters",
+        "swimming pigs of Exuma"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Bahrain": {
+      "country": "Bahrain",
+      "capital": "Manama",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "refined petroleum",
+        "aluminum",
+        "iron ore"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "Formula 1 Grand Prix",
+        "ancient Dilmun civilization",
+        "pearl diving heritage"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Bangladesh": {
+      "country": "Bangladesh",
+      "capital": "Dhaka",
+      "majorCities": [
+        "Chittagong",
+        "Sylhet"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "textiles",
+        "garments",
+        "footwear",
+        "fish",
+        "jute"
+      ],
+      "climate": "Tropical monsoon",
+      "famousFor": [
+        "Sundarbans mangrove forest",
+        "world's longest natural beach at Cox's Bazar",
+        "garment industry"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Barbados": {
+      "country": "Barbados",
+      "capital": "Bridgetown",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "rum",
+        "sugar",
+        "chemicals",
+        "electrical components"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "rum production",
+        "cricket",
+        "beautiful beaches"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Belarus": {
+      "country": "Belarus",
+      "capital": "Minsk",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "refined petroleum",
+        "potash fertilizers",
+        "dairy products",
+        "machinery"
+      ],
+      "climate": "Continental",
+      "famousFor": [
+        "Białowieża Forest and European bison",
+        "Soviet-era architecture"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Belgium": {
+      "country": "Belgium",
+      "capital": "Brussels",
+      "majorCities": [
+        "Antwerp",
+        "Bruges",
+        "Ghent",
+        "Liège"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "chemicals",
+        "vehicles",
+        "diamonds",
+        "pharmaceuticals",
+        "machinery"
+      ],
+      "climate": "Temperate maritime",
+      "famousFor": [
+        "chocolate",
+        "waffles",
+        "comic strips and Tintin"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Belize": {
+      "country": "Belize",
+      "capital": "Belmopan",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "sugar",
+        "bananas",
+        "citrus",
+        "marine products",
+        "crude oil"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Great Blue Hole",
+        "Maya ruins",
+        "barrier reef"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Benin": {
+      "country": "Benin",
+      "capital": "Porto-Novo",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "cotton",
+        "cashew nuts",
+        "gold",
+        "palm oil"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "birthplace of Vodun (Voodoo)",
+        "Kingdom of Dahomey",
+        "Royal Palaces of Abomey"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Bermuda": {
+      "country": "Bermuda",
+      "capital": "Hamilton",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Bhutan": {
+      "country": "Bhutan",
+      "capital": "Thimphu",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "hydroelectricity",
+        "ferrosilicon",
+        "cement",
+        "cardamom"
+      ],
+      "climate": "Varies by altitude (tropical to alpine)",
+      "famousFor": [
+        "Gross National Happiness index",
+        "Tiger's Nest monastery",
+        "pristine Himalayan landscapes"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Bolivia": {
+      "country": "Bolivia",
+      "capital": "Sucre",
+      "majorCities": [
+        "Santa Cruz de la Sierra",
+        "Cochabamba"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "natural gas",
+        "zinc",
+        "gold",
+        "soybeans",
+        "tin"
+      ],
+      "climate": "Varies by altitude (tropical to cold highland)",
+      "famousFor": [
+        "Salar de Uyuni salt flat",
+        "Lake Titicaca",
+        "ancient Tiwanaku ruins"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Bosnia and Herzegovina": {
+      "country": "Bosnia and Herzegovina",
+      "capital": "Sarajevo",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "electricity",
+        "aluminum",
+        "metals",
+        "wood",
+        "footwear"
+      ],
+      "climate": "Continental to Mediterranean",
+      "famousFor": [
+        "Stari Most bridge in Mostar",
+        "Ottoman heritage",
+        "diverse religious architecture"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Botswana": {
+      "country": "Botswana",
+      "capital": "Gaborone",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "diamonds",
+        "copper",
+        "nickel",
+        "beef",
+        "soda ash"
+      ],
+      "climate": "Semi-arid",
+      "famousFor": [
+        "Okavango Delta",
+        "Kalahari Desert wildlife",
+        "diamond mining"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Brazil": {
+      "country": "Brazil",
+      "capital": "Brasília",
+      "majorCities": [
+        "São Paulo",
+        "Rio de Janeiro",
+        "Salvador",
+        "Manaus",
+        "Recife",
+        "Fortaleza",
+        "Belo Horizonte"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "soybeans",
+        "iron ore",
+        "crude oil",
+        "sugar",
+        "beef"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Amazon rainforest",
+        "Carnival",
+        "football"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "British Indian Ocean Territory": {
+      "country": "British Indian Ocean Territory",
+      "capital": "Diego Garcia",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "British Virgin Islands": {
+      "country": "British Virgin Islands",
+      "capital": "Road Town",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Brunei": {
+      "country": "Brunei",
+      "capital": "Bandar Seri Begawan",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "crude oil",
+        "natural gas",
+        "refined petroleum"
+      ],
+      "climate": "Tropical equatorial",
+      "famousFor": [
+        "Sultan's golden-domed palace",
+        "oil wealth",
+        "pristine rainforests"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Bulgaria": {
+      "country": "Bulgaria",
+      "capital": "Sofia",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "refined petroleum",
+        "copper",
+        "machinery",
+        "wheat",
+        "clothing"
+      ],
+      "climate": "Continental to Mediterranean",
+      "famousFor": [
+        "Rose Valley and rose oil production",
+        "ancient Thracian heritage",
+        "Black Sea coast"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Burkina Faso": {
+      "country": "Burkina Faso",
+      "capital": "Ouagadougou",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "gold",
+        "cotton",
+        "sesame seeds",
+        "cashew nuts"
+      ],
+      "climate": "Tropical savanna",
+      "famousFor": [
+        "FESPACO film festival",
+        "Ruins of Loropéni",
+        "vibrant mask traditions"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Burundi": {
+      "country": "Burundi",
+      "capital": "Gitega",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "coffee",
+        "tea",
+        "gold",
+        "sugar"
+      ],
+      "climate": "Tropical highland",
+      "famousFor": [
+        "source of the Nile River",
+        "Lake Tanganyika",
+        "traditional drumming"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Cabo Verde": {
+      "country": "Cabo Verde",
+      "capital": "Praia",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "fish",
+        "clothing",
+        "footwear",
+        "bananas"
+      ],
+      "climate": "Arid tropical",
+      "famousFor": [
+        "volcanic islands",
+        "morna music genre",
+        "windsurfing"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Cambodia": {
+      "country": "Cambodia",
+      "capital": "Phnom Penh",
+      "majorCities": [
+        "Siem Reap",
+        "Sihanoukville"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "clothing",
+        "footwear",
+        "rice",
+        "rubber",
+        "fish"
+      ],
+      "climate": "Tropical monsoon",
+      "famousFor": [
+        "Angkor Wat temple complex",
+        "Khmer heritage",
+        "Mekong River"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Cameroon": {
+      "country": "Cameroon",
+      "capital": "Yaoundé",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "crude oil",
+        "cocoa",
+        "coffee",
+        "timber",
+        "bananas"
+      ],
+      "climate": "Varies (tropical to semi-arid)",
+      "famousFor": [
+        "diverse ecosystems from coast to Sahel",
+        "football excellence",
+        "Mount Cameroon"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Canada": {
+      "country": "Canada",
+      "capital": "Ottawa",
+      "majorCities": [
+        "Toronto",
+        "Vancouver",
+        "Montreal",
+        "Calgary",
+        "Quebec City",
+        "Edmonton",
+        "Winnipeg"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "crude oil",
+        "vehicles",
+        "gold",
+        "natural gas",
+        "lumber"
+      ],
+      "climate": "Varies (arctic to temperate)",
+      "famousFor": [
+        "Niagara Falls",
+        "Rocky Mountains",
+        "maple syrup"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Cayman Islands": {
+      "country": "Cayman Islands",
+      "capital": "George Town",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Central African Republic": {
+      "country": "Central African Republic",
+      "capital": "Bangui",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "diamonds",
+        "timber",
+        "cotton",
+        "coffee"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "dense tropical rainforests",
+        "Dzanga-Sangha gorilla reserve"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Chad": {
+      "country": "Chad",
+      "capital": "N'Djamena",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "crude oil",
+        "cotton",
+        "gold",
+        "gum arabic"
+      ],
+      "climate": "Varies (desert to tropical)",
+      "famousFor": [
+        "Lake Chad",
+        "Saharan rock art in Ennedi",
+        "diverse landscapes from desert to savanna"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Chile": {
+      "country": "Chile",
+      "capital": "Santiago",
+      "majorCities": [
+        "Valparaíso",
+        "Concepción",
+        "Punta Arenas"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "copper",
+        "lithium",
+        "salmon",
+        "wine",
+        "fruit"
+      ],
+      "climate": "Varies (desert to subpolar)",
+      "famousFor": [
+        "Atacama Desert",
+        "Easter Island",
+        "Patagonian fjords"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "China": {
+      "country": "China",
+      "capital": "Beijing",
+      "majorCities": [
+        "Shanghai",
+        "Hong Kong",
+        "Shenzhen",
+        "Guangzhou",
+        "Xi'an",
+        "Chengdu",
+        "Hangzhou",
+        "Wuhan",
+        "Chongqing",
+        "Lhasa"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "electronics",
+        "machinery",
+        "textiles",
+        "furniture",
+        "plastics"
+      ],
+      "climate": "Varies (tropical to subarctic)",
+      "famousFor": [
+        "Great Wall",
+        "Terracotta Army",
+        "ancient civilization"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Colombia": {
+      "country": "Colombia",
+      "capital": "Bogotá",
+      "majorCities": [
+        "Medellín",
+        "Cartagena",
+        "Cali",
+        "Barranquilla"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "crude oil",
+        "coffee",
+        "coal",
+        "gold",
+        "bananas"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "coffee",
+        "emeralds",
+        "biodiversity"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Comoros": {
+      "country": "Comoros",
+      "capital": "Moroni",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "cloves",
+        "vanilla",
+        "ylang-ylang",
+        "copra"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "ylang-ylang perfume production",
+        "volcanic islands",
+        "coelacanth discovery"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Congo": {
+      "country": "Congo",
+      "capital": "Brazzaville",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "crude oil",
+        "timber",
+        "potash",
+        "sugar"
+      ],
+      "climate": "Tropical equatorial",
+      "famousFor": [
+        "Congo River",
+        "tropical rainforests",
+        "Brazzaville riverfront"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Cook Islands": {
+      "country": "Cook Islands",
+      "capital": "Avarua",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Costa Rica": {
+      "country": "Costa Rica",
+      "capital": "San José",
+      "majorCities": [
+        "Puerto Limón"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "medical devices",
+        "bananas",
+        "pineapples",
+        "coffee"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "cloud forests",
+        "biodiversity",
+        "no standing army"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Côte d'Ivoire": {
+      "country": "Côte d'Ivoire",
+      "capital": "Yamoussoukro",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "cocoa",
+        "cashew nuts",
+        "rubber",
+        "gold",
+        "refined petroleum"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "world's largest cocoa producer",
+        "Basilica of Our Lady of Peace",
+        "diverse ethnic cultures"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Croatia": {
+      "country": "Croatia",
+      "capital": "Zagreb",
+      "majorCities": [
+        "Dubrovnik",
+        "Split"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "refined petroleum",
+        "pharmaceuticals",
+        "vehicles",
+        "wood",
+        "electrical equipment"
+      ],
+      "climate": "Mediterranean to continental",
+      "famousFor": [
+        "Dubrovnik old town",
+        "Plitvice Lakes",
+        "Adriatic coastline"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Cuba": {
+      "country": "Cuba",
+      "capital": "Havana",
+      "majorCities": [
+        "Santiago de Cuba",
+        "Trinidad",
+        "Varadero"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "sugar",
+        "nickel",
+        "tobacco",
+        "medical products",
+        "citrus"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "classic American cars",
+        "cigars",
+        "salsa music"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Curaçao": {
+      "country": "Curaçao",
+      "capital": "Willemstad",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Cyprus": {
+      "country": "Cyprus",
+      "capital": "Nicosia",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "refined petroleum",
+        "ships",
+        "pharmaceuticals",
+        "cheese"
+      ],
+      "climate": "Mediterranean",
+      "famousFor": [
+        "birthplace of Aphrodite",
+        "ancient ruins",
+        "Mediterranean beaches"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Czechia": {
+      "country": "Czechia",
+      "capital": "Prague",
+      "majorCities": [
+        "Brno",
+        "Karlovy Vary"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "vehicles",
+        "machinery",
+        "electronics",
+        "glass",
+        "iron and steel"
+      ],
+      "climate": "Temperate continental",
+      "famousFor": [
+        "Prague Castle",
+        "beer brewing tradition",
+        "Bohemian crystal"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Democratic Republic of the Congo": {
+      "country": "Democratic Republic of the Congo",
+      "capital": "Kinshasa",
+      "majorCities": [
+        "Lubumbashi",
+        "Goma"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "cobalt",
+        "copper",
+        "diamonds",
+        "gold",
+        "crude oil"
+      ],
+      "climate": "Tropical equatorial",
+      "famousFor": [
+        "Congo River",
+        "vast mineral wealth",
+        "Virunga mountain gorillas"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Denmark": {
+      "country": "Denmark",
+      "capital": "Copenhagen",
+      "majorCities": [
+        "Aarhus",
+        "Odense"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "pharmaceuticals",
+        "machinery",
+        "wind turbines",
+        "pork",
+        "dairy"
+      ],
+      "climate": "Temperate maritime",
+      "famousFor": [
+        "LEGO",
+        "Viking heritage",
+        "hygge lifestyle"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Djibouti": {
+      "country": "Djibouti",
+      "capital": "Djibouti",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "livestock",
+        "coffee",
+        "salt"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "Lake Assal (Africa's lowest point)",
+        "strategic port location"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Dominica": {
+      "country": "Dominica",
+      "capital": "Roseau",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "bananas",
+        "soap",
+        "coconuts",
+        "citrus"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Boiling Lake",
+        "lush rainforests",
+        "Caribbean's 'Nature Isle'"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Dominican Republic": {
+      "country": "Dominican Republic",
+      "capital": "Santo Domingo",
+      "majorCities": [
+        "Punta Cana",
+        "Santiago de los Caballeros"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "gold",
+        "cigars",
+        "sugar",
+        "medical instruments",
+        "bananas"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Caribbean beaches",
+        "merengue music",
+        "baseball talent"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Ecuador": {
+      "country": "Ecuador",
+      "capital": "Quito",
+      "majorCities": [
+        "Guayaquil",
+        "Cuenca"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "crude oil",
+        "bananas",
+        "shrimp",
+        "cocoa",
+        "flowers"
+      ],
+      "climate": "Varies (tropical to alpine)",
+      "famousFor": [
+        "Galápagos Islands",
+        "Amazon rainforest",
+        "equatorial line"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Egypt": {
+      "country": "Egypt",
+      "capital": "Cairo",
+      "majorCities": [
+        "Alexandria",
+        "Luxor",
+        "Aswan",
+        "Sharm El Sheikh",
+        "Hurghada",
+        "Giza"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "crude oil",
+        "natural gas",
+        "gold",
+        "textiles",
+        "fertilizers"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "Pyramids of Giza",
+        "Nile River",
+        "ancient pharaonic civilization"
+      ],
+      "culturalTags": [
+        "Bibliotheca Alexandrina",
+        "Egyptian Museum",
+        "Rosetta Stone",
+        "ancient scripts and decipherment route",
+        "bilingual inscription",
+        "granodiorite",
+        "script_archive",
+        "stele",
+        "translation_archive",
+        "Überrest"
+      ],
+      "culturalObjects": [
+        {
+          "title": "Rosetta Stone",
+          "wikidataId": "Q48584",
+          "pattern": "ancient scripts and decipherment route"
+        }
+      ],
+      "culturalPlaces": [
+        {
+          "name": "Egyptian Museum",
+          "city": "Cairo",
+          "role": "script_archive",
+          "wikidataId": "Q201219",
+          "lat": 30.047778,
+          "lon": 31.233333
+        },
+        {
+          "name": "Bibliotheca Alexandrina",
+          "city": "Alexandria",
+          "role": "translation_archive",
+          "wikidataId": "Q501851",
+          "lat": 31.208888888889,
+          "lon": 29.909166666667
+        }
+      ],
+      "caseIds": [
+        "rosetta-cipher"
+      ]
+    },
+    "El Salvador": {
+      "country": "El Salvador",
+      "capital": "San Salvador",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "textiles",
+        "coffee",
+        "sugar",
+        "ethanol",
+        "iron and steel"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Mayan ruins of Joya de Cerén",
+        "Pacific surf beaches",
+        "pupusa cuisine"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Equatorial Guinea": {
+      "country": "Equatorial Guinea",
+      "capital": "Malabo",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "crude oil",
+        "natural gas",
+        "timber",
+        "cocoa"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Bioko Island",
+        "oil wealth",
+        "only Spanish-speaking African country"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Eritrea": {
+      "country": "Eritrea",
+      "capital": "Asmara",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "gold",
+        "zinc",
+        "copper",
+        "salt",
+        "livestock"
+      ],
+      "climate": "Arid to semi-arid",
+      "famousFor": [
+        "Art Deco architecture in Asmara",
+        "Red Sea coastline",
+        "Dahlak Archipelago"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Estonia": {
+      "country": "Estonia",
+      "capital": "Tallinn",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "electronics",
+        "mineral fuels",
+        "wood",
+        "machinery",
+        "food products"
+      ],
+      "climate": "Temperate maritime",
+      "famousFor": [
+        "digital society and e-governance",
+        "medieval old town of Tallinn",
+        "song festival tradition"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Eswatini": {
+      "country": "Eswatini",
+      "capital": "Mbabane",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "sugar",
+        "soft drink concentrates",
+        "textiles",
+        "wood pulp"
+      ],
+      "climate": "Varies (tropical to temperate)",
+      "famousFor": [
+        "Incwala ceremony",
+        "Hlane Royal National Park",
+        "last absolute monarchy in Africa"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Ethiopia": {
+      "country": "Ethiopia",
+      "capital": "Addis Ababa",
+      "majorCities": [
+        "Dire Dawa",
+        "Lalibela"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "coffee",
+        "sesame seeds",
+        "cut flowers",
+        "gold",
+        "leather"
+      ],
+      "climate": "Tropical highland",
+      "famousFor": [
+        "birthplace of coffee",
+        "Lalibela rock-hewn churches",
+        "Lucy fossil"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Falkland Islands": {
+      "country": "Falkland Islands",
+      "capital": "Stanley",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Faroe Islands": {
+      "country": "Faroe Islands",
+      "capital": "Tórshavn",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Fiji": {
+      "country": "Fiji",
+      "capital": "Suva",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [
+        "sugar",
+        "fish",
+        "water",
+        "clothing",
+        "gold"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "tropical islands",
+        "coral reefs",
+        "rugby culture"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Finland": {
+      "country": "Finland",
+      "capital": "Helsinki",
+      "majorCities": [
+        "Tampere",
+        "Turku",
+        "Rovaniemi"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "machinery",
+        "paper",
+        "refined petroleum",
+        "vehicles",
+        "electronics"
+      ],
+      "climate": "Subarctic to temperate",
+      "famousFor": [
+        "saunas",
+        "Northern Lights",
+        "Santa Claus Village"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "France": {
+      "country": "France",
+      "capital": "Paris",
+      "majorCities": [
+        "Marseille",
+        "Lyon",
+        "Nice",
+        "Cannes",
+        "Bordeaux",
+        "Strasbourg",
+        "Toulouse"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "aircraft",
+        "vehicles",
+        "pharmaceuticals",
+        "wine",
+        "machinery"
+      ],
+      "climate": "Temperate oceanic to Mediterranean",
+      "famousFor": [
+        "Eiffel Tower",
+        "wine and cuisine",
+        "fashion"
+      ],
+      "culturalTags": [
+        "Italian Renaissance",
+        "Leonardo da Vinci",
+        "Louvre Museum",
+        "Mona Lisa",
+        "Renaissance provenance route",
+        "oil paint",
+        "painting",
+        "poplar panel",
+        "portrait",
+        "theft_scene",
+        "wood"
+      ],
+      "culturalObjects": [
+        {
+          "title": "Mona Lisa",
+          "wikidataId": "Q12418",
+          "pattern": "Renaissance provenance route"
+        }
+      ],
+      "culturalPlaces": [
+        {
+          "name": "Louvre Museum",
+          "city": "Paris",
+          "role": "theft_scene",
+          "wikidataId": "Q19675",
+          "lat": 48.861111111111114,
+          "lon": 2.3358333333333334
+        }
+      ],
+      "caseIds": [
+        "louvre-vanishing"
+      ]
+    },
+    "French Polynesia": {
+      "country": "French Polynesia",
+      "capital": "Papeete",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Gabon": {
+      "country": "Gabon",
+      "capital": "Libreville",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "crude oil",
+        "manganese",
+        "timber",
+        "uranium"
+      ],
+      "climate": "Tropical equatorial",
+      "famousFor": [
+        "Lopé National Park",
+        "equatorial rainforests",
+        "gorilla and elephant sanctuaries"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Gambia": {
+      "country": "Gambia",
+      "capital": "Banjul",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "peanuts",
+        "fish",
+        "cotton",
+        "palm kernels"
+      ],
+      "climate": "Tropical savanna",
+      "famousFor": [
+        "River Gambia",
+        "birdwatching",
+        "Roots heritage tourism"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Georgia": {
+      "country": "Georgia",
+      "capital": "Tbilisi",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "copper",
+        "vehicles",
+        "wine",
+        "ferroalloys",
+        "hazelnuts"
+      ],
+      "climate": "Subtropical to alpine",
+      "famousFor": [
+        "ancient wine-making tradition",
+        "Caucasus Mountains",
+        "cave city of Vardzia"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Germany": {
+      "country": "Germany",
+      "capital": "Berlin",
+      "majorCities": [
+        "Munich",
+        "Hamburg",
+        "Frankfurt",
+        "Cologne",
+        "Dresden",
+        "Stuttgart",
+        "Düsseldorf"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "vehicles",
+        "machinery",
+        "chemicals",
+        "electronics",
+        "pharmaceuticals"
+      ],
+      "climate": "Temperate oceanic to continental",
+      "famousFor": [
+        "automotive engineering",
+        "Oktoberfest",
+        "Brandenburg Gate"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Ghana": {
+      "country": "Ghana",
+      "capital": "Accra",
+      "majorCities": [
+        "Kumasi",
+        "Cape Coast"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "gold",
+        "crude oil",
+        "cocoa",
+        "timber",
+        "manganese"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Cape Coast Castle",
+        "Ashanti culture",
+        "cocoa production"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Gibraltar": {
+      "country": "Gibraltar",
+      "capital": "Gibraltar",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Greece": {
+      "country": "Greece",
+      "capital": "Athens",
+      "majorCities": [
+        "Thessaloniki",
+        "Santorini",
+        "Mykonos",
+        "Rhodes",
+        "Heraklion"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "refined petroleum",
+        "aluminum",
+        "olive oil",
+        "pharmaceuticals",
+        "fish"
+      ],
+      "climate": "Mediterranean",
+      "famousFor": [
+        "Acropolis and Parthenon",
+        "birthplace of democracy",
+        "Greek islands"
+      ],
+      "culturalTags": [
+        "Acropolis Museum",
+        "Acropolis of Athens",
+        "Elgin Marbles",
+        "Pentelic marble",
+        "Phidias",
+        "art collection",
+        "classical sculpture and restitution route",
+        "group of sculptures",
+        "origin_claim",
+        "site_evidence"
+      ],
+      "culturalObjects": [
+        {
+          "title": "Elgin Marbles",
+          "wikidataId": "Q606662",
+          "pattern": "classical sculpture and restitution route"
+        }
+      ],
+      "culturalPlaces": [
+        {
+          "name": "Acropolis Museum",
+          "city": "Athens",
+          "role": "origin_claim",
+          "wikidataId": "Q421084",
+          "lat": 37.968417,
+          "lon": 23.728472
+        },
+        {
+          "name": "Acropolis of Athens",
+          "city": "Athens",
+          "role": "site_evidence",
+          "wikidataId": "Q131013",
+          "lat": 37.971666666666664,
+          "lon": 23.726111111111113
+        }
+      ],
+      "caseIds": [
+        "parthenon-fragments"
+      ]
+    },
+    "Greenland": {
+      "country": "Greenland",
+      "capital": "Nuuk",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Grenada": {
+      "country": "Grenada",
+      "capital": "St. George's",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "nutmeg",
+        "mace",
+        "cocoa",
+        "fish",
+        "fruit"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "nutmeg production (Spice Isle)",
+        "Grand Anse Beach"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Guam": {
+      "country": "Guam",
+      "capital": "Hagåtña",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Guatemala": {
+      "country": "Guatemala",
+      "capital": "Guatemala City",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "bananas",
+        "coffee",
+        "sugar",
+        "palm oil",
+        "textiles"
+      ],
+      "climate": "Tropical to temperate highland",
+      "famousFor": [
+        "Tikal Maya ruins",
+        "Antigua Guatemala",
+        "volcanic highlands"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Guernsey": {
+      "country": "Guernsey",
+      "capital": "Saint Peter Port",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Guinea": {
+      "country": "Guinea",
+      "capital": "Conakry",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "bauxite",
+        "gold",
+        "alumina",
+        "fish",
+        "diamonds"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Fouta Djallon highlands",
+        "bauxite reserves",
+        "source of the Niger River"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Guinea-Bissau": {
+      "country": "Guinea-Bissau",
+      "capital": "Bissau",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "cashew nuts",
+        "fish",
+        "timber",
+        "peanuts"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Bijagós Archipelago",
+        "cashew nut production"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Guyana": {
+      "country": "Guyana",
+      "capital": "Georgetown",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "gold",
+        "crude oil",
+        "rice",
+        "sugar",
+        "bauxite"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Kaieteur Falls",
+        "vast rainforests",
+        "recent oil discovery"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Haiti": {
+      "country": "Haiti",
+      "capital": "Port-au-Prince",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "textiles",
+        "cocoa",
+        "mangoes",
+        "coffee",
+        "essential oils"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Citadelle Laferrière",
+        "first Black republic",
+        "vibrant art scene"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Honduras": {
+      "country": "Honduras",
+      "capital": "Tegucigalpa",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "coffee",
+        "bananas",
+        "palm oil",
+        "shrimp",
+        "textiles"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Copán Maya ruins",
+        "Bay Islands diving",
+        "cloud forests"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Hong Kong": {
+      "country": "Hong Kong",
+      "capital": "Hong Kong",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Hungary": {
+      "country": "Hungary",
+      "capital": "Budapest",
+      "majorCities": [
+        "Debrecen",
+        "Szeged"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "vehicles",
+        "machinery",
+        "electronics",
+        "pharmaceuticals",
+        "food products"
+      ],
+      "climate": "Continental",
+      "famousFor": [
+        "thermal baths of Budapest",
+        "Parliament building",
+        "goulash"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Iceland": {
+      "country": "Iceland",
+      "capital": "Reykjavík",
+      "majorCities": [
+        "Akureyri"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "aluminum",
+        "fish",
+        "ferrosilicon",
+        "geothermal energy"
+      ],
+      "climate": "Subarctic oceanic",
+      "famousFor": [
+        "geysers and hot springs",
+        "Northern Lights",
+        "Viking heritage"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "India": {
+      "country": "India",
+      "capital": "New Delhi",
+      "majorCities": [
+        "Mumbai",
+        "Bangalore",
+        "Kolkata",
+        "Chennai",
+        "Jaipur",
+        "Varanasi",
+        "Agra",
+        "Hyderabad",
+        "Goa"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "refined petroleum",
+        "pharmaceuticals",
+        "gems and jewelry",
+        "rice",
+        "textiles"
+      ],
+      "climate": "Varies (tropical to alpine)",
+      "famousFor": [
+        "Taj Mahal",
+        "diverse cultures and languages",
+        "Bollywood"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Indonesia": {
+      "country": "Indonesia",
+      "capital": "Jakarta",
+      "majorCities": [
+        "Bali",
+        "Surabaya",
+        "Yogyakarta",
+        "Bandung",
+        "Medan"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "palm oil",
+        "coal",
+        "petroleum gas",
+        "rubber",
+        "nickel"
+      ],
+      "climate": "Tropical equatorial",
+      "famousFor": [
+        "Bali",
+        "Komodo dragons",
+        "world's largest archipelago"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Iran": {
+      "country": "Iran",
+      "capital": "Tehran",
+      "majorCities": [
+        "Isfahan",
+        "Shiraz",
+        "Tabriz",
+        "Mashhad"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "crude oil",
+        "petrochemicals",
+        "plastics",
+        "iron and steel",
+        "fruits"
+      ],
+      "climate": "Arid to semi-arid",
+      "famousFor": [
+        "Persepolis ruins",
+        "Persian carpets",
+        "ancient Persian civilization"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Iraq": {
+      "country": "Iraq",
+      "capital": "Baghdad",
+      "majorCities": [
+        "Basra",
+        "Erbil",
+        "Mosul"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "crude oil",
+        "refined petroleum",
+        "gold"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "ancient Mesopotamia (cradle of civilization)",
+        "Babylon ruins",
+        "Marshlands of southern Iraq"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Ireland": {
+      "country": "Ireland",
+      "capital": "Dublin",
+      "majorCities": [
+        "Cork",
+        "Galway"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "pharmaceuticals",
+        "medical devices",
+        "chemicals",
+        "software",
+        "dairy"
+      ],
+      "climate": "Temperate oceanic",
+      "famousFor": [
+        "Cliffs of Moher",
+        "literary tradition",
+        "Guinness"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Isle of Man": {
+      "country": "Isle of Man",
+      "capital": "Douglas",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Israel": {
+      "country": "Israel",
+      "capital": "Jerusalem",
+      "majorCities": [
+        "Tel Aviv",
+        "Haifa",
+        "Eilat"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "diamonds",
+        "electronics",
+        "machinery",
+        "pharmaceuticals",
+        "chemicals"
+      ],
+      "climate": "Mediterranean to arid",
+      "famousFor": [
+        "Jerusalem holy sites",
+        "Dead Sea",
+        "tech startup ecosystem"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Italy": {
+      "country": "Italy",
+      "capital": "Rome",
+      "majorCities": [
+        "Milan",
+        "Venice",
+        "Florence",
+        "Naples",
+        "Turin",
+        "Pisa",
+        "Palermo",
+        "Verona"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "machinery",
+        "vehicles",
+        "pharmaceuticals",
+        "clothing",
+        "wine"
+      ],
+      "climate": "Mediterranean",
+      "famousFor": [
+        "Colosseum and Roman ruins",
+        "Renaissance art",
+        "pizza and pasta"
+      ],
+      "culturalTags": [
+        "Italian Renaissance",
+        "Leonardo da Vinci",
+        "Mona Lisa",
+        "Renaissance provenance route",
+        "Uffizi Gallery",
+        "oil paint",
+        "painting",
+        "poplar panel",
+        "portrait",
+        "provenance_archive",
+        "wood"
+      ],
+      "culturalObjects": [
+        {
+          "title": "Mona Lisa",
+          "wikidataId": "Q12418",
+          "pattern": "Renaissance provenance route"
+        }
+      ],
+      "culturalPlaces": [
+        {
+          "name": "Uffizi Gallery",
+          "city": "Florence",
+          "role": "provenance_archive",
+          "wikidataId": "Q51252",
+          "lat": 43.76833333333333,
+          "lon": 11.255277777777778
+        }
+      ],
+      "caseIds": [
+        "louvre-vanishing"
+      ]
+    },
+    "Jamaica": {
+      "country": "Jamaica",
+      "capital": "Kingston",
+      "majorCities": [
+        "Montego Bay"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "aluminum oxide",
+        "rum",
+        "coffee",
+        "sugar",
+        "chemicals"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "reggae music and Bob Marley",
+        "Blue Mountain coffee",
+        "sprinting champions"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Japan": {
+      "country": "Japan",
+      "capital": "Tokyo",
+      "majorCities": [
+        "Osaka",
+        "Kyoto",
+        "Hiroshima",
+        "Yokohama",
+        "Nagasaki",
+        "Sapporo",
+        "Nara",
+        "Fukuoka"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "vehicles",
+        "machinery",
+        "electronics",
+        "iron and steel",
+        "plastics"
+      ],
+      "climate": "Varies (subtropical to subarctic)",
+      "famousFor": [
+        "Mount Fuji",
+        "cherry blossoms",
+        "sushi and anime"
+      ],
+      "culturalTags": [
+        "Katsushika Hokusai",
+        "Prussian blue",
+        "Sumida Hokusai Museum",
+        "The Great Wave off Kanagawa",
+        "meisho-e",
+        "nishiki-e",
+        "origin_scene",
+        "paper",
+        "ukiyo-e",
+        "ukiyo-e print and maritime image route",
+        "woodblock print"
+      ],
+      "culturalObjects": [
+        {
+          "title": "The Great Wave off Kanagawa",
+          "wikidataId": "Q252485",
+          "pattern": "ukiyo-e print and maritime image route"
+        }
+      ],
+      "culturalPlaces": [
+        {
+          "name": "Sumida Hokusai Museum",
+          "city": "Tokyo",
+          "role": "origin_scene",
+          "wikidataId": "Q17220332",
+          "lat": 35.69675,
+          "lon": 139.800389
+        }
+      ],
+      "caseIds": [
+        "great-wave-ledger"
+      ]
+    },
+    "Jersey": {
+      "country": "Jersey",
+      "capital": "Saint Helier",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Jordan": {
+      "country": "Jordan",
+      "capital": "Amman",
+      "majorCities": [
+        "Aqaba",
+        "Petra"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "phosphates",
+        "fertilizers",
+        "potash",
+        "textiles",
+        "pharmaceuticals"
+      ],
+      "climate": "Arid to semi-arid",
+      "famousFor": [
+        "Petra",
+        "Dead Sea",
+        "Wadi Rum desert"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Kazakhstan": {
+      "country": "Kazakhstan",
+      "capital": "Astana",
+      "majorCities": [
+        "Almaty"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "crude oil",
+        "natural gas",
+        "uranium",
+        "copper",
+        "wheat"
+      ],
+      "climate": "Continental arid",
+      "famousFor": [
+        "vast steppe landscapes",
+        "Baikonur Cosmodrome",
+        "nomadic heritage"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Kenya": {
+      "country": "Kenya",
+      "capital": "Nairobi",
+      "majorCities": [
+        "Mombasa",
+        "Kisumu"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "tea",
+        "cut flowers",
+        "coffee",
+        "vegetables",
+        "titanium ore"
+      ],
+      "climate": "Varies (tropical to arid)",
+      "famousFor": [
+        "Maasai Mara wildlife reserve",
+        "Great Rift Valley",
+        "long-distance runners"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Kiribati": {
+      "country": "Kiribati",
+      "capital": "South Tarawa",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [
+        "fish",
+        "coconut products",
+        "seaweed"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "straddling four hemispheres",
+        "first place to see the new year"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Kosovo": {
+      "country": "Kosovo",
+      "capital": "Pristina",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Kuwait": {
+      "country": "Kuwait",
+      "capital": "Kuwait City",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "crude oil",
+        "refined petroleum",
+        "petrochemicals"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "oil wealth",
+        "Kuwait Towers",
+        "pearl diving heritage"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Kyrgyzstan": {
+      "country": "Kyrgyzstan",
+      "capital": "Bishkek",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "gold",
+        "cotton",
+        "tobacco",
+        "dairy products",
+        "mercury"
+      ],
+      "climate": "Continental",
+      "famousFor": [
+        "Tian Shan mountains",
+        "nomadic yurt culture",
+        "Issyk-Kul Lake"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Laos": {
+      "country": "Laos",
+      "capital": "Vientiane",
+      "majorCities": [
+        "Luang Prabang"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "electricity",
+        "gold",
+        "copper",
+        "coffee",
+        "rubber"
+      ],
+      "climate": "Tropical monsoon",
+      "famousFor": [
+        "Luang Prabang temples",
+        "Mekong River",
+        "Plain of Jars"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Latvia": {
+      "country": "Latvia",
+      "capital": "Riga",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "wood",
+        "machinery",
+        "metals",
+        "food products",
+        "textiles"
+      ],
+      "climate": "Temperate maritime",
+      "famousFor": [
+        "Art Nouveau architecture in Riga",
+        "Song and Dance Festival",
+        "Baltic amber"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Lebanon": {
+      "country": "Lebanon",
+      "capital": "Beirut",
+      "majorCities": [
+        "Tripoli",
+        "Byblos"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "gold",
+        "jewelry",
+        "iron and steel",
+        "food products"
+      ],
+      "climate": "Mediterranean",
+      "famousFor": [
+        "ancient Phoenician heritage",
+        "Cedars of God",
+        "Beirut's nightlife"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Lesotho": {
+      "country": "Lesotho",
+      "capital": "Maseru",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "diamonds",
+        "clothing",
+        "wool",
+        "mohair",
+        "water"
+      ],
+      "climate": "Temperate highland",
+      "famousFor": [
+        "mountain kingdom entirely above 1,000 meters",
+        "Maletsunyane Falls"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Liberia": {
+      "country": "Liberia",
+      "capital": "Monrovia",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "iron ore",
+        "rubber",
+        "gold",
+        "timber",
+        "palm oil"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "oldest republic in Africa",
+        "rubber plantations",
+        "Sapo National Park"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Libya": {
+      "country": "Libya",
+      "capital": "Tripoli",
+      "majorCities": [
+        "Benghazi"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "crude oil",
+        "natural gas",
+        "refined petroleum"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "Sahara Desert",
+        "ancient Roman city of Leptis Magna"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Liechtenstein": {
+      "country": "Liechtenstein",
+      "capital": "Vaduz",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "dental products",
+        "electronics",
+        "metal goods",
+        "ceramics"
+      ],
+      "climate": "Alpine continental",
+      "famousFor": [
+        "Alpine scenery",
+        "Royal family's art collection",
+        "financial center"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Lithuania": {
+      "country": "Lithuania",
+      "capital": "Vilnius",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "refined petroleum",
+        "furniture",
+        "wheat",
+        "chemicals",
+        "plastics"
+      ],
+      "climate": "Temperate continental",
+      "famousFor": [
+        "Hill of Crosses",
+        "Vilnius Old Town",
+        "basketball passion"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Luxembourg": {
+      "country": "Luxembourg",
+      "capital": "Luxembourg",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "iron and steel",
+        "machinery",
+        "rubber products",
+        "glass"
+      ],
+      "climate": "Temperate oceanic",
+      "famousFor": [
+        "medieval castles",
+        "European Union institutions",
+        "banking sector"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Macao": {
+      "country": "Macao",
+      "capital": "Macao",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Madagascar": {
+      "country": "Madagascar",
+      "capital": "Antananarivo",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "vanilla",
+        "cloves",
+        "nickel",
+        "clothing",
+        "seafood"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "unique lemurs",
+        "baobab trees",
+        "extraordinary biodiversity"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Malawi": {
+      "country": "Malawi",
+      "capital": "Lilongwe",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "tobacco",
+        "tea",
+        "sugar",
+        "cotton",
+        "uranium"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Lake Malawi",
+        "friendly people (Warm Heart of Africa)"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Malaysia": {
+      "country": "Malaysia",
+      "capital": "Kuala Lumpur",
+      "majorCities": [
+        "George Town",
+        "Malacca City",
+        "Kota Kinabalu"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "electronics",
+        "palm oil",
+        "petroleum",
+        "rubber",
+        "chemicals"
+      ],
+      "climate": "Tropical equatorial",
+      "famousFor": [
+        "Petronas Twin Towers",
+        "tropical rainforests",
+        "diverse cuisine"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Maldives": {
+      "country": "Maldives",
+      "capital": "Malé",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "fish",
+        "clothing",
+        "coconut products"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "overwater bungalows",
+        "coral atolls",
+        "crystal-clear waters"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Mali": {
+      "country": "Mali",
+      "capital": "Bamako",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "gold",
+        "cotton",
+        "livestock",
+        "salt"
+      ],
+      "climate": "Arid to tropical savanna",
+      "famousFor": [
+        "Timbuktu",
+        "Djenné's Great Mosque",
+        "ancient trading empires"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Malta": {
+      "country": "Malta",
+      "capital": "Valletta",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "pharmaceuticals",
+        "electronics",
+        "petroleum",
+        "fish"
+      ],
+      "climate": "Mediterranean",
+      "famousFor": [
+        "ancient megalithic temples",
+        "Knights of St. John heritage",
+        "Mediterranean culture"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Marshall Islands": {
+      "country": "Marshall Islands",
+      "capital": "Majuro",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [
+        "fish",
+        "coconut oil",
+        "copra"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "Bikini Atoll nuclear test site",
+        "coral atolls",
+        "traditional outrigger canoe sailing"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Mauritania": {
+      "country": "Mauritania",
+      "capital": "Nouakchott",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "iron ore",
+        "gold",
+        "fish",
+        "copper"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "Sahara Desert",
+        "Banc d'Arguin National Park",
+        "Richat Structure (Eye of the Sahara)"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Mauritius": {
+      "country": "Mauritius",
+      "capital": "Port Louis",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "clothing",
+        "sugar",
+        "fish",
+        "diamonds",
+        "rum"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "dodo bird (extinct)",
+        "multicultural society",
+        "tropical beaches"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Mexico": {
+      "country": "Mexico",
+      "capital": "Mexico City",
+      "majorCities": [
+        "Cancún",
+        "Guadalajara",
+        "Monterrey",
+        "Acapulco",
+        "Tijuana",
+        "Puerto Vallarta",
+        "Oaxaca"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "vehicles",
+        "electronics",
+        "crude oil",
+        "machinery",
+        "medical instruments"
+      ],
+      "climate": "Varies (arid to tropical)",
+      "famousFor": [
+        "Aztec and Maya pyramids",
+        "tacos and tequila",
+        "Day of the Dead"
+      ],
+      "culturalTags": [
+        "Aztec sun stone",
+        "Mexica",
+        "National Museum of Anthropology",
+        "Templo Mayor",
+        "Templo Mayor Museum",
+        "basalt",
+        "calendar stone and Mesoamerican provenance route",
+        "final_proof_scene",
+        "sculpture",
+        "site_evidence",
+        "theft_scene"
+      ],
+      "culturalObjects": [
+        {
+          "title": "Aztec sun stone",
+          "wikidataId": "Q786806",
+          "pattern": "calendar stone and Mesoamerican provenance route"
+        }
+      ],
+      "culturalPlaces": [
+        {
+          "name": "National Museum of Anthropology",
+          "city": "Mexico City",
+          "role": "theft_scene",
+          "wikidataId": "Q524249",
+          "lat": 19.426111111111112,
+          "lon": -99.18611111111112
+        },
+        {
+          "name": "Templo Mayor",
+          "city": "Mexico City",
+          "role": "site_evidence",
+          "wikidataId": "Q774021",
+          "lat": 19.435,
+          "lon": -99.131389
+        },
+        {
+          "name": "Templo Mayor Museum",
+          "city": "Mexico City",
+          "role": "final_proof_scene",
+          "wikidataId": "Q3330387",
+          "lat": 19.43441,
+          "lon": -99.13208
+        }
+      ],
+      "caseIds": [
+        "sun-stone-calendar"
+      ]
+    },
+    "Micronesia": {
+      "country": "Micronesia",
+      "capital": "Palikir",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [
+        "fish",
+        "clothing",
+        "bananas",
+        "black pepper"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "ancient ruins of Nan Madol",
+        "coral reefs",
+        "traditional navigation"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Moldova": {
+      "country": "Moldova",
+      "capital": "Chișinău",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "sunflower oil",
+        "wine",
+        "wheat",
+        "clothing",
+        "footwear"
+      ],
+      "climate": "Temperate continental",
+      "famousFor": [
+        "wine cellars (Mileștii Mici is world's largest)",
+        "monasteries"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Monaco": {
+      "country": "Monaco",
+      "capital": "Monaco",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "chemicals",
+        "plastics",
+        "rubber products"
+      ],
+      "climate": "Mediterranean",
+      "famousFor": [
+        "Monte Carlo Casino",
+        "Formula 1 Grand Prix",
+        "luxury yachts"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Mongolia": {
+      "country": "Mongolia",
+      "capital": "Ulaanbaatar",
+      "majorCities": [
+        "Erdenet"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "copper",
+        "gold",
+        "coal",
+        "iron ore",
+        "cashmere"
+      ],
+      "climate": "Continental arid",
+      "famousFor": [
+        "Genghis Khan's empire",
+        "vast steppe grasslands",
+        "nomadic herding culture"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Montenegro": {
+      "country": "Montenegro",
+      "capital": "Podgorica",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "aluminum",
+        "electricity",
+        "iron and steel",
+        "wood",
+        "wine"
+      ],
+      "climate": "Mediterranean to continental",
+      "famousFor": [
+        "Bay of Kotor",
+        "Adriatic coastline",
+        "Durmitor National Park"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Montserrat": {
+      "country": "Montserrat",
+      "capital": "Brades",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Morocco": {
+      "country": "Morocco",
+      "capital": "Rabat",
+      "majorCities": [
+        "Casablanca",
+        "Marrakech",
+        "Fez",
+        "Tangier",
+        "Chefchaouen"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "phosphates",
+        "vehicles",
+        "electronics",
+        "citrus",
+        "textiles"
+      ],
+      "climate": "Mediterranean to arid",
+      "famousFor": [
+        "Marrakech medina",
+        "Sahara Desert",
+        "Fez's leather tanneries"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Mozambique": {
+      "country": "Mozambique",
+      "capital": "Maputo",
+      "majorCities": [
+        "Beira"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "aluminum",
+        "coal",
+        "natural gas",
+        "electricity",
+        "tobacco"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Bazaruto Archipelago",
+        "Island of Mozambique",
+        "marine biodiversity"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Myanmar": {
+      "country": "Myanmar",
+      "capital": "Naypyidaw",
+      "majorCities": [
+        "Yangon",
+        "Mandalay",
+        "Bagan"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "natural gas",
+        "garments",
+        "jade",
+        "rice",
+        "beans"
+      ],
+      "climate": "Tropical monsoon",
+      "famousFor": [
+        "Bagan temple plains",
+        "Shwedagon Pagoda",
+        "Inle Lake"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Namibia": {
+      "country": "Namibia",
+      "capital": "Windhoek",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "diamonds",
+        "uranium",
+        "zinc",
+        "fish",
+        "beef"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "Namib Desert and sand dunes",
+        "Etosha salt pan",
+        "Skeleton Coast"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Nauru": {
+      "country": "Nauru",
+      "capital": "Yaren",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [
+        "phosphates",
+        "coconut products"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "world's smallest republic",
+        "phosphate mining history"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Nepal": {
+      "country": "Nepal",
+      "capital": "Kathmandu",
+      "majorCities": [
+        "Pokhara",
+        "Lumbini"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "palm oil",
+        "clothing",
+        "carpets",
+        "textiles",
+        "juice"
+      ],
+      "climate": "Varies (tropical to alpine)",
+      "famousFor": [
+        "Mount Everest",
+        "Hindu and Buddhist temples",
+        "Himalayan trekking"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Netherlands": {
+      "country": "Netherlands",
+      "capital": "Amsterdam",
+      "majorCities": [
+        "Rotterdam",
+        "The Hague",
+        "Utrecht",
+        "Eindhoven"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "machinery",
+        "chemicals",
+        "refined petroleum",
+        "food products",
+        "flowers"
+      ],
+      "climate": "Temperate maritime",
+      "famousFor": [
+        "tulips and windmills",
+        "canals of Amsterdam",
+        "cycling culture"
+      ],
+      "culturalTags": [
+        "Italian Renaissance",
+        "Katsushika Hokusai",
+        "Leonardo da Vinci",
+        "Mona Lisa",
+        "Prussian blue",
+        "Renaissance provenance route",
+        "Rijksmuseum",
+        "The Great Wave off Kanagawa",
+        "meisho-e",
+        "nishiki-e",
+        "oil paint",
+        "painting",
+        "paper",
+        "poplar panel",
+        "portrait",
+        "print_trade_record",
+        "restoration_lead",
+        "ukiyo-e",
+        "ukiyo-e print and maritime image route",
+        "wood",
+        "woodblock print"
+      ],
+      "culturalObjects": [
+        {
+          "title": "Mona Lisa",
+          "wikidataId": "Q12418",
+          "pattern": "Renaissance provenance route"
+        },
+        {
+          "title": "The Great Wave off Kanagawa",
+          "wikidataId": "Q252485",
+          "pattern": "ukiyo-e print and maritime image route"
+        }
+      ],
+      "culturalPlaces": [
+        {
+          "name": "Rijksmuseum",
+          "city": "Amsterdam",
+          "role": "restoration_lead",
+          "wikidataId": "Q190804",
+          "lat": 52.36,
+          "lon": 4.885277777777778
+        },
+        {
+          "name": "Rijksmuseum",
+          "city": "Amsterdam",
+          "role": "print_trade_record",
+          "wikidataId": "Q190804",
+          "lat": 52.36,
+          "lon": 4.885277777777778
+        }
+      ],
+      "caseIds": [
+        "great-wave-ledger",
+        "louvre-vanishing"
+      ]
+    },
+    "New Caledonia": {
+      "country": "New Caledonia",
+      "capital": "Nouméa",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "New Zealand": {
+      "country": "New Zealand",
+      "capital": "Wellington",
+      "majorCities": [
+        "Auckland",
+        "Queenstown",
+        "Christchurch"
+      ],
+      "continent": "Oceania",
+      "exports": [
+        "dairy",
+        "meat",
+        "wood",
+        "fruit",
+        "wine"
+      ],
+      "climate": "Temperate oceanic",
+      "famousFor": [
+        "Māori culture",
+        "Lord of the Rings filming locations",
+        "stunning fjords"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Nicaragua": {
+      "country": "Nicaragua",
+      "capital": "Managua",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "coffee",
+        "beef",
+        "gold",
+        "sugar",
+        "textiles"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "volcanic landscapes",
+        "colonial city of Granada",
+        "Lake Nicaragua"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Niger": {
+      "country": "Niger",
+      "capital": "Niamey",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "uranium",
+        "gold",
+        "oil",
+        "cowpeas",
+        "onions"
+      ],
+      "climate": "Arid desert to semi-arid",
+      "famousFor": [
+        "Sahara Desert",
+        "Agadez mosque",
+        "dinosaur fossils"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Nigeria": {
+      "country": "Nigeria",
+      "capital": "Abuja",
+      "majorCities": [
+        "Lagos",
+        "Kano",
+        "Port Harcourt"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "crude oil",
+        "natural gas",
+        "cocoa",
+        "rubber"
+      ],
+      "climate": "Varies (tropical to semi-arid)",
+      "famousFor": [
+        "Nollywood film industry",
+        "diverse ethnic cultures",
+        "Afrobeats music"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Niue": {
+      "country": "Niue",
+      "capital": "Alofi",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Norfolk Island": {
+      "country": "Norfolk Island",
+      "capital": "Kingston",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "North Korea": {
+      "country": "North Korea",
+      "capital": "Pyongyang",
+      "majorCities": [
+        "Kaesong"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "minerals",
+        "textiles",
+        "metallurgical products",
+        "weapons"
+      ],
+      "climate": "Continental",
+      "famousFor": [
+        "DMZ border zone",
+        "extreme secrecy",
+        "mass choreographed performances"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "North Macedonia": {
+      "country": "North Macedonia",
+      "capital": "Skopje",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "catalytic converters",
+        "textiles",
+        "iron and steel",
+        "tobacco"
+      ],
+      "climate": "Continental to Mediterranean",
+      "famousFor": [
+        "Lake Ohrid",
+        "Matka Canyon",
+        "Ottoman bazaars"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Northern Mariana Islands": {
+      "country": "Northern Mariana Islands",
+      "capital": "Saipan",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Norway": {
+      "country": "Norway",
+      "capital": "Oslo",
+      "majorCities": [
+        "Bergen",
+        "Tromsø",
+        "Trondheim",
+        "Stavanger"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "crude oil",
+        "natural gas",
+        "fish",
+        "aluminum",
+        "machinery"
+      ],
+      "climate": "Temperate to arctic",
+      "famousFor": [
+        "fjords",
+        "Northern Lights",
+        "Viking heritage"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Oman": {
+      "country": "Oman",
+      "capital": "Muscat",
+      "majorCities": [
+        "Salalah"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "crude oil",
+        "refined petroleum",
+        "natural gas",
+        "iron ore"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "ancient frankincense trade",
+        "dramatic fjords of Musandam",
+        "Sultan Qaboos Grand Mosque"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Pakistan": {
+      "country": "Pakistan",
+      "capital": "Islamabad",
+      "majorCities": [
+        "Karachi",
+        "Lahore",
+        "Peshawar",
+        "Faisalabad"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "textiles",
+        "rice",
+        "leather goods",
+        "surgical instruments",
+        "sports goods"
+      ],
+      "climate": "Varies (arid to alpine)",
+      "famousFor": [
+        "K2 and Karakoram mountains",
+        "Mohenjo-daro ruins",
+        "Mughal architecture"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Palau": {
+      "country": "Palau",
+      "capital": "Ngerulmud",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [
+        "fish",
+        "shellfish",
+        "copra"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "Rock Islands",
+        "jellyfish lake",
+        "pristine marine ecosystems"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Palestine": {
+      "country": "Palestine",
+      "capital": "Ramallah",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Panama": {
+      "country": "Panama",
+      "capital": "Panama City",
+      "majorCities": [
+        "Colón"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "gold",
+        "bananas",
+        "shrimp",
+        "sugar",
+        "iron scrap"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Panama Canal",
+        "biodiversity bridge between continents"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Papua New Guinea": {
+      "country": "Papua New Guinea",
+      "capital": "Port Moresby",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [
+        "gold",
+        "oil",
+        "palm oil",
+        "coffee",
+        "copper"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "extraordinary linguistic diversity",
+        "tribal cultures",
+        "coral reefs"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Paraguay": {
+      "country": "Paraguay",
+      "capital": "Asunción",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "soybeans",
+        "beef",
+        "electricity",
+        "corn",
+        "wheat"
+      ],
+      "climate": "Subtropical",
+      "famousFor": [
+        "Itaipu Dam (one of world's largest)",
+        "Jesuit missions ruins",
+        "yerba mate"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Peru": {
+      "country": "Peru",
+      "capital": "Lima",
+      "majorCities": [
+        "Cusco",
+        "Arequipa",
+        "Machu Picchu"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "copper",
+        "gold",
+        "zinc",
+        "fishmeal",
+        "coffee"
+      ],
+      "climate": "Varies (tropical to alpine)",
+      "famousFor": [
+        "Machu Picchu",
+        "Nazca Lines",
+        "Amazon rainforest"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Philippines": {
+      "country": "Philippines",
+      "capital": "Manila",
+      "majorCities": [
+        "Cebu City",
+        "Davao City",
+        "Boracay"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "electronics",
+        "semiconductors",
+        "coconut oil",
+        "fruits",
+        "copper"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "thousands of islands",
+        "rice terraces of Banaue",
+        "whale shark encounters"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Poland": {
+      "country": "Poland",
+      "capital": "Warsaw",
+      "majorCities": [
+        "Kraków",
+        "Gdańsk",
+        "Wrocław",
+        "Poznań"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "machinery",
+        "vehicles",
+        "furniture",
+        "electronics",
+        "food products"
+      ],
+      "climate": "Temperate continental",
+      "famousFor": [
+        "Auschwitz memorial",
+        "Kraków's historic old town",
+        "Wieliczka Salt Mine"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Portugal": {
+      "country": "Portugal",
+      "capital": "Lisbon",
+      "majorCities": [
+        "Porto",
+        "Faro",
+        "Funchal"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "vehicles",
+        "refined petroleum",
+        "footwear",
+        "paper",
+        "wine"
+      ],
+      "climate": "Mediterranean",
+      "famousFor": [
+        "Age of Exploration heritage",
+        "pastéis de nata",
+        "Fado music"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Puerto Rico": {
+      "country": "Puerto Rico",
+      "capital": "San Juan",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Qatar": {
+      "country": "Qatar",
+      "capital": "Doha",
+      "majorCities": [
+        "Al Wakrah"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "natural gas",
+        "crude oil",
+        "refined petroleum",
+        "aluminum",
+        "fertilizers"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "2022 FIFA World Cup host",
+        "natural gas wealth",
+        "Museum of Islamic Art"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Romania": {
+      "country": "Romania",
+      "capital": "Bucharest",
+      "majorCities": [
+        "Cluj-Napoca",
+        "Timișoara",
+        "Brașov"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "vehicles",
+        "machinery",
+        "electronics",
+        "wheat",
+        "clothing"
+      ],
+      "climate": "Temperate continental",
+      "famousFor": [
+        "Dracula's Bran Castle",
+        "painted monasteries of Bucovina",
+        "Carpathian Mountains"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Russia": {
+      "country": "Russia",
+      "capital": "Moscow",
+      "majorCities": [
+        "St. Petersburg",
+        "Vladivostok",
+        "Novosibirsk",
+        "Sochi",
+        "Yekaterinburg",
+        "Kazan"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "crude oil",
+        "natural gas",
+        "metals",
+        "wheat",
+        "timber"
+      ],
+      "climate": "Varies (arctic to subtropical)",
+      "famousFor": [
+        "Red Square and Kremlin",
+        "Trans-Siberian Railway",
+        "ballet and literature"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Rwanda": {
+      "country": "Rwanda",
+      "capital": "Kigali",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "coffee",
+        "tea",
+        "tin ore",
+        "gold",
+        "coltan"
+      ],
+      "climate": "Tropical highland",
+      "famousFor": [
+        "mountain gorillas",
+        "remarkable post-genocide recovery",
+        "clean streets"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Saint Barthelemy": {
+      "country": "Saint Barthelemy",
+      "capital": "Gustavia",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Saint Helena": {
+      "country": "Saint Helena",
+      "capital": "Jamestown",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Saint Kitts and Nevis": {
+      "country": "Saint Kitts and Nevis",
+      "capital": "Basseterre",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "electronics",
+        "beverages",
+        "tobacco",
+        "sugar"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "Brimstone Hill Fortress",
+        "sugar plantation heritage",
+        "smallest Caribbean nation"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Saint Lucia": {
+      "country": "Saint Lucia",
+      "capital": "Castries",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "bananas",
+        "beverages",
+        "cocoa",
+        "vegetables"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "twin Pitons volcanic peaks",
+        "lush rainforests"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Saint Martin": {
+      "country": "Saint Martin",
+      "capital": "Marigot",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Saint Pierre and Miquelon": {
+      "country": "Saint Pierre and Miquelon",
+      "capital": "Saint-Pierre",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Saint Vincent and the Grenadines": {
+      "country": "Saint Vincent and the Grenadines",
+      "capital": "Kingstown",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "bananas",
+        "flour",
+        "rice",
+        "fish"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "sailing and yacht culture",
+        "La Soufrière volcano",
+        "Tobago Cays"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Samoa": {
+      "country": "Samoa",
+      "capital": "Apia",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [
+        "fish",
+        "coconut products",
+        "taro",
+        "automotive parts"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "traditional fa'a Samoa culture",
+        "lava fields",
+        "Robert Louis Stevenson's final home"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "San Marino": {
+      "country": "San Marino",
+      "capital": "San Marino",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "building stone",
+        "ceramics",
+        "clothing",
+        "electronics"
+      ],
+      "climate": "Mediterranean",
+      "famousFor": [
+        "world's oldest republic",
+        "three medieval towers",
+        "Mount Titano"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Sao Tome and Principe": {
+      "country": "Sao Tome and Principe",
+      "capital": "São Tomé",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "cocoa",
+        "palm oil",
+        "coffee",
+        "copra"
+      ],
+      "climate": "Tropical equatorial",
+      "famousFor": [
+        "cocoa plantations",
+        "equatorial biodiversity",
+        "colonial architecture"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Saudi Arabia": {
+      "country": "Saudi Arabia",
+      "capital": "Riyadh",
+      "majorCities": [
+        "Jeddah",
+        "Mecca",
+        "Medina"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "crude oil",
+        "refined petroleum",
+        "petrochemicals",
+        "plastics"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "Mecca and Medina holy sites",
+        "oil wealth",
+        "vast desert landscapes"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Senegal": {
+      "country": "Senegal",
+      "capital": "Dakar",
+      "majorCities": [
+        "Saint-Louis"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "gold",
+        "fish",
+        "phosphoric acid",
+        "peanuts",
+        "refined petroleum"
+      ],
+      "climate": "Tropical savanna",
+      "famousFor": [
+        "Gorée Island slave trade memorial",
+        "vibrant music scene",
+        "teranga hospitality"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Serbia": {
+      "country": "Serbia",
+      "capital": "Belgrade",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "vehicles",
+        "iron and steel",
+        "rubber",
+        "electricity",
+        "cereals"
+      ],
+      "climate": "Continental",
+      "famousFor": [
+        "Belgrade nightlife",
+        "medieval monasteries",
+        "Nikola Tesla's birthplace"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Seychelles": {
+      "country": "Seychelles",
+      "capital": "Victoria",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "fish",
+        "refined petroleum",
+        "coconut products"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "pristine beaches",
+        "coco de mer palm",
+        "giant Aldabra tortoises"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Sierra Leone": {
+      "country": "Sierra Leone",
+      "capital": "Freetown",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "iron ore",
+        "diamonds",
+        "titanium ore",
+        "cocoa",
+        "coffee"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "diamond mining",
+        "Freetown's Cotton Tree",
+        "Bunce Island slave trade history"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Singapore": {
+      "country": "Singapore",
+      "capital": "Singapore",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "electronics",
+        "refined petroleum",
+        "machinery",
+        "chemicals",
+        "pharmaceuticals"
+      ],
+      "climate": "Tropical equatorial",
+      "famousFor": [
+        "Marina Bay Sands",
+        "street food culture",
+        "garden city"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Sint Maarten": {
+      "country": "Sint Maarten",
+      "capital": "Philipsburg",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Slovakia": {
+      "country": "Slovakia",
+      "capital": "Bratislava",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "vehicles",
+        "electronics",
+        "machinery",
+        "iron and steel",
+        "rubber"
+      ],
+      "climate": "Temperate continental",
+      "famousFor": [
+        "Tatra Mountains",
+        "medieval castles",
+        "Bratislava old town"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Slovenia": {
+      "country": "Slovenia",
+      "capital": "Ljubljana",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "vehicles",
+        "pharmaceuticals",
+        "machinery",
+        "furniture",
+        "aluminum"
+      ],
+      "climate": "Alpine to Mediterranean",
+      "famousFor": [
+        "Lake Bled",
+        "Postojna Cave",
+        "Julian Alps"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Solomon Islands": {
+      "country": "Solomon Islands",
+      "capital": "Honiara",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [
+        "timber",
+        "fish",
+        "palm oil",
+        "cocoa",
+        "copra"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "World War II battlefields",
+        "coral reefs",
+        "traditional canoe culture"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Somalia": {
+      "country": "Somalia",
+      "capital": "Mogadishu",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "livestock",
+        "bananas",
+        "charcoal",
+        "fish"
+      ],
+      "climate": "Arid to semi-arid",
+      "famousFor": [
+        "longest coastline in mainland Africa",
+        "ancient port cities",
+        "camel herding culture"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "South Africa": {
+      "country": "South Africa",
+      "capital": "Pretoria",
+      "majorCities": [
+        "Johannesburg",
+        "Durban",
+        "Port Elizabeth"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "gold",
+        "diamonds",
+        "platinum",
+        "vehicles",
+        "iron ore"
+      ],
+      "climate": "Varies (Mediterranean to subtropical)",
+      "famousFor": [
+        "Table Mountain",
+        "Kruger National Park",
+        "Nelson Mandela's legacy"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "South Korea": {
+      "country": "South Korea",
+      "capital": "Seoul",
+      "majorCities": [
+        "Busan",
+        "Incheon",
+        "Jeju",
+        "Gyeongju"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "semiconductors",
+        "vehicles",
+        "ships",
+        "electronics",
+        "petrochemicals"
+      ],
+      "climate": "Continental with monsoon",
+      "famousFor": [
+        "K-pop",
+        "Samsung and tech industry",
+        "ancient Buddhist temples"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "South Sudan": {
+      "country": "South Sudan",
+      "capital": "Juba",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "crude oil",
+        "timber",
+        "gold"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Sudd wetland",
+        "world's newest country",
+        "diverse ethnic groups"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Spain": {
+      "country": "Spain",
+      "capital": "Madrid",
+      "majorCities": [
+        "Barcelona",
+        "Seville",
+        "Valencia",
+        "Bilbao",
+        "Granada",
+        "Málaga",
+        "San Sebastián"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "vehicles",
+        "refined petroleum",
+        "medicines",
+        "olive oil",
+        "citrus"
+      ],
+      "climate": "Mediterranean to semi-arid",
+      "famousFor": [
+        "Sagrada Familia",
+        "flamenco",
+        "La Tomatina festival"
+      ],
+      "culturalTags": [
+        "Italian Renaissance",
+        "Leonardo da Vinci",
+        "Mona Lisa",
+        "Museo del Prado",
+        "Renaissance provenance route",
+        "final_proof_scene",
+        "oil paint",
+        "painting",
+        "poplar panel",
+        "portrait",
+        "wood"
+      ],
+      "culturalObjects": [
+        {
+          "title": "Mona Lisa",
+          "wikidataId": "Q12418",
+          "pattern": "Renaissance provenance route"
+        }
+      ],
+      "culturalPlaces": [
+        {
+          "name": "Museo del Prado",
+          "city": "Madrid",
+          "role": "final_proof_scene",
+          "wikidataId": "Q160112",
+          "lat": 40.41388888888889,
+          "lon": -3.692222222222222
+        }
+      ],
+      "caseIds": [
+        "louvre-vanishing"
+      ]
+    },
+    "Sri Lanka": {
+      "country": "Sri Lanka",
+      "capital": "Sri Jayawardenepura Kotte",
+      "majorCities": [
+        "Kandy",
+        "Galle"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "tea",
+        "clothing",
+        "rubber",
+        "coconut products",
+        "spices"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Ceylon tea",
+        "ancient Sigiriya rock fortress",
+        "Buddhist heritage"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Sudan": {
+      "country": "Sudan",
+      "capital": "Khartoum",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "gold",
+        "crude oil",
+        "livestock",
+        "sesame seeds",
+        "peanuts"
+      ],
+      "climate": "Arid desert to tropical",
+      "famousFor": [
+        "Nubian pyramids at Meroë",
+        "confluence of the Blue and White Nile"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Suriname": {
+      "country": "Suriname",
+      "capital": "Paramaribo",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "gold",
+        "crude oil",
+        "rice",
+        "bananas",
+        "shrimp"
+      ],
+      "climate": "Tropical equatorial",
+      "famousFor": [
+        "Amazon rainforest covering 93% of land",
+        "diverse ethnic mix"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Sweden": {
+      "country": "Sweden",
+      "capital": "Stockholm",
+      "majorCities": [
+        "Gothenburg",
+        "Malmö",
+        "Kiruna"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "vehicles",
+        "machinery",
+        "pharmaceuticals",
+        "iron and steel",
+        "paper"
+      ],
+      "climate": "Temperate to subarctic",
+      "famousFor": [
+        "IKEA",
+        "Northern Lights",
+        "Nobel Prize"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Switzerland": {
+      "country": "Switzerland",
+      "capital": "Bern",
+      "majorCities": [
+        "Zurich",
+        "Geneva",
+        "Basel",
+        "Lucerne",
+        "Interlaken"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "gold",
+        "pharmaceuticals",
+        "watches",
+        "machinery",
+        "chemicals"
+      ],
+      "climate": "Alpine to temperate",
+      "famousFor": [
+        "Swiss Alps",
+        "chocolate and cheese",
+        "watchmaking"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Syria": {
+      "country": "Syria",
+      "capital": "Damascus",
+      "majorCities": [
+        "Aleppo",
+        "Palmyra"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "crude oil",
+        "olive oil",
+        "fruits",
+        "textiles",
+        "livestock"
+      ],
+      "climate": "Mediterranean to arid",
+      "famousFor": [
+        "ancient city of Damascus (one of world's oldest)",
+        "Palmyra ruins"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Taiwan": {
+      "country": "Taiwan",
+      "capital": "Taipei",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Tajikistan": {
+      "country": "Tajikistan",
+      "capital": "Dushanbe",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "aluminum",
+        "gold",
+        "cotton",
+        "zinc",
+        "electricity"
+      ],
+      "climate": "Continental to alpine",
+      "famousFor": [
+        "Pamir Mountains (Roof of the World)",
+        "ancient Silk Road cities"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Tanzania": {
+      "country": "Tanzania",
+      "capital": "Dodoma",
+      "majorCities": [
+        "Dar es Salaam",
+        "Zanzibar City",
+        "Arusha"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "gold",
+        "coffee",
+        "cashew nuts",
+        "tobacco",
+        "gemstones"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Mount Kilimanjaro",
+        "Serengeti migration",
+        "Zanzibar spice island"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Thailand": {
+      "country": "Thailand",
+      "capital": "Bangkok",
+      "majorCities": [
+        "Chiang Mai",
+        "Phuket",
+        "Pattaya",
+        "Krabi"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "electronics",
+        "vehicles",
+        "rubber",
+        "rice",
+        "jewelry"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "ornate Buddhist temples",
+        "Thai cuisine",
+        "tropical islands"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Timor-Leste": {
+      "country": "Timor-Leste",
+      "capital": "Dili",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "crude oil",
+        "natural gas",
+        "coffee"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Cristo Rei statue",
+        "coral reefs",
+        "coffee growing highlands"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Togo": {
+      "country": "Togo",
+      "capital": "Lomé",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "gold",
+        "refined petroleum",
+        "phosphates",
+        "cotton",
+        "cocoa"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Koutammakou UNESCO landscape",
+        "voodoo festivals",
+        "Togoville"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Tonga": {
+      "country": "Tonga",
+      "capital": "Nukuʻalofa",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [
+        "squash",
+        "fish",
+        "vanilla",
+        "root crops"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "only Pacific monarchy",
+        "whale watching",
+        "blowholes of Houma"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Trinidad and Tobago": {
+      "country": "Trinidad and Tobago",
+      "capital": "Port of Spain",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "petroleum",
+        "natural gas",
+        "ammonia",
+        "methanol",
+        "chemicals"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Carnival",
+        "steelpan music (invented here)",
+        "Pitch Lake"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Tunisia": {
+      "country": "Tunisia",
+      "capital": "Tunis",
+      "majorCities": [
+        "Tunis",
+        "Sousse"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "refined petroleum",
+        "olive oil",
+        "phosphates",
+        "textiles",
+        "dates"
+      ],
+      "climate": "Mediterranean to arid",
+      "famousFor": [
+        "Carthage ruins",
+        "Star Wars filming locations",
+        "Mediterranean beaches"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Turkey": {
+      "country": "Turkey",
+      "capital": "Ankara",
+      "majorCities": [
+        "Istanbul",
+        "Antalya",
+        "Izmir",
+        "Cappadocia",
+        "Bodrum",
+        "Ephesus"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "vehicles",
+        "machinery",
+        "textiles",
+        "iron and steel",
+        "electronics"
+      ],
+      "climate": "Temperate to continental",
+      "famousFor": [
+        "Hagia Sophia",
+        "Cappadocia",
+        "ancient Troy"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Turkmenistan": {
+      "country": "Turkmenistan",
+      "capital": "Ashgabat",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "natural gas",
+        "crude oil",
+        "petrochemicals",
+        "textiles",
+        "cotton"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "Darvaza Gas Crater (Door to Hell)",
+        "Akhal-Teke horses",
+        "white marble capital"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Turks and Caicos Islands": {
+      "country": "Turks and Caicos Islands",
+      "capital": "Cockburn Town",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Tuvalu": {
+      "country": "Tuvalu",
+      "capital": "Funafuti",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [
+        "fish",
+        "coconut products"
+      ],
+      "climate": "Tropical maritime",
+      "famousFor": [
+        "one of world's smallest and least-visited countries",
+        ".tv internet domain"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Uganda": {
+      "country": "Uganda",
+      "capital": "Kampala",
+      "majorCities": [
+        "Entebbe"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "coffee",
+        "gold",
+        "fish",
+        "tea",
+        "tobacco"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "mountain gorillas in Bwindi",
+        "source of the Nile",
+        "diverse birdlife"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Ukraine": {
+      "country": "Ukraine",
+      "capital": "Kyiv",
+      "majorCities": [
+        "Lviv",
+        "Odesa",
+        "Kharkiv",
+        "Chernobyl"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "corn",
+        "sunflower oil",
+        "iron ore",
+        "wheat",
+        "steel"
+      ],
+      "climate": "Temperate continental",
+      "famousFor": [
+        "Kyiv's golden-domed churches",
+        "breadbasket of Europe",
+        "Chernobyl site"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "United Arab Emirates": {
+      "country": "United Arab Emirates",
+      "capital": "Abu Dhabi",
+      "majorCities": [
+        "Dubai",
+        "Sharjah"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "crude oil",
+        "refined petroleum",
+        "gold",
+        "aluminum",
+        "diamonds"
+      ],
+      "climate": "Arid desert",
+      "famousFor": [
+        "Burj Khalifa (world's tallest building)",
+        "luxury shopping",
+        "desert safaris"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "United Kingdom": {
+      "country": "United Kingdom",
+      "capital": "London",
+      "majorCities": [
+        "Manchester",
+        "Edinburgh",
+        "Liverpool",
+        "Birmingham",
+        "Oxford",
+        "Cambridge",
+        "Glasgow",
+        "Bath"
+      ],
+      "continent": "Europe",
+      "exports": [
+        "vehicles",
+        "machinery",
+        "pharmaceuticals",
+        "gold",
+        "crude oil"
+      ],
+      "climate": "Temperate oceanic",
+      "famousFor": [
+        "Big Ben and Buckingham Palace",
+        "Shakespeare",
+        "The Beatles"
+      ],
+      "culturalTags": [
+        "British Museum",
+        "Elgin Marbles",
+        "Pentelic marble",
+        "Phidias",
+        "Rosetta Stone",
+        "ancient scripts and decipherment route",
+        "art collection",
+        "bilingual inscription",
+        "classical sculpture and restitution route",
+        "granodiorite",
+        "group of sculptures",
+        "stele",
+        "theft_scene",
+        "Überrest"
+      ],
+      "culturalObjects": [
+        {
+          "title": "Rosetta Stone",
+          "wikidataId": "Q48584",
+          "pattern": "ancient scripts and decipherment route"
+        },
+        {
+          "title": "Elgin Marbles",
+          "wikidataId": "Q606662",
+          "pattern": "classical sculpture and restitution route"
+        }
+      ],
+      "culturalPlaces": [
+        {
+          "name": "British Museum",
+          "city": "London",
+          "role": "theft_scene",
+          "wikidataId": "Q6373",
+          "lat": 51.519444444444446,
+          "lon": -0.12694444444444444
+        },
+        {
+          "name": "British Museum",
+          "city": "London",
+          "role": "theft_scene",
+          "wikidataId": "Q6373",
+          "lat": 51.519444444444446,
+          "lon": -0.12694444444444444
+        }
+      ],
+      "caseIds": [
+        "parthenon-fragments",
+        "rosetta-cipher"
+      ]
+    },
+    "United States": {
+      "country": "United States",
+      "capital": "Washington, D.C.",
+      "majorCities": [
+        "New York",
+        "Los Angeles",
+        "Chicago",
+        "San Francisco",
+        "Las Vegas",
+        "Miami",
+        "Houston",
+        "Seattle",
+        "Boston",
+        "New Orleans"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "refined petroleum",
+        "aircraft",
+        "vehicles",
+        "machinery",
+        "electronics"
+      ],
+      "climate": "Varies (tropical to arctic)",
+      "famousFor": [
+        "Statue of Liberty",
+        "Grand Canyon",
+        "Hollywood"
+      ],
+      "culturalTags": [
+        "Freer Gallery of Art",
+        "Katsushika Hokusai",
+        "Prussian blue",
+        "The Great Wave off Kanagawa",
+        "final_proof_scene",
+        "meisho-e",
+        "nishiki-e",
+        "paper",
+        "ukiyo-e",
+        "ukiyo-e print and maritime image route",
+        "woodblock print"
+      ],
+      "culturalObjects": [
+        {
+          "title": "The Great Wave off Kanagawa",
+          "wikidataId": "Q252485",
+          "pattern": "ukiyo-e print and maritime image route"
+        }
+      ],
+      "culturalPlaces": [
+        {
+          "name": "Freer Gallery of Art",
+          "city": "Washington, D.C.",
+          "role": "final_proof_scene",
+          "wikidataId": "Q1075126",
+          "lat": 38.888333333333335,
+          "lon": -77.0275
+        }
+      ],
+      "caseIds": [
+        "great-wave-ledger"
+      ]
+    },
+    "United States Virgin Islands": {
+      "country": "United States Virgin Islands",
+      "capital": "Charlotte Amalie",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Uruguay": {
+      "country": "Uruguay",
+      "capital": "Montevideo",
+      "majorCities": [],
+      "continent": "Americas",
+      "exports": [
+        "beef",
+        "soybeans",
+        "cellulose",
+        "rice",
+        "dairy"
+      ],
+      "climate": "Temperate subtropical",
+      "famousFor": [
+        "progressive social policies",
+        "gaucho culture",
+        "Punta del Este beaches"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Uzbekistan": {
+      "country": "Uzbekistan",
+      "capital": "Tashkent",
+      "majorCities": [
+        "Samarkand",
+        "Bukhara"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "gold",
+        "cotton",
+        "natural gas",
+        "uranium",
+        "textiles"
+      ],
+      "climate": "Continental arid",
+      "famousFor": [
+        "Samarkand's Registan Square",
+        "Silk Road heritage",
+        "Islamic architecture"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Vanuatu": {
+      "country": "Vanuatu",
+      "capital": "Port Vila",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [
+        "copra",
+        "beef",
+        "cocoa",
+        "timber",
+        "kava"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "active volcanoes",
+        "land diving (origin of bungee jumping)",
+        "diverse Melanesian culture"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Vatican City": {
+      "country": "Vatican City",
+      "capital": "Vatican City",
+      "majorCities": [],
+      "continent": "Europe",
+      "exports": [
+        "postage stamps",
+        "publications",
+        "souvenirs"
+      ],
+      "climate": "Mediterranean",
+      "famousFor": [
+        "St. Peter's Basilica",
+        "Sistine Chapel",
+        "center of the Catholic Church"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Venezuela": {
+      "country": "Venezuela",
+      "capital": "Caracas",
+      "majorCities": [
+        "Maracaibo",
+        "Valencia"
+      ],
+      "continent": "Americas",
+      "exports": [
+        "crude oil",
+        "refined petroleum",
+        "gold",
+        "iron ore"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Angel Falls (world's highest waterfall)",
+        "oil reserves",
+        "tepui table-top mountains"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Vietnam": {
+      "country": "Vietnam",
+      "capital": "Hanoi",
+      "majorCities": [
+        "Ho Chi Minh City",
+        "Da Nang",
+        "Hoi An",
+        "Nha Trang",
+        "Halong Bay"
+      ],
+      "continent": "Asia",
+      "exports": [
+        "electronics",
+        "footwear",
+        "textiles",
+        "seafood",
+        "coffee"
+      ],
+      "climate": "Tropical to subtropical",
+      "famousFor": [
+        "Ha Long Bay",
+        "phở cuisine",
+        "Cu Chi tunnels"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Wallis and Futuna": {
+      "country": "Wallis and Futuna",
+      "capital": "Mata-Utu",
+      "majorCities": [],
+      "continent": "Oceania",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Western Sahara": {
+      "country": "Western Sahara",
+      "capital": "Laayoune",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [],
+      "climate": "",
+      "famousFor": [],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Yemen": {
+      "country": "Yemen",
+      "capital": "Sana'a",
+      "majorCities": [],
+      "continent": "Asia",
+      "exports": [
+        "crude oil",
+        "gold",
+        "fish",
+        "coffee"
+      ],
+      "climate": "Arid desert to tropical",
+      "famousFor": [
+        "Socotra Island biodiversity",
+        "Old Sana'a architecture",
+        "ancient incense trade"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Zambia": {
+      "country": "Zambia",
+      "capital": "Lusaka",
+      "majorCities": [],
+      "continent": "Africa",
+      "exports": [
+        "copper",
+        "gold",
+        "gemstones",
+        "tobacco",
+        "sugar"
+      ],
+      "climate": "Tropical",
+      "famousFor": [
+        "Victoria Falls",
+        "South Luangwa National Park",
+        "copper mining"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    },
+    "Zimbabwe": {
+      "country": "Zimbabwe",
+      "capital": "Harare",
+      "majorCities": [
+        "Bulawayo",
+        "Victoria Falls"
+      ],
+      "continent": "Africa",
+      "exports": [
+        "gold",
+        "tobacco",
+        "diamonds",
+        "ferroalloys",
+        "nickel"
+      ],
+      "climate": "Tropical to subtropical",
+      "famousFor": [
+        "Victoria Falls",
+        "Great Zimbabwe ruins",
+        "diverse wildlife"
+      ],
+      "culturalTags": [],
+      "culturalObjects": [],
+      "culturalPlaces": [],
+      "caseIds": []
+    }
+  }
+}

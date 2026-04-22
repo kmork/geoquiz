@@ -1,0 +1,392 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "generatedBy": "carmen/script/import-world-cultural-data.mjs"
+  },
+  "terms": [
+    {
+      "term": "ancient scripts and decipherment route",
+      "kind": "case_pattern",
+      "sourceIds": [
+        "rosetta-cipher"
+      ]
+    },
+    {
+      "term": "calendar stone and Mesoamerican provenance route",
+      "kind": "case_pattern",
+      "sourceIds": [
+        "sun-stone-calendar"
+      ]
+    },
+    {
+      "term": "classical sculpture and restitution route",
+      "kind": "case_pattern",
+      "sourceIds": [
+        "parthenon-fragments"
+      ]
+    },
+    {
+      "term": "Renaissance provenance route",
+      "kind": "case_pattern",
+      "sourceIds": [
+        "louvre-vanishing"
+      ]
+    },
+    {
+      "term": "ukiyo-e print and maritime image route",
+      "kind": "case_pattern",
+      "sourceIds": [
+        "great-wave-ledger"
+      ]
+    },
+    {
+      "term": "final_proof_scene",
+      "kind": "case_place_role",
+      "sourceIds": [
+        "louvre-vanishing-final-proof-scene-q160112",
+        "great-wave-ledger-final-proof-scene-q1075126",
+        "sun-stone-calendar-final-proof-scene-q3330387"
+      ]
+    },
+    {
+      "term": "origin_claim",
+      "kind": "case_place_role",
+      "sourceIds": [
+        "parthenon-fragments-origin-claim-q421084"
+      ]
+    },
+    {
+      "term": "origin_scene",
+      "kind": "case_place_role",
+      "sourceIds": [
+        "great-wave-ledger-origin-scene-q17220332"
+      ]
+    },
+    {
+      "term": "print_trade_record",
+      "kind": "case_place_role",
+      "sourceIds": [
+        "great-wave-ledger-print-trade-record-q190804"
+      ]
+    },
+    {
+      "term": "provenance_archive",
+      "kind": "case_place_role",
+      "sourceIds": [
+        "louvre-vanishing-provenance-archive-q51252"
+      ]
+    },
+    {
+      "term": "restoration_lead",
+      "kind": "case_place_role",
+      "sourceIds": [
+        "louvre-vanishing-restoration-lead-q190804"
+      ]
+    },
+    {
+      "term": "script_archive",
+      "kind": "case_place_role",
+      "sourceIds": [
+        "rosetta-cipher-script-archive-q201219"
+      ]
+    },
+    {
+      "term": "site_evidence",
+      "kind": "case_place_role",
+      "sourceIds": [
+        "parthenon-fragments-site-evidence-q131013",
+        "sun-stone-calendar-site-evidence-q774021"
+      ]
+    },
+    {
+      "term": "theft_scene",
+      "kind": "case_place_role",
+      "sourceIds": [
+        "louvre-vanishing-theft-scene-q19675",
+        "rosetta-cipher-theft-scene-q6373",
+        "parthenon-fragments-theft-scene-q6373",
+        "sun-stone-calendar-theft-scene-q524249"
+      ]
+    },
+    {
+      "term": "translation_archive",
+      "kind": "case_place_role",
+      "sourceIds": [
+        "rosetta-cipher-translation-archive-q501851"
+      ]
+    },
+    {
+      "term": "Katsushika Hokusai",
+      "kind": "creator",
+      "sourceIds": [
+        "Q252485"
+      ]
+    },
+    {
+      "term": "Leonardo da Vinci",
+      "kind": "creator",
+      "sourceIds": [
+        "Q12418"
+      ]
+    },
+    {
+      "term": "Mexica",
+      "kind": "creator",
+      "sourceIds": [
+        "Q786806"
+      ]
+    },
+    {
+      "term": "Phidias",
+      "kind": "creator",
+      "sourceIds": [
+        "Q606662"
+      ]
+    },
+    {
+      "term": "Acropolis Museum",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q421084"
+      ]
+    },
+    {
+      "term": "Acropolis of Athens",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q131013"
+      ]
+    },
+    {
+      "term": "Bibliotheca Alexandrina",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q501851"
+      ]
+    },
+    {
+      "term": "British Museum",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q6373"
+      ]
+    },
+    {
+      "term": "Egyptian Museum",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q201219"
+      ]
+    },
+    {
+      "term": "Freer Gallery of Art",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q1075126"
+      ]
+    },
+    {
+      "term": "Louvre Museum",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q19675"
+      ]
+    },
+    {
+      "term": "Museo del Prado",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q160112"
+      ]
+    },
+    {
+      "term": "National Museum of Anthropology",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q524249"
+      ]
+    },
+    {
+      "term": "Rijksmuseum",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q190804"
+      ]
+    },
+    {
+      "term": "Sumida Hokusai Museum",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q17220332"
+      ]
+    },
+    {
+      "term": "Templo Mayor",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q774021"
+      ]
+    },
+    {
+      "term": "Templo Mayor Museum",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q3330387"
+      ]
+    },
+    {
+      "term": "Uffizi Gallery",
+      "kind": "cultural_place",
+      "sourceIds": [
+        "Q51252"
+      ]
+    },
+    {
+      "term": "meisho-e",
+      "kind": "genre",
+      "sourceIds": [
+        "Q252485"
+      ]
+    },
+    {
+      "term": "nishiki-e",
+      "kind": "genre",
+      "sourceIds": [
+        "Q252485"
+      ]
+    },
+    {
+      "term": "portrait",
+      "kind": "genre",
+      "sourceIds": [
+        "Q12418"
+      ]
+    },
+    {
+      "term": "ukiyo-e",
+      "kind": "genre",
+      "sourceIds": [
+        "Q252485"
+      ]
+    },
+    {
+      "term": "basalt",
+      "kind": "material",
+      "sourceIds": [
+        "Q786806"
+      ]
+    },
+    {
+      "term": "granodiorite",
+      "kind": "material",
+      "sourceIds": [
+        "Q48584"
+      ]
+    },
+    {
+      "term": "oil paint",
+      "kind": "material",
+      "sourceIds": [
+        "Q12418"
+      ]
+    },
+    {
+      "term": "paper",
+      "kind": "material",
+      "sourceIds": [
+        "Q252485"
+      ]
+    },
+    {
+      "term": "Pentelic marble",
+      "kind": "material",
+      "sourceIds": [
+        "Q606662"
+      ]
+    },
+    {
+      "term": "poplar panel",
+      "kind": "material",
+      "sourceIds": [
+        "Q12418"
+      ]
+    },
+    {
+      "term": "Prussian blue",
+      "kind": "material",
+      "sourceIds": [
+        "Q252485"
+      ]
+    },
+    {
+      "term": "wood",
+      "kind": "material",
+      "sourceIds": [
+        "Q12418"
+      ]
+    },
+    {
+      "term": "Italian Renaissance",
+      "kind": "movement",
+      "sourceIds": [
+        "Q12418"
+      ]
+    },
+    {
+      "term": "art collection",
+      "kind": "object_type",
+      "sourceIds": [
+        "Q606662"
+      ]
+    },
+    {
+      "term": "bilingual inscription",
+      "kind": "object_type",
+      "sourceIds": [
+        "Q48584"
+      ]
+    },
+    {
+      "term": "group of sculptures",
+      "kind": "object_type",
+      "sourceIds": [
+        "Q606662"
+      ]
+    },
+    {
+      "term": "painting",
+      "kind": "object_type",
+      "sourceIds": [
+        "Q12418"
+      ]
+    },
+    {
+      "term": "sculpture",
+      "kind": "object_type",
+      "sourceIds": [
+        "Q786806"
+      ]
+    },
+    {
+      "term": "stele",
+      "kind": "object_type",
+      "sourceIds": [
+        "Q48584"
+      ]
+    },
+    {
+      "term": "Überrest",
+      "kind": "object_type",
+      "sourceIds": [
+        "Q48584"
+      ]
+    },
+    {
+      "term": "woodblock print",
+      "kind": "object_type",
+      "sourceIds": [
+        "Q252485"
+      ]
+    }
+  ]
+}

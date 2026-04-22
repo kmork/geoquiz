@@ -2484,6 +2484,25 @@ body {
   border-color: rgba(129, 201, 157, 0.68);
 }
 
+.carmen-city-map-pin.cultural-place {
+  border-color: rgba(250, 204, 21, 0.82);
+  background:
+    linear-gradient(180deg, rgba(92, 65, 33, 0.98), rgba(42, 32, 21, 0.96));
+  color: #fff7d6;
+}
+
+.carmen-city-map-pin.cultural-place::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: #facc15;
+  box-shadow: 0 0 10px rgba(250, 204, 21, 0.52);
+}
+
 .carmen-city-map-pin.real-place::before {
   content: '';
   position: absolute;

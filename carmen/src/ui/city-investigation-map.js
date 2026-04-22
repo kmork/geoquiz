@@ -36,6 +36,11 @@ function getGeoPoints(options) {
     points.push({ lat: options.scene.lat, lon: options.scene.lon });
   }
   if (options.airport) points.push({ lat: options.airport.lat, lon: options.airport.lon });
+  for (const loc of options.locations || []) {
+    if (Number.isFinite(loc?.lat) && Number.isFinite(loc?.lon)) {
+      points.push({ lat: loc.lat, lon: loc.lon });
+    }
+  }
   for (const poi of Object.values(options.pois || {})) {
     if (Number.isFinite(poi?.lat) && Number.isFinite(poi?.lon)) {
       points.push({ lat: poi.lat, lon: poi.lon });
@@ -97,6 +102,7 @@ function projectToScreen(lat, lon, viewport) {
 }
 
 export function createCityInvestigationMap(container, locations, options, onPick) {
+  options.locations = locations;
   container.innerHTML = `
     <div class="carmen-city-map">
       <div class="carmen-city-map-head">
@@ -229,7 +235,9 @@ export function createCityInvestigationMap(container, locations, options, onPick
       const button = pinButtons.get(loc.id);
       if (!button) continue;
       let point = null;
-      if (loc.id === 'airport' && options.airport) {
+      if (Number.isFinite(loc.lat) && Number.isFinite(loc.lon)) {
+        point = projectToScreen(loc.lat, loc.lon, viewport);
+      } else if (loc.id === 'airport' && options.airport) {
         point = projectToScreen(options.airport.lat, options.airport.lon, viewport);
       } else if (options.pois?.[loc.id]) {
         point = projectToScreen(options.pois[loc.id].lat, options.pois[loc.id].lon, viewport);
@@ -350,6 +358,9 @@ export function createCityInvestigationMap(container, locations, options, onPick
     button.className = 'carmen-city-map-pin';
     button.dataset.location = loc.id;
     const poi = options.pois?.[loc.id] || null;
+    if (loc.type === 'cultural-place') {
+      button.classList.add('cultural-place');
+    }
     if (poi) {
       button.classList.add('real-place');
       button.dataset.confidence = poi.confidence || 'medium';
@@ -357,6 +368,8 @@ export function createCityInvestigationMap(container, locations, options, onPick
     const airportSuffix = loc.id === 'airport' && options.airport?.iata ? ` (${options.airport.iata})` : '';
     const title = loc.id === 'airport' && options.airport?.name
       ? `${loc.name}: ${options.airport.name}${airportSuffix}`
+      : loc.type === 'cultural-place'
+        ? `${loc.placeName || loc.name}: ${loc.description || loc.role || 'case evidence location'}`
       : poi?.name
         ? `${loc.name}: ${poi.name}`
       : `${loc.name}: ACME field stop`;

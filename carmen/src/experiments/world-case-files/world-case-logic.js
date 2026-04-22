@@ -17,7 +17,7 @@ function countryHasCity(countryData, city) {
   return (countryData?.cities || []).some(item => normalize(item.name) === wanted);
 }
 
-function countryMatchesTag(countryData, tag) {
+function countryMatchesTag(countryData, tag, culturalCountry = null) {
   if (!countryData || !tag) return false;
   const [kind, rawValue = ''] = tag.split(':');
   const value = rawValue.trim();
@@ -44,8 +44,18 @@ function countryMatchesTag(countryData, tag) {
       countryData.history,
       ...(countryData.famousFor || []),
       countryData.climate,
+      ...(culturalCountry?.culturalTags || []),
     ].map(normalize).join(' ');
     return haystack.includes(valueLower);
+  }
+  if (kind === 'cultural_place') {
+    return (culturalCountry?.culturalPlaces || []).some(place => normalize(place.name).includes(valueLower));
+  }
+  if (kind === 'cultural_role') {
+    return (culturalCountry?.culturalPlaces || []).some(place => normalize(place.role) === valueLower);
+  }
+  if (kind === 'cultural_object') {
+    return (culturalCountry?.culturalObjects || []).some(object => normalize(object.title).includes(valueLower));
   }
 
   // Direction and atmospheric tags are treated as narrative-only until a
@@ -53,26 +63,29 @@ function countryMatchesTag(countryData, tag) {
   return false;
 }
 
-function evidenceMatch(countryData, evidence) {
+function evidenceMatch(countryData, evidence, culturalCountry = null) {
   const tags = evidence?.tags || [];
   if (!tags.length) return { matches: 0, contradictions: 0 };
   let matches = 0;
   let contradictions = 0;
   for (const tag of tags) {
     if (tag.startsWith('exclude:')) {
-      if (countryMatchesTag(countryData, tag)) contradictions++;
+      if (countryMatchesTag(countryData, tag, culturalCountry)) contradictions++;
       continue;
     }
-    if (countryMatchesTag(countryData, tag)) matches++;
+    if (countryMatchesTag(countryData, tag, culturalCountry)) matches++;
   }
   return { matches, contradictions };
 }
 
 export class WorldCaseFilesLogic {
-  constructor({ caseData, countries }) {
+  constructor({ caseData, countries, culturalPlaces = [], culturalObjects = [], candidateIndex = null }) {
     this.caseData = caseData;
     this.countries = countries || [];
     this.countryMap = Object.fromEntries(this.countries.map(country => [country.country, country]));
+    this.culturalPlaces = (culturalPlaces || []).filter(place => place.caseId === caseData.id);
+    this.culturalObjects = (culturalObjects || []).filter(object => object.id === caseData.id);
+    this.candidateIndex = candidateIndex?.countries || {};
     this.currentLeg = 0;
     this.currentCountry = caseData.start.country;
     this.visited = [caseData.start.country];
@@ -112,11 +125,26 @@ export class WorldCaseFilesLogic {
   }
 
   getLocations() {
-    return LOCATIONS.map(location => ({
+    const baseLocations = LOCATIONS.map(location => ({
       id: location.id,
       emoji: location.emoji,
       name: location.name,
     }));
+    return [
+      ...baseLocations,
+      ...this.getSceneCulturalPlaces().map(place => ({
+        id: this._culturalLocationId(place.id),
+        emoji: this._culturalPlaceEmoji(place.role),
+        name: place.name,
+        type: 'cultural-place',
+        role: place.role,
+        placeId: place.id,
+        lat: place.lat,
+        lon: place.lon,
+        placeName: place.name,
+        description: place.description,
+      })),
+    ];
   }
 
   getInvestigatedLocationIds() {
@@ -124,6 +152,13 @@ export class WorldCaseFilesLogic {
   }
 
   getInformant(locationId) {
+    if (this._isCulturalLocationId(locationId)) {
+      const place = this.getCulturalPlaceByLocationId(locationId);
+      return {
+        emoji: this._culturalPlaceEmoji(place?.role),
+        prefix: `${place?.name || 'Cultural archive'} records show`,
+      };
+    }
     const location = LOCATIONS.find(item => item.id === locationId);
     const informant = location?.informants?.[0];
     return informant || { emoji: location?.emoji || '🔎', prefix: location?.name || 'Field office' };
@@ -167,14 +202,46 @@ export class WorldCaseFilesLogic {
       targetCountry: leg.to,
       foundInCountry: this.currentCountry,
       foundInCity: this.getSceneForCountry(this.currentCountry)?.city || this.currentCountry,
-      category: clue.tags?.some(tag => tag.startsWith('culture:') || tag.startsWith('famous:') || tag.startsWith('history:'))
-        ? 'Cultural Evidence'
-        : clue.tags?.some(tag => tag.startsWith('country:') || tag.startsWith('city:') || tag === 'confirmation')
-          ? 'Confirmation'
-          : 'Route Evidence',
+      category: clue.category || (
+        clue.tags?.some(tag => tag.startsWith('culture:') || tag.startsWith('famous:') || tag.startsWith('history:') || tag.startsWith('cultural_'))
+          ? 'Cultural Evidence'
+          : clue.tags?.some(tag => tag.startsWith('country:') || tag.startsWith('city:') || tag === 'confirmation')
+            ? 'Confirmation'
+            : 'Route Evidence'
+      ),
     };
     this.evidence.push(evidence);
     return evidence;
+  }
+
+  _isCulturalLocationId(locationId) {
+    return String(locationId || '').startsWith('cultural:');
+  }
+
+  _culturalLocationId(placeId) {
+    return `cultural:${placeId}`;
+  }
+
+  _culturalPlaceEmoji(role = '') {
+    if (role.includes('archive') || role.includes('record')) return '📜';
+    if (role.includes('site')) return '🏺';
+    if (role.includes('proof')) return '🧾';
+    return '🏛️';
+  }
+
+  getCulturalPlaceByLocationId(locationId) {
+    const placeId = String(locationId || '').replace(/^cultural:/, '');
+    return this.culturalPlaces.find(place => place.id === placeId) || null;
+  }
+
+  getSceneCulturalPlaces(country = this.currentCountry) {
+    const scene = this.getSceneForCountry(country);
+    const sceneCity = normalize(scene?.city);
+    return this.culturalPlaces.filter(place => {
+      if (place.country !== country) return false;
+      if (!sceneCity) return true;
+      return normalize(place.city) === sceneCity;
+    });
   }
 
   getSceneForCountry(country) {
@@ -194,8 +261,9 @@ export class WorldCaseFilesLogic {
       let strength = 0;
       const matchedEvidence = [];
       const contradictedEvidence = [];
+      const culturalCountry = this.candidateIndex[countryData.country] || null;
       for (const evidence of activeEvidence) {
-        const result = evidenceMatch(countryData, evidence);
+        const result = evidenceMatch(countryData, evidence, culturalCountry);
         if (result.matches > 0) {
           matches += result.matches;
           strength += evidence.strength || 1;
@@ -314,6 +382,8 @@ export class WorldCaseFilesLogic {
       evidence: [...this.evidence],
       deadEnds: [...this.deadEnds],
       route: this.caseData.route,
+      culturalPlaces: this.culturalPlaces,
+      culturalObjects: this.culturalObjects,
     };
   }
 }

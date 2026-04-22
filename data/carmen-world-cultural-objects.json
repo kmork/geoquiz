@@ -1,0 +1,265 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "generatedBy": "carmen/script/import-world-cultural-data.mjs"
+  },
+  "objects": [
+    {
+      "id": "louvre-vanishing",
+      "title": "Mona Lisa",
+      "wikidataId": "Q12418",
+      "description": "oil painting by Leonardo da Vinci in the Louvre, Paris",
+      "caseTitle": "The Louvre Vanishing",
+      "pattern": "Renaissance provenance route",
+      "creator": [
+        "Leonardo da Vinci"
+      ],
+      "movement": [
+        "Italian Renaissance"
+      ],
+      "objectType": [
+        "painting"
+      ],
+      "materials": [
+        "oil paint",
+        "poplar panel",
+        "wood"
+      ],
+      "genre": [
+        "portrait"
+      ],
+      "depicts": [
+        "Lisa del Giocondo",
+        "sky",
+        "body of water",
+        "bridge",
+        "armrest",
+        "landscape",
+        "mountain",
+        "figure",
+        "person depicted in Mona Lisa"
+      ],
+      "creationPlace": [
+        "Florence"
+      ],
+      "countries": [
+        "France",
+        "Republic of Florence"
+      ],
+      "currentInstitution": [
+        "Department of Paintings of the Louvre"
+      ],
+      "currentLocation": [
+        "Salle des États, Louvre",
+        "Louvre Museum"
+      ],
+      "inventoryId": "INV 779",
+      "dateCreated": "1503-00-00T00:00:00Z",
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q12418",
+        "commons": "https://commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_natural_color.jpg"
+      },
+      "image": {
+        "commonsFile": "Mona Lisa, by Leonardo da Vinci, from C2RMF natural color.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_natural_color.jpg",
+        "licenseShortName": "Public domain",
+        "licenseUrl": "",
+        "credit": "Natural colors from <a class=\"external text\" href=\"https://upload.wikimedia.org/wikipedia/commons/archive/e/ec/20110818173258%21Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg\">17:19, 18 August 2011 (UTC) version</a> by <a href=\"//commons.wikimedia.org/wiki/User:Cybershot800i\" title=\"User:Cybershot800i\">Cybershot800i</a> of <a href=\"//commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg\" title=\"File:Mona Lisa, by Leonardo da Vinci, from C2RMF retouched.jpg\">File:Mona Lisa, by Leonardo da Vinci, from C2RMF retouched.jpg</a> per <a class=\"external text\" href=\"https://commons.wikimedia.org/w/index.php?title=File_talk:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF_retouched.jpg&amp;oldid=58394818\">this discussion</a>. Cropped and relevelled from <a href=\"//commons.wikimedia.org/wiki/File:Mona_Lisa,_by_Leonardo_da_Vinci,_from_C2RMF.jpg\" title=\"File:Mona Lisa, by Leonardo da Vinci, from C2RMF.jpg\">File:Mona Lisa, by Leonardo da Vinci, from C2RMF.jpg</a>. Originally C2RMF: <a rel=\"nofollow\" class=\"external text\" href=\"http://web.archive.org/web/20120524155855/http://www.technologies.c2rmf.fr/imaging/showcase\">Galerie de tableaux en très haute définition</a>: <a rel=\"nofollow\" class=\"external text\" href=\"http://www.technologies.c2rmf.fr/iipimage/showcase/zoom/cop29\">image page</a>."
+      }
+    },
+    {
+      "id": "rosetta-cipher",
+      "title": "Rosetta Stone",
+      "wikidataId": "Q48584",
+      "description": "ancient Egyptian stele with inscriptions in three writing systems",
+      "caseTitle": "The Rosetta Cipher",
+      "pattern": "ancient scripts and decipherment route",
+      "creator": [],
+      "movement": [],
+      "objectType": [
+        "Überrest",
+        "bilingual inscription",
+        "stele"
+      ],
+      "materials": [
+        "granodiorite"
+      ],
+      "genre": [],
+      "depicts": [],
+      "creationPlace": [],
+      "countries": [
+        "Egypt",
+        "history of Ptolemaic Egypt"
+      ],
+      "currentInstitution": [
+        "British Museum"
+      ],
+      "currentLocation": [
+        "British Museum"
+      ],
+      "inventoryId": "EA24",
+      "dateCreated": "-0196-00-00T00:00:00Z",
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q48584",
+        "commons": "https://commons.wikimedia.org/wiki/File:Rosetta_Stone_-_front_face_-_corrected_image.jpg"
+      },
+      "image": {
+        "commonsFile": "Rosetta Stone - front face - corrected image.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Rosetta_Stone_-_front_face_-_corrected_image.jpg",
+        "licenseShortName": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>"
+      }
+    },
+    {
+      "id": "parthenon-fragments",
+      "title": "Elgin Marbles",
+      "wikidataId": "Q606662",
+      "description": "collection of sculptures from the Athenian Acropolis in the British Museum",
+      "caseTitle": "The Parthenon Fragments",
+      "pattern": "classical sculpture and restitution route",
+      "creator": [
+        "Phidias"
+      ],
+      "movement": [],
+      "objectType": [
+        "art collection",
+        "group of sculptures"
+      ],
+      "materials": [
+        "Pentelic marble"
+      ],
+      "genre": [],
+      "depicts": [],
+      "creationPlace": [],
+      "countries": [],
+      "currentInstitution": [
+        "British Museum"
+      ],
+      "currentLocation": [
+        "British Museum"
+      ],
+      "inventoryId": "",
+      "dateCreated": "-0440-00-00T00:00:00Z",
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q606662",
+        "commons": "https://commons.wikimedia.org/wiki/File:Elgin_Marbles_British_Museum.jpg"
+      },
+      "image": {
+        "commonsFile": "Elgin Marbles British Museum.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Elgin_Marbles_British_Museum.jpg",
+        "licenseShortName": "CC BY-SA 2.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+        "credit": ""
+      }
+    },
+    {
+      "id": "great-wave-ledger",
+      "title": "The Great Wave off Kanagawa",
+      "wikidataId": "Q252485",
+      "description": "woodblock print by Hokusai",
+      "caseTitle": "The Great Wave Ledger",
+      "pattern": "ukiyo-e print and maritime image route",
+      "creator": [
+        "Katsushika Hokusai"
+      ],
+      "movement": [],
+      "objectType": [
+        "woodblock print"
+      ],
+      "materials": [
+        "paper",
+        "Prussian blue"
+      ],
+      "genre": [
+        "ukiyo-e",
+        "meisho-e",
+        "nishiki-e"
+      ],
+      "depicts": [
+        "Mount Fuji",
+        "Tokyo Bay",
+        "Oshiokuribune",
+        "rogue wave",
+        "Q66686028"
+      ],
+      "creationPlace": [
+        "Japan"
+      ],
+      "countries": [],
+      "currentInstitution": [
+        "Tokyo National Museum",
+        "Rijksmuseum",
+        "Honolulu Museum of Art",
+        "Centre Céramique",
+        "Metropolitan Museum of Art",
+        "British Museum",
+        "Tokyo Fuji Art Museum",
+        "National Gallery of Victoria",
+        "Museum of Art and Crafts Hamburg",
+        "Art Institute of Chicago",
+        "Los Angeles County Museum of Art",
+        "Maidstone Museum and Bentlif Art Gallery",
+        "MAK – Museum of Applied Arts"
+      ],
+      "currentLocation": [],
+      "inventoryId": "13695",
+      "dateCreated": "1900-00-00T00:00:00Z",
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q252485",
+        "commons": "https://commons.wikimedia.org/wiki/File:Katsushika_Hokusai_-_The_Great_Wave_off_the_Coast_of_Kanagawa_LCCN2008660568.jpg"
+      },
+      "image": {
+        "commonsFile": "Katsushika Hokusai - The Great Wave off the Coast of Kanagawa LCCN2008660568.jpg",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Katsushika_Hokusai_-_The_Great_Wave_off_the_Coast_of_Kanagawa_LCCN2008660568.jpg",
+        "licenseShortName": "Public domain",
+        "licenseUrl": "",
+        "credit": "<p>Library of Congress\n</p>\n<ul><li><i>Catalog:</i> <a rel=\"nofollow\" class=\"external free\" href=\"https://lccn.loc.gov/2008660568\">https://lccn.loc.gov/2008660568</a></li>\n<li><i>Image download:</i> <a rel=\"nofollow\" class=\"external free\" href=\"https://cdn.loc.gov/service/pnp/jpd/02000/02018v.jpg\">https://cdn.loc.gov/service/pnp/jpd/02000/02018v.jpg</a></li>\n<li><i>Original url:</i> <a rel=\"nofollow\" class=\"external free\" href=\"https://www.loc.gov/pictures/item/2008660568/\">https://www.loc.gov/pictures/item/2008660568/</a></li></ul>"
+      }
+    },
+    {
+      "id": "sun-stone-calendar",
+      "title": "Aztec sun stone",
+      "wikidataId": "Q786806",
+      "description": "16th century Mexica sculpture",
+      "caseTitle": "The Sun Stone Calendar",
+      "pattern": "calendar stone and Mesoamerican provenance route",
+      "creator": [
+        "Mexica"
+      ],
+      "movement": [],
+      "objectType": [
+        "sculpture"
+      ],
+      "materials": [
+        "basalt"
+      ],
+      "genre": [],
+      "depicts": [],
+      "creationPlace": [],
+      "countries": [
+        "Mexico"
+      ],
+      "currentInstitution": [
+        "National Museum of Anthropology"
+      ],
+      "currentLocation": [
+        "National Museum of Anthropology",
+        "Mexico City Metropolitan Cathedral"
+      ],
+      "inventoryId": "",
+      "dateCreated": "1510-00-00T00:00:00Z",
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q786806",
+        "commons": "https://commons.wikimedia.org/wiki/File:Piedra_del_Sol.tif"
+      },
+      "image": {
+        "commonsFile": "Piedra del Sol.tif",
+        "url": "https://upload.wikimedia.org/wikipedia/commons/2/2e/Piedra_del_Sol.tif",
+        "licenseShortName": "CC BY-SA 4.0",
+        "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+        "credit": "<a href=\"//commons.wikimedia.org/wiki/User:ProtoplasmaKid\" title=\"User:ProtoplasmaKid\">ProtoplasmaKid</a>"
+      }
+    }
+  ]
+}

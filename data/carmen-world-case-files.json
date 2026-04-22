@@ -14,8 +14,8 @@
         "country": "France",
         "city": "Paris",
         "scene": "Louvre",
-        "lat": 48.8606,
-        "lon": 2.3376
+        "lat": 48.861111111111114,
+        "lon": 2.3358333333333334
       },
       "suspect": "The Cartographer",
       "pattern": {
@@ -23,34 +23,10 @@
         "summary": "The thief is laundering the painting through places tied to Renaissance art, museum catalogues, and old European collection routes."
       },
       "route": [
-        {
-          "country": "France",
-          "city": "Paris",
-          "scene": "Louvre",
-          "lat": 48.8606,
-          "lon": 2.3376
-        },
-        {
-          "country": "Italy",
-          "city": "Florence",
-          "scene": "Uffizi archive",
-          "lat": 43.7687,
-          "lon": 11.2550
-        },
-        {
-          "country": "Netherlands",
-          "city": "Amsterdam",
-          "scene": "Rijksmuseum restoration studio",
-          "lat": 52.3600,
-          "lon": 4.8852
-        },
-        {
-          "country": "Spain",
-          "city": "Madrid",
-          "scene": "Prado museum freight office",
-          "lat": 40.4138,
-          "lon": -3.6921
-        }
+        { "country": "France", "city": "Paris", "scene": "Louvre", "lat": 48.861111111111114, "lon": 2.3358333333333334 },
+        { "country": "Italy", "city": "Florence", "scene": "Uffizi archive", "lat": 43.76833333333333, "lon": 11.255277777777778 },
+        { "country": "Netherlands", "city": "Amsterdam", "scene": "Rijksmuseum restoration studio", "lat": 52.36, "lon": 4.885277777777778 },
+        { "country": "Spain", "city": "Madrid", "scene": "Prado museum freight office", "lat": 40.41388888888889, "lon": -3.692222222222222 }
       ],
       "legs": [
         {
@@ -68,13 +44,13 @@
               "strength": 2
             },
             {
-              "id": "louvre-library-renaissance",
-              "locationId": "library",
-              "action": "Consult art archive",
-              "title": "Renaissance catalogue card",
-              "text": "The torn catalogue card references Renaissance workshop records and portrait studies, pointing toward the country most directly associated with Leonardo's early career.",
-              "tags": ["culture:Renaissance", "famous:Renaissance art"],
-              "strength": 3
+              "id": "louvre-gallery-florence-file",
+              "locationId": "cultural:louvre-vanishing-theft-scene-q19675",
+              "action": "Inspect missing gallery register",
+              "title": "Florence shelf mark",
+              "text": "The Louvre register is missing a Florence loan sleeve. Its old shelf mark names a Renaissance workshop file, not a Paris exhibition file.",
+              "tags": ["city:Florence", "country:Italy", "culture:Renaissance", "cultural_place:Uffizi"],
+              "strength": 4
             },
             {
               "id": "louvre-market-wine-cloth",
@@ -91,7 +67,7 @@
               "action": "Verify export permit",
               "title": "Romance-language permit",
               "text": "The permit translation stayed inside the Romance-language corridor, but the seal did not match France, Spain, or Portugal. ACME flags Italy as the cleanest fit.",
-              "tags": ["exclude:France", "exclude:Spain", "exclude:Portugal", "country:Italy"],
+              "tags": ["exclude:France", "exclude:Spain", "exclude:Portugal", "country:Italy", "confirmation"],
               "strength": 3
             },
             {
@@ -119,13 +95,13 @@
           "sceneTitle": "The varnish ledger",
           "clues": [
             {
-              "id": "florence-library-northern-restoration",
-              "locationId": "library",
-              "action": "Read restoration ledger",
+              "id": "florence-cultural-northern-restoration",
+              "locationId": "cultural:louvre-vanishing-provenance-archive-q51252",
+              "action": "Read Uffizi transfer ledger",
               "title": "Northern studio note",
-              "text": "The Uffizi archive ledger mentions a northern European restoration studio famous for canal freight and old-master trade records.",
-              "tags": ["continent:Europe", "culture:old-master", "climate:Temperate"],
-              "strength": 2
+              "text": "The Uffizi ledger names a northern restoration studio and an old-master dealer beside canals. The next archive is not another Italian gallery.",
+              "tags": ["continent:Europe", "culture:old-master", "city:Amsterdam", "country:Netherlands"],
+              "strength": 4
             },
             {
               "id": "florence-market-pharma-machinery",
@@ -142,7 +118,7 @@
               "action": "Check air cargo desk",
               "title": "Northwest transfer",
               "text": "The next crate moved northwest from Italy, still inside Europe, toward a low-lying country with a major capital-area airport.",
-              "tags": ["continent:Europe", "direction:northwest", "lowland"],
+              "tags": ["continent:Europe", "direction:northwest"],
               "strength": 2
             },
             {
@@ -151,27 +127,11 @@
               "action": "Interview night clerk",
               "title": "Canal booking",
               "text": "The thief asked for a hotel near canals and a restoration studio, then corrected the clerk when he suggested Venice.",
-              "tags": ["city:Amsterdam", "country:Netherlands", "exclude:Italy"],
-              "strength": 3
-            },
-            {
-              "id": "florence-embassy-low-country",
-              "locationId": "embassy",
-              "action": "Compare transit seal",
-              "title": "Low-country seal",
-              "text": "The diplomatic pouch number points to the Low Countries, but the language mark is not Belgian. That leaves the Dutch file brightest on ACME's board.",
-              "tags": ["country:Netherlands", "exclude:Belgium"],
+              "tags": ["city:Amsterdam", "country:Netherlands", "exclude:Italy", "confirmation"],
               "strength": 3
             }
           ],
-          "followups": [
-            {
-              "afterCountry": "Netherlands",
-              "locationId": "hotel",
-              "text": "The Florence clerk remembers the thief rejecting Venice because the next stop had canals and northern old-master dealers, not Italian Renaissance galleries.",
-              "tags": ["country:Netherlands", "confirmation"]
-            }
-          ]
+          "followups": []
         },
         {
           "from": "Netherlands",
@@ -179,22 +139,13 @@
           "sceneTitle": "The final catalogue swap",
           "clues": [
             {
-              "id": "amsterdam-library-habsburg",
-              "locationId": "library",
-              "action": "Check collection history",
-              "title": "Royal collection trail",
-              "text": "The altered provenance page points to a royal collection city with deep Habsburg-era paperwork and major European museum records.",
-              "tags": ["continent:Europe", "history:Habsburg", "culture:museum"],
-              "strength": 2
-            },
-            {
-              "id": "amsterdam-market-olive-wine",
-              "locationId": "market",
-              "action": "Read cargo relabel",
-              "title": "Mediterranean cargo relabel",
-              "text": "The fake cargo relabel lists wine, vehicles, and Mediterranean food shipments. It is too southern for the Low Countries and too western for Italy.",
-              "tags": ["export:wine", "export:vehicles", "climate:Mediterranean", "exclude:Italy"],
-              "strength": 2
+              "id": "amsterdam-cultural-prado-crossref",
+              "locationId": "cultural:louvre-vanishing-restoration-lead-q190804",
+              "action": "Compare restoration cross-reference",
+              "title": "Prado cross-reference",
+              "text": "The Rijksmuseum restoration note points to a Spanish royal collection file. The exchange number is stamped for the Prado freight office.",
+              "tags": ["country:Spain", "city:Madrid", "cultural_place:Prado", "culture:museum"],
+              "strength": 4
             },
             {
               "id": "amsterdam-airport-southwest",
@@ -206,13 +157,13 @@
               "strength": 3
             },
             {
-              "id": "amsterdam-hotel-prado",
-              "locationId": "hotel",
-              "action": "Question courier",
-              "title": "Museum nickname",
-              "text": "A courier kept saying 'the meadow file' in bad translation. ACME thinks that is a clumsy hint at the Prado.",
-              "tags": ["city:Madrid", "country:Spain", "culture:museum"],
-              "strength": 3
+              "id": "amsterdam-market-olive-wine",
+              "locationId": "market",
+              "action": "Read cargo relabel",
+              "title": "Mediterranean cargo relabel",
+              "text": "The fake cargo relabel lists wine, vehicles, and Mediterranean food shipments. It is too southern for the Low Countries and too western for Italy.",
+              "tags": ["export:vehicles", "climate:Mediterranean", "exclude:Italy"],
+              "strength": 2
             },
             {
               "id": "amsterdam-embassy-spanish",
@@ -231,8 +182,457 @@
         "default": "The field office found no match for the cultural pattern. At least one strong clue contradicts this destination.",
         "France": "The trail began in France, but the collected evidence points away from the Louvre after the theft.",
         "Portugal": "Portugal fits part of the Romance-language trail, but the Renaissance and export evidence do not support it.",
-        "Belgium": "Belgium fits the Low Countries clue, but the language and canal-restoration evidence point farther north.",
-        "Italy": "Italy is already part of the route. For this leg, the later evidence points beyond the Renaissance archive."
+        "Belgium": "Belgium fits the Low Countries clue, but the language and canal-restoration evidence point farther north."
+      }
+    },
+    {
+      "id": "rosetta-cipher",
+      "title": "The Rosetta Cipher",
+      "artifact": {
+        "siteName": "Rosetta Stone",
+        "country": "United Kingdom",
+        "hint": "A trilingual inscription file disappeared from the British Museum, leaving only a rubbed copy and a false customs card.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c8/Rosetta_Stone_-_front_face_-_corrected_image.jpg"
+      },
+      "start": { "country": "United Kingdom", "city": "London", "scene": "British Museum", "lat": 51.519444444444446, "lon": -0.12694444444444444 },
+      "suspect": "Professor Paradox",
+      "pattern": {
+        "label": "Ancient scripts and decipherment route",
+        "summary": "The thief follows translation archives, pharaonic evidence, and places where script fragments can be turned into a false origin story."
+      },
+      "route": [
+        { "country": "United Kingdom", "city": "London", "scene": "British Museum", "lat": 51.519444444444446, "lon": -0.12694444444444444 },
+        { "country": "Egypt", "city": "Cairo", "scene": "Egyptian Museum script archive", "lat": 30.047778, "lon": 31.233333 },
+        { "country": "Egypt", "city": "Alexandria", "scene": "Bibliotheca Alexandrina translation room", "lat": 31.208888888889, "lon": 29.909166666667 }
+      ],
+      "legs": [
+        {
+          "from": "United Kingdom",
+          "to": "Egypt",
+          "sceneTitle": "A missing trilingual file",
+          "clues": [
+            {
+              "id": "rosetta-british-museum-case-note",
+              "locationId": "cultural:rosetta-cipher-theft-scene-q6373",
+              "action": "Inspect the empty display case",
+              "title": "Three scripts, one destination",
+              "text": "The empty case was dusted with a rubbing of Greek, Demotic, and hieroglyphic text. The note names a pharaonic archive and rejects every European destination.",
+              "tags": ["country:Egypt", "culture:pharaonic", "cultural_object:Rosetta Stone", "exclude:United Kingdom"],
+              "strength": 4
+            },
+            {
+              "id": "rosetta-library-decipherment",
+              "locationId": "library",
+              "action": "Read decipherment notes",
+              "title": "Decipherment shelf",
+              "text": "The stolen catalogue card was filed beside ancient-script research, Nile maps, and a note about a museum in Cairo.",
+              "tags": ["country:Egypt", "city:Cairo", "famous:Nile", "culture:ancient"],
+              "strength": 3
+            },
+            {
+              "id": "rosetta-market-granodiorite",
+              "locationId": "market",
+              "action": "Check stone dealer invoice",
+              "title": "Granodiorite invoice",
+              "text": "A fake stone-sample invoice moved with gold and textile paperwork. The cargo language points to North Africa, not another London collector.",
+              "tags": ["export:gold", "export:textiles", "continent:Africa", "exclude:United Kingdom"],
+              "strength": 2
+            },
+            {
+              "id": "rosetta-embassy-cairo-permit",
+              "locationId": "embassy",
+              "action": "Verify research permit",
+              "title": "Cairo permit",
+              "text": "The research permit is valid only for Cairo. The museum stamp is genuine, but the object description has been rewritten.",
+              "tags": ["country:Egypt", "city:Cairo", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        },
+        {
+          "from": "Egypt",
+          "to": "Egypt",
+          "sceneTitle": "The translation copy",
+          "clues": [
+            {
+              "id": "rosetta-egyptian-museum-alexandria-lead",
+              "locationId": "cultural:rosetta-cipher-script-archive-q201219",
+              "action": "Compare script archive cards",
+              "title": "Alexandria translation slip",
+              "text": "The Cairo archive has a duplicate translation slip requested by a library on the Mediterranean coast. The signature points to Alexandria.",
+              "tags": ["country:Egypt", "city:Alexandria", "cultural_place:Bibliotheca Alexandrina"],
+              "strength": 4
+            },
+            {
+              "id": "rosetta-airport-coastal-hop",
+              "locationId": "airport",
+              "category": "Route Evidence",
+              "action": "Check domestic travel sleeve",
+              "title": "Coastal hop",
+              "text": "The courier did not leave Egypt. The travel sleeve names a coastal research city west of Cairo.",
+              "tags": ["country:Egypt", "city:Alexandria", "confirmation"],
+              "strength": 3
+            },
+            {
+              "id": "rosetta-library-library-match",
+              "locationId": "library",
+              "action": "Search library request logs",
+              "title": "Library request",
+              "text": "A translation request arrived from a modern library built around ancient Alexandria's scholarly reputation.",
+              "tags": ["country:Egypt", "city:Alexandria", "culture:ancient scripts"],
+              "strength": 3
+            },
+            {
+              "id": "rosetta-embassy-alexandria-confirmation",
+              "locationId": "embassy",
+              "action": "Confirm archive authority",
+              "title": "Alexandria authority",
+              "text": "The cultural authority confirms the duplicate translation slip was requested for Alexandria, not another Cairo archive.",
+              "tags": ["country:Egypt", "city:Alexandria", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        }
+      ],
+      "deadEnds": {
+        "default": "The script evidence does not fit this destination. The stronger clues still point toward Egypt and its translation archives.",
+        "Greece": "The Greek text matters, but the stone trail is not moving to Greece.",
+        "France": "French decipherment history is tempting, but the permits and cargo records point back to Egypt."
+      }
+    },
+    {
+      "id": "parthenon-fragments",
+      "title": "The Parthenon Fragments",
+      "artifact": {
+        "siteName": "Parthenon Marbles",
+        "country": "United Kingdom",
+        "hint": "Sculpture fragments vanished from a disputed collection file, leaving a restitution memo and a marble dust trail.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Elgin_Marbles_British_Museum.jpg"
+      },
+      "start": { "country": "United Kingdom", "city": "London", "scene": "British Museum", "lat": 51.519444444444446, "lon": -0.12694444444444444 },
+      "suspect": "Ivory Phantom",
+      "pattern": {
+        "label": "Classical sculpture and restitution route",
+        "summary": "The thief moves through classical sculpture evidence, marble source notes, and restitution claims tied to Athens."
+      },
+      "route": [
+        { "country": "United Kingdom", "city": "London", "scene": "British Museum", "lat": 51.519444444444446, "lon": -0.12694444444444444 },
+        { "country": "Greece", "city": "Athens", "scene": "Acropolis Museum", "lat": 37.968417, "lon": 23.728472 },
+        { "country": "Greece", "city": "Athens", "scene": "Acropolis of Athens", "lat": 37.971666666666664, "lon": 23.726111111111113 }
+      ],
+      "legs": [
+        {
+          "from": "United Kingdom",
+          "to": "Greece",
+          "sceneTitle": "The marble return trail",
+          "clues": [
+            {
+              "id": "parthenon-british-museum-restitution-note",
+              "locationId": "cultural:parthenon-fragments-theft-scene-q6373",
+              "action": "Inspect restitution memo",
+              "title": "Athens claim file",
+              "text": "The stolen file references a restitution claim, Pentelic marble, and a museum below the Acropolis. It points away from London and toward Athens.",
+              "tags": ["country:Greece", "city:Athens", "cultural_place:Acropolis Museum", "exclude:United Kingdom"],
+              "strength": 4
+            },
+            {
+              "id": "parthenon-library-classical-shelf",
+              "locationId": "library",
+              "action": "Read sculpture shelf notes",
+              "title": "Classical sculpture shelf",
+              "text": "The archive shelf is indexed under classical sculpture, democracy, and the Parthenon. ACME marks Greece as the historic match.",
+              "tags": ["country:Greece", "famous:Parthenon", "famous:democracy", "culture:classical"],
+              "strength": 3
+            },
+            {
+              "id": "parthenon-market-olive-fish",
+              "locationId": "market",
+              "action": "Inspect freight wrapping",
+              "title": "Mediterranean packing",
+              "text": "The false packing list names olive oil and fish beside marble tools. The climate note reads Mediterranean.",
+              "tags": ["export:olive oil", "export:fish", "climate:Mediterranean"],
+              "strength": 2
+            },
+            {
+              "id": "parthenon-embassy-athens-letter",
+              "locationId": "embassy",
+              "action": "Verify museum letter",
+              "title": "Athens letterhead",
+              "text": "A forged cultural-loan letter uses Greek ministry formatting and names Athens as the receiving city.",
+              "tags": ["country:Greece", "city:Athens", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        },
+        {
+          "from": "Greece",
+          "to": "Greece",
+          "sceneTitle": "The site alignment",
+          "clues": [
+            {
+              "id": "parthenon-acropolis-museum-site-match",
+              "locationId": "cultural:parthenon-fragments-origin-claim-q421084",
+              "action": "Compare fragment alignment",
+              "title": "Site alignment",
+              "text": "The Acropolis Museum alignment table sends the investigator up to the ancient citadel itself. The stolen fragment's edge matches a site record, not a storage room.",
+              "tags": ["country:Greece", "city:Athens", "cultural_place:Acropolis of Athens"],
+              "strength": 4
+            },
+            {
+              "id": "parthenon-hotel-rooftop-view",
+              "locationId": "hotel",
+              "category": "Route Evidence",
+              "action": "Question rooftop attendant",
+              "title": "Rooftop sightline",
+              "text": "A courier requested a room with a direct view of the Acropolis, then left before sunrise with a long crate.",
+              "tags": ["country:Greece", "city:Athens", "famous:Acropolis"],
+              "strength": 3
+            },
+            {
+              "id": "parthenon-embassy-site-warrant",
+              "locationId": "embassy",
+              "action": "Confirm site warrant",
+              "title": "Site warrant",
+              "text": "The final warrant names Athens and the Acropolis site record. ACME has enough confirmation to close the fragment pattern.",
+              "tags": ["country:Greece", "city:Athens", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        }
+      ],
+      "deadEnds": {
+        "default": "The marble and restitution evidence does not fit this destination.",
+        "Italy": "Rome fits classical history, but the specific Parthenon and Acropolis evidence points to Athens.",
+        "United Kingdom": "The case begins in London, but every useful claim file points away from it."
+      }
+    },
+    {
+      "id": "great-wave-ledger",
+      "title": "The Great Wave Ledger",
+      "artifact": {
+        "siteName": "The Great Wave off Kanagawa",
+        "country": "Japan",
+        "hint": "A Hokusai print and its maritime ledger vanished, leaving blue pigment traces and a shipping account.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b5/Katsushika_Hokusai_-_The_Great_Wave_off_the_Coast_of_Kanagawa_LCCN2008660568.jpg"
+      },
+      "start": { "country": "Japan", "city": "Tokyo", "scene": "Sumida Hokusai Museum", "lat": 35.69675, "lon": 139.800389 },
+      "suspect": "Ghost Mariner",
+      "pattern": {
+        "label": "Ukiyo-e print and maritime image route",
+        "summary": "The thief follows Hokusai records, Dutch print-trade catalogues, and a final American collection ledger."
+      },
+      "route": [
+        { "country": "Japan", "city": "Tokyo", "scene": "Sumida Hokusai Museum", "lat": 35.69675, "lon": 139.800389 },
+        { "country": "Netherlands", "city": "Amsterdam", "scene": "Rijksmuseum print records", "lat": 52.36, "lon": 4.885277777777778 },
+        { "country": "United States", "city": "Washington, D.C.", "scene": "Freer Gallery of Art", "lat": 38.888333333333335, "lon": -77.0275 }
+      ],
+      "legs": [
+        {
+          "from": "Japan",
+          "to": "Netherlands",
+          "sceneTitle": "The blue pigment ledger",
+          "clues": [
+            {
+              "id": "wave-hokusai-dutch-ledger",
+              "locationId": "cultural:great-wave-ledger-origin-scene-q17220332",
+              "action": "Inspect Hokusai catalogue drawer",
+              "title": "Dutch print-trade entry",
+              "text": "The Hokusai drawer is missing a maritime print-trade ledger. Its margin note names Amsterdam and a Dutch old-master catalogue shelf.",
+              "tags": ["country:Netherlands", "city:Amsterdam", "cultural_place:Rijksmuseum", "culture:ukiyo-e"],
+              "strength": 4
+            },
+            {
+              "id": "wave-market-blue-paper",
+              "locationId": "market",
+              "action": "Trace pigment and paper",
+              "title": "Blue-paper shipment",
+              "text": "The wrapping included machinery paperwork and a packet marked for a canal-side print dealer.",
+              "tags": ["export:machinery", "city:Amsterdam", "country:Netherlands"],
+              "strength": 3
+            },
+            {
+              "id": "wave-airport-westbound",
+              "locationId": "airport",
+              "action": "Check freight route",
+              "title": "Westbound art freight",
+              "text": "The crate moved west from Tokyo to Europe, not across the Pacific. The routing label mentions a temperate maritime destination.",
+              "tags": ["continent:Europe", "climate:Temperate maritime", "direction:west"],
+              "strength": 2
+            },
+            {
+              "id": "wave-embassy-dutch-confirmation",
+              "locationId": "embassy",
+              "action": "Verify customs stamp",
+              "title": "Dutch customs stamp",
+              "text": "The customs stamp is Dutch, and the permit number matches a museum print department in Amsterdam.",
+              "tags": ["country:Netherlands", "city:Amsterdam", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        },
+        {
+          "from": "Netherlands",
+          "to": "United States",
+          "sceneTitle": "The American collection ledger",
+          "clues": [
+            {
+              "id": "wave-rijksmuseum-freer-ledger",
+              "locationId": "cultural:great-wave-ledger-print-trade-record-q190804",
+              "action": "Compare print acquisition records",
+              "title": "Freer accession number",
+              "text": "The Rijksmuseum print record contains a copied accession number for an Asian art collection in Washington, D.C.",
+              "tags": ["country:United States", "city:Washington, D.C.", "cultural_place:Freer"],
+              "strength": 4
+            },
+            {
+              "id": "wave-airport-atlantic",
+              "locationId": "airport",
+              "action": "Read transatlantic sleeve",
+              "title": "Atlantic sleeve",
+              "text": "The next crate crossed the Atlantic toward a capital city, not a commercial art hub.",
+              "tags": ["country:United States", "capital:Washington", "direction:west"],
+              "strength": 3
+            },
+            {
+              "id": "wave-market-aircraft-electronics",
+              "locationId": "market",
+              "action": "Inspect cover manifest",
+              "title": "Industrial cover manifest",
+              "text": "The cover manifest lists aircraft parts and electronics. It fits an American customs file better than another European stop.",
+              "tags": ["export:aircraft", "export:electronics", "exclude:Netherlands"],
+              "strength": 2
+            },
+            {
+              "id": "wave-library-american-confirmation",
+              "locationId": "library",
+              "action": "Search collection catalogue",
+              "title": "Washington catalogue",
+              "text": "The catalogue request names Washington, D.C. and an Asian art gallery. ACME marks the American collection ledger as the final proof point.",
+              "tags": ["country:United States", "city:Washington, D.C.", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        }
+      ],
+      "deadEnds": {
+        "default": "The print-trade ledger does not support this destination.",
+        "United Kingdom": "The British Museum appears in print history, but this route's records move through Amsterdam first.",
+        "Japan": "The theft begins in Japan. The ledger points outward after the first scene."
+      }
+    },
+    {
+      "id": "sun-stone-calendar",
+      "title": "The Sun Stone Calendar",
+      "artifact": {
+        "siteName": "Aztec Sun Stone",
+        "country": "Mexico",
+        "hint": "The Sun Stone file was stolen from Mexico City, along with an excavation note and a cathedral-era storage reference.",
+        "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Piedra_del_Sol.tif/lossy-page1-800px-Piedra_del_Sol.tif.jpg"
+      },
+      "start": { "country": "Mexico", "city": "Mexico City", "scene": "National Museum of Anthropology", "lat": 19.426111111111112, "lon": -99.18611111111112 },
+      "suspect": "Dr. Atlas",
+      "pattern": {
+        "label": "Calendar stone and Mesoamerican provenance route",
+        "summary": "The thief is not crossing borders first; the pattern hides the object inside Mexico City's own museum, temple, and excavation records."
+      },
+      "route": [
+        { "country": "Mexico", "city": "Mexico City", "scene": "National Museum of Anthropology", "lat": 19.426111111111112, "lon": -99.18611111111112 },
+        { "country": "Mexico", "city": "Mexico City", "scene": "Templo Mayor", "lat": 19.435, "lon": -99.131389 },
+        { "country": "Mexico", "city": "Mexico City", "scene": "Templo Mayor Museum", "lat": 19.43441, "lon": -99.13208 }
+      ],
+      "legs": [
+        {
+          "from": "Mexico",
+          "to": "Mexico",
+          "sceneTitle": "The museum-to-temple trail",
+          "clues": [
+            {
+              "id": "sun-stone-anthropology-templo-note",
+              "locationId": "cultural:sun-stone-calendar-theft-scene-q524249",
+              "action": "Inspect missing object card",
+              "title": "Temple site note",
+              "text": "The stolen object card names Mexica sculpture and a site-evidence file at Templo Mayor. The thief is still inside Mexico City.",
+              "tags": ["country:Mexico", "city:Mexico City", "cultural_place:Templo Mayor", "culture:Aztec"],
+              "strength": 4
+            },
+            {
+              "id": "sun-stone-library-mesoamerican",
+              "locationId": "library",
+              "action": "Read excavation bibliography",
+              "title": "Mesoamerican bibliography",
+              "text": "The bibliography points to Aztec and Maya pyramids, a Mesoamerican provenance argument, and the old center of Tenochtitlan.",
+              "tags": ["country:Mexico", "famous:Aztec", "culture:Mesoamerican"],
+              "strength": 3
+            },
+            {
+              "id": "sun-stone-market-cover-manifest",
+              "locationId": "market",
+              "category": "Route Evidence",
+              "action": "Inspect cover manifest",
+              "title": "Local cover manifest",
+              "text": "The manifest lists vehicles and electronics, but every address stays in Mexico City. There is no border-crossing customs mark.",
+              "tags": ["country:Mexico", "city:Mexico City", "export:vehicles"],
+              "strength": 2
+            },
+            {
+              "id": "sun-stone-embassy-no-export",
+              "locationId": "embassy",
+              "action": "Check export registry",
+              "title": "No export permit",
+              "text": "The registry confirms no legal export permit exists. The next scene is domestic and tied to the temple site.",
+              "tags": ["country:Mexico", "city:Mexico City", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        },
+        {
+          "from": "Mexico",
+          "to": "Mexico",
+          "sceneTitle": "The final excavation card",
+          "clues": [
+            {
+              "id": "sun-stone-templo-museum-card",
+              "locationId": "cultural:sun-stone-calendar-site-evidence-q774021",
+              "action": "Match excavation card",
+              "title": "Museum case number",
+              "text": "The Templo Mayor site card matches a museum case number a few streets away. The false provenance will be filed at the Templo Mayor Museum.",
+              "tags": ["country:Mexico", "city:Mexico City", "cultural_place:Templo Mayor Museum"],
+              "strength": 4
+            },
+            {
+              "id": "sun-stone-hotel-curator",
+              "locationId": "hotel",
+              "category": "Route Evidence",
+              "action": "Question visiting curator",
+              "title": "Curator's shortcut",
+              "text": "A visiting curator heard the courier ask for the shortest walk from the excavation site to the museum archive.",
+              "tags": ["country:Mexico", "city:Mexico City", "culture:Mesoamerican"],
+              "strength": 3
+            },
+            {
+              "id": "sun-stone-embassy-local-warrant",
+              "locationId": "embassy",
+              "action": "Confirm recovery warrant",
+              "title": "Local warrant",
+              "text": "The warrant names Mexico City and the Templo Mayor Museum archive. The pattern is local, but the evidence is complete.",
+              "tags": ["country:Mexico", "city:Mexico City", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        }
+      ],
+      "deadEnds": {
+        "default": "The Sun Stone evidence is unusually local; this lead does not support an international jump.",
+        "Spain": "Colonial records may matter later, but the current excavation evidence stays in Mexico City.",
+        "Guatemala": "Mesoamerican context is relevant, but the object and scene evidence both point to Mexico."
       }
     }
   ]

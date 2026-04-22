@@ -202,7 +202,7 @@ function chooseArrivalAtmosphere(country, stop) {
 while (!window.DATA) await new Promise(r => setTimeout(r, 50));
 
 // Load all data in parallel
-const [worldData, factsData, heritageData, riversData, mountainsData, empiresData, portraitProfileData, campaignModeData, cityMapPoiData, worldCaseFilesData] = await Promise.all([
+const [worldData, factsData, heritageData, riversData, mountainsData, empiresData, portraitProfileData, campaignModeData, cityMapPoiData, worldCaseFilesData, worldCulturalPlacesData, worldCulturalObjectsData, worldCandidateIndexData] = await Promise.all([
   loadGeoJSON('data/ne_10m_admin_0_countries_route.geojson.gz'),
   fetch('data/country-facts.json').then(r => r.json()),
   fetch('data/heritage-sites.json').then(r => r.json()),
@@ -213,6 +213,9 @@ const [worldData, factsData, heritageData, riversData, mountainsData, empiresDat
   loadCampaignModeData(),
   fetch('data/carmen-city-map-pois.json').then(r => r.ok ? r.json() : null).catch(() => null),
   fetch('data/carmen-world-case-files.json').then(r => r.ok ? r.json() : null).catch(() => null),
+  fetch('data/carmen-world-cultural-places.json').then(r => r.ok ? r.json() : null).catch(() => null),
+  fetch('data/carmen-world-cultural-objects.json').then(r => r.ok ? r.json() : null).catch(() => null),
+  fetch('data/carmen-world-candidate-index.json').then(r => r.ok ? r.json() : null).catch(() => null),
 ]);
 
 const playableMode = getPlayableGameMode(getGameMode(), campaignModeData);
@@ -828,7 +831,18 @@ function checkTimeExpired() {
 let activeWorldCandidateLayer = null;
 
 function getWorldCaseData() {
-  return worldCaseFilesData?.cases?.[0] || null;
+  const cases = worldCaseFilesData?.cases || [];
+  if (!cases.length) return null;
+  const params = new URLSearchParams(window.location.search);
+  const requested = params.get('case') || params.get('worldCase');
+  if (requested) {
+    return cases.find(item => item.id === requested) || cases[0];
+  }
+  const caseIndex = Number(params.get('caseIndex') || params.get('worldCaseIndex'));
+  if (Number.isInteger(caseIndex) && caseIndex >= 1 && caseIndex <= cases.length) {
+    return cases[caseIndex - 1];
+  }
+  return cases[0];
 }
 
 function drawWorldCaseMap() {
@@ -978,7 +992,7 @@ async function handleWorldTravel(country) {
       score,
       {
         continueLabel: 'Replay Experiment →',
-        solvedText: `${worldCase.caseData.pattern.label} proven. ACME has enough evidence to recover the Mona Lisa file and issue the warrant.`,
+        solvedText: `${worldCase.caseData.pattern.label} proven. ACME has enough evidence to recover the ${worldCase.artifact?.siteName || 'stolen object'} file and issue the warrant.`,
       },
     );
     await handleEndChoice(choice, true);
@@ -994,6 +1008,9 @@ async function startWorldCaseFiles(runConfig) {
   worldCase = new WorldCaseFilesLogic({
     caseData,
     countries: window.DATA,
+    culturalPlaces: worldCulturalPlacesData?.places || [],
+    culturalObjects: worldCulturalObjectsData?.objects || [],
+    candidateIndex: worldCandidateIndexData,
   });
   const intro = worldCase.start();
 

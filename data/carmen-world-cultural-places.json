@@ -1,0 +1,264 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "generatedBy": "carmen/script/import-world-cultural-data.mjs"
+  },
+  "places": [
+    {
+      "id": "louvre-vanishing-theft-scene-q19675",
+      "name": "Louvre Museum",
+      "wikidataId": "Q19675",
+      "description": "art and archeology museum in Paris, France",
+      "role": "theft_scene",
+      "caseId": "louvre-vanishing",
+      "caseTitle": "The Louvre Vanishing",
+      "city": "Paris",
+      "country": "France",
+      "lat": 48.861111111111114,
+      "lon": 2.3358333333333334,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q19675"
+      }
+    },
+    {
+      "id": "louvre-vanishing-provenance-archive-q51252",
+      "name": "Uffizi Gallery",
+      "wikidataId": "Q51252",
+      "description": "palace and art museum in Florence, Italy",
+      "role": "provenance_archive",
+      "caseId": "louvre-vanishing",
+      "caseTitle": "The Louvre Vanishing",
+      "city": "Florence",
+      "country": "Italy",
+      "lat": 43.76833333333333,
+      "lon": 11.255277777777778,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q51252"
+      }
+    },
+    {
+      "id": "louvre-vanishing-restoration-lead-q190804",
+      "name": "Rijksmuseum",
+      "wikidataId": "Q190804",
+      "description": "museum in Amsterdam, Netherlands",
+      "role": "restoration_lead",
+      "caseId": "louvre-vanishing",
+      "caseTitle": "The Louvre Vanishing",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "lat": 52.36,
+      "lon": 4.885277777777778,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q190804"
+      }
+    },
+    {
+      "id": "louvre-vanishing-final-proof-scene-q160112",
+      "name": "Museo del Prado",
+      "wikidataId": "Q160112",
+      "description": "Spanish national art museum in Madrid, Spain",
+      "role": "final_proof_scene",
+      "caseId": "louvre-vanishing",
+      "caseTitle": "The Louvre Vanishing",
+      "city": "Madrid",
+      "country": "Spain",
+      "lat": 40.41388888888889,
+      "lon": -3.692222222222222,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q160112"
+      }
+    },
+    {
+      "id": "rosetta-cipher-theft-scene-q6373",
+      "name": "British Museum",
+      "wikidataId": "Q6373",
+      "description": "national museum in London, United Kingdom",
+      "role": "theft_scene",
+      "caseId": "rosetta-cipher",
+      "caseTitle": "The Rosetta Cipher",
+      "city": "London",
+      "country": "United Kingdom",
+      "lat": 51.519444444444446,
+      "lon": -0.12694444444444444,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q6373"
+      }
+    },
+    {
+      "id": "rosetta-cipher-script-archive-q201219",
+      "name": "Egyptian Museum",
+      "wikidataId": "Q201219",
+      "description": "museum in Cairo",
+      "role": "script_archive",
+      "caseId": "rosetta-cipher",
+      "caseTitle": "The Rosetta Cipher",
+      "city": "Cairo",
+      "country": "Egypt",
+      "lat": 30.047778,
+      "lon": 31.233333,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q201219"
+      }
+    },
+    {
+      "id": "rosetta-cipher-translation-archive-q501851",
+      "name": "Bibliotheca Alexandrina",
+      "wikidataId": "Q501851",
+      "description": "major library and cultural center in Alexandria, Egypt",
+      "role": "translation_archive",
+      "caseId": "rosetta-cipher",
+      "caseTitle": "The Rosetta Cipher",
+      "city": "Alexandria",
+      "country": "Egypt",
+      "lat": 31.208888888889,
+      "lon": 29.909166666667,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q501851"
+      }
+    },
+    {
+      "id": "parthenon-fragments-theft-scene-q6373",
+      "name": "British Museum",
+      "wikidataId": "Q6373",
+      "description": "national museum in London, United Kingdom",
+      "role": "theft_scene",
+      "caseId": "parthenon-fragments",
+      "caseTitle": "The Parthenon Fragments",
+      "city": "London",
+      "country": "United Kingdom",
+      "lat": 51.519444444444446,
+      "lon": -0.12694444444444444,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q6373"
+      }
+    },
+    {
+      "id": "parthenon-fragments-origin-claim-q421084",
+      "name": "Acropolis Museum",
+      "wikidataId": "Q421084",
+      "description": "museum in Athens, Greece",
+      "role": "origin_claim",
+      "caseId": "parthenon-fragments",
+      "caseTitle": "The Parthenon Fragments",
+      "city": "Athens",
+      "country": "Greece",
+      "lat": 37.968417,
+      "lon": 23.728472,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q421084"
+      }
+    },
+    {
+      "id": "parthenon-fragments-site-evidence-q131013",
+      "name": "Acropolis of Athens",
+      "wikidataId": "Q131013",
+      "description": "ancient citadel above the city of Athens",
+      "role": "site_evidence",
+      "caseId": "parthenon-fragments",
+      "caseTitle": "The Parthenon Fragments",
+      "city": "Athens",
+      "country": "Greece",
+      "lat": 37.971666666666664,
+      "lon": 23.726111111111113,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q131013"
+      }
+    },
+    {
+      "id": "great-wave-ledger-origin-scene-q17220332",
+      "name": "Sumida Hokusai Museum",
+      "wikidataId": "Q17220332",
+      "description": "museum in Japan",
+      "role": "origin_scene",
+      "caseId": "great-wave-ledger",
+      "caseTitle": "The Great Wave Ledger",
+      "city": "Tokyo",
+      "country": "Japan",
+      "lat": 35.69675,
+      "lon": 139.800389,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q17220332"
+      }
+    },
+    {
+      "id": "great-wave-ledger-print-trade-record-q190804",
+      "name": "Rijksmuseum",
+      "wikidataId": "Q190804",
+      "description": "museum in Amsterdam, Netherlands",
+      "role": "print_trade_record",
+      "caseId": "great-wave-ledger",
+      "caseTitle": "The Great Wave Ledger",
+      "city": "Amsterdam",
+      "country": "Netherlands",
+      "lat": 52.36,
+      "lon": 4.885277777777778,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q190804"
+      }
+    },
+    {
+      "id": "great-wave-ledger-final-proof-scene-q1075126",
+      "name": "Freer Gallery of Art",
+      "wikidataId": "Q1075126",
+      "description": "art museum in Washington, D.C.",
+      "role": "final_proof_scene",
+      "caseId": "great-wave-ledger",
+      "caseTitle": "The Great Wave Ledger",
+      "city": "Washington, D.C.",
+      "country": "United States",
+      "lat": 38.888333333333335,
+      "lon": -77.0275,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q1075126"
+      }
+    },
+    {
+      "id": "sun-stone-calendar-theft-scene-q524249",
+      "name": "National Museum of Anthropology",
+      "wikidataId": "Q524249",
+      "description": "national museum of Mexico",
+      "role": "theft_scene",
+      "caseId": "sun-stone-calendar",
+      "caseTitle": "The Sun Stone Calendar",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "lat": 19.426111111111112,
+      "lon": -99.18611111111112,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q524249"
+      }
+    },
+    {
+      "id": "sun-stone-calendar-site-evidence-q774021",
+      "name": "Templo Mayor",
+      "wikidataId": "Q774021",
+      "description": "main Temple of Tenochtitlan",
+      "role": "site_evidence",
+      "caseId": "sun-stone-calendar",
+      "caseTitle": "The Sun Stone Calendar",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "lat": 19.435,
+      "lon": -99.131389,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q774021"
+      }
+    },
+    {
+      "id": "sun-stone-calendar-final-proof-scene-q3330387",
+      "name": "Templo Mayor Museum",
+      "wikidataId": "Q3330387",
+      "description": "archaeological museum in Mexico City",
+      "role": "final_proof_scene",
+      "caseId": "sun-stone-calendar",
+      "caseTitle": "The Sun Stone Calendar",
+      "city": "Mexico City",
+      "country": "Mexico",
+      "lat": 19.43441,
+      "lon": -99.13208,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q3330387"
+      }
+    }
+  ]
+}

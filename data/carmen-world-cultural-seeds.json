@@ -1,0 +1,61 @@
+{
+  "schemaVersion": 1,
+  "cases": [
+    {
+      "id": "louvre-vanishing",
+      "title": "The Louvre Vanishing",
+      "object": { "label": "Mona Lisa", "wikidataId": "Q12418" },
+      "pattern": "Renaissance provenance route",
+      "places": [
+        { "label": "Louvre Museum", "wikidataId": "Q19675", "role": "theft_scene", "city": "Paris", "country": "France" },
+        { "label": "Uffizi", "wikidataId": "Q51252", "role": "provenance_archive", "city": "Florence", "country": "Italy" },
+        { "label": "Rijksmuseum", "wikidataId": "Q190804", "role": "restoration_lead", "city": "Amsterdam", "country": "Netherlands" },
+        { "label": "Museo del Prado", "wikidataId": "Q160112", "role": "final_proof_scene", "city": "Madrid", "country": "Spain" }
+      ]
+    },
+    {
+      "id": "rosetta-cipher",
+      "title": "The Rosetta Cipher",
+      "object": { "label": "Rosetta Stone", "wikidataId": "Q48584" },
+      "pattern": "ancient scripts and decipherment route",
+      "places": [
+        { "label": "British Museum", "wikidataId": "Q6373", "role": "theft_scene", "city": "London", "country": "United Kingdom" },
+        { "label": "Egyptian Museum", "wikidataId": "Q201219", "role": "script_archive", "city": "Cairo", "country": "Egypt" },
+        { "label": "Bibliotheca Alexandrina", "wikidataId": "Q501851", "role": "translation_archive", "city": "Alexandria", "country": "Egypt" }
+      ]
+    },
+    {
+      "id": "parthenon-fragments",
+      "title": "The Parthenon Fragments",
+      "object": { "label": "Parthenon Marbles", "wikidataId": "Q606662" },
+      "pattern": "classical sculpture and restitution route",
+      "places": [
+        { "label": "British Museum", "wikidataId": "Q6373", "role": "theft_scene", "city": "London", "country": "United Kingdom" },
+        { "label": "Acropolis Museum", "wikidataId": "Q421084", "role": "origin_claim", "city": "Athens", "country": "Greece" },
+        { "label": "Acropolis of Athens", "wikidataId": "Q131013", "role": "site_evidence", "city": "Athens", "country": "Greece" }
+      ]
+    },
+    {
+      "id": "great-wave-ledger",
+      "title": "The Great Wave Ledger",
+      "object": { "label": "The Great Wave off Kanagawa", "wikidataId": "Q252485" },
+      "pattern": "ukiyo-e print and maritime image route",
+      "places": [
+        { "label": "Sumida Hokusai Museum", "wikidataId": "Q17220332", "role": "origin_scene", "city": "Tokyo", "country": "Japan" },
+        { "label": "Rijksmuseum", "wikidataId": "Q190804", "role": "print_trade_record", "city": "Amsterdam", "country": "Netherlands" },
+        { "label": "Freer Gallery of Art", "wikidataId": "Q1075126", "role": "final_proof_scene", "city": "Washington, D.C.", "country": "United States" }
+      ]
+    },
+    {
+      "id": "sun-stone-calendar",
+      "title": "The Sun Stone Calendar",
+      "object": { "label": "Aztec Sun Stone", "wikidataId": "Q786806" },
+      "pattern": "calendar stone and Mesoamerican provenance route",
+      "places": [
+        { "label": "National Museum of Anthropology", "wikidataId": "Q524249", "role": "theft_scene", "city": "Mexico City", "country": "Mexico" },
+        { "label": "Templo Mayor", "wikidataId": "Q774021", "role": "site_evidence", "city": "Mexico City", "country": "Mexico" },
+        { "label": "Templo Mayor Museum", "wikidataId": "Q3330387", "role": "final_proof_scene", "city": "Mexico City", "country": "Mexico" }
+      ]
+    }
+  ]
+}
