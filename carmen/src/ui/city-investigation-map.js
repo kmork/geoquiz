@@ -54,10 +54,8 @@ function getViewport(options, width, height) {
     const [x, y] = projMercator([point.lon, point.lat]);
     return { x, y };
   });
-  const centerProjected = projected.reduce((acc, point) => ({
-    x: acc.x + point.x / projected.length,
-    y: acc.y + point.y / projected.length,
-  }), { x: 0, y: 0 });
+  const [centerX, centerY] = projMercator([options.center.lon, options.center.lat]);
+  const centerProjected = { x: centerX, y: centerY };
   const xs = projected.map(point => point.x);
   const ys = projected.map(point => point.y);
   const minX = Math.min(...xs);
@@ -108,7 +106,7 @@ export function createCityInvestigationMap(container, locations, options, onPick
       <div class="carmen-city-map-head">
         <div>
           <div class="carmen-city-map-title">${esc(options.capital)}</div>
-          <div class="carmen-city-map-subtitle">ACME field stops near the capital</div>
+          <div class="carmen-city-map-subtitle">ACME field stops near the current scene</div>
         </div>
         <div class="carmen-city-map-country">${esc(options.country)}</div>
       </div>

@@ -178,36 +178,43 @@ export class CarmenRouteRenderer extends RouteRenderer {
     };
   }
 
-  drawWorldCandidates(candidates, onClick) {
+  drawWorldCandidates(candidates, onClick, options = {}) {
     const group = document.createElementNS(SVG_NS, 'g');
     group.setAttribute('class', 'carmen-world-candidates');
     this.svg.appendChild(group);
 
     const palette = {
-      unknown: { fill: 'rgba(100, 116, 139, 0.08)', stroke: 'rgba(100, 116, 139, 0.22)' },
-      partial: { fill: 'rgba(245, 158, 11, 0.28)', stroke: 'rgba(245, 158, 11, 0.75)' },
-      pattern: { fill: 'rgba(168, 85, 247, 0.28)', stroke: 'rgba(168, 85, 247, 0.8)' },
-      strong: { fill: 'rgba(34, 197, 94, 0.34)', stroke: 'rgba(34, 197, 94, 0.9)' },
-      contradicted: { fill: 'rgba(239, 68, 68, 0.08)', stroke: 'rgba(239, 68, 68, 0.85)' },
-      current: { fill: 'rgba(251, 191, 36, 0.42)', stroke: 'rgba(251, 191, 36, 1)' },
+      unknown: { fill: 'rgba(148, 163, 184, 0.02)', stroke: 'rgba(148, 163, 184, 0.14)', strokeWidth: '0.85' },
+      partial: { fill: 'rgba(245, 158, 11, 0.14)', stroke: 'rgba(245, 158, 11, 0.34)', strokeWidth: '0.95' },
+      pattern: { fill: 'rgba(168, 85, 247, 0.14)', stroke: 'rgba(168, 85, 247, 0.42)', strokeWidth: '1.05' },
+      strong: { fill: 'rgba(34, 197, 94, 0.16)', stroke: 'rgba(74, 222, 128, 0.62)', strokeWidth: '1.2' },
+      contradicted: { fill: 'rgba(239, 68, 68, 0.03)', stroke: 'rgba(248, 113, 113, 0.32)', strokeWidth: '0.95' },
+      current: { fill: 'rgba(251, 191, 36, 0.22)', stroke: 'rgba(251, 191, 36, 0.92)', strokeWidth: '1.45' },
     };
     const candidateByCountry = Object.fromEntries((candidates || []).map(item => [item.country, item]));
+    const hintsEnabled = options.hintsEnabled !== false;
 
     for (const candidate of candidates || []) {
-      if (candidate.state === 'unknown') continue;
       const features = findGeoFeatures(this.worldFeatures, candidate.country);
       if (!features.length) continue;
-      const color = palette[candidate.state] || palette.unknown;
+      const color = hintsEnabled ? (palette[candidate.state] || palette.unknown) : palette.unknown;
       for (const feature of features) {
         const path = document.createElementNS(SVG_NS, 'path');
         path.setAttribute('d', this.pathFromFeature(feature));
         path.setAttribute('fill', color.fill);
         path.setAttribute('stroke', color.stroke);
-        path.setAttribute('stroke-width', candidate.state === 'strong' || candidate.state === 'current' ? '1.8' : '1.1');
+        path.setAttribute('stroke-width', color.strokeWidth || '1');
         path.setAttribute('vector-effect', 'non-scaling-stroke');
         path.setAttribute('cursor', 'pointer');
         path.setAttribute('class', `carmen-world-map-candidate ${candidate.state}`);
         path.setAttribute('data-country', candidate.country);
+        path.setAttribute('aria-label', candidate.country);
+        if (candidate.hintSummary) {
+          path.setAttribute('title', `${candidate.country}: ${candidate.hintSummary}`);
+        } else {
+          path.setAttribute('title', candidate.country);
+        }
+        path.addEventListener('pointerdown', event => event.stopPropagation());
         path.addEventListener('click', () => onClick?.(candidate.country, candidateByCountry[candidate.country]));
         group.appendChild(path);
       }

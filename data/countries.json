@@ -58,7 +58,9 @@
     "timeZones": [
       "Asia/Kabul"
     ],
-    "capitalTimeZone": "Asia/Kabul"
+    "capitalTimeZone": "Asia/Kabul",
+    "currency": "AFN",
+    "currencyName": "Afghan afghani"
   },
   {
     "country": "Aland",
@@ -82,7 +84,9 @@
     "timeZones": [
       "Europe/Mariehamn"
     ],
-    "capitalTimeZone": "Europe/Mariehamn"
+    "capitalTimeZone": "Europe/Mariehamn",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Albania",
@@ -124,7 +128,9 @@
     "timeZones": [
       "Europe/Tirane"
     ],
-    "capitalTimeZone": "Europe/Tirane"
+    "capitalTimeZone": "Europe/Tirane",
+    "currency": "ALL",
+    "currencyName": "Albanian lek"
   },
   {
     "country": "Algeria",
@@ -179,7 +185,9 @@
     "timeZones": [
       "Africa/Algiers"
     ],
-    "capitalTimeZone": "Africa/Algiers"
+    "capitalTimeZone": "Africa/Algiers",
+    "currency": "DZD",
+    "currencyName": "Algerian dinar"
   },
   {
     "country": "American Samoa",
@@ -203,7 +211,9 @@
     "timeZones": [
       "Pacific/Pago_Pago"
     ],
-    "capitalTimeZone": "Pacific/Pago_Pago"
+    "capitalTimeZone": "Pacific/Pago_Pago",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Andorra",
@@ -241,7 +251,9 @@
     "timeZones": [
       "Europe/Andorra"
     ],
-    "capitalTimeZone": "Europe/Andorra"
+    "capitalTimeZone": "Europe/Andorra",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Angola",
@@ -283,7 +295,9 @@
     "timeZones": [
       "Africa/Luanda"
     ],
-    "capitalTimeZone": "Africa/Luanda"
+    "capitalTimeZone": "Africa/Luanda",
+    "currency": "AOA",
+    "currencyName": "Angolan kwanza"
   },
   {
     "country": "Anguilla",
@@ -307,7 +321,9 @@
     "timeZones": [
       "America/Anguilla"
     ],
-    "capitalTimeZone": "America/Anguilla"
+    "capitalTimeZone": "America/Anguilla",
+    "currency": "XCD",
+    "currencyName": "East Caribbean dollar"
   },
   {
     "country": "Antigua and Barbuda",
@@ -342,7 +358,9 @@
     "timeZones": [
       "America/Antigua"
     ],
-    "capitalTimeZone": "America/Antigua"
+    "capitalTimeZone": "America/Antigua",
+    "currency": "XCD",
+    "currencyName": "East Caribbean dollar"
   },
   {
     "country": "Argentina",
@@ -424,7 +442,9 @@
       "America/Argentina/Tucuman",
       "America/Argentina/Ushuaia"
     ],
-    "capitalTimeZone": "America/Argentina/Buenos_Aires"
+    "capitalTimeZone": "America/Argentina/Buenos_Aires",
+    "currency": "ARS",
+    "currencyName": "Argentine peso"
   },
   {
     "country": "Armenia",
@@ -466,7 +486,9 @@
     "timeZones": [
       "Asia/Yerevan"
     ],
-    "capitalTimeZone": "Asia/Yerevan"
+    "capitalTimeZone": "Asia/Yerevan",
+    "currency": "AMD",
+    "currencyName": "Armenian dram"
   },
   {
     "country": "Aruba",
@@ -490,7 +512,9 @@
     "timeZones": [
       "America/Aruba"
     ],
-    "capitalTimeZone": "America/Aruba"
+    "capitalTimeZone": "America/Aruba",
+    "currency": "AWG",
+    "currencyName": "Aruban florin"
   },
   {
     "country": "Australia",
@@ -576,7 +600,9 @@
       "Australia/Perth",
       "Australia/Sydney"
     ],
-    "capitalTimeZone": "Australia/Sydney"
+    "capitalTimeZone": "Australia/Sydney",
+    "currency": "AUD",
+    "currencyName": "Australian dollar"
   },
   {
     "country": "Austria",
@@ -639,7 +665,9 @@
     "timeZones": [
       "Europe/Vienna"
     ],
-    "capitalTimeZone": "Europe/Vienna"
+    "capitalTimeZone": "Europe/Vienna",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Azerbaijan",
@@ -682,7 +710,9 @@
     "timeZones": [
       "Asia/Baku"
     ],
-    "capitalTimeZone": "Asia/Baku"
+    "capitalTimeZone": "Asia/Baku",
+    "currency": "AZN",
+    "currencyName": "Azerbaijani manat"
   },
   {
     "country": "Bahamas",
@@ -718,7 +748,9 @@
     "timeZones": [
       "America/Nassau"
     ],
-    "capitalTimeZone": "America/Nassau"
+    "capitalTimeZone": "America/Nassau",
+    "currency": "BSD",
+    "currencyName": "Bahamian dollar"
   },
   {
     "country": "Bahrain",
@@ -754,7 +786,9 @@
     "timeZones": [
       "Asia/Bahrain"
     ],
-    "capitalTimeZone": "Asia/Bahrain"
+    "capitalTimeZone": "Asia/Bahrain",
+    "currency": "BHD",
+    "currencyName": "Bahraini dinar"
   },
   {
     "country": "Bangladesh",
@@ -807,7 +841,9 @@
     "timeZones": [
       "Asia/Dhaka"
     ],
-    "capitalTimeZone": "Asia/Dhaka"
+    "capitalTimeZone": "Asia/Dhaka",
+    "currency": "BDT",
+    "currencyName": "Bangladeshi taka"
   },
   {
     "country": "Barbados",
@@ -844,7 +880,9 @@
     "timeZones": [
       "America/Barbados"
     ],
-    "capitalTimeZone": "America/Barbados"
+    "capitalTimeZone": "America/Barbados",
+    "currency": "BBD",
+    "currencyName": "Barbadian dollar"
   },
   {
     "country": "Belarus",
@@ -886,7 +924,9 @@
     "timeZones": [
       "Europe/Minsk"
     ],
-    "capitalTimeZone": "Europe/Minsk"
+    "capitalTimeZone": "Europe/Minsk",
+    "currency": "BYN",
+    "currencyName": "Belarusian ruble"
   },
   {
     "country": "Belgium",
@@ -951,7 +991,9 @@
     "timeZones": [
       "Europe/Brussels"
     ],
-    "capitalTimeZone": "Europe/Brussels"
+    "capitalTimeZone": "Europe/Brussels",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Belize",
@@ -992,7 +1034,9 @@
     "timeZones": [
       "America/Belize"
     ],
-    "capitalTimeZone": "America/Belize"
+    "capitalTimeZone": "America/Belize",
+    "currency": "BZD",
+    "currencyName": "Belize dollar"
   },
   {
     "country": "Benin",
@@ -1034,7 +1078,9 @@
     "timeZones": [
       "Africa/Porto-Novo"
     ],
-    "capitalTimeZone": "Africa/Porto-Novo"
+    "capitalTimeZone": "Africa/Porto-Novo",
+    "currency": "XOF",
+    "currencyName": "West African CFA franc"
   },
   {
     "country": "Bermuda",
@@ -1058,7 +1104,9 @@
     "timeZones": [
       "Atlantic/Bermuda"
     ],
-    "capitalTimeZone": "Atlantic/Bermuda"
+    "capitalTimeZone": "Atlantic/Bermuda",
+    "currency": "BMD",
+    "currencyName": "Bermudian dollar"
   },
   {
     "country": "Bhutan",
@@ -1098,7 +1146,9 @@
     "timeZones": [
       "Asia/Thimphu"
     ],
-    "capitalTimeZone": "Asia/Thimphu"
+    "capitalTimeZone": "Asia/Thimphu",
+    "currency": "BTN",
+    "currencyName": "Bhutanese ngultrum"
   },
   {
     "country": "Bolivia",
@@ -1155,7 +1205,9 @@
     "timeZones": [
       "America/La_Paz"
     ],
-    "capitalTimeZone": "America/La_Paz"
+    "capitalTimeZone": "America/La_Paz",
+    "currency": "BOB",
+    "currencyName": "Bolivian boliviano"
   },
   {
     "country": "Bosnia and Herzegovina",
@@ -1197,7 +1249,9 @@
     "timeZones": [
       "Europe/Sarajevo"
     ],
-    "capitalTimeZone": "Europe/Sarajevo"
+    "capitalTimeZone": "Europe/Sarajevo",
+    "currency": "BAM",
+    "currencyName": "Bosnia and Herzegovina convertible mark"
   },
   {
     "country": "Botswana",
@@ -1240,7 +1294,9 @@
     "timeZones": [
       "Africa/Gaborone"
     ],
-    "capitalTimeZone": "Africa/Gaborone"
+    "capitalTimeZone": "Africa/Gaborone",
+    "currency": "BWP",
+    "currencyName": "Botswana pula"
   },
   {
     "country": "Brazil",
@@ -1340,7 +1396,9 @@
       "America/Santarem",
       "America/Sao_Paulo"
     ],
-    "capitalTimeZone": "America/Sao_Paulo"
+    "capitalTimeZone": "America/Sao_Paulo",
+    "currency": "BRL",
+    "currencyName": "Brazilian real"
   },
   {
     "country": "British Indian Ocean Territory",
@@ -1364,7 +1422,9 @@
     "timeZones": [
       "Indian/Chagos"
     ],
-    "capitalTimeZone": "Indian/Chagos"
+    "capitalTimeZone": "Indian/Chagos",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "British Virgin Islands",
@@ -1388,7 +1448,9 @@
     "timeZones": [
       "America/Tortola"
     ],
-    "capitalTimeZone": "America/Tortola"
+    "capitalTimeZone": "America/Tortola",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Brunei",
@@ -1426,7 +1488,9 @@
     "timeZones": [
       "Asia/Brunei"
     ],
-    "capitalTimeZone": "Asia/Brunei"
+    "capitalTimeZone": "Asia/Brunei",
+    "currency": "BND",
+    "currencyName": "Brunei dollar"
   },
   {
     "country": "Bulgaria",
@@ -1470,7 +1534,9 @@
     "timeZones": [
       "Europe/Sofia"
     ],
-    "capitalTimeZone": "Europe/Sofia"
+    "capitalTimeZone": "Europe/Sofia",
+    "currency": "BGN",
+    "currencyName": "Bulgarian lev"
   },
   {
     "country": "Burkina Faso",
@@ -1514,7 +1580,9 @@
     "timeZones": [
       "Africa/Ouagadougou"
     ],
-    "capitalTimeZone": "Africa/Ouagadougou"
+    "capitalTimeZone": "Africa/Ouagadougou",
+    "currency": "XOF",
+    "currencyName": "West African CFA franc"
   },
   {
     "country": "Burundi",
@@ -1555,7 +1623,9 @@
     "timeZones": [
       "Africa/Bujumbura"
     ],
-    "capitalTimeZone": "Africa/Bujumbura"
+    "capitalTimeZone": "Africa/Bujumbura",
+    "currency": "BIF",
+    "currencyName": "Burundian franc"
   },
   {
     "country": "Cabo Verde",
@@ -1592,7 +1662,9 @@
     "timeZones": [
       "Atlantic/Cape_Verde"
     ],
-    "capitalTimeZone": "Atlantic/Cape_Verde"
+    "capitalTimeZone": "Atlantic/Cape_Verde",
+    "currency": "CVE",
+    "currencyName": "Cape Verdean escudo"
   },
   {
     "country": "Cambodia",
@@ -1646,7 +1718,9 @@
     "timeZones": [
       "Asia/Phnom_Penh"
     ],
-    "capitalTimeZone": "Asia/Phnom_Penh"
+    "capitalTimeZone": "Asia/Phnom_Penh",
+    "currency": "KHR",
+    "currencyName": "Cambodian riel"
   },
   {
     "country": "Cameroon",
@@ -1691,7 +1765,9 @@
     "timeZones": [
       "Africa/Douala"
     ],
-    "capitalTimeZone": "Africa/Douala"
+    "capitalTimeZone": "Africa/Douala",
+    "currency": "XAF",
+    "currencyName": "Central African CFA franc"
   },
   {
     "country": "Canada",
@@ -1790,7 +1866,9 @@
       "America/Whitehorse",
       "America/Winnipeg"
     ],
-    "capitalTimeZone": "America/Toronto"
+    "capitalTimeZone": "America/Toronto",
+    "currency": "CAD",
+    "currencyName": "Canadian dollar"
   },
   {
     "country": "Cayman Islands",
@@ -1814,7 +1892,9 @@
     "timeZones": [
       "America/Cayman"
     ],
-    "capitalTimeZone": "America/Cayman"
+    "capitalTimeZone": "America/Cayman",
+    "currency": "KYD",
+    "currencyName": "Cayman Islands dollar"
   },
   {
     "country": "Central African Republic",
@@ -1857,7 +1937,9 @@
     "timeZones": [
       "Africa/Bangui"
     ],
-    "capitalTimeZone": "Africa/Bangui"
+    "capitalTimeZone": "Africa/Bangui",
+    "currency": "XAF",
+    "currencyName": "Central African CFA franc"
   },
   {
     "country": "Chad",
@@ -1901,7 +1983,9 @@
     "timeZones": [
       "Africa/Ndjamena"
     ],
-    "capitalTimeZone": "Africa/Ndjamena"
+    "capitalTimeZone": "Africa/Ndjamena",
+    "currency": "XAF",
+    "currencyName": "Central African CFA franc"
   },
   {
     "country": "Chile",
@@ -1963,7 +2047,9 @@
       "America/Santiago",
       "Pacific/Easter"
     ],
-    "capitalTimeZone": "America/Santiago"
+    "capitalTimeZone": "America/Santiago",
+    "currency": "CLP",
+    "currencyName": "Chilean peso"
   },
   {
     "country": "China",
@@ -2069,7 +2155,9 @@
       "Asia/Shanghai",
       "Asia/Urumqi"
     ],
-    "capitalTimeZone": "Asia/Shanghai"
+    "capitalTimeZone": "Asia/Shanghai",
+    "currency": "CNY",
+    "currencyName": "Chinese yuan"
   },
   {
     "country": "Colombia",
@@ -2135,7 +2223,9 @@
     "timeZones": [
       "America/Bogota"
     ],
-    "capitalTimeZone": "America/Bogota"
+    "capitalTimeZone": "America/Bogota",
+    "currency": "COP",
+    "currencyName": "Colombian peso"
   },
   {
     "country": "Comoros",
@@ -2172,7 +2262,9 @@
     "timeZones": [
       "Indian/Comoro"
     ],
-    "capitalTimeZone": "Indian/Comoro"
+    "capitalTimeZone": "Indian/Comoro",
+    "currency": "KMF",
+    "currencyName": "Comorian franc"
   },
   {
     "country": "Congo",
@@ -2215,7 +2307,9 @@
     "timeZones": [
       "Africa/Brazzaville"
     ],
-    "capitalTimeZone": "Africa/Brazzaville"
+    "capitalTimeZone": "Africa/Brazzaville",
+    "currency": "XAF",
+    "currencyName": "Central African CFA franc"
   },
   {
     "country": "Cook Islands",
@@ -2239,7 +2333,9 @@
     "timeZones": [
       "Pacific/Rarotonga"
     ],
-    "capitalTimeZone": "Pacific/Rarotonga"
+    "capitalTimeZone": "Pacific/Rarotonga",
+    "currency": "NZD",
+    "currencyName": "New Zealand dollar"
   },
   {
     "country": "Costa Rica",
@@ -2286,7 +2382,9 @@
     "timeZones": [
       "America/Costa_Rica"
     ],
-    "capitalTimeZone": "America/Costa_Rica"
+    "capitalTimeZone": "America/Costa_Rica",
+    "currency": "CRC",
+    "currencyName": "Costa Rican colón"
   },
   {
     "country": "Côte d'Ivoire",
@@ -2330,7 +2428,9 @@
     "timeZones": [
       "Africa/Abidjan"
     ],
-    "capitalTimeZone": "Africa/Abidjan"
+    "capitalTimeZone": "Africa/Abidjan",
+    "currency": "XOF",
+    "currencyName": "West African CFA franc"
   },
   {
     "country": "Croatia",
@@ -2386,7 +2486,9 @@
     "timeZones": [
       "Europe/Zagreb"
     ],
-    "capitalTimeZone": "Europe/Zagreb"
+    "capitalTimeZone": "Europe/Zagreb",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Cuba",
@@ -2441,7 +2543,9 @@
     "timeZones": [
       "America/Havana"
     ],
-    "capitalTimeZone": "America/Havana"
+    "capitalTimeZone": "America/Havana",
+    "currency": "CUP",
+    "currencyName": "Cuban peso"
   },
   {
     "country": "Curaçao",
@@ -2465,7 +2569,9 @@
     "timeZones": [
       "America/Curacao"
     ],
-    "capitalTimeZone": "America/Curacao"
+    "capitalTimeZone": "America/Curacao",
+    "currency": "ANG",
+    "currencyName": "Netherlands Antillean guilder"
   },
   {
     "country": "Cyprus",
@@ -2503,7 +2609,9 @@
       "Asia/Famagusta",
       "Asia/Nicosia"
     ],
-    "capitalTimeZone": "Asia/Nicosia"
+    "capitalTimeZone": "Asia/Nicosia",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Czechia",
@@ -2558,7 +2666,9 @@
     "timeZones": [
       "Europe/Prague"
     ],
-    "capitalTimeZone": "Europe/Prague"
+    "capitalTimeZone": "Europe/Prague",
+    "currency": "CZK",
+    "currencyName": "Czech koruna"
   },
   {
     "country": "Democratic Republic of the Congo",
@@ -2619,7 +2729,9 @@
       "Africa/Kinshasa",
       "Africa/Lubumbashi"
     ],
-    "capitalTimeZone": "Africa/Kinshasa"
+    "capitalTimeZone": "Africa/Kinshasa",
+    "currency": "CDF",
+    "currencyName": "Congolese franc"
   },
   {
     "country": "Denmark",
@@ -2671,7 +2783,9 @@
     "timeZones": [
       "Europe/Copenhagen"
     ],
-    "capitalTimeZone": "Europe/Copenhagen"
+    "capitalTimeZone": "Europe/Copenhagen",
+    "currency": "DKK",
+    "currencyName": "Danish krone"
   },
   {
     "country": "Djibouti",
@@ -2710,7 +2824,9 @@
     "timeZones": [
       "Africa/Djibouti"
     ],
-    "capitalTimeZone": "Africa/Djibouti"
+    "capitalTimeZone": "Africa/Djibouti",
+    "currency": "DJF",
+    "currencyName": "Djiboutian franc"
   },
   {
     "country": "Dominica",
@@ -2747,7 +2863,9 @@
     "timeZones": [
       "America/Dominica"
     ],
-    "capitalTimeZone": "America/Dominica"
+    "capitalTimeZone": "America/Dominica",
+    "currency": "XCD",
+    "currencyName": "East Caribbean dollar"
   },
   {
     "country": "Dominican Republic",
@@ -2799,7 +2917,9 @@
     "timeZones": [
       "America/Santo_Domingo"
     ],
-    "capitalTimeZone": "America/Santo_Domingo"
+    "capitalTimeZone": "America/Santo_Domingo",
+    "currency": "DOP",
+    "currencyName": "Dominican peso"
   },
   {
     "country": "Ecuador",
@@ -2853,7 +2973,9 @@
       "America/Guayaquil",
       "Pacific/Galapagos"
     ],
-    "capitalTimeZone": "America/Guayaquil"
+    "capitalTimeZone": "America/Guayaquil",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Egypt",
@@ -2928,7 +3050,9 @@
     "timeZones": [
       "Africa/Cairo"
     ],
-    "capitalTimeZone": "Africa/Cairo"
+    "capitalTimeZone": "Africa/Cairo",
+    "currency": "EGP",
+    "currencyName": "Egyptian pound"
   },
   {
     "country": "El Salvador",
@@ -2969,7 +3093,9 @@
     "timeZones": [
       "America/El_Salvador"
     ],
-    "capitalTimeZone": "America/El_Salvador"
+    "capitalTimeZone": "America/El_Salvador",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Equatorial Guinea",
@@ -3009,7 +3135,9 @@
     "timeZones": [
       "Africa/Malabo"
     ],
-    "capitalTimeZone": "Africa/Malabo"
+    "capitalTimeZone": "Africa/Malabo",
+    "currency": "XAF",
+    "currencyName": "Central African CFA franc"
   },
   {
     "country": "Eritrea",
@@ -3051,7 +3179,9 @@
     "timeZones": [
       "Africa/Asmara"
     ],
-    "capitalTimeZone": "Africa/Asmara"
+    "capitalTimeZone": "Africa/Asmara",
+    "currency": "ERN",
+    "currencyName": "Eritrean nakfa"
   },
   {
     "country": "Estonia",
@@ -3092,7 +3222,9 @@
     "timeZones": [
       "Europe/Tallinn"
     ],
-    "capitalTimeZone": "Europe/Tallinn"
+    "capitalTimeZone": "Europe/Tallinn",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Eswatini",
@@ -3132,7 +3264,9 @@
     "timeZones": [
       "Africa/Mbabane"
     ],
-    "capitalTimeZone": "Africa/Mbabane"
+    "capitalTimeZone": "Africa/Mbabane",
+    "currency": "SZL",
+    "currencyName": "Swazi lilangeni"
   },
   {
     "country": "Ethiopia",
@@ -3189,7 +3323,9 @@
     "timeZones": [
       "Africa/Addis_Ababa"
     ],
-    "capitalTimeZone": "Africa/Addis_Ababa"
+    "capitalTimeZone": "Africa/Addis_Ababa",
+    "currency": "ETB",
+    "currencyName": "Ethiopian birr"
   },
   {
     "country": "Falkland Islands",
@@ -3213,7 +3349,9 @@
     "timeZones": [
       "Atlantic/Stanley"
     ],
-    "capitalTimeZone": "Atlantic/Stanley"
+    "capitalTimeZone": "Atlantic/Stanley",
+    "currency": "FKP",
+    "currencyName": "Falkland Islands pound"
   },
   {
     "country": "Faroe Islands",
@@ -3237,7 +3375,9 @@
     "timeZones": [
       "Atlantic/Faroe"
     ],
-    "capitalTimeZone": "Atlantic/Faroe"
+    "capitalTimeZone": "Atlantic/Faroe",
+    "currency": "DKK",
+    "currencyName": "Danish krone"
   },
   {
     "country": "Fiji",
@@ -3275,7 +3415,9 @@
     "timeZones": [
       "Pacific/Fiji"
     ],
-    "capitalTimeZone": "Pacific/Fiji"
+    "capitalTimeZone": "Pacific/Fiji",
+    "currency": "FJD",
+    "currencyName": "Fijian dollar"
   },
   {
     "country": "Finland",
@@ -3334,7 +3476,9 @@
     "timeZones": [
       "Europe/Helsinki"
     ],
-    "capitalTimeZone": "Europe/Helsinki"
+    "capitalTimeZone": "Europe/Helsinki",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "France",
@@ -3418,7 +3562,9 @@
     "timeZones": [
       "Europe/Paris"
     ],
-    "capitalTimeZone": "Europe/Paris"
+    "capitalTimeZone": "Europe/Paris",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "French Polynesia",
@@ -3444,7 +3590,9 @@
       "Pacific/Marquesas",
       "Pacific/Tahiti"
     ],
-    "capitalTimeZone": "Pacific/Tahiti"
+    "capitalTimeZone": "Pacific/Tahiti",
+    "currency": "XPF",
+    "currencyName": "CFP franc"
   },
   {
     "country": "Gabon",
@@ -3485,7 +3633,9 @@
     "timeZones": [
       "Africa/Libreville"
     ],
-    "capitalTimeZone": "Africa/Libreville"
+    "capitalTimeZone": "Africa/Libreville",
+    "currency": "XAF",
+    "currencyName": "Central African CFA franc"
   },
   {
     "country": "Gambia",
@@ -3524,7 +3674,9 @@
     "timeZones": [
       "Africa/Banjul"
     ],
-    "capitalTimeZone": "Africa/Banjul"
+    "capitalTimeZone": "Africa/Banjul",
+    "currency": "GMD",
+    "currencyName": "Gambian dalasi"
   },
   {
     "country": "Georgia",
@@ -3567,7 +3719,9 @@
     "timeZones": [
       "Asia/Tbilisi"
     ],
-    "capitalTimeZone": "Asia/Tbilisi"
+    "capitalTimeZone": "Asia/Tbilisi",
+    "currency": "GEL",
+    "currencyName": "Georgian lari"
   },
   {
     "country": "Germany",
@@ -3653,7 +3807,9 @@
       "Europe/Berlin",
       "Europe/Busingen"
     ],
-    "capitalTimeZone": "Europe/Berlin"
+    "capitalTimeZone": "Europe/Berlin",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Ghana",
@@ -3707,7 +3863,9 @@
     "timeZones": [
       "Africa/Accra"
     ],
-    "capitalTimeZone": "Africa/Accra"
+    "capitalTimeZone": "Africa/Accra",
+    "currency": "GHS",
+    "currencyName": "Ghanaian cedi"
   },
   {
     "country": "Gibraltar",
@@ -3731,7 +3889,9 @@
     "timeZones": [
       "Europe/Gibraltar"
     ],
-    "capitalTimeZone": "Europe/Gibraltar"
+    "capitalTimeZone": "Europe/Gibraltar",
+    "currency": "GIP",
+    "currencyName": "Gibraltar pound"
   },
   {
     "country": "Greece",
@@ -3801,7 +3961,9 @@
     "timeZones": [
       "Europe/Athens"
     ],
-    "capitalTimeZone": "Europe/Athens"
+    "capitalTimeZone": "Europe/Athens",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Greenland",
@@ -3828,7 +3990,9 @@
       "America/Scoresbysund",
       "America/Thule"
     ],
-    "capitalTimeZone": "America/Nuuk"
+    "capitalTimeZone": "America/Nuuk",
+    "currency": "DKK",
+    "currencyName": "Danish krone"
   },
   {
     "country": "Grenada",
@@ -3865,7 +4029,9 @@
     "timeZones": [
       "America/Grenada"
     ],
-    "capitalTimeZone": "America/Grenada"
+    "capitalTimeZone": "America/Grenada",
+    "currency": "XCD",
+    "currencyName": "East Caribbean dollar"
   },
   {
     "country": "Guam",
@@ -3889,7 +4055,9 @@
     "timeZones": [
       "Pacific/Guam"
     ],
-    "capitalTimeZone": "Pacific/Guam"
+    "capitalTimeZone": "Pacific/Guam",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Guatemala",
@@ -3932,7 +4100,9 @@
     "timeZones": [
       "America/Guatemala"
     ],
-    "capitalTimeZone": "America/Guatemala"
+    "capitalTimeZone": "America/Guatemala",
+    "currency": "GTQ",
+    "currencyName": "Guatemalan quetzal"
   },
   {
     "country": "Guernsey",
@@ -3956,7 +4126,9 @@
     "timeZones": [
       "Europe/Guernsey"
     ],
-    "capitalTimeZone": "Europe/Guernsey"
+    "capitalTimeZone": "Europe/Guernsey",
+    "currency": "GBP",
+    "currencyName": "British pound sterling"
   },
   {
     "country": "Guinea",
@@ -4001,7 +4173,9 @@
     "timeZones": [
       "Africa/Conakry"
     ],
-    "capitalTimeZone": "Africa/Conakry"
+    "capitalTimeZone": "Africa/Conakry",
+    "currency": "GNF",
+    "currencyName": "Guinean franc"
   },
   {
     "country": "Guinea-Bissau",
@@ -4040,7 +4214,9 @@
     "timeZones": [
       "Africa/Bissau"
     ],
-    "capitalTimeZone": "Africa/Bissau"
+    "capitalTimeZone": "Africa/Bissau",
+    "currency": "XOF",
+    "currencyName": "West African CFA franc"
   },
   {
     "country": "Guyana",
@@ -4082,7 +4258,9 @@
     "timeZones": [
       "America/Guyana"
     ],
-    "capitalTimeZone": "America/Guyana"
+    "capitalTimeZone": "America/Guyana",
+    "currency": "GYD",
+    "currencyName": "Guyanese dollar"
   },
   {
     "country": "Haiti",
@@ -4122,7 +4300,9 @@
     "timeZones": [
       "America/Port-au-Prince"
     ],
-    "capitalTimeZone": "America/Port-au-Prince"
+    "capitalTimeZone": "America/Port-au-Prince",
+    "currency": "HTG",
+    "currencyName": "Haitian gourde"
   },
   {
     "country": "Honduras",
@@ -4164,7 +4344,9 @@
     "timeZones": [
       "America/Tegucigalpa"
     ],
-    "capitalTimeZone": "America/Tegucigalpa"
+    "capitalTimeZone": "America/Tegucigalpa",
+    "currency": "HNL",
+    "currencyName": "Honduran lempira"
   },
   {
     "country": "Hong Kong",
@@ -4187,7 +4369,9 @@
     "timeZones": [
       "Asia/Hong_Kong"
     ],
-    "capitalTimeZone": "Asia/Hong_Kong"
+    "capitalTimeZone": "Asia/Hong_Kong",
+    "currency": "HKD",
+    "currencyName": "Hong Kong dollar"
   },
   {
     "country": "Hungary",
@@ -4245,7 +4429,9 @@
     "timeZones": [
       "Europe/Budapest"
     ],
-    "capitalTimeZone": "Europe/Budapest"
+    "capitalTimeZone": "Europe/Budapest",
+    "currency": "HUF",
+    "currencyName": "Hungarian forint"
   },
   {
     "country": "Iceland",
@@ -4289,7 +4475,9 @@
     "timeZones": [
       "Atlantic/Reykjavik"
     ],
-    "capitalTimeZone": "Atlantic/Reykjavik"
+    "capitalTimeZone": "Atlantic/Reykjavik",
+    "currency": "ISK",
+    "currencyName": "Icelandic króna"
   },
   {
     "country": "India",
@@ -4381,7 +4569,9 @@
     "timeZones": [
       "Asia/Kolkata"
     ],
-    "capitalTimeZone": "Asia/Kolkata"
+    "capitalTimeZone": "Asia/Kolkata",
+    "currency": "INR",
+    "currencyName": "Indian rupee"
   },
   {
     "country": "Indonesia",
@@ -4453,7 +4643,9 @@
       "Asia/Makassar",
       "Asia/Pontianak"
     ],
-    "capitalTimeZone": "Asia/Jakarta"
+    "capitalTimeZone": "Asia/Jakarta",
+    "currency": "IDR",
+    "currencyName": "Indonesian rupiah"
   },
   {
     "country": "Iran",
@@ -4525,7 +4717,9 @@
     "timeZones": [
       "Asia/Tehran"
     ],
-    "capitalTimeZone": "Asia/Tehran"
+    "capitalTimeZone": "Asia/Tehran",
+    "currency": "IRR",
+    "currencyName": "Iranian rial"
   },
   {
     "country": "Iraq",
@@ -4585,7 +4779,9 @@
     "timeZones": [
       "Asia/Baghdad"
     ],
-    "capitalTimeZone": "Asia/Baghdad"
+    "capitalTimeZone": "Asia/Baghdad",
+    "currency": "IQD",
+    "currencyName": "Iraqi dinar"
   },
   {
     "country": "Ireland",
@@ -4637,7 +4833,9 @@
     "timeZones": [
       "Europe/Dublin"
     ],
-    "capitalTimeZone": "Europe/Dublin"
+    "capitalTimeZone": "Europe/Dublin",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Isle of Man",
@@ -4661,7 +4859,9 @@
     "timeZones": [
       "Europe/Isle_of_Man"
     ],
-    "capitalTimeZone": "Europe/Isle_of_Man"
+    "capitalTimeZone": "Europe/Isle_of_Man",
+    "currency": "GBP",
+    "currencyName": "British pound sterling"
   },
   {
     "country": "Israel",
@@ -4722,7 +4922,9 @@
     "timeZones": [
       "Asia/Jerusalem"
     ],
-    "capitalTimeZone": "Asia/Jerusalem"
+    "capitalTimeZone": "Asia/Jerusalem",
+    "currency": "ILS",
+    "currencyName": "Israeli new shekel"
   },
   {
     "country": "Italy",
@@ -4809,7 +5011,9 @@
     "timeZones": [
       "Europe/Rome"
     ],
-    "capitalTimeZone": "Europe/Rome"
+    "capitalTimeZone": "Europe/Rome",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Jamaica",
@@ -4854,7 +5058,9 @@
     "timeZones": [
       "America/Jamaica"
     ],
-    "capitalTimeZone": "America/Jamaica"
+    "capitalTimeZone": "America/Jamaica",
+    "currency": "JMD",
+    "currencyName": "Jamaican dollar"
   },
   {
     "country": "Japan",
@@ -4934,7 +5140,9 @@
     "timeZones": [
       "Asia/Tokyo"
     ],
-    "capitalTimeZone": "Asia/Tokyo"
+    "capitalTimeZone": "Asia/Tokyo",
+    "currency": "JPY",
+    "currencyName": "Japanese yen"
   },
   {
     "country": "Jersey",
@@ -4958,7 +5166,9 @@
     "timeZones": [
       "Europe/Jersey"
     ],
-    "capitalTimeZone": "Europe/Jersey"
+    "capitalTimeZone": "Europe/Jersey",
+    "currency": "GBP",
+    "currencyName": "British pound sterling"
   },
   {
     "country": "Jordan",
@@ -5014,7 +5224,9 @@
     "timeZones": [
       "Asia/Amman"
     ],
-    "capitalTimeZone": "Asia/Amman"
+    "capitalTimeZone": "Asia/Amman",
+    "currency": "JOD",
+    "currencyName": "Jordanian dinar"
   },
   {
     "country": "Kazakhstan",
@@ -5071,7 +5283,9 @@
       "Asia/Qostanay",
       "Asia/Qyzylorda"
     ],
-    "capitalTimeZone": "Asia/Qostanay"
+    "capitalTimeZone": "Asia/Qostanay",
+    "currency": "KZT",
+    "currencyName": "Kazakhstani tenge"
   },
   {
     "country": "Kenya",
@@ -5127,7 +5341,9 @@
     "timeZones": [
       "Africa/Nairobi"
     ],
-    "capitalTimeZone": "Africa/Nairobi"
+    "capitalTimeZone": "Africa/Nairobi",
+    "currency": "KES",
+    "currencyName": "Kenyan shilling"
   },
   {
     "country": "Kiribati",
@@ -5164,7 +5380,9 @@
       "Pacific/Kiritimati",
       "Pacific/Tarawa"
     ],
-    "capitalTimeZone": "Pacific/Tarawa"
+    "capitalTimeZone": "Pacific/Tarawa",
+    "currency": "AUD",
+    "currencyName": "Australian dollar"
   },
   {
     "country": "Kosovo",
@@ -5193,7 +5411,9 @@
     "timeZones": [
       "Europe/Belgrade"
     ],
-    "capitalTimeZone": "Europe/Belgrade"
+    "capitalTimeZone": "Europe/Belgrade",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Kuwait",
@@ -5232,7 +5452,9 @@
     "timeZones": [
       "Asia/Kuwait"
     ],
-    "capitalTimeZone": "Asia/Kuwait"
+    "capitalTimeZone": "Asia/Kuwait",
+    "currency": "KWD",
+    "currencyName": "Kuwaiti dinar"
   },
   {
     "country": "Kyrgyzstan",
@@ -5275,7 +5497,9 @@
     "timeZones": [
       "Asia/Bishkek"
     ],
-    "capitalTimeZone": "Asia/Bishkek"
+    "capitalTimeZone": "Asia/Bishkek",
+    "currency": "KGS",
+    "currencyName": "Kyrgyzstani som"
   },
   {
     "country": "Laos",
@@ -5326,7 +5550,9 @@
     "timeZones": [
       "Asia/Vientiane"
     ],
-    "capitalTimeZone": "Asia/Vientiane"
+    "capitalTimeZone": "Asia/Vientiane",
+    "currency": "LAK",
+    "currencyName": "Lao kip"
   },
   {
     "country": "Latvia",
@@ -5369,7 +5595,9 @@
     "timeZones": [
       "Europe/Riga"
     ],
-    "capitalTimeZone": "Europe/Riga"
+    "capitalTimeZone": "Europe/Riga",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Lebanon",
@@ -5421,7 +5649,9 @@
     "timeZones": [
       "Asia/Beirut"
     ],
-    "capitalTimeZone": "Asia/Beirut"
+    "capitalTimeZone": "Asia/Beirut",
+    "currency": "LBP",
+    "currencyName": "Lebanese pound"
   },
   {
     "country": "Lesotho",
@@ -5460,7 +5690,9 @@
     "timeZones": [
       "Africa/Maseru"
     ],
-    "capitalTimeZone": "Africa/Maseru"
+    "capitalTimeZone": "Africa/Maseru",
+    "currency": "LSL",
+    "currencyName": "Lesotho loti"
   },
   {
     "country": "Liberia",
@@ -5502,7 +5734,9 @@
     "timeZones": [
       "Africa/Monrovia"
     ],
-    "capitalTimeZone": "Africa/Monrovia"
+    "capitalTimeZone": "Africa/Monrovia",
+    "currency": "LRD",
+    "currencyName": "Liberian dollar"
   },
   {
     "country": "Libya",
@@ -5551,7 +5785,9 @@
     "timeZones": [
       "Africa/Tripoli"
     ],
-    "capitalTimeZone": "Africa/Tripoli"
+    "capitalTimeZone": "Africa/Tripoli",
+    "currency": "LYD",
+    "currencyName": "Libyan dinar"
   },
   {
     "country": "Liechtenstein",
@@ -5591,7 +5827,9 @@
     "timeZones": [
       "Europe/Vaduz"
     ],
-    "capitalTimeZone": "Europe/Vaduz"
+    "capitalTimeZone": "Europe/Vaduz",
+    "currency": "CHF",
+    "currencyName": "Swiss franc"
   },
   {
     "country": "Lithuania",
@@ -5634,7 +5872,9 @@
     "timeZones": [
       "Europe/Vilnius"
     ],
-    "capitalTimeZone": "Europe/Vilnius"
+    "capitalTimeZone": "Europe/Vilnius",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Luxembourg",
@@ -5675,7 +5915,9 @@
     "timeZones": [
       "Europe/Luxembourg"
     ],
-    "capitalTimeZone": "Europe/Luxembourg"
+    "capitalTimeZone": "Europe/Luxembourg",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Macao",
@@ -5698,7 +5940,9 @@
     "timeZones": [
       "Asia/Macau"
     ],
-    "capitalTimeZone": "Asia/Macau"
+    "capitalTimeZone": "Asia/Macau",
+    "currency": "MOP",
+    "currencyName": "Macanese pataca"
   },
   {
     "country": "Madagascar",
@@ -5736,7 +5980,9 @@
     "timeZones": [
       "Indian/Antananarivo"
     ],
-    "capitalTimeZone": "Indian/Antananarivo"
+    "capitalTimeZone": "Indian/Antananarivo",
+    "currency": "MGA",
+    "currencyName": "Malagasy ariary"
   },
   {
     "country": "Malawi",
@@ -5777,7 +6023,9 @@
     "timeZones": [
       "Africa/Blantyre"
     ],
-    "capitalTimeZone": "Africa/Blantyre"
+    "capitalTimeZone": "Africa/Blantyre",
+    "currency": "MWK",
+    "currencyName": "Malawian kwacha"
   },
   {
     "country": "Malaysia",
@@ -5837,7 +6085,9 @@
       "Asia/Kuala_Lumpur",
       "Asia/Kuching"
     ],
-    "capitalTimeZone": "Asia/Kuala_Lumpur"
+    "capitalTimeZone": "Asia/Kuala_Lumpur",
+    "currency": "MYR",
+    "currencyName": "Malaysian ringgit"
   },
   {
     "country": "Maldives",
@@ -5873,7 +6123,9 @@
     "timeZones": [
       "Indian/Maldives"
     ],
-    "capitalTimeZone": "Indian/Maldives"
+    "capitalTimeZone": "Indian/Maldives",
+    "currency": "MVR",
+    "currencyName": "Maldivian rufiyaa"
   },
   {
     "country": "Mali",
@@ -5918,7 +6170,9 @@
     "timeZones": [
       "Africa/Bamako"
     ],
-    "capitalTimeZone": "Africa/Bamako"
+    "capitalTimeZone": "Africa/Bamako",
+    "currency": "XOF",
+    "currencyName": "West African CFA franc"
   },
   {
     "country": "Malta",
@@ -5955,7 +6209,9 @@
     "timeZones": [
       "Europe/Malta"
     ],
-    "capitalTimeZone": "Europe/Malta"
+    "capitalTimeZone": "Europe/Malta",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Marshall Islands",
@@ -5992,7 +6248,9 @@
       "Pacific/Kwajalein",
       "Pacific/Majuro"
     ],
-    "capitalTimeZone": "Pacific/Majuro"
+    "capitalTimeZone": "Pacific/Majuro",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Mauritania",
@@ -6034,7 +6292,9 @@
     "timeZones": [
       "Africa/Nouakchott"
     ],
-    "capitalTimeZone": "Africa/Nouakchott"
+    "capitalTimeZone": "Africa/Nouakchott",
+    "currency": "MRU",
+    "currencyName": "Mauritanian ouguiya"
   },
   {
     "country": "Mauritius",
@@ -6072,7 +6332,9 @@
     "timeZones": [
       "Indian/Mauritius"
     ],
-    "capitalTimeZone": "Indian/Mauritius"
+    "capitalTimeZone": "Indian/Mauritius",
+    "currency": "MUR",
+    "currencyName": "Mauritian rupee"
   },
   {
     "country": "Mexico",
@@ -6162,7 +6424,9 @@
       "America/Ojinaga",
       "America/Tijuana"
     ],
-    "capitalTimeZone": "America/Mexico_City"
+    "capitalTimeZone": "America/Mexico_City",
+    "currency": "MXN",
+    "currencyName": "Mexican peso"
   },
   {
     "country": "Micronesia",
@@ -6201,7 +6465,9 @@
       "Pacific/Kosrae",
       "Pacific/Pohnpei"
     ],
-    "capitalTimeZone": "Pacific/Pohnpei"
+    "capitalTimeZone": "Pacific/Pohnpei",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Moldova",
@@ -6241,7 +6507,9 @@
     "timeZones": [
       "Europe/Chisinau"
     ],
-    "capitalTimeZone": "Europe/Chisinau"
+    "capitalTimeZone": "Europe/Chisinau",
+    "currency": "MDL",
+    "currencyName": "Moldovan leu"
   },
   {
     "country": "Monaco",
@@ -6279,7 +6547,9 @@
     "timeZones": [
       "Europe/Monaco"
     ],
-    "capitalTimeZone": "Europe/Monaco"
+    "capitalTimeZone": "Europe/Monaco",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Mongolia",
@@ -6328,7 +6598,9 @@
       "Asia/Hovd",
       "Asia/Ulaanbaatar"
     ],
-    "capitalTimeZone": "Asia/Ulaanbaatar"
+    "capitalTimeZone": "Asia/Ulaanbaatar",
+    "currency": "MNT",
+    "currencyName": "Mongolian tögrög"
   },
   {
     "country": "Montenegro",
@@ -6372,7 +6644,9 @@
     "timeZones": [
       "Europe/Podgorica"
     ],
-    "capitalTimeZone": "Europe/Podgorica"
+    "capitalTimeZone": "Europe/Podgorica",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Montserrat",
@@ -6396,7 +6670,9 @@
     "timeZones": [
       "America/Montserrat"
     ],
-    "capitalTimeZone": "America/Montserrat"
+    "capitalTimeZone": "America/Montserrat",
+    "currency": "XCD",
+    "currencyName": "East Caribbean dollar"
   },
   {
     "country": "Morocco",
@@ -6465,7 +6741,9 @@
     "timeZones": [
       "Africa/Casablanca"
     ],
-    "capitalTimeZone": "Africa/Casablanca"
+    "capitalTimeZone": "Africa/Casablanca",
+    "currency": "MAD",
+    "currencyName": "Moroccan dirham"
   },
   {
     "country": "Mozambique",
@@ -6517,7 +6795,9 @@
     "timeZones": [
       "Africa/Maputo"
     ],
-    "capitalTimeZone": "Africa/Maputo"
+    "capitalTimeZone": "Africa/Maputo",
+    "currency": "MZN",
+    "currencyName": "Mozambican metical"
   },
   {
     "country": "Myanmar",
@@ -6578,7 +6858,9 @@
     "timeZones": [
       "Asia/Yangon"
     ],
-    "capitalTimeZone": "Asia/Yangon"
+    "capitalTimeZone": "Asia/Yangon",
+    "currency": "MMK",
+    "currencyName": "Myanmar kyat"
   },
   {
     "country": "Namibia",
@@ -6621,7 +6903,9 @@
     "timeZones": [
       "Africa/Windhoek"
     ],
-    "capitalTimeZone": "Africa/Windhoek"
+    "capitalTimeZone": "Africa/Windhoek",
+    "currency": "NAD",
+    "currencyName": "Namibian dollar"
   },
   {
     "country": "Nauru",
@@ -6655,7 +6939,9 @@
     "timeZones": [
       "Pacific/Nauru"
     ],
-    "capitalTimeZone": "Pacific/Nauru"
+    "capitalTimeZone": "Pacific/Nauru",
+    "currency": "AUD",
+    "currencyName": "Australian dollar"
   },
   {
     "country": "Nepal",
@@ -6708,7 +6994,9 @@
     "timeZones": [
       "Asia/Kathmandu"
     ],
-    "capitalTimeZone": "Asia/Kathmandu"
+    "capitalTimeZone": "Asia/Kathmandu",
+    "currency": "NPR",
+    "currencyName": "Nepalese rupee"
   },
   {
     "country": "Netherlands",
@@ -6771,7 +7059,9 @@
     "timeZones": [
       "Europe/Amsterdam"
     ],
-    "capitalTimeZone": "Europe/Amsterdam"
+    "capitalTimeZone": "Europe/Amsterdam",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "New Caledonia",
@@ -6795,7 +7085,9 @@
     "timeZones": [
       "Pacific/Noumea"
     ],
-    "capitalTimeZone": "Pacific/Noumea"
+    "capitalTimeZone": "Pacific/Noumea",
+    "currency": "XPF",
+    "currencyName": "CFP franc"
   },
   {
     "country": "New Zealand",
@@ -6851,7 +7143,9 @@
       "Pacific/Auckland",
       "Pacific/Chatham"
     ],
-    "capitalTimeZone": "Pacific/Auckland"
+    "capitalTimeZone": "Pacific/Auckland",
+    "currency": "NZD",
+    "currencyName": "New Zealand dollar"
   },
   {
     "country": "Nicaragua",
@@ -6892,7 +7186,9 @@
     "timeZones": [
       "America/Managua"
     ],
-    "capitalTimeZone": "America/Managua"
+    "capitalTimeZone": "America/Managua",
+    "currency": "NIO",
+    "currencyName": "Nicaraguan córdoba"
   },
   {
     "country": "Niger",
@@ -6938,7 +7234,9 @@
     "timeZones": [
       "Africa/Niamey"
     ],
-    "capitalTimeZone": "Africa/Niamey"
+    "capitalTimeZone": "Africa/Niamey",
+    "currency": "XOF",
+    "currencyName": "West African CFA franc"
   },
   {
     "country": "Nigeria",
@@ -6997,7 +7295,9 @@
     "timeZones": [
       "Africa/Lagos"
     ],
-    "capitalTimeZone": "Africa/Lagos"
+    "capitalTimeZone": "Africa/Lagos",
+    "currency": "NGN",
+    "currencyName": "Nigerian naira"
   },
   {
     "country": "Niue",
@@ -7021,7 +7321,9 @@
     "timeZones": [
       "Pacific/Niue"
     ],
-    "capitalTimeZone": "Pacific/Niue"
+    "capitalTimeZone": "Pacific/Niue",
+    "currency": "NZD",
+    "currencyName": "New Zealand dollar"
   },
   {
     "country": "Norfolk Island",
@@ -7045,7 +7347,9 @@
     "timeZones": [
       "Pacific/Norfolk"
     ],
-    "capitalTimeZone": "Pacific/Norfolk"
+    "capitalTimeZone": "Pacific/Norfolk",
+    "currency": "AUD",
+    "currencyName": "Australian dollar"
   },
   {
     "country": "North Korea",
@@ -7093,7 +7397,9 @@
     "timeZones": [
       "Asia/Pyongyang"
     ],
-    "capitalTimeZone": "Asia/Pyongyang"
+    "capitalTimeZone": "Asia/Pyongyang",
+    "currency": "KPW",
+    "currencyName": "North Korean won"
   },
   {
     "country": "North Macedonia",
@@ -7136,7 +7442,9 @@
     "timeZones": [
       "Europe/Skopje"
     ],
-    "capitalTimeZone": "Europe/Skopje"
+    "capitalTimeZone": "Europe/Skopje",
+    "currency": "MKD",
+    "currencyName": "Macedonian denar"
   },
   {
     "country": "Northern Mariana Islands",
@@ -7160,7 +7468,9 @@
     "timeZones": [
       "Pacific/Saipan"
     ],
-    "capitalTimeZone": "Pacific/Saipan"
+    "capitalTimeZone": "Pacific/Saipan",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Norway",
@@ -7224,7 +7534,9 @@
     "timeZones": [
       "Europe/Oslo"
     ],
-    "capitalTimeZone": "Europe/Oslo"
+    "capitalTimeZone": "Europe/Oslo",
+    "currency": "NOK",
+    "currencyName": "Norwegian krone"
   },
   {
     "country": "Oman",
@@ -7272,7 +7584,9 @@
     "timeZones": [
       "Asia/Muscat"
     ],
-    "capitalTimeZone": "Asia/Muscat"
+    "capitalTimeZone": "Asia/Muscat",
+    "currency": "OMR",
+    "currencyName": "Omani rial"
   },
   {
     "country": "Pakistan",
@@ -7337,7 +7651,9 @@
     "timeZones": [
       "Asia/Karachi"
     ],
-    "capitalTimeZone": "Asia/Karachi"
+    "capitalTimeZone": "Asia/Karachi",
+    "currency": "PKR",
+    "currencyName": "Pakistani rupee"
   },
   {
     "country": "Palau",
@@ -7373,7 +7689,9 @@
     "timeZones": [
       "Pacific/Palau"
     ],
-    "capitalTimeZone": "Pacific/Palau"
+    "capitalTimeZone": "Pacific/Palau",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Palestine",
@@ -7402,7 +7720,9 @@
       "Asia/Gaza",
       "Asia/Hebron"
     ],
-    "capitalTimeZone": "Asia/Gaza"
+    "capitalTimeZone": "Asia/Gaza",
+    "currency": "ILS",
+    "currencyName": "Israeli new shekel"
   },
   {
     "country": "Panama",
@@ -7449,7 +7769,9 @@
     "timeZones": [
       "America/Panama"
     ],
-    "capitalTimeZone": "America/Panama"
+    "capitalTimeZone": "America/Panama",
+    "currency": "PAB",
+    "currencyName": "Panamanian balboa"
   },
   {
     "country": "Papua New Guinea",
@@ -7490,7 +7812,9 @@
       "Pacific/Bougainville",
       "Pacific/Port_Moresby"
     ],
-    "capitalTimeZone": "Pacific/Port_Moresby"
+    "capitalTimeZone": "Pacific/Port_Moresby",
+    "currency": "PGK",
+    "currencyName": "Papua New Guinean kina"
   },
   {
     "country": "Paraguay",
@@ -7532,7 +7856,9 @@
     "timeZones": [
       "America/Asuncion"
     ],
-    "capitalTimeZone": "America/Asuncion"
+    "capitalTimeZone": "America/Asuncion",
+    "currency": "PYG",
+    "currencyName": "Paraguayan guaraní"
   },
   {
     "country": "Peru",
@@ -7593,7 +7919,9 @@
     "timeZones": [
       "America/Lima"
     ],
-    "capitalTimeZone": "America/Lima"
+    "capitalTimeZone": "America/Lima",
+    "currency": "PEN",
+    "currencyName": "Peruvian sol"
   },
   {
     "country": "Philippines",
@@ -7648,7 +7976,9 @@
     "timeZones": [
       "Asia/Manila"
     ],
-    "capitalTimeZone": "Asia/Manila"
+    "capitalTimeZone": "Asia/Manila",
+    "currency": "PHP",
+    "currencyName": "Philippine peso"
   },
   {
     "country": "Poland",
@@ -7716,7 +8046,9 @@
     "timeZones": [
       "Europe/Warsaw"
     ],
-    "capitalTimeZone": "Europe/Warsaw"
+    "capitalTimeZone": "Europe/Warsaw",
+    "currency": "PLN",
+    "currencyName": "Polish złoty"
   },
   {
     "country": "Portugal",
@@ -7775,7 +8107,9 @@
       "Atlantic/Madeira",
       "Europe/Lisbon"
     ],
-    "capitalTimeZone": "Europe/Lisbon"
+    "capitalTimeZone": "Europe/Lisbon",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Puerto Rico",
@@ -7799,7 +8133,9 @@
     "timeZones": [
       "America/Puerto_Rico"
     ],
-    "capitalTimeZone": "America/Puerto_Rico"
+    "capitalTimeZone": "America/Puerto_Rico",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Qatar",
@@ -7846,7 +8182,9 @@
     "timeZones": [
       "Asia/Qatar"
     ],
-    "capitalTimeZone": "Asia/Qatar"
+    "capitalTimeZone": "Asia/Qatar",
+    "currency": "QAR",
+    "currencyName": "Qatari riyal"
   },
   {
     "country": "Romania",
@@ -7907,7 +8245,9 @@
     "timeZones": [
       "Europe/Bucharest"
     ],
-    "capitalTimeZone": "Europe/Bucharest"
+    "capitalTimeZone": "Europe/Bucharest",
+    "currency": "RON",
+    "currencyName": "Romanian leu"
   },
   {
     "country": "Russia",
@@ -8017,7 +8357,9 @@
       "Europe/Ulyanovsk",
       "Europe/Volgograd"
     ],
-    "capitalTimeZone": "Europe/Moscow"
+    "capitalTimeZone": "Europe/Moscow",
+    "currency": "RUB",
+    "currencyName": "Russian ruble"
   },
   {
     "country": "Rwanda",
@@ -8060,7 +8402,9 @@
     "timeZones": [
       "Africa/Kigali"
     ],
-    "capitalTimeZone": "Africa/Kigali"
+    "capitalTimeZone": "Africa/Kigali",
+    "currency": "RWF",
+    "currencyName": "Rwandan franc"
   },
   {
     "country": "Saint Barthelemy",
@@ -8084,7 +8428,9 @@
     "timeZones": [
       "America/St_Barthelemy"
     ],
-    "capitalTimeZone": "America/St_Barthelemy"
+    "capitalTimeZone": "America/St_Barthelemy",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Saint Helena",
@@ -8108,7 +8454,9 @@
     "timeZones": [
       "Atlantic/St_Helena"
     ],
-    "capitalTimeZone": "Atlantic/St_Helena"
+    "capitalTimeZone": "Atlantic/St_Helena",
+    "currency": "SHP",
+    "currencyName": "Saint Helena pound"
   },
   {
     "country": "Saint Kitts and Nevis",
@@ -8145,7 +8493,9 @@
     "timeZones": [
       "America/St_Kitts"
     ],
-    "capitalTimeZone": "America/St_Kitts"
+    "capitalTimeZone": "America/St_Kitts",
+    "currency": "XCD",
+    "currencyName": "East Caribbean dollar"
   },
   {
     "country": "Saint Lucia",
@@ -8181,7 +8531,9 @@
     "timeZones": [
       "America/St_Lucia"
     ],
-    "capitalTimeZone": "America/St_Lucia"
+    "capitalTimeZone": "America/St_Lucia",
+    "currency": "XCD",
+    "currencyName": "East Caribbean dollar"
   },
   {
     "country": "Saint Martin",
@@ -8205,7 +8557,9 @@
     "timeZones": [
       "America/Marigot"
     ],
-    "capitalTimeZone": "America/Marigot"
+    "capitalTimeZone": "America/Marigot",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Saint Pierre and Miquelon",
@@ -8229,7 +8583,9 @@
     "timeZones": [
       "America/Miquelon"
     ],
-    "capitalTimeZone": "America/Miquelon"
+    "capitalTimeZone": "America/Miquelon",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Saint Vincent and the Grenadines",
@@ -8266,7 +8622,9 @@
     "timeZones": [
       "America/St_Vincent"
     ],
-    "capitalTimeZone": "America/St_Vincent"
+    "capitalTimeZone": "America/St_Vincent",
+    "currency": "XCD",
+    "currencyName": "East Caribbean dollar"
   },
   {
     "country": "Samoa",
@@ -8303,7 +8661,9 @@
     "timeZones": [
       "Pacific/Apia"
     ],
-    "capitalTimeZone": "Pacific/Apia"
+    "capitalTimeZone": "Pacific/Apia",
+    "currency": "WST",
+    "currencyName": "Samoan tālā"
   },
   {
     "country": "San Marino",
@@ -8342,7 +8702,9 @@
     "timeZones": [
       "Europe/San_Marino"
     ],
-    "capitalTimeZone": "Europe/San_Marino"
+    "capitalTimeZone": "Europe/San_Marino",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Sao Tome and Principe",
@@ -8379,7 +8741,9 @@
     "timeZones": [
       "Africa/Sao_Tome"
     ],
-    "capitalTimeZone": "Africa/Sao_Tome"
+    "capitalTimeZone": "Africa/Sao_Tome",
+    "currency": "STN",
+    "currencyName": "São Tomé and Príncipe dobra"
   },
   {
     "country": "Saudi Arabia",
@@ -8441,7 +8805,9 @@
     "timeZones": [
       "Asia/Riyadh"
     ],
-    "capitalTimeZone": "Asia/Riyadh"
+    "capitalTimeZone": "Asia/Riyadh",
+    "currency": "SAR",
+    "currencyName": "Saudi riyal"
   },
   {
     "country": "Senegal",
@@ -8492,7 +8858,9 @@
     "timeZones": [
       "Africa/Dakar"
     ],
-    "capitalTimeZone": "Africa/Dakar"
+    "capitalTimeZone": "Africa/Dakar",
+    "currency": "XOF",
+    "currencyName": "West African CFA franc"
   },
   {
     "country": "Serbia",
@@ -8539,7 +8907,9 @@
     "timeZones": [
       "Europe/Belgrade"
     ],
-    "capitalTimeZone": "Europe/Belgrade"
+    "capitalTimeZone": "Europe/Belgrade",
+    "currency": "RSD",
+    "currencyName": "Serbian dinar"
   },
   {
     "country": "Seychelles",
@@ -8575,7 +8945,9 @@
     "timeZones": [
       "Indian/Mahe"
     ],
-    "capitalTimeZone": "Indian/Mahe"
+    "capitalTimeZone": "Indian/Mahe",
+    "currency": "SCR",
+    "currencyName": "Seychellois rupee"
   },
   {
     "country": "Sierra Leone",
@@ -8616,7 +8988,9 @@
     "timeZones": [
       "Africa/Freetown"
     ],
-    "capitalTimeZone": "Africa/Freetown"
+    "capitalTimeZone": "Africa/Freetown",
+    "currency": "SLE",
+    "currencyName": "Sierra Leonean leone"
   },
   {
     "country": "Singapore",
@@ -8654,7 +9028,9 @@
     "timeZones": [
       "Asia/Singapore"
     ],
-    "capitalTimeZone": "Asia/Singapore"
+    "capitalTimeZone": "Asia/Singapore",
+    "currency": "SGD",
+    "currencyName": "Singapore dollar"
   },
   {
     "country": "Sint Maarten",
@@ -8678,7 +9054,9 @@
     "timeZones": [
       "America/Lower_Princes"
     ],
-    "capitalTimeZone": "America/Lower_Princes"
+    "capitalTimeZone": "America/Lower_Princes",
+    "currency": "ANG",
+    "currencyName": "Netherlands Antillean guilder"
   },
   {
     "country": "Slovakia",
@@ -8722,7 +9100,9 @@
     "timeZones": [
       "Europe/Bratislava"
     ],
-    "capitalTimeZone": "Europe/Bratislava"
+    "capitalTimeZone": "Europe/Bratislava",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Slovenia",
@@ -8765,7 +9145,9 @@
     "timeZones": [
       "Europe/Ljubljana"
     ],
-    "capitalTimeZone": "Europe/Ljubljana"
+    "capitalTimeZone": "Europe/Ljubljana",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Solomon Islands",
@@ -8803,7 +9185,9 @@
     "timeZones": [
       "Pacific/Guadalcanal"
     ],
-    "capitalTimeZone": "Pacific/Guadalcanal"
+    "capitalTimeZone": "Pacific/Guadalcanal",
+    "currency": "SBD",
+    "currencyName": "Solomon Islands dollar"
   },
   {
     "country": "Somalia",
@@ -8844,7 +9228,9 @@
     "timeZones": [
       "Africa/Mogadishu"
     ],
-    "capitalTimeZone": "Africa/Mogadishu"
+    "capitalTimeZone": "Africa/Mogadishu",
+    "currency": "SOS",
+    "currencyName": "Somali shilling"
   },
   {
     "country": "South Africa",
@@ -8908,7 +9294,9 @@
     "timeZones": [
       "Africa/Johannesburg"
     ],
-    "capitalTimeZone": "Africa/Johannesburg"
+    "capitalTimeZone": "Africa/Johannesburg",
+    "currency": "ZAR",
+    "currencyName": "South African rand"
   },
   {
     "country": "South Korea",
@@ -8970,7 +9358,9 @@
     "timeZones": [
       "Asia/Seoul"
     ],
-    "capitalTimeZone": "Asia/Seoul"
+    "capitalTimeZone": "Asia/Seoul",
+    "currency": "KRW",
+    "currencyName": "South Korean won"
   },
   {
     "country": "South Sudan",
@@ -9013,7 +9403,9 @@
     "timeZones": [
       "Africa/Juba"
     ],
-    "capitalTimeZone": "Africa/Juba"
+    "capitalTimeZone": "Africa/Juba",
+    "currency": "SSP",
+    "currencyName": "South Sudanese pound"
   },
   {
     "country": "Spain",
@@ -9095,7 +9487,9 @@
       "Atlantic/Canary",
       "Europe/Madrid"
     ],
-    "capitalTimeZone": "Europe/Madrid"
+    "capitalTimeZone": "Europe/Madrid",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Sri Lanka",
@@ -9145,7 +9539,9 @@
     "timeZones": [
       "Asia/Colombo"
     ],
-    "capitalTimeZone": "Asia/Colombo"
+    "capitalTimeZone": "Asia/Colombo",
+    "currency": "LKR",
+    "currencyName": "Sri Lankan rupee"
   },
   {
     "country": "Sudan",
@@ -9190,7 +9586,9 @@
     "timeZones": [
       "Africa/Khartoum"
     ],
-    "capitalTimeZone": "Africa/Khartoum"
+    "capitalTimeZone": "Africa/Khartoum",
+    "currency": "SDG",
+    "currencyName": "Sudanese pound"
   },
   {
     "country": "Suriname",
@@ -9230,7 +9628,9 @@
     "timeZones": [
       "America/Paramaribo"
     ],
-    "capitalTimeZone": "America/Paramaribo"
+    "capitalTimeZone": "America/Paramaribo",
+    "currency": "SRD",
+    "currencyName": "Surinamese dollar"
   },
   {
     "country": "Sweden",
@@ -9288,7 +9688,9 @@
     "timeZones": [
       "Europe/Stockholm"
     ],
-    "capitalTimeZone": "Europe/Stockholm"
+    "capitalTimeZone": "Europe/Stockholm",
+    "currency": "SEK",
+    "currencyName": "Swedish krona"
   },
   {
     "country": "Switzerland",
@@ -9359,7 +9761,9 @@
     "timeZones": [
       "Europe/Zurich"
     ],
-    "capitalTimeZone": "Europe/Zurich"
+    "capitalTimeZone": "Europe/Zurich",
+    "currency": "CHF",
+    "currencyName": "Swiss franc"
   },
   {
     "country": "Syria",
@@ -9414,7 +9818,9 @@
     "timeZones": [
       "Asia/Damascus"
     ],
-    "capitalTimeZone": "Asia/Damascus"
+    "capitalTimeZone": "Asia/Damascus",
+    "currency": "SYP",
+    "currencyName": "Syrian pound"
   },
   {
     "country": "Taiwan",
@@ -9438,7 +9844,9 @@
     "timeZones": [
       "Asia/Taipei"
     ],
-    "capitalTimeZone": "Asia/Taipei"
+    "capitalTimeZone": "Asia/Taipei",
+    "currency": "TWD",
+    "currencyName": "New Taiwan dollar"
   },
   {
     "country": "Tajikistan",
@@ -9480,7 +9888,9 @@
     "timeZones": [
       "Asia/Dushanbe"
     ],
-    "capitalTimeZone": "Asia/Dushanbe"
+    "capitalTimeZone": "Asia/Dushanbe",
+    "currency": "TJS",
+    "currencyName": "Tajikistani somoni"
   },
   {
     "country": "Tanzania",
@@ -9544,7 +9954,9 @@
     "timeZones": [
       "Africa/Dar_es_Salaam"
     ],
-    "capitalTimeZone": "Africa/Dar_es_Salaam"
+    "capitalTimeZone": "Africa/Dar_es_Salaam",
+    "currency": "TZS",
+    "currencyName": "Tanzanian shilling"
   },
   {
     "country": "Thailand",
@@ -9609,7 +10021,9 @@
     "timeZones": [
       "Asia/Bangkok"
     ],
-    "capitalTimeZone": "Asia/Bangkok"
+    "capitalTimeZone": "Asia/Bangkok",
+    "currency": "THB",
+    "currencyName": "Thai baht"
   },
   {
     "country": "Timor-Leste",
@@ -9647,7 +10061,9 @@
     "timeZones": [
       "Asia/Dili"
     ],
-    "capitalTimeZone": "Asia/Dili"
+    "capitalTimeZone": "Asia/Dili",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Togo",
@@ -9689,7 +10105,9 @@
     "timeZones": [
       "Africa/Lome"
     ],
-    "capitalTimeZone": "Africa/Lome"
+    "capitalTimeZone": "Africa/Lome",
+    "currency": "XOF",
+    "currencyName": "West African CFA franc"
   },
   {
     "country": "Tonga",
@@ -9726,7 +10144,9 @@
     "timeZones": [
       "Pacific/Tongatapu"
     ],
-    "capitalTimeZone": "Pacific/Tongatapu"
+    "capitalTimeZone": "Pacific/Tongatapu",
+    "currency": "TOP",
+    "currencyName": "Tongan paʻanga"
   },
   {
     "country": "Trinidad and Tobago",
@@ -9764,7 +10184,9 @@
     "timeZones": [
       "America/Port_of_Spain"
     ],
-    "capitalTimeZone": "America/Port_of_Spain"
+    "capitalTimeZone": "America/Port_of_Spain",
+    "currency": "TTD",
+    "currencyName": "Trinidad and Tobago dollar"
   },
   {
     "country": "Tunisia",
@@ -9817,7 +10239,9 @@
     "timeZones": [
       "Africa/Tunis"
     ],
-    "capitalTimeZone": "Africa/Tunis"
+    "capitalTimeZone": "Africa/Tunis",
+    "currency": "TND",
+    "currencyName": "Tunisian dinar"
   },
   {
     "country": "Turkey",
@@ -9896,7 +10320,9 @@
     "timeZones": [
       "Europe/Istanbul"
     ],
-    "capitalTimeZone": "Europe/Istanbul"
+    "capitalTimeZone": "Europe/Istanbul",
+    "currency": "TRY",
+    "currencyName": "Turkish lira"
   },
   {
     "country": "Turkmenistan",
@@ -9939,7 +10365,9 @@
     "timeZones": [
       "Asia/Ashgabat"
     ],
-    "capitalTimeZone": "Asia/Ashgabat"
+    "capitalTimeZone": "Asia/Ashgabat",
+    "currency": "TMT",
+    "currencyName": "Turkmenistan manat"
   },
   {
     "country": "Turks and Caicos Islands",
@@ -9963,7 +10391,9 @@
     "timeZones": [
       "America/Grand_Turk"
     ],
-    "capitalTimeZone": "America/Grand_Turk"
+    "capitalTimeZone": "America/Grand_Turk",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Tuvalu",
@@ -9997,7 +10427,9 @@
     "timeZones": [
       "Pacific/Funafuti"
     ],
-    "capitalTimeZone": "Pacific/Funafuti"
+    "capitalTimeZone": "Pacific/Funafuti",
+    "currency": "AUD",
+    "currencyName": "Australian dollar"
   },
   {
     "country": "Uganda",
@@ -10048,7 +10480,9 @@
     "timeZones": [
       "Africa/Kampala"
     ],
-    "capitalTimeZone": "Africa/Kampala"
+    "capitalTimeZone": "Africa/Kampala",
+    "currency": "UGX",
+    "currencyName": "Ugandan shilling"
   },
   {
     "country": "Ukraine",
@@ -10117,7 +10551,9 @@
       "Europe/Kyiv",
       "Europe/Simferopol"
     ],
-    "capitalTimeZone": "Europe/Kyiv"
+    "capitalTimeZone": "Europe/Kyiv",
+    "currency": "UAH",
+    "currencyName": "Ukrainian hryvnia"
   },
   {
     "country": "United Arab Emirates",
@@ -10170,7 +10606,9 @@
     "timeZones": [
       "Asia/Dubai"
     ],
-    "capitalTimeZone": "Asia/Dubai"
+    "capitalTimeZone": "Asia/Dubai",
+    "currency": "AED",
+    "currencyName": "United Arab Emirates dirham"
   },
   {
     "country": "United Kingdom",
@@ -10252,7 +10690,9 @@
     "timeZones": [
       "Europe/London"
     ],
-    "capitalTimeZone": "Europe/London"
+    "capitalTimeZone": "Europe/London",
+    "currency": "GBP",
+    "currencyName": "British pound sterling"
   },
   {
     "country": "United States",
@@ -10373,7 +10813,9 @@
       "America/Yakutat",
       "Pacific/Honolulu"
     ],
-    "capitalTimeZone": "America/New_York"
+    "capitalTimeZone": "America/New_York",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "United States Virgin Islands",
@@ -10397,7 +10839,9 @@
     "timeZones": [
       "America/St_Thomas"
     ],
-    "capitalTimeZone": "America/St_Thomas"
+    "capitalTimeZone": "America/St_Thomas",
+    "currency": "USD",
+    "currencyName": "United States dollar"
   },
   {
     "country": "Uruguay",
@@ -10438,7 +10882,9 @@
     "timeZones": [
       "America/Montevideo"
     ],
-    "capitalTimeZone": "America/Montevideo"
+    "capitalTimeZone": "America/Montevideo",
+    "currency": "UYU",
+    "currencyName": "Uruguayan peso"
   },
   {
     "country": "Uzbekistan",
@@ -10495,7 +10941,9 @@
       "Asia/Samarkand",
       "Asia/Tashkent"
     ],
-    "capitalTimeZone": "Asia/Tashkent"
+    "capitalTimeZone": "Asia/Tashkent",
+    "currency": "UZS",
+    "currencyName": "Uzbekistani som"
   },
   {
     "country": "Vanuatu",
@@ -10533,7 +10981,9 @@
     "timeZones": [
       "Pacific/Efate"
     ],
-    "capitalTimeZone": "Pacific/Efate"
+    "capitalTimeZone": "Pacific/Efate",
+    "currency": "VUV",
+    "currencyName": "Vanuatu vatu"
   },
   {
     "country": "Vatican City",
@@ -10571,7 +11021,9 @@
     "timeZones": [
       "Europe/Vatican"
     ],
-    "capitalTimeZone": "Europe/Vatican"
+    "capitalTimeZone": "Europe/Vatican",
+    "currency": "EUR",
+    "currencyName": "Euro"
   },
   {
     "country": "Venezuela",
@@ -10624,7 +11076,9 @@
     "timeZones": [
       "America/Caracas"
     ],
-    "capitalTimeZone": "America/Caracas"
+    "capitalTimeZone": "America/Caracas",
+    "currency": "VES",
+    "currencyName": "Venezuelan bolívar"
   },
   {
     "country": "Vietnam",
@@ -10693,7 +11147,9 @@
     "timeZones": [
       "Asia/Ho_Chi_Minh"
     ],
-    "capitalTimeZone": "Asia/Ho_Chi_Minh"
+    "capitalTimeZone": "Asia/Ho_Chi_Minh",
+    "currency": "VND",
+    "currencyName": "Vietnamese đồng"
   },
   {
     "country": "Wallis and Futuna",
@@ -10717,7 +11173,9 @@
     "timeZones": [
       "Pacific/Wallis"
     ],
-    "capitalTimeZone": "Pacific/Wallis"
+    "capitalTimeZone": "Pacific/Wallis",
+    "currency": "XPF",
+    "currencyName": "CFP franc"
   },
   {
     "country": "Western Sahara",
@@ -10741,7 +11199,9 @@
     "timeZones": [
       "Africa/El_Aaiun"
     ],
-    "capitalTimeZone": "Africa/El_Aaiun"
+    "capitalTimeZone": "Africa/El_Aaiun",
+    "currency": "MAD",
+    "currencyName": "Moroccan dirham"
   },
   {
     "country": "Yemen",
@@ -10781,7 +11241,9 @@
     "timeZones": [
       "Asia/Aden"
     ],
-    "capitalTimeZone": "Asia/Aden"
+    "capitalTimeZone": "Asia/Aden",
+    "currency": "YER",
+    "currencyName": "Yemeni rial"
   },
   {
     "country": "Zambia",
@@ -10828,7 +11290,9 @@
     "timeZones": [
       "Africa/Lusaka"
     ],
-    "capitalTimeZone": "Africa/Lusaka"
+    "capitalTimeZone": "Africa/Lusaka",
+    "currency": "ZMW",
+    "currencyName": "Zambian kwacha"
   },
   {
     "country": "Zimbabwe",
@@ -10883,6 +11347,8 @@
     "timeZones": [
       "Africa/Harare"
     ],
-    "capitalTimeZone": "Africa/Harare"
+    "capitalTimeZone": "Africa/Harare",
+    "currency": "ZWL",
+    "currencyName": "Zimbabwean dollar"
   }
 ]

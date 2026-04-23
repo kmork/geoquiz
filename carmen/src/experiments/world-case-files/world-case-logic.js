@@ -83,6 +83,32 @@ function evidenceMatch(countryData, evidence, culturalCountry = null) {
   return { matches, contradictions };
 }
 
+function humanizeTagValue(value = '') {
+  return String(value || '')
+    .trim()
+    .replace(/[_-]+/g, ' ');
+}
+
+function atlasHintFromTag(tag, evidence) {
+  if (!tag || tag.startsWith('exclude:') || tag === 'confirmation') return '';
+  const [kind, rawValue = ''] = String(tag).split(':');
+  const value = humanizeTagValue(rawValue);
+  if (kind === 'export') return `Export clue points toward countries known for ${value}.`;
+  if (kind === 'continent') return `Geography clue narrows the lead toward ${value}.`;
+  if (kind === 'capital') return `Capital clue points toward countries whose capital starts like "${value}".`;
+  if (kind === 'city') return `City clue narrows the trail toward countries tied to ${value}.`;
+  if (kind === 'history') return `History clue points toward countries tied to ${value}.`;
+  if (kind === 'culture') return `Culture clue fits countries associated with ${value}.`;
+  if (kind === 'famous') return `Reference clue points toward countries known for ${value}.`;
+  if (kind === 'climate') return `Climate clue narrows the field toward ${value} regions.`;
+  if (kind === 'cultural_place') return `Site clue points toward countries linked to ${value}.`;
+  if (kind === 'cultural_role') return `Archive clue favors countries with a ${value} role in the object's story.`;
+  if (kind === 'cultural_object') return `Object clue points toward countries connected to ${value}.`;
+  if (kind === 'country') return `One clue directly names ${value}.`;
+  if (evidence?.category === 'Confirmation') return 'Confirmation clue strengthens one destination enough to move.';
+  return '';
+}
+
 export class WorldCaseFilesLogic {
   constructor({ caseData, countries, culturalPlaces = [], culturalObjects = [], candidateIndex = null }) {
     this.caseData = caseData;
@@ -307,8 +333,29 @@ export class WorldCaseFilesLogic {
         correct: countryData.country === targetCountry,
         matchedEvidence,
         contradictedEvidence,
+        hintSummary: this.getCandidateHintSummary({
+          country: countryData.country,
+          state,
+          matchedEvidence,
+          contradictedEvidence,
+        }),
       };
     });
+  }
+
+  getCandidateHintSummary(candidate) {
+    if (!candidate) return '';
+    if (candidate.country === this.currentCountry) return 'Current scene. Gather more evidence before moving the case onward.';
+    if (candidate.state === 'contradicted') return 'Collected evidence contradicts this destination.';
+    const matched = candidate.matchedEvidence || [];
+    if (matched.length) {
+      const evidence = matched[0];
+      const tagHint = (evidence.tags || []).map(tag => atlasHintFromTag(tag, evidence)).find(Boolean);
+      if (tagHint) return tagHint;
+      return evidence.title || evidence.text || 'Some collected evidence points here.';
+    }
+    if (candidate.state === 'unknown') return 'No collected evidence points here yet.';
+    return 'This destination partly fits the current evidence.';
   }
 
   getCandidateSummary() {
@@ -396,11 +443,33 @@ export class WorldCaseFilesLogic {
       current: this.getProgress(),
       confidence: this.getConfidence(),
       summary: this.getCandidateSummary(),
+      atlasHints: this.getAtlasHints(),
       evidence: [...this.evidence],
       deadEnds: [...this.deadEnds],
       route: this.caseData.route,
       culturalPlaces: this.culturalPlaces,
       culturalObjects: this.culturalObjects,
     };
+  }
+
+  getAtlasHints() {
+    const activeEvidence = this.evidence.filter(item => item.legIndex === this.currentLeg);
+    const seen = new Set();
+    const hints = [];
+    for (const evidence of activeEvidence) {
+      const tagHint = (evidence.tags || []).map(tag => atlasHintFromTag(tag, evidence)).find(Boolean);
+      const text = tagHint || evidence.title || evidence.text || '';
+      if (!text) continue;
+      const normalizedText = normalize(text);
+      if (seen.has(normalizedText)) continue;
+      seen.add(normalizedText);
+      hints.push({
+        id: evidence.id,
+        text,
+        category: evidence.category || 'Evidence',
+        strength: evidence.strength || 1,
+      });
+    }
+    return hints.sort((a, b) => (b.strength - a.strength) || a.text.localeCompare(b.text));
   }
 }

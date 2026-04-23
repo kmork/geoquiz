@@ -2749,7 +2749,8 @@ body {
 
 .carmen-world-board-section,
 .carmen-world-travel-desk,
-.carmen-world-candidate-detail {
+.carmen-world-candidate-detail,
+.carmen-world-atlas-stack {
   display: grid;
   gap: 10px;
 }
@@ -2855,6 +2856,103 @@ body {
   font: inherit;
 }
 
+.carmen-world-atlas-stack {
+  width: min(320px, calc(100vw - 32px));
+}
+
+.carmen-world-atlas-meta,
+.carmen-world-atlas-chip-row,
+.carmen-world-candidate-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.carmen-world-atlas-meta {
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+.carmen-world-atlas-count,
+.carmen-world-atlas-toggle,
+.carmen-world-atlas-mini {
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 8px;
+  background: rgba(15, 23, 42, 0.68);
+  color: rgba(226, 232, 240, 0.82);
+}
+
+.carmen-world-atlas-count,
+.carmen-world-atlas-mini {
+  padding: 6px 8px;
+  font-size: 0.76rem;
+}
+
+.carmen-world-atlas-count b {
+  color: #f8fafc;
+}
+
+.carmen-world-atlas-toggle,
+.carmen-world-atlas-close {
+  padding: 6px 8px;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 900;
+  border-radius: 8px;
+  border: 1px solid rgba(148, 163, 184, 0.24);
+  background: rgba(15, 23, 42, 0.78);
+  color: #e2e8f0;
+  cursor: pointer;
+}
+
+.carmen-world-atlas-close {
+  min-width: 30px;
+  padding: 4px 8px;
+  font-size: 1rem;
+  line-height: 1;
+}
+
+.carmen-world-atlas-toggle:hover,
+.carmen-world-atlas-close:hover,
+.carmen-world-atlas-hint:hover,
+.carmen-world-travel-now:hover {
+  border-color: rgba(248, 250, 252, 0.42);
+  background: rgba(30, 41, 59, 0.88);
+}
+
+.carmen-world-atlas-hint {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 8px 9px;
+  text-align: left;
+  border-radius: 8px;
+  border: 1px solid rgba(250, 204, 21, 0.18);
+  background: rgba(15, 23, 42, 0.76);
+  color: #e2e8f0;
+  font: inherit;
+  cursor: pointer;
+}
+
+.carmen-world-atlas-hint-label {
+  color: rgba(250, 204, 21, 0.92);
+  font-size: 0.66rem;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.carmen-world-atlas-hint-text {
+  color: rgba(226, 232, 240, 0.86);
+  font-size: 0.78rem;
+  line-height: 1.32;
+}
+
+.carmen-world-atlas-hint-list {
+  display: grid;
+  gap: 6px;
+}
+
 .carmen-world-map-legend {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2941,6 +3039,12 @@ body {
   text-transform: uppercase;
 }
 
+.carmen-world-candidate-detail.compact .carmen-world-section-title,
+.carmen-world-candidate-detail.compact .carmen-world-mini-card,
+.carmen-world-candidate-detail.compact .carmen-dossier-empty {
+  display: none;
+}
+
 .carmen-world-mini-card.contradicted,
 .carmen-world-dead-end {
   border-color: rgba(239, 68, 68, 0.32);
@@ -2983,6 +3087,10 @@ body {
     right: 8px;
     top: auto;
     bottom: 8px;
+  }
+
+  .carmen-world-atlas-stack {
+    width: 100%;
   }
 }
 

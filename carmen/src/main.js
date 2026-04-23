@@ -53,9 +53,25 @@ const carmenFrontImg = document.getElementById('carmen-front-img');
 const carmenHeader = document.getElementById('carmen-header');
 
 const confetti = initConfetti('confetti');
+let cityPoiDataRef = null;
 
 function normalizeCityName(value) {
   return String(value || '').trim().toLowerCase();
+}
+
+function getCityPoiEntry(country, city = '') {
+  if (!cityPoiDataRef) return null;
+  const normalizedCity = normalizeCityName(city);
+  if (normalizedCity) {
+    const cityEntries = cityPoiDataRef.cities?.[country] || null;
+    if (cityEntries) {
+      for (const [name, entry] of Object.entries(cityEntries)) {
+        if (normalizeCityName(name) === normalizedCity) return entry;
+        if (normalizeCityName(entry?.city) === normalizedCity) return entry;
+      }
+    }
+  }
+  return cityPoiDataRef.capitals?.[country] || null;
 }
 
 function isTypingTarget(target) {
@@ -221,6 +237,7 @@ const [worldData, factsData, heritageData, riversData, mountainsData, empiresDat
   fetch('data/carmen-world-cultural-objects.json').then(r => r.ok ? r.json() : null).catch(() => null),
   fetch('data/carmen-world-candidate-index.json').then(r => r.ok ? r.json() : null).catch(() => null),
 ]);
+cityPoiDataRef = cityMapPoiData;
 
 const playableMode = getPlayableGameMode(getGameMode(), campaignModeData);
 if (playableMode !== getGameMode()) setGameMode(playableMode);
@@ -833,6 +850,10 @@ function checkTimeExpired() {
 }
 
 let activeWorldCandidateLayer = null;
+let worldCaseHintMode = 'subtle';
+let worldCaseHintIndex = 0;
+let worldCaseHintDetailsOpen = false;
+let worldCaseInspectCountry = '';
 
 function getWorldCaseData() {
   const cases = worldCaseFilesData?.cases || [];
@@ -852,6 +873,7 @@ function getWorldCaseData() {
 function drawWorldCaseMap() {
   if (!worldCase) return;
   const candidates = worldCase.analyzeCandidates();
+  const boardState = worldCase.getBoardState();
   const highlightedVisited = worldCase.visited.map((country, index) => ({
     country,
     color: index === 0 ? 'start' : country === worldCase.currentCountry ? 'end' : 'path',
@@ -864,12 +886,45 @@ function drawWorldCaseMap() {
     activeWorldCandidateLayer = null;
   }
   activeWorldCandidateLayer = renderer.drawWorldCandidates(candidates, (country, candidate) => {
-    ui.showWorldCandidateDetails(candidate, handleWorldTravel);
+    worldCaseInspectCountry = country;
+    ui.showWorldCandidateDetails(candidate, handleWorldTravel, {
+      currentCountry: worldCase.currentCountry,
+      onClose: () => {
+        worldCaseInspectCountry = '';
+        drawWorldCaseMap();
+      },
+    });
+  }, {
+    hintsEnabled: worldCaseHintMode !== 'off',
   });
-  ui.showWorldTravelDesk(candidates, handleWorldTravel, (country) => {
-    const candidate = candidates.find(item => item.country === country);
-    if (candidate) ui.showWorldCandidateDetails(candidate, handleWorldTravel);
-  }, { switchToTravel: false });
+  ui.showWorldTravelDesk(candidates, handleWorldTravel, null, {
+    switchToTravel: false,
+    summary: boardState.summary,
+    atlasHints: boardState.atlasHints,
+    hintMode: worldCaseHintMode,
+    hintIndex: worldCaseHintIndex,
+    revealHintDetails: worldCaseHintDetailsOpen,
+    inspectCountry: worldCaseInspectCountry,
+    currentCountry: worldCase.currentCountry,
+    onToggleHints: () => {
+      worldCaseHintMode = worldCaseHintMode === 'off' ? 'subtle' : 'off';
+      drawWorldCaseMap();
+    },
+    onCycleHint: () => {
+      const hintCount = boardState.atlasHints?.length || 0;
+      if (!hintCount) return;
+      worldCaseHintIndex = (worldCaseHintIndex + 1) % hintCount;
+      drawWorldCaseMap();
+    },
+    onToggleHintDetails: () => {
+      worldCaseHintDetailsOpen = !worldCaseHintDetailsOpen;
+      drawWorldCaseMap();
+    },
+    onCloseInspect: () => {
+      worldCaseInspectCountry = '';
+      drawWorldCaseMap();
+    },
+  });
 }
 
 function refreshWorldCaseUi() {
@@ -888,7 +943,7 @@ function buildWorldCaseCityMapOptions() {
   if (!worldCase) return null;
   const country = worldCase.currentCountry;
   const scene = worldCase.getSceneForCountry(country);
-  const cityPoiEntry = cityMapPoiData?.capitals?.[country] || null;
+  const cityPoiEntry = getCityPoiEntry(country, scene?.city);
   const gateway = campaignModeData.skylineRouteProvider?.gatewayByCountry?.[country] || null;
   const sceneLat = Number(scene?.lat);
   const sceneLon = Number(scene?.lon);
@@ -995,6 +1050,7 @@ async function handleWorldTravel(country) {
   await renderer.animateTravel(from, country);
   stopAmbient();
   const result = worldCase.travelTo(country);
+  worldCaseInspectCountry = country;
 
   if (result.type === 'dead_end' || result.type === 'arrived_unproven') {
     ui.addDetourEntry(country, capitalOf[country], { mode: WORLD_CASE_FILES_MODE });
@@ -1007,6 +1063,7 @@ async function handleWorldTravel(country) {
   if (result.type === 'revisited') {
     ui.showNarratorCaption(result.explanation, 7200);
     ui.clearClues();
+    worldCaseInspectCountry = '';
     refreshWorldCaseUi();
     return;
   }
@@ -1014,6 +1071,9 @@ async function handleWorldTravel(country) {
   if (result.type === 'advanced') {
     ui.showNarratorCaption(`Lead proven. ACME opens the next scene in ${result.scene.city}, ${result.scene.country}.`, 7200);
     ui.clearClues();
+    worldCaseHintIndex = 0;
+    worldCaseHintDetailsOpen = false;
+    worldCaseInspectCountry = '';
     ui.showWorldCaseIntro(worldCase.getBoardState());
     refreshWorldCaseUi();
     return;
@@ -1049,6 +1109,10 @@ async function startWorldCaseFiles(runConfig) {
     culturalObjects: worldCulturalObjectsData?.objects || [],
     candidateIndex: worldCandidateIndexData,
   });
+  worldCaseHintMode = 'subtle';
+  worldCaseHintIndex = 0;
+  worldCaseHintDetailsOpen = false;
+  worldCaseInspectCountry = '';
   const intro = worldCase.start();
 
   if (isFirstGame) {
@@ -1226,7 +1290,7 @@ function buildCityMapOptions() {
   const capitalLon = Number(gateway?.capitalLon);
   const airportLat = Number(gateway?.airport?.lat);
   const airportLon = Number(gateway?.airport?.lon);
-  const cityPoiEntry = cityMapPoiData?.capitals?.[country] || null;
+  const cityPoiEntry = getCityPoiEntry(country, capital);
   if (!Number.isFinite(capitalLat) || !Number.isFinite(capitalLon)) return null;
   return {
     cityMap: true,

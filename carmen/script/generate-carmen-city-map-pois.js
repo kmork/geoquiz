@@ -17,6 +17,7 @@ const https = require('https');
 
 const ROOT = path.resolve(__dirname, '..', '..');
 const FLIGHT_ROUTES_PATH = path.join(ROOT, 'data', 'capital-flight-routes.json');
+const COUNTRIES_PATH = path.join(ROOT, 'data', 'countries.json');
 const OUTPUT_PATH = path.join(ROOT, 'data', 'carmen-city-map-pois.json');
 const CACHE_DIR = path.join(ROOT, 'data', 'generated-cache', 'carmen-city-map-pois');
 
@@ -53,6 +54,7 @@ function parseArgs(argv) {
     radiusMeters: DEFAULT_RADIUS_METERS,
     batchSize: 20,
     countries: null,
+    allCities: false,
   };
   for (let i = 2; i < argv.length; i++) {
     const arg = argv[i];
@@ -68,6 +70,7 @@ function parseArgs(argv) {
     else if (arg.startsWith('--batch-size=')) args.batchSize = parseNonNegativeInt(arg.slice('--batch-size='.length), 10) || 20;
     else if (arg === '--countries') args.countries = String(argv[++i] || '').split(',').map(s => s.trim()).filter(Boolean);
     else if (arg.startsWith('--countries=')) args.countries = arg.slice('--countries='.length).split(',').map(s => s.trim()).filter(Boolean);
+    else if (arg === '--all-cities') args.allCities = true;
     else throw new Error(`Unknown argument: ${arg}`);
   }
   return args;
@@ -96,18 +99,18 @@ function slugify(text) {
     .replace(/^-|-$/g, '') || 'unknown';
 }
 
-function cachePath(country) {
-  return path.join(CACHE_DIR, `${slugify(country)}.json`);
+function cachePath(cacheKey) {
+  return path.join(CACHE_DIR, `${slugify(cacheKey)}.json`);
 }
 
-function readCache(country) {
-  const filePath = cachePath(country);
+function readCache(cacheKey) {
+  const filePath = cachePath(cacheKey);
   if (!fs.existsSync(filePath)) return null;
   return readJson(filePath);
 }
 
-function writeCache(country, data) {
-  writeJson(cachePath(country), data);
+function writeCache(cacheKey, data) {
+  writeJson(cachePath(cacheKey), data);
 }
 
 function sleep(ms) {
@@ -165,12 +168,38 @@ function buildCapitalRows(flightRoutes) {
   return (flightRoutes.gateways || [])
     .filter(gateway => gateway?.country && Number.isFinite(gateway.capitalLat) && Number.isFinite(gateway.capitalLon))
     .map(gateway => ({
+      cacheKey: `${gateway.country}::${gateway.capital}`,
+      kind: 'capital',
       country: gateway.country,
+      city: gateway.capital,
       capital: gateway.capital,
       lat: gateway.capitalLat,
       lon: gateway.capitalLon,
     }))
     .sort((a, b) => a.country.localeCompare(b.country));
+}
+
+function buildCityRows(countries) {
+  const rows = [];
+  for (const countryData of countries || []) {
+    const country = countryData?.country;
+    if (!country) continue;
+    const capital = countryData?.capitals?.[0] || '';
+    for (const city of countryData?.cities || []) {
+      if (!city?.name || !Number.isFinite(city.lat) || !Number.isFinite(city.lon)) continue;
+      if (city.name === capital) continue;
+      rows.push({
+        cacheKey: `${country}::${city.name}`,
+        kind: 'city',
+        country,
+        city: city.name,
+        capital,
+        lat: Number(city.lat),
+        lon: Number(city.lon),
+      });
+    }
+  }
+  return rows.sort((a, b) => a.country.localeCompare(b.country) || a.city.localeCompare(b.city));
 }
 
 function buildOverpassQuery(row, radiusMeters) {
@@ -184,7 +213,7 @@ function buildOverpassQuery(row, radiusMeters) {
 
 async function fetchOsm(row, options) {
   if (!options.refresh) {
-    const cached = readCache(row.country);
+    const cached = readCache(row.cacheKey);
     if (cached) return cached;
   }
   if (options.offline) throw new Error('no cached OSM response');
@@ -194,27 +223,27 @@ async function fetchOsm(row, options) {
     body,
   });
   const result = { elements: data.elements || [] };
-  writeCache(row.country, result);
+  writeCache(row.cacheKey, result);
   return result;
 }
 
 async function fetchOsmBatch(rows, options) {
   if (!options.refresh) {
-    const cachedByCountry = {};
+    const cachedByKey = {};
     const missing = [];
     for (const row of rows) {
-      const cached = readCache(row.country);
-      if (cached) cachedByCountry[row.country] = cached;
+      const cached = readCache(row.cacheKey);
+      if (cached) cachedByKey[row.cacheKey] = cached;
       else missing.push(row);
     }
-    if (!missing.length) return cachedByCountry;
+    if (!missing.length) return cachedByKey;
     if (options.offline) {
-      for (const row of missing) cachedByCountry[row.country] = { elements: [] };
-      return cachedByCountry;
+      for (const row of missing) cachedByKey[row.cacheKey] = { elements: [] };
+      return cachedByKey;
     }
   }
   if (options.offline) {
-    return Object.fromEntries(rows.map(row => [row.country, { elements: [] }]));
+    return Object.fromEntries(rows.map(row => [row.cacheKey, { elements: [] }]));
   }
 
   const selectors = rows.flatMap(row => {
@@ -229,8 +258,8 @@ async function fetchOsmBatch(rows, options) {
     method: 'POST',
     body,
   });
-  const grouped = Object.fromEntries(rows.map(row => [row.country, { elements: [] }]));
-  const seenByCountry = Object.fromEntries(rows.map(row => [row.country, new Set()]));
+  const grouped = Object.fromEntries(rows.map(row => [row.cacheKey, { elements: [] }]));
+  const seenByKey = Object.fromEntries(rows.map(row => [row.cacheKey, new Set()]));
   for (const element of data.elements || []) {
     const lat = Number(element.lat ?? element.center?.lat);
     const lon = Number(element.lon ?? element.center?.lon);
@@ -246,11 +275,11 @@ async function fetchOsmBatch(rows, options) {
     }
     if (!nearest || nearestKm > options.radiusMeters / 1000) continue;
     const key = `${element.type}/${element.id}`;
-    if (seenByCountry[nearest.country].has(key)) continue;
-    seenByCountry[nearest.country].add(key);
-    grouped[nearest.country].elements.push(element);
+    if (seenByKey[nearest.cacheKey].has(key)) continue;
+    seenByKey[nearest.cacheKey].add(key);
+    grouped[nearest.cacheKey].elements.push(element);
   }
-  for (const row of rows) writeCache(row.country, grouped[row.country]);
+  for (const row of rows) writeCache(row.cacheKey, grouped[row.cacheKey]);
   return grouped;
 }
 
@@ -336,18 +365,51 @@ function compactTags(tags) {
   return Object.fromEntries(keys.filter(key => tags[key]).map(key => [key, tags[key]]));
 }
 
+function countPois(entries) {
+  let realPins = 0;
+  let missingPins = 0;
+  for (const entry of entries) {
+    for (const poi of Object.values(entry?.pois || {})) {
+      if (poi) realPins++;
+      else missingPins++;
+    }
+  }
+  return { realPins, missingPins };
+}
+
+function buildStats(capitals, cities) {
+  const capitalEntries = Object.values(capitals || {});
+  const cityEntries = Object.values(cities || {}).flatMap(countryEntries => Object.values(countryEntries || {}));
+  const counts = countPois(capitalEntries.concat(cityEntries));
+  return {
+    rows: capitalEntries.length + cityEntries.length,
+    capitals: capitalEntries.length,
+    cities: cityEntries.length,
+    realPins: counts.realPins,
+    missingPins: counts.missingPins,
+  };
+}
+
 async function main() {
   const options = parseArgs(process.argv);
   const flightRoutes = readJson(FLIGHT_ROUTES_PATH);
+  const countries = readJson(COUNTRIES_PATH);
   let rows = buildCapitalRows(flightRoutes);
+  if (options.allCities) rows = rows.concat(buildCityRows(countries));
   if (options.countries?.length) {
     const wanted = new Set(options.countries.map(country => country.toLowerCase()));
-    rows = rows.filter(row => wanted.has(row.country.toLowerCase()) || wanted.has(row.capital.toLowerCase()));
+    rows = rows.filter(row =>
+      wanted.has(row.country.toLowerCase()) ||
+      wanted.has(String(row.city || '').toLowerCase()) ||
+      wanted.has(String(row.capital || '').toLowerCase())
+    );
   }
   if (options.limit) rows = rows.slice(0, options.limit);
 
-  const capitals = {};
-  const stats = { countries: rows.length, realPins: 0, missingPins: 0 };
+  const mergeExisting = !!(options.countries?.length || options.limit);
+  const existing = mergeExisting && fs.existsSync(OUTPUT_PATH) ? readJson(OUTPUT_PATH) : null;
+  const capitals = existing?.capitals ? { ...existing.capitals } : {};
+  const cities = existing?.cities ? { ...existing.cities } : {};
   for (let start = 0; start < rows.length; start += options.batchSize) {
     const batch = rows.slice(start, start + options.batchSize);
     const end = start + batch.length;
@@ -372,34 +434,40 @@ async function main() {
     }
 
     for (const row of batch) {
-      const osm = batchData[row.country] || { elements: [] };
+      const osm = batchData[row.cacheKey] || { elements: [] };
       const pois = pickPois(row, osm);
-      for (const poi of Object.values(pois)) {
-        if (poi) stats.realPins++;
-        else stats.missingPins++;
-      }
-      capitals[row.country] = {
+      const entry = {
         country: row.country,
+        city: row.city,
         capital: row.capital,
         lat: row.lat,
         lon: row.lon,
         pois,
       };
+      if (row.kind === 'capital') {
+        capitals[row.country] = entry;
+      } else {
+        cities[row.country] ||= {};
+        cities[row.country][row.city] = entry;
+      }
     }
     if (options.delayMs && end < rows.length) await sleep(options.delayMs);
   }
 
+  const stats = buildStats(capitals, cities);
   writeJson(OUTPUT_PATH, {
-    schemaVersion: 1,
+    schemaVersion: 2,
     source: {
       generatedAt: new Date().toISOString(),
       capitalFlightRoutes: 'data/capital-flight-routes.json',
+      countries: 'data/countries.json',
       osm: 'https://overpass-api.de',
       radiusMeters: options.radiusMeters,
       usage: 'Map placement only; not gameplay clue truth.',
     },
     stats,
     capitals,
+    cities,
   });
   console.log(`Wrote ${OUTPUT_PATH}`);
   console.log(stats);

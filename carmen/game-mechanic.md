@@ -191,7 +191,7 @@ Mechanically, World Case Files does not use the constrained route-choice loop. T
 
 Each city scene lets the player investigate Airport, Hotel, Market, Library, and Embassy sources freely. The Investigate tab reuses the OpenStreetMap-compatible city map and POI placement from City Map Open Case, with an added curated scene marker when the case supplies exact coordinates. In The Louvre Vanishing, the first scene marker places the Louvre in Paris. Evidence is curated per case rather than generated from OSM truth. Evidence can be route-oriented, cultural, or confirmatory. Cultural evidence may reference art history, museum provenance, exports, language, old collection routes, or historic trade context. OSM and city map data remain placement/context only, not clue truth.
 
-The world map colors possible countries by how strongly they match collected evidence:
+The world map always stays open at world scale. It uses subtle atlas guidance instead of a large travel desk. Countries remain selectable, but the map only gives light visual help about how collected evidence fits:
 
 - partial clue match;
 - cultural-pattern match;
@@ -199,7 +199,7 @@ The world map colors possible countries by how strongly they match collected evi
 - contradicted candidate;
 - current scene.
 
-The travel desk also provides country/capital search and an evidence comparison panel. Wrong travel is allowed and produces a dead-end explanation that says which evidence failed. The player can backtrack to previous cities; some follow-up evidence can unlock after later travel.
+The map overlay is intentionally compact: a tiny confidence summary, a small hint toggle, and one short atlas-hint line that explains what a clue means in world terms (for example, export clues pointing toward coffee producers) without listing answers. Detailed evidence comparison now appears only when the player inspects a country on the map. Wrong travel is allowed and produces a dead-end explanation that says which evidence failed. The player can backtrack to previous cities; some follow-up evidence can unlock after later travel.
 
 Advancing to the next city requires more than choosing the right destination. The player needs enough evidence on the board: route evidence, cultural-pattern evidence, and confirmation/contradiction evidence. When the destination is ready, ACME shows a proof review overlay so the player locks the evidence before the case advances. This makes the mode slower and more detective-like than the chase modes.
 

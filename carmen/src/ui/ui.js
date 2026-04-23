@@ -1259,74 +1259,118 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     showWorldTravelDesk(candidates, onTravel, onInspect, options = null) {
-      const top = candidates
-        .filter(item => item.state !== 'unknown')
-        .sort((a, b) => (b.strength - a.strength) || a.country.localeCompare(b.country))
-        .slice(0, 18);
+      const summary = options?.summary || {};
+      const atlasHints = options?.atlasHints || [];
+      const hintMode = options?.hintMode || 'subtle';
+      const hintIndex = atlasHints.length ? Math.max(0, Math.min(options?.hintIndex || 0, atlasHints.length - 1)) : 0;
+      const activeHint = atlasHints[hintIndex] || null;
+      const revealHintDetails = !!options?.revealHintDetails;
+      const inspectCountry = options?.inspectCountry || '';
+      const inspectCandidate = inspectCountry
+        ? candidates.find(item => item.country === inspectCountry) || null
+        : null;
       els.travelTitle.textContent = 'Where does the world case lead?';
-      els.travelDesc.textContent = 'Search the atlas or use the colored map. You can travel anywhere, but ACME will only advance on proven evidence.';
+      els.travelDesc.textContent = 'The whole atlas is open. Compare the evidence, inspect countries on the map, and move when the lead is strong enough.';
       const cost = els.panelTravel.querySelector('.carmen-panel-cost');
-      if (cost) cost.innerHTML = 'No hard clock: <strong>case rating tracks evidence quality</strong>';
+      if (cost) cost.innerHTML = 'No hard clock: <strong>travel anywhere, but only proven routes advance the case</strong>';
       els.sidebar.innerHTML = `
-        <div class="carmen-world-travel-desk">
-          <div class="carmen-world-search">
-            <input type="search" placeholder="Search country or capital" aria-label="Search country or capital">
+        <div class="carmen-world-atlas-stack">
+          <div class="carmen-world-travel-desk">
+            <div class="carmen-world-atlas-meta">
+              <div class="carmen-world-atlas-count"><b>${esc(String(summary.strong || 0))}</b> strong</div>
+              <div class="carmen-world-atlas-count">${esc(String(summary.partial || 0))} partial</div>
+            </div>
+            <div class="carmen-world-atlas-chip-row">
+              <button type="button" class="carmen-world-atlas-toggle" data-hints>
+                Hints: ${esc(hintMode === 'off' ? 'off' : 'subtle')}
+              </button>
+              ${atlasHints.length > 1 ? '<button type="button" class="carmen-world-atlas-toggle" data-next-hint>Next hint</button>' : ''}
+            </div>
+            <button type="button" class="carmen-world-atlas-hint${revealHintDetails ? ' is-open' : ''}" data-hint-detail>
+              <span class="carmen-world-atlas-hint-label">Atlas hint</span>
+              <span class="carmen-world-atlas-hint-text">${esc(activeHint?.text || 'Gather evidence to let the map start teaching back.')}</span>
+            </button>
+            ${revealHintDetails ? `
+              <div class="carmen-world-atlas-hint-list">
+                ${(atlasHints.slice(0, 4)).map(item => `<div class="carmen-world-atlas-mini">${esc(item.text)}</div>`).join('')}
+              </div>
+            ` : ''}
           </div>
-          <div class="carmen-world-map-legend">
-            <span class="partial">one clue</span>
-            <span class="pattern">pattern</span>
-            <span class="strong">strong</span>
-            <span class="contradicted">contradicted</span>
-          </div>
-          <div class="carmen-world-candidate-list"></div>
+          ${inspectCandidate ? `
+            <div class="carmen-world-candidate-detail compact">
+              <div class="carmen-world-candidate-topline">
+                <div>
+                  <div class="carmen-panel-badge">ATLAS COMPARISON</div>
+                  <div class="carmen-panel-title">${esc(inspectCandidate.country)}</div>
+                  <div class="carmen-panel-desc">${esc(inspectCandidate.capital || '')}</div>
+                </div>
+                <button type="button" class="carmen-world-atlas-close" data-close-detail aria-label="Close country details">×</button>
+              </div>
+              <div class="carmen-world-candidate-state ${esc(inspectCandidate.state || 'unknown')}">${esc(inspectCandidate.state || 'unknown')}</div>
+              <div class="carmen-world-atlas-mini">${esc(inspectCandidate.hintSummary || 'No evidence summary yet.')}</div>
+              <button type="button" class="carmen-world-travel-now" data-travel-country="${esc(inspectCandidate.country)}"${inspectCandidate.country === options?.currentCountry ? ' disabled' : ''}>
+                ${inspectCandidate.country === options?.currentCountry ? 'Current scene' : `Travel to ${esc(inspectCandidate.country)}`}
+              </button>
+            </div>
+          ` : ''}
         </div>
       `;
-      const input = els.sidebar.querySelector('input');
-      const list = els.sidebar.querySelector('.carmen-world-candidate-list');
-      const render = () => {
-        const q = normalizeForUi(input.value);
-        const source = q
-          ? candidates.filter(item => normalizeForUi(`${item.country} ${item.capital}`).includes(q)).slice(0, 24)
-          : top;
-        list.innerHTML = source.map(item => `
-          <div class="carmen-world-candidate ${esc(item.state)}">
-            <button type="button" class="carmen-world-candidate-main" data-country="${esc(item.country)}">
-              <b>${esc(item.country)}</b>
-              <span>${esc(item.capital || '')}</span>
-            </button>
-            <button type="button" class="carmen-world-candidate-travel" data-travel="${esc(item.country)}">Travel</button>
-          </div>
-        `).join('') || '<div class="carmen-dossier-empty">No countries match that search.</div>';
-        list.querySelectorAll('[data-country]').forEach(btn => {
-          btn.addEventListener('click', () => onInspect(btn.dataset.country));
-        });
-        list.querySelectorAll('[data-travel]').forEach(btn => {
-          btn.addEventListener('click', () => onTravel(btn.dataset.travel));
-        });
-      };
-      input.addEventListener('input', render);
-      render();
+      const hintsButton = els.sidebar.querySelector('[data-hints]');
+      if (hintsButton && typeof options?.onToggleHints === 'function') {
+        hintsButton.addEventListener('click', () => options.onToggleHints());
+      }
+      const hintDetailButton = els.sidebar.querySelector('[data-hint-detail]');
+      if (hintDetailButton && typeof options?.onToggleHintDetails === 'function') {
+        hintDetailButton.addEventListener('click', () => options.onToggleHintDetails());
+      }
+      const nextHintButton = els.sidebar.querySelector('[data-next-hint]');
+      if (nextHintButton && typeof options?.onCycleHint === 'function') {
+        nextHintButton.addEventListener('click', () => options.onCycleHint());
+      }
+      const closeDetail = els.sidebar.querySelector('[data-close-detail]');
+      if (closeDetail && typeof options?.onCloseInspect === 'function') {
+        closeDetail.addEventListener('click', () => options.onCloseInspect());
+      }
+      const travelBtn = els.sidebar.querySelector('[data-travel-country]');
+      if (travelBtn) {
+        travelBtn.addEventListener('click', () => onTravel(travelBtn.dataset.travelCountry));
+      }
       if (options?.switchToTravel !== false) switchTab('travel');
     },
 
-    showWorldCandidateDetails(candidate, onTravel) {
+    showWorldCandidateDetails(candidate, onTravel, options = null) {
       const matched = candidate?.matchedEvidence || [];
       const contradicted = candidate?.contradictedEvidence || [];
+      const currentCountry = options?.currentCountry || '';
       els.sidebar.innerHTML = `
-        <div class="carmen-world-candidate-detail">
-          <div class="carmen-panel-badge">ATLAS COMPARISON</div>
-          <div class="carmen-panel-title">${esc(candidate?.country || 'Unknown')}</div>
-          <div class="carmen-panel-desc">${esc(candidate?.capital || '')}</div>
-          <div class="carmen-world-candidate-state ${esc(candidate?.state || 'unknown')}">${esc(candidate?.state || 'unknown')}</div>
-          <button type="button" class="carmen-world-travel-now">Travel to ${esc(candidate?.country || 'destination')}</button>
-          <div class="carmen-world-section-title">Matches</div>
-          ${matched.length ? matched.map(item => `<div class="carmen-world-mini-card">✓ ${esc(item.title || item.text)}</div>`).join('') : '<div class="carmen-dossier-empty">No collected clue points here yet.</div>'}
-          <div class="carmen-world-section-title">Contradictions</div>
-          ${contradicted.length ? contradicted.map(item => `<div class="carmen-world-mini-card contradicted">× ${esc(item.title || item.text)}</div>`).join('') : '<div class="carmen-dossier-empty">No direct contradiction found.</div>'}
+        <div class="carmen-world-atlas-stack">
+          <div class="carmen-world-candidate-detail">
+            <div class="carmen-world-candidate-topline">
+              <div>
+                <div class="carmen-panel-badge">ATLAS COMPARISON</div>
+                <div class="carmen-panel-title">${esc(candidate?.country || 'Unknown')}</div>
+                <div class="carmen-panel-desc">${esc(candidate?.capital || '')}</div>
+              </div>
+              ${typeof options?.onClose === 'function' ? '<button type="button" class="carmen-world-atlas-close" data-close-detail aria-label="Close country details">×</button>' : ''}
+            </div>
+            <div class="carmen-world-candidate-state ${esc(candidate?.state || 'unknown')}">${esc(candidate?.state || 'unknown')}</div>
+            <div class="carmen-world-atlas-mini">${esc(candidate?.hintSummary || 'No collected evidence points here yet.')}</div>
+            <button type="button" class="carmen-world-travel-now"${candidate?.country && candidate.country !== currentCountry ? '' : ' disabled'}>
+              ${candidate?.country && candidate.country !== currentCountry ? `Travel to ${esc(candidate.country)}` : 'Current scene'}
+            </button>
+            <div class="carmen-world-section-title">Matches</div>
+            ${matched.length ? matched.map(item => `<div class="carmen-world-mini-card">✓ ${esc(item.title || item.text)}</div>`).join('') : '<div class="carmen-dossier-empty">No collected clue points here yet.</div>'}
+            <div class="carmen-world-section-title">Contradictions</div>
+            ${contradicted.length ? contradicted.map(item => `<div class="carmen-world-mini-card contradicted">× ${esc(item.title || item.text)}</div>`).join('') : '<div class="carmen-dossier-empty">No direct contradiction found.</div>'}
+          </div>
         </div>
       `;
       const btn = els.sidebar.querySelector('.carmen-world-travel-now');
-      if (btn && candidate?.country) btn.addEventListener('click', () => onTravel(candidate.country));
+      if (btn && candidate?.country && candidate.country !== currentCountry) {
+        btn.addEventListener('click', () => onTravel(candidate.country));
+      }
+      const close = els.sidebar.querySelector('[data-close-detail]');
+      if (close && typeof options?.onClose === 'function') close.addEventListener('click', () => options.onClose());
     },
 
     showWorldProofReview(cards, destination) {
