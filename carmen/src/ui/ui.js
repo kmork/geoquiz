@@ -1270,6 +1270,8 @@ export function createCarmenUI(container, flagCodes) {
       const inspectCandidate = inspectCountry
         ? candidates.find(item => item.country === inspectCountry) || null
         : null;
+      const targetStop = options?.targetStop || null;
+      const targetTravelLabel = options?.targetTravelLabel || null;
       els.travelTitle.textContent = 'Where does the world case lead?';
       els.travelDesc.textContent = 'The whole atlas is open. Compare the evidence, inspect countries on the map, and move when the lead is strong enough.';
       const cost = els.panelTravel.querySelector('.carmen-panel-cost');
@@ -1277,6 +1279,13 @@ export function createCarmenUI(container, flagCodes) {
       els.sidebar.innerHTML = `
         <div class="carmen-world-atlas-stack">
           <div class="carmen-world-travel-desk">
+            ${targetStop ? `
+              <div class="carmen-world-active-lead">
+                <span class="carmen-world-atlas-hint-label">Active lead</span>
+                <strong>${esc(targetTravelLabel?.primary || [targetStop.city, targetStop.country].filter(Boolean).join(', ') || targetStop.country || 'Unknown destination')}</strong>
+                ${targetTravelLabel?.secondary ? `<span>${esc(targetTravelLabel.secondary)}</span>` : ''}
+              </div>
+            ` : ''}
             <div class="carmen-world-atlas-meta">
               <div class="carmen-world-atlas-count"><b>${esc(String(summary.strong || 0))}</b> strong</div>
               <div class="carmen-world-atlas-count">${esc(String(summary.partial || 0))} partial</div>
@@ -1302,8 +1311,8 @@ export function createCarmenUI(container, flagCodes) {
               <div class="carmen-world-candidate-topline">
                 <div>
                   <div class="carmen-panel-badge">ATLAS COMPARISON</div>
-                  <div class="carmen-panel-title">${esc(inspectCandidate.country)}</div>
-                  <div class="carmen-panel-desc">${esc(inspectCandidate.capital || '')}</div>
+                  <div class="carmen-panel-title">${esc(inspectCandidate.travelLabel?.primary || inspectCandidate.country)}</div>
+                  <div class="carmen-panel-desc">${esc(inspectCandidate.travelLabel?.secondary || inspectCandidate.capital || '')}</div>
                 </div>
                 <button type="button" class="carmen-world-atlas-close" data-close-detail aria-label="Close country details">×</button>
               </div>
@@ -1349,8 +1358,8 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-world-candidate-topline">
               <div>
                 <div class="carmen-panel-badge">ATLAS COMPARISON</div>
-                <div class="carmen-panel-title">${esc(candidate?.country || 'Unknown')}</div>
-                <div class="carmen-panel-desc">${esc(candidate?.capital || '')}</div>
+                <div class="carmen-panel-title">${esc(candidate?.travelLabel?.primary || candidate?.country || 'Unknown')}</div>
+                <div class="carmen-panel-desc">${esc(candidate?.travelLabel?.secondary || candidate?.capital || '')}</div>
               </div>
               ${typeof options?.onClose === 'function' ? '<button type="button" class="carmen-world-atlas-close" data-close-detail aria-label="Close country details">×</button>' : ''}
             </div>

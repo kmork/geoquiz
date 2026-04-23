@@ -901,6 +901,8 @@ function drawWorldCaseMap() {
     switchToTravel: false,
     summary: boardState.summary,
     atlasHints: boardState.atlasHints,
+    targetStop: worldCase.targetRouteStop,
+    targetTravelLabel: worldCase.targetRouteStop ? worldCase.getTravelLabel(worldCase.targetRouteStop.country) : null,
     hintMode: worldCaseHintMode,
     hintIndex: worldCaseHintIndex,
     revealHintDetails: worldCaseHintDetailsOpen,

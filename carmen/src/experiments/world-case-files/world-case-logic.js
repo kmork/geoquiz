@@ -163,6 +163,30 @@ export class WorldCaseFilesLogic {
     };
   }
 
+  hasMultipleStopsInCountry(country) {
+    const wanted = normalize(country);
+    return this.caseData.route.filter(stop => normalize(stop.country) === wanted).length > 1;
+  }
+
+  getTravelLabel(country) {
+    const targetStop = this.targetRouteStop;
+    if (targetStop?.country === country) {
+      const sceneBits = [targetStop.city, targetStop.country].filter(Boolean);
+      return {
+        primary: sceneBits.join(', ') || country,
+        secondary: this.hasMultipleStopsInCountry(country)
+          ? `Return to ${country} for the ${targetStop.scene || targetStop.biographyStage || 'next scene'}.`
+          : (targetStop.scene || ''),
+      };
+    }
+    const scene = this.getSceneForCountry(country);
+    const sceneBits = [scene.city, scene.country].filter(Boolean);
+    return {
+      primary: sceneBits.join(', ') || country,
+      secondary: scene.scene || '',
+    };
+  }
+
   getLocations() {
     const currentStop = this.currentRouteStop || {};
     const baseLocations = LOCATIONS.map(location => ({
@@ -244,7 +268,7 @@ export class WorldCaseFilesLogic {
       fromCountry: leg.from,
       targetCountry: leg.to,
       foundInCountry: this.currentCountry,
-      foundInCity: this.getSceneForCountry(this.currentCountry)?.city || this.currentCountry,
+      foundInCity: this.currentRouteStop?.city || this.currentCountry,
       category: clue.category || (
         clue.tags?.some(tag => tag.startsWith('culture:') || tag.startsWith('famous:') || tag.startsWith('history:') || tag.startsWith('cultural_'))
           ? 'Cultural Evidence'
@@ -288,6 +312,12 @@ export class WorldCaseFilesLogic {
   }
 
   getSceneForCountry(country) {
+    if (normalize(this.currentRouteStop?.country) === normalize(country)) {
+      return this.currentRouteStop;
+    }
+    if (normalize(this.targetRouteStop?.country) === normalize(country)) {
+      return this.targetRouteStop;
+    }
     return this.caseData.route.find(stop => stop.country === country) || {
       country,
       city: primaryCapital(this.countryMap[country]) || country,
@@ -333,6 +363,7 @@ export class WorldCaseFilesLogic {
         correct: countryData.country === targetCountry,
         matchedEvidence,
         contradictedEvidence,
+        travelLabel: this.getTravelLabel(countryData.country),
         hintSummary: this.getCandidateHintSummary({
           country: countryData.country,
           state,
