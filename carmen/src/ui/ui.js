@@ -1114,6 +1114,7 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-intro-badge">WORLD CASE FILES</div>
           <div class="carmen-intro-artifact">${esc(state?.caseTitle || 'Open cultural theft')}</div>
           <div class="carmen-intro-origin">Current scene: <strong>${esc(current.city || current.country || '')}</strong></div>
+          ${current.biographyStage ? `<div class="carmen-intro-origin">Biography stage: <strong>${esc(current.biographyStage)}</strong></div>` : ''}
           <div class="carmen-intro-suspect">🔎 Pattern: <span class="thief-name">${esc(pattern.label || 'Unknown')}</span></div>
           <div class="carmen-intro-mission">${esc(pattern.summary || 'Gather evidence, narrow the world atlas, and travel when the case is strong enough.')}</div>
         </div>
@@ -1127,6 +1128,8 @@ export function createCarmenUI(container, flagCodes) {
       worldCaseBoardState = state || null;
       const confidence = state?.confidence || {};
       const summary = state?.summary || {};
+      const current = state?.current || {};
+      const route = state?.route || [];
       const steps = [
         ['Lead found', confidence.leadFound],
         ['Pattern supported', confidence.patternSupported],
@@ -1151,6 +1154,37 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-world-dead-end">❌ ${esc(item.country)} — ${esc(item.explanation)}</div>
         `).join('')
         : '';
+      const biographyHtml = route.length
+        ? `
+          <div class="carmen-world-biography">
+            ${route.map((stop, index) => {
+              const active = index === current.leg;
+              const visited = index < current.leg;
+              return `
+                <div class="carmen-world-biography-stop${active ? ' active' : ''}${visited ? ' visited' : ''}">
+                  <div class="carmen-world-biography-stage">${esc(stop.biographyStage || `Stop ${index + 1}`)}</div>
+                  <div class="carmen-world-biography-place">${esc(stop.city || stop.country || '')}</div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        `
+        : '';
+      const stageHtml = current.biographyStage
+        ? `
+          <div class="carmen-world-board-section">
+            <div class="carmen-world-section-title">Artifact Biography</div>
+            ${biographyHtml}
+            <div class="carmen-world-stage-card">
+              <div class="carmen-world-evidence-type">${esc(current.biographyStage)}</div>
+              <div class="carmen-world-evidence-title">${esc(current.scene || current.city || current.country || 'Current scene')}</div>
+              <div class="carmen-world-evidence-text">${esc(current.learningGoal || '')}</div>
+              ${current.thiefClaim ? `<div class="carmen-world-stage-claim"><b>Thief claim:</b> ${esc(current.thiefClaim)}</div>` : ''}
+              ${current.truthComplication ? `<div class="carmen-world-stage-claim"><b>Complication:</b> ${esc(current.truthComplication)}</div>` : ''}
+            </div>
+          </div>
+        `
+        : '';
       els.dossierBody.innerHTML = `
         <div class="carmen-world-board">
           <div class="carmen-world-board-head">
@@ -1169,6 +1203,7 @@ export function createCarmenUI(container, flagCodes) {
               <span class="carmen-world-confidence-step${active ? ' active' : ''}">${esc(label)}</span>
             `).join('')}
           </div>
+          ${stageHtml}
           <div class="carmen-world-board-section">
             <div class="carmen-world-section-title">Collected Evidence</div>
             ${evidenceHtml}

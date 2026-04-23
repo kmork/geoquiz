@@ -8,7 +8,7 @@
         "siteName": "Mona Lisa",
         "country": "France",
         "hint": "Leonardo da Vinci's portrait vanished from the Louvre with its provenance card, shipping sleeve, and conservation notes.",
-        "imageUrl": "carmen/img/mona_lisa_noir.png"
+        "imageUrl": "carmen/img/mona_lisa_noir_color.png"
       },
       "start": {
         "country": "France",
@@ -23,10 +23,50 @@
         "summary": "The thief is laundering the painting through places tied to Renaissance art, museum catalogues, and old European collection routes."
       },
       "route": [
-        { "country": "France", "city": "Paris", "scene": "Louvre", "lat": 48.861111111111114, "lon": 2.3358333333333334 },
-        { "country": "Italy", "city": "Florence", "scene": "Uffizi archive", "lat": 43.76833333333333, "lon": 11.255277777777778 },
-        { "country": "Netherlands", "city": "Amsterdam", "scene": "Rijksmuseum restoration studio", "lat": 52.36, "lon": 4.885277777777778 },
-        { "country": "Spain", "city": "Madrid", "scene": "Prado museum freight office", "lat": 40.41388888888889, "lon": -3.692222222222222 }
+        {
+          "country": "France",
+          "city": "Paris",
+          "scene": "Louvre",
+          "lat": 48.861111111111114,
+          "lon": 2.3358333333333334,
+          "biographyStage": "Display",
+          "learningGoal": "Understand the Mona Lisa as a Louvre icon and a French royal-to-national museum object.",
+          "thiefClaim": "The Louvre is only the final holder, so its claim is shallow.",
+          "truthComplication": "French collection history is part of the painting's biography, even though Leonardo painted it in Italy."
+        },
+        {
+          "country": "Italy",
+          "city": "Florence",
+          "scene": "Uffizi archive",
+          "lat": 43.76833333333333,
+          "lon": 11.255277777777778,
+          "biographyStage": "Origin",
+          "learningGoal": "Connect Leonardo, Renaissance workshop culture, and Florence to the portrait's creation context.",
+          "thiefClaim": "Florence proves the painting has one rightful cultural home.",
+          "truthComplication": "Origin explains creation, but not the whole later life of the object."
+        },
+        {
+          "country": "Netherlands",
+          "city": "Amsterdam",
+          "scene": "Rijksmuseum restoration studio",
+          "lat": 52.36,
+          "lon": 4.885277777777778,
+          "biographyStage": "Archive",
+          "learningGoal": "Use restoration and old-master records to compare Renaissance and northern European collection evidence.",
+          "thiefClaim": "Technical archives can be edited until the route looks certain.",
+          "truthComplication": "Conservation evidence can clarify movement, but it cannot rewrite authorship or ownership."
+        },
+        {
+          "country": "Spain",
+          "city": "Madrid",
+          "scene": "Prado museum freight office",
+          "lat": 40.41388888888889,
+          "lon": -3.692222222222222,
+          "biographyStage": "Forgery",
+          "learningGoal": "Expose a false museum-transfer file built from real European collection patterns.",
+          "thiefClaim": "A forged Prado exchange record can make the return route look official.",
+          "truthComplication": "Museum paperwork is evidence only when it fits the whole provenance chain."
+        }
       ],
       "legs": [
         {
@@ -201,9 +241,39 @@
         "summary": "The thief follows translation archives, pharaonic evidence, and places where script fragments can be turned into a false origin story."
       },
       "route": [
-        { "country": "United Kingdom", "city": "London", "scene": "British Museum", "lat": 51.519444444444446, "lon": -0.12694444444444444 },
-        { "country": "Egypt", "city": "Cairo", "scene": "Egyptian Museum script archive", "lat": 30.047778, "lon": 31.233333 },
-        { "country": "Egypt", "city": "Alexandria", "scene": "Bibliotheca Alexandrina translation room", "lat": 31.208888888889, "lon": 29.909166666667 }
+        {
+          "country": "United Kingdom",
+          "city": "London",
+          "scene": "British Museum",
+          "lat": 51.519444444444446,
+          "lon": -0.12694444444444444,
+          "biographyStage": "Display",
+          "learningGoal": "Frame the Rosetta Stone as a British Museum object with an older Egyptian life and a modern display story.",
+          "thiefClaim": "The current display location is irrelevant because the stone's root is elsewhere.",
+          "truthComplication": "Current display is not origin, but it is part of how the object became globally known."
+        },
+        {
+          "country": "Egypt",
+          "city": "Cairo",
+          "scene": "Egyptian Museum script archive",
+          "lat": 30.047778,
+          "lon": 31.233333,
+          "biographyStage": "Origin",
+          "learningGoal": "Connect the inscription to ancient Egypt, pharaonic context, and modern Egyptian cultural identity.",
+          "thiefClaim": "Egyptian origin alone solves the case.",
+          "truthComplication": "The object is Egyptian, but its meaning also depends on later discovery, capture, and decipherment."
+        },
+        {
+          "country": "Egypt",
+          "city": "Alexandria",
+          "scene": "Bibliotheca Alexandrina translation room",
+          "lat": 31.208888888889,
+          "lon": 29.909166666667,
+          "biographyStage": "Archive",
+          "learningGoal": "Use translation history and ancient learning to show why the stone changed how scripts were understood.",
+          "thiefClaim": "A translation archive can certify the thief's return narrative.",
+          "truthComplication": "Scholarship explains meaning; it does not make forged custody records true."
+        }
       ],
       "legs": [
         {
@@ -318,9 +388,39 @@
         "summary": "The thief moves through classical sculpture evidence, marble source notes, and restitution claims tied to Athens."
       },
       "route": [
-        { "country": "United Kingdom", "city": "London", "scene": "British Museum", "lat": 51.519444444444446, "lon": -0.12694444444444444 },
-        { "country": "Greece", "city": "Athens", "scene": "Acropolis Museum", "lat": 37.968417, "lon": 23.728472 },
-        { "country": "Greece", "city": "Athens", "scene": "Acropolis of Athens", "lat": 37.971666666666664, "lon": 23.726111111111113 }
+        {
+          "country": "United Kingdom",
+          "city": "London",
+          "scene": "British Museum",
+          "lat": 51.519444444444446,
+          "lon": -0.12694444444444444,
+          "biographyStage": "Display",
+          "learningGoal": "Introduce the sculptures as a disputed collection displayed far from the building they came from.",
+          "thiefClaim": "The London display is only a colonial interruption.",
+          "truthComplication": "The dispute is real, but forged restitution paperwork still has to be proven false."
+        },
+        {
+          "country": "Greece",
+          "city": "Athens",
+          "scene": "Acropolis Museum",
+          "lat": 37.968417,
+          "lon": 23.728472,
+          "biographyStage": "Claim",
+          "learningGoal": "Connect modern restitution arguments with a museum built to interpret the Acropolis material.",
+          "thiefClaim": "A modern origin-claim institution can authorize the whole route.",
+          "truthComplication": "A strong cultural claim is not the same thing as permission for theft."
+        },
+        {
+          "country": "Greece",
+          "city": "Athens",
+          "scene": "Acropolis of Athens",
+          "lat": 37.971666666666664,
+          "lon": 23.726111111111113,
+          "biographyStage": "Origin",
+          "learningGoal": "Tie the fragments back to the Parthenon and their architectural site context.",
+          "thiefClaim": "The original site cancels every later chapter.",
+          "truthComplication": "Site context is essential, but the investigation must preserve evidence instead of replacing it with a slogan."
+        }
       ],
       "legs": [
         {
@@ -426,9 +526,39 @@
         "summary": "The thief follows Hokusai records, Dutch print-trade catalogues, and a final American collection ledger."
       },
       "route": [
-        { "country": "Japan", "city": "Tokyo", "scene": "Sumida Hokusai Museum", "lat": 35.69675, "lon": 139.800389 },
-        { "country": "Netherlands", "city": "Amsterdam", "scene": "Rijksmuseum print records", "lat": 52.36, "lon": 4.885277777777778 },
-        { "country": "United States", "city": "Washington, D.C.", "scene": "Freer Gallery of Art", "lat": 38.888333333333335, "lon": -77.0275 }
+        {
+          "country": "Japan",
+          "city": "Tokyo",
+          "scene": "Sumida Hokusai Museum",
+          "lat": 35.69675,
+          "lon": 139.800389,
+          "biographyStage": "Origin",
+          "learningGoal": "Connect Hokusai, Edo print culture, Mount Fuji imagery, and the print's Japanese context.",
+          "thiefClaim": "The print's origin makes every later collection secondary.",
+          "truthComplication": "The Great Wave is rooted in Japan but became globally influential through circulation."
+        },
+        {
+          "country": "Netherlands",
+          "city": "Amsterdam",
+          "scene": "Rijksmuseum print records",
+          "lat": 52.36,
+          "lon": 4.885277777777778,
+          "biographyStage": "Movement",
+          "learningGoal": "Show how print collecting and Dutch-Japanese cultural routes helped move Japanese images into Europe.",
+          "thiefClaim": "European records are just contamination to be removed.",
+          "truthComplication": "Collection routes can distort context, but they also explain how influence spread."
+        },
+        {
+          "country": "United States",
+          "city": "Washington, D.C.",
+          "scene": "Freer Gallery of Art",
+          "lat": 38.888333333333335,
+          "lon": -77.0275,
+          "biographyStage": "Influence",
+          "learningGoal": "Connect the print to global museum collections and the wider afterlife of Japanese visual culture.",
+          "thiefClaim": "Influence abroad is proof the object was taken too far from its root.",
+          "truthComplication": "Influence is not ownership, but it is part of why the object matters worldwide."
+        }
       ],
       "legs": [
         {
@@ -542,9 +672,39 @@
         "summary": "The thief is not crossing borders first; the pattern hides the object inside Mexico City's own museum, temple, and excavation records."
       },
       "route": [
-        { "country": "Mexico", "city": "Mexico City", "scene": "National Museum of Anthropology", "lat": 19.426111111111112, "lon": -99.18611111111112 },
-        { "country": "Mexico", "city": "Mexico City", "scene": "Templo Mayor", "lat": 19.435, "lon": -99.131389 },
-        { "country": "Mexico", "city": "Mexico City", "scene": "Templo Mayor Museum", "lat": 19.43441, "lon": -99.13208 }
+        {
+          "country": "Mexico",
+          "city": "Mexico City",
+          "scene": "National Museum of Anthropology",
+          "lat": 19.426111111111112,
+          "lon": -99.18611111111112,
+          "biographyStage": "Display",
+          "learningGoal": "Introduce the Sun Stone as a national museum object tied to Mexica identity and Mexico City.",
+          "thiefClaim": "A national display still separates the stone from its sacred urban root.",
+          "truthComplication": "The museum protects and interprets the object as part of modern national memory."
+        },
+        {
+          "country": "Mexico",
+          "city": "Mexico City",
+          "scene": "Templo Mayor",
+          "lat": 19.435,
+          "lon": -99.131389,
+          "biographyStage": "Origin",
+          "learningGoal": "Connect the object to Tenochtitlan, Mexica sacred geography, and the archaeological center of the city.",
+          "thiefClaim": "The temple site is the only context that matters.",
+          "truthComplication": "The site is crucial, but the object's modern museum life is also part of its cultural biography."
+        },
+        {
+          "country": "Mexico",
+          "city": "Mexico City",
+          "scene": "Templo Mayor Museum",
+          "lat": 19.43441,
+          "lon": -99.13208,
+          "biographyStage": "Forgery",
+          "learningGoal": "Expose a false local transfer that turns valid site evidence into a forged custody claim.",
+          "thiefClaim": "A nearby museum archive can make the local return official.",
+          "truthComplication": "Even a local route needs proof; proximity cannot replace records."
+        }
       ],
       "legs": [
         {

@@ -113,13 +113,21 @@ export class WorldCaseFilesLogic {
   }
 
   getProgress() {
+    const currentStop = this.currentRouteStop;
+    const targetStop = this.targetRouteStop;
     return {
       leg: this.currentLeg,
       totalLegs: this.totalLegs,
-      city: this.currentRouteStop.city,
+      city: currentStop.city,
       country: this.currentCountry,
-      targetCity: this.targetRouteStop?.city || '',
-      targetCountry: this.targetRouteStop?.country || '',
+      scene: currentStop.scene || '',
+      biographyStage: currentStop.biographyStage || '',
+      learningGoal: currentStop.learningGoal || '',
+      thiefClaim: currentStop.thiefClaim || '',
+      truthComplication: currentStop.truthComplication || '',
+      targetCity: targetStop?.city || '',
+      targetCountry: targetStop?.country || '',
+      targetBiographyStage: targetStop?.biographyStage || '',
       evidenceCount: this.evidence.length,
     };
   }

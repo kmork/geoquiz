@@ -25,6 +25,8 @@ const FILES = {
 const BASE_LOCATION_IDS = new Set(['airport', 'hotel', 'market', 'library', 'embassy']);
 const REQUIRED_CATEGORIES = ['route', 'culture', 'confirmation'];
 const NON_ENGLISH_HINT_RE = /[^\x00-\x7F]|Überrest/i;
+const MIN_SOLID_ROUTE_STOPS = 5;
+const ROUTE_STAGE_FIELDS = ['biographyStage', 'learningGoal', 'thiefClaim', 'truthComplication'];
 
 async function readJson(filePath) {
   return JSON.parse(await fs.readFile(filePath, 'utf8'));
@@ -55,8 +57,25 @@ function inspectCase(caseFile, source, warnings, errors) {
   if (!hasText(caseFile?.artifact?.siteName)) errors.push(`${prefix}: missing artifact siteName`);
   if (!hasText(caseFile?.artifact?.imageUrl)) warnings.push(`${prefix}: missing artifact image`);
   if (!Array.isArray(caseFile?.route) || caseFile.route.length < 2) errors.push(`${prefix}: route needs at least two stops`);
+  if ((caseFile?.route || []).length > 0 && caseFile.route.length < MIN_SOLID_ROUTE_STOPS) {
+    warnings.push(`${prefix}: route has ${caseFile.route.length} stops; solid World Case artifacts should target at least ${MIN_SOLID_ROUTE_STOPS}`);
+  }
   if (!Array.isArray(caseFile?.legs) || caseFile.legs.length !== Math.max(0, (caseFile.route || []).length - 1)) {
     errors.push(`${prefix}: legs must be route length minus one`);
+  }
+
+  const stageCounts = new Map();
+  for (const [stopIndex, stop] of (caseFile.route || []).entries()) {
+    const stopPrefix = `${prefix} route stop ${stopIndex + 1}`;
+    for (const field of ROUTE_STAGE_FIELDS) {
+      if (!hasText(stop?.[field])) warnings.push(`${stopPrefix}: missing ${field}`);
+    }
+    if (hasText(stop?.biographyStage)) {
+      stageCounts.set(stop.biographyStage, (stageCounts.get(stop.biographyStage) || 0) + 1);
+    }
+  }
+  for (const [stage, count] of stageCounts) {
+    if (count > 1) warnings.push(`${prefix}: biography stage "${stage}" appears ${count} times; make repeated stages intentional in the case notes`);
   }
 
   const sourceObject = source.objectsById.get(caseFile.id);
@@ -79,6 +98,13 @@ function inspectCase(caseFile, source, warnings, errors) {
       if (!Array.isArray(clue?.tags) || clue.tags.length === 0) errors.push(`${cluePrefix}: missing tags`);
       const placeId = culturalPlaceId(clue?.locationId);
       if (placeId && !source.placeIds.has(placeId)) errors.push(`${cluePrefix}: unknown cultural place ${placeId}`);
+      if (placeId) {
+        const place = source.placesById.get(placeId);
+        const routeStop = caseFile.route?.[legIndex];
+        if (place && routeStop && place.country !== routeStop.country) {
+          warnings.push(`${cluePrefix}: cultural place country ${place.country} does not match current route stop ${routeStop.country}`);
+        }
+      }
       if (!placeId && !BASE_LOCATION_IDS.has(clue?.locationId)) errors.push(`${cluePrefix}: unknown base location ${clue?.locationId || '(missing locationId)'}`);
       const types = classifyTags(clue.tags || []);
       for (const category of REQUIRED_CATEGORIES) {
@@ -129,6 +155,7 @@ async function main() {
     attributions: attributionsData,
     objectsById: new Map((objectsData.objects || []).map(object => [object.id, object])),
     placeIds: new Set((placesData.places || []).map(place => place.id)),
+    placesById: new Map((placesData.places || []).map(place => [place.id, place])),
     placesByCase: new Map(),
   };
   for (const place of source.places) {

@@ -54,6 +54,10 @@ const carmenHeader = document.getElementById('carmen-header');
 
 const confetti = initConfetti('confetti');
 
+function normalizeCityName(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
 function isTypingTarget(target) {
   if (!(target instanceof HTMLElement)) return false;
   return target.isContentEditable || /^(INPUT|TEXTAREA|SELECT|BUTTON)$/.test(target.tagName);
@@ -895,6 +899,39 @@ function buildWorldCaseCityMapOptions() {
   if (!Number.isFinite(centerLat) || !Number.isFinite(centerLon)) return null;
   const airportLat = Number(gateway?.airport?.lat);
   const airportLon = Number(gateway?.airport?.lon);
+  const usingNonCapitalScene = Number.isFinite(sceneLat) &&
+    Number.isFinite(sceneLon) &&
+    scene?.city &&
+    cityPoiEntry?.capital &&
+    normalizeCityName(scene.city) !== normalizeCityName(cityPoiEntry.capital);
+  const sceneFallbackPois = usingNonCapitalScene
+    ? {
+        hotel: {
+          name: `${scene.city} field hotel`,
+          lat: sceneLat + 0.006,
+          lon: sceneLon - 0.01,
+          confidence: 'scene-fallback',
+        },
+        market: {
+          name: `${scene.city} market quarter`,
+          lat: sceneLat + 0.004,
+          lon: sceneLon + 0.012,
+          confidence: 'scene-fallback',
+        },
+        library: {
+          name: `${scene.city} research archive`,
+          lat: sceneLat - 0.008,
+          lon: sceneLon - 0.006,
+          confidence: 'scene-fallback',
+        },
+        embassy: {
+          name: `${scene.city} consular desk`,
+          lat: sceneLat - 0.006,
+          lon: sceneLon + 0.01,
+          confidence: 'scene-fallback',
+        },
+      }
+    : null;
   return {
     cityMap: true,
     country,
@@ -916,7 +953,7 @@ function buildWorldCaseCityMapOptions() {
           lon: airportLon,
         }
       : null,
-    pois: cityPoiEntry?.pois || null,
+    pois: sceneFallbackPois || cityPoiEntry?.pois || null,
     investigatedIds: worldCase.getInvestigatedLocationIds(),
   };
 }
