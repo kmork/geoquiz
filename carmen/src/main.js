@@ -850,7 +850,7 @@ function checkTimeExpired() {
 }
 
 let activeWorldCandidateLayer = null;
-let worldCaseHintMode = 'subtle';
+let worldCaseHintMode = 'off';
 let worldCaseHintIndex = 0;
 let worldCaseHintDetailsOpen = false;
 let worldCaseInspectCountry = '';
@@ -1109,7 +1109,7 @@ async function startWorldCaseFiles(runConfig) {
     culturalObjects: worldCulturalObjectsData?.objects || [],
     candidateIndex: worldCandidateIndexData,
   });
-  worldCaseHintMode = 'subtle';
+  worldCaseHintMode = 'off';
   worldCaseHintIndex = 0;
   worldCaseHintDetailsOpen = false;
   worldCaseInspectCountry = '';
