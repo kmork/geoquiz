@@ -1374,42 +1374,6 @@ export function createCarmenUI(container, flagCodes) {
       if (close && typeof options?.onClose === 'function') close.addEventListener('click', () => options.onClose());
     },
 
-    showWorldProofReview(cards, destination) {
-      return new Promise(resolve => {
-        const overlay = document.createElement('div');
-        overlay.className = 'carmen-briefing-overlay carmen-world-proof-overlay';
-        const cardHtml = (cards || []).map(card => `
-          <div class="carmen-world-evidence-card">
-            <div class="carmen-world-evidence-type">${esc(card.category || 'Evidence')}</div>
-            <div class="carmen-world-evidence-title">${esc(card.title || 'Field note')}</div>
-            <div class="carmen-world-evidence-text">${esc(card.text || '')}</div>
-          </div>
-        `).join('');
-        overlay.innerHTML = `
-          <div class="carmen-briefing-content carmen-world-proof-content">
-            <div class="carmen-briefing-stamp">PROOF</div>
-            <div class="carmen-briefing-label">ACME EVIDENCE REVIEW</div>
-            <div class="carmen-case-title">${esc(destination?.city || destination?.country || 'Destination')}</div>
-            <div class="carmen-briefing-note">Lock these evidence cards to advance the case file.</div>
-            <div class="carmen-world-proof-cards">${cardHtml}</div>
-            <div class="carmen-closing-buttons">
-              <button class="carmen-closing-btn carmen-btn-continue">Lock Proof</button>
-              <button class="carmen-closing-btn carmen-btn-quit">Review More</button>
-            </div>
-          </div>
-        `;
-        document.body.appendChild(overlay);
-        overlay.querySelector('.carmen-btn-continue').addEventListener('click', () => {
-          overlay.remove();
-          resolve(true);
-        });
-        overlay.querySelector('.carmen-btn-quit').addEventListener('click', () => {
-          overlay.remove();
-          resolve(false);
-        });
-      });
-    },
-
     addManifestSegment(segment) {
       if (!manifestState.enabled || !segment) return;
       const duplicate = manifestState.segments.some(existing =>

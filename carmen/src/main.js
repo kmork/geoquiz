@@ -1039,11 +1039,6 @@ function handleWorldInvestigation(locationId) {
 
 async function handleWorldTravel(country) {
   if (!worldCase || !country) return;
-  const target = worldCase.targetRouteStop;
-  if (country === target?.country && worldCase.canSubmitProof(country)) {
-    const locked = await ui.showWorldProofReview(worldCase.getProofCards(), target);
-    if (!locked) return;
-  }
   stopAmbient();
   const from = worldCase.currentCountry;
   playAmbient('airplane');
