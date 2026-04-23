@@ -45,7 +45,7 @@ export function clueFromFact(country, ctx) {
     if (ctx.usedClueIds.has(id)) continue;
     const redacted = redactCountryName(f.fact, country);
     if (!containsCountryName(redacted, country)) {
-      return { id, text: redacted, icon: iconForCategory(f.category), category: 'fact', data: { text: redacted } };
+      return { id, text: redacted, icon: iconForCategory(f.category), category: 'fact', scope: 'country', data: { text: redacted } };
     }
   }
   return null;
@@ -66,7 +66,7 @@ export function allGeographyClues(country, ctx, neighborChoices = []) {
     clues.push({
       id: `geo-continent-${country}`,
       text: `This country is in ${c.continent}.`,
-      icon: '🌍', category: 'geography', subtype: 'continent',
+      icon: '🌍', category: 'geography', subtype: 'continent', scope: 'country',
       data: { continent: c.continent },
     });
   }
@@ -77,7 +77,7 @@ export function allGeographyClues(country, ctx, neighborChoices = []) {
       clues.push({
         id: `geo-landlocked-${country}`,
         text: 'This country is landlocked.',
-        icon: '🌍', category: 'geography', subtype: 'landlocked',
+        icon: '🌍', category: 'geography', subtype: 'landlocked', scope: 'country',
         data: {},
       });
     }
@@ -92,7 +92,7 @@ export function allGeographyClues(country, ctx, neighborChoices = []) {
     clues.push({
       id: `geo-capital-letter-${country}`,
       text: `The capital starts with the letter "${cap[0]}".`,
-      icon: '🏛️', category: 'geography', subtype: 'capital_letter',
+      icon: '🏛️', category: 'geography', subtype: 'capital_letter', scope: 'capital',
       data: { letter: cap[0], matchCount: capMatchCount, totalChoices: neighborChoices.length },
     });
   }
@@ -105,7 +105,7 @@ export function allGeographyClues(country, ctx, neighborChoices = []) {
       clues.push({
         id: `geo-pop-${country}`,
         text: `This country has a population of ${bracket}.`,
-        icon: '👥', category: 'geography', subtype: 'population',
+        icon: '👥', category: 'geography', subtype: 'population', scope: 'country',
         data: { bracket, matchCount: popMatchCount, totalChoices: neighborChoices.length },
       });
     }
@@ -119,7 +119,7 @@ export function allGeographyClues(country, ctx, neighborChoices = []) {
     clues.push({
       id: `geo-neighbors-${country}`,
       text: `This country borders ${nbrCount} ${nbrCount === 1 ? 'country' : 'countries'}.`,
-      icon: '🌍', category: 'geography', subtype: 'neighbors',
+      icon: '🌍', category: 'geography', subtype: 'neighbors', scope: 'country',
       data: { count: nbrCount, matchCount: nbrMatchCount, totalChoices: neighborChoices.length },
     });
   }
@@ -128,7 +128,7 @@ export function allGeographyClues(country, ctx, neighborChoices = []) {
     clues.push({
       id: `geo-peak-${country}`,
       text: `The highest point here is ${c.highestPeak.name} at ${c.highestPeak.elev.toLocaleString()}m.`,
-      icon: '⛰️', category: 'geography', subtype: 'peak',
+      icon: '⛰️', category: 'geography', subtype: 'peak', scope: 'country',
       data: { name: c.highestPeak.name, elev: c.highestPeak.elev },
     });
   }
@@ -154,7 +154,7 @@ export function clueFromHeritage(country, ctx) {
     if (ctx.usedClueIds.has(id)) continue;
     const text = redactCountryName(`A famous site here: ${site.hint}.`, country);
     if (!containsCountryName(text, country)) {
-      return { id, text, icon: '🏛️', category: 'landmarks', data: { siteName: site.siteName, hint: site.hint } };
+      return { id, text, icon: '🏛️', category: 'landmarks', scope: 'country', data: { siteName: site.siteName, hint: site.hint } };
     }
   }
   return null;
@@ -176,7 +176,7 @@ export function clueFromRiverOrMountain(country, ctx, neighborChoices = []) {
       id,
       text: `The ${f.name} ${label} passes through this country.`,
       icon: f.type === 'river' ? '🏞️' : '⛰️',
-      category: 'river_mountain',
+      category: 'river_mountain', scope: 'country',
       data: { name: f.name, type: f.type, matchCount, totalChoices: neighborChoices.length },
     };
   }
@@ -193,7 +193,7 @@ export function clueFromEmpire(country, ctx) {
     return {
       id,
       text: `This country was once part of the ${e.name} (${e.yearLabel}).`,
-      icon: '👑', category: 'history',
+      icon: '👑', category: 'history', scope: 'country',
       data: { name: e.name, yearLabel: e.yearLabel },
     };
   }
@@ -218,7 +218,7 @@ export function clueFromFamousFor(country, ctx, neighborChoices = []) {
     const matchCount = neighborChoices.filter(n =>
       (ctx.countryMap[n]?.famousFor || []).includes(item)
     ).length;
-    return { id, text, icon: '🌟', category: 'famous_for', data: { item, matchCount, totalChoices: neighborChoices.length } };
+    return { id, text, icon: '🌟', category: 'famous_for', scope: 'country', data: { item, matchCount, totalChoices: neighborChoices.length } };
   }
   return null;
 }
@@ -252,5 +252,5 @@ export function clueFromExports(country, ctx, neighborChoices = []) {
     const nExports = ctx.countryMap[n]?.exports || [];
     return subset.some(item => nExports.includes(item));
   }).length;
-  return { id, text, icon: '📦', category: 'exports', data: { list, items: subset, matchCount, totalChoices: neighborChoices.length } };
+  return { id, text, icon: '📦', category: 'exports', scope: 'country', data: { list, items: subset, matchCount, totalChoices: neighborChoices.length } };
 }

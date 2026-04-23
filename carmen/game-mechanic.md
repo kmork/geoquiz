@@ -69,6 +69,8 @@ The clue generator tracks used clue IDs across the case, so the same clue does n
 
 Clue redaction is important. The engine actively prevents generated or narrated clues from naming the target country. If the noir rewrite accidentally reintroduces the answer, the game falls back to the safer raw clue.
 
+Every clue carries a `scope` field — either `'capital'` or `'country'` — indicating whether the clue describes the capital city or the country as a whole. Capital-scoped clues include: capital letter hints, scramble visual clues, and all Skyline flight clues that use capital coordinates or airport data (distance, clock, hemisphere, latitude, capital initial, airport code, gateway connectivity). Country-scoped clues include: facts, continent, landlocked, population, neighbors, peak, heritage, rivers/mountains, empires, famous-for, exports, outline visual, flag visual, and Skyline continent/landlocked/cargo clues. The scope is shown to the player as a subtle label in the speech bubble ("capital lead" / "country lead") and in dossier entries ("CAPITAL" / "COUNTRY"), helping the player interpret each clue correctly without breaking the noir narrative.
+
 ## Suspect Deduction
 
 The suspect layer is now a real second puzzle, not just end-of-case flavor.

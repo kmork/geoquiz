@@ -493,7 +493,7 @@ export class CarmenGameLogic {
         if (this.usedClueIds.has(id)) continue;
         const redacted = redactCountryName(f.fact, country);
         if (redacted === f.fact || !redacted.includes(country)) {
-          const clue = { id, text: redacted, icon: iconForCategory(f.category), category: f.category };
+          const clue = { id, text: redacted, icon: iconForCategory(f.category), category: f.category, scope: 'country' };
           if (this._shouldUseClue(clue, country) && this._claimClue(clue)) clues.push(clue);
         }
       }

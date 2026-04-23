@@ -1363,6 +1363,15 @@ body {
   white-space: nowrap;
 }
 
+.carmen-dossier-scope {
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: rgba(199, 176, 138, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-right: 0.3rem;
+}
+
 .carmen-dossier-text {
   color: rgba(241, 235, 226, 0.94);
   max-width: 44rem;
@@ -1886,6 +1895,15 @@ body {
   margin-bottom: 0.4rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+}
+
+.carmen-clue-scope {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: rgba(199, 176, 138, 0.45);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 0.3rem;
 }
 
 .carmen-speech-text {

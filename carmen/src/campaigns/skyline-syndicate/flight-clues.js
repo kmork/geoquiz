@@ -58,7 +58,7 @@ export function buildFlightDistanceClue(routeMeta, choices = []) {
   return {
     id: `flight-distance-${routeMeta.from}-${routeMeta.to}`,
     icon: '✈️',
-    category: 'flight',
+    category: 'flight', scope: 'capital',
     text,
     data: {
       text,
@@ -79,7 +79,7 @@ export function buildFlightClockClue(routeMeta, choices = []) {
   return {
     id: `flight-clock-${routeMeta.from}-${routeMeta.to}`,
     icon: '🕰',
-    category: 'flight',
+    category: 'flight', scope: 'capital',
     text,
     data: {
       text,
@@ -119,7 +119,7 @@ export function buildHemisphereClue(fromGateway, toGateway, choices = []) {
   return {
     id: `flight-hemisphere-${fromGateway.country}-${toGateway.country}`,
     icon: '🌍',
-    category: 'flight',
+    category: 'flight', scope: 'capital',
     text,
     data: { text, crossing, matchCount, totalChoices: choices.length },
   };
@@ -133,7 +133,7 @@ export function buildLatitudeClue(toGateway, choices = []) {
   return {
     id: `flight-latitude-${toGateway.country}`,
     icon: '🌍',
-    category: 'flight',
+    category: 'flight', scope: 'capital',
     text,
     data: { text, band, matchCount, totalChoices: choices.length },
   };
@@ -147,7 +147,7 @@ export function buildCapitalInitialClue(toGateway, choices = []) {
   return {
     id: `flight-capital-initial-${toGateway.country}`,
     icon: '🔤',
-    category: 'flight',
+    category: 'flight', scope: 'capital',
     text,
     data: { text, initial, matchCount, totalChoices: choices.length },
   };
@@ -162,7 +162,7 @@ export function buildContinentClue(fromContinent, toContinent, toCountry, choice
     return {
       id: `flight-continent-${toCountry}`,
       icon: '🗺️',
-      category: 'flight',
+      category: 'flight', scope: 'country',
       text,
       data: { text, continent: toContinent, crosses, matchCount, totalChoices: choices.length },
     };
@@ -172,7 +172,7 @@ export function buildContinentClue(fromContinent, toContinent, toCountry, choice
   return {
     id: `flight-continent-${toCountry}`,
     icon: '🗺️',
-    category: 'flight',
+    category: 'flight', scope: 'country',
     text,
     data: { text, continent: toContinent, crosses, matchCount, totalChoices: choices.length },
   };
@@ -188,7 +188,7 @@ export function buildLandlockedClue(targetCountryData, choices = []) {
   return {
     id: `flight-landlocked-${targetCountryData.country}`,
     icon: '🏔️',
-    category: 'flight',
+    category: 'flight', scope: 'country',
     text,
     data: { text, landlocked, matchCount, totalChoices: choices.length },
   };
@@ -211,7 +211,7 @@ export function buildCargoClue(targetCountryData, choices = []) {
   return {
     id: `flight-cargo-${targetCountryData.country}-${exportItem}`,
     icon: '📦',
-    category: 'flight',
+    category: 'flight', scope: 'country',
     text,
     data: {
       text,
@@ -233,7 +233,7 @@ export function buildAirportCodeClue(toGateway, revealFirst, choices = []) {
   return {
     id: `flight-airport-code-${toGateway.country}-${position}-${letter}`,
     icon: '🏷️',
-    category: 'flight',
+    category: 'flight', scope: 'capital',
     text,
     data: { text, letter, revealFirst, iata, matchCount, totalChoices: choices.length },
   };
@@ -248,7 +248,7 @@ export function buildGatewayConnectivityClue(gatewayMeta, choices = []) {
   return {
     id: `flight-gateway-${gatewayMeta.country}-${band}`,
     icon: '🛫',
-    category: 'flight',
+    category: 'flight', scope: 'capital',
     text,
     data: {
       text,

@@ -1,7 +1,7 @@
 const SCRAMBLE_INTROS = [
-  'A crumpled note was found at the scene. The letters were all wrong.',
+  'A crumpled note was found at the scene. The capital name\'s letters were all wrong.',
   'Someone left a torn travel receipt. The destination capital was scrambled.',
-  'A notepad had hastily written letters -- rearranged, unreadable at first glance.',
+  'A notepad had hastily written letters of a capital name -- rearranged, unreadable at first glance.',
   'A smudged label had a capital name on it, but the letters were jumbled.',
 ];
 
@@ -80,7 +80,7 @@ export function buildScrambleClue(target, ctx = null) {
   return {
     id: `visual-scramble-${country}`,
     icon: '🧩',
-    category: 'visual',
+    category: 'visual', scope: 'capital',
     text,
     data: { text, visualType: 'scramble', letters: result, fixed, answer: capital.toUpperCase() },
   };
@@ -93,7 +93,7 @@ export function buildOutlineClue(target, ctx = null) {
   return {
     id: `visual-outline-${country}`,
     icon: '🗺️',
-    category: 'visual',
+    category: 'visual', scope: 'country',
     text,
     data: { text, visualType: 'outline', targetCountry: country },
   };
@@ -106,7 +106,7 @@ export function buildFlagClue(target, ctx = null) {
   return {
     id: `visual-flag-${country}`,
     icon: '🏳️',
-    category: 'visual',
+    category: 'visual', scope: 'country',
     text,
     data: { text, visualType: 'flag', targetCountry: country },
   };

@@ -780,10 +780,11 @@ export function createCarmenUI(container, flagCodes) {
       }
       const icon = e.emoji || '';
       const entryClass = e.type === 'detour' ? ' carmen-dossier-detour' : '';
+      const scopeTag = e.scope ? `<span class="carmen-dossier-scope">${e.scope === 'capital' ? 'CAPITAL' : 'COUNTRY'}</span> ` : '';
       html += `<div class="carmen-dossier-entry${entryClass}">
         ${icon ? `<span class="carmen-dossier-emoji">${icon}</span>` : ''}
         <span class="carmen-dossier-prefix">${esc(e.informantPrefix || 'Clue')}:</span>
-        <span class="carmen-dossier-text">${esc(e.clueText)}</span>
+        ${scopeTag}<span class="carmen-dossier-text">${esc(e.clueText)}</span>
       </div>`;
       if (e.visualEvidence) {
         html += `<div class="carmen-dossier-visual" data-dossier-visual-id="${esc(e.visualEvidence.id)}"></div>`;
@@ -1442,6 +1443,7 @@ export function createCarmenUI(container, flagCodes) {
         emoji,
         country,
         capital,
+        scope: options?.scope || null,
         visualEvidence: options?.visualEvidence || null,
       });
       renderDossier();
@@ -1990,11 +1992,13 @@ export function createCarmenUI(container, flagCodes) {
 
       const emoji = informant ? informant.emoji : (clue.icon || '💬');
       const prefix = informant ? informant.prefix : 'Intel';
+      const scopeLabel = clue.scope === 'capital' ? '📍 capital lead' : '🗺️ country lead';
       els.reveal.innerHTML = `
         <div class="carmen-speech-bubble">
           <div class="carmen-speech-avatar">${emoji}</div>
           <div class="carmen-speech-body">
             <div class="carmen-speech-name">${esc(prefix)}</div>
+            ${clue.scope ? `<div class="carmen-clue-scope">${scopeLabel}</div>` : ''}
             ${clue.action ? `<div class="carmen-speech-action">${esc(clue.action)}</div>` : ''}
             <div class="carmen-speech-text"></div>
           </div>

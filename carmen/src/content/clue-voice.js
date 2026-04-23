@@ -30,9 +30,9 @@ const PHRASINGS = {
       () => `Place has no coast. Whoever ran there had to go overland.`,
     ],
     capital_letter: [
-      d => `City starts with a "${d.letter}", if that helps you any.`,
+      d => `The capital city starts with "${d.letter}", if that helps you any.`,
       d => `The capital? Begins with "${d.letter}". That's all I caught.`,
-      d => `I heard the name. Started with "${d.letter}". Couldn't make out the rest.`,
+      d => `I caught the capital name. Starts with "${d.letter}". Couldn't make out the rest.`,
     ],
     population: [
       d => `Population sits at ${d.bracket}. Make of that what you will.`,
@@ -108,9 +108,9 @@ const SKYLINE_PHRASINGS = {
       d => `The next capital connection points somewhere in ${d.continent}.`,
     ],
     landlocked: [
-      () => `No coastline on that file. The destination sits inland.`,
-      () => `Landlocked country. The manifest still points there.`,
-      () => `No seaport angle. The lead is inland.`,
+      () => `No coastline on that country. The destination sits inland.`,
+      () => `The country is landlocked. The manifest still points there.`,
+      () => `No seaport for that country. The lead is inland.`,
     ],
     peak: [
       d => `Mountains over there scrape the sky. ${d.name} tops out at ${d.elev.toLocaleString()} meters.`,
@@ -118,6 +118,16 @@ const SKYLINE_PHRASINGS = {
       d => `${d.name}. ${d.elev.toLocaleString()} meters. A useful landmark from the air.`,
     ],
   },
+  exports: [
+    d => `The destination country exports ${d.list}. That's what keeps the place going.`,
+    d => `Country-level trade: ${d.list}. Targeted cargo, specific route.`,
+    d => `The country runs on ${d.list}. Always has.`,
+  ],
+  famous_for: [
+    d => `The destination country is known for ${d.item}. Maybe the thief knows it too.`,
+    d => `Famous for ${d.item}, that country. Could be why they went there.`,
+    d => `${d.item}. That's what the destination country is known for.`,
+  ],
 };
 
 // ─── B. Location voice wrappers ───────────────────────────────────
@@ -484,8 +494,11 @@ export function composeClue(clue, informant, locationId, redactFn, options = nul
   // 1. Pick a phrasing.
   let pool = null;
   const skylineGeoPool = SKYLINE_PHRASINGS.geography[clue.subtype];
+  const skylineCatPool = SKYLINE_PHRASINGS[clue.category];
   if (routeKind === 'capital_flights' && clue.category === 'geography' && clue.subtype && skylineGeoPool) {
     pool = skylineGeoPool;
+  } else if (routeKind === 'capital_flights' && skylineCatPool && !clue.subtype) {
+    pool = skylineCatPool;
   } else if (clue.data?.visualType === 'cargo-label') {
     pool = PHRASINGS.cargo_label;
   } else if (clue.category === 'geography' && clue.subtype && PHRASINGS.geography[clue.subtype]) {

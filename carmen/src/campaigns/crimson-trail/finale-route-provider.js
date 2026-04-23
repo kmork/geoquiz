@@ -140,7 +140,7 @@ function pick(values) {
 }
 
 function clue(id, text, category = 'fact', icon = '📋') {
-  return { id, text, category, icon, data: { text } };
+  return { id, text, category, scope: 'country', icon, data: { text } };
 }
 
 export class CrimsonTrailFinaleRouteProvider {
