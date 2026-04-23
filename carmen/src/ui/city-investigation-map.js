@@ -131,6 +131,7 @@ export function createCityInvestigationMap(container, locations, options, onPick
   const ctx = canvas.getContext('2d');
   const pinButtons = new Map();
   let scenePin = null;
+  let scenePickLocationId = null;
   let viewport = null;
   let initialViewport = null;
   let resizeObserver = null;
@@ -234,6 +235,10 @@ export function createCityInvestigationMap(container, locations, options, onPick
     for (const loc of locations) {
       const button = pinButtons.get(loc.id);
       if (!button) continue;
+      if (loc.hideOnMap) {
+        button.style.display = 'none';
+        continue;
+      }
       let point = null;
       if (Number.isFinite(loc.lat) && Number.isFinite(loc.lon)) {
         point = projectToScreen(loc.lat, loc.lon, viewport);
@@ -340,19 +345,35 @@ export function createCityInvestigationMap(container, locations, options, onPick
   }
 
   if (Number.isFinite(options.scene?.lat) && Number.isFinite(options.scene?.lon)) {
+    const sceneLocation = locations.find(loc => loc.hideOnMap && loc.type === 'cultural-place');
+    scenePickLocationId = sceneLocation?.id || null;
     scenePin = document.createElement('div');
-    scenePin.className = 'carmen-city-map-scene-pin';
+    scenePin.className = `carmen-city-map-scene-pin${scenePickLocationId ? ' is-pickable' : ''}`;
     const sceneTitle = options.scene.name || options.scene.label || 'Case scene';
-    scenePin.title = sceneTitle;
-    scenePin.setAttribute('aria-label', sceneTitle);
+    const title = scenePickLocationId ? `${sceneTitle} — investigate scene` : sceneTitle;
+    scenePin.title = title;
+    scenePin.setAttribute('aria-label', title);
     scenePin.innerHTML = `
       <span class="carmen-city-map-scene-icon">${esc(options.scene.emoji || '◆')}</span>
       <span class="carmen-city-map-scene-label">${esc(sceneTitle)}</span>
     `;
+    if (scenePickLocationId) {
+      scenePin.setAttribute('role', 'button');
+      scenePin.tabIndex = 0;
+      scenePin.addEventListener('pointerdown', (e) => e.stopPropagation());
+      scenePin.addEventListener('click', () => onPick(scenePickLocationId));
+      scenePin.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onPick(scenePickLocationId);
+        }
+      });
+    }
     pinsLayer.appendChild(scenePin);
   }
 
   for (const loc of locations) {
+    if (loc.hideOnMap) continue;
     const button = document.createElement('button');
     button.type = 'button';
     button.className = 'carmen-city-map-pin';

@@ -2592,6 +2592,11 @@ body {
   pointer-events: none;
 }
 
+.carmen-city-map-scene-pin.is-pickable {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
 .carmen-location-btn {
   position: relative;
   display: flex;

@@ -46,6 +46,17 @@
           "truthComplication": "Origin explains creation, but not the whole later life of the object."
         },
         {
+          "country": "France",
+          "city": "Amboise",
+          "scene": "Clos Lucé royal papers",
+          "lat": 47.4123,
+          "lon": 0.9829,
+          "biographyStage": "Transfer",
+          "learningGoal": "Show how Leonardo's last years in France and French royal collecting became part of the painting's life story.",
+          "thiefClaim": "The move into French royal hands was just the first mistake in the provenance chain.",
+          "truthComplication": "Court transfer changed the object's history permanently; later custody is not noise to erase."
+        },
+        {
           "country": "Netherlands",
           "city": "Amsterdam",
           "scene": "Rijksmuseum restoration studio",
@@ -131,42 +142,88 @@
         },
         {
           "from": "Italy",
+          "to": "France",
+          "sceneTitle": "The royal passage",
+          "clues": [
+            {
+              "id": "florence-uffizi-french-court",
+              "locationId": "cultural:louvre-vanishing-provenance-archive-q51252",
+              "action": "Read court transfer note",
+              "title": "French court note",
+              "text": "The Uffizi transfer note says the portrait's track leaves Tuscany only after Leonardo's final years, toward a French royal residence in the Loire Valley.",
+              "tags": ["country:France", "city:Amboise", "culture:Leonardo"],
+              "strength": 4
+            },
+            {
+              "id": "florence-airport-loire-route",
+              "locationId": "airport",
+              "category": "Route Evidence",
+              "action": "Check courier itinerary",
+              "title": "Loire route",
+              "text": "The courier route bends northwest from Florence toward a smaller French stop rather than a capital museum office.",
+              "tags": ["continent:Europe", "direction:northwest", "country:France"],
+              "strength": 2
+            },
+            {
+              "id": "florence-hotel-clos-luce",
+              "locationId": "hotel",
+              "action": "Interview concierge",
+              "title": "Clos Lucé booking",
+              "text": "A guest asked for a driver to the house where Leonardo spent his final years under French patronage. The clerk wrote down Amboise.",
+              "tags": ["country:France", "city:Amboise", "confirmation"],
+              "strength": 4
+            },
+            {
+              "id": "florence-embassy-french-seal",
+              "locationId": "embassy",
+              "action": "Compare transit seal",
+              "title": "French royal seal",
+              "text": "The transit seal is French and references an old royal inventory series, not an Italian restoration office.",
+              "tags": ["country:France", "exclude:Italy", "confirmation"],
+              "strength": 3
+            }
+          ],
+          "followups": []
+        },
+        {
+          "from": "France",
           "to": "Netherlands",
           "sceneTitle": "The varnish ledger",
           "clues": [
             {
-              "id": "florence-cultural-northern-restoration",
-              "locationId": "cultural:louvre-vanishing-provenance-archive-q51252",
-              "action": "Read Uffizi transfer ledger",
-              "title": "Northern studio note",
-              "text": "The Uffizi ledger names a northern restoration studio and an old-master dealer beside canals. The next archive is not another Italian gallery.",
+              "id": "amboise-library-dutch-restoration",
+              "locationId": "library",
+              "action": "Read copied inventory pages",
+              "title": "Dutch restoration note",
+              "text": "A copied French court inventory page was annotated by Dutch restorers and old-master dealers in Amsterdam.",
               "tags": ["continent:Europe", "culture:old-master", "city:Amsterdam", "country:Netherlands"],
               "strength": 4
             },
             {
-              "id": "florence-market-pharma-machinery",
+              "id": "amboise-market-machinery-chemicals",
               "locationId": "market",
-              "action": "Inspect solvent invoice",
-              "title": "Solvent invoice",
-              "text": "A solvent invoice was bundled with machinery and pharmaceutical export paperwork, a better fit for the Netherlands than the Mediterranean decoys.",
-              "tags": ["export:machinery", "export:pharmaceuticals", "country:Netherlands"],
+              "action": "Inspect packing invoice",
+              "title": "Canal workshop invoice",
+              "text": "The packing invoice includes machinery and chemical supplies tied to a conservation workshop in the Low Countries.",
+              "tags": ["export:machinery", "export:chemicals", "country:Netherlands"],
               "strength": 3
             },
             {
-              "id": "florence-airport-northwest",
+              "id": "amboise-airport-low-country",
               "locationId": "airport",
+              "category": "Route Evidence",
               "action": "Check air cargo desk",
-              "title": "Northwest transfer",
-              "text": "The next crate moved northwest from Italy, still inside Europe, toward a low-lying country with a major capital-area airport.",
-              "tags": ["continent:Europe", "direction:northwest"],
+              "title": "Low-country transfer",
+              "text": "The crate left France for a low-lying northern country with canals, still inside Europe and well away from royal residences.",
+              "tags": ["continent:Europe", "direction:northeast", "country:Netherlands"],
               "strength": 2
             },
             {
-              "id": "florence-hotel-canal",
+              "id": "amboise-hotel-canal",
               "locationId": "hotel",
               "action": "Interview night clerk",
               "title": "Canal booking",
-              "text": "The thief asked for a hotel near canals and a restoration studio, then corrected the clerk when he suggested Venice.",
+              "text": "The thief asked for a hotel near canals and a restoration studio, then corrected the clerk when he suggested Bruges. The booking was for Amsterdam.",
               "tags": ["city:Amsterdam", "country:Netherlands", "exclude:Italy", "confirmation"],
               "strength": 3
             }
@@ -254,14 +311,25 @@
         },
         {
           "country": "Egypt",
+          "city": "Rashid",
+          "scene": "Fort Julien discovery file",
+          "lat": 31.4018,
+          "lon": 30.4173,
+          "biographyStage": "Origin",
+          "learningGoal": "Tie the stone to the Nile Delta discovery site and the local geography that gave it its European name.",
+          "thiefClaim": "Discovery near Rashid settles the object's true destination by itself.",
+          "truthComplication": "Discovery location matters, but the object's later Egyptian, European, and scholarly histories still matter too."
+        },
+        {
+          "country": "Egypt",
           "city": "Cairo",
           "scene": "Egyptian Museum script archive",
           "lat": 30.047778,
           "lon": 31.233333,
-          "biographyStage": "Origin",
+          "biographyStage": "Transfer",
           "learningGoal": "Connect the inscription to ancient Egypt, pharaonic context, and modern Egyptian cultural identity.",
-          "thiefClaim": "Egyptian origin alone solves the case.",
-          "truthComplication": "The object is Egyptian, but its meaning also depends on later discovery, capture, and decipherment."
+          "thiefClaim": "Once the stone re-enters Egyptian custody, the rest of the route becomes irrelevant.",
+          "truthComplication": "National custody is a real chapter, but it does not erase how the object was discovered, captured, studied, and displayed."
         },
         {
           "country": "Egypt",
@@ -273,6 +341,17 @@
           "learningGoal": "Use translation history and ancient learning to show why the stone changed how scripts were understood.",
           "thiefClaim": "A translation archive can certify the thief's return narrative.",
           "truthComplication": "Scholarship explains meaning; it does not make forged custody records true."
+        },
+        {
+          "country": "France",
+          "city": "Paris",
+          "scene": "Paris decipherment archive",
+          "lat": 48.8566,
+          "lon": 2.3522,
+          "biographyStage": "Forgery",
+          "learningGoal": "Show how the stone's European decipherment story became part of its global afterlife and how the thief abuses that prestige.",
+          "thiefClaim": "French decipherment gives Paris the authority to rewrite the final provenance.",
+          "truthComplication": "Scholarship made the stone famous, but fame and interpretation do not create legal custody."
         }
       ],
       "legs": [
@@ -286,8 +365,8 @@
               "locationId": "cultural:rosetta-cipher-theft-scene-q6373",
               "action": "Inspect the empty display case",
               "title": "Three scripts, one destination",
-              "text": "The empty case was dusted with a rubbing of Greek, Demotic, and hieroglyphic text. The note names a pharaonic archive and rejects every European destination.",
-              "tags": ["country:Egypt", "culture:pharaonic", "cultural_object:Rosetta Stone", "exclude:United Kingdom"],
+              "text": "The empty case was dusted with a rubbing of Greek, Demotic, and hieroglyphic text. The margin note points to the Nile Delta discovery site, not another European archive.",
+              "tags": ["country:Egypt", "city:Rashid", "culture:pharaonic", "cultural_object:Rosetta Stone", "exclude:United Kingdom"],
               "strength": 4
             },
             {
@@ -295,25 +374,71 @@
               "locationId": "library",
               "action": "Read decipherment notes",
               "title": "Decipherment shelf",
-              "text": "The stolen catalogue card was filed beside ancient-script research, Nile maps, and a note about a museum in Cairo.",
-              "tags": ["country:Egypt", "city:Cairo", "famous:Nile", "culture:ancient"],
+              "text": "The stolen catalogue card was filed beside ancient-script research, Nile Delta maps, and a sketch labelled Rashid.",
+              "tags": ["country:Egypt", "city:Rashid", "famous:Nile", "culture:ancient"],
               "strength": 3
             },
             {
               "id": "rosetta-market-granodiorite",
               "locationId": "market",
+              "category": "Route Evidence",
               "action": "Check stone dealer invoice",
               "title": "Granodiorite invoice",
-              "text": "A fake stone-sample invoice moved with gold and textile paperwork. The cargo language points to North Africa, not another London collector.",
-              "tags": ["export:gold", "export:textiles", "continent:Africa", "exclude:United Kingdom"],
+              "text": "A fake stone-sample invoice moved with gold and textile paperwork. The cargo language points to a North African port town, not another London collector.",
+              "tags": ["export:gold", "export:textiles", "continent:Africa", "country:Egypt"],
               "strength": 2
             },
             {
-              "id": "rosetta-embassy-cairo-permit",
+              "id": "rosetta-embassy-rashid-permit",
               "locationId": "embassy",
               "action": "Verify research permit",
-              "title": "Cairo permit",
-              "text": "The research permit is valid only for Cairo. The museum stamp is genuine, but the object description has been rewritten.",
+              "title": "Delta permit",
+              "text": "The permit is valid only for a restricted antiquities survey near Rashid. The description is forged, but the destination line is clear.",
+              "tags": ["country:Egypt", "city:Rashid", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        },
+        {
+          "from": "Egypt",
+          "to": "Egypt",
+          "sceneTitle": "The museum transfer ledger",
+          "clues": [
+            {
+              "id": "rosetta-rashid-library-cairo-ledger",
+              "locationId": "library",
+              "action": "Read transfer ledger",
+              "title": "Cairo custody line",
+              "text": "The Delta transfer ledger forwards every formal custody reference to Cairo's national museum files, not to a local holding room.",
+              "tags": ["country:Egypt", "city:Cairo", "culture:pharaonic"],
+              "strength": 4
+            },
+            {
+              "id": "rosetta-rashid-airport-capital-run",
+              "locationId": "airport",
+              "category": "Route Evidence",
+              "action": "Check internal cargo route",
+              "title": "Capital run",
+              "text": "The courier route stays within Egypt and follows the Nile corridor toward the capital rather than back to the coast.",
+              "tags": ["country:Egypt", "city:Cairo", "confirmation"],
+              "strength": 3
+            },
+            {
+              "id": "rosetta-rashid-market-antiquities-wrap",
+              "locationId": "market",
+              "action": "Inspect wrapping paper",
+              "title": "Museum wrapping",
+              "text": "The wrapping bears a Cairo antiquities registry code beneath the forged shipping number.",
+              "tags": ["country:Egypt", "city:Cairo", "confirmation"],
+              "strength": 3
+            },
+            {
+              "id": "rosetta-rashid-embassy-national-custody",
+              "locationId": "embassy",
+              "action": "Confirm antiquities authority",
+              "title": "National custody",
+              "text": "The antiquities authority confirms the next clean file in the chain is the national museum archive in Cairo.",
               "tags": ["country:Egypt", "city:Cairo", "confirmation"],
               "strength": 4
             }
@@ -360,6 +485,51 @@
               "title": "Alexandria authority",
               "text": "The cultural authority confirms the duplicate translation slip was requested for Alexandria, not another Cairo archive.",
               "tags": ["country:Egypt", "city:Alexandria", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        },
+        {
+          "from": "Egypt",
+          "to": "France",
+          "sceneTitle": "The decipherment trap",
+          "clues": [
+            {
+              "id": "rosetta-alexandria-paris-letter",
+              "locationId": "cultural:rosetta-cipher-translation-archive-q501851",
+              "action": "Read translator correspondence",
+              "title": "Paris correspondence",
+              "text": "The Alexandria correspondence points to Paris scholars who turned the stone into a European decipherment legend. The thief is leaning on that prestige.",
+              "tags": ["country:France", "city:Paris", "culture:decipherment"],
+              "strength": 4
+            },
+            {
+              "id": "rosetta-airport-mediterranean-hop",
+              "locationId": "airport",
+              "category": "Route Evidence",
+              "action": "Check outbound sleeve",
+              "title": "Mediterranean hop",
+              "text": "The next flight leaves the Mediterranean for a European capital where script scholarship became part of the object's fame.",
+              "tags": ["continent:Europe", "capital:P", "country:France"],
+              "strength": 3
+            },
+            {
+              "id": "rosetta-hotel-seine-scholar",
+              "locationId": "hotel",
+              "action": "Question archive clerk",
+              "title": "Seine scholar booking",
+              "text": "A scholar's alias was booked near a Paris archive, not another museum gallery or coastal library.",
+              "tags": ["country:France", "city:Paris", "culture:scholarship"],
+              "strength": 3
+            },
+            {
+              "id": "rosetta-embassy-french-seal",
+              "locationId": "embassy",
+              "action": "Verify academy seal",
+              "title": "French academy seal",
+              "text": "The forged final paperwork uses a French academic seal to make a fake decipherment-based transfer look legitimate.",
+              "tags": ["country:France", "city:Paris", "confirmation"],
               "strength": 4
             }
           ],
@@ -538,6 +708,17 @@
           "truthComplication": "The Great Wave is rooted in Japan but became globally influential through circulation."
         },
         {
+          "country": "Japan",
+          "city": "Nagasaki",
+          "scene": "Dejima shipping ledger",
+          "lat": 32.7448,
+          "lon": 129.8737,
+          "biographyStage": "Transfer",
+          "learningGoal": "Show how maritime trade routes and Dutch-Japanese contact opened channels through which Japanese prints could travel outward.",
+          "thiefClaim": "The print left Japan through a single corrupt export corridor that can be reversed cleanly.",
+          "truthComplication": "Trade routes moved objects and ideas, but they rarely form a simple reversible chain."
+        },
+        {
           "country": "Netherlands",
           "city": "Amsterdam",
           "scene": "Rijksmuseum print records",
@@ -549,29 +730,85 @@
           "truthComplication": "Collection routes can distort context, but they also explain how influence spread."
         },
         {
+          "country": "France",
+          "city": "Paris",
+          "scene": "Paris Japonisme salon",
+          "lat": 48.8606,
+          "lon": 2.3376,
+          "biographyStage": "Influence",
+          "learningGoal": "Trace how Japanese prints reshaped European taste, collecting, and modern art through Parisian salons and critics.",
+          "thiefClaim": "Paris proves the image was consumed as fashion, not respected as culture.",
+          "truthComplication": "European enthusiasm distorted context, but it also formed part of the print's modern worldwide significance."
+        },
+        {
           "country": "United States",
           "city": "Washington, D.C.",
           "scene": "Freer Gallery of Art",
           "lat": 38.888333333333335,
           "lon": -77.0275,
-          "biographyStage": "Influence",
-          "learningGoal": "Connect the print to global museum collections and the wider afterlife of Japanese visual culture.",
-          "thiefClaim": "Influence abroad is proof the object was taken too far from its root.",
-          "truthComplication": "Influence is not ownership, but it is part of why the object matters worldwide."
+          "biographyStage": "Forgery",
+          "learningGoal": "Expose the thief's final attempt to turn a global collection history into a fake proof of improper removal.",
+          "thiefClaim": "An American collection file proves the print wandered too far from its rightful home.",
+          "truthComplication": "Global collecting can be unequal, but the final forged transfer still has to be disproved with evidence."
         }
       ],
       "legs": [
+        {
+          "from": "Japan",
+          "to": "Japan",
+          "sceneTitle": "The harbor ledger",
+          "clues": [
+            {
+              "id": "wave-sumida-dejima-note",
+              "locationId": "cultural:great-wave-ledger-origin-scene-q17220332",
+              "action": "Inspect Hokusai catalogue drawer",
+              "title": "Dejima note",
+              "text": "The missing ledger references a western Japanese harbor where Dutch trade paperwork once touched Japanese print routes. The margin says Nagasaki.",
+              "tags": ["country:Japan", "city:Nagasaki", "culture:ukiyo-e"],
+              "strength": 4
+            },
+            {
+              "id": "wave-airport-domestic-west",
+              "locationId": "airport",
+              "category": "Route Evidence",
+              "action": "Check domestic freight route",
+              "title": "Domestic westbound hop",
+              "text": "The first move stays inside Japan and heads west toward a port city rather than directly overseas.",
+              "tags": ["country:Japan", "direction:west", "city:Nagasaki"],
+              "strength": 3
+            },
+            {
+              "id": "wave-market-port-packing",
+              "locationId": "market",
+              "action": "Trace wrapping paper",
+              "title": "Port wrapping",
+              "text": "The wrapping includes harbor codes and cargo twine used by maritime traders, not by inland print sellers.",
+              "tags": ["country:Japan", "city:Nagasaki", "culture:maritime"],
+              "strength": 2
+            },
+            {
+              "id": "wave-embassy-japanese-transfer",
+              "locationId": "embassy",
+              "action": "Verify domestic customs stamp",
+              "title": "Domestic customs stamp",
+              "text": "The first customs stamp is domestic and Japanese. The export stage starts later.",
+              "tags": ["country:Japan", "city:Nagasaki", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        },
         {
           "from": "Japan",
           "to": "Netherlands",
           "sceneTitle": "The blue pigment ledger",
           "clues": [
             {
-              "id": "wave-hokusai-dutch-ledger",
-              "locationId": "cultural:great-wave-ledger-origin-scene-q17220332",
-              "action": "Inspect Hokusai catalogue drawer",
+              "id": "wave-nagasaki-dutch-ledger",
+              "locationId": "library",
+              "action": "Inspect Dutch trade ledger",
               "title": "Dutch print-trade entry",
-              "text": "The Hokusai drawer is missing a maritime print-trade ledger. Its margin note names Amsterdam and a Dutch old-master catalogue shelf.",
+              "text": "The Nagasaki trade ledger points to Amsterdam and a Dutch old-master catalogue shelf that handled Japanese print records.",
               "tags": ["country:Netherlands", "city:Amsterdam", "cultural_place:Rijksmuseum", "culture:ukiyo-e"],
               "strength": 4
             },
@@ -607,21 +844,67 @@
         },
         {
           "from": "Netherlands",
+          "to": "France",
+          "sceneTitle": "The Paris salon trail",
+          "clues": [
+            {
+              "id": "wave-rijksmuseum-paris-salon",
+              "locationId": "cultural:great-wave-ledger-print-trade-record-q190804",
+              "action": "Compare print circulation card",
+              "title": "Paris salon card",
+              "text": "A Rijksmuseum circulation card points to Paris salons where Japanese prints changed European taste and criticism.",
+              "tags": ["country:France", "city:Paris", "culture:Japonisme"],
+              "strength": 4
+            },
+            {
+              "id": "wave-airport-short-hop",
+              "locationId": "airport",
+              "category": "Route Evidence",
+              "action": "Check continental sleeve",
+              "title": "Short continental hop",
+              "text": "The next move is a short west-southwest hop to a European capital on the Seine rather than across the Atlantic.",
+              "tags": ["country:France", "capital:P", "continent:Europe"],
+              "strength": 3
+            },
+            {
+              "id": "wave-library-french-critics",
+              "locationId": "library",
+              "action": "Read critics' index",
+              "title": "Critics' index",
+              "text": "The critics' index is full of Paris addresses, collectors, and salon notes about Japanese prints.",
+              "tags": ["country:France", "city:Paris", "culture:modern art"],
+              "strength": 3
+            },
+            {
+              "id": "wave-embassy-french-collector",
+              "locationId": "embassy",
+              "action": "Verify collector seal",
+              "title": "French collector seal",
+              "text": "The sealed packet matches a Paris collector's route rather than another Dutch museum transfer.",
+              "tags": ["country:France", "city:Paris", "confirmation"],
+              "strength": 4
+            }
+          ],
+          "followups": []
+        },
+        {
+          "from": "France",
           "to": "United States",
           "sceneTitle": "The American collection ledger",
           "clues": [
             {
-              "id": "wave-rijksmuseum-freer-ledger",
-              "locationId": "cultural:great-wave-ledger-print-trade-record-q190804",
-              "action": "Compare print acquisition records",
+              "id": "wave-paris-freer-ledger",
+              "locationId": "library",
+              "action": "Compare collection correspondence",
               "title": "Freer accession number",
-              "text": "The Rijksmuseum print record contains a copied accession number for an Asian art collection in Washington, D.C.",
+              "text": "The Paris correspondence contains a copied accession number for an Asian art collection in Washington, D.C., where the thief plans the final proof swap.",
               "tags": ["country:United States", "city:Washington, D.C.", "cultural_place:Freer"],
               "strength": 4
             },
             {
               "id": "wave-airport-atlantic",
               "locationId": "airport",
+              "category": "Route Evidence",
               "action": "Read transatlantic sleeve",
               "title": "Atlantic sleeve",
               "text": "The next crate crossed the Atlantic toward a capital city, not a commercial art hub.",
@@ -639,8 +922,8 @@
             },
             {
               "id": "wave-library-american-confirmation",
-              "locationId": "library",
-              "action": "Search collection catalogue",
+              "locationId": "embassy",
+              "action": "Verify collection cable",
               "title": "Washington catalogue",
               "text": "The catalogue request names Washington, D.C. and an Asian art gallery. ACME marks the American collection ledger as the final proof point.",
               "tags": ["country:United States", "city:Washington, D.C.", "confirmation"],

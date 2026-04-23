@@ -6,6 +6,11 @@ function normalize(value) {
   return String(value || '').trim().toLowerCase();
 }
 
+function approxSamePoint(aLat, aLon, bLat, bLon) {
+  if (![aLat, aLon, bLat, bLon].every(Number.isFinite)) return false;
+  return Math.abs(aLat - bLat) <= 0.003 && Math.abs(aLon - bLon) <= 0.003;
+}
+
 function primaryCapital(countryData) {
   return countryData?.capitals?.[0] || '';
 }
@@ -133,6 +138,7 @@ export class WorldCaseFilesLogic {
   }
 
   getLocations() {
+    const currentStop = this.currentRouteStop || {};
     const baseLocations = LOCATIONS.map(location => ({
       id: location.id,
       emoji: location.emoji,
@@ -151,6 +157,9 @@ export class WorldCaseFilesLogic {
         lon: place.lon,
         placeName: place.name,
         description: place.description,
+        hideOnMap: approxSamePoint(place.lat, place.lon, currentStop.lat, currentStop.lon) ||
+          normalize(place.name).includes(normalize(currentStop.scene)) ||
+          normalize(currentStop.scene).includes(normalize(place.name)),
       })),
     ];
   }
