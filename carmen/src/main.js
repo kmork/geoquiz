@@ -1039,6 +1039,7 @@ function buildWorldCaseCityMapOptions() {
   const scenePois = scene?.pois || null;
   return {
     cityMap: true,
+    contextKey: `world-case::${country}::${scene?.scene || ''}::${scene?.city || ''}::${centerLat.toFixed(4)},${centerLon.toFixed(4)}`,
     country,
     capital: scene?.city || gateway?.capital || cityPoiEntry?.capital || capitalOf[country] || country,
     center: { lat: centerLat, lon: centerLon },

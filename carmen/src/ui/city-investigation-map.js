@@ -130,12 +130,12 @@ export function createCityInvestigationMap(container, locations, options, onPick
   const pinButtons = new Map();
   let scenePin = null;
   let scenePickLocationId = null;
-  let viewport = null;
+  let viewport = options.initialUserViewport ? { ...options.initialUserViewport } : null;
   let initialViewport = null;
   let resizeObserver = null;
   let destroyed = false;
   let redrawQueued = false;
-  let hasUserNavigated = false;
+  let hasUserNavigated = !!options.initialUserViewport;
   let lastSize = { width: 0, height: 0 };
   let dragState = null;
   const activePointers = new Map();
@@ -431,6 +431,13 @@ export function createCityInvestigationMap(container, locations, options, onPick
   requestAnimationFrame(draw);
 
   return {
+    getContextKey() {
+      return options.contextKey || null;
+    },
+    getViewport() {
+      if (!hasUserNavigated || !viewport) return null;
+      return { scrollX: viewport.scrollX, scrollY: viewport.scrollY, zoom: viewport.zoom };
+    },
     setLocationState(locationId, state) {
       const button = pinButtons.get(locationId);
       if (!button) return;

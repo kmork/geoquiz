@@ -1286,6 +1286,10 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     showWorldCaseLocations(sceneActions, onInvestigate, state, options = null) {
+      // Capture the existing city map's pan/zoom so we can restore it after
+      // the rebuild, but only if the underlying scene/location is unchanged.
+      const prevContextKey = cityInvestigationMap?.getContextKey?.() || null;
+      const prevViewport = cityInvestigationMap?.getViewport?.() || null;
       clearCityInvestigationMap();
       this._worldInvestigatedIds = new Set(options?.investigatedIds || []);
       const current = state?.current || {};
@@ -1394,7 +1398,15 @@ export function createCarmenUI(container, flagCodes) {
       if (options?.cityMap && els.cityMapStage) {
         els.rvClues.classList.add('has-city-map');
         els.cityMapStage.style.display = '';
-        cityInvestigationMap = createCityInvestigationMap(els.cityMapStage, mapLocations, options, selectMapLocation);
+        const restoredViewport = options.contextKey && options.contextKey === prevContextKey
+          ? prevViewport
+          : null;
+        cityInvestigationMap = createCityInvestigationMap(
+          els.cityMapStage,
+          mapLocations,
+          { ...options, initialUserViewport: restoredViewport },
+          selectMapLocation
+        );
         for (const locId of this._worldInvestigatedIds) {
           cityInvestigationMap?.setLocationState?.(locId, 'investigated');
         }
