@@ -87,8 +87,17 @@ if (modeParam) setGameMode(modeParam);
 function updateFrontImageForMode(mode = getGameMode()) {
   if (!carmenFrontImg) return;
   const skyline = isSkylineSyndicateMode(mode);
-  carmenFrontImg.src = skyline ? IMG.skylineFront : IMG.carmenFront;
-  carmenFrontImg.alt = skyline ? 'Skyline Syndicate' : 'Where in the World?';
+  const renaissance = isWorldCaseFilesGameMode(mode);
+  if (renaissance) {
+    carmenFrontImg.src = IMG.renaissanceFront;
+    carmenFrontImg.alt = 'The Renaissance Wave';
+  } else if (skyline) {
+    carmenFrontImg.src = IMG.skylineFront;
+    carmenFrontImg.alt = 'Skyline Syndicate';
+  } else {
+    carmenFrontImg.src = IMG.carmenFront;
+    carmenFrontImg.alt = 'Where in the World?';
+  }
 }
 
 // Debug: ?case=N URL param jumps directly to that case on load.
