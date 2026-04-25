@@ -2133,14 +2133,13 @@ export function createCarmenUI(container, flagCodes) {
 
       const emoji = informant ? informant.emoji : (clue.icon || '💬');
       const prefix = informant ? informant.prefix : 'Intel';
-      const scopeLabel = clue.scope === 'capital' ? '📍 capital lead' : '🗺️ country lead';
       els.reveal.innerHTML = `
         <div class="carmen-speech-bubble">
-          <button class="carmen-clue-close-btn" type="button" aria-label="Dismiss clue">✕</button>
+          <button class="carmen-clue-close-btn" type="button" aria-label="Dismiss clue" style="display:none">✕</button>
           <div class="carmen-speech-avatar">${emoji}</div>
           <div class="carmen-speech-body">
             <div class="carmen-speech-name">${esc(prefix)}</div>
-            ${clue.scope ? `<div class="carmen-clue-scope">${scopeLabel}</div>` : ''}
+            ${clue.scope === 'capital' ? `<div class="carmen-clue-scope">📍 capital lead</div>` : ''}
             ${clue.action ? `<div class="carmen-speech-action">${esc(clue.action)}</div>` : ''}
             <div class="carmen-speech-text"></div>
           </div>
@@ -2157,6 +2156,9 @@ export function createCarmenUI(container, flagCodes) {
       // Typewriter the clue text
       const textEl = els.reveal.querySelector('.carmen-speech-text');
       typewriter(textEl, `"${clue.text}"`, 20).then(() => {
+        // Show dismiss button after typewriter completes
+        const closeBtn = els.reveal.querySelector('.carmen-clue-close-btn');
+        if (closeBtn) closeBtn.style.display = '';
         // Visual clue: show "Examine Evidence" button after text completes
         const speechBody = els.reveal.querySelector('.carmen-speech-body');
         if (!speechBody || !clue.data?.visualType) return;
