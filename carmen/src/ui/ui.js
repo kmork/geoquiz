@@ -1905,7 +1905,7 @@ export function createCarmenUI(container, flagCodes) {
         els.briefingArtifact.innerHTML = `
           <div class="carmen-artifact-label">${esc(caseLabel)}</div>
           ${caseTitle ? `<div class="carmen-case-title">${esc(caseTitle)}</div>` : ''}
-          <div class="carmen-artifact-name">${esc(siteName)}</div>
+          ${mode === 'world_case_files' ? '' : `<div class="carmen-artifact-name">${esc(siteName)}</div>`}
           <div class="carmen-artifact-origin">Last seen in ${esc(startCountry)}</div>
         `;
         els.briefingMission.textContent = '';

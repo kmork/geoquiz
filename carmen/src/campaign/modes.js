@@ -118,7 +118,7 @@ export function getRunConfigForMode({
         ? skylineNarrative?.briefing || SKYLINE_SYNDICATE.briefing
         : null,
     briefingNote: worldCaseFiles
-      ? 'Experiment note: there is no hard case clock. Candidate colors show how strongly countries match the collected evidence.'
+      ? null
       : cityOpenCase ? CITY_OPEN_CASE_NARRATIVE.note : skylineNarrative?.note || null,
     closingCopy: worldCaseFiles
       ? { solved: 'The world case file is ready for ACME review.', failed: 'The world case file remains open.' }
