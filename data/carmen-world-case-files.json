@@ -3,11 +3,11 @@
   "cases": [
     {
       "id": "louvre-vanishing",
-      "title": "The Louvre Vanishing",
+      "title": "The Renaissance Wave",
       "artifact": {
-        "siteName": "Mona Lisa",
+        "siteName": "Renaissance Masterworks",
         "country": "France",
-        "hint": "Leonardo da Vinci's portrait vanished from the Louvre with its provenance card, shipping sleeve, and conservation notes.",
+        "hint": "The Mona Lisa vanished from the Louvre, and ACME now believes the thief is advancing through a handpicked list of Renaissance masterpieces.",
         "imageUrl": "carmen/img/mona_lisa_noir_color.png"
       },
       "start": {
@@ -19,9 +19,150 @@
       },
       "suspect": "The Cartographer",
       "pattern": {
-        "label": "Renaissance provenance route",
-        "summary": "The thief is laundering the painting through places tied to Renaissance art, museum catalogues, and old European collection routes."
+        "label": "Renaissance masterworks escalation",
+        "summary": "The thief is moving from one flagship Renaissance work to the next, using chapel plans, museum inventories, and prestige routes to predict where ACME will arrive too late."
       },
+      "solvedText": "ACME reaches Rome in time and catches the thief during the Vatican strike. The Renaissance sequence collapses before the final masterpiece can be taken.",
+      "works": [
+        {
+          "id": "mona-lisa",
+          "title": "Mona Lisa",
+          "artist": "Leonardo da Vinci",
+          "institution": "Louvre Museum",
+          "city": "Paris",
+          "country": "France",
+          "description": "A small, high-profile portrait whose layered glazing, landscape background, and subtle facial modeling make it ideal for forgery-detail play.",
+          "imagePath": "carmen/img/renaissance/mona-lisa-reference.png",
+          "imageReady": true,
+          "imagePrompt": "Create a museum-realistic, high-fidelity reference image inspired by Leonardo da Vinci's Mona Lisa as seen in the Louvre: frontal portrait, half-length seated figure, subtle sfumato facial modeling, folded hands, muted atmospheric landscape background, faithful Renaissance color balance, clear surface detail, no frame, no visitors, clean archival presentation.",
+          "evidenceImages": [
+            {
+              "id": "mona-lisa-label-authentic",
+              "title": "Authentic Louvre label",
+              "imagePath": "carmen/img/renaissance/mona-lisa-label-authentic.png",
+              "imagePurpose": "museum_label",
+              "imagePrompt": "Create a realistic museum label card for the Mona Lisa at the Louvre, photographed straight-on under warm gallery light. Use elegant French museum typography, accession number styling, artist line 'Leonardo da Vinci', title 'Mona Lisa', location 'Louvre Museum, Paris', cream paper, slight wear, highly believable but generic enough to be fictionalized for a detective game.",
+              "imageNotes": "Use this as the authentic comparison label."
+            },
+            {
+              "id": "mona-lisa-detail-crop",
+              "title": "Mona Lisa hand detail",
+              "imagePath": "carmen/img/renaissance/mona-lisa-detail-hands.png",
+              "imagePurpose": "detail_crop",
+              "imagePrompt": "Create a high-fidelity museum restoration-style close-up crop inspired by the Mona Lisa's folded hands and sleeve area. Neutral conservation lighting, visible craquelure, subtle oil glaze texture, no frame, no labels, true-to-painting color and tone.",
+              "imageNotes": "Use for a later detail-comparison puzzle."
+            }
+          ]
+        },
+        {
+          "id": "last-supper",
+          "title": "The Last Supper",
+          "artist": "Leonardo da Vinci",
+          "institution": "Santa Maria delle Grazie",
+          "city": "Milan",
+          "country": "Italy",
+          "description": "A monumental refectory mural built around perspective, gesture, and table rhythm, ideal for sequence and detail-forgery scenes.",
+          "imageReady": false,
+          "imagePath": "carmen/img/renaissance/last-supper-reference.png",
+          "imagePrompt": "Create a high-fidelity, museum-realistic reference image inspired by Leonardo da Vinci's The Last Supper in Santa Maria delle Grazie: wide horizontal composition, Christ centered, apostles reacting in grouped gestures, strong one-point perspective, muted worn mural surface, faithful Renaissance palette, conservation-grade clarity, no tourists, no frame."
+        },
+        {
+          "id": "birth-of-venus",
+          "title": "Birth of Venus",
+          "artist": "Sandro Botticelli",
+          "institution": "Uffizi Gallery",
+          "city": "Florence",
+          "country": "Italy",
+          "description": "An iconic mythological panel defined by flowing hair, shell, shoreline wind figures, and decorative linear rhythm.",
+          "imageReady": false,
+          "imagePath": "carmen/img/renaissance/birth-of-venus-reference.png",
+          "imagePrompt": "Create a museum-realistic, high-fidelity reference image inspired by Botticelli's Birth of Venus: Venus on a shell, wind figures at left, attendant with cloak at right, pale sea and shoreline, linear Florentine elegance, clear tempera-like surface, true composition, no frame, no visitors."
+        },
+        {
+          "id": "primavera",
+          "title": "Primavera",
+          "artist": "Sandro Botticelli",
+          "institution": "Uffizi Gallery",
+          "city": "Florence",
+          "country": "Italy",
+          "description": "A dense spring allegory with multiple figures and botanical richness, useful for iconography mismatch clues.",
+          "imageReady": false,
+          "imagePath": "carmen/img/renaissance/primavera-reference.png",
+          "imagePrompt": "Create a high-fidelity museum reference image inspired by Botticelli's Primavera: Venus centered, Mercury at left, Graces, Flora, Zephyrus and Chloris, dense orange grove background, intricate garment detail, true Renaissance composition, no frame, evenly lit."
+        },
+        {
+          "id": "venus-of-urbino",
+          "title": "Venus of Urbino",
+          "artist": "Titian",
+          "institution": "Uffizi Gallery",
+          "city": "Florence",
+          "country": "Italy",
+          "description": "A reclining nude with interior setting, rich color, and domestic background detail suitable for label and detail comparison.",
+          "imageReady": false,
+          "imagePath": "carmen/img/renaissance/venus-of-urbino-reference.png",
+          "imagePrompt": "Create a museum-realistic reference image inspired by Titian's Venus of Urbino: reclining nude on a couch, interior with attendants in background, rich Venetian color, soft flesh modeling, clear textile detail, high fidelity to the original composition, no frame."
+        },
+        {
+          "id": "school-of-athens",
+          "title": "School of Athens",
+          "artist": "Raphael",
+          "institution": "Vatican Museums",
+          "city": "Rome",
+          "country": "Italy",
+          "description": "A monumental fresco of philosophers in architectural perspective, suited to perspective and figure-placement clues.",
+          "imageReady": false,
+          "imagePath": "carmen/img/renaissance/school-of-athens-reference.png",
+          "imagePrompt": "Create a high-fidelity museum reference image inspired by Raphael's School of Athens: grand architectural hall, Plato and Aristotle centered, philosophers arranged in groups, balanced fresco color, crisp perspective lines, faithful composition, no visitors, no frame."
+        },
+        {
+          "id": "creation-of-adam",
+          "title": "Creation of Adam",
+          "artist": "Michelangelo",
+          "institution": "Sistine Chapel",
+          "city": "Rome",
+          "country": "Italy",
+          "description": "A famous ceiling detail defined by nearly touching hands, anatomy, and charged negative space.",
+          "imageReady": false,
+          "imagePath": "carmen/img/renaissance/creation-of-adam-reference.png",
+          "imagePrompt": "Create a museum-realistic, high-fidelity reference image inspired by Michelangelo's Creation of Adam: the iconic near-touching hands, reclining Adam, dynamic God figure with drapery, fresco surface texture, chapel-light neutrality, faithful composition, no added elements."
+        },
+        {
+          "id": "sistine-chapel-ceiling",
+          "title": "Sistine Chapel Ceiling",
+          "artist": "Michelangelo",
+          "institution": "Sistine Chapel",
+          "city": "Rome",
+          "country": "Italy",
+          "description": "A complex fresco program ideal for ceiling-layout and sightline-based scene evidence.",
+          "imageReady": false,
+          "imagePath": "carmen/img/renaissance/sistine-ceiling-reference.png",
+          "imagePrompt": "Create a high-fidelity reference view inspired by the Sistine Chapel ceiling: broad ceiling vista, multiple fresco panels, architectural framing, readable central scenes, museum-realistic fresco wear, neutral conservation lighting, no tourists."
+        },
+        {
+          "id": "last-judgment",
+          "title": "The Last Judgment",
+          "artist": "Michelangelo",
+          "institution": "Sistine Chapel",
+          "city": "Rome",
+          "country": "Italy",
+          "description": "A dense altar-wall fresco whose figure grouping and motion support forgery and archive comparison play.",
+          "imageReady": false,
+          "imagePath": "carmen/img/renaissance/last-judgment-reference.png",
+          "imagePrompt": "Create a museum-realistic reference image inspired by Michelangelo's Last Judgment: large altar-wall fresco, swirling figure masses, central Christ, layered blue and flesh tones, conservation-grade detail, faithful composition, no modern visitors."
+        },
+        {
+          "id": "ghent-altarpiece",
+          "title": "Ghent Altarpiece",
+          "artist": "Hubert and Jan van Eyck",
+          "institution": "Saint Bavo Cathedral",
+          "city": "Ghent",
+          "country": "Belgium",
+          "description": "A multipart devotional work suited to panel-order, hinge, and lamb-iconography forgery scenes.",
+          "imageReady": false,
+          "imagePath": "carmen/img/renaissance/ghent-altarpiece-reference.png",
+          "imagePrompt": "Create a high-fidelity museum reference image inspired by the Ghent Altarpiece open view: multi-panel arrangement, central Adoration of the Mystic Lamb, rich Northern Renaissance detail, jewel-toned color, crisp panel edges, believable cathedral presentation without visitors."
+        }
+      ],
       "route": [
         {
           "country": "France",
@@ -29,257 +170,776 @@
           "scene": "Louvre",
           "lat": 48.861111111111114,
           "lon": 2.3358333333333334,
-          "biographyStage": "Display",
-          "learningGoal": "Understand the Mona Lisa as a Louvre icon and a French royal-to-national museum object.",
-          "thiefClaim": "The Louvre is only the final holder, so its claim is shallow.",
-          "truthComplication": "French collection history is part of the painting's biography, even though Leonardo painted it in Italy."
+          "biographyStage": "Opening theft",
+          "chapterTitle": "Paris opening file",
+          "chapterSummary": "The case begins at the Louvre, where the Mona Lisa is gone and the remaining evidence points toward a broader Renaissance strike list rather than a single-object escape.",
+          "learningGoal": "Frame the case as an escalating masterpiece hunt instead of a single provenance dispute.",
+          "thiefClaim": "The first theft is only the opening note in a cleaner Renaissance canon.",
+          "truthComplication": "These works live in different cities and institutions for different historical reasons; the thief is flattening them into one prestige route.",
+          "localScenes": [
+            {
+              "id": "paris-opening",
+              "sceneType": "crime_scene",
+              "title": "The Louvre breach",
+              "city": "Paris",
+              "country": "France",
+              "scene": "Louvre theft scene",
+              "lat": 48.861111111111114,
+              "lon": 2.3358333333333334,
+              "biographyStage": "Opening theft",
+              "learningGoal": "Read the theft as the first move in a larger Renaissance circuit.",
+              "thiefClaim": "The thief wants the Louvre theft to feel like a return to a purer Italian story.",
+              "truthComplication": "The evidence says the next move is not about one painting's origin but about fame, prestige, and sequence.",
+              "focusWorks": ["Mona Lisa"],
+              "threatenedWorks": ["The Last Supper", "Birth of Venus", "Primavera", "Creation of Adam"],
+              "stolenWorks": ["Mona Lisa"],
+              "escalationText": "ACME suspects the thief chose the Mona Lisa first because every later strike will read like a deliberate climb through Renaissance fame.",
+              "investigationPrompt": "Inspect the breach, compare the museum paperwork, and identify which Italian art centers the thief staged into the opening file.",
+              "requirePuzzle": true,
+              "minimumEvidence": 4,
+              "customLocations": [
+                {
+                  "id": "night-porter",
+                  "emoji": "🕴️",
+                  "name": "Night Porter",
+                  "type": "human-lead",
+                  "prefix": "The night porter admits",
+                  "description": "A shaken Louvre porter who saw the thief's staging materials before the alarm was silenced.",
+                  "lat": 48.8607,
+                  "lon": 2.3349
+                },
+                {
+                  "id": "dispatch-ledger",
+                  "emoji": "🧩",
+                  "name": "Dispatch Ledger",
+                  "prefix": "A seized dispatch sheet shows",
+                  "description": "A coded museum-routing puzzle left beside the stolen frame.",
+                  "lat": 48.8619,
+                  "lon": 2.3382
+                }
+              ],
+              "pois": {
+                "dispatch-ledger": {
+                  "name": "Louvre dispatch desk",
+                  "lat": 48.8619,
+                  "lon": 2.3382,
+                  "confidence": "scene-fallback"
+                }
+              },
+              "evidenceImages": [
+                {
+                  "id": "paris-breach-photo",
+                  "title": "Louvre breach photo",
+                  "imagePath": "carmen/img/renaissance/paris-louvre-breach-photo.png",
+                  "imagePurpose": "crime_scene_photo",
+                  "imagePrompt": "Create a detective-noir but museum-realistic crime scene photo inside a Louvre-style gallery after the theft of the Mona Lisa: empty hanging area or secured empty display zone, evidence tags, subtle police tape, warm museum walls, low dramatic lighting around the room but clear readable evidence, no bodies, no sensationalism.",
+                  "imageNotes": "Use as the opening crime-scene visual."
+                },
+                {
+                  "id": "paris-dispatch-ledger",
+                  "title": "Forged dispatch ledger",
+                  "imagePath": "carmen/img/renaissance/paris-dispatch-ledger.png",
+                  "imagePurpose": "archive_card",
+                  "imagePrompt": "Create a close tabletop evidence photo of a forged museum dispatch ledger on cream archival paper, handwritten route notes, coded references to Milan, Florence, and Rome, wax-pencil circles, paper wear, detective-noir evidence-table mood, but crisp and readable enough for gameplay.",
+                  "imageNotes": "Use for the Paris route puzzle."
+                }
+              ],
+              "clues": [
+                {
+                  "id": "rw-paris-airport-italy",
+                  "locationId": "airport",
+                  "category": "Route Evidence",
+                  "action": "Inspect private cargo itinerary",
+                  "title": "Italian split route",
+                  "text": "The outbound sleeve was split across three Italian art codes: Milan, Florence, and Rome. No northern hub or Iberian transfer was listed.",
+                  "tags": ["country:Italy", "city:Milan", "city:Florence", "city:Rome", "exclude:Spain", "exclude:Belgium"],
+                  "strength": 3
+                },
+                {
+                  "id": "rw-paris-library-canon",
+                  "locationId": "library",
+                  "category": "Cultural Evidence",
+                  "action": "Read curator margin notes",
+                  "title": "Canonical short list",
+                  "text": "The missing catalogue card was clipped to a reading list of Leonardo, Botticelli, Raphael, and Michelangelo. ACME reads it as a Renaissance greatest-hits plan centered on Italy.",
+                  "tags": ["country:Italy", "culture:Renaissance", "city:Florence", "city:Rome", "city:Milan"],
+                  "strength": 4
+                },
+                {
+                  "id": "rw-paris-embassy-confirm",
+                  "locationId": "embassy",
+                  "category": "Confirmation",
+                  "action": "Verify emergency customs rider",
+                  "title": "Italian insurance rider",
+                  "text": "An emergency insurance rider excludes Belgium, Spain, and the Netherlands and instead references protected ecclesiastical and museum holdings in Italy.",
+                  "tags": ["country:Italy", "exclude:Belgium", "exclude:Spain", "exclude:Netherlands", "confirmation"],
+                  "strength": 4
+                },
+                {
+                  "id": "rw-paris-human-lead",
+                  "locationId": "night-porter",
+                  "category": "Route Evidence",
+                  "action": "Question the night porter",
+                  "title": "Three rail tickets",
+                  "text": "The porter remembers three clipped Italian rail stubs on the thief's desk mock-up. He is sure one named Milan and another named Firenze.",
+                  "tags": ["country:Italy", "city:Milan", "city:Florence"],
+                  "strength": 3
+                },
+                {
+                  "id": "rw-paris-puzzle-ledger",
+                  "locationId": "dispatch-ledger",
+                  "category": "Puzzle Evidence",
+                  "action": "Solve routing cipher",
+                  "title": "Three-city cipher",
+                  "text": "The coded ledger resolves into three Italian anchor words: refectory, gallery, chapel. The thief expects the next chapter to unfold inside Italy before the trail crosses north.",
+                  "tags": ["country:Italy", "city:Milan", "city:Florence", "city:Rome"],
+                  "strength": 4
+                }
+              ]
+            }
+          ]
         },
         {
           "country": "Italy",
-          "city": "Florence",
-          "scene": "Uffizi archive",
-          "lat": 43.76833333333333,
-          "lon": 11.255277777777778,
-          "biographyStage": "Origin",
-          "learningGoal": "Connect Leonardo, Renaissance workshop culture, and Florence to the portrait's creation context.",
-          "thiefClaim": "Florence proves the painting has one rightful cultural home.",
-          "truthComplication": "Origin explains creation, but not the whole later life of the object."
+          "city": "Milan",
+          "scene": "Italian museum trail",
+          "lat": 45.4642,
+          "lon": 9.19,
+          "biographyStage": "Italian chapter",
+          "chapterTitle": "Italy under pressure",
+          "chapterSummary": "ACME follows the thief through three Italian art centers: Milan, Florence, and Rome. Each scene reveals another threatened masterpiece and another piece of the route north.",
+          "localTravelStyle": "rail",
+          "localTrailLabel": "Italian museum line",
+          "learningGoal": "Use multiple Italian art hubs to prove the thief is staging a Renaissance sequence rather than a single return.",
+          "thiefClaim": "Italy is being used as the moral center of the route, as if every later move can be justified by beginning here.",
+          "truthComplication": "The thief is exploiting Italy's symbolic weight, not proving a clean destination.",
+          "localScenes": [
+            {
+              "id": "italy-milan",
+              "sceneType": "painting_exam",
+              "title": "Milan refectory alarm",
+              "city": "Milan",
+              "country": "Italy",
+              "scene": "Santa Maria delle Grazie watch room",
+              "lat": 45.4658,
+              "lon": 9.1706,
+              "biographyStage": "Close miss",
+              "learningGoal": "Establish that the thief is targeting named masterworks in sequence, not merely moving one stolen painting.",
+              "thiefClaim": "The Last Supper belongs on the same canonical trail as the Mona Lisa, so the route must continue through elite devotional works.",
+              "truthComplication": "The target list is about fame and sequence, not legal or historical destiny.",
+              "focusWorks": ["The Last Supper"],
+              "threatenedWorks": ["The Last Supper", "Birth of Venus", "Primavera"],
+              "stolenWorks": ["Mona Lisa"],
+              "escalationText": "ACME reaches Milan before the strike lands, but the thief leaves enough staging material to prove the route is still moving.",
+              "investigationPrompt": "Compare the refectory evidence, question the local night lead, and decide whether the Milan staging points north to Ghent or back toward another Italian stop.",
+              "requirePuzzle": true,
+              "minimumEvidence": 4,
+              "customLocations": [
+                {
+                  "id": "refectory-caretaker",
+                  "emoji": "🗣️",
+                  "name": "Refectory Caretaker",
+                  "type": "human-lead",
+                  "prefix": "The caretaker insists",
+                  "description": "The night caretaker saw the thief measure distances across the mural wall before disappearing.",
+                  "lat": 45.4653,
+                  "lon": 9.1711
+                },
+                {
+                  "id": "refectory-grid",
+                  "emoji": "🧩",
+                  "name": "Refectory Grid",
+                  "prefix": "A penciled seating grid implies",
+                  "description": "A puzzle sheet matching meal-table positions to later destinations.",
+                  "lat": 45.4662,
+                  "lon": 9.1715
+                }
+              ],
+              "pois": {
+                "refectory-grid": {
+                  "name": "Refectory security desk",
+                  "lat": 45.4662,
+                  "lon": 9.1715,
+                  "confidence": "scene-fallback"
+                }
+              },
+              "evidenceImages": [
+                {
+                  "id": "milan-refectory-photo",
+                  "title": "Watch room evidence photo",
+                  "imagePath": "carmen/img/renaissance/milan-refectory-watch-room.png",
+                  "imagePurpose": "crime_scene_photo",
+                  "imagePrompt": "Create a realistic detective evidence photo inside a Renaissance convent watch room near The Last Supper: guard desk, route notes, conservation gloves, measuring tape, and a partial refectory floor sketch. Noir mood around the edges, but objects bright and readable.",
+                  "imageNotes": "Supports Milan scene framing."
+                },
+                {
+                  "id": "last-supper-detail-compare",
+                  "title": "Last Supper table-detail crop",
+                  "imagePath": "carmen/img/renaissance/last-supper-table-detail.png",
+                  "imagePurpose": "detail_crop",
+                  "imagePrompt": "Create a high-fidelity close-up crop inspired by The Last Supper focusing on table edge, hands, bread, and drapery rhythm. Conservation-light neutrality, visible mural wear, sharp enough for a forgery-detection comparison.",
+                  "imageNotes": "Use for Milan painting-detail play."
+                }
+              ],
+              "clues": [
+                {
+                  "id": "rw-milan-airport-flanders",
+                  "locationId": "airport",
+                  "category": "Route Evidence",
+                  "action": "Check courier redirection",
+                  "title": "Northbound freight swap",
+                  "text": "The same courier number that shadowed the Louvre theft now points north from Italy toward Flanders rather than back toward France or down toward Spain.",
+                  "tags": ["country:Belgium", "city:Ghent", "exclude:France", "exclude:Spain"],
+                  "strength": 3
+                },
+                {
+                  "id": "rw-milan-library-altarpiece",
+                  "locationId": "library",
+                  "category": "Cultural Evidence",
+                  "action": "Read chapel comparison notes",
+                  "title": "Panel-to-mural contrast",
+                  "text": "The comparison notes jump from Leonardo's wall painting to a multi-panel devotional work in Flanders, suggesting the thief is escalating across landmark Christian image programs.",
+                  "tags": ["country:Belgium", "city:Ghent", "culture:Flemish"],
+                  "strength": 4
+                },
+                {
+                  "id": "rw-milan-embassy-border-check",
+                  "locationId": "embassy",
+                  "category": "Confirmation",
+                  "action": "Verify customs escort request",
+                  "title": "Flanders clearance",
+                  "text": "A forged escort request cites Belgium specifically and rules out Amsterdam. ACME flags Ghent as the cleanest match.",
+                  "tags": ["country:Belgium", "city:Ghent", "exclude:Netherlands", "confirmation"],
+                  "strength": 4
+                },
+                {
+                  "id": "rw-milan-human-lead",
+                  "locationId": "refectory-caretaker",
+                  "category": "Route Evidence",
+                  "action": "Question the caretaker",
+                  "title": "Rail timetable memory",
+                  "text": "The caretaker remembers the thief muttering about making the morning line north before Florence woke up. He swears the route note used the word Flanders.",
+                  "tags": ["country:Belgium", "culture:Flemish"],
+                  "strength": 3
+                },
+                {
+                  "id": "rw-milan-puzzle-grid",
+                  "locationId": "refectory-grid",
+                  "category": "Puzzle Evidence",
+                  "action": "Rebuild the sequence puzzle",
+                  "title": "Meal to altarpiece chain",
+                  "text": "The solved grid links supper, spring, chapel, and lamb to a northbound sequence. The only non-Italian stop on the page is Ghent.",
+                  "tags": ["country:Belgium", "city:Ghent"],
+                  "strength": 4
+                }
+              ]
+            },
+            {
+              "id": "italy-florence",
+              "sceneType": "archive",
+              "title": "Florentine double scare",
+              "city": "Florence",
+              "country": "Italy",
+              "scene": "Uffizi reserve corridor",
+              "lat": 43.76833333333333,
+              "lon": 11.255277777777778,
+              "biographyStage": "Escalation",
+              "learningGoal": "Show the thief clustering Botticelli and Titian into the same prestige route while still pointing the case north.",
+              "thiefClaim": "If Florence can be made to look like the route's emotional center, every later move will seem like a curated continuation.",
+              "truthComplication": "The thief is composing an exhibition fantasy, not a real historical chain.",
+              "focusWorks": ["Birth of Venus", "Primavera", "Venus of Urbino"],
+              "threatenedWorks": ["Birth of Venus", "Primavera", "Venus of Urbino"],
+              "stolenWorks": ["Mona Lisa", "Primavera"],
+              "escalationText": "ACME learns that one Florentine reserve swap already happened overnight, proving the thief can still land secondary strikes while moving onward.",
+              "investigationPrompt": "Cross-check the reserve rehanging plan, the altered packing relabel, and the local archive notes to see which Florentine work was used to disguise the Ghent pivot.",
+              "requirePuzzle": true,
+              "minimumEvidence": 4,
+              "customLocations": [
+                {
+                  "id": "botticelli-hang",
+                  "emoji": "🧩",
+                  "name": "Botticelli Hang Plan",
+                  "prefix": "A rehanging sketch suggests",
+                  "description": "A mislabeled gallery plan with arrows between figure groups and destinations.",
+                  "lat": 43.7689,
+                  "lon": 11.2564
+                }
+              ],
+              "pois": {
+                "botticelli-hang": {
+                  "name": "Uffizi reserve desk",
+                  "lat": 43.7689,
+                  "lon": 11.2564,
+                  "confidence": "scene-fallback"
+                }
+              },
+              "evidenceImages": [
+                {
+                  "id": "florence-hang-plan",
+                  "title": "Florentine rehanging sketch",
+                  "imagePath": "carmen/img/renaissance/florence-rehanging-sketch.png",
+                  "imagePurpose": "archive_card",
+                  "imagePrompt": "Create a realistic archive evidence photo of a Florence gallery rehanging sketch on cream paper, pencil arrows between Botticelli and Titian works, one museum stamp partly scratched away, elegant but readable handwriting, detective-noir evidence-table styling with high readability.",
+                  "imageNotes": "Use as Florence archive evidence."
+                }
+              ],
+              "clues": [
+                {
+                  "id": "rw-florence-hotel-ghent",
+                  "locationId": "hotel",
+                  "category": "Route Evidence",
+                  "action": "Interview overnight courier clerk",
+                  "title": "North Sea booking",
+                  "text": "The courier asked for a route toward a cathedral city in Belgium, not another Italian museum night watch.",
+                  "tags": ["country:Belgium", "city:Ghent"],
+                  "strength": 3
+                },
+                {
+                  "id": "rw-florence-market-lamb",
+                  "locationId": "market",
+                  "category": "Cultural Evidence",
+                  "action": "Read packing relabel",
+                  "title": "Adoration relabel",
+                  "text": "The relabel swaps pagan spring imagery for a lamb-and-panel inventory reference. ACME reads it as a pivot from Botticelli to the Ghent Altarpiece.",
+                  "tags": ["country:Belgium", "city:Ghent", "culture:Flemish"],
+                  "strength": 4
+                },
+                {
+                  "id": "rw-florence-embassy-confirm",
+                  "locationId": "embassy",
+                  "category": "Confirmation",
+                  "action": "Check diplomatic courier request",
+                  "title": "Belgian courier line",
+                  "text": "The forged request names a Belgian restoration contact and excludes France as the immediate next stop.",
+                  "tags": ["country:Belgium", "exclude:France", "confirmation"],
+                  "strength": 3
+                },
+                {
+                  "id": "rw-florence-puzzle-hang",
+                  "locationId": "botticelli-hang",
+                  "category": "Puzzle Evidence",
+                  "action": "Match the gallery arrows",
+                  "title": "Figure-group sequence",
+                  "text": "When the arrows are matched correctly, the final label reads GENT. The thief is spelling Ghent with one letter dropped in the draft.",
+                  "tags": ["country:Belgium", "city:Ghent"],
+                  "strength": 4
+                }
+              ]
+            },
+            {
+              "id": "italy-rome",
+              "sceneType": "archive",
+              "title": "Vatican pre-strike trail",
+              "city": "Rome",
+              "country": "Italy",
+              "scene": "Vatican Museums incident room",
+              "lat": 41.9065,
+              "lon": 12.4536,
+              "biographyStage": "Pattern lock",
+              "learningGoal": "Use the Vatican cluster to confirm the thief's sequencing logic and prove the next country beyond Italy.",
+              "thiefClaim": "By touching Raphael and Michelangelo, the thief can claim the route now holds the entire high canon together.",
+              "truthComplication": "The pattern is theatrical curation, not evidence of rightful belonging.",
+              "focusWorks": ["School of Athens", "Creation of Adam", "Sistine Chapel Ceiling", "The Last Judgment"],
+              "threatenedWorks": ["School of Athens", "Creation of Adam", "Sistine Chapel Ceiling", "The Last Judgment"],
+              "stolenWorks": ["Mona Lisa", "Primavera"],
+              "escalationText": "Rome confirms the pattern: the thief is not lingering in Italy. The next strike is already staged in Ghent.",
+              "investigationPrompt": "Read the chapel-access fraud, compare the iconography notes, and use the Vatican layout to prove whether the thief is heading north or doubling back.",
+              "requirePuzzle": true,
+              "minimumEvidence": 4,
+              "customLocations": [
+                {
+                  "id": "chapel-layout",
+                  "emoji": "🧩",
+                  "name": "Chapel Layout",
+                  "prefix": "A marked chapel plan reveals",
+                  "description": "A floor-plan puzzle with numbered vantage points and a final red arrow.",
+                  "lat": 41.9029,
+                  "lon": 12.4545
+                }
+              ],
+              "pois": {
+                "chapel-layout": {
+                  "name": "Vatican incident table",
+                  "lat": 41.9029,
+                  "lon": 12.4545,
+                  "confidence": "scene-fallback"
+                }
+              },
+              "evidenceImages": [
+                {
+                  "id": "rome-vatican-layout",
+                  "title": "Vatican layout board",
+                  "imagePath": "carmen/img/renaissance/rome-vatican-layout-board.png",
+                  "imagePurpose": "archive_card",
+                  "imagePrompt": "Create a realistic detective evidence-board image showing a Vatican Museums floor plan and chapel access sheet pinned together, red pencil route marks, stamped access credentials, and one circled note reading LAMB. Noir frame, but every line and note remains clear and readable.",
+                  "imageNotes": "Supports Rome layout puzzle."
+                }
+              ],
+              "clues": [
+                {
+                  "id": "rw-rome-airport-ghent",
+                  "locationId": "airport",
+                  "category": "Route Evidence",
+                  "action": "Inspect charter sleeve",
+                  "title": "Direct to Flanders",
+                  "text": "The charter sleeve drops every remaining Italian code and goes straight to Belgium, toward a city whose cathedral cargo access was mapped in advance.",
+                  "tags": ["country:Belgium", "city:Ghent"],
+                  "strength": 3
+                },
+                {
+                  "id": "rw-rome-library-flemish",
+                  "locationId": "library",
+                  "category": "Cultural Evidence",
+                  "action": "Read iconography cross-reference",
+                  "title": "Flemish devotional pivot",
+                  "text": "The iconography notes pivot from fresco cycles to a famed Flemish altarpiece with hinged panels and a central lamb scene.",
+                  "tags": ["country:Belgium", "city:Ghent", "culture:Flemish"],
+                  "strength": 4
+                },
+                {
+                  "id": "rw-rome-embassy-ghent-confirm",
+                  "locationId": "embassy",
+                  "category": "Confirmation",
+                  "action": "Verify courier immunity claim",
+                  "title": "Ghent warrant line",
+                  "text": "The immunity claim is forged, but the destination line is clear: Ghent. ACME has enough for a Belgian warning cable.",
+                  "tags": ["country:Belgium", "city:Ghent", "confirmation"],
+                  "strength": 4
+                },
+                {
+                  "id": "rw-rome-puzzle-layout",
+                  "locationId": "chapel-layout",
+                  "category": "Puzzle Evidence",
+                  "action": "Solve the chapel sightline puzzle",
+                  "title": "North-pointing final arrow",
+                  "text": "The final sightline lands on a note reading LAMB. It is the thief's shorthand for the Ghent Altarpiece.",
+                  "tags": ["country:Belgium", "city:Ghent"],
+                  "strength": 4
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "country": "Belgium",
+          "city": "Ghent",
+          "scene": "St Bavo's Cathedral",
+          "lat": 51.0536,
+          "lon": 3.7253,
+          "biographyStage": "Northern pivot",
+          "chapterTitle": "Ghent crisis",
+          "chapterSummary": "The Ghent chapter proves the thief can switch from Italian icons to Flemish prestige, then pivot the route back into Paris through forged comparative scholarship.",
+          "learningGoal": "Connect the Ghent Altarpiece to the same prestige-route logic while exposing a later Paris forgery move.",
+          "thiefClaim": "The Ghent stop lets the thief claim the route now speaks for all of Northern and Southern Renaissance greatness.",
+          "truthComplication": "The route is becoming more artificial as it grows, not more historically truthful.",
+          "localScenes": [
+            {
+              "id": "ghent-cathedral",
+              "sceneType": "archive",
+              "title": "Altarpiece night watch",
+              "city": "Ghent",
+              "country": "Belgium",
+              "scene": "St Bavo's Cathedral side archive",
+              "lat": 51.0536,
+              "lon": 3.7253,
+              "biographyStage": "Northern pivot",
+              "learningGoal": "Show the jump from Italy to Ghent as a prestige move and reveal the forged Paris comparison archive.",
+              "thiefClaim": "The altarpiece makes Ghent the rightful northern anchor of the route.",
+              "truthComplication": "The thief still needs Parisian paperwork to make the route sound authoritative.",
+              "focusWorks": ["Ghent Altarpiece"],
+              "threatenedWorks": ["Ghent Altarpiece"],
+              "stolenWorks": ["Mona Lisa", "Primavera", "Ghent Altarpiece panel notes"],
+              "escalationText": "Ghent proves the thief can still strike while moving. The next move now looks like a forged scholarly return to Paris.",
+              "investigationPrompt": "Use the hinge diagram, the cathedral archive, and the local conservator's testimony to prove why the thief needs Paris before the final strike.",
+              "requirePuzzle": true,
+              "minimumEvidence": 4,
+              "customLocations": [
+                {
+                  "id": "cathedral-conservator",
+                  "emoji": "🧑‍🔬",
+                  "name": "Cathedral Conservator",
+                  "type": "human-lead",
+                  "prefix": "The conservator explains",
+                  "description": "A conservator caught a false panel note and can describe what the thief needed from the cathedral archive.",
+                  "lat": 51.0534,
+                  "lon": 3.7259
+                },
+                {
+                  "id": "panel-hinge",
+                  "emoji": "🧩",
+                  "name": "Panel Hinge Diagram",
+                  "prefix": "A hinge diagram indicates",
+                  "description": "A reconstruction puzzle matching panel wings to archive destinations.",
+                  "lat": 51.0531,
+                  "lon": 3.7262
+                }
+              ],
+              "pois": {
+                "panel-hinge": {
+                  "name": "Cathedral conservation desk",
+                  "lat": 51.0531,
+                  "lon": 3.7262,
+                  "confidence": "scene-fallback"
+                }
+              },
+              "evidenceImages": [
+                {
+                  "id": "ghent-hinge-photo",
+                  "title": "Altarpiece hinge evidence",
+                  "imagePath": "carmen/img/renaissance/ghent-hinge-evidence.png",
+                  "imagePurpose": "restoration_photo",
+                  "imagePrompt": "Create a museum-realistic conservation evidence photo showing a Ghent Altarpiece hinge diagram, panel edge notes, and restoration annotations on a worktable. Northern Renaissance archival atmosphere, detective-noir framing around the edges, but the diagram and notes must remain crisp and readable.",
+                  "imageNotes": "Supports the Ghent panel-order puzzle."
+                }
+              ],
+              "clues": [
+                {
+                  "id": "rw-ghent-airport-paris",
+                  "locationId": "airport",
+                  "category": "Route Evidence",
+                  "action": "Inspect courier transfer",
+                  "title": "Return to Paris",
+                  "text": "The courier path heads for Paris, not for Rome or Madrid. ACME reads it as a paperwork move rather than another immediate chapel strike.",
+                  "tags": ["country:France", "city:Paris", "exclude:Italy", "exclude:Spain"],
+                  "strength": 3
+                },
+                {
+                  "id": "rw-ghent-library-louvre",
+                  "locationId": "library",
+                  "category": "Cultural Evidence",
+                  "action": "Read comparison request",
+                  "title": "Louvre comparison file",
+                  "text": "A comparison request pairs the altarpiece with Louvre records and French-language scholarship. The thief wants Parisian authority for the next fake narrative jump.",
+                  "tags": ["country:France", "city:Paris", "culture:museum"],
+                  "strength": 4
+                },
+                {
+                  "id": "rw-ghent-embassy-confirm",
+                  "locationId": "embassy",
+                  "category": "Confirmation",
+                  "action": "Check insurance reroute",
+                  "title": "French archive destination",
+                  "text": "The reroute paperwork names Paris directly and excludes Brussels as a long stop. ACME marks the Louvre archive as the likely next scene.",
+                  "tags": ["country:France", "city:Paris", "confirmation"],
+                  "strength": 4
+                },
+                {
+                  "id": "rw-ghent-human-lead",
+                  "locationId": "cathedral-conservator",
+                  "category": "Cultural Evidence",
+                  "action": "Question the conservator",
+                  "title": "French comparison request",
+                  "text": "The conservator says the thief was obsessed with how Paris would read the altarpiece beside the Mona Lisa file, as if French authority still had to bless the route.",
+                  "tags": ["country:France", "city:Paris", "culture:museum"],
+                  "strength": 3
+                },
+                {
+                  "id": "rw-ghent-puzzle-hinge",
+                  "locationId": "panel-hinge",
+                  "category": "Puzzle Evidence",
+                  "action": "Reassemble the hinge diagram",
+                  "title": "French reading order",
+                  "text": "When the panels are folded in the correct order, the marginal letters spell PARIS. The thief wants the route validated there before the final strike.",
+                  "tags": ["country:France", "city:Paris"],
+                  "strength": 4
+                }
+              ]
+            }
+          ]
         },
         {
           "country": "France",
-          "city": "Amboise",
-          "scene": "Clos Lucé royal papers",
-          "lat": 47.4123,
-          "lon": 0.9829,
-          "biographyStage": "Transfer",
-          "learningGoal": "Show how Leonardo's last years in France and French royal collecting became part of the painting's life story.",
-          "thiefClaim": "The move into French royal hands was just the first mistake in the provenance chain.",
-          "truthComplication": "Court transfer changed the object's history permanently; later custody is not noise to erase."
+          "city": "Paris",
+          "scene": "Louvre archive return",
+          "lat": 48.861111111111114,
+          "lon": 2.3358333333333334,
+          "biographyStage": "Forgery return",
+          "chapterTitle": "Paris return file",
+          "chapterSummary": "Back in Paris, ACME discovers the thief is using Louvre authority to stage one final Vatican strike. The route is not ending in France; Paris is the validation desk.",
+          "learningGoal": "Expose Paris as the forgery hub rather than the route's conclusion.",
+          "thiefClaim": "If Paris signs off on the comparison chain, the final Vatican move will look intellectually inevitable.",
+          "truthComplication": "Prestige scholarship can be cited, but it cannot launder a crime spree into truth.",
+          "localScenes": [
+            {
+              "id": "paris-return",
+              "sceneType": "archive",
+              "title": "Archive forgery desk",
+              "city": "Paris",
+              "country": "France",
+              "scene": "Louvre archive annex",
+              "lat": 48.8604,
+              "lon": 2.3368,
+              "biographyStage": "Forgery return",
+              "learningGoal": "Prove the final strike returns to Italy and targets the Vatican cluster in person.",
+              "thiefClaim": "The route needs one last Paris validation before it can climax in Rome.",
+              "truthComplication": "The forged scholarship is theater; the real endgame is a live strike.",
+              "focusWorks": ["Mona Lisa", "School of Athens", "Creation of Adam", "The Last Judgment"],
+              "threatenedWorks": ["School of Athens", "Creation of Adam", "Sistine Chapel Ceiling", "The Last Judgment"],
+              "stolenWorks": ["Mona Lisa", "Primavera", "Ghent Altarpiece panel notes"],
+              "escalationText": "Paris reveals the endgame: the thief will strike the Vatican in person if ACME does not move immediately.",
+              "investigationPrompt": "Study the forged comparison bundle, question the archive assistant, and identify which Vatican work cluster the thief intends to hit in person.",
+              "requirePuzzle": true,
+              "minimumEvidence": 4,
+              "customLocations": [
+                {
+                  "id": "archive-assistant",
+                  "emoji": "🧾",
+                  "name": "Archive Assistant",
+                  "type": "human-lead",
+                  "prefix": "The archive assistant reports",
+                  "description": "A Louvre assistant saw the forged comparison bundle before it was slipped back into the archive drawer.",
+                  "lat": 48.8605,
+                  "lon": 2.3374
+                },
+                {
+                  "id": "reserve-index",
+                  "emoji": "🧩",
+                  "name": "Reserve Index",
+                  "prefix": "A forged reserve index confirms",
+                  "description": "A final puzzle matching archive citations to the intended Vatican targets.",
+                  "lat": 48.8607,
+                  "lon": 2.3381
+                }
+              ],
+              "pois": {
+                "reserve-index": {
+                  "name": "Louvre archive annex",
+                  "lat": 48.8607,
+                  "lon": 2.3381,
+                  "confidence": "scene-fallback"
+                }
+              },
+              "evidenceImages": [
+                {
+                  "id": "paris-return-bundle",
+                  "title": "Forged comparison bundle",
+                  "imagePath": "carmen/img/renaissance/paris-return-comparison-bundle.png",
+                  "imagePurpose": "archive_card",
+                  "imagePrompt": "Create a realistic evidence-table photo of a forged Louvre comparison bundle: multiple cream archive cards, clipped Raphael and Michelangelo citations, one stamped Vatican access note, red pencil underlines, classy museum paperwork textures, noir detective mood with highly legible text blocks.",
+                  "imageNotes": "Supports the Paris return puzzle."
+                }
+              ],
+              "clues": [
+                {
+                  "id": "rw-paris-return-airport-rome",
+                  "locationId": "airport",
+                  "category": "Route Evidence",
+                  "action": "Inspect immediate departure strip",
+                  "title": "Emergency Rome departure",
+                  "text": "The departure strip abandons Belgium entirely and points back to Rome for a same-night move under chapel-access credentials.",
+                  "tags": ["country:Italy", "city:Rome"],
+                  "strength": 3
+                },
+                {
+                  "id": "rw-paris-return-library-vatican",
+                  "locationId": "library",
+                  "category": "Cultural Evidence",
+                  "action": "Read comparison citation bundle",
+                  "title": "Vatican climax bundle",
+                  "text": "The bundle pairs Raphael and Michelangelo citations with security blind spots in the Vatican Museums. The final stage is clearly Rome.",
+                  "tags": ["country:Italy", "city:Rome", "culture:Renaissance"],
+                  "strength": 4
+                },
+                {
+                  "id": "rw-paris-return-embassy-confirm",
+                  "locationId": "embassy",
+                  "category": "Confirmation",
+                  "action": "Verify chapel access fraud",
+                  "title": "Roman access line",
+                  "text": "The forged access pass names Rome directly and is time-stamped for the Vatican night watch. ACME can intercept if it moves now.",
+                  "tags": ["country:Italy", "city:Rome", "confirmation"],
+                  "strength": 4
+                },
+                {
+                  "id": "rw-paris-return-human-lead",
+                  "locationId": "archive-assistant",
+                  "category": "Route Evidence",
+                  "action": "Question the archive assistant",
+                  "title": "Night-watch timing",
+                  "text": "The assistant recalls the forged bundle being timed against the Vatican night watch, not a daytime loan schedule. The thief is heading to Rome in person.",
+                  "tags": ["country:Italy", "city:Rome", "confirmation"],
+                  "strength": 3
+                },
+                {
+                  "id": "rw-paris-return-puzzle-index",
+                  "locationId": "reserve-index",
+                  "category": "Puzzle Evidence",
+                  "action": "Solve citation-to-gallery index",
+                  "title": "Final target board",
+                  "text": "The corrected index maps every remaining citation to the Vatican Museums. The thief is not hiding the ending anymore.",
+                  "tags": ["country:Italy", "city:Rome"],
+                  "strength": 4
+                }
+              ]
+            }
+          ]
         },
         {
-          "country": "Netherlands",
-          "city": "Amsterdam",
-          "scene": "Rijksmuseum restoration studio",
-          "lat": 52.36,
-          "lon": 4.885277777777778,
-          "biographyStage": "Archive",
-          "learningGoal": "Use restoration and old-master records to compare Renaissance and northern European collection evidence.",
-          "thiefClaim": "Technical archives can be edited until the route looks certain.",
-          "truthComplication": "Conservation evidence can clarify movement, but it cannot rewrite authorship or ownership."
-        },
-        {
-          "country": "Spain",
-          "city": "Madrid",
-          "scene": "Prado museum freight office",
-          "lat": 40.41388888888889,
-          "lon": -3.692222222222222,
-          "biographyStage": "Forgery",
-          "learningGoal": "Expose a false museum-transfer file built from real European collection patterns.",
-          "thiefClaim": "A forged Prado exchange record can make the return route look official.",
-          "truthComplication": "Museum paperwork is evidence only when it fits the whole provenance chain."
+          "country": "Italy",
+          "city": "Rome",
+          "scene": "Vatican night watch",
+          "lat": 41.9029,
+          "lon": 12.4545,
+          "biographyStage": "Interception",
+          "chapterTitle": "Final interception",
+          "chapterSummary": "ACME reaches Rome in time to intercept the thief during the attempted Vatican strike.",
+          "learningGoal": "Close the case by proving the pattern and arriving before the final attack lands.",
+          "investigationPrompt": "Use the final Vatican file to stage the interception and compare the target list against the forged canon the thief has been building all case.",
+          "thiefClaim": "The final Vatican strike would have completed the thief's curated Renaissance canon.",
+          "truthComplication": "The route collapses once ACME reaches the living crime instead of the forged paperwork.",
+          "focusWorks": ["School of Athens", "Creation of Adam", "Sistine Chapel Ceiling", "The Last Judgment"],
+          "threatenedWorks": ["School of Athens", "Creation of Adam", "Sistine Chapel Ceiling", "The Last Judgment"],
+          "stolenWorks": ["Mona Lisa", "Primavera", "Ghent Altarpiece panel notes"],
+          "escalationText": "The forged route has run out of paper. ACME is no longer reading the thief's plan from archives; it is arriving at the strike itself.",
+          "evidenceImages": [
+            {
+              "id": "vatican-interception-board",
+              "title": "Vatican interception board",
+              "imagePath": "carmen/img/renaissance/vatican-interception-board.png",
+              "imagePurpose": "crime_scene_photo",
+              "imagePrompt": "Create a realistic detective-noir evidence-board image for a Vatican interception scene: chapel access map, guard timing sheet, red pencil route marks, clipped reproductions referencing School of Athens, Creation of Adam, Sistine Chapel Ceiling, and The Last Judgment, with moody surrounding light but crisp readable documents.",
+              "imageNotes": "Use for the final interception panel and climax scene setup."
+            }
+          ]
         }
       ],
       "legs": [
         {
           "from": "France",
           "to": "Italy",
-          "sceneTitle": "A missing portrait trail",
-          "clues": [
-            {
-              "id": "louvre-airport-southeast-europe",
-              "locationId": "airport",
-              "action": "Inspect arrivals desk",
-              "title": "Baggage direction",
-              "text": "A private crate left Paris for a European country southeast of the Louvre. The handler remembered a destination tied to Leonardo, not to a modern auction house.",
-              "tags": ["continent:Europe", "direction:southeast", "culture:Renaissance"],
-              "strength": 2
-            },
-            {
-              "id": "louvre-gallery-florence-file",
-              "locationId": "cultural:louvre-vanishing-theft-scene-q19675",
-              "action": "Inspect missing gallery register",
-              "title": "Florence shelf mark",
-              "text": "The Louvre register is missing a Florence loan sleeve. Its old shelf mark names a Renaissance workshop file, not a Paris exhibition file.",
-              "tags": ["city:Florence", "country:Italy", "culture:Renaissance", "cultural_place:Uffizi"],
-              "strength": 4
-            },
-            {
-              "id": "louvre-market-wine-cloth",
-              "locationId": "market",
-              "action": "Inspect crate packing",
-              "title": "Trade packing",
-              "text": "The crate padding used a wine merchant's sleeve and clothing-house inventory paper. It looks like cover cargo from a country known for wine and fashion exports.",
-              "tags": ["export:wine", "export:clothing"],
-              "strength": 2
-            },
-            {
-              "id": "louvre-embassy-romance",
-              "locationId": "embassy",
-              "action": "Verify export permit",
-              "title": "Romance-language permit",
-              "text": "The permit translation stayed inside the Romance-language corridor, but the seal did not match France, Spain, or Portugal. ACME flags Italy as the cleanest fit.",
-              "tags": ["exclude:France", "exclude:Spain", "exclude:Portugal", "country:Italy", "confirmation"],
-              "strength": 3
-            },
-            {
-              "id": "louvre-hotel-conservator",
-              "locationId": "hotel",
-              "action": "Question concierge",
-              "title": "Conservator request",
-              "text": "A guest asked for a late train to a city with portrait conservation labs and Renaissance archives. The city name was not written down, but the question sounded like Florence.",
-              "tags": ["city:Florence", "country:Italy"],
-              "strength": 3
-            }
-          ],
-          "followups": [
-            {
-              "afterCountry": "Italy",
-              "locationId": "library",
-              "text": "Back in Paris, the Louvre archivist confirms the missing shelf mark belonged to a Florence loan file, not a Paris exhibition file.",
-              "tags": ["country:Italy", "confirmation"]
-            }
-          ]
+          "sceneTitle": "From Paris into Italy",
+          "clues": [],
+          "followups": []
         },
         {
           "from": "Italy",
+          "to": "Belgium",
+          "sceneTitle": "Through the Italian hubs toward Ghent",
+          "clues": [],
+          "followups": []
+        },
+        {
+          "from": "Belgium",
           "to": "France",
-          "sceneTitle": "The royal passage",
-          "clues": [
-            {
-              "id": "florence-uffizi-french-court",
-              "locationId": "cultural:louvre-vanishing-provenance-archive-q51252",
-              "action": "Read court transfer note",
-              "title": "French court note",
-              "text": "The Uffizi transfer note says the portrait's track leaves Tuscany only after Leonardo's final years, toward a French royal residence in the Loire Valley.",
-              "tags": ["country:France", "city:Amboise", "culture:Leonardo"],
-              "strength": 4
-            },
-            {
-              "id": "florence-airport-loire-route",
-              "locationId": "airport",
-              "category": "Route Evidence",
-              "action": "Check courier itinerary",
-              "title": "Loire route",
-              "text": "The courier route bends northwest from Florence toward a smaller French stop rather than a capital museum office.",
-              "tags": ["continent:Europe", "direction:northwest", "country:France"],
-              "strength": 2
-            },
-            {
-              "id": "florence-hotel-clos-luce",
-              "locationId": "hotel",
-              "action": "Interview concierge",
-              "title": "Clos Lucé booking",
-              "text": "A guest asked for a driver to the house where Leonardo spent his final years under French patronage. The clerk wrote down Amboise.",
-              "tags": ["country:France", "city:Amboise", "confirmation"],
-              "strength": 4
-            },
-            {
-              "id": "florence-embassy-french-seal",
-              "locationId": "embassy",
-              "action": "Compare transit seal",
-              "title": "French royal seal",
-              "text": "The transit seal is French and references an old royal inventory series, not an Italian restoration office.",
-              "tags": ["country:France", "exclude:Italy", "confirmation"],
-              "strength": 3
-            }
-          ],
+          "sceneTitle": "Ghent points back to Paris",
+          "clues": [],
           "followups": []
         },
         {
           "from": "France",
-          "to": "Netherlands",
-          "sceneTitle": "The varnish ledger",
-          "clues": [
-            {
-              "id": "amboise-library-dutch-restoration",
-              "locationId": "library",
-              "action": "Read copied inventory pages",
-              "title": "Dutch restoration note",
-              "text": "A copied French court inventory page was annotated by Dutch restorers and old-master dealers in Amsterdam.",
-              "tags": ["continent:Europe", "culture:old-master", "city:Amsterdam", "country:Netherlands"],
-              "strength": 4
-            },
-            {
-              "id": "amboise-market-machinery-chemicals",
-              "locationId": "market",
-              "action": "Inspect packing invoice",
-              "title": "Canal workshop invoice",
-              "text": "The packing invoice includes machinery and chemical supplies tied to a conservation workshop in the Low Countries.",
-              "tags": ["export:machinery", "export:chemicals", "country:Netherlands"],
-              "strength": 3
-            },
-            {
-              "id": "amboise-airport-low-country",
-              "locationId": "airport",
-              "category": "Route Evidence",
-              "action": "Check air cargo desk",
-              "title": "Low-country transfer",
-              "text": "The crate left France for a low-lying northern country with canals, still inside Europe and well away from royal residences.",
-              "tags": ["continent:Europe", "direction:northeast", "country:Netherlands"],
-              "strength": 2
-            },
-            {
-              "id": "amboise-hotel-canal",
-              "locationId": "hotel",
-              "action": "Interview night clerk",
-              "title": "Canal booking",
-              "text": "The thief asked for a hotel near canals and a restoration studio, then corrected the clerk when he suggested Bruges. The booking was for Amsterdam.",
-              "tags": ["city:Amsterdam", "country:Netherlands", "exclude:Italy", "confirmation"],
-              "strength": 3
-            }
-          ],
-          "followups": []
-        },
-        {
-          "from": "Netherlands",
-          "to": "Spain",
-          "sceneTitle": "The final catalogue swap",
-          "clues": [
-            {
-              "id": "amsterdam-cultural-prado-crossref",
-              "locationId": "cultural:louvre-vanishing-restoration-lead-q190804",
-              "action": "Compare restoration cross-reference",
-              "title": "Prado cross-reference",
-              "text": "The Rijksmuseum restoration note points to a Spanish royal collection file. The exchange number is stamped for the Prado freight office.",
-              "tags": ["country:Spain", "city:Madrid", "cultural_place:Prado", "culture:museum"],
-              "strength": 4
-            },
-            {
-              "id": "amsterdam-airport-southwest",
-              "locationId": "airport",
-              "action": "Match flight sleeve",
-              "title": "Southwest sleeve",
-              "text": "The cargo sleeve shows a southwest route inside Europe, toward a capital whose name starts with M.",
-              "tags": ["continent:Europe", "direction:southwest", "capital:M"],
-              "strength": 3
-            },
-            {
-              "id": "amsterdam-market-olive-wine",
-              "locationId": "market",
-              "action": "Read cargo relabel",
-              "title": "Mediterranean cargo relabel",
-              "text": "The fake cargo relabel lists wine, vehicles, and Mediterranean food shipments. It is too southern for the Low Countries and too western for Italy.",
-              "tags": ["export:vehicles", "climate:Mediterranean", "exclude:Italy"],
-              "strength": 2
-            },
-            {
-              "id": "amsterdam-embassy-spanish",
-              "locationId": "embassy",
-              "action": "Verify seal language",
-              "title": "Spanish seal",
-              "text": "The replacement export seal is Spanish, but the stated artwork origin is false. That contradiction is strong enough for a warrant in Madrid.",
-              "tags": ["country:Spain", "city:Madrid", "confirmation"],
-              "strength": 4
-            }
-          ],
+          "to": "Italy",
+          "sceneTitle": "Paris reveals the final Vatican strike",
+          "clues": [],
           "followups": []
         }
       ],
       "deadEnds": {
         "default": "The field office found no match for the cultural pattern. At least one strong clue contradicts this destination.",
-        "France": "The trail began in France, but the collected evidence points away from the Louvre after the theft.",
-        "Portugal": "Portugal fits part of the Romance-language trail, but the Renaissance and export evidence do not support it.",
-        "Belgium": "Belgium fits the Low Countries clue, but the language and canal-restoration evidence point farther north."
+        "France": "Paris is important to the case, but not as the next country unless the current chapter explicitly points back there.",
+        "Netherlands": "The trail brushes past northern art routes, but the current evidence points to Ghent in Belgium rather than Amsterdam.",
+        "Spain": "The thief is climbing a Renaissance canon path, not turning toward Iberian museum freight.",
+        "Belgium": "Belgium matters only after the Italian chapter is fully solved.",
+        "Italy": "Italy anchors the pattern, but ACME still needs the chapter-specific proof before moving there."
       }
     },
     {

@@ -3,14 +3,16 @@
   "cases": [
     {
       "id": "louvre-vanishing",
-      "title": "The Louvre Vanishing",
+      "title": "The Renaissance Wave",
       "object": { "label": "Mona Lisa", "wikidataId": "Q12418" },
-      "pattern": "Renaissance provenance route",
+      "pattern": "Renaissance masterworks escalation",
       "places": [
         { "label": "Louvre Museum", "wikidataId": "Q19675", "role": "theft_scene", "city": "Paris", "country": "France" },
+        { "label": "Santa Maria delle Grazie", "wikidataId": "Q51952", "role": "refectory_watch", "city": "Milan", "country": "Italy" },
         { "label": "Uffizi", "wikidataId": "Q51252", "role": "provenance_archive", "city": "Florence", "country": "Italy" },
-        { "label": "Rijksmuseum", "wikidataId": "Q190804", "role": "restoration_lead", "city": "Amsterdam", "country": "Netherlands" },
-        { "label": "Museo del Prado", "wikidataId": "Q160112", "role": "final_proof_scene", "city": "Madrid", "country": "Spain" }
+        { "label": "Vatican Museums", "wikidataId": "Q170583", "role": "vatican_watch", "city": "Rome", "country": "Italy" },
+        { "label": "Saint Bavo Cathedral", "wikidataId": "Q1473", "role": "ghent_pivot", "city": "Ghent", "country": "Belgium" },
+        { "label": "Louvre Museum", "wikidataId": "Q19675", "role": "forgery_return", "city": "Paris", "country": "France" }
       ]
     },
     {

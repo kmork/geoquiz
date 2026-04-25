@@ -6,11 +6,11 @@
   "objects": [
     {
       "id": "louvre-vanishing",
-      "title": "Mona Lisa",
+      "title": "Renaissance Masterworks",
       "wikidataId": "Q12418",
-      "description": "oil painting by Leonardo da Vinci in the Louvre, Paris",
-      "caseTitle": "The Louvre Vanishing",
-      "pattern": "Renaissance provenance route",
+      "description": "curated Renaissance painting strike list opened by the theft of the Mona Lisa from the Louvre",
+      "caseTitle": "The Renaissance Wave",
+      "pattern": "Renaissance masterworks escalation",
       "creator": [
         "Leonardo da Vinci"
       ],

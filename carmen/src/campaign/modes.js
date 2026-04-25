@@ -109,7 +109,7 @@ export function getRunConfigForMode({
       : crimsonFinale
         ? crimsonFinaleRouteProvider
         : null,
-    caseTitle: cityOpenCase ? CITY_OPEN_CASE_NARRATIVE.title : worldCaseFiles ? 'The Louvre Vanishing' : skylineNarrative?.title || null,
+    caseTitle: cityOpenCase ? CITY_OPEN_CASE_NARRATIVE.title : worldCaseFiles ? 'The Renaissance Wave' : skylineNarrative?.title || null,
     briefingCopy: worldCaseFiles
       ? 'ACME is opening the whole world desk. Investigate the cultural theft, gather enough evidence to narrow the atlas, travel when ready, and prove each destination before advancing.'
       : cityOpenCase

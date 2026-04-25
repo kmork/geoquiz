@@ -854,6 +854,8 @@ let worldCaseHintMode = 'off';
 let worldCaseHintIndex = 0;
 let worldCaseHintDetailsOpen = false;
 let worldCaseInspectCountry = '';
+let worldCaseSelectedContext = { type: 'scene' };
+const worldCaseLocationClueMemory = new Map();
 
 function getWorldCaseData() {
   const cases = worldCaseFilesData?.cases || [];
@@ -901,6 +903,7 @@ function drawWorldCaseMap() {
     switchToTravel: false,
     summary: boardState.summary,
     atlasHints: boardState.atlasHints,
+    localTrail: boardState.localTrail,
     targetStop: worldCase.targetRouteStop,
     targetTravelLabel: worldCase.targetRouteStop ? worldCase.getTravelLabel(worldCase.targetRouteStop.country) : null,
     hintMode: worldCaseHintMode,
@@ -929,16 +932,51 @@ function drawWorldCaseMap() {
   });
 }
 
-function refreshWorldCaseUi() {
+function refreshWorldCaseUi(focusTravel = false) {
   if (!worldCase) return;
   const state = worldCase.getBoardState();
   ui.updateMissions([], true, 1, 1, getMissionLabel());
   ui.updateScore(Math.max(0, 5000 - (worldCase.evidence.length * 75) - (worldCase.deadEnds.length * 250)));
   ui.updateProgress(worldCase.currentLeg, worldCase.totalLegs + 1);
   ui.setFreeInvestigationClock('No case clock');
+  ui.updateWorldCaseArtifact(state);
   ui.updateWorldCaseBoard(state);
-  ui.showWorldCaseLocations(worldCase.getLocations(), handleWorldInvestigation, state, buildWorldCaseCityMapOptions());
+  ui.showWorldCaseLocations(state.sceneActions || [], handleWorldInvestigation, state, buildWorldCaseCityMapOptions());
   drawWorldCaseMap();
+  if (focusTravel) {
+    const candidates = worldCase.analyzeCandidates();
+    ui.showWorldTravelDesk(candidates, handleWorldTravel, null, {
+      switchToTravel: true,
+      summary: state.summary,
+      atlasHints: state.atlasHints,
+      localTrail: state.localTrail,
+      targetStop: worldCase.targetRouteStop,
+      targetTravelLabel: worldCase.targetRouteStop ? worldCase.getTravelLabel(worldCase.targetRouteStop.country) : null,
+      hintMode: worldCaseHintMode,
+      hintIndex: worldCaseHintIndex,
+      revealHintDetails: worldCaseHintDetailsOpen,
+      inspectCountry: worldCaseInspectCountry,
+      currentCountry: worldCase.currentCountry,
+      onToggleHints: () => {
+        worldCaseHintMode = worldCaseHintMode === 'off' ? 'subtle' : 'off';
+        drawWorldCaseMap();
+      },
+      onCycleHint: () => {
+        const hintCount = state.atlasHints?.length || 0;
+        if (!hintCount) return;
+        worldCaseHintIndex = (worldCaseHintIndex + 1) % hintCount;
+        drawWorldCaseMap();
+      },
+      onToggleHintDetails: () => {
+        worldCaseHintDetailsOpen = !worldCaseHintDetailsOpen;
+        drawWorldCaseMap();
+      },
+      onCloseInspect: () => {
+        worldCaseInspectCountry = '';
+        drawWorldCaseMap();
+      },
+    });
+  }
 }
 
 function buildWorldCaseCityMapOptions() {
@@ -989,6 +1027,7 @@ function buildWorldCaseCityMapOptions() {
         },
       }
     : null;
+  const scenePois = scene?.pois || null;
   return {
     cityMap: true,
     country,
@@ -1002,7 +1041,7 @@ function buildWorldCaseCityMapOptions() {
           lon: sceneLon,
         }
       : null,
-    airport: Number.isFinite(airportLat) && Number.isFinite(airportLon)
+      airport: Number.isFinite(airportLat) && Number.isFinite(airportLon)
       ? {
           name: gateway.airport.name,
           iata: gateway.airport.iata || gateway.airport.ident || '',
@@ -1010,33 +1049,73 @@ function buildWorldCaseCityMapOptions() {
           lon: airportLon,
         }
       : null,
-    pois: sceneFallbackPois || cityPoiEntry?.pois || null,
+    pois: {
+      ...(cityPoiEntry?.pois || {}),
+      ...(sceneFallbackPois || {}),
+      ...(scenePois || {}),
+    },
+    mapLocations: worldCase.getMapLocations(),
     investigatedIds: worldCase.getInvestigatedLocationIds(),
+    selectedContext: worldCaseSelectedContext,
+    onSceneFocus: () => {
+      worldCaseSelectedContext = { type: 'scene' };
+      refreshWorldCaseUi(false);
+      ui.showNarratorCaption(`Scene file reopened: ${scene?.scene || scene?.city || country}.`);
+    },
+    onLocationSelect: handleWorldLocationSelection,
   };
 }
 
 function handleWorldInvestigation(locationId) {
   if (!worldCase) return;
+  const clueMemoryKey = `${worldCase.getCurrentSceneKey()}:${locationId}`;
   const informant = worldCase.getInformant(locationId);
-  const evidence = worldCase.investigate(locationId);
-  if (!evidence) {
+  if (worldCase.getInvestigatedLocationIds().has(locationId) && worldCaseLocationClueMemory.has(clueMemoryKey)) {
+    const stored = worldCaseLocationClueMemory.get(clueMemoryKey);
+    ui.addClue(stored.clue, stored.informant);
+    return;
+  }
+  const result = worldCase.investigate(locationId);
+  if (!result) {
     ui.addClue({ text: 'No new evidence from this scene yet.', icon: '❌' }, informant);
     return;
   }
-  ui.addClue({ text: evidence.text, icon: '🧾' }, {
+  const { evidence, progress } = result;
+  const renderedClue = { text: evidence.text, icon: '🧾' };
+  const renderedInformant = {
     emoji: informant.emoji,
     prefix: `${informant.prefix} — ${evidence.title}`,
+  };
+  worldCaseLocationClueMemory.set(clueMemoryKey, {
+    clue: renderedClue,
+    informant: renderedInformant,
   });
+  ui.addClue(renderedClue, renderedInformant);
   ui.addDossierEntry(
-    evidence.legIndex,
+    `${evidence.legIndex}-${evidence.sceneId || evidence.sceneIndex}`,
     evidence.text,
     evidence.category,
-    evidence.category === 'Cultural Evidence' ? '🎭' : evidence.category === 'Confirmation' ? '✅' : '🧭',
+    evidence.category === 'Cultural Evidence' ? '🎭' : evidence.category === 'Confirmation' ? '✅' : evidence.category === 'Puzzle Evidence' ? '🧩' : '🧭',
     evidence.foundInCountry,
     evidence.foundInCity,
+    { stopLabel: evidence.sceneTitle || evidence.foundInCity || 'Scene file' }
   );
+  if (progress?.type === 'scene_advanced') {
+    worldCaseSelectedContext = { type: 'scene' };
+    ui.showNarratorCaption(`ACME follows the local line from ${progress.fromScene.city} to ${progress.toScene.city}. The next scene is live.`, 7200);
+    ui.clearClues();
+  } else if (progress?.type === 'chapter_ready') {
+    ui.showNarratorCaption(`The ${worldCase.currentRouteStop.chapterTitle || worldCase.currentRouteStop.scene || 'current chapter'} is proven. The atlas is ready for the next country.`, 7200);
+  }
   ui.updateWorldCaseBoard(worldCase.getBoardState());
-  drawWorldCaseMap();
+  refreshWorldCaseUi(progress?.type === 'scene_advanced');
+}
+
+function handleWorldLocationSelection(locationId) {
+  if (!worldCase || !locationId) return;
+  worldCaseSelectedContext = { type: 'location', id: locationId };
+  refreshWorldCaseUi(false);
+  handleWorldInvestigation(locationId);
 }
 
 async function handleWorldTravel(country) {
@@ -1047,6 +1126,7 @@ async function handleWorldTravel(country) {
   await renderer.animateTravel(from, country);
   stopAmbient();
   const result = worldCase.travelTo(country);
+  worldCaseSelectedContext = { type: 'scene' };
   worldCaseInspectCountry = country;
 
   if (result.type === 'dead_end' || result.type === 'arrived_unproven') {
@@ -1066,7 +1146,7 @@ async function handleWorldTravel(country) {
   }
 
   if (result.type === 'advanced') {
-    ui.showNarratorCaption(`Lead proven. ACME opens the next scene in ${result.scene.city}, ${result.scene.country}.`, 7200);
+    ui.showNarratorCaption(`Lead proven. ACME opens the next chapter in ${result.currentScene.city}, ${result.currentScene.country}.`, 7200);
     ui.clearClues();
     worldCaseHintIndex = 0;
     worldCaseHintDetailsOpen = false;
@@ -1086,7 +1166,7 @@ async function handleWorldTravel(country) {
       score,
       {
         continueLabel: 'Replay Experiment →',
-        solvedText: `${worldCase.caseData.pattern.label} proven. ACME has enough evidence to recover the ${worldCase.artifact?.siteName || 'stolen object'} file and issue the warrant.`,
+        solvedText: worldCase.caseData.solvedText || `${worldCase.caseData.pattern.label} proven. ACME has enough evidence to recover the ${worldCase.artifact?.siteName || 'stolen object'} file and issue the warrant.`,
       },
     );
     await handleEndChoice(choice, true);
@@ -1110,6 +1190,8 @@ async function startWorldCaseFiles(runConfig) {
   worldCaseHintIndex = 0;
   worldCaseHintDetailsOpen = false;
   worldCaseInspectCountry = '';
+  worldCaseSelectedContext = { type: 'scene' };
+  worldCaseLocationClueMemory.clear();
   const intro = worldCase.start();
 
   if (isFirstGame) {

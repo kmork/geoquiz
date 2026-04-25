@@ -975,6 +975,54 @@ body {
   color: #6a4528;
 }
 
+.carmen-artifact-evidence-list {
+  margin-top: 0.7rem;
+  padding-top: 0.55rem;
+  border-top: 1px dashed rgba(112, 84, 60, 0.34);
+  width: 100%;
+}
+
+.carmen-artifact-evidence-title {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: rgba(101, 68, 43, 0.88);
+  margin-bottom: 0.35rem;
+  text-transform: uppercase;
+}
+
+.carmen-artifact-evidence-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.08rem;
+  margin-top: 0.35rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.68rem;
+  color: #433126;
+}
+
+.carmen-artifact-evidence-btn {
+  width: 100%;
+  padding: 0.45rem 0.55rem;
+  text-align: left;
+  border: 1px solid rgba(112, 84, 60, 0.2);
+  border-radius: 10px;
+  background: rgba(255, 251, 242, 0.78);
+  cursor: pointer;
+  transition: background 0.18s ease, border-color 0.18s ease, transform 0.18s ease;
+}
+
+.carmen-artifact-evidence-btn:hover {
+  background: rgba(255, 246, 227, 0.96);
+  border-color: rgba(112, 84, 60, 0.36);
+  transform: translateY(-1px);
+}
+
+.carmen-artifact-image.is-clickable {
+  cursor: zoom-in;
+}
+
 .carmen-artifact-back-return {
   position: absolute;
   right: 0.35rem;
@@ -1849,6 +1897,21 @@ body {
   padding: 1.2rem;
   height: 100%;
   box-sizing: border-box;
+  position: relative;
+}
+
+.carmen-clue-close-btn {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  width: 1.9rem;
+  height: 1.9rem;
+  border: 1px solid rgba(199, 176, 138, 0.24);
+  border-radius: 999px;
+  background: rgba(29, 23, 19, 0.9);
+  color: rgba(236, 220, 194, 0.88);
+  cursor: pointer;
+  z-index: 3;
 }
 
 .carmen-speech-avatar {
@@ -2054,6 +2117,97 @@ body {
 }
 .carmen-evidence-btn:hover {
   background: rgba(199, 176, 138, 0.2);
+}
+
+.carmen-image-viewer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 360;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(7, 6, 5, 0.84);
+  backdrop-filter: blur(3px);
+}
+
+.carmen-image-viewer-card {
+  position: relative;
+  width: min(960px, 94vw);
+  max-height: 90vh;
+  overflow: auto;
+  padding: 1rem 1rem 0.9rem;
+  border-radius: 16px;
+  border: 1px solid rgba(214, 180, 124, 0.24);
+  background:
+    linear-gradient(180deg, rgba(27, 24, 22, 0.98), rgba(13, 12, 11, 0.98)),
+    radial-gradient(circle at top, rgba(255, 223, 164, 0.07), transparent 55%);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.46);
+}
+
+.carmen-image-viewer-close {
+  position: absolute;
+  top: 0.7rem;
+  right: 0.7rem;
+  border: 0;
+  border-radius: 999px;
+  width: 2rem;
+  height: 2rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f7e8cf;
+  cursor: pointer;
+}
+
+.carmen-image-viewer-kicker {
+  font: 700 0.72rem 'Courier New', monospace;
+  letter-spacing: 0.2em;
+  color: rgba(232, 206, 161, 0.74);
+  text-transform: uppercase;
+}
+
+.carmen-image-viewer-title {
+  margin-top: 0.22rem;
+  font: 700 1.2rem Georgia, serif;
+  color: #f7ecdc;
+}
+
+.carmen-image-viewer-subtitle,
+.carmen-image-viewer-notes,
+.carmen-image-viewer-path {
+  color: rgba(236, 223, 200, 0.8);
+  font-size: 0.84rem;
+  line-height: 1.45;
+}
+
+.carmen-image-viewer-subtitle {
+  margin-top: 0.18rem;
+}
+
+.carmen-image-viewer-frame {
+  margin-top: 0.9rem;
+  padding: 0.9rem;
+  border-radius: 12px;
+  background: rgba(255, 250, 239, 0.05);
+  border: 1px solid rgba(255, 239, 211, 0.08);
+}
+
+.carmen-image-viewer-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  background: #151311;
+}
+
+.carmen-image-viewer-notes {
+  margin-top: 0.75rem;
+}
+
+.carmen-image-viewer-path {
+  margin-top: 0.45rem;
+  font-family: 'Courier New', monospace;
+  word-break: break-all;
+  opacity: 0.76;
 }
 @keyframes carmen-evidence-fade-in {
   from { opacity: 0; transform: translateY(4px); }
@@ -2305,6 +2459,49 @@ body {
   display: flex;
   flex-direction: column;
   gap: 0.45rem;
+}
+
+.carmen-world-scene-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.carmen-world-scene-panel-head {
+  padding: 0.7rem 0.8rem 0.78rem;
+  border-radius: 12px;
+  border: 1px solid rgba(199, 176, 138, 0.24);
+  background:
+    linear-gradient(180deg, rgba(35, 25, 18, 0.9), rgba(18, 14, 11, 0.88));
+  box-shadow: 0 10px 22px rgba(8, 6, 4, 0.18);
+}
+
+.carmen-world-scene-panel-kicker,
+.carmen-world-scene-section-title {
+  color: rgba(232, 211, 188, 0.72);
+  font-family: 'Courier New', monospace;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.carmen-world-scene-panel-title {
+  margin-top: 0.22rem;
+  color: #f2dcc4;
+  font-size: 0.96rem;
+  font-weight: 700;
+  line-height: 1.22;
+}
+
+.carmen-world-scene-section {
+  display: flex;
+  flex-direction: column;
+  gap: 0.42rem;
+}
+
+.carmen-world-scene-btn {
+  width: 100%;
 }
 
 .carmen-city-map {
@@ -2589,6 +2786,12 @@ body {
   color: #1a1511;
   font-size: 0.6rem;
   font-weight: 900;
+}
+
+.carmen-city-map-pin.selected,
+.carmen-city-map-scene-pin.selected {
+  border-color: rgba(250, 204, 21, 0.92);
+  box-shadow: 0 0 0 2px rgba(250, 204, 21, 0.2), 0 8px 20px rgba(0, 0, 0, 0.34);
 }
 
 .carmen-city-map-pin.exhausted {
@@ -2876,6 +3079,104 @@ body {
 
 .carmen-world-atlas-stack {
   width: min(320px, calc(100vw - 32px));
+}
+
+.carmen-world-local-trail {
+  position: relative;
+  padding: 0.9rem 1rem 0.95rem;
+  border-radius: 14px;
+  border: 1px solid rgba(194, 164, 122, 0.18);
+  background:
+    linear-gradient(180deg, rgba(30, 24, 20, 0.95), rgba(19, 15, 12, 0.94)),
+    radial-gradient(circle at top left, rgba(185, 150, 106, 0.12), transparent 36%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 241, 219, 0.04),
+    0 18px 26px rgba(0, 0, 0, 0.16);
+}
+
+.carmen-world-local-kicker {
+  font-size: 0.64rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: rgba(229, 199, 156, 0.7);
+  text-transform: uppercase;
+}
+
+.carmen-world-local-title {
+  margin-top: 0.25rem;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1rem;
+  color: #f0ddc1;
+}
+
+.carmen-world-local-track {
+  position: relative;
+  margin-top: 0.85rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.carmen-world-local-track::before {
+  content: '';
+  position: absolute;
+  left: 0.38rem;
+  top: 0.15rem;
+  bottom: 0.35rem;
+  width: 2px;
+  background:
+    linear-gradient(180deg, rgba(202, 172, 126, 0.8), rgba(138, 113, 81, 0.55));
+}
+
+.carmen-world-local-node {
+  position: relative;
+  padding-left: 1.55rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.06rem;
+}
+
+.carmen-world-local-dot {
+  position: absolute;
+  left: 0;
+  top: -0.05rem;
+  width: 0.8rem;
+  height: 0.8rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #d5b387;
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.carmen-world-local-node.current .carmen-world-local-dot {
+  color: #ffd28d;
+  animation: carmen-local-train-pulse 1.6s ease-in-out infinite;
+}
+
+.carmen-world-local-city {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #f3e6cf;
+}
+
+.carmen-world-local-stop {
+  font-size: 0.76rem;
+  color: rgba(233, 216, 193, 0.74);
+}
+
+.carmen-world-local-node.visited .carmen-world-local-city,
+.carmen-world-local-node.visited .carmen-world-local-stop {
+  color: rgba(216, 195, 168, 0.62);
+}
+
+.carmen-world-local-node.next .carmen-world-local-city {
+  color: #ffd7a0;
+}
+
+@keyframes carmen-local-train-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.08); opacity: 1; }
 }
 
 .carmen-world-atlas-meta,

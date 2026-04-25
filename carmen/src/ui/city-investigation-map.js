@@ -345,25 +345,30 @@ export function createCityInvestigationMap(container, locations, options, onPick
   if (Number.isFinite(options.scene?.lat) && Number.isFinite(options.scene?.lon)) {
     const sceneLocation = locations.find(loc => loc.hideOnMap && loc.type === 'cultural-place');
     scenePickLocationId = sceneLocation?.id || null;
+    const sceneFocusable = typeof options.onSceneFocus === 'function';
     scenePin = document.createElement('div');
-    scenePin.className = `carmen-city-map-scene-pin${scenePickLocationId ? ' is-pickable' : ''}`;
+    scenePin.className = `carmen-city-map-scene-pin${scenePickLocationId || sceneFocusable ? ' is-pickable' : ''}`;
     const sceneTitle = options.scene.name || options.scene.label || 'Case scene';
-    const title = scenePickLocationId ? `${sceneTitle} — investigate scene` : sceneTitle;
+    const title = scenePickLocationId || sceneFocusable ? `${sceneTitle} — open scene actions` : sceneTitle;
     scenePin.title = title;
     scenePin.setAttribute('aria-label', title);
     scenePin.innerHTML = `
       <span class="carmen-city-map-scene-icon">${esc(options.scene.emoji || '◆')}</span>
       <span class="carmen-city-map-scene-label">${esc(sceneTitle)}</span>
     `;
-    if (scenePickLocationId) {
+    if (scenePickLocationId || sceneFocusable) {
       scenePin.setAttribute('role', 'button');
       scenePin.tabIndex = 0;
       scenePin.addEventListener('pointerdown', (e) => e.stopPropagation());
-      scenePin.addEventListener('click', () => onPick(scenePickLocationId));
+      scenePin.addEventListener('click', () => {
+        if (sceneFocusable) options.onSceneFocus();
+        else if (scenePickLocationId) onPick(scenePickLocationId);
+      });
       scenePin.addEventListener('keydown', (e) => {
         if (e.key === 'Enter' || e.key === ' ') {
           e.preventDefault();
-          onPick(scenePickLocationId);
+          if (sceneFocusable) options.onSceneFocus();
+          else if (scenePickLocationId) onPick(scenePickLocationId);
         }
       });
     }
@@ -431,7 +436,15 @@ export function createCityInvestigationMap(container, locations, options, onPick
       if (!button) return;
       button.classList.toggle('investigated', state === 'investigated');
       button.classList.toggle('exhausted', state === 'exhausted');
-      button.disabled = state === 'investigated' || state === 'exhausted';
+      button.disabled = state === 'exhausted';
+    },
+    setSelectedLocation(locationId) {
+      for (const [candidateId, button] of pinButtons) {
+        button.classList.toggle('selected', !!locationId && candidateId === locationId);
+      }
+      if (scenePin) {
+        scenePin.classList.toggle('selected', locationId === '__scene__');
+      }
     },
     exhaustUnvisited(visitedIds) {
       for (const [locationId, button] of pinButtons) {

@@ -109,28 +109,35 @@ function atlasHintFromTag(tag, evidence) {
   return '';
 }
 
+function sceneSlug(scene = {}, fallback = 'scene') {
+  return normalize(scene.id || scene.scene || scene.city || fallback).replace(/[^a-z0-9]+/g, '-') || fallback;
+}
+
 export class WorldCaseFilesLogic {
   constructor({ caseData, countries, culturalPlaces = [], culturalObjects = [], candidateIndex = null }) {
     this.caseData = caseData;
     this.countries = countries || [];
     this.countryMap = Object.fromEntries(this.countries.map(country => [country.country, country]));
+    this.workMap = Object.fromEntries((caseData.works || []).map(work => [normalize(work.title), work]));
     this.culturalPlaces = (culturalPlaces || []).filter(place => place.caseId === caseData.id);
     this.culturalObjects = (culturalObjects || []).filter(object => object.id === caseData.id);
     this.candidateIndex = candidateIndex?.countries || {};
     this.currentLeg = 0;
+    this.currentSceneIndex = 0;
     this.currentCountry = caseData.start.country;
     this.visited = [caseData.start.country];
     this.evidence = [];
     this.investigatedByScene = new Map();
     this.deadEnds = [];
     this.finalSolved = false;
+    this.completedSceneKeys = [];
   }
 
   get mode() { return 'world_case_files'; }
-  get totalLegs() { return this.caseData.legs.length; }
+  get totalLegs() { return Math.max(0, this.caseData.route.length - 1); }
   get currentRouteStop() { return this.caseData.route[this.currentLeg] || this.caseData.start; }
   get targetRouteStop() { return this.caseData.route[this.currentLeg + 1] || null; }
-  get currentLegData() { return this.caseData.legs[this.currentLeg] || null; }
+  get currentLegData() { return this.caseData.legs?.[this.currentLeg] || null; }
   get artifact() { return this.caseData.artifact; }
 
   start() {
@@ -146,20 +153,141 @@ export class WorldCaseFilesLogic {
   getProgress() {
     const currentStop = this.currentRouteStop;
     const targetStop = this.targetRouteStop;
+    const currentScene = this.getCurrentScene();
     return {
       leg: this.currentLeg,
       totalLegs: this.totalLegs,
-      city: currentStop.city,
+      city: currentScene.city || currentStop.city || this.currentCountry,
       country: this.currentCountry,
-      scene: currentStop.scene || '',
-      biographyStage: currentStop.biographyStage || '',
-      learningGoal: currentStop.learningGoal || '',
-      thiefClaim: currentStop.thiefClaim || '',
-      truthComplication: currentStop.truthComplication || '',
+      scene: currentScene.scene || currentStop.scene || '',
+      biographyStage: currentScene.biographyStage || currentStop.biographyStage || '',
+      learningGoal: currentScene.learningGoal || currentStop.learningGoal || '',
+      thiefClaim: currentScene.thiefClaim || currentStop.thiefClaim || '',
+      truthComplication: currentScene.truthComplication || currentStop.truthComplication || '',
       targetCity: targetStop?.city || '',
       targetCountry: targetStop?.country || '',
       targetBiographyStage: targetStop?.biographyStage || '',
       evidenceCount: this.evidence.length,
+      chapterTitle: currentStop.chapterTitle || currentStop.scene || currentStop.city || '',
+      chapterSummary: currentStop.chapterSummary || '',
+      sceneTitle: currentScene.title || currentScene.scene || currentScene.city || '',
+      sceneIndex: this.currentSceneIndex,
+      sceneCount: this.getSceneList(currentStop).length,
+      activeWorks: currentScene.focusWorks || [],
+      threatenedWorks: currentScene.threatenedWorks || [],
+      stolenWorks: currentScene.stolenWorks || [],
+      escalationText: currentScene.escalationText || currentStop.escalationText || '',
+      chapterReady: this.isCurrentSceneReady() && !this.getNextScene(),
+    };
+  }
+
+  getSceneList(stop = this.currentRouteStop) {
+    if (Array.isArray(stop?.localScenes) && stop.localScenes.length) {
+      return stop.localScenes.map((scene, index) => ({
+        ...scene,
+        id: scene.id || `${sceneSlug(stop, 'chapter')}-scene-${index + 1}`,
+      }));
+    }
+    const legacyLeg = stop === this.currentRouteStop ? this.currentLegData : null;
+    return [{
+      id: `${sceneSlug(stop, 'scene')}-legacy`,
+      city: stop?.city,
+      country: stop?.country,
+      scene: stop?.scene,
+      lat: stop?.lat,
+      lon: stop?.lon,
+      biographyStage: stop?.biographyStage,
+      learningGoal: stop?.learningGoal,
+      thiefClaim: stop?.thiefClaim,
+      truthComplication: stop?.truthComplication,
+      investigationPrompt: stop?.investigationPrompt,
+      clues: legacyLeg?.clues || [],
+      followups: legacyLeg?.followups || [],
+      customLocations: [],
+      pois: null,
+      evidenceImages: stop?.evidenceImages || [],
+      focusWorks: stop?.focusWorks || [],
+      threatenedWorks: stop?.threatenedWorks || [],
+      stolenWorks: stop?.stolenWorks || [],
+      title: stop?.scene || stop?.city || stop?.country,
+      requirePuzzle: false,
+    }];
+  }
+
+  getCurrentScene() {
+    const scenes = this.getSceneList();
+    return scenes[this.currentSceneIndex] || scenes[0] || {};
+  }
+
+  getNextScene() {
+    const scenes = this.getSceneList();
+    return scenes[this.currentSceneIndex + 1] || null;
+  }
+
+  getCurrentSceneKey() {
+    const scene = this.getCurrentScene();
+    return `${this.currentLeg}:${scene.id || sceneSlug(scene, 'scene')}`;
+  }
+
+  getCurrentWorks(scene = this.getCurrentScene()) {
+    const focusWorks = scene?.focusWorks || [];
+    return focusWorks.map(title => this.workMap[normalize(title)] || {
+      title,
+      artist: '',
+      institution: '',
+      city: scene?.city || '',
+      country: scene?.country || '',
+      description: '',
+      imagePath: '',
+      imageReady: false,
+      evidenceImages: [],
+    });
+  }
+
+  getCurrentPrimaryWork(scene = this.getCurrentScene()) {
+    return this.getCurrentWorks(scene)[0] || null;
+  }
+
+  getCurrentArtifactPanel() {
+    const currentScene = this.getCurrentScene();
+    const works = this.getCurrentWorks(currentScene);
+    const primaryWork = works[0] || null;
+    return {
+      caseTitle: this.caseData.title,
+      chapterTitle: this.currentRouteStop.chapterTitle || this.currentRouteStop.scene || '',
+      sceneTitle: currentScene.title || currentScene.scene || currentScene.city || '',
+      currentObjective: currentScene.investigationPrompt || currentScene.learningGoal || this.currentRouteStop.learningGoal || '',
+      summary: currentScene.escalationText || this.currentRouteStop.chapterSummary || this.caseData.artifact?.hint || '',
+      primaryWork,
+      works,
+      evidenceImages: [
+        ...(primaryWork?.evidenceImages || []),
+        ...(currentScene.evidenceImages || []),
+      ],
+    };
+  }
+
+  getLocalTrailState(stop = this.currentRouteStop) {
+    const scenes = this.getSceneList(stop);
+    if (scenes.length <= 1) return null;
+    const activeStop = stop === this.currentRouteStop;
+    const currentIndex = activeStop ? this.currentSceneIndex : 0;
+    return {
+      label: stop.localTrailLabel || `${stop.city || stop.country} museum line`,
+      style: stop.localTravelStyle || 'rail',
+      chapterTitle: stop.chapterTitle || stop.scene || stop.city || stop.country,
+      nodes: scenes.map((scene, index) => ({
+        id: scene.id,
+        city: scene.city || stop.city || stop.country,
+        title: scene.title || scene.scene || scene.city || `Scene ${index + 1}`,
+        role: scene.sceneType || 'scene',
+        status: activeStop
+          ? index < currentIndex ? 'visited'
+          : index === currentIndex ? 'current'
+          : index === currentIndex + 1 ? 'next'
+          : 'upcoming'
+          : index === 0 ? 'current' : 'upcoming',
+      })),
     };
   }
 
@@ -175,20 +303,25 @@ export class WorldCaseFilesLogic {
       return {
         primary: sceneBits.join(', ') || country,
         secondary: this.hasMultipleStopsInCountry(country)
-          ? `Return to ${country} for the ${targetStop.scene || targetStop.biographyStage || 'next scene'}.`
-          : (targetStop.scene || ''),
+          ? `Return to ${country} for the ${targetStop.scene || targetStop.chapterTitle || targetStop.biographyStage || 'next scene'}.`
+          : (targetStop.scene || targetStop.chapterTitle || ''),
       };
     }
     const scene = this.getSceneForCountry(country);
     const sceneBits = [scene.city, scene.country].filter(Boolean);
     return {
       primary: sceneBits.join(', ') || country,
-      secondary: scene.scene || '',
+      secondary: scene.scene || scene.chapterTitle || '',
     };
   }
 
   getLocations() {
+    return this.getMapLocations();
+  }
+
+  getMapLocations() {
     const currentStop = this.currentRouteStop || {};
+    const currentScene = this.getCurrentScene();
     const baseLocations = LOCATIONS.map(location => ({
       id: location.id,
       emoji: location.emoji,
@@ -207,15 +340,69 @@ export class WorldCaseFilesLogic {
         lon: place.lon,
         placeName: place.name,
         description: place.description,
-        hideOnMap: approxSamePoint(place.lat, place.lon, currentStop.lat, currentStop.lon) ||
-          normalize(place.name).includes(normalize(currentStop.scene)) ||
-          normalize(currentStop.scene).includes(normalize(place.name)),
-      })),
+        hideOnMap: approxSamePoint(place.lat, place.lon, currentScene.lat, currentScene.lon) ||
+          approxSamePoint(place.lat, place.lon, currentStop.lat, currentStop.lon) ||
+          normalize(place.name).includes(normalize(currentScene.scene)) ||
+          normalize(currentScene.scene).includes(normalize(place.name)),
+        hideInList: approxSamePoint(place.lat, place.lon, currentScene.lat, currentScene.lon) ||
+          approxSamePoint(place.lat, place.lon, currentStop.lat, currentStop.lon) ||
+          normalize(place.name).includes(normalize(currentScene.scene)) ||
+          normalize(currentScene.scene).includes(normalize(place.name)),
+        })),
     ];
   }
 
+  getSceneActions() {
+    const currentScene = this.getCurrentScene();
+    return (currentScene.customLocations || []).map((location, index) => ({
+      id: location.id || `custom-${currentScene.id || 'scene'}-${index + 1}`,
+      emoji: location.emoji || '🧩',
+      name: location.name || location.title || 'Scene desk',
+      type: location.type || 'scene-puzzle',
+      prefix: location.prefix || '',
+      lat: location.lat,
+      lon: location.lon,
+      description: location.description || '',
+    }));
+  }
+
+  getSceneEvidenceImages() {
+    const currentScene = this.getCurrentScene();
+    const works = this.getCurrentWorks(currentScene);
+    const primaryWork = works[0] || null;
+    const images = [];
+    if (primaryWork?.imagePath) {
+      images.push({
+        id: `${primaryWork.id || normalize(primaryWork.title)}-reference`,
+        title: `${primaryWork.title} reference image`,
+        imagePath: primaryWork.imagePath,
+        imagePurpose: 'painting_reference',
+        imageNotes: primaryWork.description || '',
+        subtitle: [
+          primaryWork.artist,
+          primaryWork.institution,
+          [primaryWork.city, primaryWork.country].filter(Boolean).join(', '),
+        ].filter(Boolean).join(' • '),
+      });
+    }
+    for (const item of primaryWork?.evidenceImages || []) {
+      images.push({ ...item });
+    }
+    for (const item of currentScene.evidenceImages || []) {
+      images.push({ ...item });
+    }
+    const seen = new Set();
+    return images.filter(item => {
+      const key = `${item.imagePath || ''}::${item.title || ''}`;
+      if (!key.trim()) return false;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
+  }
+
   getInvestigatedLocationIds() {
-    return new Set(this.investigatedByScene.get(this._sceneKey()) || []);
+    return new Set(this.investigatedByScene.get(this.getCurrentSceneKey()) || []);
   }
 
   getInformant(locationId) {
@@ -226,35 +413,37 @@ export class WorldCaseFilesLogic {
         prefix: `${place?.name || 'Cultural archive'} records show`,
       };
     }
+    const customLocation = this.getLocations().find(item => item.id === locationId && item.type && item.type !== 'cultural-place');
+    if (customLocation) {
+      return {
+        emoji: customLocation.emoji || '🧩',
+        prefix: customLocation.prefix || `${customLocation.name || 'Scene puzzle'} indicates`,
+      };
+    }
     const location = LOCATIONS.find(item => item.id === locationId);
     const informant = location?.informants?.[0];
     return informant || { emoji: location?.emoji || '🔎', prefix: location?.name || 'Field office' };
   }
 
-  _sceneKey(country = this.currentCountry, leg = this.currentLeg) {
-    return `${leg}:${country}`;
-  }
-
   investigate(locationId) {
-    const leg = this.currentLegData;
-    if (!leg) return null;
-    const key = this._sceneKey();
+    const scene = this.getCurrentScene();
+    const key = this.getCurrentSceneKey();
     const investigated = this.investigatedByScene.get(key) || new Set();
     if (investigated.has(locationId)) return null;
     investigated.add(locationId);
     this.investigatedByScene.set(key, investigated);
 
-    let clue = leg.clues.find(item => item.locationId === locationId && !this.evidence.some(e => e.id === item.id));
-    if (!clue && this.currentCountry !== leg.from) {
-      clue = leg.followups?.find(item =>
+    let clue = (scene.clues || []).find(item => item.locationId === locationId && !this.evidence.some(e => e.id === item.id));
+    if (!clue && this.currentCountry !== this.currentRouteStop.country) {
+      clue = (scene.followups || []).find(item =>
         item.afterCountry === this.currentCountry &&
         item.locationId === locationId &&
-        !this.evidence.some(e => e.id === `${leg.from}-${item.locationId}-followup`)
+        !this.evidence.some(e => e.id === `${scene.id}-${item.locationId}-followup`)
       );
       if (clue) {
         clue = {
           ...clue,
-          id: `${leg.from}-${clue.locationId}-followup`,
+          id: `${scene.id}-${clue.locationId}-followup`,
           title: 'Follow-up confirmation',
           action: 'Ask follow-up question',
           strength: 3,
@@ -265,10 +454,13 @@ export class WorldCaseFilesLogic {
     const evidence = {
       ...clue,
       legIndex: this.currentLeg,
-      fromCountry: leg.from,
-      targetCountry: leg.to,
+      sceneIndex: this.currentSceneIndex,
+      sceneId: scene.id,
+      sceneTitle: scene.title || scene.scene || scene.city || '',
+      fromCountry: this.currentRouteStop.country,
+      targetCountry: this.targetRouteStop?.country || '',
       foundInCountry: this.currentCountry,
-      foundInCity: this.currentRouteStop?.city || this.currentCountry,
+      foundInCity: scene.city || this.currentRouteStop?.city || this.currentCountry,
       category: clue.category || (
         clue.tags?.some(tag => tag.startsWith('culture:') || tag.startsWith('famous:') || tag.startsWith('history:') || tag.startsWith('cultural_'))
           ? 'Cultural Evidence'
@@ -278,7 +470,29 @@ export class WorldCaseFilesLogic {
       ),
     };
     this.evidence.push(evidence);
-    return evidence;
+
+    const progress = this.progressSceneIfReady();
+    return { evidence, progress };
+  }
+
+  progressSceneIfReady() {
+    if (!this.isCurrentSceneReady()) return { type: 'scene_pending' };
+    const currentScene = this.getCurrentScene();
+    if (this.getNextScene()) {
+      this.completedSceneKeys.push(this.getCurrentSceneKey());
+      this.currentSceneIndex += 1;
+      return {
+        type: 'scene_advanced',
+        fromScene: currentScene,
+        toScene: this.getCurrentScene(),
+        chapterTitle: this.currentRouteStop.chapterTitle || this.currentRouteStop.scene || '',
+      };
+    }
+    return {
+      type: 'chapter_ready',
+      scene: currentScene,
+      targetCountry: this.targetRouteStop?.country || '',
+    };
   }
 
   _isCulturalLocationId(locationId) {
@@ -302,7 +516,7 @@ export class WorldCaseFilesLogic {
   }
 
   getSceneCulturalPlaces(country = this.currentCountry) {
-    const scene = this.getSceneForCountry(country);
+    const scene = this.getCurrentScene();
     const sceneCity = normalize(scene?.city);
     return this.culturalPlaces.filter(place => {
       if (place.country !== country) return false;
@@ -313,20 +527,26 @@ export class WorldCaseFilesLogic {
 
   getSceneForCountry(country) {
     if (normalize(this.currentRouteStop?.country) === normalize(country)) {
-      return this.currentRouteStop;
+      return this.getCurrentScene();
     }
     if (normalize(this.targetRouteStop?.country) === normalize(country)) {
-      return this.targetRouteStop;
+      return this.getSceneList(this.targetRouteStop)[0] || this.targetRouteStop;
     }
-    return this.caseData.route.find(stop => stop.country === country) || {
+    const stop = this.caseData.route.find(item => normalize(item.country) === normalize(country));
+    if (stop) return this.getSceneList(stop)[0] || stop;
+    return {
       country,
       city: primaryCapital(this.countryMap[country]) || country,
       scene: 'ACME field office',
     };
   }
 
+  getActiveEvidence() {
+    return this.evidence.filter(item => item.legIndex === this.currentLeg && item.sceneIndex === this.currentSceneIndex);
+  }
+
   analyzeCandidates() {
-    const activeEvidence = this.evidence.filter(item => item.legIndex === this.currentLeg);
+    const activeEvidence = this.getActiveEvidence();
     const targetCountry = this.targetRouteStop?.country;
     return this.countries.map(countryData => {
       let matches = 0;
@@ -376,7 +596,7 @@ export class WorldCaseFilesLogic {
 
   getCandidateHintSummary(candidate) {
     if (!candidate) return '';
-    if (candidate.country === this.currentCountry) return 'Current scene. Gather more evidence before moving the case onward.';
+    if (candidate.country === this.currentCountry) return 'Current scene. Finish the local chapter before moving the case onward.';
     if (candidate.state === 'contradicted') return 'Collected evidence contradicts this destination.';
     const matched = candidate.matchedEvidence || [];
     if (matched.length) {
@@ -401,23 +621,31 @@ export class WorldCaseFilesLogic {
   }
 
   getConfidence() {
-    const activeEvidence = this.evidence.filter(item => item.legIndex === this.currentLeg);
+    const activeEvidence = this.getActiveEvidence();
+    const currentScene = this.getCurrentScene();
     const hasRoute = activeEvidence.some(item => item.category === 'Route Evidence');
     const hasCulture = activeEvidence.some(item => item.category === 'Cultural Evidence');
     const hasConfirmation = activeEvidence.some(item => item.category === 'Confirmation');
+    const hasPuzzle = activeEvidence.some(item => item.category === 'Puzzle Evidence');
+    const requirePuzzle = !!currentScene.requirePuzzle || (currentScene.clues || []).some(item => item.category === 'Puzzle Evidence');
     const strongCandidateCount = this.analyzeCandidates().filter(item => item.state === 'strong').length;
     return {
       leadFound: activeEvidence.length > 0,
       patternSupported: hasCulture,
       contradictionsChecked: activeEvidence.some(item => (item.tags || []).some(tag => tag.startsWith('exclude:'))),
       destinationLikely: strongCandidateCount <= 3 && activeEvidence.length >= 3,
-      evidenceReady: hasRoute && hasCulture && hasConfirmation && activeEvidence.length >= REQUIRED_PROOF_CARDS,
+      evidenceReady: hasRoute && hasCulture && hasConfirmation && (!requirePuzzle || hasPuzzle) && activeEvidence.length >= Math.max(REQUIRED_PROOF_CARDS, currentScene.minimumEvidence || 0),
+      puzzleSolved: !requirePuzzle || hasPuzzle,
     };
+  }
+
+  isCurrentSceneReady() {
+    return this.getConfidence().evidenceReady;
   }
 
   canSubmitProof(country) {
     const confidence = this.getConfidence();
-    return country === this.targetRouteStop?.country && confidence.evidenceReady;
+    return country === this.targetRouteStop?.country && confidence.evidenceReady && !this.getNextScene();
   }
 
   travelTo(country) {
@@ -445,10 +673,13 @@ export class WorldCaseFilesLogic {
         type: 'arrived_unproven',
         from,
         country,
-        explanation: 'The destination fits, but ACME will not advance the case until route, cultural, and confirmation evidence are all on the board.',
+        explanation: this.getNextScene()
+          ? 'The country fits, but ACME still needs the remaining local scenes solved before the chapter can move onward.'
+          : 'The destination fits, but ACME will not advance the case until route, cultural, confirmation, and puzzle evidence are all on the board.',
       };
     }
     this.currentLeg++;
+    this.currentSceneIndex = 0;
     this.currentCountry = country;
     const solved = this.currentLeg >= this.totalLegs;
     if (solved) this.finalSolved = true;
@@ -458,13 +689,12 @@ export class WorldCaseFilesLogic {
       country,
       next: this.targetRouteStop,
       scene: this.currentRouteStop,
+      currentScene: this.getCurrentScene(),
     };
   }
 
   getProofCards() {
-    return this.evidence
-      .filter(item => item.legIndex === this.currentLeg)
-      .slice(-5);
+    return this.getActiveEvidence().slice(-5);
   }
 
   getBoardState() {
@@ -480,11 +710,18 @@ export class WorldCaseFilesLogic {
       route: this.caseData.route,
       culturalPlaces: this.culturalPlaces,
       culturalObjects: this.culturalObjects,
+      currentScene: this.getCurrentScene(),
+      currentWorks: this.getCurrentWorks(),
+      sceneActions: this.getSceneActions(),
+      sceneEvidenceImages: this.getSceneEvidenceImages(),
+      artifactPanel: this.getCurrentArtifactPanel(),
+      localTrail: this.getLocalTrailState(),
+      completedSceneKeys: [...this.completedSceneKeys],
     };
   }
 
   getAtlasHints() {
-    const activeEvidence = this.evidence.filter(item => item.legIndex === this.currentLeg);
+    const activeEvidence = this.getActiveEvidence();
     const seen = new Set();
     const hints = [];
     for (const evidence of activeEvidence) {

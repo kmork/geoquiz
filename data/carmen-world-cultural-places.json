@@ -11,7 +11,7 @@
       "description": "art and archeology museum in Paris, France",
       "role": "theft_scene",
       "caseId": "louvre-vanishing",
-      "caseTitle": "The Louvre Vanishing",
+      "caseTitle": "The Renaissance Wave",
       "city": "Paris",
       "country": "France",
       "lat": 48.861111111111114,
@@ -21,13 +21,29 @@
       }
     },
     {
+      "id": "louvre-vanishing-refectory-watch-q51952",
+      "name": "Santa Maria delle Grazie",
+      "wikidataId": "Q51952",
+      "description": "church and convent in Milan, Italy",
+      "role": "refectory_watch",
+      "caseId": "louvre-vanishing",
+      "caseTitle": "The Renaissance Wave",
+      "city": "Milan",
+      "country": "Italy",
+      "lat": 45.4658,
+      "lon": 9.1706,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q51952"
+      }
+    },
+    {
       "id": "louvre-vanishing-provenance-archive-q51252",
       "name": "Uffizi Gallery",
       "wikidataId": "Q51252",
       "description": "palace and art museum in Florence, Italy",
       "role": "provenance_archive",
       "caseId": "louvre-vanishing",
-      "caseTitle": "The Louvre Vanishing",
+      "caseTitle": "The Renaissance Wave",
       "city": "Florence",
       "country": "Italy",
       "lat": 43.76833333333333,
@@ -37,35 +53,51 @@
       }
     },
     {
-      "id": "louvre-vanishing-restoration-lead-q190804",
-      "name": "Rijksmuseum",
-      "wikidataId": "Q190804",
-      "description": "museum in Amsterdam, Netherlands",
-      "role": "restoration_lead",
+      "id": "louvre-vanishing-vatican-watch-q170583",
+      "name": "Vatican Museums",
+      "wikidataId": "Q170583",
+      "description": "art museums in Vatican City",
+      "role": "vatican_watch",
       "caseId": "louvre-vanishing",
-      "caseTitle": "The Louvre Vanishing",
-      "city": "Amsterdam",
-      "country": "Netherlands",
-      "lat": 52.36,
-      "lon": 4.885277777777778,
+      "caseTitle": "The Renaissance Wave",
+      "city": "Rome",
+      "country": "Italy",
+      "lat": 41.9065,
+      "lon": 12.4536,
       "sourceUrls": {
-        "wikidata": "https://www.wikidata.org/wiki/Q190804"
+        "wikidata": "https://www.wikidata.org/wiki/Q170583"
       }
     },
     {
-      "id": "louvre-vanishing-final-proof-scene-q160112",
-      "name": "Museo del Prado",
-      "wikidataId": "Q160112",
-      "description": "Spanish national art museum in Madrid, Spain",
-      "role": "final_proof_scene",
+      "id": "louvre-vanishing-ghent-pivot-q1473",
+      "name": "Saint Bavo Cathedral",
+      "wikidataId": "Q1473",
+      "description": "cathedral in Ghent, Belgium",
+      "role": "ghent_pivot",
       "caseId": "louvre-vanishing",
-      "caseTitle": "The Louvre Vanishing",
-      "city": "Madrid",
-      "country": "Spain",
-      "lat": 40.41388888888889,
-      "lon": -3.692222222222222,
+      "caseTitle": "The Renaissance Wave",
+      "city": "Ghent",
+      "country": "Belgium",
+      "lat": 51.0536,
+      "lon": 3.7253,
       "sourceUrls": {
-        "wikidata": "https://www.wikidata.org/wiki/Q160112"
+        "wikidata": "https://www.wikidata.org/wiki/Q1473"
+      }
+    },
+    {
+      "id": "louvre-vanishing-louvre-return-q19675",
+      "name": "Louvre Museum",
+      "wikidataId": "Q19675",
+      "description": "art and archeology museum in Paris, France",
+      "role": "forgery_return",
+      "caseId": "louvre-vanishing",
+      "caseTitle": "The Renaissance Wave",
+      "city": "Paris",
+      "country": "France",
+      "lat": 48.8604,
+      "lon": 2.3368,
+      "sourceUrls": {
+        "wikidata": "https://www.wikidata.org/wiki/Q19675"
       }
     },
     {

@@ -232,6 +232,7 @@ export function createCarmenUI(container, flagCodes) {
     startCountry: '',
     thiefName: 'Unknown',
     mode: 'campaign',
+    artifact: null,
   };
   const inspectState = {
     pinnedPhoto: null,
@@ -630,7 +631,8 @@ export function createCarmenUI(container, flagCodes) {
     switchTab('case');
   }
 
-  els.artifactDisplay.addEventListener('click', () => {
+  els.artifactDisplay.addEventListener('click', (event) => {
+    if (event.target.closest('.carmen-artifact-evidence-btn')) return;
     els.artifactDisplay.classList.toggle('flipped');
     if (els.artifactFlipLabel) {
       els.artifactFlipLabel.classList.add('hidden');
@@ -774,7 +776,9 @@ export function createCarmenUI(container, flagCodes) {
           ? ` — ${esc(e.capital)}, ${esc(e.country)}`
           : e.country ? ` — ${esc(e.country)}` : '';
         const detourClass = e.type === 'detour' ? ' carmen-dossier-detour' : '';
-        const label = e.type === 'detour' ? 'Dead end' : `Stop ${Number(e.stop) + 1}`;
+        const label = e.type === 'detour'
+          ? 'Dead end'
+          : (e.stopLabel || (Number.isFinite(Number(e.stop)) ? `Stop ${Number(e.stop) + 1}` : 'Case file'));
         html += `<div class="carmen-dossier-section${detourClass}"><div class="carmen-dossier-stop${detourClass}">${label}${location}</div>`;
         sectionOpen = true;
       }
@@ -896,6 +900,56 @@ export function createCarmenUI(container, flagCodes) {
     if (panel) panel.remove();
     const stage = els.rvClues.querySelector('.carmen-investigate-stage');
     if (stage) stage.style.display = '';
+  }
+
+  function dismissImageViewer() {
+    const overlay = document.querySelector('.carmen-image-viewer-overlay');
+    if (overlay) overlay.remove();
+  }
+
+  function showImageViewer(item) {
+    if (!item?.imagePath) return;
+    dismissImageViewer();
+    const overlay = document.createElement('div');
+    overlay.className = 'carmen-image-viewer-overlay';
+    overlay.innerHTML = `
+      <div class="carmen-image-viewer-card">
+        <button class="carmen-image-viewer-close" type="button" aria-label="Close evidence viewer">✕</button>
+        <div class="carmen-image-viewer-kicker">${esc(item.imagePurpose || item.kind || 'evidence image')}</div>
+        <div class="carmen-image-viewer-title">${esc(item.title || item.label || 'Evidence image')}</div>
+        ${item.subtitle ? `<div class="carmen-image-viewer-subtitle">${esc(item.subtitle)}</div>` : ''}
+        <div class="carmen-image-viewer-frame">
+          <img src="${esc(item.imagePath)}" alt="${esc(item.title || item.label || 'Evidence image')}">
+        </div>
+      </div>
+    `;
+    overlay.addEventListener('click', (event) => {
+      if (event.target === overlay) dismissImageViewer();
+    });
+    overlay.querySelector('.carmen-image-viewer-close')?.addEventListener('click', () => dismissImageViewer());
+    document.body.appendChild(overlay);
+  }
+
+  function bindWorldCaseArtifactEvidence(panel = null) {
+    if (!els.artifactSummary) return;
+    els.artifactSummary.querySelectorAll('[data-evidence-image-path]').forEach(btn => {
+      btn.addEventListener('click', (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        showImageViewer({
+          imagePath: btn.dataset.evidenceImagePath || '',
+          imagePurpose: btn.dataset.evidenceImagePurpose || '',
+          title: btn.dataset.evidenceImageTitle || 'Evidence image',
+          subtitle: btn.dataset.evidenceImageSubtitle || '',
+          imageNotes: btn.dataset.evidenceImageNotes || '',
+        });
+      });
+    });
+    if (els.artifactImg) {
+      els.artifactImg.classList.remove('is-clickable');
+      els.artifactImg.title = '';
+      els.artifactImg.onclick = null;
+    }
   }
 
   function showNarratorCaption(text, duration = null) {
@@ -1110,11 +1164,13 @@ export function createCarmenUI(container, flagCodes) {
       applyRouteCopy('world_case_files');
       const current = state?.current || {};
       const pattern = state?.pattern || {};
+      this.updateWorldCaseArtifact(state);
       els.narrative.innerHTML = `
         <div class="carmen-intro-card carmen-world-case-card">
           <div class="carmen-intro-badge">WORLD CASE FILES</div>
           <div class="carmen-intro-artifact">${esc(state?.caseTitle || 'Open cultural theft')}</div>
-          <div class="carmen-intro-origin">Current scene: <strong>${esc(current.city || current.country || '')}</strong></div>
+          <div class="carmen-intro-origin">Current chapter: <strong>${esc(current.chapterTitle || current.city || current.country || '')}</strong></div>
+          <div class="carmen-intro-origin">Current scene: <strong>${esc(current.sceneTitle || current.city || current.country || '')}</strong></div>
           ${current.biographyStage ? `<div class="carmen-intro-origin">Biography stage: <strong>${esc(current.biographyStage)}</strong></div>` : ''}
           <div class="carmen-intro-suspect">🔎 Pattern: <span class="thief-name">${esc(pattern.label || 'Unknown')}</span></div>
           <div class="carmen-intro-mission">${esc(pattern.summary || 'Gather evidence, narrow the world atlas, and travel when the case is strong enough.')}</div>
@@ -1130,6 +1186,7 @@ export function createCarmenUI(container, flagCodes) {
       const confidence = state?.confidence || {};
       const summary = state?.summary || {};
       const current = state?.current || {};
+      const currentScene = state?.currentScene || {};
       const route = state?.route || [];
       const steps = [
         ['Lead found', confidence.leadFound],
@@ -1138,8 +1195,12 @@ export function createCarmenUI(container, flagCodes) {
         ['Destination likely', confidence.destinationLikely],
         ['Evidence ready', confidence.evidenceReady],
       ];
+      if (confidence.puzzleSolved !== undefined) steps.push(['Puzzle solved', confidence.puzzleSolved]);
       const evidence = state?.evidence || [];
       const deadEnds = state?.deadEnds || [];
+      const activeWorks = current.activeWorks || [];
+      const threatenedWorks = current.threatenedWorks || [];
+      const stolenWorks = current.stolenWorks || [];
       const evidenceHtml = evidence.length
         ? evidence.slice().reverse().map(item => `
           <div class="carmen-world-evidence-card">
@@ -1163,7 +1224,7 @@ export function createCarmenUI(container, flagCodes) {
               const visited = index < current.leg;
               return `
                 <div class="carmen-world-biography-stop${active ? ' active' : ''}${visited ? ' visited' : ''}">
-                  <div class="carmen-world-biography-stage">${esc(stop.biographyStage || `Stop ${index + 1}`)}</div>
+                  <div class="carmen-world-biography-stage">${esc(stop.chapterTitle || stop.biographyStage || `Stop ${index + 1}`)}</div>
                   <div class="carmen-world-biography-place">${esc(stop.city || stop.country || '')}</div>
                 </div>
               `;
@@ -1171,17 +1232,27 @@ export function createCarmenUI(container, flagCodes) {
           </div>
         `
         : '';
+      const worksHtml = (title, items, className) => items.length ? `
+        <div class="carmen-world-stage-claim ${className}">
+          <b>${esc(title)}:</b> ${esc(items.join(', '))}
+        </div>
+      ` : '';
       const stageHtml = current.biographyStage
         ? `
           <div class="carmen-world-board-section">
-            <div class="carmen-world-section-title">Artifact Biography</div>
+            <div class="carmen-world-section-title">Case Progression</div>
             ${biographyHtml}
             <div class="carmen-world-stage-card">
               <div class="carmen-world-evidence-type">${esc(current.biographyStage)}</div>
-              <div class="carmen-world-evidence-title">${esc(current.scene || current.city || current.country || 'Current scene')}</div>
-              <div class="carmen-world-evidence-text">${esc(current.learningGoal || '')}</div>
+              <div class="carmen-world-evidence-title">${esc(current.chapterTitle || current.scene || current.city || current.country || 'Current scene')}</div>
+              <div class="carmen-world-evidence-text">${esc(current.chapterSummary || current.learningGoal || '')}</div>
+              <div class="carmen-world-evidence-meta">Scene ${esc(String((current.sceneIndex || 0) + 1))} of ${esc(String(current.sceneCount || 1))}: ${esc(current.sceneTitle || current.scene || current.city || '')}</div>
               ${current.thiefClaim ? `<div class="carmen-world-stage-claim"><b>Thief claim:</b> ${esc(current.thiefClaim)}</div>` : ''}
               ${current.truthComplication ? `<div class="carmen-world-stage-claim"><b>Complication:</b> ${esc(current.truthComplication)}</div>` : ''}
+              ${worksHtml('Works in play', activeWorks, 'works')}
+              ${worksHtml('At risk', threatenedWorks, 'threatened')}
+              ${worksHtml('Already hit', stolenWorks, 'stolen')}
+              ${current.escalationText ? `<div class="carmen-world-stage-claim"><b>Escalation:</b> ${esc(current.escalationText)}</div>` : ''}
             </div>
           </div>
         `
@@ -1214,28 +1285,90 @@ export function createCarmenUI(container, flagCodes) {
       `;
     },
 
-    showWorldCaseLocations(locations, onInvestigate, state, options = null) {
+    showWorldCaseLocations(sceneActions, onInvestigate, state, options = null) {
       clearCityInvestigationMap();
       this._worldInvestigatedIds = new Set(options?.investigatedIds || []);
       const current = state?.current || {};
+      const mapLocations = options?.mapLocations || [];
+      const sceneEvidenceImages = state?.sceneEvidenceImages || [];
+      const sceneTitle = state?.current?.sceneTitle || state?.currentScene?.title || state?.currentScene?.scene || current.city || 'Current scene';
+      const visibleSceneActions = sceneActions || [];
+      const selectedContext = options?.selectedContext || { type: 'scene' };
+      const selectedMapLocation = selectedContext?.type === 'location'
+        ? mapLocations.find(loc => loc.id === selectedContext.id) || null
+        : null;
       els.locationsLabel.style.display = '';
-      els.locationsLabel.textContent = `Investigate freely in ${current.city || current.country || 'the current city'}:`;
+      els.locationsLabel.textContent = selectedContext?.type === 'scene'
+        ? `${sceneTitle}:`
+        : `${selectedMapLocation?.name || 'Location'}:`;
       els.locations.innerHTML = `
         <div class="carmen-location-list carmen-world-location-list">
-          ${locations.map(loc => `
-            <button class="carmen-location-btn" data-location="${loc.id}">
-              <span class="carmen-location-emoji">${loc.emoji}</span>
-              <span class="carmen-location-name">${loc.name}</span>
-            </button>
-          `).join('')}
+          ${selectedContext?.type === 'scene' ? `
+            <div class="carmen-world-scene-panel">
+              <div class="carmen-world-scene-panel-head">
+                <div class="carmen-world-scene-panel-kicker">SCENE FILE</div>
+                <div class="carmen-world-scene-panel-title">${esc(sceneTitle)}</div>
+              </div>
+              ${visibleSceneActions.length ? `
+                <div class="carmen-world-scene-section">
+                  <div class="carmen-world-scene-section-title">Scene Actions</div>
+                  ${visibleSceneActions.map(loc => `
+                    <button class="carmen-location-btn carmen-world-scene-btn" data-location="${loc.id}">
+                      <span class="carmen-location-emoji">${loc.emoji}</span>
+                      <span class="carmen-location-name">${loc.name}</span>
+                    </button>
+                  `).join('')}
+                </div>
+              ` : ''}
+              ${sceneEvidenceImages.length ? `
+                <div class="carmen-world-scene-section">
+                  <div class="carmen-world-scene-section-title">Evidence</div>
+                  ${sceneEvidenceImages.map(item => `
+                    <button
+                      class="carmen-location-btn carmen-world-scene-btn carmen-world-scene-evidence-btn"
+                      type="button"
+                      data-evidence-image-path="${esc(item.imagePath || '')}"
+                      data-evidence-image-purpose="${esc(item.imagePurpose || 'evidence_image')}"
+                      data-evidence-image-title="${esc(item.title || 'Evidence image')}"
+                      data-evidence-image-subtitle="${esc(item.subtitle || '')}"
+                      data-evidence-image-notes="${esc(item.imageNotes || '')}"
+                    >
+                      <span class="carmen-location-emoji">🖼️</span>
+                      <span class="carmen-location-name">${esc(item.title || 'Evidence image')}</span>
+                    </button>
+                  `).join('')}
+                </div>
+              ` : ''}
+              ${!visibleSceneActions.length && !sceneEvidenceImages.length ? `
+                <div class="carmen-dossier-empty">No authored scene actions are available here yet.</div>
+              ` : ''}
+            </div>
+          ` : `
+            <div class="carmen-world-scene-panel">
+              <div class="carmen-world-scene-panel-head">
+                <div class="carmen-world-scene-panel-kicker">MAP LOCATION</div>
+                <div class="carmen-world-scene-panel-title">${esc(selectedMapLocation?.name || 'Location')}</div>
+              </div>
+              <div class="carmen-artifact-summary carmen-artifact-summary-secondary">
+                ${esc(selectedMapLocation?.description || 'This location is handled on the map. Select the scene marker to reopen scene actions and evidence.')}
+              </div>
+            </div>
+          `}
         </div>
       `;
-      const pickLocation = (locId) => {
+      const pickSceneAction = (locId) => {
         this._worldInvestigatedIds.add(locId);
         const btn = Array.from(els.locations.querySelectorAll('.carmen-location-btn'))
           .find(candidate => candidate.dataset.location === locId);
         if (btn) btn.classList.add('investigated');
         cityInvestigationMap?.setLocationState?.(locId, 'investigated');
+        onInvestigate(locId);
+      };
+      const selectMapLocation = (locId) => {
+        if (typeof options?.onLocationSelect === 'function') {
+          options.onLocationSelect(locId);
+          return;
+        }
         onInvestigate(locId);
       };
 
@@ -1245,17 +1378,31 @@ export function createCarmenUI(container, flagCodes) {
         if (btn) btn.classList.add('investigated');
       }
 
+      els.locations.querySelectorAll('.carmen-world-scene-evidence-btn').forEach(btn => {
+        btn.addEventListener('click', (event) => {
+          event.preventDefault();
+          showImageViewer({
+            imagePath: btn.dataset.evidenceImagePath || '',
+            imagePurpose: btn.dataset.evidenceImagePurpose || '',
+            title: btn.dataset.evidenceImageTitle || 'Evidence image',
+            subtitle: btn.dataset.evidenceImageSubtitle || '',
+            imageNotes: btn.dataset.evidenceImageNotes || '',
+          });
+        });
+      });
+
       if (options?.cityMap && els.cityMapStage) {
         els.rvClues.classList.add('has-city-map');
         els.cityMapStage.style.display = '';
-        cityInvestigationMap = createCityInvestigationMap(els.cityMapStage, locations, options, pickLocation);
+        cityInvestigationMap = createCityInvestigationMap(els.cityMapStage, mapLocations, options, selectMapLocation);
         for (const locId of this._worldInvestigatedIds) {
           cityInvestigationMap?.setLocationState?.(locId, 'investigated');
         }
+        cityInvestigationMap?.setSelectedLocation?.(selectedContext?.type === 'scene' ? '__scene__' : selectedContext?.id || '');
       }
 
-      els.locations.querySelectorAll('.carmen-location-btn').forEach(btn => {
-        btn.addEventListener('click', () => pickLocation(btn.dataset.location));
+      els.locations.querySelectorAll('.carmen-world-scene-btn[data-location]').forEach(btn => {
+        btn.addEventListener('click', () => pickSceneAction(btn.dataset.location));
       });
     },
 
@@ -1272,12 +1419,14 @@ export function createCarmenUI(container, flagCodes) {
         : null;
       const targetStop = options?.targetStop || null;
       const targetTravelLabel = options?.targetTravelLabel || null;
+      const localTrail = options?.localTrail || null;
       els.travelTitle.textContent = 'Where does the world case lead?';
       els.travelDesc.textContent = 'The whole atlas is open. Compare the evidence, inspect countries on the map, and move when the lead is strong enough.';
       const cost = els.panelTravel.querySelector('.carmen-panel-cost');
       if (cost) cost.innerHTML = 'No hard clock: <strong>travel anywhere, but only proven routes advance the case</strong>';
       els.sidebar.innerHTML = `
         <div class="carmen-world-atlas-stack">
+          ${localTrail ? renderWorldLocalTrail(localTrail) : ''}
           <div class="carmen-world-travel-desk">
             ${targetStop ? `
               <div class="carmen-world-active-lead">
@@ -1418,6 +1567,7 @@ export function createCarmenUI(container, flagCodes) {
         capital,
         scope: options?.scope || null,
         visualEvidence: options?.visualEvidence || null,
+        stopLabel: options?.stopLabel || '',
       });
       renderDossier();
     },
@@ -1798,20 +1948,26 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     showIntro(thiefName, artifact, startCountry, options = null) {
-      const mode = options?.mode || 'campaign';
-      const copy = getRouteCopy(mode);
-      resetInterpolPhotoInspect();
-      const siteName = artifact.siteName || 'a priceless artifact';
-      const imgUrl = artifact.imageUrl || '';
-      caseCardState.siteName = siteName;
-      caseCardState.startCountry = startCountry || '';
-      caseCardState.thiefName = thiefName || 'Unknown';
-      caseCardState.mode = mode;
-      applyRouteCopy(mode);
+        const mode = options?.mode || 'campaign';
+        const copy = getRouteCopy(mode);
+        resetInterpolPhotoInspect();
+        const siteName = artifact.siteName || 'a priceless artifact';
+        const imgUrl = artifact.imageUrl || '';
+        caseCardState.siteName = siteName;
+        caseCardState.startCountry = startCountry || '';
+        caseCardState.thiefName = thiefName || 'Unknown';
+        caseCardState.mode = mode;
+        caseCardState.artifact = artifact || null;
+        applyRouteCopy(mode);
       // Set artifact image for the right-side display
       if (imgUrl) {
         els.artifactImg.src = imgUrl;
         els.artifactImg.alt = siteName;
+      }
+      if (els.artifactImg) {
+        els.artifactImg.classList.remove('is-clickable');
+        els.artifactImg.title = '';
+        els.artifactImg.onclick = null;
       }
       lineupState.active = false;
       lineupState.suspects = [];
@@ -1841,6 +1997,18 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-intro-mission">${esc(copy.introMission)}</div>
         </div>
       `;
+    },
+
+    updateWorldCaseArtifact(state) {
+      const panel = state?.artifactPanel || null;
+      const artifact = caseCardState.artifact || {};
+      const imagePath = artifact.imageUrl || '';
+      if (imagePath) {
+        els.artifactImg.src = imagePath;
+        els.artifactImg.alt = artifact.siteName || 'Case evidence';
+      }
+      els.artifactSummary.innerHTML = formatArtifactBack(artifact, panel);
+      bindWorldCaseArtifactEvidence(panel);
     },
 
     showStopNarrative(stopIndex, totalStops, options = null) {
@@ -1968,6 +2136,7 @@ export function createCarmenUI(container, flagCodes) {
       const scopeLabel = clue.scope === 'capital' ? '📍 capital lead' : '🗺️ country lead';
       els.reveal.innerHTML = `
         <div class="carmen-speech-bubble">
+          <button class="carmen-clue-close-btn" type="button" aria-label="Dismiss clue">✕</button>
           <div class="carmen-speech-avatar">${emoji}</div>
           <div class="carmen-speech-body">
             <div class="carmen-speech-name">${esc(prefix)}</div>
@@ -1978,6 +2147,10 @@ export function createCarmenUI(container, flagCodes) {
         </div>
       `;
       els.reveal.style.display = '';
+      els.reveal.querySelector('.carmen-clue-close-btn')?.addEventListener('click', () => {
+        els.reveal.style.display = 'none';
+        els.reveal.innerHTML = '';
+      });
       // Switch right panel to clues view
       for (const rv of allRightViews) rv.style.display = 'none';
       els.rvClues.style.display = '';
@@ -2365,25 +2538,51 @@ function esc(str) {
   return d.innerHTML;
 }
 
-function formatArtifactBack(artifact) {
+function renderWorldLocalTrail(localTrail) {
+  const nodes = localTrail?.nodes || [];
+  if (!nodes.length) return '';
+  return `
+    <div class="carmen-world-local-trail ${esc(localTrail.style || 'rail')}">
+      <div class="carmen-world-local-kicker">LOCAL LINE</div>
+      <div class="carmen-world-local-title">${esc(localTrail.label || 'Museum line')}</div>
+      <div class="carmen-world-local-track">
+        ${nodes.map(node => `
+          <div class="carmen-world-local-node ${esc(node.status || 'upcoming')}">
+            <span class="carmen-world-local-dot">${node.status === 'current' ? '🚆' : node.status === 'visited' ? '●' : '○'}</span>
+            <span class="carmen-world-local-city">${esc(node.city || '')}</span>
+            <span class="carmen-world-local-stop">${esc(node.title || '')}</span>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function formatArtifactBack(artifact, panel = null) {
   const siteName = artifact.siteName || 'Unknown Site';
   const country = artifact.country || '';
   const hint = artifact.hint || '';
-  const summary = (artifact.summary || '').trim();
+  const summary = (panel?.summary || artifact.summary || '').trim();
   const sentences = summary ? summary.split(/(?<=[.!?])\s+/).filter(Boolean) : [];
-  const lead = sentences[0] || 'Reference note unavailable.';
-  const extra = '';
+  const lead = panel?.currentObjective || sentences[0] || 'Reference note unavailable.';
+  const work = panel?.primaryWork || null;
+  const workLines = work ? [
+    work.artist ? `${work.artist}` : '',
+    work.institution ? `${work.institution}` : '',
+    [work.city, work.country].filter(Boolean).join(', '),
+  ].filter(Boolean) : [];
 
   return `
     <div class="carmen-artifact-backdrop">
-      <div class="carmen-artifact-back-type">ARCHIVE NOTE</div>
-      <div class="carmen-artifact-back-site">${esc(siteName)}</div>
-      ${country ? `<div class="carmen-artifact-back-origin">${esc(country)}</div>` : ''}
+      <div class="carmen-artifact-back-type">${panel ? 'CASE EVIDENCE' : 'ARCHIVE NOTE'}</div>
+      <div class="carmen-artifact-back-site">${esc(work?.title || siteName)}</div>
+      ${(work?.artist || country) ? `<div class="carmen-artifact-back-origin">${esc(work?.artist || country)}</div>` : ''}
       <div class="carmen-artifact-note">
         <div class="carmen-artifact-note-clip"></div>
-        <div class="carmen-artifact-note-label">FIELD NOTE</div>
+        <div class="carmen-artifact-note-label">${panel ? 'CURRENT READ' : 'FIELD NOTE'}</div>
         <div class="carmen-artifact-summary">${esc(lead)}</div>
-        ${extra ? `<div class="carmen-artifact-summary carmen-artifact-summary-secondary">${esc(extra)}</div>` : ''}
+        ${workLines.length ? `<div class="carmen-artifact-summary carmen-artifact-summary-secondary">${esc(workLines.join(' • '))}</div>` : ''}
+        ${work?.description ? `<div class="carmen-artifact-summary carmen-artifact-summary-secondary">${esc(work.description)}</div>` : ''}
         ${hint ? `<div class="carmen-artifact-geo-note"><span>Geo note:</span> ${esc(hint)}</div>` : ''}
       </div>
       <div class="carmen-artifact-back-return">↩ back to photo</div>
