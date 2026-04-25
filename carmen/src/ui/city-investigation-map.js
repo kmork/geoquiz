@@ -32,17 +32,29 @@ function zoomForOsmLevel(level) {
 
 function getGeoPoints(options) {
   const points = [options.center];
-  if (options.scene && Number.isFinite(options.scene.lat) && Number.isFinite(options.scene.lon)) {
+  const maxDist = Number.isFinite(options.fitMaxDistanceDegrees) ? options.fitMaxDistanceDegrees : Infinity;
+  const cLat = options.center?.lat;
+  const cLon = options.center?.lon;
+  const within = (lat, lon) => {
+    if (!Number.isFinite(maxDist) || !Number.isFinite(cLat) || !Number.isFinite(cLon)) return true;
+    const dLat = lat - cLat;
+    const dLon = lon - cLon;
+    return (dLat * dLat + dLon * dLon) <= (maxDist * maxDist);
+  };
+  if (options.scene && Number.isFinite(options.scene.lat) && Number.isFinite(options.scene.lon)
+      && within(options.scene.lat, options.scene.lon)) {
     points.push({ lat: options.scene.lat, lon: options.scene.lon });
   }
-  if (options.airport) points.push({ lat: options.airport.lat, lon: options.airport.lon });
+  if (options.airport && within(options.airport.lat, options.airport.lon)) {
+    points.push({ lat: options.airport.lat, lon: options.airport.lon });
+  }
   for (const loc of options.locations || []) {
-    if (Number.isFinite(loc?.lat) && Number.isFinite(loc?.lon)) {
+    if (Number.isFinite(loc?.lat) && Number.isFinite(loc?.lon) && within(loc.lat, loc.lon)) {
       points.push({ lat: loc.lat, lon: loc.lon });
     }
   }
   for (const poi of Object.values(options.pois || {})) {
-    if (Number.isFinite(poi?.lat) && Number.isFinite(poi?.lon)) {
+    if (Number.isFinite(poi?.lat) && Number.isFinite(poi?.lon) && within(poi.lat, poi.lon)) {
       points.push({ lat: poi.lat, lon: poi.lon });
     }
   }
@@ -65,9 +77,10 @@ function getViewport(options, width, height) {
   const padding = Math.min(130, Math.max(70, Math.min(width, height) * 0.16));
   const fitZoomX = (width - padding * 2) / Math.max(0.0001, maxX - minX);
   const fitZoomY = (height - padding * 2) / Math.max(0.0001, maxY - minY);
+  const targetOsmLevel = Number.isFinite(options.targetOsmZoom) ? options.targetOsmZoom : TARGET_OSM_ZOOM;
   const zoom = Math.max(
     zoomForOsmLevel(MIN_OSM_ZOOM),
-    Math.min(zoomForOsmLevel(TARGET_OSM_ZOOM), fitZoomX, fitZoomY)
+    Math.min(zoomForOsmLevel(targetOsmLevel), fitZoomX, fitZoomY)
   );
   return {
     scrollX: centerProjected.x - width / (2 * zoom),
