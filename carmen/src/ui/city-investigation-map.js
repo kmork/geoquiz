@@ -106,7 +106,6 @@ export function createCityInvestigationMap(container, locations, options, onPick
       <div class="carmen-city-map-head">
         <div>
           <div class="carmen-city-map-title">${esc(options.capital)}</div>
-          <div class="carmen-city-map-subtitle">ACME field stops near the current scene</div>
         </div>
         <div class="carmen-city-map-country">${esc(options.country)}</div>
       </div>
