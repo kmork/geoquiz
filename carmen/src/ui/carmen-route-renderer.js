@@ -58,9 +58,6 @@ export class CarmenRouteRenderer extends RouteRenderer {
   }
 
   _wireChoice(el, entry, countryName, onClick) {
-    el.addEventListener('pointerdown', (e) => {
-      if (!entry.disabled) e.stopPropagation();
-    });
     el.addEventListener('click', () => {
       if (!entry.disabled) onClick(countryName);
     });
@@ -75,12 +72,12 @@ export class CarmenRouteRenderer extends RouteRenderer {
   _setChoiceState(entry, state) {
     const palette = {
       idle: {
-        fill: 'rgba(148, 163, 184, 0.2)',
-        stroke: 'rgba(148, 163, 184, 0.6)',
+        fill: 'rgba(148, 163, 184, 0.5)',
+        stroke: 'rgba(148, 163, 184, 0.7)',
       },
       hover: {
-        fill: 'rgba(148, 163, 184, 0.4)',
-        stroke: 'rgba(148, 163, 184, 0.9)',
+        fill: 'rgba(148, 163, 184, 0.46)',
+        stroke: 'rgba(148, 163, 184, 0.95)',
       },
       correct: {
         fill: 'rgba(34, 197, 94, 0.35)',
@@ -184,20 +181,40 @@ export class CarmenRouteRenderer extends RouteRenderer {
     this.svg.appendChild(group);
 
     const palette = {
-      unknown: { fill: 'rgba(148, 163, 184, 0.02)', stroke: 'rgba(148, 163, 184, 0.14)', strokeWidth: '0.85' },
+      unknown: { fill: 'rgba(148, 163, 184, 0.08)', stroke: 'rgba(148, 163, 184, 0.24)', strokeWidth: '0.95' },
       partial: { fill: 'rgba(245, 158, 11, 0.14)', stroke: 'rgba(245, 158, 11, 0.34)', strokeWidth: '0.95' },
       pattern: { fill: 'rgba(168, 85, 247, 0.14)', stroke: 'rgba(168, 85, 247, 0.42)', strokeWidth: '1.05' },
       strong: { fill: 'rgba(34, 197, 94, 0.16)', stroke: 'rgba(74, 222, 128, 0.62)', strokeWidth: '1.2' },
       contradicted: { fill: 'rgba(239, 68, 68, 0.03)', stroke: 'rgba(248, 113, 113, 0.32)', strokeWidth: '0.95' },
       current: { fill: 'rgba(251, 191, 36, 0.22)', stroke: 'rgba(251, 191, 36, 0.92)', strokeWidth: '1.45' },
+      selected: { fill: 'rgba(59, 130, 246, 0.24)', stroke: 'rgba(96, 165, 250, 0.9)', strokeWidth: '1.5' },
     };
     const candidateByCountry = Object.fromEntries((candidates || []).map(item => [item.country, item]));
     const hintsEnabled = options.hintsEnabled !== false;
+    let selectedCountry = options.selectedCountry || '';
+    const entriesByCountry = new Map();
+
+    const getColorForCandidate = (candidate) => {
+      const baseColor = hintsEnabled ? (palette[candidate.state] || palette.unknown) : palette.unknown;
+      return candidate.country === selectedCountry ? palette.selected : baseColor;
+    };
+
+    const applyEntryColor = (entry) => {
+      if (!entry) return;
+      const color = getColorForCandidate(entry.candidate);
+      for (const path of entry.paths) {
+        path.setAttribute('fill', color.fill);
+        path.setAttribute('stroke', color.stroke);
+        path.setAttribute('stroke-width', color.strokeWidth || '1');
+      }
+    };
 
     for (const candidate of candidates || []) {
       const features = findGeoFeatures(this.worldFeatures, candidate.country);
       if (!features.length) continue;
-      const color = hintsEnabled ? (palette[candidate.state] || palette.unknown) : palette.unknown;
+      const entry = { candidate, paths: [] };
+      entriesByCountry.set(candidate.country, entry);
+      const color = getColorForCandidate(candidate);
       for (const feature of features) {
         const path = document.createElementNS(SVG_NS, 'path');
         path.setAttribute('d', this.pathFromFeature(feature));
@@ -214,13 +231,24 @@ export class CarmenRouteRenderer extends RouteRenderer {
         } else {
           path.setAttribute('title', candidate.country);
         }
-        path.addEventListener('pointerdown', event => event.stopPropagation());
+        path.addEventListener('mouseenter', () => {
+          path.setAttribute('fill', 'rgba(203, 213, 225, 0.24)');
+          path.setAttribute('stroke', 'rgba(226, 232, 240, 0.52)');
+        });
+        path.addEventListener('mouseleave', () => {
+          applyEntryColor(entry);
+        });
         path.addEventListener('click', () => onClick?.(candidate.country, candidateByCountry[candidate.country]));
         group.appendChild(path);
+        entry.paths.push(path);
       }
     }
 
     return {
+      setSelected: (country = '') => {
+        selectedCountry = country || '';
+        for (const entry of entriesByCountry.values()) applyEntryColor(entry);
+      },
       remove: () => group.remove(),
     };
   }

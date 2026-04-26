@@ -898,15 +898,18 @@ function drawWorldCaseMap() {
   }
   activeWorldCandidateLayer = renderer.drawWorldCandidates(candidates, (country, candidate) => {
     worldCaseInspectCountry = country;
+    activeWorldCandidateLayer?.setSelected?.(country);
     ui.showWorldCandidateDetails(candidate, handleWorldTravel, {
       currentCountry: worldCase.currentCountry,
       onClose: () => {
         worldCaseInspectCountry = '';
+        activeWorldCandidateLayer?.setSelected?.('');
         drawWorldCaseMap();
       },
     });
   }, {
     hintsEnabled: worldCaseHintMode !== 'off',
+    selectedCountry: worldCaseInspectCountry,
   });
   ui.showWorldTravelDesk(candidates, handleWorldTravel, null, {
     switchToTravel: false,

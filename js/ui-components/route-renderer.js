@@ -314,10 +314,6 @@ export class RouteRenderer {
         group.appendChild(path);
         entry.paths.push(path);
 
-        // Stop propagation so zoom-pan doesn't steal the pointer
-        path.addEventListener('pointerdown', (e) => {
-          if (!entry.disabled) e.stopPropagation();
-        });
         path.addEventListener('click', () => {
           if (!entry.disabled) onClick(name);
         });
@@ -369,9 +365,6 @@ export class RouteRenderer {
             group.appendChild(circle);
             entry.paths.push(circle);
 
-            circle.addEventListener('pointerdown', (e) => {
-              if (!entry.disabled) e.stopPropagation();
-            });
             circle.addEventListener('click', () => {
               if (!entry.disabled) onClick(name);
             });

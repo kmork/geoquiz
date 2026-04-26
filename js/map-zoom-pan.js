@@ -135,6 +135,8 @@ export function attachZoomPan(svgEl, getBaseViewBox) {
   let startVB = null;
   let panStart = null;
   let prevDist = 0;
+  let panActivated = false;
+  const PAN_START_THRESHOLD = 8;
 
   const dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
@@ -142,17 +144,21 @@ export function attachZoomPan(svgEl, getBaseViewBox) {
   svgEl.style.touchAction = "none";
 
   const onPointerDown = (e) => {
-    svgEl.setPointerCapture(e.pointerId);
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     startVB = getVB();
 
     if (pointers.size === 1) {
       panStart = { x: e.clientX, y: e.clientY };
       prevDist = 0;
+      panActivated = false;
     } else if (pointers.size === 2) {
+      for (const pointerId of pointers.keys()) {
+        svgEl.setPointerCapture?.(pointerId);
+      }
       const pts = [...pointers.values()];
       prevDist = dist(pts[0], pts[1]);
       panStart = null;
+      panActivated = false;
     }
   };
 
@@ -163,6 +169,12 @@ export function attachZoomPan(svgEl, getBaseViewBox) {
     // One pointer => pan
     if (pointers.size === 1 && panStart) {
       const p = [...pointers.values()][0];
+      const moved = Math.hypot(p.x - panStart.x, p.y - panStart.y);
+      if (!panActivated) {
+        if (moved < PAN_START_THRESHOLD) return;
+        panActivated = true;
+        svgEl.setPointerCapture?.(e.pointerId);
+      }
 
       const a = clientToSvg(panStart.x, panStart.y);
       const b = clientToSvg(p.x, p.y);
@@ -200,10 +212,12 @@ export function attachZoomPan(svgEl, getBaseViewBox) {
       startVB = getVB();
       panStart = { x: p.x, y: p.y };
       prevDist = 0;
+      panActivated = false;
     } else if (pointers.size === 0) {
       startVB = null;
       panStart = null;
       prevDist = 0;
+      panActivated = false;
     }
   };
 
@@ -214,7 +228,8 @@ export function attachZoomPan(svgEl, getBaseViewBox) {
     pointers.clear();
     startVB = null;
     panStart = null;
-    startDist = 0;
+    prevDist = 0;
+    panActivated = false;
   });
 
   /** Shift the current viewBox by (dx, dy) in SVG units. */
