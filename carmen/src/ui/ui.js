@@ -1387,7 +1387,7 @@ export function createCarmenUI(container, flagCodes) {
       const current = state?.current || {};
       const mapLocations = options?.mapLocations || [];
       const sceneEvidenceImages = state?.sceneEvidenceImages || [];
-      const sceneTitle = state?.current?.sceneTitle || state?.currentScene?.title || state?.currentScene?.scene || current.city || 'Current scene';
+      const sceneTitle = state?.displayScene?.title || state?.displayScene?.scene || state?.current?.sceneTitle || state?.currentScene?.title || state?.currentScene?.scene || current.city || 'Current scene';
       const visibleSceneActions = sceneActions || [];
       const selectedContext = options?.selectedContext || { type: 'scene' };
       const selectedMapLocation = selectedContext?.type === 'location'
@@ -1524,11 +1524,14 @@ export function createCarmenUI(container, flagCodes) {
       const inspectCandidate = inspectCountry
         ? candidates.find(item => item.country === inspectCountry) || null
         : null;
+      const citySelection = options?.citySelection || null;
       const targetStop = options?.targetStop || null;
       const targetTravelLabel = options?.targetTravelLabel || null;
       const localTrail = options?.localTrail || null;
       els.travelTitle.textContent = 'Where does the world case lead?';
-      els.travelDesc.textContent = 'Compare the evidence, inspect countries on the map, and move when the lead is strong enough.';
+      els.travelDesc.textContent = citySelection
+        ? 'Choose a city on the map to commit the next flight.'
+        : 'Compare the evidence, inspect countries on the map, and move when the lead is strong enough.';
       const cost = els.panelTravel.querySelector('.carmen-panel-cost');
       if (cost) cost.innerHTML = '';
       els.sidebar.innerHTML = `
@@ -1562,7 +1565,24 @@ export function createCarmenUI(container, flagCodes) {
               </div>
             ` : ''}
           </div>
-          ${inspectCandidate ? `
+          ${citySelection && inspectCandidate ? `
+            <div class="carmen-world-candidate-detail compact">
+              <div class="carmen-world-candidate-topline">
+                <div>
+                  <div class="carmen-panel-badge">CITY PICKER</div>
+                  <div class="carmen-panel-title">${esc(inspectCandidate.travelLabel?.primary || inspectCandidate.country)}</div>
+                  <div class="carmen-panel-desc">Choose a city destination on the map.</div>
+                </div>
+                <button type="button" class="carmen-world-atlas-close" data-close-detail aria-label="Back to world atlas">×</button>
+              </div>
+              <div class="carmen-world-candidate-state ${esc(inspectCandidate.state || 'unknown')}">${esc(inspectCandidate.state || 'unknown')}</div>
+              <div class="carmen-world-atlas-mini">${esc(inspectCandidate.hintSummary || 'The country fits the board. Narrow it to the right city.')}</div>
+              <div class="carmen-world-atlas-mini">
+                ${citySelection.cities?.length ? `${esc(String(citySelection.cities.length))} city options available.` : 'No city data available for this country.'}
+              </div>
+              <div class="carmen-world-atlas-mini">The current city remains visible on the map but cannot be selected.</div>
+            </div>
+          ` : inspectCandidate ? `
             <div class="carmen-world-candidate-detail compact">
               <div class="carmen-world-candidate-topline">
                 <div>

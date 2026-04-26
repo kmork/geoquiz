@@ -1,4 +1,5 @@
 import { findGeoFeatures } from '../../../js/aliases.js';
+import { padBBox } from '../../../js/map-utils.js';
 import { RouteRenderer } from '../../../js/ui-components/route-renderer.js';
 
 const SVG_NS = 'http://www.w3.org/2000/svg';
@@ -252,4 +253,119 @@ export class CarmenRouteRenderer extends RouteRenderer {
       remove: () => group.remove(),
     };
   }
+
+  projectLatLon(lat, lon) {
+    if (!Number.isFinite(lat) || !Number.isFinite(lon)) return null;
+    return this.proj([lon, lat]);
+  }
+
+  fitCountryView(countryName, padding = 0.16) {
+    const features = findGeoFeatures(this.worldFeatures, countryName);
+    const bboxes = features.map(feature => this.bboxOfFeature(feature)).filter(Boolean);
+    if (!bboxes.length) return { x: 0, y: 0, w: this.MAP_W, h: this.MAP_H };
+    let bbox = this.computeViewBbox(bboxes) || bboxes[0];
+    bbox = padBBox(bbox, padding);
+    const [x1, y1] = this.proj([bbox.minLon, bbox.maxLat]);
+    const [x2, y2] = this.proj([bbox.maxLon, bbox.minLat]);
+    const viewBox = {
+      x: Math.min(x1, x2),
+      y: Math.min(y1, y2),
+      w: Math.abs(x2 - x1),
+      h: Math.abs(y2 - y1),
+    };
+    this.svg.setAttribute('viewBox', `${viewBox.x} ${viewBox.y} ${viewBox.w} ${viewBox.h}`);
+    return viewBox;
+  }
+
+  drawWorldCityChoices(countryName, cities, onClick, options = {}) {
+    const group = document.createElementNS(SVG_NS, 'g');
+    group.setAttribute('class', 'carmen-world-city-choices');
+    this.svg.appendChild(group);
+    let selectedCity = options.selectedCity || '';
+    const currentCity = options.currentCity || '';
+    const entriesByCity = new Map();
+    const vb = this.svg.viewBox.baseVal;
+    const zoomScale = Math.max(0.08, Math.min(1, (vb.width || this.MAP_W) / this.MAP_W));
+    const circleRadius = Math.max(0.6, 3.5 * zoomScale);
+    const hoverRadius = Math.max(0.8, 4.2 * zoomScale);
+    const labelOffset = Math.max(0.9, 3.2 * zoomScale);
+    const fontSize = Math.max(0.62, 3.3 * zoomScale);
+    const strokeWidth = Math.max(0.18, 0.9 * zoomScale);
+
+    const applyState = (entry) => {
+      if (!entry) return;
+      const isCurrent = normalizeCityName(entry.city.city) === normalizeCityName(currentCity);
+      const active = normalizeCityName(entry.city.city) === normalizeCityName(selectedCity);
+      entry.circle.setAttribute('fill',
+        isCurrent ? 'rgba(96, 165, 250, 0.72)'
+        : active ? 'rgba(59, 130, 246, 0.92)'
+        : 'rgba(250, 204, 21, 0.92)');
+      entry.circle.setAttribute('stroke',
+        isCurrent ? 'rgba(219, 234, 254, 0.96)'
+        : active ? 'rgba(191, 219, 254, 1)'
+        : 'rgba(124, 45, 18, 0.95)');
+      entry.label.setAttribute('fill', isCurrent ? 'rgba(219, 234, 254, 0.92)' : active ? '#eff6ff' : '#f8fafc');
+      entry.circle.setAttribute('opacity', isCurrent ? '0.88' : '1');
+      entry.circle.setAttribute('cursor', isCurrent ? 'default' : 'pointer');
+    };
+
+    for (const city of cities || []) {
+      const point = this.projectLatLon(city.lat, city.lon);
+      if (!point) continue;
+      const entry = { city };
+      const circle = document.createElementNS(SVG_NS, 'circle');
+      circle.setAttribute('cx', point[0]);
+      circle.setAttribute('cy', point[1]);
+      circle.setAttribute('r', String(circleRadius));
+      circle.setAttribute('stroke-width', String(Math.max(0.3, 1.4 * zoomScale)));
+      circle.setAttribute('vector-effect', 'non-scaling-stroke');
+      circle.setAttribute('class', 'carmen-world-city-choice');
+      circle.setAttribute('data-country', countryName);
+      circle.setAttribute('data-city', city.city);
+      const label = document.createElementNS(SVG_NS, 'text');
+      label.setAttribute('x', point[0] + labelOffset);
+      label.setAttribute('y', point[1]);
+      label.setAttribute('text-anchor', 'start');
+      label.setAttribute('dominant-baseline', 'central');
+      label.setAttribute('font-size', String(fontSize));
+      label.setAttribute('font-weight', '700');
+      label.setAttribute('paint-order', 'stroke');
+      label.setAttribute('stroke', 'rgba(15, 23, 42, 0.88)');
+      label.setAttribute('stroke-width', String(strokeWidth));
+      label.setAttribute('pointer-events', 'none');
+      label.setAttribute('class', 'carmen-world-city-label');
+      label.textContent = city.city;
+      circle.addEventListener('mouseenter', () => {
+        if (normalizeCityName(city.city) === normalizeCityName(currentCity)) return;
+        circle.setAttribute('r', String(hoverRadius));
+      });
+      circle.addEventListener('mouseleave', () => {
+        circle.setAttribute('r', String(circleRadius));
+        applyState(entry);
+      });
+      circle.addEventListener('click', (event) => {
+        event.stopPropagation();
+        if (normalizeCityName(city.city) === normalizeCityName(currentCity)) return;
+        onClick?.(city);
+      });
+      group.appendChild(circle);
+      group.appendChild(label);
+      entry.circle = circle;
+      entry.label = label;
+      entriesByCity.set(normalizeCityName(city.city), entry);
+      applyState(entry);
+    }
+
+    return {
+      setSelected: (city = '') => {
+        selectedCity = city || '';
+        for (const entry of entriesByCity.values()) applyState(entry);
+      },
+      remove: () => group.remove(),
+    };
+  }
+}
+
+function normalizeCityName(value) {
+  return String(value || '').trim().toLowerCase();
 }

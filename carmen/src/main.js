@@ -859,11 +859,13 @@ function checkTimeExpired() {
 }
 
 let activeWorldCandidateLayer = null;
+let activeWorldCityLayer = null;
 let worldCaseHintMode = 'off';
 let worldCaseHintIndex = 0;
 let worldCaseHintDetailsOpen = false;
 let worldCaseInspectCountry = '';
 let worldCaseSelectedContext = { type: 'scene' };
+let worldCaseTravelSelection = { mode: 'country', country: '', cities: [], selectedCity: '' };
 const worldCaseLocationClueMemory = new Map();
 
 function getWorldCaseData() {
@@ -881,13 +883,56 @@ function getWorldCaseData() {
   return cases[0];
 }
 
+function getWorldCaseTravelCities(country) {
+  if (!country || !cityPoiDataRef) return [];
+  const seen = new Set();
+  const cities = [];
+  const addCity = (entry, source = 'poi') => {
+    const city = String(entry?.city || '').trim();
+    const lat = Number(entry?.lat);
+    const lon = Number(entry?.lon);
+    if (!city || !Number.isFinite(lat) || !Number.isFinite(lon)) return;
+    const key = normalizeCityName(city);
+    if (seen.has(key)) return;
+    seen.add(key);
+    cities.push({ country, city, lat, lon, source });
+  };
+  addCity(cityPoiDataRef.capitals?.[country], 'capital');
+  for (const entry of Object.values(cityPoiDataRef.cities?.[country] || {})) {
+    addCity(entry, 'poi');
+  }
+  for (const stop of worldCase?.caseData?.route || []) {
+    if (normalizeCityName(stop.country) === normalizeCityName(country)) {
+      addCity(stop, 'case');
+      for (const scene of stop.localScenes || []) addCity(scene, 'case-scene');
+    }
+  }
+  return cities.sort((a, b) => a.city.localeCompare(b.city));
+}
+
+function setWorldCaseTravelSelection(country = '', options = {}) {
+  if (!country) {
+    worldCaseTravelSelection = { mode: 'country', country: '', cities: [], selectedCity: '' };
+    worldCaseInspectCountry = '';
+    return;
+  }
+  worldCaseTravelSelection = {
+    mode: 'city',
+    country,
+    cities: getWorldCaseTravelCities(country),
+    selectedCity: options.selectedCity || '',
+  };
+  worldCaseInspectCountry = country;
+}
+
 function drawWorldCaseMap() {
   if (!worldCase) return;
   const candidates = worldCase.analyzeCandidates();
   const boardState = worldCase.getBoardState();
+  const fieldCountry = worldCase.getCurrentFieldLocation?.()?.country || worldCase.currentCountry;
   const highlightedVisited = worldCase.visited.map((country, index) => ({
     country,
-    color: index === 0 ? 'start' : country === worldCase.currentCountry ? 'end' : 'path',
+    color: index === 0 ? 'start' : country === fieldCountry ? 'end' : 'path',
   }));
   renderer.drawRoute(highlightedVisited, []);
   ui.mapSvg.setAttribute('viewBox', '0 0 600 320');
@@ -896,21 +941,35 @@ function drawWorldCaseMap() {
     activeWorldCandidateLayer.remove();
     activeWorldCandidateLayer = null;
   }
+  if (activeWorldCityLayer) {
+    activeWorldCityLayer.remove();
+    activeWorldCityLayer = null;
+  }
   activeWorldCandidateLayer = renderer.drawWorldCandidates(candidates, (country, candidate) => {
-    worldCaseInspectCountry = country;
+    if (worldCaseTravelSelection.mode === 'city') return;
+    setWorldCaseTravelSelection(country);
     activeWorldCandidateLayer?.setSelected?.(country);
-    ui.showWorldCandidateDetails(candidate, handleWorldTravel, {
-      currentCountry: worldCase.currentCountry,
-      onClose: () => {
-        worldCaseInspectCountry = '';
-        activeWorldCandidateLayer?.setSelected?.('');
-        drawWorldCaseMap();
-      },
-    });
+    drawWorldCaseMap();
   }, {
     hintsEnabled: worldCaseHintMode !== 'off',
     selectedCountry: worldCaseInspectCountry,
   });
+  if (worldCaseTravelSelection.mode === 'city' && worldCaseTravelSelection.country) {
+    const focusedView = renderer.fitCountryView(worldCaseTravelSelection.country);
+    baseViewBox = focusedView;
+    const currentFieldCity = worldCase.getCurrentFieldLocation?.()?.country === worldCaseTravelSelection.country
+      ? worldCase.getCurrentFieldLocation?.()?.city || ''
+      : '';
+    activeWorldCityLayer = renderer.drawWorldCityChoices(
+      worldCaseTravelSelection.country,
+      worldCaseTravelSelection.cities,
+      (city) => handleWorldTravel({ country: worldCaseTravelSelection.country, city }),
+      { selectedCity: worldCaseTravelSelection.selectedCity, currentCity: currentFieldCity }
+    );
+  } else {
+    ui.mapSvg.setAttribute('viewBox', '0 0 600 320');
+    baseViewBox = { x: 0, y: 0, w: 600, h: 320 };
+  }
   ui.showWorldTravelDesk(candidates, handleWorldTravel, null, {
     switchToTravel: false,
     summary: boardState.summary,
@@ -922,7 +981,8 @@ function drawWorldCaseMap() {
     hintIndex: worldCaseHintIndex,
     revealHintDetails: worldCaseHintDetailsOpen,
     inspectCountry: worldCaseInspectCountry,
-    currentCountry: worldCase.currentCountry,
+    currentCountry: fieldCountry,
+    citySelection: worldCaseTravelSelection.mode === 'city' ? worldCaseTravelSelection : null,
     onToggleHints: () => {
       worldCaseHintMode = worldCaseHintMode === 'off' ? 'subtle' : 'off';
       drawWorldCaseMap();
@@ -938,7 +998,7 @@ function drawWorldCaseMap() {
       drawWorldCaseMap();
     },
     onCloseInspect: () => {
-      worldCaseInspectCountry = '';
+      setWorldCaseTravelSelection('');
       drawWorldCaseMap();
     },
   });
@@ -947,6 +1007,7 @@ function drawWorldCaseMap() {
 function refreshWorldCaseUi(focusTravel = false) {
   if (!worldCase) return;
   const state = worldCase.getBoardState();
+  const fieldCountry = worldCase.getCurrentFieldLocation?.()?.country || worldCase.currentCountry;
   ui.updateMissions([], true, 1, 1, getMissionLabel());
   ui.updateScore(Math.max(0, 5000 - (worldCase.evidence.length * 75) - (worldCase.deadEnds.length * 250)));
   ui.setWorldCaseStatus(state.statusBar);
@@ -967,7 +1028,8 @@ function refreshWorldCaseUi(focusTravel = false) {
       hintIndex: worldCaseHintIndex,
       revealHintDetails: worldCaseHintDetailsOpen,
       inspectCountry: worldCaseInspectCountry,
-      currentCountry: worldCase.currentCountry,
+      currentCountry: fieldCountry,
+      citySelection: worldCaseTravelSelection.mode === 'city' ? worldCaseTravelSelection : null,
       onToggleHints: () => {
         worldCaseHintMode = worldCaseHintMode === 'off' ? 'subtle' : 'off';
         drawWorldCaseMap();
@@ -983,7 +1045,7 @@ function refreshWorldCaseUi(focusTravel = false) {
         drawWorldCaseMap();
       },
       onCloseInspect: () => {
-        worldCaseInspectCountry = '';
+        setWorldCaseTravelSelection('');
         drawWorldCaseMap();
       },
     });
@@ -992,8 +1054,18 @@ function refreshWorldCaseUi(focusTravel = false) {
 
 function buildWorldCaseCityMapOptions() {
   if (!worldCase) return null;
-  const country = worldCase.currentCountry;
-  const scene = worldCase.getSceneForCountry(country);
+  const fieldLocation = worldCase.getCurrentFieldLocation?.() || null;
+  const country = fieldLocation?.country || worldCase.currentCountry;
+  const displayScene = worldCase.getDisplaySceneContext?.()?.scene || null;
+  const scene = fieldLocation?.kind && fieldLocation.kind !== 'scene' && !displayScene
+    ? {
+        city: fieldLocation.city || country,
+        country,
+        scene: fieldLocation.city || country,
+        lat: fieldLocation.lat,
+        lon: fieldLocation.lon,
+      }
+    : (displayScene || worldCase.getSceneForCountry(country));
   const cityPoiEntry = getCityPoiEntry(country, scene?.city);
   const gateway = campaignModeData.skylineRouteProvider?.gatewayByCountry?.[country] || null;
   const sceneLat = Number(scene?.lat);
@@ -1133,30 +1205,66 @@ function handleWorldLocationSelection(locationId) {
   handleWorldInvestigation(locationId);
 }
 
-async function handleWorldTravel(country) {
-  if (!worldCase || !country) return;
+function getWorldCaseTravelOriginPoint() {
+  if (!worldCase) return null;
+  const fieldLocation = worldCase.getCurrentFieldLocation?.() || null;
+  const fieldLat = Number(fieldLocation?.lat);
+  const fieldLon = Number(fieldLocation?.lon);
+  if (Number.isFinite(fieldLat) && Number.isFinite(fieldLon)) {
+    return renderer.projectLatLon(fieldLat, fieldLon);
+  }
+  return renderer.getTravelPoint?.(fieldLocation?.country || worldCase.currentCountry) || renderer.getCentroid(fieldLocation?.country || worldCase.currentCountry);
+}
+
+async function handleWorldTravel(selection) {
+  if (!worldCase || !selection) return;
+  const travelSelection = typeof selection === 'string'
+    ? { country: selection, city: { city: '', lat: NaN, lon: NaN } }
+    : { country: selection.country, city: selection.city || { city: '', lat: NaN, lon: NaN } };
+  const country = travelSelection.country;
+  const city = travelSelection.city;
+  if (!country) return;
   stopAmbient();
   const from = worldCase.currentCountry;
   playAmbient('airplane');
-  await renderer.animateTravel(from, country);
+  const fromPoint = getWorldCaseTravelOriginPoint();
+  const toPoint = renderer.projectLatLon(Number(city?.lat), Number(city?.lon));
+  if (fromPoint && toPoint) await renderer.animateTravelPoints(fromPoint, toPoint);
+  else await renderer.animateTravel(from, country);
   stopAmbient();
-  const result = worldCase.travelTo(country);
+  worldCaseTravelSelection.selectedCity = city?.city || '';
+  const result = worldCase.travelToSelection({
+    country,
+    city: city?.city || '',
+    lat: Number(city?.lat),
+    lon: Number(city?.lon),
+  });
   worldCaseSelectedContext = { type: 'scene' };
   worldCaseInspectCountry = country;
 
+  if (result.type === 'wrong_city') {
+    ui.addClue({ text: result.explanation, icon: '❌' }, { emoji: '❌', prefix: 'City mismatch' });
+    setWorldCaseTravelSelection(country, { selectedCity: city?.city || '' });
+    refreshWorldCaseUi(false);
+    ui.switchTab('investigate');
+    return;
+  }
+
   if (result.type === 'dead_end' || result.type === 'arrived_unproven') {
     ui.addDetourEntry(country, capitalOf[country], { mode: WORLD_CASE_FILES_MODE });
-    ui.showNarratorCaption(result.explanation, 9000);
     ui.addClue({ text: result.explanation, icon: '❌' }, { emoji: '❌', prefix: result.type === 'dead_end' ? 'Dead-end report' : 'Proof required' });
+    setWorldCaseTravelSelection('');
     refreshWorldCaseUi();
+    ui.switchTab('investigate');
     return;
   }
 
   if (result.type === 'revisited') {
     ui.showNarratorCaption(result.explanation, 7200);
     ui.clearClues();
-    worldCaseInspectCountry = '';
+    setWorldCaseTravelSelection('');
     refreshWorldCaseUi();
+    ui.switchTab('investigate');
     return;
   }
 
@@ -1165,13 +1273,14 @@ async function handleWorldTravel(country) {
     ui.clearClues();
     worldCaseHintIndex = 0;
     worldCaseHintDetailsOpen = false;
-    worldCaseInspectCountry = '';
+    setWorldCaseTravelSelection('');
     ui.showWorldCaseIntro(worldCase.getBoardState());
     refreshWorldCaseUi();
     return;
   }
 
   if (result.type === 'case_ready') {
+    setWorldCaseTravelSelection('');
     playVictoryMusic();
     const score = Math.max(1000, 5000 - (worldCase.evidence.length * 75) - (worldCase.deadEnds.length * 250));
     saveGameRecord(gameId, score, 0);
@@ -1206,6 +1315,7 @@ async function startWorldCaseFiles(runConfig) {
   worldCaseHintDetailsOpen = false;
   worldCaseInspectCountry = '';
   worldCaseSelectedContext = { type: 'scene' };
+  worldCaseTravelSelection = { mode: 'country', country: '', cities: [], selectedCity: '' };
   worldCaseLocationClueMemory.clear();
   const intro = worldCase.start();
 

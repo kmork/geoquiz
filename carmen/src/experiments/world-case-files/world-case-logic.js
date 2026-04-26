@@ -131,6 +131,9 @@ export class WorldCaseFilesLogic {
     this.deadEnds = [];
     this.finalSolved = false;
     this.completedSceneKeys = [];
+    this.fieldStopHistory = [];
+    this.currentFieldLocation = null;
+    this._setFieldLocation(this._buildFieldStopFromScene(this.getCurrentScene(), 'scene'));
   }
 
   get mode() { return 'world_case_files'; }
@@ -154,11 +157,12 @@ export class WorldCaseFilesLogic {
     const currentStop = this.currentRouteStop;
     const targetStop = this.targetRouteStop;
     const currentScene = this.getCurrentScene();
+    const fieldLocation = this.currentFieldLocation || null;
     return {
       leg: this.currentLeg,
       totalLegs: this.totalLegs,
-      city: currentScene.city || currentStop.city || this.currentCountry,
-      country: this.currentCountry,
+      city: fieldLocation?.city || currentScene.city || currentStop.city || this.currentCountry,
+      country: fieldLocation?.country || this.currentCountry,
       scene: currentScene.scene || currentStop.scene || '',
       biographyStage: currentScene.biographyStage || currentStop.biographyStage || '',
       learningGoal: currentScene.learningGoal || currentStop.learningGoal || '',
@@ -170,7 +174,9 @@ export class WorldCaseFilesLogic {
       evidenceCount: this.evidence.length,
       chapterTitle: currentStop.chapterTitle || currentStop.scene || currentStop.city || '',
       chapterSummary: currentStop.chapterSummary || '',
-      sceneTitle: currentScene.title || currentScene.scene || currentScene.city || '',
+      sceneTitle: fieldLocation?.kind && fieldLocation.kind !== 'scene'
+        ? (fieldLocation.city || fieldLocation.country || '')
+        : (currentScene.title || currentScene.scene || currentScene.city || ''),
       sceneIndex: this.currentSceneIndex,
       sceneCount: this.getSceneList(currentStop).length,
       activeWorks: currentScene.focusWorks || [],
@@ -178,6 +184,7 @@ export class WorldCaseFilesLogic {
       stolenWorks: currentScene.stolenWorks || [],
       escalationText: currentScene.escalationText || currentStop.escalationText || '',
       chapterReady: this.isCurrentSceneReady() && !this.getNextScene(),
+      fieldStopKind: fieldLocation?.kind || 'scene',
     };
   }
 
@@ -249,15 +256,29 @@ export class WorldCaseFilesLogic {
   }
 
   getCurrentArtifactPanel() {
-    const currentScene = this.getCurrentScene();
+    const displayContext = this.getDisplaySceneContext();
+    if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) {
+      return {
+        caseTitle: this.caseData.title,
+        chapterTitle: this.currentRouteStop.chapterTitle || this.currentRouteStop.scene || '',
+        sceneTitle: this.currentFieldLocation.city || this.currentFieldLocation.country || 'Field stop',
+        currentObjective: 'Review the dead-end report, then return to the trail to choose the next lead.',
+        summary: this.currentFieldLocation.explanation || 'ACME logged a field stop that did not advance the case.',
+        primaryWork: null,
+        works: [],
+        evidenceImages: [],
+      };
+    }
+    const currentScene = displayContext?.scene || this.getCurrentScene();
+    const currentStop = displayContext?.stop || this.currentRouteStop;
     const works = this.getCurrentWorks(currentScene);
     const primaryWork = works[0] || null;
     return {
       caseTitle: this.caseData.title,
-      chapterTitle: this.currentRouteStop.chapterTitle || this.currentRouteStop.scene || '',
+      chapterTitle: currentStop.chapterTitle || currentStop.scene || '',
       sceneTitle: currentScene.title || currentScene.scene || currentScene.city || '',
-      currentObjective: currentScene.investigationPrompt || currentScene.learningGoal || this.currentRouteStop.learningGoal || '',
-      summary: currentScene.escalationText || this.currentRouteStop.chapterSummary || this.caseData.artifact?.hint || '',
+      currentObjective: currentScene.investigationPrompt || currentScene.learningGoal || currentStop.learningGoal || '',
+      summary: currentScene.escalationText || currentStop.chapterSummary || this.caseData.artifact?.hint || '',
       primaryWork,
       works,
       evidenceImages: [
@@ -319,9 +340,90 @@ export class WorldCaseFilesLogic {
     return this.getMapLocations();
   }
 
+  _buildFieldStopFromScene(scene = {}, kind = 'scene', extra = {}) {
+    const country = scene.country || this.currentCountry;
+    return {
+      kind,
+      country,
+      city: scene.city || primaryCapital(this.countryMap[country]) || country,
+      lat: Number(scene.lat),
+      lon: Number(scene.lon),
+      scene: scene.scene || scene.title || scene.city || '',
+      legIndex: this.currentLeg,
+      sceneIndex: this.currentSceneIndex,
+      ...extra,
+    };
+  }
+
+  _setFieldLocation(stop, appendHistory = true) {
+    this.currentFieldLocation = {
+      ...stop,
+      lat: Number(stop?.lat),
+      lon: Number(stop?.lon),
+    };
+    if (appendHistory) this.fieldStopHistory.push({ ...this.currentFieldLocation });
+  }
+
+  getCurrentFieldLocation() {
+    return this.currentFieldLocation ? { ...this.currentFieldLocation } : null;
+  }
+
+  _buildSceneContext(stop, stopIndex, scene, sceneIndex) {
+    return {
+      stop,
+      stopIndex,
+      scene,
+      sceneIndex,
+      sceneKey: `${stopIndex}:${scene.id || sceneSlug(scene, 'scene')}`,
+      isCurrentAuthored: stopIndex === this.currentLeg && sceneIndex === this.currentSceneIndex,
+    };
+  }
+
+  getDisplaySceneContext() {
+    if (this.currentFieldLocation?.kind === 'scene') {
+      return this._buildSceneContext(this.currentRouteStop, this.currentLeg, this.getCurrentScene(), this.currentSceneIndex);
+    }
+    return this.findSceneContextForLocation(this.currentFieldLocation?.country, this.currentFieldLocation?.city);
+  }
+
+  findSceneContextForLocation(country, city) {
+    const wantedCountry = normalize(country);
+    const wantedCity = normalize(city);
+    if (!wantedCountry || !wantedCity) return null;
+    let best = null;
+    for (let stopIndex = 0; stopIndex < this.caseData.route.length; stopIndex += 1) {
+      const stop = this.caseData.route[stopIndex];
+      const scenes = this.getSceneList(stop);
+      for (let sceneIndex = 0; sceneIndex < scenes.length; sceneIndex += 1) {
+        const scene = scenes[sceneIndex];
+        if (normalize(scene.country || stop.country) !== wantedCountry) continue;
+        if (normalize(scene.city || stop.city) !== wantedCity) continue;
+        const context = this._buildSceneContext(stop, stopIndex, scene, sceneIndex);
+        if (!best) {
+          best = context;
+          continue;
+        }
+        const bestDistance = Math.abs(best.stopIndex - this.currentLeg);
+        const currentDistance = Math.abs(stopIndex - this.currentLeg);
+        if (currentDistance < bestDistance || (currentDistance === bestDistance && stopIndex > best.stopIndex)) {
+          best = context;
+        }
+      }
+    }
+    return best;
+  }
+
   getMapLocations() {
-    const currentStop = this.currentRouteStop || {};
-    const currentScene = this.getCurrentScene();
+    const displayContext = this.getDisplaySceneContext();
+    if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) {
+      return LOCATIONS.map(location => ({
+        id: location.id,
+        emoji: location.emoji,
+        name: location.name,
+      }));
+    }
+    const currentStop = displayContext?.stop || this.currentRouteStop || {};
+    const currentScene = displayContext?.scene || this.getCurrentScene();
     const baseLocations = LOCATIONS.map(location => ({
       id: location.id,
       emoji: location.emoji,
@@ -353,7 +455,9 @@ export class WorldCaseFilesLogic {
   }
 
   getSceneActions() {
-    const currentScene = this.getCurrentScene();
+    const displayContext = this.getDisplaySceneContext();
+    if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) return [];
+    const currentScene = displayContext?.scene || this.getCurrentScene();
     return (currentScene.customLocations || []).map((location, index) => ({
       id: location.id || `custom-${currentScene.id || 'scene'}-${index + 1}`,
       emoji: location.emoji || '🧩',
@@ -367,7 +471,9 @@ export class WorldCaseFilesLogic {
   }
 
   getSceneEvidenceImages() {
-    const currentScene = this.getCurrentScene();
+    const displayContext = this.getDisplaySceneContext();
+    if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) return [];
+    const currentScene = displayContext?.scene || this.getCurrentScene();
     const works = this.getCurrentWorks(currentScene);
     const primaryWork = works[0] || null;
     const images = [];
@@ -402,7 +508,8 @@ export class WorldCaseFilesLogic {
   }
 
   getInvestigatedLocationIds() {
-    return new Set(this.investigatedByScene.get(this.getCurrentSceneKey()) || []);
+    const displayContext = this.getDisplaySceneContext();
+    return new Set(this.investigatedByScene.get(displayContext?.sceneKey || this.getCurrentSceneKey()) || []);
   }
 
   getInformant(locationId) {
@@ -426,17 +533,20 @@ export class WorldCaseFilesLogic {
   }
 
   investigate(locationId) {
-    const scene = this.getCurrentScene();
-    const key = this.getCurrentSceneKey();
+    const displayContext = this.getDisplaySceneContext();
+    if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) return null;
+    const scene = displayContext?.scene || this.getCurrentScene();
+    const fieldLocation = this.currentFieldLocation || {};
+    const key = displayContext?.sceneKey || this.getCurrentSceneKey();
     const investigated = this.investigatedByScene.get(key) || new Set();
     if (investigated.has(locationId)) return null;
     investigated.add(locationId);
     this.investigatedByScene.set(key, investigated);
 
     let clue = (scene.clues || []).find(item => item.locationId === locationId && !this.evidence.some(e => e.id === item.id));
-    if (!clue && this.currentCountry !== this.currentRouteStop.country) {
+    if (!clue && fieldLocation.country && fieldLocation.country !== this.currentRouteStop.country) {
       clue = (scene.followups || []).find(item =>
-        item.afterCountry === this.currentCountry &&
+        item.afterCountry === fieldLocation.country &&
         item.locationId === locationId &&
         !this.evidence.some(e => e.id === `${scene.id}-${item.locationId}-followup`)
       );
@@ -459,8 +569,8 @@ export class WorldCaseFilesLogic {
       sceneTitle: scene.title || scene.scene || scene.city || '',
       fromCountry: this.currentRouteStop.country,
       targetCountry: this.targetRouteStop?.country || '',
-      foundInCountry: this.currentCountry,
-      foundInCity: scene.city || this.currentRouteStop?.city || this.currentCountry,
+      foundInCountry: fieldLocation.country || this.currentCountry,
+      foundInCity: fieldLocation.city || scene.city || this.currentRouteStop?.city || this.currentCountry,
       category: clue.category || (
         clue.tags?.some(tag => tag.startsWith('culture:') || tag.startsWith('famous:') || tag.startsWith('history:') || tag.startsWith('cultural_'))
           ? 'Cultural Evidence'
@@ -471,7 +581,7 @@ export class WorldCaseFilesLogic {
     };
     this.evidence.push(evidence);
 
-    const progress = this.progressSceneIfReady();
+    const progress = displayContext?.isCurrentAuthored ? this.progressSceneIfReady() : { type: 'scene_pending' };
     return { evidence, progress };
   }
 
@@ -481,6 +591,7 @@ export class WorldCaseFilesLogic {
     if (this.getNextScene()) {
       this.completedSceneKeys.push(this.getCurrentSceneKey());
       this.currentSceneIndex += 1;
+      this._setFieldLocation(this._buildFieldStopFromScene(this.getCurrentScene(), 'scene'));
       return {
         type: 'scene_advanced',
         fromScene: currentScene,
@@ -516,7 +627,9 @@ export class WorldCaseFilesLogic {
   }
 
   getSceneCulturalPlaces(country = this.currentCountry) {
-    const scene = this.getCurrentScene();
+    const displayContext = this.getDisplaySceneContext();
+    if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) return [];
+    const scene = displayContext?.scene || this.getCurrentScene();
     const sceneCity = normalize(scene?.city);
     return this.culturalPlaces.filter(place => {
       if (place.country !== country) return false;
@@ -548,6 +661,7 @@ export class WorldCaseFilesLogic {
   analyzeCandidates() {
     const activeEvidence = this.getActiveEvidence();
     const targetCountry = this.targetRouteStop?.country;
+    const currentFieldCountry = this.currentFieldLocation?.country || this.currentCountry;
     return this.countries.map(countryData => {
       let matches = 0;
       let contradictions = 0;
@@ -569,7 +683,7 @@ export class WorldCaseFilesLogic {
       }
       let state = 'unknown';
       if (contradictions > 0) state = 'contradicted';
-      else if (countryData.country === this.currentCountry) state = 'current';
+      else if (countryData.country === currentFieldCountry) state = 'current';
       else if (matches >= 4 || strength >= 7) state = 'strong';
       else if (matches >= 2 || strength >= 4) state = 'pattern';
       else if (matches > 0) state = 'partial';
@@ -596,7 +710,11 @@ export class WorldCaseFilesLogic {
 
   getCandidateHintSummary(candidate) {
     if (!candidate) return '';
-    if (candidate.country === this.currentCountry) return 'Current scene. Finish the local chapter before moving the case onward.';
+    if (candidate.country === (this.currentFieldLocation?.country || this.currentCountry)) {
+      return this.currentFieldLocation?.kind === 'scene'
+        ? 'Current scene. Finish the local chapter before moving the case onward.'
+        : 'Current field stop. Move onward when the lead is clear.';
+    }
     if (candidate.state === 'contradicted') return 'Collected evidence contradicts this destination.';
     const matched = candidate.matchedEvidence || [];
     if (matched.length) {
@@ -648,49 +766,108 @@ export class WorldCaseFilesLogic {
     return country === this.targetRouteStop?.country && confidence.evidenceReady && !this.getNextScene();
   }
 
-  travelTo(country) {
+  getExpectedTravelCity() {
+    return this.targetRouteStop?.city || '';
+  }
+
+  travelToSelection(selection = {}) {
     const target = this.targetRouteStop;
     if (!target) return { type: 'complete' };
-    const from = this.currentCountry;
-    const wasVisited = this.visited.includes(country);
-    this.currentCountry = country;
-    if (!wasVisited) this.visited.push(country);
-    if (country !== target.country && wasVisited && this.caseData.route.findIndex(stop => stop.country === country) <= this.currentLeg) {
+    const country = selection?.country || '';
+    const city = selection?.city || '';
+    const lat = Number(selection?.lat);
+    const lon = Number(selection?.lon);
+    const from = this.currentFieldLocation?.country || this.currentCountry;
+    const expectedCity = this.getExpectedTravelCity();
+    const baseFieldStop = this._buildFieldStopFromScene({
+      country,
+      city: city || primaryCapital(this.countryMap[country]) || country,
+      lat,
+      lon,
+      scene: city || country,
+    }, 'field_stop');
+    const wasVisitedCountry = this.visited.includes(country);
+    if (!wasVisitedCountry) this.visited.push(country);
+
+    if (country === target.country && expectedCity && normalize(city) && normalize(city) !== normalize(expectedCity)) {
+      const explanation = `ACME checks ${city}, but the lead does not resolve there. The country fits, but this city does not match the active case file.`;
+      const fieldStop = {
+        ...baseFieldStop,
+        kind: 'wrong_city',
+        expectedCity,
+        explanation,
+      };
+      this._setFieldLocation(fieldStop);
+      this.deadEnds.push({ legIndex: this.currentLeg, country, city, explanation, kind: 'wrong_city' });
+      return {
+        type: 'wrong_city',
+        from,
+        country,
+        city,
+        expectedCity,
+        fieldStop,
+        explanation,
+      };
+    }
+    const revisitedSceneContext = this.findSceneContextForLocation(country, city || primaryCapital(this.countryMap[country]) || country);
+    if (country !== target.country && revisitedSceneContext && !revisitedSceneContext.isCurrentAuthored) {
+      const explanation = 'ACME reopens the earlier scene. New evidence may unlock if the latest lead gives you a better question to ask.';
+      const fieldStop = { ...baseFieldStop, kind: 'revisited', explanation };
+      this._setFieldLocation(fieldStop);
       return {
         type: 'revisited',
         from,
         country,
-        explanation: 'ACME reopens the earlier scene. New evidence may unlock if the latest lead gives you a better question to ask.',
+        city: fieldStop.city,
+        fieldStop,
+        explanation,
       };
     }
     if (country !== target.country) {
-      const explanation = this.caseData.deadEnds?.[country] || this.caseData.deadEnds?.default || 'The field office found no match for the evidence.';
-      this.deadEnds.push({ legIndex: this.currentLeg, country, explanation });
-      return { type: 'dead_end', from, country, explanation };
+      const isLocalCountryMove = country === (this.currentFieldLocation?.country || this.currentCountry);
+      const explanation = isLocalCountryMove
+        ? `${baseFieldStop.city} does not open the next lead. ACME stays on the ${country} file, but this stop does not advance the case.`
+        : (this.caseData.deadEnds?.[country] || this.caseData.deadEnds?.default || 'The field office found no match for the evidence.');
+      const fieldStop = { ...baseFieldStop, kind: 'dead_end_country', explanation };
+      this._setFieldLocation(fieldStop);
+      this.deadEnds.push({ legIndex: this.currentLeg, country, city: fieldStop.city, explanation, kind: 'dead_end_country' });
+      return { type: 'dead_end', from, country, city: fieldStop.city, fieldStop, explanation };
     }
     if (!this.canSubmitProof(country)) {
+      const explanation = this.getNextScene()
+        ? 'The country fits, but ACME still needs the remaining local scenes solved before the chapter can move onward.'
+        : 'The destination fits, but ACME will not advance the case until route, cultural, confirmation, and puzzle evidence are all on the board.';
+      const fieldStop = { ...baseFieldStop, kind: 'arrived_unproven', city: city || target.city || baseFieldStop.city, explanation };
+      this._setFieldLocation(fieldStop);
       return {
         type: 'arrived_unproven',
         from,
         country,
-        explanation: this.getNextScene()
-          ? 'The country fits, but ACME still needs the remaining local scenes solved before the chapter can move onward.'
-          : 'The destination fits, but ACME will not advance the case until route, cultural, confirmation, and puzzle evidence are all on the board.',
+        city: fieldStop.city,
+        fieldStop,
+        explanation,
       };
     }
     this.currentLeg++;
     this.currentSceneIndex = 0;
     this.currentCountry = country;
+    this._setFieldLocation(this._buildFieldStopFromScene(this.getCurrentScene(), 'scene'));
     const solved = this.currentLeg >= this.totalLegs;
     if (solved) this.finalSolved = true;
     return {
       type: solved ? 'case_ready' : 'advanced',
       from,
       country,
+      city: city || target.city || '',
       next: this.targetRouteStop,
       scene: this.currentRouteStop,
       currentScene: this.getCurrentScene(),
+      fieldStop: this.getCurrentFieldLocation(),
     };
+  }
+
+  travelTo(country) {
+    return this.travelToSelection({ country });
   }
 
   getProofCards() {
@@ -698,6 +875,7 @@ export class WorldCaseFilesLogic {
   }
 
   getBoardState() {
+    const displayContext = this.getDisplaySceneContext();
     return {
       caseTitle: this.caseData.title,
       pattern: this.caseData.pattern,
@@ -708,16 +886,19 @@ export class WorldCaseFilesLogic {
       atlasHints: this.getAtlasHints(),
       evidence: [...this.evidence],
       deadEnds: [...this.deadEnds],
+      fieldStopHistory: [...this.fieldStopHistory],
       route: this.caseData.route,
       culturalPlaces: this.culturalPlaces,
       culturalObjects: this.culturalObjects,
       currentScene: this.getCurrentScene(),
+      displayScene: displayContext?.scene || null,
       currentWorks: this.getCurrentWorks(),
       sceneActions: this.getSceneActions(),
       sceneEvidenceImages: this.getSceneEvidenceImages(),
       artifactPanel: this.getCurrentArtifactPanel(),
       localTrail: this.getLocalTrailState(),
       completedSceneKeys: [...this.completedSceneKeys],
+      currentFieldLocation: this.getCurrentFieldLocation(),
     };
   }
 

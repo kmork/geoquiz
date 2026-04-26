@@ -494,69 +494,79 @@ export class RouteRenderer {
     return new Promise(resolve => {
       const from = this.getTravelPoint?.(fromCountry) || this.getCentroid(fromCountry);
       const to = this.getTravelPoint?.(toCountry) || this.getCentroid(toCountry);
-      if (!from || !to) { resolve(); return; }
+      this._animateTravelBetweenPoints(from, to, duration, resolve);
+    });
+  }
 
-      const ns = "http://www.w3.org/2000/svg";
+  animateTravelPoints(fromPoint, toPoint, duration = 1200) {
+    return new Promise(resolve => {
+      this._animateTravelBetweenPoints(fromPoint, toPoint, duration, resolve);
+    });
+  }
 
-      // Dashed travel path
-      const line = document.createElementNS(ns, "line");
-      line.setAttribute("x1", from[0]);
-      line.setAttribute("y1", from[1]);
-      line.setAttribute("x2", to[0]);
-      line.setAttribute("y2", to[1]);
-      line.setAttribute("stroke", "rgba(251, 191, 36, 0.7)");
-      line.setAttribute("stroke-width", "2");
-      line.setAttribute("stroke-dasharray", "6,4");
-      line.setAttribute("vector-effect", "non-scaling-stroke");
-      line.style.opacity = "0";
-      this.svg.appendChild(line);
+  _animateTravelBetweenPoints(from, to, duration, resolve) {
+    if (!from || !to) { resolve?.(); return; }
 
-      // Travel icon — scale to viewBox, rotate to match flight direction
-      const vb = this.svg.viewBox.baseVal;
-      const planeSize = Math.max(vb.width * 0.04, 3);
-      const angle = Math.atan2(to[1] - from[1], to[0] - from[0]) * (180 / Math.PI);
-      const icon = document.createElementNS(ns, "text");
-      icon.setAttribute("font-size", planeSize);
-      icon.setAttribute("text-anchor", "middle");
-      icon.setAttribute("dominant-baseline", "central");
-      icon.setAttribute("transform", `translate(${from[0]},${from[1]}) rotate(${angle})`);
-      icon.textContent = "✈";
-      this.svg.appendChild(icon);
+    const ns = "http://www.w3.org/2000/svg";
 
-      // Animate
-      const startTime = performance.now();
-      let cancelled = false;
+    // Dashed travel path
+    const line = document.createElementNS(ns, "line");
+    line.setAttribute("x1", from[0]);
+    line.setAttribute("y1", from[1]);
+    line.setAttribute("x2", to[0]);
+    line.setAttribute("y2", to[1]);
+    line.setAttribute("stroke", "rgba(251, 191, 36, 0.7)");
+    line.setAttribute("stroke-width", "2");
+    line.setAttribute("stroke-dasharray", "6,4");
+    line.setAttribute("vector-effect", "non-scaling-stroke");
+    line.style.opacity = "0";
+    this.svg.appendChild(line);
 
-      // Allow click to skip
-      const skipHandler = () => { cancelled = true; };
-      this.svg.addEventListener('click', skipHandler, { once: true });
+    // Travel icon — scale to viewBox, rotate to match flight direction
+    const vb = this.svg.viewBox.baseVal;
+    const planeSize = Math.max(vb.width * 0.04, 3);
+    const angle = Math.atan2(to[1] - from[1], to[0] - from[0]) * (180 / Math.PI);
+    const icon = document.createElementNS(ns, "text");
+    icon.setAttribute("font-size", planeSize);
+    icon.setAttribute("text-anchor", "middle");
+    icon.setAttribute("dominant-baseline", "central");
+    icon.setAttribute("transform", `translate(${from[0]},${from[1]}) rotate(${angle})`);
+    icon.textContent = "✈";
+    this.svg.appendChild(icon);
 
-      const animate = (now) => {
-        const elapsed = now - startTime;
-        const t = Math.min(elapsed / duration, 1);
-        const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // easeInOutQuad
+    // Animate
+    const startTime = performance.now();
+    let cancelled = false;
 
-        if (cancelled || t >= 1) {
-          line.remove();
-          icon.remove();
-          this.svg.removeEventListener('click', skipHandler);
-          resolve();
-          return;
-        }
+    // Allow click to skip
+    const skipHandler = () => { cancelled = true; };
+    this.svg.addEventListener('click', skipHandler, { once: true });
 
-        // Show dashed line with growing opacity
-        line.style.opacity = String(Math.min(t * 3, 0.7));
+    const animate = (now) => {
+      const elapsed = now - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2; // easeInOutQuad
 
-        // Move icon along path, keeping rotation
-        const x = from[0] + (to[0] - from[0]) * eased;
-        const y = from[1] + (to[1] - from[1]) * eased;
-        icon.setAttribute("transform", `translate(${x},${y}) rotate(${angle})`);
+      if (cancelled || t >= 1) {
+        line.remove();
+        icon.remove();
+        this.svg.removeEventListener('click', skipHandler);
+        resolve?.();
+        return;
+      }
 
-        requestAnimationFrame(animate);
-      };
+      // Show dashed line with growing opacity
+      line.style.opacity = String(Math.min(t * 3, 0.7));
+
+      // Move icon along path, keeping rotation
+      const x = from[0] + (to[0] - from[0]) * eased;
+      const y = from[1] + (to[1] - from[1]) * eased;
+      icon.setAttribute("transform", `translate(${x},${y}) rotate(${angle})`);
 
       requestAnimationFrame(animate);
-    });
+    };
+
+    requestAnimationFrame(animate);
   }
 
   /**
