@@ -1387,6 +1387,7 @@ export function createCarmenUI(container, flagCodes) {
       const current = state?.current || {};
       const mapLocations = options?.mapLocations || [];
       const sceneEvidenceImages = state?.sceneEvidenceImages || [];
+      const genericFieldStop = !!(state?.currentFieldLocation?.kind && state.currentFieldLocation.kind !== 'scene' && !state?.displayScene);
       const sceneTitle = state?.displayScene?.title || state?.displayScene?.scene || state?.current?.sceneTitle || state?.currentScene?.title || state?.currentScene?.scene || current.city || 'Current scene';
       const visibleSceneActions = sceneActions || [];
       const selectedContext = options?.selectedContext || { type: 'scene' };
@@ -1395,16 +1396,21 @@ export function createCarmenUI(container, flagCodes) {
         : null;
       els.locationsLabel.style.display = '';
       els.locationsLabel.textContent = selectedContext?.type === 'scene'
-        ? `${sceneTitle}:`
+        ? (genericFieldStop ? 'Field stop:' : `${sceneTitle}:`)
         : `${selectedMapLocation?.name || 'Location'}:`;
       els.locations.innerHTML = `
         <div class="carmen-location-list carmen-world-location-list">
           ${selectedContext?.type === 'scene' ? `
             <div class="carmen-world-scene-panel">
               <div class="carmen-world-scene-panel-head">
-                <div class="carmen-world-scene-panel-kicker">SCENE FILE</div>
-                <div class="carmen-world-scene-panel-title">${esc(sceneTitle)}</div>
+                <div class="carmen-world-scene-panel-kicker">${genericFieldStop ? 'FIELD STOP' : 'SCENE FILE'}</div>
+                <div class="carmen-world-scene-panel-title">${esc(genericFieldStop ? (state?.currentFieldLocation?.city || state?.currentFieldLocation?.country || 'Field stop') : sceneTitle)}</div>
               </div>
+              ${genericFieldStop ? `
+                <div class="carmen-artifact-summary carmen-artifact-summary-secondary">
+                  ${esc(state?.currentFieldLocation?.explanation || 'ACME logged this stop on the trail, but it does not open the next scene. Review the note on the map and choose the next lead when ready.')}
+                </div>
+              ` : ''}
               ${visibleSceneActions.length ? `
                 <div class="carmen-world-scene-section">
                   <div class="carmen-world-scene-section-title">Scene Actions</div>
@@ -1435,7 +1441,7 @@ export function createCarmenUI(container, flagCodes) {
                   `).join('')}
                 </div>
               ` : ''}
-              ${!visibleSceneActions.length && !sceneEvidenceImages.length ? `
+              ${!genericFieldStop && !visibleSceneActions.length && !sceneEvidenceImages.length ? `
                 <div class="carmen-dossier-empty">No authored scene actions are available here yet.</div>
               ` : ''}
             </div>

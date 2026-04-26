@@ -1057,19 +1057,12 @@ function buildWorldCaseCityMapOptions() {
   const fieldLocation = worldCase.getCurrentFieldLocation?.() || null;
   const country = fieldLocation?.country || worldCase.currentCountry;
   const displayScene = worldCase.getDisplaySceneContext?.()?.scene || null;
-  const scene = fieldLocation?.kind && fieldLocation.kind !== 'scene' && !displayScene
-    ? {
-        city: fieldLocation.city || country,
-        country,
-        scene: fieldLocation.city || country,
-        lat: fieldLocation.lat,
-        lon: fieldLocation.lon,
-      }
-    : (displayScene || worldCase.getSceneForCountry(country));
+  const genericFieldStop = !!(fieldLocation?.kind && fieldLocation.kind !== 'scene' && !displayScene);
+  const scene = genericFieldStop ? null : (displayScene || worldCase.getSceneForCountry(country));
   const cityPoiEntry = getCityPoiEntry(country, scene?.city);
   const gateway = campaignModeData.skylineRouteProvider?.gatewayByCountry?.[country] || null;
-  const sceneLat = Number(scene?.lat);
-  const sceneLon = Number(scene?.lon);
+  const sceneLat = Number(genericFieldStop ? fieldLocation?.lat : scene?.lat);
+  const sceneLon = Number(genericFieldStop ? fieldLocation?.lon : scene?.lon);
   const capitalLat = Number(gateway?.capitalLat ?? cityPoiEntry?.lat);
   const capitalLon = Number(gateway?.capitalLon ?? cityPoiEntry?.lon);
   const centerLat = Number.isFinite(sceneLat) ? sceneLat : capitalLat;
@@ -1118,9 +1111,9 @@ function buildWorldCaseCityMapOptions() {
     targetOsmZoom: 15,
     fitMaxDistanceDegrees: 0.05,
     country,
-    capital: scene?.city || gateway?.capital || cityPoiEntry?.capital || capitalOf[country] || country,
+    capital: (genericFieldStop ? fieldLocation?.city : scene?.city) || gateway?.capital || cityPoiEntry?.capital || capitalOf[country] || country,
     center: { lat: centerLat, lon: centerLon },
-    scene: Number.isFinite(sceneLat) && Number.isFinite(sceneLon)
+    scene: !genericFieldStop && Number.isFinite(sceneLat) && Number.isFinite(sceneLon)
       ? {
           name: scene.scene ? `${scene.scene}, ${scene.city || country}` : scene.city || country,
           emoji: '◆',
