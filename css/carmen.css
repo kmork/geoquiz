@@ -1213,6 +1213,25 @@ body {
   line-height: 1.1;
 }
 
+.carmen-progress.world-case-status {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.42rem;
+}
+
+.carmen-progress-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim, #8f8a80);
+}
+
+.carmen-progress-location {
+  color: var(--text-color);
+  font-weight: 700;
+}
+
 .carmen-score-status b {
   color: var(--text-color);
   font-weight: 700;
@@ -1241,6 +1260,64 @@ body {
 
 .carmen-clock-text {
   line-height: 1.1;
+}
+
+.carmen-clock.world-case-status {
+  gap: 0;
+}
+
+.carmen-world-gauge-label {
+  display: inline-block;
+  margin-right: 0.48rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim, #8f8a80);
+}
+
+.carmen-world-gauge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  flex-wrap: wrap;
+}
+
+.carmen-world-gauge-segment {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.4rem;
+  padding: 0.1rem 0.44rem;
+  border: 1px solid rgba(164, 148, 126, 0.34);
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: rgba(232, 225, 213, 0.82);
+  background: rgba(78, 68, 57, 0.28);
+}
+
+.carmen-world-gauge-segment.complete {
+  color: #f5f1e8;
+  border-color: rgba(117, 195, 142, 0.62);
+  background: rgba(58, 110, 72, 0.52);
+}
+
+.carmen-world-gauge-segment.incomplete {
+  color: rgba(232, 225, 213, 0.82);
+  border-color: rgba(164, 148, 126, 0.34);
+  background: rgba(78, 68, 57, 0.28);
+}
+
+.carmen-world-gauge-segment.not_required {
+  color: rgba(208, 201, 190, 0.78);
+  border-style: dashed;
+  border-color: rgba(150, 141, 127, 0.3);
+  background: rgba(58, 55, 50, 0.16);
+}
+
+.carmen-clock.world-case-ready .carmen-world-gauge-label {
+  color: rgba(176, 220, 180, 0.92);
 }
 
 .carmen-clock.low {

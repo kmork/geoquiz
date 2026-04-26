@@ -1212,9 +1212,44 @@ export function createCarmenUI(container, flagCodes) {
 
     setFreeInvestigationClock(label = 'No case clock') {
       const clockText = els.clock.querySelector('.carmen-clock-text');
+      const clockIcon = els.clock.querySelector('.carmen-clock-icon');
+      els.clock.classList.remove('world-case-status', 'world-case-ready');
+      if (clockIcon) clockIcon.style.display = '';
       if (clockText) clockText.textContent = label;
       else els.clock.textContent = label;
       els.clock.classList.remove('low', 'critical');
+    },
+
+    setWorldCaseStatus(status = null) {
+      const locationLabel = status?.locationLabel || 'Current scene';
+      const gauge = Array.isArray(status?.evidenceGauge) ? status.evidenceGauge : [];
+      const clockText = els.clock.querySelector('.carmen-clock-text');
+      const clockIcon = els.clock.querySelector('.carmen-clock-icon');
+
+      els.progress.classList.add('world-case-status');
+      els.progress.innerHTML = `
+        <span class="carmen-progress-kicker">Location</span>
+        <span class="carmen-progress-location">${esc(locationLabel)}</span>
+      `;
+
+      els.clock.classList.remove('low', 'critical');
+      els.clock.classList.add('world-case-status');
+      els.clock.classList.toggle('world-case-ready', !!status?.ready);
+      if (clockIcon) clockIcon.style.display = 'none';
+      if (clockText) {
+        clockText.innerHTML = `
+          <span class="carmen-world-gauge-label">Evidence</span>
+          <span class="carmen-world-gauge" aria-label="Evidence status">
+            ${gauge.map(item => `
+              <span class="carmen-world-gauge-segment ${esc(item.state || 'incomplete')}" title="${esc(item.label || 'Evidence')}">
+                ${esc(item.label || 'Evidence')}
+              </span>
+            `).join('')}
+          </span>
+        `;
+      } else {
+        els.clock.textContent = '';
+      }
     },
 
     showWorldCaseIntro(state) {
@@ -1493,9 +1528,9 @@ export function createCarmenUI(container, flagCodes) {
       const targetTravelLabel = options?.targetTravelLabel || null;
       const localTrail = options?.localTrail || null;
       els.travelTitle.textContent = 'Where does the world case lead?';
-      els.travelDesc.textContent = 'The whole atlas is open. Compare the evidence, inspect countries on the map, and move when the lead is strong enough.';
+      els.travelDesc.textContent = 'Compare the evidence, inspect countries on the map, and move when the lead is strong enough.';
       const cost = els.panelTravel.querySelector('.carmen-panel-cost');
-      if (cost) cost.innerHTML = 'No hard clock: <strong>travel anywhere, but only proven routes advance the case</strong>';
+      if (cost) cost.innerHTML = '';
       els.sidebar.innerHTML = `
         <div class="carmen-world-atlas-stack">
           ${localTrail ? renderWorldLocalTrail(localTrail) : ''}
@@ -2142,12 +2177,16 @@ export function createCarmenUI(container, flagCodes) {
     },
 
     updateProgress(stop, total) {
+      els.progress.classList.remove('world-case-status');
       const displayStop = Math.min(total, stop + 1);
       els.progress.textContent = `Stop ${displayStop} of ${total}`;
     },
 
     updateClock(hoursRemaining, totalHours) {
       const clockText = els.clock.querySelector('.carmen-clock-text');
+      const clockIcon = els.clock.querySelector('.carmen-clock-icon');
+      els.clock.classList.remove('world-case-status', 'world-case-ready');
+      if (clockIcon) clockIcon.style.display = '';
       const setClockText = (text) => {
         if (clockText) clockText.textContent = text;
         else els.clock.textContent = text;

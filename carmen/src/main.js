@@ -949,8 +949,7 @@ function refreshWorldCaseUi(focusTravel = false) {
   const state = worldCase.getBoardState();
   ui.updateMissions([], true, 1, 1, getMissionLabel());
   ui.updateScore(Math.max(0, 5000 - (worldCase.evidence.length * 75) - (worldCase.deadEnds.length * 250)));
-  ui.updateProgress(worldCase.currentLeg, worldCase.totalLegs + 1);
-  ui.setFreeInvestigationClock('No case clock');
+  ui.setWorldCaseStatus(state.statusBar);
   ui.updateWorldCaseArtifact(state);
   ui.updateWorldCaseBoard(state);
   ui.showWorldCaseLocations(state.sceneActions || [], handleWorldInvestigation, state, buildWorldCaseCityMapOptions());
@@ -1042,6 +1041,7 @@ function buildWorldCaseCityMapOptions() {
   const scenePois = scene?.pois || null;
   return {
     cityMap: true,
+    showHeader: false,
     contextKey: `world-case::${country}::${scene?.scene || ''}::${scene?.city || ''}::${centerLat.toFixed(4)},${centerLon.toFixed(4)}`,
     targetOsmZoom: 15,
     fitMaxDistanceDegrees: 0.05,

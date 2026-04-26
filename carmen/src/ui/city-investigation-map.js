@@ -114,14 +114,17 @@ function projectToScreen(lat, lon, viewport) {
 
 export function createCityInvestigationMap(container, locations, options, onPick) {
   options.locations = locations;
+  const showHeader = options.showHeader !== false;
   container.innerHTML = `
     <div class="carmen-city-map">
-      <div class="carmen-city-map-head">
-        <div>
-          <div class="carmen-city-map-title">${esc(options.capital)}</div>
+      ${showHeader ? `
+        <div class="carmen-city-map-head">
+          <div>
+            <div class="carmen-city-map-title">${esc(options.capital)}</div>
+          </div>
+          <div class="carmen-city-map-country">${esc(options.country)}</div>
         </div>
-        <div class="carmen-city-map-country">${esc(options.country)}</div>
-      </div>
+      ` : ''}
       <div class="carmen-city-map-wrap">
         <canvas class="carmen-city-map-canvas" aria-hidden="true"></canvas>
         <div class="carmen-city-map-pins" aria-label="City investigation map"></div>

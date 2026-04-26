@@ -703,6 +703,7 @@ export class WorldCaseFilesLogic {
       pattern: this.caseData.pattern,
       current: this.getProgress(),
       confidence: this.getConfidence(),
+      statusBar: this.getStatusBarState(),
       summary: this.getCandidateSummary(),
       atlasHints: this.getAtlasHints(),
       evidence: [...this.evidence],
@@ -717,6 +718,51 @@ export class WorldCaseFilesLogic {
       artifactPanel: this.getCurrentArtifactPanel(),
       localTrail: this.getLocalTrailState(),
       completedSceneKeys: [...this.completedSceneKeys],
+    };
+  }
+
+  getStatusBarState() {
+    const current = this.getProgress();
+    const confidence = this.getConfidence();
+    const currentScene = this.getCurrentScene();
+    const routeRequired = true;
+    const cultureRequired = true;
+    const confirmationRequired = true;
+    const puzzleRequired = !!currentScene.requirePuzzle || (currentScene.clues || []).some(item => item.category === 'Puzzle Evidence');
+    const city = current.city || currentScene.city || '';
+    const country = current.country || this.currentCountry || '';
+    const samePlace = normalize(city) && normalize(city) === normalize(country);
+    const locationLabel = [city, samePlace ? '' : country].filter(Boolean).join(', ') || country || 'Current scene';
+
+    return {
+      locationLabel,
+      evidenceGauge: [
+        {
+          id: 'route',
+          label: 'Route',
+          state: routeRequired && confidence.leadFound && this.getActiveEvidence().some(item => item.category === 'Route Evidence')
+            ? 'complete'
+            : 'incomplete',
+        },
+        {
+          id: 'culture',
+          label: 'Culture',
+          state: cultureRequired && confidence.patternSupported ? 'complete' : 'incomplete',
+        },
+        {
+          id: 'confirmation',
+          label: 'Confirm',
+          state: confirmationRequired && this.getActiveEvidence().some(item => item.category === 'Confirmation')
+            ? 'complete'
+            : 'incomplete',
+        },
+        {
+          id: 'puzzle',
+          label: 'Puzzle',
+          state: !puzzleRequired ? 'not_required' : confidence.puzzleSolved ? 'complete' : 'incomplete',
+        },
+      ],
+      ready: confidence.evidenceReady,
     };
   }
 
