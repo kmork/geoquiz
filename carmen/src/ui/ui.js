@@ -903,31 +903,88 @@ export function createCarmenUI(container, flagCodes) {
   }
 
   function dismissImageViewer() {
-    const overlay = document.querySelector('.carmen-image-viewer-overlay');
-    if (overlay) overlay.remove();
+    document.querySelector('.carmen-image-viewer-overlay')?.remove();
+    document.querySelector('.carmen-image-viewer-docked')?.remove();
   }
 
-  function showImageViewer(item) {
+  let dockedImageViewerState = null;
+
+  function showImageViewerModal(item) {
     if (!item?.imagePath) return;
-    dismissImageViewer();
+    document.querySelector('.carmen-image-viewer-overlay')?.remove();
     const overlay = document.createElement('div');
     overlay.className = 'carmen-image-viewer-overlay';
     overlay.innerHTML = `
-      <div class="carmen-image-viewer-card">
+      <div class="carmen-image-viewer-card carmen-image-viewer-toggle-card">
         <button class="carmen-image-viewer-close" type="button" aria-label="Close evidence viewer">✕</button>
         <div class="carmen-image-viewer-kicker">${esc(item.imagePurpose || item.kind || 'evidence image')}</div>
         <div class="carmen-image-viewer-title">${esc(item.title || item.label || 'Evidence image')}</div>
         ${item.subtitle ? `<div class="carmen-image-viewer-subtitle">${esc(item.subtitle)}</div>` : ''}
         <div class="carmen-image-viewer-frame">
-          <img src="${esc(item.imagePath)}" alt="${esc(item.title || item.label || 'Evidence image')}">
+          <img class="carmen-image-viewer-toggle-img" src="${esc(item.imagePath)}" alt="${esc(item.title || item.label || 'Evidence image')}">
         </div>
       </div>
     `;
     overlay.addEventListener('click', (event) => {
-      if (event.target === overlay) dismissImageViewer();
+      if (event.target === overlay) document.querySelector('.carmen-image-viewer-overlay')?.remove();
     });
-    overlay.querySelector('.carmen-image-viewer-close')?.addEventListener('click', () => dismissImageViewer());
+    overlay.querySelector('.carmen-image-viewer-close')?.addEventListener('click', () => {
+      document.querySelector('.carmen-image-viewer-overlay')?.remove();
+    });
+    overlay.querySelector('.carmen-image-viewer-toggle-card')?.addEventListener('click', (event) => {
+      if (event.target.closest('.carmen-image-viewer-close')) return;
+      document.querySelector('.carmen-image-viewer-overlay')?.remove();
+      if (dockedImageViewerState?.item?.imagePath) {
+        showDockedImageViewer(dockedImageViewerState.item, dockedImageViewerState.targetEl);
+      }
+    });
     document.body.appendChild(overlay);
+  }
+
+  function showDockedImageViewer(item, targetEl = null) {
+    if (!item?.imagePath) return;
+    const dockTarget = targetEl || els.cityMapStage?.querySelector('.carmen-city-map-wrap');
+    if (!dockTarget) {
+      showImageViewerModal(item);
+      return;
+    }
+    dockedImageViewerState = { item, targetEl: dockTarget };
+    dockTarget.querySelector('.carmen-image-viewer-docked')?.remove();
+    const docked = document.createElement('div');
+    docked.className = 'carmen-image-viewer-docked';
+    docked.innerHTML = `
+      <div class="carmen-image-viewer-docked-card carmen-image-viewer-toggle-card">
+        <div class="carmen-image-viewer-docked-head">
+          <div>
+            <div class="carmen-image-viewer-kicker">${esc(item.imagePurpose || item.kind || 'evidence')}</div>
+            <div class="carmen-image-viewer-docked-title">${esc(item.title || item.label || 'Evidence image')}</div>
+          </div>
+          <div class="carmen-image-viewer-docked-actions">
+            <button class="carmen-image-viewer-docked-btn" type="button" data-close aria-label="Close evidence viewer">✕</button>
+          </div>
+        </div>
+        <div class="carmen-image-viewer-docked-frame">
+          <img class="carmen-image-viewer-toggle-img" src="${esc(item.imagePath)}" alt="${esc(item.title || item.label || 'Evidence image')}">
+        </div>
+      </div>
+    `;
+    docked.querySelector('[data-close]')?.addEventListener('click', () => {
+      docked.remove();
+      dockedImageViewerState = null;
+    });
+    docked.querySelector('.carmen-image-viewer-toggle-card')?.addEventListener('click', (event) => {
+      if (event.target.closest('[data-close]')) return;
+      showImageViewerModal(item);
+    });
+    dockTarget.appendChild(docked);
+  }
+
+  function showImageViewer(item, options = null) {
+    if (options?.dockToMap) {
+      showDockedImageViewer(item, options?.targetEl || null);
+      return;
+    }
+    showImageViewerModal(item);
   }
 
   function bindWorldCaseArtifactEvidence(panel = null) {
@@ -1391,6 +1448,9 @@ export function createCarmenUI(container, flagCodes) {
             title: btn.dataset.evidenceImageTitle || 'Evidence image',
             subtitle: btn.dataset.evidenceImageSubtitle || '',
             imageNotes: btn.dataset.evidenceImageNotes || '',
+          }, {
+            dockToMap: true,
+            targetEl: els.cityMapStage?.querySelector('.carmen-city-map-wrap') || null,
           });
         });
       });

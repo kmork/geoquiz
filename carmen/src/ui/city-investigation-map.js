@@ -288,6 +288,7 @@ export function createCityInvestigationMap(container, locations, options, onPick
   }
 
   function onWheel(e) {
+    if (e.target.closest('.carmen-image-viewer-docked')) return;
     e.preventDefault();
     if (!viewport) return;
     const point = eventPoint(e);
@@ -296,7 +297,7 @@ export function createCityInvestigationMap(container, locations, options, onPick
   }
 
   function onPointerDown(e) {
-    if (e.target.closest('.carmen-city-map-pin, .carmen-city-map-controls')) return;
+    if (e.target.closest('.carmen-city-map-pin, .carmen-city-map-controls, .carmen-image-viewer-docked')) return;
     if (!viewport) return;
     e.preventDefault();
     mapWrap.setPointerCapture?.(e.pointerId);

@@ -2137,6 +2137,72 @@ body {
   backdrop-filter: blur(3px);
 }
 
+.carmen-image-viewer-docked {
+  position: absolute;
+  top: 0.85rem;
+  right: 0.85rem;
+  z-index: 5;
+  width: min(38%, 340px);
+  min-width: 220px;
+  max-width: calc(100% - 1.7rem);
+  pointer-events: none;
+}
+
+.carmen-image-viewer-docked-card {
+  pointer-events: auto;
+  border-radius: 14px;
+  border: 1px solid rgba(214, 180, 124, 0.26);
+  background:
+    linear-gradient(180deg, rgba(27, 24, 22, 0.98), rgba(13, 12, 11, 0.98)),
+    radial-gradient(circle at top, rgba(255, 223, 164, 0.07), transparent 55%);
+  box-shadow: 0 22px 48px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.carmen-image-viewer-docked-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.55rem;
+  padding: 0.75rem 0.8rem 0.55rem;
+}
+
+.carmen-image-viewer-docked-title {
+  margin-top: 0.16rem;
+  color: #f7ecdc;
+  font: 700 0.96rem Georgia, serif;
+  line-height: 1.2;
+}
+
+.carmen-image-viewer-docked-btn {
+  border: 0;
+  border-radius: 999px;
+  width: 1.9rem;
+  height: 1.9rem;
+  background: rgba(255, 255, 255, 0.08);
+  color: #f7e8cf;
+  cursor: pointer;
+}
+
+.carmen-image-viewer-docked-frame {
+  padding: 0 0.75rem 0.8rem;
+}
+
+.carmen-image-viewer-toggle-card {
+  cursor: pointer;
+}
+
+.carmen-image-viewer-docked-frame img {
+  display: block;
+  width: 100%;
+  height: auto;
+  max-height: min(48vh, 360px);
+  object-fit: contain;
+  border-radius: 10px;
+  background: #151311;
+  cursor: zoom-in;
+}
+
 .carmen-image-viewer-card {
   position: relative;
   width: min(960px, 94vw);
@@ -2203,6 +2269,7 @@ body {
   height: auto;
   border-radius: 8px;
   background: #151311;
+  cursor: zoom-out;
 }
 
 .carmen-image-viewer-notes {
@@ -2774,8 +2841,6 @@ body {
 
 .carmen-city-map-pin.investigated {
   border-color: rgba(148, 190, 168, 0.62);
-  color: rgba(232, 220, 204, 0.78);
-  opacity: 0.7;
 }
 
 .carmen-city-map-pin.investigated::before {

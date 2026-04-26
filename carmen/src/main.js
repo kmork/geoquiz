@@ -1071,8 +1071,8 @@ function buildWorldCaseCityMapOptions() {
     selectedContext: worldCaseSelectedContext,
     onSceneFocus: () => {
       worldCaseSelectedContext = { type: 'scene' };
+      ui.clearClues();
       refreshWorldCaseUi(false);
-      ui.showNarratorCaption(`Scene file reopened: ${scene?.scene || scene?.city || country}.`);
     },
     onLocationSelect: handleWorldLocationSelection,
   };
