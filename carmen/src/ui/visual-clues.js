@@ -194,6 +194,240 @@ export function renderScramble(container, data, onSolved) {
   tilesEl.addEventListener('pointerdown', onPointerDown);
 }
 
+// ── Seal-cipher renderer ─────────────────────────────────────────
+
+const SEAL_COLORS = {
+  red:   { fill: '#a4222a', glow: 'rgba(164,34,42,0.55)',  ink: '#fff5e1' },
+  green: { fill: '#1f6b3d', glow: 'rgba(31,107,61,0.55)',  ink: '#eaf5e8' },
+  blue:  { fill: '#1d4a7a', glow: 'rgba(29,74,122,0.55)',  ink: '#e7eef7' },
+};
+
+/**
+ * Render a seal-cipher puzzle. Drag a coloured wax seal onto a rail-corridor
+ * destination. Greyed seals stay in place and only show a pending tooltip.
+ *
+ * @param {HTMLElement} container — the element to render into
+ * @param {Object}      data     — { seals: [...], destinations: [...], placedSealIds?: Set, solved?: boolean }
+ * @param {Function}    onAttempt — called with { sealId, destinationId } when a seal is dropped on a destination.
+ *                                  Should return a string code: 'solved' | 'partial' | 'wrong' | 'inactive_seal' | 'already' | 'unknown_seal'
+ */
+export function renderSealCipher(container, data, onAttempt) {
+  const seals = Array.isArray(data?.seals) ? data.seals : [];
+  const destinations = Array.isArray(data?.destinations) ? data.destinations : [];
+  const placed = new Set(data?.placedSealIds || []);
+  let solved = !!data?.solved;
+
+  const card = document.createElement('div');
+  card.className = 'carmen-evidence-card carmen-evidence-seal-cipher';
+  container.appendChild(card);
+
+  const board = document.createElement('div');
+  board.className = 'carmen-seal-board';
+  card.appendChild(board);
+
+  const sealsCol = document.createElement('div');
+  sealsCol.className = 'carmen-seal-tray';
+  const sealsLabel = document.createElement('div');
+  sealsLabel.className = 'carmen-seal-tray-label';
+  sealsLabel.textContent = 'Sceaux';
+  sealsCol.appendChild(sealsLabel);
+
+  const destCol = document.createElement('div');
+  destCol.className = 'carmen-seal-destinations';
+  const destLabel = document.createElement('div');
+  destLabel.className = 'carmen-seal-tray-label';
+  destLabel.textContent = 'Corridors';
+  destCol.appendChild(destLabel);
+
+  board.appendChild(sealsCol);
+  board.appendChild(destCol);
+
+  for (const seal of seals) {
+    const palette = SEAL_COLORS[seal.id] || SEAL_COLORS.red;
+    const el = document.createElement('div');
+    el.className = 'carmen-seal-token';
+    el.dataset.sealId = seal.id;
+    el.style.setProperty('--seal-fill', palette.fill);
+    el.style.setProperty('--seal-glow', palette.glow);
+    el.style.setProperty('--seal-ink', palette.ink);
+    if (!seal.active) {
+      el.classList.add('is-inactive');
+      el.title = seal.evidencePendingText || 'Awaiting field evidence.';
+    } else {
+      el.style.touchAction = 'none';
+      el.style.cursor = 'grab';
+    }
+    if (placed.has(seal.id)) {
+      el.classList.add('is-placed');
+      el.style.cursor = '';
+    }
+    el.innerHTML = `<span class="carmen-seal-glyph">⌬</span><span class="carmen-seal-label">${esc(seal.label || seal.id)}</span>`;
+    sealsCol.appendChild(el);
+  }
+
+  const destElsById = new Map();
+  for (const dest of destinations) {
+    const el = document.createElement('div');
+    el.className = 'carmen-seal-destination';
+    el.dataset.destinationId = dest.id;
+    el.innerHTML = `<span class="carmen-seal-dest-name">${esc(dest.label || dest.id)}</span><span class="carmen-seal-dest-slot" aria-hidden="true"></span>`;
+    destCol.appendChild(el);
+    destElsById.set(dest.id, el);
+  }
+
+  function stampSeal(sealId, destinationId) {
+    const palette = SEAL_COLORS[sealId] || SEAL_COLORS.red;
+    const destEl = destElsById.get(destinationId);
+    if (!destEl) return;
+    const slot = destEl.querySelector('.carmen-seal-dest-slot');
+    if (slot) {
+      slot.classList.add('is-stamped');
+      slot.style.setProperty('--seal-fill', palette.fill);
+      slot.style.setProperty('--seal-glow', palette.glow);
+      slot.style.setProperty('--seal-ink', palette.ink);
+      slot.textContent = '⌬';
+    }
+    destEl.classList.add('is-resolved');
+  }
+
+  // Re-stamp any seals that were already placed in prior sessions
+  for (const seal of seals) {
+    if (placed.has(seal.id) && seal.destination) stampSeal(seal.id, seal.destination);
+  }
+
+  const status = document.createElement('div');
+  status.className = 'carmen-seal-status';
+  card.appendChild(status);
+
+  function setStatus(text, mode = '') {
+    status.textContent = text || '';
+    status.classList.remove('is-error', 'is-ok', 'is-pending');
+    if (mode) status.classList.add(`is-${mode}`);
+  }
+
+  // ── Drag-and-drop ──
+  let dragSealId = null;
+  let dragEl = null;
+  let ghost = null;
+  let dragStarted = false;
+  let startX = 0;
+  let startY = 0;
+  const DRAG_THRESHOLD = 5;
+
+  function getDestinationAtPoint(x, y) {
+    for (const [id, el] of destElsById.entries()) {
+      const r = el.getBoundingClientRect();
+      if (x >= r.left && x <= r.right && y >= r.top && y <= r.bottom) return id;
+    }
+    return null;
+  }
+
+  function clearDropHighlights() {
+    for (const el of destElsById.values()) el.classList.remove('drop-target');
+  }
+
+  function onPointerDown(e) {
+    if (solved) return;
+    const tokenEl = e.target.closest('.carmen-seal-token');
+    if (!tokenEl) return;
+    const sealId = tokenEl.dataset.sealId;
+    const seal = seals.find(s => s.id === sealId);
+    if (!seal) return;
+    if (!seal.active) {
+      setStatus(seal.evidencePendingText || 'This seal is awaiting field evidence.', 'pending');
+      return;
+    }
+    if (placed.has(sealId)) return;
+    e.preventDefault();
+    dragSealId = sealId;
+    dragEl = tokenEl;
+    dragStarted = false;
+    startX = e.clientX;
+    startY = e.clientY;
+    tokenEl.setPointerCapture(e.pointerId);
+    tokenEl.addEventListener('pointermove', onPointerMove);
+    tokenEl.addEventListener('pointerup', onPointerUp);
+    tokenEl.addEventListener('pointercancel', onPointerUp);
+  }
+
+  function onPointerMove(e) {
+    if (!dragSealId) return;
+    const dx = e.clientX - startX, dy = e.clientY - startY;
+    if (!dragStarted) {
+      if (Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) return;
+      dragStarted = true;
+      dragEl.classList.add('is-dragging');
+      const palette = SEAL_COLORS[dragSealId] || SEAL_COLORS.red;
+      ghost = document.createElement('div');
+      ghost.className = 'carmen-seal-token carmen-seal-ghost';
+      ghost.style.setProperty('--seal-fill', palette.fill);
+      ghost.style.setProperty('--seal-glow', palette.glow);
+      ghost.style.setProperty('--seal-ink', palette.ink);
+      ghost.innerHTML = '<span class="carmen-seal-glyph">⌬</span>';
+      ghost.style.left = e.clientX + 'px';
+      ghost.style.top = e.clientY + 'px';
+      document.body.appendChild(ghost);
+    }
+    if (ghost) { ghost.style.left = e.clientX + 'px'; ghost.style.top = e.clientY + 'px'; }
+    clearDropHighlights();
+    const targetId = getDestinationAtPoint(e.clientX, e.clientY);
+    if (targetId) destElsById.get(targetId)?.classList.add('drop-target');
+  }
+
+  function onPointerUp(e) {
+    if (!dragSealId) return;
+    if (dragEl) {
+      try { dragEl.releasePointerCapture(e.pointerId); } catch (_) { /* noop */ }
+      dragEl.removeEventListener('pointermove', onPointerMove);
+      dragEl.removeEventListener('pointerup', onPointerUp);
+      dragEl.removeEventListener('pointercancel', onPointerUp);
+      dragEl.classList.remove('is-dragging');
+    }
+    if (ghost) { ghost.remove(); ghost = null; }
+    clearDropHighlights();
+    let dropTarget = null;
+    if (dragStarted) dropTarget = getDestinationAtPoint(e.clientX, e.clientY);
+    const sealId = dragSealId;
+    dragSealId = null;
+    dragEl = null;
+    dragStarted = false;
+    if (!dropTarget) return;
+    if (typeof onAttempt !== 'function') return;
+    const code = onAttempt({ sealId, destinationId: dropTarget });
+    if (code === 'solved' || code === 'partial') {
+      placed.add(sealId);
+      stampSeal(sealId, dropTarget);
+      const tokenEl = sealsCol.querySelector(`.carmen-seal-token[data-seal-id="${sealId}"]`);
+      if (tokenEl) {
+        tokenEl.classList.add('is-placed');
+        tokenEl.style.cursor = '';
+      }
+      if (code === 'solved') {
+        solved = true;
+        setStatus('Cipher resolved.', 'ok');
+      } else {
+        setStatus('Seal placed. The other rows are still unreadable.', 'ok');
+      }
+    } else if (code === 'wrong') {
+      setStatus('That seal does not match that corridor.', 'error');
+      const destEl = destElsById.get(dropTarget);
+      if (destEl) {
+        destEl.classList.add('is-rejected');
+        setTimeout(() => destEl.classList.remove('is-rejected'), 700);
+      }
+    } else if (code === 'inactive_seal') {
+      const seal = seals.find(s => s.id === sealId);
+      setStatus(seal?.evidencePendingText || 'This seal is awaiting field evidence.', 'pending');
+    } else if (code === 'already') {
+      // No change.
+    }
+  }
+
+  sealsCol.addEventListener('pointerdown', onPointerDown);
+
+  if (solved) setStatus('Cipher resolved.', 'ok');
+}
+
 // ── Outline renderer ─────────────────────────────────────────────
 
 /**

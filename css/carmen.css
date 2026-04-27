@@ -259,6 +259,7 @@ body {
   border-left: 2px solid rgba(245, 158, 11, 0.35);
   padding-left: 0.7rem;
   margin-bottom: 1.35rem;
+  white-space: pre-line;
 }
 
 .carmen-tap-hint {
@@ -489,6 +490,57 @@ body {
 .carmen-narrator-caption.is-fading {
   opacity: 0;
   transform: translateX(-50%) translateY(12px);
+}
+
+.carmen-inner-monologue {
+  position: absolute;
+  left: 50%;
+  top: 1.5rem;
+  transform: translateX(-50%) translateY(-16px);
+  width: min(74%, 40rem);
+  padding: 0.85rem 1.1rem 0.95rem;
+  border-radius: 6px;
+  background:
+    linear-gradient(180deg, rgba(244, 230, 199, 0.96), rgba(232, 215, 179, 0.94)),
+    radial-gradient(circle at 50% 0%, rgba(180, 140, 80, 0.06), transparent 60%);
+  border: 1px solid rgba(120, 86, 38, 0.32);
+  box-shadow:
+    0 14px 22px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255, 248, 224, 0.55);
+  color: #2a1d10;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.5;
+  letter-spacing: 0.015em;
+  text-align: center;
+  text-shadow: 0 1px 0 rgba(255, 248, 224, 0.35);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 6;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.carmen-inner-monologue::before {
+  content: "DETECTIVE'S NOTE";
+  display: block;
+  margin-bottom: 0.4rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.62rem;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.28em;
+  color: rgba(120, 86, 38, 0.78);
+}
+
+.carmen-inner-monologue.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.carmen-inner-monologue.is-fading {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-12px);
 }
 
 .carmen-artifact-img {
@@ -2333,11 +2385,49 @@ body {
 }
 
 .carmen-image-viewer-frame {
+  position: relative;
   margin-top: 0.9rem;
   padding: 0.9rem;
   border-radius: 12px;
   background: rgba(255, 250, 239, 0.05);
   border: 1px solid rgba(255, 239, 211, 0.08);
+}
+
+.carmen-image-viewer-caption {
+  position: absolute;
+  left: 50%;
+  bottom: 1.4rem;
+  transform: translateX(-50%) translateY(8px);
+  width: min(86%, 36rem);
+  padding: 0.7rem 1rem 0.8rem;
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(14, 11, 10, 0.94), rgba(9, 8, 7, 0.9)),
+    radial-gradient(circle at 50% 0%, rgba(255, 236, 199, 0.08), transparent 55%);
+  border: 1px solid rgba(216, 188, 141, 0.2);
+  box-shadow:
+    0 14px 24px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 240, 214, 0.07);
+  color: #efe4d1;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 0.95rem;
+  font-style: italic;
+  line-height: 1.45;
+  letter-spacing: 0.02em;
+  text-align: center;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.72);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 10;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.carmen-image-viewer-caption.is-visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+.carmen-image-viewer-caption.is-fading {
+  opacity: 0;
+  transform: translateX(-50%) translateY(8px);
 }
 
 .carmen-image-viewer-frame img {
@@ -2347,6 +2437,77 @@ body {
   border-radius: 8px;
   background: #151311;
   cursor: zoom-out;
+}
+
+.carmen-image-viewer-hotspot-stage {
+  position: relative;
+  width: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.carmen-image-viewer-hotspot-stage img {
+  cursor: crosshair;
+}
+
+.carmen-image-hotspot {
+  position: absolute;
+  border: 2px dashed rgba(255, 226, 168, 0.0);
+  border-radius: 6px;
+  background: rgba(255, 226, 168, 0.0);
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.carmen-image-hotspot:hover,
+.carmen-image-hotspot:focus-visible {
+  background: rgba(255, 226, 168, 0.18);
+  border-color: rgba(255, 226, 168, 0.6);
+  outline: none;
+}
+
+.carmen-image-hotspot.is-correct {
+  background: rgba(120, 220, 140, 0.22);
+  border-color: rgba(120, 220, 140, 0.7);
+  cursor: default;
+}
+
+.carmen-image-hotspot.is-wrong {
+  background: rgba(220, 120, 120, 0.22);
+  border-color: rgba(220, 120, 120, 0.7);
+}
+
+.carmen-image-hotspot-pip {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  font: 700 0.85rem 'Courier New', monospace;
+  color: #cdf3c9;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+
+.carmen-image-puzzle-mount {
+  margin-top: 0.9rem;
+  padding-top: 0.7rem;
+  border-top: 1px solid rgba(255, 239, 211, 0.1);
+}
+
+.carmen-image-puzzle-prompt {
+  font: 600 0.82rem 'Courier New', monospace;
+  letter-spacing: 0.16em;
+  color: rgba(232, 206, 161, 0.86);
+  text-transform: uppercase;
+  margin-bottom: 0.5rem;
+}
+
+.carmen-image-puzzle-status {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: rgba(236, 223, 200, 0.78);
+}
+
+.carmen-image-puzzle-status.is-solved {
+  color: #cdf3c9;
 }
 
 .carmen-image-viewer-notes {
@@ -2415,6 +2576,166 @@ body {
   opacity: 0.85;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
+
+/* Seal-cipher puzzle */
+.carmen-image-puzzle-mount-seal {
+  background: rgba(34, 24, 16, 0.55);
+  border: 1px solid rgba(199, 176, 138, 0.25);
+  border-radius: 6px;
+  padding: 0.7rem 0.9rem;
+  margin-top: 0.5rem;
+}
+.carmen-evidence-seal-cipher {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+.carmen-seal-board {
+  display: grid;
+  grid-template-columns: minmax(120px, 0.8fr) 1.4fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+.carmen-seal-tray,
+.carmen-seal-destinations {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.carmen-seal-tray-label {
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(236, 216, 194, 0.65);
+  font-family: 'Courier New', monospace;
+}
+.carmen-seal-token {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.45rem 0.6rem;
+  background: rgba(20, 14, 10, 0.55);
+  border: 1px solid rgba(199, 176, 138, 0.25);
+  border-radius: 6px;
+  user-select: none;
+  -webkit-user-select: none;
+  color: var(--seal-ink, #ecd8c2);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
+}
+.carmen-seal-token .carmen-seal-glyph {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--seal-fill, #a4222a);
+  color: var(--seal-ink, #fff5e1);
+  font-size: 1rem;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.35) inset,
+    0 0 14px var(--seal-glow, rgba(164, 34, 42, 0.4));
+}
+.carmen-seal-token .carmen-seal-label {
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+}
+.carmen-seal-token.is-inactive {
+  opacity: 0.45;
+  cursor: not-allowed;
+  filter: grayscale(0.8);
+}
+.carmen-seal-token.is-inactive .carmen-seal-glyph {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35) inset;
+}
+.carmen-seal-token.is-placed {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.carmen-seal-token.is-dragging {
+  opacity: 0.3;
+}
+.carmen-seal-ghost {
+  position: fixed;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.92;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.carmen-seal-ghost .carmen-seal-glyph {
+  width: 38px;
+  height: 38px;
+  font-size: 1.2rem;
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.5) inset,
+    0 4px 18px var(--seal-glow, rgba(164, 34, 42, 0.55));
+}
+.carmen-seal-destination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  padding: 0.5rem 0.7rem;
+  border: 1px dashed rgba(199, 176, 138, 0.45);
+  border-radius: 6px;
+  background: rgba(20, 14, 10, 0.4);
+  font-family: 'Courier New', monospace;
+  color: rgba(236, 216, 194, 0.85);
+  transition: background 0.12s ease, border-color 0.12s ease;
+}
+.carmen-seal-destination.drop-target {
+  border-color: rgba(236, 216, 194, 0.85);
+  background: rgba(60, 42, 28, 0.6);
+}
+.carmen-seal-destination.is-resolved {
+  border-style: solid;
+  border-color: rgba(80, 160, 100, 0.55);
+  background: rgba(40, 60, 40, 0.55);
+}
+.carmen-seal-destination.is-rejected {
+  border-color: rgba(200, 80, 80, 0.85);
+  background: rgba(80, 30, 30, 0.55);
+}
+.carmen-seal-dest-name {
+  font-size: 0.85rem;
+  letter-spacing: 0.04em;
+}
+.carmen-seal-dest-slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px dashed rgba(199, 176, 138, 0.5);
+  color: transparent;
+  font-size: 0.95rem;
+}
+.carmen-seal-dest-slot.is-stamped {
+  background: var(--seal-fill, #a4222a);
+  color: var(--seal-ink, #fff5e1);
+  border-style: solid;
+  border-color: rgba(0, 0, 0, 0.35);
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.35) inset,
+    0 0 14px var(--seal-glow, rgba(164, 34, 42, 0.4));
+}
+.carmen-seal-status {
+  margin-top: 0.6rem;
+  min-height: 1.25rem;
+  font-size: 0.82rem;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.04em;
+  color: rgba(236, 216, 194, 0.7);
+}
+.carmen-seal-status.is-error { color: #e8a0a0; }
+.carmen-seal-status.is-ok    { color: #a8ddb5; }
+.carmen-seal-status.is-pending { color: #e8d59a; }
 
 /* Flag fragment */
 .carmen-evidence-flag {
@@ -2652,6 +2973,62 @@ body {
 
 .carmen-world-scene-btn {
   width: 100%;
+}
+
+.carmen-world-scene-btn.is-locked {
+  opacity: 0.65;
+  cursor: help;
+}
+
+.carmen-world-scene-btn.is-locked .carmen-location-name {
+  text-decoration: line-through;
+  text-decoration-color: rgba(238, 201, 139, 0.4);
+}
+
+.carmen-world-scene-btn.is-anonymous .carmen-location-name {
+  font-style: italic;
+  color: rgba(238, 201, 139, 0.78);
+  letter-spacing: 0.02em;
+}
+
+.carmen-world-scene-btn.is-stale {
+  animation: carmen-stale-pulse 1.6s ease-in-out infinite;
+  border-color: rgba(255, 211, 138, 0.6);
+}
+
+.carmen-location-stale-badge {
+  display: inline-block;
+  margin-left: 0.6rem;
+  padding: 0.12rem 0.45rem;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #1a120a;
+  background: rgba(255, 211, 138, 0.92);
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.carmen-city-pin.is-stale {
+  animation: carmen-stale-pulse 1.6s ease-in-out infinite;
+  outline: 2px solid rgba(255, 211, 138, 0.7);
+  outline-offset: 2px;
+}
+
+@keyframes carmen-stale-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 211, 138, 0.0); }
+  50% { box-shadow: 0 0 0 6px rgba(255, 211, 138, 0.45); }
+}
+
+.carmen-world-scene-evidence-btn.is-pulsing {
+  animation: carmen-evidence-pulse 0.7s ease 2;
+}
+
+@keyframes carmen-evidence-pulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 226, 168, 0.0); }
+  50% { box-shadow: 0 0 0 6px rgba(255, 226, 168, 0.45); }
 }
 
 .carmen-city-map {

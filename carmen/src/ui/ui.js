@@ -7,7 +7,7 @@ import { IMG } from '../assets.js';
 import { getInterpolBackgroundStory } from '../content/interpol-backgrounds.js';
 import { getPortraitStyleVars } from '../content/portrait-specs.js';
 import { typewriter } from './typewriter.js';
-import { renderScramble, renderOutline, renderFlag, renderCargoLabel } from './visual-clues.js';
+import { renderScramble, renderSealCipher, renderOutline, renderFlag, renderCargoLabel } from './visual-clues.js';
 import { createCityInvestigationMap } from './city-investigation-map.js';
 
 function renderPortraitImg(suspect, extraClass = '') {
@@ -168,6 +168,7 @@ export function createCarmenUI(container, flagCodes) {
             <div class="carmen-lineup-stage" id="carmen-lineup-stage"></div>
           </div>
           <div class="carmen-narrator-caption" id="carmen-narrator-caption" aria-live="polite"></div>
+          <div class="carmen-inner-monologue" id="carmen-inner-monologue" aria-live="polite"></div>
         </div>
       </div>
     </div>
@@ -208,6 +209,7 @@ export function createCarmenUI(container, flagCodes) {
     rvInterpol: container.querySelector('#carmen-rv-interpol'),
     rvLineup: container.querySelector('#carmen-rv-lineup'),
     narratorCaption: container.querySelector('#carmen-narrator-caption'),
+    innerMonologue: container.querySelector('#carmen-inner-monologue'),
     cityMapStage: container.querySelector('#carmen-city-map-stage'),
     interpolProfile: container.querySelector('#carmen-interpol-profile'),
     lineupStage: container.querySelector('#carmen-lineup-stage'),
@@ -227,6 +229,8 @@ export function createCarmenUI(container, flagCodes) {
   const interpolIntroHtml = els.interpolProfile.innerHTML;
   let narratorCaptionTimer = null;
   let narratorCaptionCleanupTimer = null;
+  let innerMonologueTimer = null;
+  let innerMonologueCleanupTimer = null;
   const caseCardState = {
     siteName: 'a priceless artifact',
     startCountry: '',
@@ -909,22 +913,124 @@ export function createCarmenUI(container, flagCodes) {
 
   let dockedImageViewerState = null;
 
-  function showImageViewerModal(item) {
+  function showImageViewerModal(item, options = null) {
     if (!item?.imagePath) return;
     document.querySelector('.carmen-image-viewer-overlay')?.remove();
+    const hasHotspots = Array.isArray(item.hotspots) && item.hotspots.length > 0;
+    const hasPuzzle = !!item.puzzle && item.puzzle.type;
+    const observation = options?.observation || { hotspotsHit: new Set(), puzzleSolved: false };
+    const onHotspotClick = options?.onHotspotClick || null;
+    const onPuzzleSolved = options?.onPuzzleSolved || null;
+
     const overlay = document.createElement('div');
     overlay.className = 'carmen-image-viewer-overlay';
+    const frameClass = hasHotspots ? 'carmen-image-viewer-frame carmen-image-viewer-hotspot-stage' : 'carmen-image-viewer-frame';
     overlay.innerHTML = `
       <div class="carmen-image-viewer-card carmen-image-viewer-toggle-card">
         <button class="carmen-image-viewer-close" type="button" aria-label="Close evidence viewer">✕</button>
         <div class="carmen-image-viewer-kicker">${esc(item.imagePurpose || item.kind || 'evidence image')}</div>
         <div class="carmen-image-viewer-title">${esc(item.title || item.label || 'Evidence image')}</div>
         ${item.subtitle ? `<div class="carmen-image-viewer-subtitle">${esc(item.subtitle)}</div>` : ''}
-        <div class="carmen-image-viewer-frame">
+        <div class="${frameClass}">
           <img class="carmen-image-viewer-toggle-img" src="${esc(item.imagePath)}" alt="${esc(item.title || item.label || 'Evidence image')}">
+          <div class="carmen-image-viewer-caption" aria-live="polite"></div>
         </div>
       </div>
     `;
+    if (hasHotspots) {
+      const frame = overlay.querySelector('.carmen-image-viewer-frame');
+      for (const hotspot of item.hotspots) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'carmen-image-hotspot';
+        btn.dataset.hotspotId = hotspot.id;
+        btn.style.left = `${hotspot.x}%`;
+        btn.style.top = `${hotspot.y}%`;
+        btn.style.width = `${hotspot.w}%`;
+        btn.style.height = `${hotspot.h}%`;
+        btn.setAttribute('aria-label', hotspot.label || `Inspect region ${hotspot.id}`);
+        const alreadyHit = hotspot.correct && observation.hotspotsHit?.has(hotspot.id);
+        if (alreadyHit) {
+          btn.classList.add('is-correct');
+          btn.disabled = true;
+          const pip = document.createElement('span');
+          pip.className = 'carmen-image-hotspot-pip';
+          pip.textContent = '✓';
+          btn.appendChild(pip);
+        }
+        btn.addEventListener('click', (event) => {
+          event.stopPropagation();
+          if (btn.disabled) return;
+          if (onHotspotClick) {
+            const outcome = onHotspotClick(item, hotspot);
+            if (outcome === 'correct') {
+              btn.classList.add('is-correct');
+              btn.disabled = true;
+              const pip = document.createElement('span');
+              pip.className = 'carmen-image-hotspot-pip';
+              pip.textContent = '✓';
+              btn.appendChild(pip);
+            } else if (outcome === 'wrong') {
+              btn.classList.add('is-wrong');
+              setTimeout(() => btn.classList.remove('is-wrong'), 700);
+            }
+          }
+        });
+        frame.appendChild(btn);
+      }
+    }
+    if (hasPuzzle && item.puzzle.type === 'scramble') {
+      const card = overlay.querySelector('.carmen-image-viewer-card');
+      const mount = document.createElement('div');
+      mount.className = 'carmen-image-puzzle-mount';
+      const prompt = document.createElement('div');
+      prompt.className = 'carmen-image-puzzle-prompt';
+      prompt.textContent = item.puzzle.prompt || 'Re-order the cipher tiles to read a single word.';
+      mount.appendChild(prompt);
+      const stage = document.createElement('div');
+      mount.appendChild(stage);
+      const status = document.createElement('div');
+      status.className = 'carmen-image-puzzle-status';
+      status.textContent = observation.puzzleSolved ? 'Cipher solved.' : '';
+      if (observation.puzzleSolved) status.classList.add('is-solved');
+      mount.appendChild(status);
+      card.appendChild(mount);
+      const answer = String(item.puzzle.solution || '').toUpperCase();
+      const initialLetters = (item.puzzle.scrambled || answer.split('').slice().reverse().join('')).toUpperCase().split('');
+      const fixed = (item.puzzle.fixed || initialLetters.map(() => false));
+      if (observation.puzzleSolved) {
+        renderScramble(stage, { letters: answer.split(''), fixed: answer.split('').map(() => true), answer }, () => {});
+      } else {
+        renderScramble(stage, { letters: initialLetters, fixed, answer }, (monologue) => {
+          status.textContent = 'Cipher solved.';
+          status.classList.add('is-solved');
+          if (onPuzzleSolved) onPuzzleSolved(item, answer, monologue);
+        });
+      }
+    }
+    if (hasPuzzle && item.puzzle.type === 'seal-cipher') {
+      const card = overlay.querySelector('.carmen-image-viewer-card');
+      const mount = document.createElement('div');
+      mount.className = 'carmen-image-puzzle-mount carmen-image-puzzle-mount-seal';
+      const prompt = document.createElement('div');
+      prompt.className = 'carmen-image-puzzle-prompt';
+      prompt.textContent = item.puzzle.prompt || 'Match the legible seal to its rail corridor.';
+      mount.appendChild(prompt);
+      const stage = document.createElement('div');
+      mount.appendChild(stage);
+      card.appendChild(mount);
+      const placedSealIds = observation.sealsPlaced ? Array.from(observation.sealsPlaced) : [];
+      renderSealCipher(stage, {
+        seals: item.puzzle.seals || [],
+        destinations: item.puzzle.destinations || [],
+        placedSealIds,
+        solved: !!observation.puzzleSolved,
+      }, (attempt) => {
+        if (!onPuzzleSolved) return null;
+        const outcome = onPuzzleSolved(item, attempt);
+        return outcome && typeof outcome === 'object' ? outcome.result : outcome;
+      });
+    }
     overlay.addEventListener('click', (event) => {
       if (event.target === overlay) document.querySelector('.carmen-image-viewer-overlay')?.remove();
     });
@@ -933,6 +1039,9 @@ export function createCarmenUI(container, flagCodes) {
     });
     overlay.querySelector('.carmen-image-viewer-toggle-card')?.addEventListener('click', (event) => {
       if (event.target.closest('.carmen-image-viewer-close')) return;
+      if (event.target.closest('.carmen-image-hotspot')) return;
+      if (event.target.closest('.carmen-image-puzzle-mount')) return;
+      if (hasHotspots || hasPuzzle) return;
       document.querySelector('.carmen-image-viewer-overlay')?.remove();
       if (dockedImageViewerState?.item?.imagePath) {
         showDockedImageViewer(dockedImageViewerState.item, dockedImageViewerState.targetEl);
@@ -984,7 +1093,7 @@ export function createCarmenUI(container, flagCodes) {
       showDockedImageViewer(item, options?.targetEl || null);
       return;
     }
-    showImageViewerModal(item);
+    showImageViewerModal(item, options);
   }
 
   function bindWorldCaseArtifactEvidence(panel = null) {
@@ -1010,8 +1119,19 @@ export function createCarmenUI(container, flagCodes) {
   }
 
   function showNarratorCaption(text, duration = null) {
-    if (!text || !els.narratorCaption) return;
+    if (!text) return;
 
+    const resolvedDuration = duration == null
+      ? Math.min(10500, Math.max(5600, 3800 + (text.length * 24)))
+      : duration;
+
+    const overlayCaption = document.querySelector('.carmen-image-viewer-overlay .carmen-image-viewer-caption');
+    if (overlayCaption) {
+      showImageViewerCaption(overlayCaption, text, resolvedDuration);
+      return;
+    }
+
+    if (!els.narratorCaption) return;
     clearNarratorCaptionTimers();
     els.narratorCaption.textContent = text;
     els.narratorCaption.classList.remove('is-fading');
@@ -1019,13 +1139,75 @@ export function createCarmenUI(container, flagCodes) {
     void els.narratorCaption.offsetWidth;
     els.narratorCaption.classList.add('is-visible');
 
-    const resolvedDuration = duration == null
-      ? Math.min(10500, Math.max(5600, 3800 + (text.length * 24)))
-      : duration;
-
     if (resolvedDuration !== Infinity) {
       narratorCaptionTimer = setTimeout(() => {
         hideNarratorCaption();
+      }, resolvedDuration);
+    }
+  }
+
+  let imageViewerCaptionTimer = null;
+  function showImageViewerCaption(captionEl, text, duration) {
+    if (imageViewerCaptionTimer) {
+      clearTimeout(imageViewerCaptionTimer);
+      imageViewerCaptionTimer = null;
+    }
+    captionEl.textContent = text;
+    captionEl.classList.remove('is-fading');
+    void captionEl.offsetWidth;
+    captionEl.classList.add('is-visible');
+    if (duration !== Infinity) {
+      imageViewerCaptionTimer = setTimeout(() => {
+        captionEl.classList.add('is-fading');
+        captionEl.classList.remove('is-visible');
+        setTimeout(() => {
+          captionEl.classList.remove('is-fading');
+          captionEl.textContent = '';
+        }, 350);
+      }, duration);
+    }
+  }
+
+  function clearInnerMonologueTimers() {
+    if (innerMonologueTimer) {
+      clearTimeout(innerMonologueTimer);
+      innerMonologueTimer = null;
+    }
+    if (innerMonologueCleanupTimer) {
+      clearTimeout(innerMonologueCleanupTimer);
+      innerMonologueCleanupTimer = null;
+    }
+  }
+
+  function hideInnerMonologue(immediate = false) {
+    if (!els.innerMonologue) return;
+    if (immediate || !els.innerMonologue.classList.contains('is-visible')) {
+      els.innerMonologue.classList.remove('is-visible', 'is-fading');
+      els.innerMonologue.textContent = '';
+      return;
+    }
+    els.innerMonologue.classList.add('is-fading');
+    els.innerMonologue.classList.remove('is-visible');
+    innerMonologueCleanupTimer = setTimeout(() => {
+      els.innerMonologue.classList.remove('is-fading');
+      els.innerMonologue.textContent = '';
+      innerMonologueCleanupTimer = null;
+    }, 420);
+  }
+
+  function showInnerMonologue(text, duration = null) {
+    if (!text || !els.innerMonologue) return;
+    clearInnerMonologueTimers();
+    els.innerMonologue.textContent = text;
+    els.innerMonologue.classList.remove('is-fading');
+    void els.innerMonologue.offsetWidth;
+    els.innerMonologue.classList.add('is-visible');
+    const resolvedDuration = duration == null
+      ? Math.min(13000, Math.max(7200, 4800 + (text.length * 28)))
+      : duration;
+    if (resolvedDuration !== Infinity) {
+      innerMonologueTimer = setTimeout(() => {
+        hideInnerMonologue();
       }, resolvedDuration);
     }
   }
@@ -1189,6 +1371,14 @@ export function createCarmenUI(container, flagCodes) {
 
     hideNarratorCaption(immediate = false) {
       hideNarratorCaption(immediate);
+    },
+
+    showInnerMonologue(text, duration) {
+      showInnerMonologue(text, duration);
+    },
+
+    hideInnerMonologue(immediate = false) {
+      hideInnerMonologue(immediate);
     },
 
     setManifestMode(enabled, options = null) {
@@ -1390,6 +1580,10 @@ export function createCarmenUI(container, flagCodes) {
       const genericFieldStop = !!(state?.currentFieldLocation?.kind && state.currentFieldLocation.kind !== 'scene' && !state?.displayScene);
       const sceneTitle = state?.displayScene?.title || state?.displayScene?.scene || state?.current?.sceneTitle || state?.currentScene?.title || state?.currentScene?.scene || current.city || 'Current scene';
       const visibleSceneActions = sceneActions || [];
+      const evidenceList = state?.evidence || [];
+      const staleLocationIds = new Set(
+        evidenceList.filter(e => e.staleAvailable).map(e => e.locationId).filter(Boolean)
+      );
       const selectedContext = options?.selectedContext || { type: 'scene' };
       const selectedMapLocation = selectedContext?.type === 'location'
         ? mapLocations.find(loc => loc.id === selectedContext.id) || null
@@ -1414,12 +1608,25 @@ export function createCarmenUI(container, flagCodes) {
               ${visibleSceneActions.length ? `
                 <div class="carmen-world-scene-section">
                   <div class="carmen-world-scene-section-title">Scene Actions</div>
-                  ${visibleSceneActions.map(loc => `
-                    <button class="carmen-location-btn carmen-world-scene-btn" data-location="${loc.id}">
-                      <span class="carmen-location-emoji">${loc.emoji}</span>
-                      <span class="carmen-location-name">${loc.name}</span>
-                    </button>
-                  `).join('')}
+                  ${visibleSceneActions.map(loc => {
+                    const isAnonymous = loc.discoveryState === 'anonymous';
+                    const isStale = staleLocationIds.has(loc.id);
+                    const cls = ['carmen-location-btn', 'carmen-world-scene-btn'];
+                    if (loc.locked) cls.push('is-locked');
+                    if (isAnonymous) cls.push('is-anonymous');
+                    if (isStale) cls.push('is-stale');
+                    const titleAttr = loc.locked && loc.requiredImageTitle
+                      ? ` title="Locked. Examine ${esc(loc.requiredImageTitle)} to open this lead."`
+                      : (isAnonymous ? ' title="An unidentified detail. Examine the breach photo for context."' : '');
+                    const emojiGlyph = loc.locked ? '🔒' : loc.emoji;
+                    return `
+                      <button class="${cls.join(' ')}" data-location="${loc.id}"${loc.locked && loc.requiredImageId ? ` data-locked-by-image="${esc(loc.requiredImageId)}"` : ''}${titleAttr}>
+                        <span class="carmen-location-emoji">${emojiGlyph}</span>
+                        <span class="carmen-location-name">${esc(loc.name)}</span>
+                        ${isStale ? '<span class="carmen-location-stale-badge">New info — re-question</span>' : ''}
+                      </button>
+                    `;
+                  }).join('')}
                 </div>
               ` : ''}
               ${sceneEvidenceImages.length ? `
@@ -1429,11 +1636,7 @@ export function createCarmenUI(container, flagCodes) {
                     <button
                       class="carmen-location-btn carmen-world-scene-btn carmen-world-scene-evidence-btn"
                       type="button"
-                      data-evidence-image-path="${esc(item.imagePath || '')}"
-                      data-evidence-image-purpose="${esc(item.imagePurpose || 'evidence_image')}"
-                      data-evidence-image-title="${esc(item.title || 'Evidence image')}"
-                      data-evidence-image-subtitle="${esc(item.subtitle || '')}"
-                      data-evidence-image-notes="${esc(item.imageNotes || '')}"
+                      data-evidence-id="${esc(item.id || '')}"
                     >
                       <span class="carmen-location-emoji">🖼️</span>
                       <span class="carmen-location-name">${esc(item.title || 'Evidence image')}</span>
@@ -1458,7 +1661,23 @@ export function createCarmenUI(container, flagCodes) {
           `}
         </div>
       `;
+      const evidenceItemMap = new Map();
+      for (const item of sceneEvidenceImages) {
+        if (item.id) evidenceItemMap.set(item.id, item);
+      }
+      const flashEvidenceButton = (imageId) => {
+        const targetBtn = els.locations.querySelector(`.carmen-world-scene-evidence-btn[data-evidence-id="${imageId}"]`);
+        if (!targetBtn) return;
+        targetBtn.classList.add('is-pulsing');
+        targetBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        setTimeout(() => targetBtn.classList.remove('is-pulsing'), 1400);
+      };
       const pickSceneAction = (locId) => {
+        const sceneAction = visibleSceneActions.find(action => action.id === locId);
+        if (sceneAction?.locked) {
+          if (sceneAction.requiredImageId) flashEvidenceButton(sceneAction.requiredImageId);
+          return;
+        }
         this._worldInvestigatedIds.add(locId);
         const btn = Array.from(els.locations.querySelectorAll('.carmen-location-btn'))
           .find(candidate => candidate.dataset.location === locId);
@@ -1467,6 +1686,11 @@ export function createCarmenUI(container, flagCodes) {
         onInvestigate(locId);
       };
       const selectMapLocation = (locId) => {
+        const sceneAction = visibleSceneActions.find(action => action.id === locId);
+        if (sceneAction?.locked) {
+          if (sceneAction.requiredImageId) flashEvidenceButton(sceneAction.requiredImageId);
+          return;
+        }
         if (typeof options?.onLocationSelect === 'function') {
           options.onLocationSelect(locId);
           return;
@@ -1480,19 +1704,33 @@ export function createCarmenUI(container, flagCodes) {
         if (btn) btn.classList.add('investigated');
       }
 
+      const openEvidenceImage = (item, dock = true) => {
+        const observation = state?.imageObservations?.[item.id] || { hotspotsHit: new Set(), puzzleSolved: false };
+        showImageViewer(item, {
+          dockToMap: dock,
+          targetEl: els.cityMapStage?.querySelector('.carmen-city-map-wrap') || null,
+          observation,
+          onHotspotClick: (img, hotspot) => {
+            if (typeof options?.onHotspotClick !== 'function') return null;
+            return options.onHotspotClick(img, hotspot);
+          },
+          onPuzzleSolved: (img, attempt, monologue) => {
+            if (typeof options?.onPuzzleSolved === 'function') {
+              return options.onPuzzleSolved(img, attempt, monologue);
+            }
+            return null;
+          },
+        });
+      };
+
       els.locations.querySelectorAll('.carmen-world-scene-evidence-btn').forEach(btn => {
         btn.addEventListener('click', (event) => {
           event.preventDefault();
-          showImageViewer({
-            imagePath: btn.dataset.evidenceImagePath || '',
-            imagePurpose: btn.dataset.evidenceImagePurpose || '',
-            title: btn.dataset.evidenceImageTitle || 'Evidence image',
-            subtitle: btn.dataset.evidenceImageSubtitle || '',
-            imageNotes: btn.dataset.evidenceImageNotes || '',
-          }, {
-            dockToMap: true,
-            targetEl: els.cityMapStage?.querySelector('.carmen-city-map-wrap') || null,
-          });
+          const imageId = btn.dataset.evidenceId || '';
+          const item = evidenceItemMap.get(imageId);
+          if (!item) return;
+          const interactive = (Array.isArray(item.hotspots) && item.hotspots.length) || !!item.puzzle;
+          openEvidenceImage(item, !interactive);
         });
       });
 
@@ -1510,6 +1748,9 @@ export function createCarmenUI(container, flagCodes) {
         );
         for (const locId of this._worldInvestigatedIds) {
           cityInvestigationMap?.setLocationState?.(locId, 'investigated');
+        }
+        for (const locId of staleLocationIds) {
+          cityInvestigationMap?.setLocationState?.(locId, 'stale');
         }
         cityInvestigationMap?.setSelectedLocation?.(selectedContext?.type === 'scene' ? '__scene__' : selectedContext?.id || '');
       }
@@ -1531,6 +1772,7 @@ export function createCarmenUI(container, flagCodes) {
         ? candidates.find(item => item.country === inspectCountry) || null
         : null;
       const citySelection = options?.citySelection || null;
+      const hoveredCity = options?.hoveredCity || '';
       const targetStop = options?.targetStop || null;
       const targetTravelLabel = options?.targetTravelLabel || null;
       const localTrail = options?.localTrail || null;
@@ -1560,6 +1802,7 @@ export function createCarmenUI(container, flagCodes) {
                 Hints: ${esc(hintMode === 'off' ? 'off' : 'subtle')}
               </button>
               ${atlasHints.length > 1 ? '<button type="button" class="carmen-world-atlas-toggle" data-next-hint>Next hint</button>' : ''}
+              ${citySelection ? '<button type="button" class="carmen-world-atlas-close" data-close-detail aria-label="Back to world atlas">×</button>' : ''}
             </div>
             <button type="button" class="carmen-world-atlas-hint${revealHintDetails ? ' is-open' : ''}" data-hint-detail>
               <span class="carmen-world-atlas-hint-label">Atlas hint</span>
@@ -1570,25 +1813,13 @@ export function createCarmenUI(container, flagCodes) {
                 ${(atlasHints.slice(0, 4)).map(item => `<div class="carmen-world-atlas-mini">${esc(item.text)}</div>`).join('')}
               </div>
             ` : ''}
-          </div>
-          ${citySelection && inspectCandidate ? `
-            <div class="carmen-world-candidate-detail compact">
-              <div class="carmen-world-candidate-topline">
-                <div>
-                  <div class="carmen-panel-badge">CITY PICKER</div>
-                  <div class="carmen-panel-title">${esc(inspectCandidate.travelLabel?.primary || inspectCandidate.country)}</div>
-                  <div class="carmen-panel-desc">Choose a city destination on the map.</div>
-                </div>
-                <button type="button" class="carmen-world-atlas-close" data-close-detail aria-label="Back to world atlas">×</button>
-              </div>
-              <div class="carmen-world-candidate-state ${esc(inspectCandidate.state || 'unknown')}">${esc(inspectCandidate.state || 'unknown')}</div>
-              <div class="carmen-world-atlas-mini">${esc(inspectCandidate.hintSummary || 'The country fits the board. Narrow it to the right city.')}</div>
+            ${citySelection ? `
               <div class="carmen-world-atlas-mini">
-                ${citySelection.cities?.length ? `${esc(String(citySelection.cities.length))} city options available.` : 'No city data available for this country.'}
+                ${hoveredCity ? `Travel to: <strong>${esc([hoveredCity, citySelection.country].filter(Boolean).join(', '))}</strong>` : 'Hover a city on the map to inspect it before you fly.'}
               </div>
-              <div class="carmen-world-atlas-mini">The current city remains visible on the map but cannot be selected.</div>
-            </div>
-          ` : inspectCandidate ? `
+            ` : ''}
+          </div>
+          ${!citySelection && inspectCandidate ? `
             <div class="carmen-world-candidate-detail compact">
               <div class="carmen-world-candidate-topline">
                 <div>

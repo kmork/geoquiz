@@ -188,7 +188,7 @@ export class CarmenRouteRenderer extends RouteRenderer {
       strong: { fill: 'rgba(34, 197, 94, 0.16)', stroke: 'rgba(74, 222, 128, 0.62)', strokeWidth: '1.2' },
       contradicted: { fill: 'rgba(239, 68, 68, 0.03)', stroke: 'rgba(248, 113, 113, 0.32)', strokeWidth: '0.95' },
       current: { fill: 'rgba(251, 191, 36, 0.22)', stroke: 'rgba(251, 191, 36, 0.92)', strokeWidth: '1.45' },
-      selected: { fill: 'rgba(59, 130, 246, 0.24)', stroke: 'rgba(96, 165, 250, 0.9)', strokeWidth: '1.5' },
+      selected: { fill: 'rgba(203, 213, 225, 0.24)', stroke: 'rgba(226, 232, 240, 0.52)', strokeWidth: '1.5' },
     };
     const candidateByCountry = Object.fromEntries((candidates || []).map(item => [item.country, item]));
     const hintsEnabled = options.hintsEnabled !== false;
@@ -286,11 +286,8 @@ export class CarmenRouteRenderer extends RouteRenderer {
     const entriesByCity = new Map();
     const vb = this.svg.viewBox.baseVal;
     const zoomScale = Math.max(0.08, Math.min(1, (vb.width || this.MAP_W) / this.MAP_W));
-    const circleRadius = Math.max(0.6, 3.5 * zoomScale);
-    const hoverRadius = Math.max(0.8, 4.2 * zoomScale);
-    const labelOffset = Math.max(0.9, 3.2 * zoomScale);
-    const fontSize = Math.max(0.62, 3.3 * zoomScale);
-    const strokeWidth = Math.max(0.18, 0.9 * zoomScale);
+    const circleRadius = Math.max(0.22, 2.1 * zoomScale);
+    const hoverRadius = Math.max(0.3, 2.7 * zoomScale);
 
     const applyState = (entry) => {
       if (!entry) return;
@@ -304,7 +301,6 @@ export class CarmenRouteRenderer extends RouteRenderer {
         isCurrent ? 'rgba(219, 234, 254, 0.96)'
         : active ? 'rgba(191, 219, 254, 1)'
         : 'rgba(124, 45, 18, 0.95)');
-      entry.label.setAttribute('fill', isCurrent ? 'rgba(219, 234, 254, 0.92)' : active ? '#eff6ff' : '#f8fafc');
       entry.circle.setAttribute('opacity', isCurrent ? '0.88' : '1');
       entry.circle.setAttribute('cursor', isCurrent ? 'default' : 'pointer');
     };
@@ -322,24 +318,13 @@ export class CarmenRouteRenderer extends RouteRenderer {
       circle.setAttribute('class', 'carmen-world-city-choice');
       circle.setAttribute('data-country', countryName);
       circle.setAttribute('data-city', city.city);
-      const label = document.createElementNS(SVG_NS, 'text');
-      label.setAttribute('x', point[0] + labelOffset);
-      label.setAttribute('y', point[1]);
-      label.setAttribute('text-anchor', 'start');
-      label.setAttribute('dominant-baseline', 'central');
-      label.setAttribute('font-size', String(fontSize));
-      label.setAttribute('font-weight', '700');
-      label.setAttribute('paint-order', 'stroke');
-      label.setAttribute('stroke', 'rgba(15, 23, 42, 0.88)');
-      label.setAttribute('stroke-width', String(strokeWidth));
-      label.setAttribute('pointer-events', 'none');
-      label.setAttribute('class', 'carmen-world-city-label');
-      label.textContent = city.city;
       circle.addEventListener('mouseenter', () => {
+        options.onHoverChange?.(city.city || '');
         if (normalizeCityName(city.city) === normalizeCityName(currentCity)) return;
         circle.setAttribute('r', String(hoverRadius));
       });
       circle.addEventListener('mouseleave', () => {
+        options.onHoverChange?.('');
         circle.setAttribute('r', String(circleRadius));
         applyState(entry);
       });
@@ -349,9 +334,7 @@ export class CarmenRouteRenderer extends RouteRenderer {
         onClick?.(city);
       });
       group.appendChild(circle);
-      group.appendChild(label);
       entry.circle = circle;
-      entry.label = label;
       entriesByCity.set(normalizeCityName(city.city), entry);
       applyState(entry);
     }
@@ -361,6 +344,7 @@ export class CarmenRouteRenderer extends RouteRenderer {
         selectedCity = city || '';
         for (const entry of entriesByCity.values()) applyState(entry);
       },
+      clearHover: () => options.onHoverChange?.(''),
       remove: () => group.remove(),
     };
   }

@@ -133,6 +133,13 @@ export class WorldCaseFilesLogic {
     this.completedSceneKeys = [];
     this.fieldStopHistory = [];
     this.currentFieldLocation = null;
+    this.unlockedLocationsByScene = new Map();
+    this.revealedLocationsByScene = new Map();
+    this.discoveredImagesByScene = new Map();
+    this.imageObservations = new Map();
+    this.lastDeadEndExplanation = '';
+    this.wrongHotspotCount = 0;
+    this.wrongPuzzleAttemptCount = 0;
     this._setFieldLocation(this._buildFieldStopFromScene(this.getCurrentScene(), 'scene'));
   }
 
@@ -458,22 +465,41 @@ export class WorldCaseFilesLogic {
     const displayContext = this.getDisplaySceneContext();
     if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) return [];
     const currentScene = displayContext?.scene || this.getCurrentScene();
-    return (currentScene.customLocations || []).map((location, index) => ({
-      id: location.id || `custom-${currentScene.id || 'scene'}-${index + 1}`,
-      emoji: location.emoji || '🧩',
-      name: location.name || location.title || 'Scene desk',
-      type: location.type || 'scene-puzzle',
-      prefix: location.prefix || '',
-      lat: location.lat,
-      lon: location.lon,
-      description: location.description || '',
-    }));
+    const sceneKey = displayContext?.sceneKey || this.getCurrentSceneKey();
+    const sceneHasLockedLocations = this._sceneHasLockedCustomLocations(currentScene);
+    return (currentScene.customLocations || []).map((location, index) => {
+      const id = location.id || `custom-${currentScene.id || 'scene'}-${index + 1}`;
+      const discoveryState = this._getLocationDiscoveryState(sceneKey, currentScene, id);
+      if (discoveryState === 'hidden') return null;
+      const locked = sceneHasLockedLocations && !this._isCustomLocationUnlocked(sceneKey, id);
+      const requiredImage = locked ? this._findUnlockingImage(currentScene, id) : null;
+      const isAnonymous = discoveryState === 'anonymous';
+      return {
+        id,
+        emoji: isAnonymous ? (location.anonymousEmoji || '❓') : (location.emoji || '🧩'),
+        name: isAnonymous ? (location.anonymousName || 'Unknown lead') : (location.name || location.title || 'Scene desk'),
+        type: location.type || 'scene-puzzle',
+        prefix: location.prefix || '',
+        lat: location.lat,
+        lon: location.lon,
+        description: isAnonymous ? '' : (location.description || ''),
+        locked,
+        discoveryState,
+        anonymousName: location.anonymousName || '',
+        anonymousEmoji: location.anonymousEmoji || '',
+        realName: location.name || location.title || '',
+        realEmoji: location.emoji || '',
+        requiredImageId: requiredImage?.id || null,
+        requiredImageTitle: requiredImage?.title || '',
+      };
+    }).filter(Boolean);
   }
 
   getSceneEvidenceImages() {
     const displayContext = this.getDisplaySceneContext();
     if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) return [];
     const currentScene = displayContext?.scene || this.getCurrentScene();
+    const sceneKey = displayContext?.sceneKey || this.getCurrentSceneKey();
     const works = this.getCurrentWorks(currentScene);
     const primaryWork = works[0] || null;
     const images = [];
@@ -495,6 +521,7 @@ export class WorldCaseFilesLogic {
       images.push({ ...item });
     }
     for (const item of currentScene.evidenceImages || []) {
+      if (!this._isImageDiscovered(sceneKey, currentScene, item.id)) continue;
       images.push({ ...item });
     }
     const seen = new Set();
@@ -520,11 +547,17 @@ export class WorldCaseFilesLogic {
         prefix: `${place?.name || 'Cultural archive'} records show`,
       };
     }
-    const customLocation = this.getLocations().find(item => item.id === locationId && item.type && item.type !== 'cultural-place');
-    if (customLocation) {
+    const scene = this.getDisplaySceneContext()?.scene || this.getCurrentScene();
+    const sceneKey = this.getDisplaySceneContext()?.sceneKey || this.getCurrentSceneKey();
+    const sceneCustomLocation = (scene?.customLocations || []).find(loc => loc.id === locationId);
+    if (sceneCustomLocation) {
+      const discoveryState = this._getLocationDiscoveryState(sceneKey, scene, locationId);
+      const isAnonymous = discoveryState === 'anonymous';
       return {
-        emoji: customLocation.emoji || '🧩',
-        prefix: customLocation.prefix || `${customLocation.name || 'Scene puzzle'} indicates`,
+        emoji: isAnonymous ? (sceneCustomLocation.anonymousEmoji || '❓') : (sceneCustomLocation.emoji || '🧩'),
+        prefix: isAnonymous
+          ? (sceneCustomLocation.anonymousName || 'Unknown lead')
+          : (sceneCustomLocation.prefix || `${sceneCustomLocation.name || 'Scene puzzle'} indicates`),
       };
     }
     const location = LOCATIONS.find(item => item.id === locationId);
@@ -538,8 +571,33 @@ export class WorldCaseFilesLogic {
     const scene = displayContext?.scene || this.getCurrentScene();
     const fieldLocation = this.currentFieldLocation || {};
     const key = displayContext?.sceneKey || this.getCurrentSceneKey();
+
+    const customLocation = (scene.customLocations || []).find(loc => loc.id === locationId);
+    if (customLocation && this._sceneHasLockedCustomLocations(scene) && !this._isCustomLocationUnlocked(key, locationId)) {
+      const requiredImage = this._findUnlockingImage(scene, locationId);
+      return {
+        blocked: true,
+        locationId,
+        customLocation,
+        requiredImageId: requiredImage?.id || null,
+        requiredImageTitle: requiredImage?.title || '',
+      };
+    }
+
     const investigated = this.investigatedByScene.get(key) || new Set();
-    if (investigated.has(locationId)) return null;
+    if (investigated.has(locationId)) {
+      const staleEvidence = this.evidence.find(e =>
+        e.locationId === locationId && e.staleAvailable && e.staleUpgrade
+      );
+      if (staleEvidence) {
+        this._consumeStale(staleEvidence);
+        this._applyClueMarksStale(scene, staleEvidence);
+        this._applyCulturalCorroboration(scene);
+        const progress = displayContext?.isCurrentAuthored ? this.progressSceneIfReady() : { type: 'scene_pending' };
+        return { evidence: staleEvidence, progress, restale: true };
+      }
+      return null;
+    }
     investigated.add(locationId);
     this.investigatedByScene.set(key, investigated);
 
@@ -561,6 +619,7 @@ export class WorldCaseFilesLogic {
       }
     }
     if (!clue) return null;
+    const isPreliminary = !customLocation && this._sceneHasLockedCustomLocations(scene) && clue.category !== 'Puzzle Evidence';
     const evidence = {
       ...clue,
       legIndex: this.currentLeg,
@@ -578,11 +637,293 @@ export class WorldCaseFilesLogic {
             ? 'Confirmation'
             : 'Route Evidence'
       ),
+      corroborated: !isPreliminary,
+      vagueText: isPreliminary ? this._buildVagueWitnessText(clue) : null,
+      staleAvailable: false,
     };
     this.evidence.push(evidence);
 
+    if (!isPreliminary) {
+      this._applyClueMarksStale(scene, clue);
+    }
+    this._applyCulturalCorroboration(scene);
+
     const progress = displayContext?.isCurrentAuthored ? this.progressSceneIfReady() : { type: 'scene_pending' };
     return { evidence, progress };
+  }
+
+  _sceneHasLockedCustomLocations(scene) {
+    return (scene.evidenceImages || []).some(img => Array.isArray(img.hotspots) || img.puzzle);
+  }
+
+  _isCustomLocationUnlocked(sceneKey, locationId) {
+    const set = this.unlockedLocationsByScene.get(sceneKey);
+    return !!(set && set.has(locationId));
+  }
+
+  _markCustomLocationUnlocked(sceneKey, locationId) {
+    const set = this.unlockedLocationsByScene.get(sceneKey) || new Set();
+    set.add(locationId);
+    this.unlockedLocationsByScene.set(sceneKey, set);
+  }
+
+  _ensureSceneDiscovery(sceneKey, scene) {
+    if (!this.revealedLocationsByScene.has(sceneKey)) {
+      const revealed = new Set();
+      for (const loc of (scene?.customLocations || [])) {
+        const state = loc.discoveryState || 'revealed';
+        if (state === 'revealed') revealed.add(loc.id);
+      }
+      this.revealedLocationsByScene.set(sceneKey, revealed);
+    }
+    if (!this.discoveredImagesByScene.has(sceneKey)) {
+      const discovered = new Set();
+      for (const img of (scene?.evidenceImages || [])) {
+        const state = img.imageDiscoveryState || 'discovered';
+        if (state === 'discovered') discovered.add(img.id);
+      }
+      this.discoveredImagesByScene.set(sceneKey, discovered);
+    }
+  }
+
+  _getLocationDiscoveryState(sceneKey, scene, locationId) {
+    this._ensureSceneDiscovery(sceneKey, scene);
+    if (this.revealedLocationsByScene.get(sceneKey)?.has(locationId)) return 'revealed';
+    const loc = (scene?.customLocations || []).find(l => l.id === locationId);
+    return loc?.discoveryState || 'revealed';
+  }
+
+  _isImageDiscovered(sceneKey, scene, imageId) {
+    this._ensureSceneDiscovery(sceneKey, scene);
+    return this.discoveredImagesByScene.get(sceneKey)?.has(imageId) || false;
+  }
+
+  _revealCustomLocation(sceneKey, locationId) {
+    const scene = this.getDisplaySceneContext()?.scene || this.getCurrentScene();
+    this._ensureSceneDiscovery(sceneKey, scene);
+    const set = this.revealedLocationsByScene.get(sceneKey);
+    if (set && !set.has(locationId)) {
+      set.add(locationId);
+      return true;
+    }
+    return false;
+  }
+
+  _discoverImage(sceneKey, imageId) {
+    const scene = this.getDisplaySceneContext()?.scene || this.getCurrentScene();
+    this._ensureSceneDiscovery(sceneKey, scene);
+    const set = this.discoveredImagesByScene.get(sceneKey);
+    if (set && !set.has(imageId)) {
+      set.add(imageId);
+      return true;
+    }
+    return false;
+  }
+
+  _findUnlockingImage(scene, locationId) {
+    return (scene.evidenceImages || []).find(image => {
+      if (Array.isArray(image.unlocks) && image.unlocks.includes(locationId)) return true;
+      if (Array.isArray(image.hotspots)) {
+        return image.hotspots.some(hotspot => Array.isArray(hotspot.unlocks) && hotspot.unlocks.includes(locationId));
+      }
+      return false;
+    }) || null;
+  }
+
+  _buildVagueWitnessText(clue) {
+    const category = clue.category || '';
+    if (category === 'Cultural Evidence') return 'A cultural reference is hinted at, but the clerk will not name the destination without something more solid to compare against.';
+    if (category === 'Confirmation') return 'Customs paperwork is consistent with the case, but it stops short of naming a specific country until corroborating evidence is filed.';
+    return 'A partial lead is on offer, but the witness wants supporting evidence before they will commit to a country or city.';
+  }
+
+  getUnlockedCustomLocations() {
+    const key = this.getDisplaySceneContext()?.sceneKey || this.getCurrentSceneKey();
+    return new Set(this.unlockedLocationsByScene.get(key) || []);
+  }
+
+  getImageObservation(imageId) {
+    const obs = this.imageObservations.get(imageId);
+    return obs ? {
+      hotspotsHit: new Set(obs.hotspotsHit),
+      puzzleSolved: !!obs.puzzleSolved,
+      sealsPlaced: new Set(obs.sealsPlaced || []),
+    } : { hotspotsHit: new Set(), puzzleSolved: false, sealsPlaced: new Set() };
+  }
+
+  observeImageHotspot(imageId, hotspotId) {
+    const scene = this.getDisplaySceneContext()?.scene || this.getCurrentScene();
+    const image = (scene.evidenceImages || []).find(item => item.id === imageId);
+    if (!image) return { result: 'unknown_image' };
+    const hotspot = (image.hotspots || []).find(item => item.id === hotspotId);
+    if (!hotspot) return { result: 'unknown_hotspot' };
+    const obs = this.imageObservations.get(imageId) || { hotspotsHit: new Set(), puzzleSolved: false };
+    if (!hotspot.correct) {
+      this.wrongHotspotCount += 1;
+      this.imageObservations.set(imageId, obs);
+      return { result: 'wrong', hotspot };
+    }
+    if (obs.hotspotsHit.has(hotspotId)) {
+      return { result: 'already', hotspot };
+    }
+    obs.hotspotsHit.add(hotspotId);
+    this.imageObservations.set(imageId, obs);
+    const sceneKey = this.getDisplaySceneContext()?.sceneKey || this.getCurrentSceneKey();
+    const unlockedLocationIds = [];
+    const revealedLocationIds = [];
+    const discoveredImageIds = [];
+    const staledClueIds = [];
+    for (const id of (hotspot.unlocks || [])) {
+      this._markCustomLocationUnlocked(sceneKey, id);
+      unlockedLocationIds.push(id);
+    }
+    for (const id of (hotspot.reveals || [])) {
+      if (this._revealCustomLocation(sceneKey, id)) revealedLocationIds.push(id);
+    }
+    for (const id of (hotspot.discoversImages || [])) {
+      if (this._discoverImage(sceneKey, id)) discoveredImageIds.push(id);
+    }
+    for (const id of (hotspot.marksStale || [])) {
+      if (this._markEvidenceStale(id)) staledClueIds.push(id);
+    }
+    return {
+      result: 'correct',
+      hotspot,
+      unlockedLocationIds,
+      revealedLocationIds,
+      discoveredImageIds,
+      staledClueIds,
+    };
+  }
+
+  solveImagePuzzle(imageId, attempt) {
+    const scene = this.getDisplaySceneContext()?.scene || this.getCurrentScene();
+    const image = (scene.evidenceImages || []).find(item => item.id === imageId);
+    if (!image || !image.puzzle) return { result: 'unknown_puzzle' };
+    const sceneKey = this.getDisplaySceneContext()?.sceneKey || this.getCurrentSceneKey();
+    if (image.puzzle.type === 'seal-cipher') {
+      return this._solveSealCipher(image, attempt, sceneKey);
+    }
+    const obs = this.imageObservations.get(imageId) || { hotspotsHit: new Set(), puzzleSolved: false };
+    if (obs.puzzleSolved) return { result: 'already' };
+    const expected = String(image.puzzle.solution || '').toUpperCase();
+    const guess = String(attempt || '').toUpperCase();
+    if (expected && guess !== expected) {
+      this.wrongPuzzleAttemptCount += 1;
+      return { result: 'wrong' };
+    }
+    obs.puzzleSolved = true;
+    this.imageObservations.set(imageId, obs);
+    const unlockedLocationIds = [];
+    const staledClueIds = [];
+    for (const id of (image.unlocks || [])) {
+      this._markCustomLocationUnlocked(sceneKey, id);
+      unlockedLocationIds.push(id);
+    }
+    for (const id of (image.puzzle.marksStale || [])) {
+      if (this._markEvidenceStale(id)) staledClueIds.push(id);
+    }
+    return { result: 'solved', unlockedLocationIds, staledClueIds };
+  }
+
+  _solveSealCipher(image, attempt, sceneKey) {
+    const sealId = attempt?.sealId;
+    const destinationId = attempt?.destinationId;
+    const seal = (image.puzzle.seals || []).find(s => s.id === sealId);
+    if (!seal) return { result: 'unknown_seal' };
+    if (!seal.active) {
+      return {
+        result: 'inactive_seal',
+        sealId,
+        evidencePendingText: seal.evidencePendingText || 'This seal is awaiting field evidence.',
+      };
+    }
+    if (seal.destination !== destinationId) {
+      this.wrongPuzzleAttemptCount += 1;
+      return { result: 'wrong', sealId, destinationId };
+    }
+    const obs = this.imageObservations.get(image.id) || { hotspotsHit: new Set(), puzzleSolved: false, sealsPlaced: new Set() };
+    if (!obs.sealsPlaced) obs.sealsPlaced = new Set();
+    if (obs.sealsPlaced.has(sealId)) {
+      return { result: 'already', sealId, destinationId };
+    }
+    obs.sealsPlaced.add(sealId);
+    const activeSeals = (image.puzzle.seals || []).filter(s => s.active);
+    const allPlaced = activeSeals.every(s => obs.sealsPlaced.has(s.id));
+    if (allPlaced) obs.puzzleSolved = true;
+    this.imageObservations.set(image.id, obs);
+    const unlockedLocationIds = [];
+    const staledClueIds = [];
+    if (allPlaced) {
+      for (const id of (image.unlocks || [])) {
+        this._markCustomLocationUnlocked(sceneKey, id);
+        unlockedLocationIds.push(id);
+      }
+      for (const id of (image.puzzle.marksStale || [])) {
+        if (this._markEvidenceStale(id)) staledClueIds.push(id);
+      }
+    }
+    return {
+      result: allPlaced ? 'solved' : 'partial',
+      sealId,
+      destinationId,
+      unlockedLocationIds,
+      staledClueIds,
+    };
+  }
+
+  _markEvidenceStale(clueId) {
+    const evidence = this.evidence.find(item => item.id === clueId);
+    if (!evidence) return false;
+    if (evidence.corroborated && !evidence.staleUpgrade) return false;
+    if (evidence.staleAvailable) return false;
+    if (!evidence.staleUpgrade) return false;
+    evidence.staleAvailable = true;
+    return true;
+  }
+
+  _consumeStale(evidence) {
+    const upgrade = evidence.staleUpgrade;
+    if (upgrade) {
+      if (upgrade.upgradedText !== undefined) evidence.text = upgrade.upgradedText;
+      if (upgrade.upgradedTitle !== undefined) evidence.title = upgrade.upgradedTitle;
+      if (upgrade.upgradedTags !== undefined) evidence.tags = upgrade.upgradedTags;
+      if (upgrade.upgradedStrength !== undefined) evidence.strength = upgrade.upgradedStrength;
+      if (upgrade.upgradedAction !== undefined) evidence.action = upgrade.upgradedAction;
+    }
+    evidence.corroborated = true;
+    evidence.staleAvailable = false;
+    evidence.vagueText = null;
+  }
+
+  _applyClueMarksStale(scene, clueOrEvidence) {
+    if (!clueOrEvidence) return;
+    const clueRef = (scene?.clues || []).find(c => c.id === clueOrEvidence.id);
+    const marksStale = clueRef?.marksStale || clueOrEvidence.marksStale || [];
+    for (const id of marksStale) {
+      this._markEvidenceStale(id);
+    }
+  }
+
+  _applyCulturalCorroboration(scene) {
+    const requires = scene?.culturalCorroborationRequires || [];
+    if (!requires.length) return;
+    const allCorroborated = requires.every(id =>
+      this.evidence.some(e => e.id === id && e.corroborated)
+    );
+    if (!allCorroborated) return;
+    for (const id of (scene.culturalCorroborationStales || [])) {
+      this._markEvidenceStale(id);
+    }
+  }
+
+  scenePuzzleRequired(scene = this.getCurrentScene()) {
+    return (scene?.evidenceImages || []).some(img => !!img.puzzle);
+  }
+
+  scenePuzzleSolved(scene = this.getCurrentScene()) {
+    if (!this.scenePuzzleRequired(scene)) return true;
+    return (scene.evidenceImages || []).some(img => img.puzzle && this.imageObservations.get(img.id)?.puzzleSolved);
   }
 
   progressSceneIfReady() {
@@ -741,19 +1082,27 @@ export class WorldCaseFilesLogic {
   getConfidence() {
     const activeEvidence = this.getActiveEvidence();
     const currentScene = this.getCurrentScene();
-    const hasRoute = activeEvidence.some(item => item.category === 'Route Evidence');
-    const hasCulture = activeEvidence.some(item => item.category === 'Cultural Evidence');
-    const hasConfirmation = activeEvidence.some(item => item.category === 'Confirmation');
-    const hasPuzzle = activeEvidence.some(item => item.category === 'Puzzle Evidence');
-    const requirePuzzle = !!currentScene.requirePuzzle || (currentScene.clues || []).some(item => item.category === 'Puzzle Evidence');
+    const hasRoute = activeEvidence.some(item => item.category === 'Route Evidence' && item.corroborated !== false);
+    const hasCulture = activeEvidence.some(item => item.category === 'Cultural Evidence' && item.corroborated !== false);
+    const hasConfirmation = activeEvidence.some(item => item.category === 'Confirmation' && item.corroborated !== false);
+    const hasPuzzleEvidence = activeEvidence.some(item => item.category === 'Puzzle Evidence' && item.corroborated !== false);
+    const sceneRequiresPuzzleImage = this.scenePuzzleRequired(currentScene);
+    const sceneHasLockedLocations = this._sceneHasLockedCustomLocations(currentScene);
+    const requirePuzzle = sceneHasLockedLocations
+      ? sceneRequiresPuzzleImage
+      : (!!currentScene.requirePuzzle || (currentScene.clues || []).some(item => item.category === 'Puzzle Evidence'));
+    const puzzleSolved = sceneHasLockedLocations
+      ? this.scenePuzzleSolved(currentScene)
+      : (!requirePuzzle || hasPuzzleEvidence);
     const strongCandidateCount = this.analyzeCandidates().filter(item => item.state === 'strong').length;
+    const corroboratedCount = activeEvidence.filter(item => item.corroborated !== false).length;
     return {
       leadFound: activeEvidence.length > 0,
       patternSupported: hasCulture,
       contradictionsChecked: activeEvidence.some(item => (item.tags || []).some(tag => tag.startsWith('exclude:'))),
-      destinationLikely: strongCandidateCount <= 3 && activeEvidence.length >= 3,
-      evidenceReady: hasRoute && hasCulture && hasConfirmation && (!requirePuzzle || hasPuzzle) && activeEvidence.length >= Math.max(REQUIRED_PROOF_CARDS, currentScene.minimumEvidence || 0),
-      puzzleSolved: !requirePuzzle || hasPuzzle,
+      destinationLikely: strongCandidateCount <= 3 && corroboratedCount >= 3,
+      evidenceReady: hasRoute && hasCulture && hasConfirmation && (!requirePuzzle || puzzleSolved) && corroboratedCount >= Math.max(REQUIRED_PROOF_CARDS, currentScene.minimumEvidence || 0),
+      puzzleSolved,
     };
   }
 
@@ -810,9 +1159,19 @@ export class WorldCaseFilesLogic {
       };
     }
     const revisitedSceneContext = this.findSceneContextForLocation(country, city || primaryCapital(this.countryMap[country]) || country);
-    if (country !== target.country && revisitedSceneContext && !revisitedSceneContext.isCurrentAuthored) {
-      const explanation = 'ACME reopens the earlier scene. New evidence may unlock if the latest lead gives you a better question to ask.';
-      const fieldStop = { ...baseFieldStop, kind: 'revisited', explanation };
+    if (revisitedSceneContext && revisitedSceneContext.stopIndex <= this.currentLeg && country !== target.country) {
+      const explanation = revisitedSceneContext.isCurrentAuthored
+        ? 'ACME returns to the active scene. The remaining clues can still be gathered here before the chapter moves on.'
+        : 'ACME reopens the earlier scene. New evidence may unlock if the latest lead gives you a better question to ask.';
+      const fieldStop = this._buildFieldStopFromScene(
+        revisitedSceneContext.scene,
+        revisitedSceneContext.isCurrentAuthored ? 'scene' : 'revisited',
+        {
+          explanation,
+          legIndex: revisitedSceneContext.stopIndex,
+          sceneIndex: revisitedSceneContext.sceneIndex,
+        }
+      );
       this._setFieldLocation(fieldStop);
       return {
         type: 'revisited',
@@ -876,6 +1235,14 @@ export class WorldCaseFilesLogic {
 
   getBoardState() {
     const displayContext = this.getDisplaySceneContext();
+    const observations = {};
+    for (const [imageId, obs] of this.imageObservations.entries()) {
+      observations[imageId] = {
+        hotspotsHit: new Set(obs.hotspotsHit),
+        puzzleSolved: !!obs.puzzleSolved,
+        sealsPlaced: new Set(obs.sealsPlaced || []),
+      };
+    }
     return {
       caseTitle: this.caseData.title,
       pattern: this.caseData.pattern,
@@ -899,7 +1266,27 @@ export class WorldCaseFilesLogic {
       localTrail: this.getLocalTrailState(),
       completedSceneKeys: [...this.completedSceneKeys],
       currentFieldLocation: this.getCurrentFieldLocation(),
+      unlockedCustomLocations: this.getUnlockedCustomLocations(),
+      revealedCustomLocations: this.getRevealedCustomLocations(),
+      discoveredEvidenceImages: this.getDiscoveredEvidenceImages(),
+      imageObservations: observations,
     };
+  }
+
+  getRevealedCustomLocations() {
+    const displayContext = this.getDisplaySceneContext();
+    const sceneKey = displayContext?.sceneKey || this.getCurrentSceneKey();
+    const scene = displayContext?.scene || this.getCurrentScene();
+    this._ensureSceneDiscovery(sceneKey, scene);
+    return new Set(this.revealedLocationsByScene.get(sceneKey) || []);
+  }
+
+  getDiscoveredEvidenceImages() {
+    const displayContext = this.getDisplaySceneContext();
+    const sceneKey = displayContext?.sceneKey || this.getCurrentSceneKey();
+    const scene = displayContext?.scene || this.getCurrentScene();
+    this._ensureSceneDiscovery(sceneKey, scene);
+    return new Set(this.discoveredImagesByScene.get(sceneKey) || []);
   }
 
   getStatusBarState() {

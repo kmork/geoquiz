@@ -22,6 +22,10 @@
         "label": "Renaissance masterworks escalation",
         "summary": "The thief is moving from one flagship Renaissance work to the next, using chapel plans, museum inventories, and prestige routes to predict where ACME will arrive too late."
       },
+      "briefing": {
+        "intro": "Paris, late October 1953. The Mona Lisa — La Joconde in the museum's own ledgers — vanished from the Louvre overnight. It is the second time in the century the painting has gone missing, but this is no copycat. The Allied art-recovery programs wound down two years ago, leaving a tangle of unverified provenance papers across postwar Europe. Customs at every border still rubber-stamps half its paperwork from memory. Someone calling themselves The Cartographer is exploiting that chaos, moving works through the same smuggling corridors that hid Nazi loot in Altaussee. ACME picks up the file before the trail crosses the Channel — or worse, the Brenner.",
+        "namingTell": "In Parisian paperwork the painting is always La Joconde; if a document calls her Mona Lisa, the document is not Parisian."
+      },
       "solvedText": "ACME reaches Rome in time and catches the thief during the Vatican strike. The Renaissance sequence collapses before the final masterpiece can be taken.",
       "works": [
         {
@@ -170,12 +174,12 @@
           "scene": "Louvre",
           "lat": 48.861111111111114,
           "lon": 2.3358333333333334,
-          "biographyStage": "Opening theft",
+          "biographyStage": "Opening theft, late October 1953",
           "chapterTitle": "Paris opening file",
-          "chapterSummary": "The case begins at the Louvre, where the Mona Lisa is gone and the remaining evidence points toward a broader Renaissance strike list rather than a single-object escape.",
-          "learningGoal": "Frame the case as an escalating masterpiece hunt instead of a single provenance dispute.",
-          "thiefClaim": "The first theft is only the opening note in a cleaner Renaissance canon.",
-          "truthComplication": "These works live in different cities and institutions for different historical reasons; the thief is flattening them into one prestige route.",
+          "chapterSummary": "October 1953. The Louvre's Salle des États is empty where La Joconde hung. The Service de Restitution des Œuvres d'Art is still cleaning up half a decade of postwar paperwork, and the dispatch room has lost a working day's records to water damage. Whatever the thief left behind is in the photos, the porter's chair, and a half-burned shipping ledger.",
+          "learningGoal": "Identify which postwar rail corridor the trail follows out of Paris, and recognise that two more corridors remain unread.",
+          "thiefClaim": "The Mona Lisa belongs back in Italy where she was painted, and the postwar paperwork can be made to agree.",
+          "truthComplication": "Two of the three Italian shipments are decoys; one is the trail. The Cartographer is not returning La Joconde — they are using a return narrative as cover for a trafficking circuit.",
           "localScenes": [
             {
               "id": "paris-opening",
@@ -186,34 +190,65 @@
               "scene": "Louvre theft scene",
               "lat": 48.861111111111114,
               "lon": 2.3358333333333334,
-              "biographyStage": "Opening theft",
-              "learningGoal": "Read the theft as the first move in a larger Renaissance circuit.",
-              "thiefClaim": "The thief wants the Louvre theft to feel like a return to a purer Italian story.",
-              "truthComplication": "The evidence says the next move is not about one painting's origin but about fame, prestige, and sequence.",
+              "biographyStage": "Opening theft, late October 1953",
+              "learningGoal": "Identify which postwar rail corridor the trail follows out of Paris, and recognise that two more corridors remain unread.",
+              "thiefClaim": "The Mona Lisa belongs back in Italy where she was painted, and the postwar paperwork can be made to agree.",
+              "truthComplication": "Two of the three Italian shipments are decoys; one is the trail. The Cartographer is not returning La Joconde — they are using a return narrative as cover for a trafficking circuit.",
               "focusWorks": ["Mona Lisa"],
-              "threatenedWorks": ["The Last Supper", "Birth of Venus", "Primavera", "Creation of Adam"],
+              "threatenedWorks": ["Codex Atlanticus", "Just Judges panel", "Primavera"],
               "stolenWorks": ["Mona Lisa"],
-              "escalationText": "ACME suspects the thief chose the Mona Lisa first because every later strike will read like a deliberate climb through Renaissance fame.",
-              "investigationPrompt": "Inspect the breach, compare the museum paperwork, and identify which Italian art centers the thief staged into the opening file.",
+              "escalationText": "ACME has the Mona Lisa case before the Cartographer hands her off in Italy.",
+              "investigationPrompt": "Read the breach scene. Find the porter, decode the only legible row of the ledger, and lock the next stop on the trail.",
               "requirePuzzle": true,
               "minimumEvidence": 4,
+              "culturalCorroborationRequires": ["rw-paris-human-lead", "rw-paris-puzzle-ledger"],
+              "culturalCorroborationStales": ["rw-paris-library-canon"],
+              "innerMonologue": [
+                {
+                  "trigger": "enter",
+                  "text": "Twelve years since Allied troops stopped this from being looted to Linz. Six since the last Vermeer crawled home from Altaussee. Now somebody walks La Joconde out the front door — Mona Lisa, if you're the kind of buyer who doesn't read French."
+                },
+                {
+                  "trigger": "breach-photo-solved",
+                  "text": "Three crates means three shipments. The thief used the Louvre's own paperwork. Audacious — and recent enough that the wax is still soft."
+                },
+                {
+                  "trigger": "porter-questioned",
+                  "text": "Red wax. The Modane tunnel runs to Turin, then Milan. Old smugglers' route — the maquis used it in '43."
+                },
+                {
+                  "trigger": "ledger-solved",
+                  "text": "One seal placed, two waiting. The other corridors are still legible somewhere on the line. Modane first. The rest of Italy after — and something the ledger doesn't list at all, after that."
+                },
+                {
+                  "trigger": "library-corroborated",
+                  "text": "The curator returns the call. With the porter's seals in hand the reading list stops being scholarship and starts being a route prediction."
+                }
+              ],
               "customLocations": [
                 {
                   "id": "night-porter",
                   "emoji": "🕴️",
                   "name": "Night Porter",
+                  "anonymousName": "Empty chair (occupant absent)",
+                  "anonymousEmoji": "❓",
+                  "discoveryState": "anonymous",
                   "type": "human-lead",
                   "prefix": "The night porter admits",
-                  "description": "A shaken Louvre porter who saw the thief's staging materials before the alarm was silenced.",
+                  "description": "A shaken Louvre porter who watched the Cartographer's crates pass through the dispatch room.",
                   "lat": 48.8607,
                   "lon": 2.3349
                 },
                 {
                   "id": "dispatch-ledger",
                   "emoji": "🧩",
-                  "name": "Dispatch Ledger",
-                  "prefix": "A seized dispatch sheet shows",
-                  "description": "A coded museum-routing puzzle left beside the stolen frame.",
+                  "name": "Dispatch Desk",
+                  "anonymousName": "Unattended desk",
+                  "anonymousEmoji": "❓",
+                  "discoveryState": "anonymous",
+                  "type": "scene-puzzle",
+                  "prefix": "The dispatch ledger reads",
+                  "description": "A half-burned dispatch ledger, three coloured wax seals visible on its routing column.",
                   "lat": 48.8619,
                   "lon": 2.3382
                 }
@@ -230,18 +265,110 @@
                 {
                   "id": "paris-breach-photo",
                   "title": "Louvre breach photo",
-                  "imagePath": "carmen/img/renaissance/paris-louvre-breach-photo.png",
+                  "imagePath": "carmen/img/renaissance/paris-louvre-breach-photo-2.png",
                   "imagePurpose": "crime_scene_photo",
-                  "imagePrompt": "Create a detective-noir but museum-realistic crime scene photo inside a Louvre-style gallery after the theft of the Mona Lisa: empty hanging area or secured empty display zone, evidence tags, subtle police tape, warm museum walls, low dramatic lighting around the room but clear readable evidence, no bodies, no sensationalism.",
-                  "imageNotes": "Use as the opening crime-scene visual."
+                  "imagePrompt": "Create a detective-noir but museum-realistic crime scene photo inside a Louvre-style gallery after the theft of La Joconde: empty hanging area or secured empty display zone, evidence tags, subtle police tape, warm museum walls, low dramatic lighting around the room but clear readable evidence, no bodies, no sensationalism.",
+                  "imageNotes": "Opening crime-scene visual. Hotspots correspond to the empty frame backing (centre-back), the toppled glass case (front-left), and the empty wooden chair (right).",
+                  "imageDiscoveryState": "discovered",
+                  "interaction": "hotspot",
+                  "hotspots": [
+                    {
+                      "id": "frame-backing",
+                      "x": 38,
+                      "y": 6,
+                      "w": 28,
+                      "h": 42,
+                      "correct": true,
+                      "label": "Empty frame backing",
+                      "successText": "The wall label still reads 'La Joconde — Léonard de Vinci'. Whatever the thief took, they took her under her real name.",
+                      "contributesTo": "library-frame"
+                    },
+                    {
+                      "id": "toppled-case",
+                      "x": 4,
+                      "y": 60,
+                      "w": 32,
+                      "h": 32,
+                      "correct": true,
+                      "label": "Toppled glass display case",
+                      "successText": "Wax-pencil tags and three colour-coded shipping labels — red, green, blue. More than one crate left this room this week.",
+                      "reveals": ["dispatch-ledger"],
+                      "discoversImages": ["paris-dispatch-ledger"]
+                    },
+                    {
+                      "id": "empty-chair",
+                      "x": 64,
+                      "y": 56,
+                      "w": 28,
+                      "h": 34,
+                      "correct": true,
+                      "label": "Empty porter's chair",
+                      "successText": "The night porter's seat. He left in a hurry — and his logbook is open to a page covered in coloured wax smudges.",
+                      "reveals": ["night-porter"],
+                      "unlocks": ["night-porter"]
+                    },
+                    {
+                      "id": "police-tape",
+                      "x": 14,
+                      "y": 44,
+                      "w": 70,
+                      "h": 14,
+                      "correct": false,
+                      "label": "Police Nationale barrier tape",
+                      "wrongText": "It's police tape. The Préfecture put it up two hours ago. It will not tell you anything the photographer did not already see."
+                    },
+                    {
+                      "id": "evidence-tag",
+                      "x": 28,
+                      "y": 80,
+                      "w": 12,
+                      "h": 12,
+                      "correct": false,
+                      "label": "Evidence number tag",
+                      "wrongText": "An evidence tag. The number itself doesn't help — the field crew put it down to mark where the case fell, not who the case is for."
+                    }
+                  ]
                 },
                 {
                   "id": "paris-dispatch-ledger",
-                  "title": "Forged dispatch ledger",
-                  "imagePath": "carmen/img/renaissance/paris-dispatch-ledger.png",
+                  "title": "Half-burned dispatch ledger",
+                  "imagePath": "carmen/img/renaissance/paris-dispatch-ledger2.png",
                   "imagePurpose": "archive_card",
-                  "imagePrompt": "Create a close tabletop evidence photo of a forged museum dispatch ledger on cream archival paper, handwritten route notes, coded references to Milan, Florence, and Rome, wax-pencil circles, paper wear, detective-noir evidence-table mood, but crisp and readable enough for gameplay.",
-                  "imageNotes": "Use for the Paris route puzzle."
+                  "imagePrompt": "Create a close evidence-table photo of a half-burned 1953 Louvre shipping ledger: header 'REGISTRE DES EXPÉDITIONS — Service des Transports et Restitutions, Octobre 1953', four typed-and-handwritten rows. Three rows carry coloured wax seals (red, green, blue) on the destination column. Only the red row is fully legible: destination 'Modane'. The green and blue rows have water-damaged or burned destination text — seals visible, cities unreadable. A fourth row reads 'La Joconde — Réserve spéciale, Galerie A — Salle 1'. A small rail-map crop in the lower-right shows the Modane (Mont Cenis), Lille and Brenner Pass corridors fanning from Paris; only Modane is highlighted. Margin cipher legend: 'Sceau rouge → Modane / Sceau vert → ??? / Sceau bleu → ???'. Postwar mid-century officialdom typography on cream paper, hybrid typed/handwritten, with magnifying glass over the red row. Background: dossiers stamped 'DOSSIER LJ-1953-04' and 'PREUVE N° 7' and 'Service de Restitution des Œuvres d'Art'.",
+                  "imageNotes": "Discovered by the toppled-case hotspot. Hosts the seal-cipher puzzle.",
+                  "imageDiscoveryState": "hidden",
+                  "interaction": "seal-cipher",
+                  "unlocks": ["dispatch-ledger"],
+                  "puzzle": {
+                    "type": "seal-cipher",
+                    "prompt": "Three colour-stamped routing rows. Two of the destination columns are water-damaged. Match the legible seal to its rail corridor.",
+                    "seals": [
+                      {
+                        "id": "red",
+                        "label": "Sceau rouge",
+                        "active": true,
+                        "destination": "modane"
+                      },
+                      {
+                        "id": "green",
+                        "label": "Sceau vert",
+                        "active": false,
+                        "evidencePendingText": "This row's destination is water-damaged. Field evidence is required to read it."
+                      },
+                      {
+                        "id": "blue",
+                        "label": "Sceau bleu",
+                        "active": false,
+                        "evidencePendingText": "This row's destination is water-damaged. Field evidence is required to read it."
+                      }
+                    ],
+                    "destinations": [
+                      { "id": "modane",  "label": "Modane (Mont Cenis tunnel)" },
+                      { "id": "lille",   "label": "Lille (corridor du Nord)" },
+                      { "id": "brenner", "label": "Col du Brenner" }
+                    ],
+                    "marksStale": ["rw-paris-embassy-confirm"]
+                  }
                 }
               ],
               "clues": [
@@ -249,50 +376,72 @@
                   "id": "rw-paris-airport-italy",
                   "locationId": "airport",
                   "category": "Route Evidence",
-                  "action": "Inspect private cargo itinerary",
-                  "title": "Italian split route",
-                  "text": "The outbound sleeve was split across three Italian art codes: Milan, Florence, and Rome. No northern hub or Iberian transfer was listed.",
-                  "tags": ["country:Italy", "city:Milan", "city:Florence", "city:Rome", "exclude:Spain", "exclude:Belgium"],
-                  "strength": 3
+                  "action": "Inspect dawn cargo manifest",
+                  "title": "Dawn cargo manifest",
+                  "text": "The dawn cargo manifest carried three bonded crates south, but the customs clerk needs a route detail before he will name the line.",
+                  "tags": ["country:Italy"],
+                  "strength": 1,
+                  "preliminaryCorroborated": false,
+                  "staleUpgrade": {
+                    "upgradedTitle": "Modane manifest match",
+                    "upgradedText": "Cross-checked against the porter's seal-colour testimony, the manifest names a red-seal shipment cleared through Lyon-Modane in the small hours.",
+                    "upgradedTags": ["country:Italy", "city:Milan", "route:Modane"],
+                    "upgradedStrength": 4
+                  }
                 },
                 {
                   "id": "rw-paris-library-canon",
                   "locationId": "library",
                   "category": "Cultural Evidence",
                   "action": "Read curator margin notes",
-                  "title": "Canonical short list",
-                  "text": "The missing catalogue card was clipped to a reading list of Leonardo, Botticelli, Raphael, and Michelangelo. ACME reads it as a Renaissance greatest-hits plan centered on Italy.",
-                  "tags": ["country:Italy", "culture:Renaissance", "city:Florence", "city:Rome", "city:Milan"],
-                  "strength": 4
+                  "title": "Curator's reading list",
+                  "text": "The curator's reading list is heavy on Italian Renaissance names, but reads as scholarship until something on the ground gives it a route.",
+                  "tags": ["culture:Renaissance"],
+                  "strength": 1,
+                  "preliminaryCorroborated": false,
+                  "staleUpgrade": {
+                    "upgradedTitle": "Leonardo-school sweep",
+                    "upgradedText": "Read as a Leonardo-school circuit, the list explains why the thief chose this opening: every name on it has at least one movable work somewhere on the Italian rail line.",
+                    "upgradedTags": ["country:Italy", "culture:Renaissance", "circuit:Leonardo-school"],
+                    "upgradedStrength": 4
+                  }
                 },
                 {
                   "id": "rw-paris-embassy-confirm",
                   "locationId": "embassy",
                   "category": "Confirmation",
                   "action": "Verify emergency customs rider",
-                  "title": "Italian insurance rider",
-                  "text": "An emergency insurance rider excludes Belgium, Spain, and the Netherlands and instead references protected ecclesiastical and museum holdings in Italy.",
-                  "tags": ["country:Italy", "exclude:Belgium", "exclude:Spain", "exclude:Netherlands", "confirmation"],
-                  "strength": 4
+                  "title": "Emergency customs rider",
+                  "text": "An emergency insurance rider excludes several borders, but the underwriter will not confirm a positive country without corroborating route paperwork.",
+                  "tags": ["confirmation"],
+                  "strength": 1,
+                  "preliminaryCorroborated": false,
+                  "staleUpgrade": {
+                    "upgradedTitle": "Modane corridor confirmed",
+                    "upgradedText": "The rider's exclusions and its protected-holdings clause both line up with the Modane corridor — Belgium, Spain, and the Netherlands are explicitly out.",
+                    "upgradedTags": ["country:Italy", "exclude:Belgium", "exclude:Spain", "exclude:Netherlands", "route:Modane", "confirmation"],
+                    "upgradedStrength": 4
+                  }
                 },
                 {
                   "id": "rw-paris-human-lead",
                   "locationId": "night-porter",
                   "category": "Route Evidence",
                   "action": "Question the night porter",
-                  "title": "Three rail tickets",
-                  "text": "The porter remembers three clipped Italian rail stubs on the thief's desk mock-up. He is sure one named Milan and another named Firenze.",
-                  "tags": ["country:Italy", "city:Milan", "city:Florence"],
-                  "strength": 3
+                  "title": "Three coloured seals",
+                  "text": "The night porter remembers three crates on the dispatch desk. He cannot read the destination columns, but he is sure of the wax: one red, one green, one blue. The red one had a Modane railway tag clipped beneath the seal.",
+                  "tags": ["country:Italy", "city:Milan", "route:Modane"],
+                  "strength": 4,
+                  "marksStale": ["rw-paris-airport-italy"]
                 },
                 {
                   "id": "rw-paris-puzzle-ledger",
                   "locationId": "dispatch-ledger",
                   "category": "Puzzle Evidence",
-                  "action": "Solve routing cipher",
-                  "title": "Three-city cipher",
-                  "text": "The coded ledger resolves into three Italian anchor words: refectory, gallery, chapel. The thief expects the next chapter to unfold inside Italy before the trail crosses north.",
-                  "tags": ["country:Italy", "city:Milan", "city:Florence", "city:Rome"],
+                  "action": "Read the surviving ledger row",
+                  "title": "Modane row legible",
+                  "text": "The ledger's red row is fully legible: Modane, Mont Cenis tunnel. The green and blue rows have lost their destinations to water damage. A fourth row lists La Joconde's paper destination as the Louvre's own reserve gallery — confirming the three Italian shipments are misdirection.",
+                  "tags": ["country:Italy", "city:Milan", "route:Modane", "puzzle"],
                   "strength": 4
                 }
               ]

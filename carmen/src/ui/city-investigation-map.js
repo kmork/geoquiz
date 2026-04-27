@@ -459,6 +459,7 @@ export function createCityInvestigationMap(container, locations, options, onPick
       if (!button) return;
       button.classList.toggle('investigated', state === 'investigated');
       button.classList.toggle('exhausted', state === 'exhausted');
+      button.classList.toggle('is-stale', state === 'stale');
       button.disabled = state === 'exhausted';
     },
     setSelectedLocation(locationId) {
