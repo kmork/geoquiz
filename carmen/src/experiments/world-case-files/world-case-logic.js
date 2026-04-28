@@ -134,6 +134,7 @@ export class WorldCaseFilesLogic {
     this.revealedLocationsByStop = new Map();
     this.discoveredImagesByStop = new Map();
     this.imageObservations = new Map();
+    this.questionsAskedByStopLocation = new Map();
     this.lastDeadEndExplanation = '';
     this.wrongHotspotCount = 0;
     this.wrongPuzzleAttemptCount = 0;
@@ -505,6 +506,16 @@ export class WorldCaseFilesLogic {
       };
     }
 
+    const interaction = stop.interactions?.[locationId];
+    if (interaction?.type === 'witness-questions') {
+      return {
+        interaction: 'witness-questions',
+        locationId,
+        intro: interaction.intro || '',
+        questions: this._buildVisibleQuestions(stop, locationId, interaction.questions || []),
+      };
+    }
+
     const investigated = this.investigatedByStop.get(key) || new Set();
     if (investigated.has(locationId)) {
       const staleEvidence = this.evidence.find(e =>
@@ -540,6 +551,10 @@ export class WorldCaseFilesLogic {
       }
     }
     if (!clue) return null;
+    return this._dispenseClue(clue, { stop, displayContext, fieldLocation, customLocation });
+  }
+
+  _dispenseClue(clue, { stop, displayContext, fieldLocation, customLocation }) {
     const isPreliminary = !customLocation && this._stopHasLockedCustomLocations(stop) && clue.category !== 'Puzzle Evidence';
     const evidence = {
       ...clue,
@@ -571,6 +586,103 @@ export class WorldCaseFilesLogic {
 
     const progress = displayContext?.isCurrentAuthored ? this.progressStopIfReady() : { type: 'stop_pending' };
     return { evidence, progress };
+  }
+
+  _questionAskedKey(stopId, locationId) {
+    return `${stopId}::${locationId}`;
+  }
+
+  _isQuestionUnlocked(stop, locationId, question) {
+    const conditions = question.unlockedBy || [];
+    if (!conditions.length) return true;
+    const stopId = stop.id || this._stopKey(stop);
+    return conditions.every((token) => {
+      const parts = String(token).split(':');
+      const kind = parts[0];
+      if (kind === 'image') {
+        const imageId = parts[1];
+        const sub = parts[2];
+        const obs = this.imageObservations.get(imageId);
+        if (!obs) return false;
+        if (sub === 'hotspot') {
+          const hotspotId = parts.slice(3).join(':');
+          return !!(obs.hotspotsHit && obs.hotspotsHit.has(hotspotId));
+        }
+        if (sub === 'puzzleSolved') {
+          return obs.puzzleSolved === true;
+        }
+        return false;
+      }
+      if (kind === 'clue') {
+        const clueId = parts.slice(1).join(':');
+        return this.evidence.some((e) => e.id === clueId);
+      }
+      if (kind === 'question') {
+        const locId = parts[1];
+        const qId = parts.slice(2).join(':');
+        const set = this.questionsAskedByStopLocation.get(this._questionAskedKey(stopId, locId));
+        return !!(set && set.has(qId));
+      }
+      return false;
+    });
+  }
+
+  _buildVisibleQuestions(stop, locationId, questions) {
+    const stopId = stop.id || this._stopKey(stop);
+    const askedSet = this.questionsAskedByStopLocation.get(this._questionAskedKey(stopId, locationId)) || new Set();
+    return questions
+      .filter((q) => this._isQuestionUnlocked(stop, locationId, q))
+      .map((q) => ({
+        id: q.id,
+        text: q.text,
+        asked: askedSet.has(q.id),
+        answer: askedSet.has(q.id) ? (q.answer || '') : '',
+        providesClue: q.providesClue || null,
+      }));
+  }
+
+  askWitnessQuestion(locationId, questionId) {
+    const displayContext = this.getDisplaySceneContext();
+    const stop = displayContext?.stop || this.currentRouteStop;
+    const fieldLocation = this.currentFieldLocation || {};
+    const interaction = stop.interactions?.[locationId];
+    if (!interaction || interaction.type !== 'witness-questions') return null;
+    const question = (interaction.questions || []).find((q) => q.id === questionId);
+    if (!question) return null;
+    if (!this._isQuestionUnlocked(stop, locationId, question)) return null;
+
+    const stopId = stop.id || this._stopKey(stop);
+    const askedKey = this._questionAskedKey(stopId, locationId);
+    const askedSet = this.questionsAskedByStopLocation.get(askedKey) || new Set();
+    const wasAsked = askedSet.has(questionId);
+    askedSet.add(questionId);
+    this.questionsAskedByStopLocation.set(askedKey, askedSet);
+
+    let evidence = null;
+    let progress = { type: 'stop_pending' };
+    if (!wasAsked && question.providesClue) {
+      const clue = (stop.clues || []).find((c) => c.id === question.providesClue);
+      if (clue && !this.evidence.some((e) => e.id === clue.id)) {
+        const customLocation = (stop.customLocations || []).find((loc) => loc.id === locationId);
+        const investigated = this.investigatedByStop.get(stopId) || new Set();
+        investigated.add(locationId);
+        this.investigatedByStop.set(stopId, investigated);
+        const dispatched = this._dispenseClue(clue, { stop, displayContext, fieldLocation, customLocation });
+        evidence = dispatched.evidence;
+        progress = dispatched.progress;
+      }
+    }
+
+    return {
+      interaction: 'witness-questions',
+      locationId,
+      intro: interaction.intro || '',
+      answer: question.answer || '',
+      providedClue: !!evidence,
+      evidence,
+      progress,
+      questions: this._buildVisibleQuestions(stop, locationId, interaction.questions || []),
+    };
   }
 
   _stopHasLockedCustomLocations(stop) {
@@ -1180,6 +1292,9 @@ export class WorldCaseFilesLogic {
       revealedCustomLocations: this.getRevealedCustomLocations(),
       discoveredEvidenceImages: this.getDiscoveredEvidenceImages(),
       imageObservations: observations,
+      questionsAsked: Object.fromEntries(
+        [...this.questionsAskedByStopLocation].map(([k, v]) => [k, [...v]])
+      ),
     };
   }
 

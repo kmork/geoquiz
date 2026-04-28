@@ -253,6 +253,41 @@
               "lon": 2.3382
             }
           ],
+          "interactions": {
+            "night-porter": {
+              "type": "witness-questions",
+              "intro": "He hasn't moved from the porter's corridor. He'll talk — but only to questions, not to broad fishing.",
+              "questions": [
+                {
+                  "id": "q-porter-shift",
+                  "text": "What time did your shift start?",
+                  "answer": "Eight in the evening. La Joconde was on the wall when I clocked in. I made my rounds at nine and again at midnight. By two she was gone."
+                },
+                {
+                  "id": "q-porter-crates",
+                  "text": "Did you see anyone moving crates through dispatch?",
+                  "unlockedBy": ["image:paris-breach-photo:hotspot:toppled-case"],
+                  "answer": "Three crates. The dispatch desk usually only does two on a Friday. I didn't read the labels — but I saw the wax. Three colours."
+                },
+                {
+                  "id": "q-porter-seals",
+                  "text": "Describe the wax seals.",
+                  "unlockedBy": [
+                    "image:paris-breach-photo:hotspot:toppled-case",
+                    "question:night-porter:q-porter-crates"
+                  ],
+                  "answer": "One red, one green, one blue. The red one had a Modane railway tag clipped beneath the wax. I do not know what was in any of the crates — but the seals were not Louvre seals.",
+                  "providesClue": "rw-paris-human-lead"
+                },
+                {
+                  "id": "q-porter-figure",
+                  "text": "Did you see who left the dispatch room?",
+                  "unlockedBy": ["image:paris-breach-photo:hotspot:empty-chair"],
+                  "answer": "A tall figure. Long coat. Empty hands — that was the strange thing. The crates moved without anyone visible carrying them. By the time I crossed the corridor the figure was gone and so was La Joconde."
+                }
+              ]
+            }
+          },
           "pois": {
             "dispatch-ledger": {
               "name": "Louvre dispatch desk",

@@ -2572,6 +2572,74 @@ export function createCarmenUI(container, flagCodes) {
       });
     },
 
+    showWitnessQuestions({ locationId, informant, intro, questions, onAsk }) {
+      dismissEvidence();
+      const emoji = informant?.emoji || '🗣️';
+      const prefix = informant?.prefix || 'Witness';
+      els.reveal.innerHTML = `
+        <div class="carmen-speech-bubble carmen-witness-bubble" data-location="${esc(locationId)}">
+          <button class="carmen-clue-close-btn" type="button" aria-label="Dismiss" style="display:none">✕</button>
+          <div class="carmen-speech-avatar">${emoji}</div>
+          <div class="carmen-speech-body">
+            <div class="carmen-speech-name">${esc(prefix)}</div>
+            <div class="carmen-speech-text carmen-witness-intro"></div>
+            <div class="carmen-speech-text carmen-witness-answer" style="display:none"></div>
+            <div class="carmen-witness-questions"></div>
+          </div>
+        </div>
+      `;
+      els.reveal.style.display = '';
+      els.reveal.querySelector('.carmen-clue-close-btn')?.addEventListener('click', () => {
+        els.reveal.style.display = 'none';
+        els.reveal.innerHTML = '';
+      });
+      for (const rv of allRightViews) rv.style.display = 'none';
+      els.rvClues.style.display = '';
+
+      const introEl = els.reveal.querySelector('.carmen-witness-intro');
+      const introText = intro || 'They are listening. Pick your question.';
+      typewriter(introEl, `"${introText}"`, 18).then(() => {
+        const closeBtn = els.reveal.querySelector('.carmen-clue-close-btn');
+        if (closeBtn) closeBtn.style.display = '';
+      });
+      this._renderWitnessQuestionList(questions, onAsk);
+    },
+
+    _renderWitnessQuestionList(questions, onAsk) {
+      const wrap = els.reveal.querySelector('.carmen-witness-questions');
+      if (!wrap) return;
+      wrap.innerHTML = (questions || []).map((q) => `
+        <button
+          class="carmen-witness-question-btn${q.asked ? ' asked' : ''}${q.providesClue ? ' has-clue' : ''}"
+          data-question="${esc(q.id)}"
+          ${q.asked ? 'disabled' : ''}
+        >
+          <span class="carmen-witness-question-text">${esc(q.text)}</span>
+          ${q.asked && q.answer ? `<span class="carmen-witness-question-answer">${esc(q.answer)}</span>` : ''}
+        </button>
+      `).join('') || `<div class="carmen-witness-empty">No questions available yet. Find more evidence in the field.</div>`;
+      wrap.querySelectorAll('.carmen-witness-question-btn:not(.asked)').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const qid = btn.getAttribute('data-question');
+          if (qid && typeof onAsk === 'function') onAsk(qid);
+        });
+      });
+    },
+
+    renderWitnessAnswer({ locationId, informant, answer, questions, onAsk }) {
+      const bubble = els.reveal.querySelector(`.carmen-witness-bubble[data-location="${CSS.escape(locationId)}"]`);
+      if (!bubble) {
+        this.showWitnessQuestions({ locationId, informant, intro: '', questions, onAsk });
+        return;
+      }
+      const answerEl = bubble.querySelector('.carmen-witness-answer');
+      if (answerEl) {
+        answerEl.style.display = '';
+        typewriter(answerEl, `"${answer || ''}"`, 18);
+      }
+      this._renderWitnessQuestionList(questions, onAsk);
+    },
+
     /**
      * Show investigation location cards.
      * @param {Array} locations — [{id, emoji, name}]

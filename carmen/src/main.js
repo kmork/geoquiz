@@ -1278,17 +1278,34 @@ function handleWorldInvestigation(locationId) {
     }, { emoji: '🔒', prefix: 'Lead locked' });
     return;
   }
+  if (result.interaction === 'witness-questions') {
+    ui.showWitnessQuestions({
+      locationId,
+      informant,
+      intro: result.intro,
+      questions: result.questions,
+      onAsk: (qid) => handleAskWitnessQuestion(locationId, qid),
+    });
+    return;
+  }
   const { evidence, progress } = result;
+  registerWorldEvidence(evidence, progress, informant, clueMemoryKey);
+}
+
+function registerWorldEvidence(evidence, progress, informant, clueMemoryKey) {
+  if (!evidence) return;
   const displayText = evidence.corroborated === false && evidence.vagueText ? evidence.vagueText : evidence.text;
   const renderedClue = { text: displayText, icon: '🧾' };
   const renderedInformant = {
     emoji: informant.emoji,
     prefix: `${informant.prefix} — ${evidence.title}${evidence.corroborated === false ? ' (uncorroborated)' : ''}`,
   };
-  worldCaseLocationClueMemory.set(clueMemoryKey, {
-    clue: renderedClue,
-    informant: renderedInformant,
-  });
+  if (clueMemoryKey) {
+    worldCaseLocationClueMemory.set(clueMemoryKey, {
+      clue: renderedClue,
+      informant: renderedInformant,
+    });
+  }
   ui.addClue(renderedClue, renderedInformant);
   ui.addDossierEntry(
     `${evidence.stopIndex}-${evidence.sceneId || evidence.stopId}`,
@@ -1309,6 +1326,26 @@ function handleWorldInvestigation(locationId) {
   ui.updateWorldCaseBoard(worldCase.getBoardState());
   refreshWorldCaseUi();
   maybeFireLibraryCorroboratedMonologue();
+}
+
+function handleAskWitnessQuestion(locationId, questionId) {
+  if (!worldCase) return;
+  const result = worldCase.askWitnessQuestion(locationId, questionId);
+  if (!result) return;
+  const informant = worldCase.getInformant(locationId);
+  ui.renderWitnessAnswer({
+    locationId,
+    informant,
+    answer: result.answer,
+    questions: result.questions,
+    onAsk: (qid) => handleAskWitnessQuestion(locationId, qid),
+  });
+  if (result.evidence) {
+    const clueMemoryKey = `${worldCase.getCurrentSceneKey()}:${locationId}`;
+    registerWorldEvidence(result.evidence, result.progress, informant, clueMemoryKey);
+  } else {
+    ui.updateWorldCaseBoard(worldCase.getBoardState());
+  }
 }
 
 function maybeFireLibraryCorroboratedMonologue() {
