@@ -63,8 +63,6 @@ function countryMatchesTag(countryData, tag, culturalCountry = null) {
     return (culturalCountry?.culturalObjects || []).some(object => normalize(object.title).includes(valueLower));
   }
 
-  // Direction and atmospheric tags are treated as narrative-only until a
-  // curated matcher is added for the experiment.
   return false;
 }
 
@@ -109,8 +107,8 @@ function atlasHintFromTag(tag, evidence) {
   return '';
 }
 
-function sceneSlug(scene = {}, fallback = 'scene') {
-  return normalize(scene.id || scene.scene || scene.city || fallback).replace(/[^a-z0-9]+/g, '-') || fallback;
+function stopSlug(stop = {}, fallback = 'stop') {
+  return normalize(stop.id || stop.scene || stop.city || fallback).replace(/[^a-z0-9]+/g, '-') || fallback;
 }
 
 export class WorldCaseFilesLogic {
@@ -122,32 +120,31 @@ export class WorldCaseFilesLogic {
     this.culturalPlaces = (culturalPlaces || []).filter(place => place.caseId === caseData.id);
     this.culturalObjects = (culturalObjects || []).filter(object => object.id === caseData.id);
     this.candidateIndex = candidateIndex?.countries || {};
-    this.currentLeg = 0;
-    this.currentSceneIndex = 0;
+    this.currentStopIndex = 0;
     this.currentCountry = caseData.start.country;
     this.visited = [caseData.start.country];
     this.evidence = [];
-    this.investigatedByScene = new Map();
+    this.investigatedByStop = new Map();
     this.deadEnds = [];
     this.finalSolved = false;
-    this.completedSceneKeys = [];
+    this.completedStopIds = [];
     this.fieldStopHistory = [];
     this.currentFieldLocation = null;
-    this.unlockedLocationsByScene = new Map();
-    this.revealedLocationsByScene = new Map();
-    this.discoveredImagesByScene = new Map();
+    this.unlockedLocationsByStop = new Map();
+    this.revealedLocationsByStop = new Map();
+    this.discoveredImagesByStop = new Map();
     this.imageObservations = new Map();
     this.lastDeadEndExplanation = '';
     this.wrongHotspotCount = 0;
     this.wrongPuzzleAttemptCount = 0;
-    this._setFieldLocation(this._buildFieldStopFromScene(this.getCurrentScene(), 'scene'));
+    this._setFieldLocation(this._buildFieldStopFromStop(this.currentRouteStop, 'scene'));
   }
 
   get mode() { return 'world_case_files'; }
   get totalLegs() { return Math.max(0, this.caseData.route.length - 1); }
-  get currentRouteStop() { return this.caseData.route[this.currentLeg] || this.caseData.start; }
-  get targetRouteStop() { return this.caseData.route[this.currentLeg + 1] || null; }
-  get currentLegData() { return this.caseData.legs?.[this.currentLeg] || null; }
+  get currentRouteStop() { return this.caseData.route[this.currentStopIndex] || this.caseData.start; }
+  get targetRouteStop() { return this.caseData.route[this.currentStopIndex + 1] || null; }
+  get currentLegData() { return this.caseData.legs?.[this.currentStopIndex] || null; }
   get artifact() { return this.caseData.artifact; }
 
   start() {
@@ -160,97 +157,56 @@ export class WorldCaseFilesLogic {
     };
   }
 
+  _stopKey(stop = this.currentRouteStop) {
+    return stop?.id || stopSlug(stop);
+  }
+
   getProgress() {
     const currentStop = this.currentRouteStop;
     const targetStop = this.targetRouteStop;
-    const currentScene = this.getCurrentScene();
     const fieldLocation = this.currentFieldLocation || null;
     return {
-      leg: this.currentLeg,
+      stopIndex: this.currentStopIndex,
+      totalStops: this.caseData.route.length,
       totalLegs: this.totalLegs,
-      city: fieldLocation?.city || currentScene.city || currentStop.city || this.currentCountry,
+      city: fieldLocation?.city || currentStop.city || this.currentCountry,
       country: fieldLocation?.country || this.currentCountry,
-      scene: currentScene.scene || currentStop.scene || '',
-      biographyStage: currentScene.biographyStage || currentStop.biographyStage || '',
-      learningGoal: currentScene.learningGoal || currentStop.learningGoal || '',
-      thiefClaim: currentScene.thiefClaim || currentStop.thiefClaim || '',
-      truthComplication: currentScene.truthComplication || currentStop.truthComplication || '',
+      scene: currentStop.scene || '',
+      learningGoal: currentStop.learningGoal || '',
+      thiefClaim: currentStop.thiefClaim || '',
+      truthComplication: currentStop.truthComplication || '',
       targetCity: targetStop?.city || '',
       targetCountry: targetStop?.country || '',
-      targetBiographyStage: targetStop?.biographyStage || '',
       evidenceCount: this.evidence.length,
-      chapterTitle: currentStop.chapterTitle || currentStop.scene || currentStop.city || '',
       chapterSummary: currentStop.chapterSummary || '',
       sceneTitle: fieldLocation?.kind && fieldLocation.kind !== 'scene'
         ? (fieldLocation.city || fieldLocation.country || '')
-        : (currentScene.title || currentScene.scene || currentScene.city || ''),
-      sceneIndex: this.currentSceneIndex,
-      sceneCount: this.getSceneList(currentStop).length,
-      activeWorks: currentScene.focusWorks || [],
-      threatenedWorks: currentScene.threatenedWorks || [],
-      stolenWorks: currentScene.stolenWorks || [],
-      escalationText: currentScene.escalationText || currentStop.escalationText || '',
-      chapterReady: this.isCurrentSceneReady() && !this.getNextScene(),
+        : (currentStop.title || currentStop.scene || currentStop.city || ''),
+      activeWorks: currentStop.focusWorks || [],
+      threatenedWorks: currentStop.threatenedWorks || [],
+      stolenWorks: currentStop.stolenWorks || [],
+      escalationText: currentStop.escalationText || '',
       fieldStopKind: fieldLocation?.kind || 'scene',
     };
   }
 
-  getSceneList(stop = this.currentRouteStop) {
-    if (Array.isArray(stop?.localScenes) && stop.localScenes.length) {
-      return stop.localScenes.map((scene, index) => ({
-        ...scene,
-        id: scene.id || `${sceneSlug(stop, 'chapter')}-scene-${index + 1}`,
-      }));
-    }
-    const legacyLeg = stop === this.currentRouteStop ? this.currentLegData : null;
-    return [{
-      id: `${sceneSlug(stop, 'scene')}-legacy`,
-      city: stop?.city,
-      country: stop?.country,
-      scene: stop?.scene,
-      lat: stop?.lat,
-      lon: stop?.lon,
-      biographyStage: stop?.biographyStage,
-      learningGoal: stop?.learningGoal,
-      thiefClaim: stop?.thiefClaim,
-      truthComplication: stop?.truthComplication,
-      investigationPrompt: stop?.investigationPrompt,
-      clues: legacyLeg?.clues || [],
-      followups: legacyLeg?.followups || [],
-      customLocations: [],
-      pois: null,
-      evidenceImages: stop?.evidenceImages || [],
-      focusWorks: stop?.focusWorks || [],
-      threatenedWorks: stop?.threatenedWorks || [],
-      stolenWorks: stop?.stolenWorks || [],
-      title: stop?.scene || stop?.city || stop?.country,
-      requirePuzzle: false,
-    }];
-  }
-
+  // Backward-compat aliases — each stop now serves as its own scene.
   getCurrentScene() {
-    const scenes = this.getSceneList();
-    return scenes[this.currentSceneIndex] || scenes[0] || {};
-  }
-
-  getNextScene() {
-    const scenes = this.getSceneList();
-    return scenes[this.currentSceneIndex + 1] || null;
+    return this.currentRouteStop;
   }
 
   getCurrentSceneKey() {
-    const scene = this.getCurrentScene();
-    return `${this.currentLeg}:${scene.id || sceneSlug(scene, 'scene')}`;
+    return this._stopKey(this.currentRouteStop);
   }
 
-  getCurrentWorks(scene = this.getCurrentScene()) {
-    const focusWorks = scene?.focusWorks || [];
+  getCurrentWorks(stop = this.currentRouteStop) {
+    const focusWorks = stop?.focusWorks || [];
     return focusWorks.map(title => this.workMap[normalize(title)] || {
       title,
       artist: '',
       institution: '',
-      city: scene?.city || '',
-      country: scene?.country || '',
+      city: stop?.city || '',
+      country: stop?.country || '',
       description: '',
       imagePath: '',
       imageReady: false,
@@ -258,8 +214,8 @@ export class WorldCaseFilesLogic {
     });
   }
 
-  getCurrentPrimaryWork(scene = this.getCurrentScene()) {
-    return this.getCurrentWorks(scene)[0] || null;
+  getCurrentPrimaryWork(stop = this.currentRouteStop) {
+    return this.getCurrentWorks(stop)[0] || null;
   }
 
   getCurrentArtifactPanel() {
@@ -267,7 +223,6 @@ export class WorldCaseFilesLogic {
     if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) {
       return {
         caseTitle: this.caseData.title,
-        chapterTitle: this.currentRouteStop.chapterTitle || this.currentRouteStop.scene || '',
         sceneTitle: this.currentFieldLocation.city || this.currentFieldLocation.country || 'Field stop',
         currentObjective: 'Review the dead-end report, then return to the trail to choose the next lead.',
         summary: this.currentFieldLocation.explanation || 'ACME logged a field stop that did not advance the case.',
@@ -276,46 +231,20 @@ export class WorldCaseFilesLogic {
         evidenceImages: [],
       };
     }
-    const currentScene = displayContext?.scene || this.getCurrentScene();
-    const currentStop = displayContext?.stop || this.currentRouteStop;
-    const works = this.getCurrentWorks(currentScene);
+    const stop = displayContext?.stop || this.currentRouteStop;
+    const works = this.getCurrentWorks(stop);
     const primaryWork = works[0] || null;
     return {
       caseTitle: this.caseData.title,
-      chapterTitle: currentStop.chapterTitle || currentStop.scene || '',
-      sceneTitle: currentScene.title || currentScene.scene || currentScene.city || '',
-      currentObjective: currentScene.investigationPrompt || currentScene.learningGoal || currentStop.learningGoal || '',
-      summary: currentScene.escalationText || currentStop.chapterSummary || this.caseData.artifact?.hint || '',
+      sceneTitle: stop.title || stop.scene || stop.city || '',
+      currentObjective: stop.investigationPrompt || stop.learningGoal || '',
+      summary: stop.escalationText || stop.chapterSummary || this.caseData.artifact?.hint || '',
       primaryWork,
       works,
       evidenceImages: [
         ...(primaryWork?.evidenceImages || []),
-        ...(currentScene.evidenceImages || []),
+        ...(stop.evidenceImages || []),
       ],
-    };
-  }
-
-  getLocalTrailState(stop = this.currentRouteStop) {
-    const scenes = this.getSceneList(stop);
-    if (scenes.length <= 1) return null;
-    const activeStop = stop === this.currentRouteStop;
-    const currentIndex = activeStop ? this.currentSceneIndex : 0;
-    return {
-      label: stop.localTrailLabel || `${stop.city || stop.country} museum line`,
-      style: stop.localTravelStyle || 'rail',
-      chapterTitle: stop.chapterTitle || stop.scene || stop.city || stop.country,
-      nodes: scenes.map((scene, index) => ({
-        id: scene.id,
-        city: scene.city || stop.city || stop.country,
-        title: scene.title || scene.scene || scene.city || `Scene ${index + 1}`,
-        role: scene.sceneType || 'scene',
-        status: activeStop
-          ? index < currentIndex ? 'visited'
-          : index === currentIndex ? 'current'
-          : index === currentIndex + 1 ? 'next'
-          : 'upcoming'
-          : index === 0 ? 'current' : 'upcoming',
-      })),
     };
   }
 
@@ -330,16 +259,14 @@ export class WorldCaseFilesLogic {
       const sceneBits = [targetStop.city, targetStop.country].filter(Boolean);
       return {
         primary: sceneBits.join(', ') || country,
-        secondary: this.hasMultipleStopsInCountry(country)
-          ? `Return to ${country} for the ${targetStop.scene || targetStop.chapterTitle || targetStop.biographyStage || 'next scene'}.`
-          : (targetStop.scene || targetStop.chapterTitle || ''),
+        secondary: targetStop.scene || targetStop.title || '',
       };
     }
-    const scene = this.getSceneForCountry(country);
-    const sceneBits = [scene.city, scene.country].filter(Boolean);
+    const stop = this.getStopForCountry(country);
+    const sceneBits = [stop.city, stop.country].filter(Boolean);
     return {
       primary: sceneBits.join(', ') || country,
-      secondary: scene.scene || scene.chapterTitle || '',
+      secondary: stop.scene || stop.title || '',
     };
   }
 
@@ -347,17 +274,16 @@ export class WorldCaseFilesLogic {
     return this.getMapLocations();
   }
 
-  _buildFieldStopFromScene(scene = {}, kind = 'scene', extra = {}) {
-    const country = scene.country || this.currentCountry;
+  _buildFieldStopFromStop(stop = {}, kind = 'scene', extra = {}) {
+    const country = stop.country || this.currentCountry;
     return {
       kind,
       country,
-      city: scene.city || primaryCapital(this.countryMap[country]) || country,
-      lat: Number(scene.lat),
-      lon: Number(scene.lon),
-      scene: scene.scene || scene.title || scene.city || '',
-      legIndex: this.currentLeg,
-      sceneIndex: this.currentSceneIndex,
+      city: stop.city || primaryCapital(this.countryMap[country]) || country,
+      lat: Number(stop.lat),
+      lon: Number(stop.lon),
+      scene: stop.scene || stop.title || stop.city || '',
+      stopIndex: this.currentStopIndex,
       ...extra,
     };
   }
@@ -375,20 +301,22 @@ export class WorldCaseFilesLogic {
     return this.currentFieldLocation ? { ...this.currentFieldLocation } : null;
   }
 
-  _buildSceneContext(stop, stopIndex, scene, sceneIndex) {
+  _buildStopContext(stop, stopIndex) {
     return {
       stop,
       stopIndex,
-      scene,
-      sceneIndex,
-      sceneKey: `${stopIndex}:${scene.id || sceneSlug(scene, 'scene')}`,
-      isCurrentAuthored: stopIndex === this.currentLeg && sceneIndex === this.currentSceneIndex,
+      // Aliases for legacy callers — each stop now IS its own scene.
+      scene: stop,
+      sceneIndex: 0,
+      sceneKey: this._stopKey(stop),
+      stopKey: this._stopKey(stop),
+      isCurrentAuthored: stopIndex === this.currentStopIndex,
     };
   }
 
   getDisplaySceneContext() {
     if (this.currentFieldLocation?.kind === 'scene') {
-      return this._buildSceneContext(this.currentRouteStop, this.currentLeg, this.getCurrentScene(), this.currentSceneIndex);
+      return this._buildStopContext(this.currentRouteStop, this.currentStopIndex);
     }
     return this.findSceneContextForLocation(this.currentFieldLocation?.country, this.currentFieldLocation?.city);
   }
@@ -400,21 +328,17 @@ export class WorldCaseFilesLogic {
     let best = null;
     for (let stopIndex = 0; stopIndex < this.caseData.route.length; stopIndex += 1) {
       const stop = this.caseData.route[stopIndex];
-      const scenes = this.getSceneList(stop);
-      for (let sceneIndex = 0; sceneIndex < scenes.length; sceneIndex += 1) {
-        const scene = scenes[sceneIndex];
-        if (normalize(scene.country || stop.country) !== wantedCountry) continue;
-        if (normalize(scene.city || stop.city) !== wantedCity) continue;
-        const context = this._buildSceneContext(stop, stopIndex, scene, sceneIndex);
-        if (!best) {
-          best = context;
-          continue;
-        }
-        const bestDistance = Math.abs(best.stopIndex - this.currentLeg);
-        const currentDistance = Math.abs(stopIndex - this.currentLeg);
-        if (currentDistance < bestDistance || (currentDistance === bestDistance && stopIndex > best.stopIndex)) {
-          best = context;
-        }
+      if (normalize(stop.country) !== wantedCountry) continue;
+      if (normalize(stop.city) !== wantedCity) continue;
+      const context = this._buildStopContext(stop, stopIndex);
+      if (!best) {
+        best = context;
+        continue;
+      }
+      const bestDistance = Math.abs(best.stopIndex - this.currentStopIndex);
+      const currentDistance = Math.abs(stopIndex - this.currentStopIndex);
+      if (currentDistance < bestDistance || (currentDistance === bestDistance && stopIndex > best.stopIndex)) {
+        best = context;
       }
     }
     return best;
@@ -430,7 +354,6 @@ export class WorldCaseFilesLogic {
       }));
     }
     const currentStop = displayContext?.stop || this.currentRouteStop || {};
-    const currentScene = displayContext?.scene || this.getCurrentScene();
     const baseLocations = LOCATIONS.map(location => ({
       id: location.id,
       emoji: location.emoji,
@@ -449,14 +372,12 @@ export class WorldCaseFilesLogic {
         lon: place.lon,
         placeName: place.name,
         description: place.description,
-        hideOnMap: approxSamePoint(place.lat, place.lon, currentScene.lat, currentScene.lon) ||
-          approxSamePoint(place.lat, place.lon, currentStop.lat, currentStop.lon) ||
-          normalize(place.name).includes(normalize(currentScene.scene)) ||
-          normalize(currentScene.scene).includes(normalize(place.name)),
-        hideInList: approxSamePoint(place.lat, place.lon, currentScene.lat, currentScene.lon) ||
-          approxSamePoint(place.lat, place.lon, currentStop.lat, currentStop.lon) ||
-          normalize(place.name).includes(normalize(currentScene.scene)) ||
-          normalize(currentScene.scene).includes(normalize(place.name)),
+        hideOnMap: approxSamePoint(place.lat, place.lon, currentStop.lat, currentStop.lon) ||
+          normalize(place.name).includes(normalize(currentStop.scene)) ||
+          normalize(currentStop.scene).includes(normalize(place.name)),
+        hideInList: approxSamePoint(place.lat, place.lon, currentStop.lat, currentStop.lon) ||
+          normalize(place.name).includes(normalize(currentStop.scene)) ||
+          normalize(currentStop.scene).includes(normalize(place.name)),
         })),
     ];
   }
@@ -464,15 +385,15 @@ export class WorldCaseFilesLogic {
   getSceneActions() {
     const displayContext = this.getDisplaySceneContext();
     if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) return [];
-    const currentScene = displayContext?.scene || this.getCurrentScene();
-    const sceneKey = displayContext?.sceneKey || this.getCurrentSceneKey();
-    const sceneHasLockedLocations = this._sceneHasLockedCustomLocations(currentScene);
-    return (currentScene.customLocations || []).map((location, index) => {
-      const id = location.id || `custom-${currentScene.id || 'scene'}-${index + 1}`;
-      const discoveryState = this._getLocationDiscoveryState(sceneKey, currentScene, id);
+    const stop = displayContext?.stop || this.currentRouteStop;
+    const stopId = displayContext?.stopKey || this._stopKey(stop);
+    const stopHasLockedLocations = this._stopHasLockedCustomLocations(stop);
+    return (stop.customLocations || []).map((location, index) => {
+      const id = location.id || `custom-${stop.id || 'stop'}-${index + 1}`;
+      const discoveryState = this._getLocationDiscoveryState(stopId, stop, id);
       if (discoveryState === 'hidden') return null;
-      const locked = sceneHasLockedLocations && !this._isCustomLocationUnlocked(sceneKey, id);
-      const requiredImage = locked ? this._findUnlockingImage(currentScene, id) : null;
+      const locked = stopHasLockedLocations && !this._isCustomLocationUnlocked(stopId, id);
+      const requiredImage = locked ? this._findUnlockingImage(stop, id) : null;
       const isAnonymous = discoveryState === 'anonymous';
       return {
         id,
@@ -498,9 +419,9 @@ export class WorldCaseFilesLogic {
   getSceneEvidenceImages() {
     const displayContext = this.getDisplaySceneContext();
     if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) return [];
-    const currentScene = displayContext?.scene || this.getCurrentScene();
-    const sceneKey = displayContext?.sceneKey || this.getCurrentSceneKey();
-    const works = this.getCurrentWorks(currentScene);
+    const stop = displayContext?.stop || this.currentRouteStop;
+    const stopId = displayContext?.stopKey || this._stopKey(stop);
+    const works = this.getCurrentWorks(stop);
     const primaryWork = works[0] || null;
     const images = [];
     if (primaryWork?.imagePath) {
@@ -520,8 +441,8 @@ export class WorldCaseFilesLogic {
     for (const item of primaryWork?.evidenceImages || []) {
       images.push({ ...item });
     }
-    for (const item of currentScene.evidenceImages || []) {
-      if (!this._isImageDiscovered(sceneKey, currentScene, item.id)) continue;
+    for (const item of stop.evidenceImages || []) {
+      if (!this._isImageDiscovered(stopId, stop, item.id)) continue;
       images.push({ ...item });
     }
     const seen = new Set();
@@ -536,7 +457,7 @@ export class WorldCaseFilesLogic {
 
   getInvestigatedLocationIds() {
     const displayContext = this.getDisplaySceneContext();
-    return new Set(this.investigatedByScene.get(displayContext?.sceneKey || this.getCurrentSceneKey()) || []);
+    return new Set(this.investigatedByStop.get(displayContext?.stopKey || this.getCurrentSceneKey()) || []);
   }
 
   getInformant(locationId) {
@@ -547,17 +468,17 @@ export class WorldCaseFilesLogic {
         prefix: `${place?.name || 'Cultural archive'} records show`,
       };
     }
-    const scene = this.getDisplaySceneContext()?.scene || this.getCurrentScene();
-    const sceneKey = this.getDisplaySceneContext()?.sceneKey || this.getCurrentSceneKey();
-    const sceneCustomLocation = (scene?.customLocations || []).find(loc => loc.id === locationId);
-    if (sceneCustomLocation) {
-      const discoveryState = this._getLocationDiscoveryState(sceneKey, scene, locationId);
+    const stop = this.getDisplaySceneContext()?.stop || this.currentRouteStop;
+    const stopId = this.getDisplaySceneContext()?.stopKey || this.getCurrentSceneKey();
+    const customLocation = (stop?.customLocations || []).find(loc => loc.id === locationId);
+    if (customLocation) {
+      const discoveryState = this._getLocationDiscoveryState(stopId, stop, locationId);
       const isAnonymous = discoveryState === 'anonymous';
       return {
-        emoji: isAnonymous ? (sceneCustomLocation.anonymousEmoji || '❓') : (sceneCustomLocation.emoji || '🧩'),
+        emoji: isAnonymous ? (customLocation.anonymousEmoji || '❓') : (customLocation.emoji || '🧩'),
         prefix: isAnonymous
-          ? (sceneCustomLocation.anonymousName || 'Unknown lead')
-          : (sceneCustomLocation.prefix || `${sceneCustomLocation.name || 'Scene puzzle'} indicates`),
+          ? (customLocation.anonymousName || 'Unknown lead')
+          : (customLocation.prefix || `${customLocation.name || 'Scene puzzle'} indicates`),
       };
     }
     const location = LOCATIONS.find(item => item.id === locationId);
@@ -568,13 +489,13 @@ export class WorldCaseFilesLogic {
   investigate(locationId) {
     const displayContext = this.getDisplaySceneContext();
     if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) return null;
-    const scene = displayContext?.scene || this.getCurrentScene();
+    const stop = displayContext?.stop || this.currentRouteStop;
     const fieldLocation = this.currentFieldLocation || {};
-    const key = displayContext?.sceneKey || this.getCurrentSceneKey();
+    const key = displayContext?.stopKey || this.getCurrentSceneKey();
 
-    const customLocation = (scene.customLocations || []).find(loc => loc.id === locationId);
-    if (customLocation && this._sceneHasLockedCustomLocations(scene) && !this._isCustomLocationUnlocked(key, locationId)) {
-      const requiredImage = this._findUnlockingImage(scene, locationId);
+    const customLocation = (stop.customLocations || []).find(loc => loc.id === locationId);
+    if (customLocation && this._stopHasLockedCustomLocations(stop) && !this._isCustomLocationUnlocked(key, locationId)) {
+      const requiredImage = this._findUnlockingImage(stop, locationId);
       return {
         blocked: true,
         locationId,
@@ -584,34 +505,34 @@ export class WorldCaseFilesLogic {
       };
     }
 
-    const investigated = this.investigatedByScene.get(key) || new Set();
+    const investigated = this.investigatedByStop.get(key) || new Set();
     if (investigated.has(locationId)) {
       const staleEvidence = this.evidence.find(e =>
         e.locationId === locationId && e.staleAvailable && e.staleUpgrade
       );
       if (staleEvidence) {
         this._consumeStale(staleEvidence);
-        this._applyClueMarksStale(scene, staleEvidence);
-        this._applyCulturalCorroboration(scene);
-        const progress = displayContext?.isCurrentAuthored ? this.progressSceneIfReady() : { type: 'scene_pending' };
+        this._applyClueMarksStale(stop, staleEvidence);
+        this._applyCulturalCorroboration(stop);
+        const progress = displayContext?.isCurrentAuthored ? this.progressStopIfReady() : { type: 'stop_pending' };
         return { evidence: staleEvidence, progress, restale: true };
       }
       return null;
     }
     investigated.add(locationId);
-    this.investigatedByScene.set(key, investigated);
+    this.investigatedByStop.set(key, investigated);
 
-    let clue = (scene.clues || []).find(item => item.locationId === locationId && !this.evidence.some(e => e.id === item.id));
+    let clue = (stop.clues || []).find(item => item.locationId === locationId && !this.evidence.some(e => e.id === item.id));
     if (!clue && fieldLocation.country && fieldLocation.country !== this.currentRouteStop.country) {
-      clue = (scene.followups || []).find(item =>
+      clue = (stop.followups || []).find(item =>
         item.afterCountry === fieldLocation.country &&
         item.locationId === locationId &&
-        !this.evidence.some(e => e.id === `${scene.id}-${item.locationId}-followup`)
+        !this.evidence.some(e => e.id === `${stop.id}-${item.locationId}-followup`)
       );
       if (clue) {
         clue = {
           ...clue,
-          id: `${scene.id}-${clue.locationId}-followup`,
+          id: `${stop.id}-${clue.locationId}-followup`,
           title: 'Follow-up confirmation',
           action: 'Ask follow-up question',
           strength: 3,
@@ -619,17 +540,17 @@ export class WorldCaseFilesLogic {
       }
     }
     if (!clue) return null;
-    const isPreliminary = !customLocation && this._sceneHasLockedCustomLocations(scene) && clue.category !== 'Puzzle Evidence';
+    const isPreliminary = !customLocation && this._stopHasLockedCustomLocations(stop) && clue.category !== 'Puzzle Evidence';
     const evidence = {
       ...clue,
-      legIndex: this.currentLeg,
-      sceneIndex: this.currentSceneIndex,
-      sceneId: scene.id,
-      sceneTitle: scene.title || scene.scene || scene.city || '',
+      stopIndex: this.currentStopIndex,
+      stopId: stop.id,
+      sceneId: stop.id,
+      sceneTitle: stop.title || stop.scene || stop.city || '',
       fromCountry: this.currentRouteStop.country,
       targetCountry: this.targetRouteStop?.country || '',
       foundInCountry: fieldLocation.country || this.currentCountry,
-      foundInCity: fieldLocation.city || scene.city || this.currentRouteStop?.city || this.currentCountry,
+      foundInCity: fieldLocation.city || stop.city || this.currentRouteStop?.city || this.currentCountry,
       category: clue.category || (
         clue.tags?.some(tag => tag.startsWith('culture:') || tag.startsWith('famous:') || tag.startsWith('history:') || tag.startsWith('cultural_'))
           ? 'Cultural Evidence'
@@ -644,64 +565,64 @@ export class WorldCaseFilesLogic {
     this.evidence.push(evidence);
 
     if (!isPreliminary) {
-      this._applyClueMarksStale(scene, clue);
+      this._applyClueMarksStale(stop, clue);
     }
-    this._applyCulturalCorroboration(scene);
+    this._applyCulturalCorroboration(stop);
 
-    const progress = displayContext?.isCurrentAuthored ? this.progressSceneIfReady() : { type: 'scene_pending' };
+    const progress = displayContext?.isCurrentAuthored ? this.progressStopIfReady() : { type: 'stop_pending' };
     return { evidence, progress };
   }
 
-  _sceneHasLockedCustomLocations(scene) {
-    return (scene.evidenceImages || []).some(img => Array.isArray(img.hotspots) || img.puzzle);
+  _stopHasLockedCustomLocations(stop) {
+    return (stop?.evidenceImages || []).some(img => Array.isArray(img.hotspots) || img.puzzle);
   }
 
-  _isCustomLocationUnlocked(sceneKey, locationId) {
-    const set = this.unlockedLocationsByScene.get(sceneKey);
+  _isCustomLocationUnlocked(stopId, locationId) {
+    const set = this.unlockedLocationsByStop.get(stopId);
     return !!(set && set.has(locationId));
   }
 
-  _markCustomLocationUnlocked(sceneKey, locationId) {
-    const set = this.unlockedLocationsByScene.get(sceneKey) || new Set();
+  _markCustomLocationUnlocked(stopId, locationId) {
+    const set = this.unlockedLocationsByStop.get(stopId) || new Set();
     set.add(locationId);
-    this.unlockedLocationsByScene.set(sceneKey, set);
+    this.unlockedLocationsByStop.set(stopId, set);
   }
 
-  _ensureSceneDiscovery(sceneKey, scene) {
-    if (!this.revealedLocationsByScene.has(sceneKey)) {
+  _ensureStopDiscovery(stopId, stop) {
+    if (!this.revealedLocationsByStop.has(stopId)) {
       const revealed = new Set();
-      for (const loc of (scene?.customLocations || [])) {
+      for (const loc of (stop?.customLocations || [])) {
         const state = loc.discoveryState || 'revealed';
         if (state === 'revealed') revealed.add(loc.id);
       }
-      this.revealedLocationsByScene.set(sceneKey, revealed);
+      this.revealedLocationsByStop.set(stopId, revealed);
     }
-    if (!this.discoveredImagesByScene.has(sceneKey)) {
+    if (!this.discoveredImagesByStop.has(stopId)) {
       const discovered = new Set();
-      for (const img of (scene?.evidenceImages || [])) {
+      for (const img of (stop?.evidenceImages || [])) {
         const state = img.imageDiscoveryState || 'discovered';
         if (state === 'discovered') discovered.add(img.id);
       }
-      this.discoveredImagesByScene.set(sceneKey, discovered);
+      this.discoveredImagesByStop.set(stopId, discovered);
     }
   }
 
-  _getLocationDiscoveryState(sceneKey, scene, locationId) {
-    this._ensureSceneDiscovery(sceneKey, scene);
-    if (this.revealedLocationsByScene.get(sceneKey)?.has(locationId)) return 'revealed';
-    const loc = (scene?.customLocations || []).find(l => l.id === locationId);
+  _getLocationDiscoveryState(stopId, stop, locationId) {
+    this._ensureStopDiscovery(stopId, stop);
+    if (this.revealedLocationsByStop.get(stopId)?.has(locationId)) return 'revealed';
+    const loc = (stop?.customLocations || []).find(l => l.id === locationId);
     return loc?.discoveryState || 'revealed';
   }
 
-  _isImageDiscovered(sceneKey, scene, imageId) {
-    this._ensureSceneDiscovery(sceneKey, scene);
-    return this.discoveredImagesByScene.get(sceneKey)?.has(imageId) || false;
+  _isImageDiscovered(stopId, stop, imageId) {
+    this._ensureStopDiscovery(stopId, stop);
+    return this.discoveredImagesByStop.get(stopId)?.has(imageId) || false;
   }
 
-  _revealCustomLocation(sceneKey, locationId) {
-    const scene = this.getDisplaySceneContext()?.scene || this.getCurrentScene();
-    this._ensureSceneDiscovery(sceneKey, scene);
-    const set = this.revealedLocationsByScene.get(sceneKey);
+  _revealCustomLocation(stopId, locationId) {
+    const stop = this.getDisplaySceneContext()?.stop || this.currentRouteStop;
+    this._ensureStopDiscovery(stopId, stop);
+    const set = this.revealedLocationsByStop.get(stopId);
     if (set && !set.has(locationId)) {
       set.add(locationId);
       return true;
@@ -709,10 +630,10 @@ export class WorldCaseFilesLogic {
     return false;
   }
 
-  _discoverImage(sceneKey, imageId) {
-    const scene = this.getDisplaySceneContext()?.scene || this.getCurrentScene();
-    this._ensureSceneDiscovery(sceneKey, scene);
-    const set = this.discoveredImagesByScene.get(sceneKey);
+  _discoverImage(stopId, imageId) {
+    const stop = this.getDisplaySceneContext()?.stop || this.currentRouteStop;
+    this._ensureStopDiscovery(stopId, stop);
+    const set = this.discoveredImagesByStop.get(stopId);
     if (set && !set.has(imageId)) {
       set.add(imageId);
       return true;
@@ -720,8 +641,8 @@ export class WorldCaseFilesLogic {
     return false;
   }
 
-  _findUnlockingImage(scene, locationId) {
-    return (scene.evidenceImages || []).find(image => {
+  _findUnlockingImage(stop, locationId) {
+    return (stop.evidenceImages || []).find(image => {
       if (Array.isArray(image.unlocks) && image.unlocks.includes(locationId)) return true;
       if (Array.isArray(image.hotspots)) {
         return image.hotspots.some(hotspot => Array.isArray(hotspot.unlocks) && hotspot.unlocks.includes(locationId));
@@ -738,8 +659,8 @@ export class WorldCaseFilesLogic {
   }
 
   getUnlockedCustomLocations() {
-    const key = this.getDisplaySceneContext()?.sceneKey || this.getCurrentSceneKey();
-    return new Set(this.unlockedLocationsByScene.get(key) || []);
+    const key = this.getDisplaySceneContext()?.stopKey || this.getCurrentSceneKey();
+    return new Set(this.unlockedLocationsByStop.get(key) || []);
   }
 
   getImageObservation(imageId) {
@@ -752,8 +673,8 @@ export class WorldCaseFilesLogic {
   }
 
   observeImageHotspot(imageId, hotspotId) {
-    const scene = this.getDisplaySceneContext()?.scene || this.getCurrentScene();
-    const image = (scene.evidenceImages || []).find(item => item.id === imageId);
+    const stop = this.getDisplaySceneContext()?.stop || this.currentRouteStop;
+    const image = (stop.evidenceImages || []).find(item => item.id === imageId);
     if (!image) return { result: 'unknown_image' };
     const hotspot = (image.hotspots || []).find(item => item.id === hotspotId);
     if (!hotspot) return { result: 'unknown_hotspot' };
@@ -768,20 +689,20 @@ export class WorldCaseFilesLogic {
     }
     obs.hotspotsHit.add(hotspotId);
     this.imageObservations.set(imageId, obs);
-    const sceneKey = this.getDisplaySceneContext()?.sceneKey || this.getCurrentSceneKey();
+    const stopId = this.getDisplaySceneContext()?.stopKey || this.getCurrentSceneKey();
     const unlockedLocationIds = [];
     const revealedLocationIds = [];
     const discoveredImageIds = [];
     const staledClueIds = [];
     for (const id of (hotspot.unlocks || [])) {
-      this._markCustomLocationUnlocked(sceneKey, id);
+      this._markCustomLocationUnlocked(stopId, id);
       unlockedLocationIds.push(id);
     }
     for (const id of (hotspot.reveals || [])) {
-      if (this._revealCustomLocation(sceneKey, id)) revealedLocationIds.push(id);
+      if (this._revealCustomLocation(stopId, id)) revealedLocationIds.push(id);
     }
     for (const id of (hotspot.discoversImages || [])) {
-      if (this._discoverImage(sceneKey, id)) discoveredImageIds.push(id);
+      if (this._discoverImage(stopId, id)) discoveredImageIds.push(id);
     }
     for (const id of (hotspot.marksStale || [])) {
       if (this._markEvidenceStale(id)) staledClueIds.push(id);
@@ -797,12 +718,12 @@ export class WorldCaseFilesLogic {
   }
 
   solveImagePuzzle(imageId, attempt) {
-    const scene = this.getDisplaySceneContext()?.scene || this.getCurrentScene();
-    const image = (scene.evidenceImages || []).find(item => item.id === imageId);
+    const stop = this.getDisplaySceneContext()?.stop || this.currentRouteStop;
+    const image = (stop.evidenceImages || []).find(item => item.id === imageId);
     if (!image || !image.puzzle) return { result: 'unknown_puzzle' };
-    const sceneKey = this.getDisplaySceneContext()?.sceneKey || this.getCurrentSceneKey();
+    const stopId = this.getDisplaySceneContext()?.stopKey || this.getCurrentSceneKey();
     if (image.puzzle.type === 'seal-cipher') {
-      return this._solveSealCipher(image, attempt, sceneKey);
+      return this._solveSealCipher(image, attempt, stopId);
     }
     const obs = this.imageObservations.get(imageId) || { hotspotsHit: new Set(), puzzleSolved: false };
     if (obs.puzzleSolved) return { result: 'already' };
@@ -817,7 +738,7 @@ export class WorldCaseFilesLogic {
     const unlockedLocationIds = [];
     const staledClueIds = [];
     for (const id of (image.unlocks || [])) {
-      this._markCustomLocationUnlocked(sceneKey, id);
+      this._markCustomLocationUnlocked(stopId, id);
       unlockedLocationIds.push(id);
     }
     for (const id of (image.puzzle.marksStale || [])) {
@@ -826,7 +747,7 @@ export class WorldCaseFilesLogic {
     return { result: 'solved', unlockedLocationIds, staledClueIds };
   }
 
-  _solveSealCipher(image, attempt, sceneKey) {
+  _solveSealCipher(image, attempt, stopId) {
     const sealId = attempt?.sealId;
     const destinationId = attempt?.destinationId;
     const seal = (image.puzzle.seals || []).find(s => s.id === sealId);
@@ -856,7 +777,7 @@ export class WorldCaseFilesLogic {
     const staledClueIds = [];
     if (allPlaced) {
       for (const id of (image.unlocks || [])) {
-        this._markCustomLocationUnlocked(sceneKey, id);
+        this._markCustomLocationUnlocked(stopId, id);
         unlockedLocationIds.push(id);
       }
       for (const id of (image.puzzle.marksStale || [])) {
@@ -896,53 +817,42 @@ export class WorldCaseFilesLogic {
     evidence.vagueText = null;
   }
 
-  _applyClueMarksStale(scene, clueOrEvidence) {
+  _applyClueMarksStale(stop, clueOrEvidence) {
     if (!clueOrEvidence) return;
-    const clueRef = (scene?.clues || []).find(c => c.id === clueOrEvidence.id);
+    const clueRef = (stop?.clues || []).find(c => c.id === clueOrEvidence.id);
     const marksStale = clueRef?.marksStale || clueOrEvidence.marksStale || [];
     for (const id of marksStale) {
       this._markEvidenceStale(id);
     }
   }
 
-  _applyCulturalCorroboration(scene) {
-    const requires = scene?.culturalCorroborationRequires || [];
+  _applyCulturalCorroboration(stop) {
+    const requires = stop?.culturalCorroborationRequires || [];
     if (!requires.length) return;
     const allCorroborated = requires.every(id =>
       this.evidence.some(e => e.id === id && e.corroborated)
     );
     if (!allCorroborated) return;
-    for (const id of (scene.culturalCorroborationStales || [])) {
+    for (const id of (stop.culturalCorroborationStales || [])) {
       this._markEvidenceStale(id);
     }
   }
 
-  scenePuzzleRequired(scene = this.getCurrentScene()) {
-    return (scene?.evidenceImages || []).some(img => !!img.puzzle);
+  scenePuzzleRequired(stop = this.currentRouteStop) {
+    return (stop?.evidenceImages || []).some(img => !!img.puzzle);
   }
 
-  scenePuzzleSolved(scene = this.getCurrentScene()) {
-    if (!this.scenePuzzleRequired(scene)) return true;
-    return (scene.evidenceImages || []).some(img => img.puzzle && this.imageObservations.get(img.id)?.puzzleSolved);
+  scenePuzzleSolved(stop = this.currentRouteStop) {
+    if (!this.scenePuzzleRequired(stop)) return true;
+    return (stop.evidenceImages || []).some(img => img.puzzle && this.imageObservations.get(img.id)?.puzzleSolved);
   }
 
-  progressSceneIfReady() {
-    if (!this.isCurrentSceneReady()) return { type: 'scene_pending' };
-    const currentScene = this.getCurrentScene();
-    if (this.getNextScene()) {
-      this.completedSceneKeys.push(this.getCurrentSceneKey());
-      this.currentSceneIndex += 1;
-      this._setFieldLocation(this._buildFieldStopFromScene(this.getCurrentScene(), 'scene'));
-      return {
-        type: 'scene_advanced',
-        fromScene: currentScene,
-        toScene: this.getCurrentScene(),
-        chapterTitle: this.currentRouteStop.chapterTitle || this.currentRouteStop.scene || '',
-      };
-    }
+  progressStopIfReady() {
+    if (!this.isCurrentSceneReady()) return { type: 'stop_pending' };
     return {
-      type: 'chapter_ready',
-      scene: currentScene,
+      type: 'stop_ready',
+      scene: this.currentRouteStop,
+      stop: this.currentRouteStop,
       targetCountry: this.targetRouteStop?.country || '',
     };
   }
@@ -970,24 +880,24 @@ export class WorldCaseFilesLogic {
   getSceneCulturalPlaces(country = this.currentCountry) {
     const displayContext = this.getDisplaySceneContext();
     if (this.currentFieldLocation?.kind && this.currentFieldLocation.kind !== 'scene' && !displayContext) return [];
-    const scene = displayContext?.scene || this.getCurrentScene();
-    const sceneCity = normalize(scene?.city);
+    const stop = displayContext?.stop || this.currentRouteStop;
+    const stopCity = normalize(stop?.city);
     return this.culturalPlaces.filter(place => {
       if (place.country !== country) return false;
-      if (!sceneCity) return true;
-      return normalize(place.city) === sceneCity;
+      if (!stopCity) return true;
+      return normalize(place.city) === stopCity;
     });
   }
 
-  getSceneForCountry(country) {
+  getStopForCountry(country) {
     if (normalize(this.currentRouteStop?.country) === normalize(country)) {
-      return this.getCurrentScene();
+      return this.currentRouteStop;
     }
     if (normalize(this.targetRouteStop?.country) === normalize(country)) {
-      return this.getSceneList(this.targetRouteStop)[0] || this.targetRouteStop;
+      return this.targetRouteStop;
     }
     const stop = this.caseData.route.find(item => normalize(item.country) === normalize(country));
-    if (stop) return this.getSceneList(stop)[0] || stop;
+    if (stop) return stop;
     return {
       country,
       city: primaryCapital(this.countryMap[country]) || country,
@@ -995,8 +905,12 @@ export class WorldCaseFilesLogic {
     };
   }
 
+  getSceneForCountry(country) {
+    return this.getStopForCountry(country);
+  }
+
   getActiveEvidence() {
-    return this.evidence.filter(item => item.legIndex === this.currentLeg && item.sceneIndex === this.currentSceneIndex);
+    return this.evidence.filter(item => item.stopIndex === this.currentStopIndex);
   }
 
   analyzeCandidates() {
@@ -1053,7 +967,7 @@ export class WorldCaseFilesLogic {
     if (!candidate) return '';
     if (candidate.country === (this.currentFieldLocation?.country || this.currentCountry)) {
       return this.currentFieldLocation?.kind === 'scene'
-        ? 'Current scene. Finish the local chapter before moving the case onward.'
+        ? 'Current scene. Finish the local lead before moving the case onward.'
         : 'Current field stop. Move onward when the lead is clear.';
     }
     if (candidate.state === 'contradicted') return 'Collected evidence contradicts this destination.';
@@ -1081,18 +995,18 @@ export class WorldCaseFilesLogic {
 
   getConfidence() {
     const activeEvidence = this.getActiveEvidence();
-    const currentScene = this.getCurrentScene();
+    const currentStop = this.currentRouteStop;
     const hasRoute = activeEvidence.some(item => item.category === 'Route Evidence' && item.corroborated !== false);
     const hasCulture = activeEvidence.some(item => item.category === 'Cultural Evidence' && item.corroborated !== false);
     const hasConfirmation = activeEvidence.some(item => item.category === 'Confirmation' && item.corroborated !== false);
     const hasPuzzleEvidence = activeEvidence.some(item => item.category === 'Puzzle Evidence' && item.corroborated !== false);
-    const sceneRequiresPuzzleImage = this.scenePuzzleRequired(currentScene);
-    const sceneHasLockedLocations = this._sceneHasLockedCustomLocations(currentScene);
-    const requirePuzzle = sceneHasLockedLocations
-      ? sceneRequiresPuzzleImage
-      : (!!currentScene.requirePuzzle || (currentScene.clues || []).some(item => item.category === 'Puzzle Evidence'));
-    const puzzleSolved = sceneHasLockedLocations
-      ? this.scenePuzzleSolved(currentScene)
+    const stopRequiresPuzzleImage = this.scenePuzzleRequired(currentStop);
+    const stopHasLockedLocations = this._stopHasLockedCustomLocations(currentStop);
+    const requirePuzzle = stopHasLockedLocations
+      ? stopRequiresPuzzleImage
+      : (!!currentStop.requirePuzzle || (currentStop.clues || []).some(item => item.category === 'Puzzle Evidence'));
+    const puzzleSolved = stopHasLockedLocations
+      ? this.scenePuzzleSolved(currentStop)
       : (!requirePuzzle || hasPuzzleEvidence);
     const strongCandidateCount = this.analyzeCandidates().filter(item => item.state === 'strong').length;
     const corroboratedCount = activeEvidence.filter(item => item.corroborated !== false).length;
@@ -1101,7 +1015,7 @@ export class WorldCaseFilesLogic {
       patternSupported: hasCulture,
       contradictionsChecked: activeEvidence.some(item => (item.tags || []).some(tag => tag.startsWith('exclude:'))),
       destinationLikely: strongCandidateCount <= 3 && corroboratedCount >= 3,
-      evidenceReady: hasRoute && hasCulture && hasConfirmation && (!requirePuzzle || puzzleSolved) && corroboratedCount >= Math.max(REQUIRED_PROOF_CARDS, currentScene.minimumEvidence || 0),
+      evidenceReady: hasRoute && hasCulture && hasConfirmation && (!requirePuzzle || puzzleSolved) && corroboratedCount >= Math.max(REQUIRED_PROOF_CARDS, currentStop.minimumEvidence || 0),
       puzzleSolved,
     };
   }
@@ -1112,7 +1026,7 @@ export class WorldCaseFilesLogic {
 
   canSubmitProof(country) {
     const confidence = this.getConfidence();
-    return country === this.targetRouteStop?.country && confidence.evidenceReady && !this.getNextScene();
+    return country === this.targetRouteStop?.country && confidence.evidenceReady;
   }
 
   getExpectedTravelCity() {
@@ -1128,7 +1042,7 @@ export class WorldCaseFilesLogic {
     const lon = Number(selection?.lon);
     const from = this.currentFieldLocation?.country || this.currentCountry;
     const expectedCity = this.getExpectedTravelCity();
-    const baseFieldStop = this._buildFieldStopFromScene({
+    const baseFieldStop = this._buildFieldStopFromStop({
       country,
       city: city || primaryCapital(this.countryMap[country]) || country,
       lat,
@@ -1147,7 +1061,7 @@ export class WorldCaseFilesLogic {
         explanation,
       };
       this._setFieldLocation(fieldStop);
-      this.deadEnds.push({ legIndex: this.currentLeg, country, city, explanation, kind: 'wrong_city' });
+      this.deadEnds.push({ stopIndex: this.currentStopIndex, country, city, explanation, kind: 'wrong_city' });
       return {
         type: 'wrong_city',
         from,
@@ -1159,17 +1073,16 @@ export class WorldCaseFilesLogic {
       };
     }
     const revisitedSceneContext = this.findSceneContextForLocation(country, city || primaryCapital(this.countryMap[country]) || country);
-    if (revisitedSceneContext && revisitedSceneContext.stopIndex <= this.currentLeg && country !== target.country) {
+    if (revisitedSceneContext && revisitedSceneContext.stopIndex <= this.currentStopIndex && country !== target.country) {
       const explanation = revisitedSceneContext.isCurrentAuthored
-        ? 'ACME returns to the active scene. The remaining clues can still be gathered here before the chapter moves on.'
+        ? 'ACME returns to the active scene. The remaining clues can still be gathered here before the trail moves on.'
         : 'ACME reopens the earlier scene. New evidence may unlock if the latest lead gives you a better question to ask.';
-      const fieldStop = this._buildFieldStopFromScene(
-        revisitedSceneContext.scene,
+      const fieldStop = this._buildFieldStopFromStop(
+        revisitedSceneContext.stop,
         revisitedSceneContext.isCurrentAuthored ? 'scene' : 'revisited',
         {
           explanation,
-          legIndex: revisitedSceneContext.stopIndex,
-          sceneIndex: revisitedSceneContext.sceneIndex,
+          stopIndex: revisitedSceneContext.stopIndex,
         }
       );
       this._setFieldLocation(fieldStop);
@@ -1189,13 +1102,11 @@ export class WorldCaseFilesLogic {
         : (this.caseData.deadEnds?.[country] || this.caseData.deadEnds?.default || 'The field office found no match for the evidence.');
       const fieldStop = { ...baseFieldStop, kind: 'dead_end_country', explanation };
       this._setFieldLocation(fieldStop);
-      this.deadEnds.push({ legIndex: this.currentLeg, country, city: fieldStop.city, explanation, kind: 'dead_end_country' });
+      this.deadEnds.push({ stopIndex: this.currentStopIndex, country, city: fieldStop.city, explanation, kind: 'dead_end_country' });
       return { type: 'dead_end', from, country, city: fieldStop.city, fieldStop, explanation };
     }
     if (!this.canSubmitProof(country)) {
-      const explanation = this.getNextScene()
-        ? 'The country fits, but ACME still needs the remaining local scenes solved before the chapter can move onward.'
-        : 'The destination fits, but ACME will not advance the case until route, cultural, confirmation, and puzzle evidence are all on the board.';
+      const explanation = 'The destination fits, but ACME will not advance the case until route, cultural, confirmation, and puzzle evidence are all on the board.';
       const fieldStop = { ...baseFieldStop, kind: 'arrived_unproven', city: city || target.city || baseFieldStop.city, explanation };
       this._setFieldLocation(fieldStop);
       return {
@@ -1207,11 +1118,11 @@ export class WorldCaseFilesLogic {
         explanation,
       };
     }
-    this.currentLeg++;
-    this.currentSceneIndex = 0;
+    this.completedStopIds.push(this._stopKey(this.currentRouteStop));
+    this.currentStopIndex++;
     this.currentCountry = country;
-    this._setFieldLocation(this._buildFieldStopFromScene(this.getCurrentScene(), 'scene'));
-    const solved = this.currentLeg >= this.totalLegs;
+    this._setFieldLocation(this._buildFieldStopFromStop(this.currentRouteStop, 'scene'));
+    const solved = this.currentStopIndex >= this.totalLegs;
     if (solved) this.finalSolved = true;
     return {
       type: solved ? 'case_ready' : 'advanced',
@@ -1220,7 +1131,7 @@ export class WorldCaseFilesLogic {
       city: city || target.city || '',
       next: this.targetRouteStop,
       scene: this.currentRouteStop,
-      currentScene: this.getCurrentScene(),
+      currentScene: this.currentRouteStop,
       fieldStop: this.getCurrentFieldLocation(),
     };
   }
@@ -1257,14 +1168,13 @@ export class WorldCaseFilesLogic {
       route: this.caseData.route,
       culturalPlaces: this.culturalPlaces,
       culturalObjects: this.culturalObjects,
-      currentScene: this.getCurrentScene(),
-      displayScene: displayContext?.scene || null,
+      currentScene: this.currentRouteStop,
+      displayScene: displayContext?.stop || null,
       currentWorks: this.getCurrentWorks(),
       sceneActions: this.getSceneActions(),
       sceneEvidenceImages: this.getSceneEvidenceImages(),
       artifactPanel: this.getCurrentArtifactPanel(),
-      localTrail: this.getLocalTrailState(),
-      completedSceneKeys: [...this.completedSceneKeys],
+      completedStopIds: [...this.completedStopIds],
       currentFieldLocation: this.getCurrentFieldLocation(),
       unlockedCustomLocations: this.getUnlockedCustomLocations(),
       revealedCustomLocations: this.getRevealedCustomLocations(),
@@ -1275,29 +1185,29 @@ export class WorldCaseFilesLogic {
 
   getRevealedCustomLocations() {
     const displayContext = this.getDisplaySceneContext();
-    const sceneKey = displayContext?.sceneKey || this.getCurrentSceneKey();
-    const scene = displayContext?.scene || this.getCurrentScene();
-    this._ensureSceneDiscovery(sceneKey, scene);
-    return new Set(this.revealedLocationsByScene.get(sceneKey) || []);
+    const stopId = displayContext?.stopKey || this.getCurrentSceneKey();
+    const stop = displayContext?.stop || this.currentRouteStop;
+    this._ensureStopDiscovery(stopId, stop);
+    return new Set(this.revealedLocationsByStop.get(stopId) || []);
   }
 
   getDiscoveredEvidenceImages() {
     const displayContext = this.getDisplaySceneContext();
-    const sceneKey = displayContext?.sceneKey || this.getCurrentSceneKey();
-    const scene = displayContext?.scene || this.getCurrentScene();
-    this._ensureSceneDiscovery(sceneKey, scene);
-    return new Set(this.discoveredImagesByScene.get(sceneKey) || []);
+    const stopId = displayContext?.stopKey || this.getCurrentSceneKey();
+    const stop = displayContext?.stop || this.currentRouteStop;
+    this._ensureStopDiscovery(stopId, stop);
+    return new Set(this.discoveredImagesByStop.get(stopId) || []);
   }
 
   getStatusBarState() {
     const current = this.getProgress();
     const confidence = this.getConfidence();
-    const currentScene = this.getCurrentScene();
+    const currentStop = this.currentRouteStop;
     const routeRequired = true;
     const cultureRequired = true;
     const confirmationRequired = true;
-    const puzzleRequired = !!currentScene.requirePuzzle || (currentScene.clues || []).some(item => item.category === 'Puzzle Evidence');
-    const city = current.city || currentScene.city || '';
+    const puzzleRequired = !!currentStop.requirePuzzle || (currentStop.clues || []).some(item => item.category === 'Puzzle Evidence');
+    const city = current.city || currentStop.city || '';
     const country = current.country || this.currentCountry || '';
     const samePlace = normalize(city) && normalize(city) === normalize(country);
     const locationLabel = [city, samePlace ? '' : country].filter(Boolean).join(', ') || country || 'Current scene';

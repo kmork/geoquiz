@@ -905,7 +905,6 @@ function getWorldCaseTravelCities(country) {
   for (const stop of worldCase?.caseData?.route || []) {
     if (normalizeCityName(stop.country) === normalizeCityName(country)) {
       addCity(stop, 'case');
-      for (const scene of stop.localScenes || []) addCity(scene, 'case-scene');
     }
   }
   return cities.sort((a, b) => a.city.localeCompare(b.city));
@@ -1292,7 +1291,7 @@ function handleWorldInvestigation(locationId) {
   });
   ui.addClue(renderedClue, renderedInformant);
   ui.addDossierEntry(
-    `${evidence.legIndex}-${evidence.sceneId || evidence.sceneIndex}`,
+    `${evidence.stopIndex}-${evidence.sceneId || evidence.stopId}`,
     displayText,
     evidence.category,
     evidence.category === 'Cultural Evidence' ? '🎭' : evidence.category === 'Confirmation' ? '✅' : evidence.category === 'Puzzle Evidence' ? '🧩' : '🧭',
@@ -1303,15 +1302,12 @@ function handleWorldInvestigation(locationId) {
   if (evidence.id === 'rw-paris-human-lead' && evidence.corroborated) {
     setTimeout(() => triggerWorldInnerMonologue('porter-questioned'), 700);
   }
-  if (progress?.type === 'scene_advanced') {
-    worldCaseSelectedContext = { type: 'scene' };
-    ui.showNarratorCaption(`ACME follows the local line from ${progress.fromScene.city} to ${progress.toScene.city}. The next scene is live.`, 7200);
-    ui.clearClues();
-  } else if (progress?.type === 'chapter_ready') {
-    ui.showNarratorCaption(`The ${worldCase.currentRouteStop.chapterTitle || worldCase.currentRouteStop.scene || 'current chapter'} is proven. The atlas is ready for the next country.`, 7200);
+  if (progress?.type === 'stop_ready') {
+    const stopLabel = worldCase.currentRouteStop?.title || worldCase.currentRouteStop?.scene || worldCase.currentRouteStop?.city || 'this stop';
+    ui.showNarratorCaption(`${stopLabel} is proven. The atlas is ready for the next country.`, 7200);
   }
   ui.updateWorldCaseBoard(worldCase.getBoardState());
-  refreshWorldCaseUi(progress?.type === 'scene_advanced');
+  refreshWorldCaseUi();
   maybeFireLibraryCorroboratedMonologue();
 }
 
@@ -1455,7 +1451,11 @@ async function startWorldCaseFiles(runConfig) {
 
   const briefingIntro = caseData.briefing?.intro || '';
   const briefingNamingTell = caseData.briefing?.namingTell || '';
-  const briefingHint = [briefingIntro, briefingNamingTell, runConfig.briefingNote].filter(Boolean).join('\n\n');
+  const caseFileBriefing = [briefingIntro, briefingNamingTell].filter(Boolean).join('\n\n');
+  if (caseFileBriefing) {
+    intro.artifact = { ...(intro.artifact || {}), briefingIntro: caseFileBriefing };
+  }
+  const briefingHint = runConfig.briefingNote || '';
   await ui.showCaseBriefing(
     intro.artifact,
     `${caseData.start.scene}, ${caseData.start.city}, ${caseData.start.country}`,

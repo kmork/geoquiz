@@ -1012,6 +1012,23 @@ body {
   margin-top: 0.45rem;
 }
 
+.carmen-artifact-note:has(.carmen-artifact-briefing-paragraph) {
+  max-width: 92%;
+  max-height: 78%;
+  overflow-y: auto;
+  padding: 0.7rem 0.9rem 0.65rem;
+}
+
+.carmen-artifact-briefing-paragraph {
+  font-size: 0.78rem;
+  line-height: 1.5;
+  margin: 0 0 0.55rem;
+}
+
+.carmen-artifact-briefing-paragraph:last-child {
+  margin-bottom: 0;
+}
+
 .carmen-artifact-geo-note {
   margin-top: 0.55rem;
   padding-top: 0.45rem;

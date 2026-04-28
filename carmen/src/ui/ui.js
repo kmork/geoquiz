@@ -1445,17 +1445,16 @@ export function createCarmenUI(container, flagCodes) {
     showWorldCaseIntro(state) {
       applyRouteCopy('world_case_files');
       const current = state?.current || {};
-      const pattern = state?.pattern || {};
       this.updateWorldCaseArtifact(state);
+      const place = [current.city, current.country].filter(Boolean).join(', ');
+      const sceneLine = [current.sceneTitle, place].filter(Boolean).join(' — ');
+      const briefing = current.chapterSummary || 'Gather evidence, narrow the world atlas, and travel when the case is strong enough.';
       els.narrative.innerHTML = `
         <div class="carmen-intro-card carmen-world-case-card">
           <div class="carmen-intro-badge">WORLD CASE FILES</div>
           <div class="carmen-intro-artifact">${esc(state?.caseTitle || 'Open cultural theft')}</div>
-          <div class="carmen-intro-origin">Current chapter: <strong>${esc(current.chapterTitle || current.city || current.country || '')}</strong></div>
-          <div class="carmen-intro-origin">Current scene: <strong>${esc(current.sceneTitle || current.city || current.country || '')}</strong></div>
-          ${current.biographyStage ? `<div class="carmen-intro-origin">Biography stage: <strong>${esc(current.biographyStage)}</strong></div>` : ''}
-          <div class="carmen-intro-suspect">🔎 Pattern: <span class="thief-name">${esc(pattern.label || 'Unknown')}</span></div>
-          <div class="carmen-intro-mission">${esc(pattern.summary || 'Gather evidence, narrow the world atlas, and travel when the case is strong enough.')}</div>
+          ${sceneLine ? `<div class="carmen-intro-origin">${esc(sceneLine)}</div>` : ''}
+          <div class="carmen-intro-mission">${esc(briefing)}</div>
         </div>
       `;
       els.notebookTabs.style.display = '';
@@ -1502,12 +1501,12 @@ export function createCarmenUI(container, flagCodes) {
         ? `
           <div class="carmen-world-biography">
             ${route.map((stop, index) => {
-              const active = index === current.leg;
-              const visited = index < current.leg;
+              const active = index === current.stopIndex;
+              const visited = index < current.stopIndex;
               return `
                 <div class="carmen-world-biography-stop${active ? ' active' : ''}${visited ? ' visited' : ''}">
-                  <div class="carmen-world-biography-stage">${esc(stop.chapterTitle || stop.biographyStage || `Stop ${index + 1}`)}</div>
-                  <div class="carmen-world-biography-place">${esc(stop.city || stop.country || '')}</div>
+                  <div class="carmen-world-biography-stage">${esc(stop.title || stop.scene || stop.city || `Stop ${index + 1}`)}</div>
+                  <div class="carmen-world-biography-place">${esc([stop.city, stop.country].filter(Boolean).join(', '))}</div>
                 </div>
               `;
             }).join('')}
@@ -1519,16 +1518,14 @@ export function createCarmenUI(container, flagCodes) {
           <b>${esc(title)}:</b> ${esc(items.join(', '))}
         </div>
       ` : '';
-      const stageHtml = current.biographyStage
+      const stageHtml = (current.sceneTitle || current.city)
         ? `
           <div class="carmen-world-board-section">
             <div class="carmen-world-section-title">Case Progression</div>
             ${biographyHtml}
             <div class="carmen-world-stage-card">
-              <div class="carmen-world-evidence-type">${esc(current.biographyStage)}</div>
-              <div class="carmen-world-evidence-title">${esc(current.chapterTitle || current.scene || current.city || current.country || 'Current scene')}</div>
+              <div class="carmen-world-evidence-title">${esc(current.sceneTitle || current.scene || current.city || current.country || 'Current scene')}</div>
               <div class="carmen-world-evidence-text">${esc(current.chapterSummary || current.learningGoal || '')}</div>
-              <div class="carmen-world-evidence-meta">Scene ${esc(String((current.sceneIndex || 0) + 1))} of ${esc(String(current.sceneCount || 1))}: ${esc(current.sceneTitle || current.scene || current.city || '')}</div>
               ${current.thiefClaim ? `<div class="carmen-world-stage-claim"><b>Thief claim:</b> ${esc(current.thiefClaim)}</div>` : ''}
               ${current.truthComplication ? `<div class="carmen-world-stage-claim"><b>Complication:</b> ${esc(current.truthComplication)}</div>` : ''}
               ${worksHtml('Works in play', activeWorks, 'works')}
@@ -2933,6 +2930,7 @@ function formatArtifactBack(artifact, panel = null) {
   const country = artifact.country || '';
   const hint = artifact.hint || '';
   const summary = (panel?.summary || artifact.summary || '').trim();
+  const briefingIntro = (artifact.briefingIntro || '').trim();
   const sentences = summary ? summary.split(/(?<=[.!?])\s+/).filter(Boolean) : [];
   const lead = panel?.currentObjective || sentences[0] || 'Reference note unavailable.';
   const work = panel?.primaryWork || null;
@@ -2942,6 +2940,10 @@ function formatArtifactBack(artifact, panel = null) {
     [work.city, work.country].filter(Boolean).join(', '),
   ].filter(Boolean) : [];
 
+  const briefingHtml = briefingIntro
+    ? briefingIntro.split(/\n\n+/).map(p => `<p class="carmen-artifact-summary carmen-artifact-briefing-paragraph">${esc(p)}</p>`).join('')
+    : '';
+
   return `
     <div class="carmen-artifact-backdrop">
       <div class="carmen-artifact-back-type">${panel ? 'CASE EVIDENCE' : 'ARCHIVE NOTE'}</div>
@@ -2949,8 +2951,8 @@ function formatArtifactBack(artifact, panel = null) {
       ${(work?.artist || country) ? `<div class="carmen-artifact-back-origin">${esc(work?.artist || country)}</div>` : ''}
       <div class="carmen-artifact-note">
         <div class="carmen-artifact-note-clip"></div>
-        <div class="carmen-artifact-note-label">${panel ? 'CURRENT READ' : 'FIELD NOTE'}</div>
-        <div class="carmen-artifact-summary">${esc(lead)}</div>
+        <div class="carmen-artifact-note-label">${panel ? 'CURRENT READ' : (briefingIntro ? 'CASE BRIEFING' : 'FIELD NOTE')}</div>
+        ${briefingHtml || `<div class="carmen-artifact-summary">${esc(lead)}</div>`}
         ${workLines.length ? `<div class="carmen-artifact-summary carmen-artifact-summary-secondary">${esc(workLines.join(' • '))}</div>` : ''}
         ${work?.description ? `<div class="carmen-artifact-summary carmen-artifact-summary-secondary">${esc(work.description)}</div>` : ''}
         ${hint ? `<div class="carmen-artifact-geo-note"><span>Geo note:</span> ${esc(hint)}</div>` : ''}
