@@ -231,6 +231,12 @@ export function createCarmenUI(container, flagCodes) {
   let narratorCaptionCleanupTimer = null;
   let innerMonologueTimer = null;
   let innerMonologueCleanupTimer = null;
+
+  container.addEventListener('click', () => {
+    if (els.innerMonologue?.classList.contains('is-visible')) {
+      hideInnerMonologue(true);
+    }
+  }, true);
   const caseCardState = {
     siteName: 'a priceless artifact',
     startCountry: '',
