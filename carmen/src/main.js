@@ -870,18 +870,7 @@ let worldCaseTravelSelection = { mode: 'country', country: '', cities: [], selec
 const worldCaseLocationClueMemory = new Map();
 
 function getWorldCaseData() {
-  const cases = worldCaseFilesData?.cases || [];
-  if (!cases.length) return null;
-  const params = new URLSearchParams(window.location.search);
-  const requested = params.get('case') || params.get('worldCase');
-  if (requested) {
-    return cases.find(item => item.id === requested) || cases[0];
-  }
-  const caseIndex = Number(params.get('caseIndex') || params.get('worldCaseIndex'));
-  if (Number.isInteger(caseIndex) && caseIndex >= 1 && caseIndex <= cases.length) {
-    return cases[caseIndex - 1];
-  }
-  return cases[0];
+  return worldCaseFilesData?.cases?.[0] || null;
 }
 
 function getWorldCaseTravelCities(country) {

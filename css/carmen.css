@@ -1571,6 +1571,22 @@ body {
   max-width: 44rem;
 }
 
+.carmen-dossier-section.active {
+  border-color: rgba(228, 191, 106, 0.42);
+  box-shadow: inset 0 1px 0 rgba(255, 245, 223, 0.06), 0 0 0 1px rgba(228, 191, 106, 0.18);
+}
+
+.carmen-dossier-section.past {
+  opacity: 0.78;
+}
+
+.carmen-dossier-empty-stop {
+  font-size: 0.92rem;
+  font-style: italic;
+  color: rgba(224, 213, 196, 0.55);
+  padding: 0.25rem 0 0.1rem;
+}
+
 .carmen-dossier-visual {
   margin: 0.2rem 0 0.75rem 1.55rem;
   padding: 0.5rem;

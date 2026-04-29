@@ -1464,100 +1464,89 @@ export function createCarmenUI(container, flagCodes) {
 
     updateWorldCaseBoard(state) {
       worldCaseBoardState = state || null;
-      const confidence = state?.confidence || {};
-      const summary = state?.summary || {};
       const current = state?.current || {};
-      const currentScene = state?.currentScene || {};
       const route = state?.route || [];
-      const steps = [
-        ['Lead found', confidence.leadFound],
-        ['Pattern supported', confidence.patternSupported],
-        ['Contradictions checked', confidence.contradictionsChecked],
-        ['Destination likely', confidence.destinationLikely],
-        ['Evidence ready', confidence.evidenceReady],
-      ];
-      if (confidence.puzzleSolved !== undefined) steps.push(['Puzzle solved', confidence.puzzleSolved]);
       const evidence = state?.evidence || [];
       const deadEnds = state?.deadEnds || [];
-      const activeWorks = current.activeWorks || [];
-      const threatenedWorks = current.threatenedWorks || [];
-      const stolenWorks = current.stolenWorks || [];
-      const evidenceHtml = evidence.length
-        ? evidence.slice().reverse().map(item => `
-          <div class="carmen-world-evidence-card">
-            <div class="carmen-world-evidence-type">${esc(item.category || 'Evidence')}</div>
-            <div class="carmen-world-evidence-title">${esc(item.title || item.action || 'Field note')}</div>
-            <div class="carmen-world-evidence-text">${esc(item.text || '')}</div>
-            <div class="carmen-world-evidence-meta">${esc(item.foundInCity || '')}, ${esc(item.foundInCountry || '')}</div>
+
+      const trailStops = route
+        .map((stop, index) => ({ stop, index }))
+        .slice(0, (current.stopIndex ?? 0) + 1)
+        .reverse();
+
+      const evidenceByStop = new Map();
+      for (const e of evidence) {
+        const key = e.stopId || e.sceneId;
+        if (!key) continue;
+        if (!evidenceByStop.has(key)) evidenceByStop.set(key, []);
+        evidenceByStop.get(key).push(e);
+      }
+      for (const arr of evidenceByStop.values()) arr.reverse();
+
+      const knownStopIds = new Set(route.map(s => s.id));
+      const orphans = evidence
+        .filter(e => !knownStopIds.has(e.stopId || e.sceneId))
+        .slice()
+        .reverse();
+
+      const iconForCategory = (cat) =>
+        cat === 'Cultural Evidence' ? '🎭'
+        : cat === 'Confirmation' ? '✅'
+        : cat === 'Puzzle Evidence' ? '🧩'
+        : '🧭';
+
+      const entryHtml = (e) => {
+        const text = e.corroborated === false && e.vagueText ? e.vagueText : e.text || '';
+        const prefix = e.title || e.category || 'Clue';
+        return `
+          <div class="carmen-dossier-entry">
+            <span class="carmen-dossier-emoji">${iconForCategory(e.category)}</span>
+            <span class="carmen-dossier-prefix">${esc(prefix)}:</span>
+            <span class="carmen-dossier-text">${esc(text)}</span>
           </div>
-        `).join('')
-        : '<div class="carmen-dossier-empty">No evidence gathered yet.</div>';
+        `;
+      };
+
+      const stopSectionHtml = ({ stop, index }) => {
+        const active = index === current.stopIndex;
+        const entries = evidenceByStop.get(stop.id) || [];
+        const placeLabel = [stop.city, stop.country].filter(Boolean).join(', ') || stop.scene || `Stop ${index + 1}`;
+        const body = entries.length
+          ? entries.map(entryHtml).join('')
+          : `<div class="carmen-dossier-empty-stop">${active ? `No clues from ${esc(stop.city || 'this stop')} yet — work the scene.` : 'No clues recorded here.'}</div>`;
+        return `
+          <div class="carmen-dossier-section${active ? ' active' : ' past'}">
+            <div class="carmen-dossier-stop">${esc(placeLabel)}</div>
+            ${body}
+          </div>
+        `;
+      };
+
+      const sectionsHtml = trailStops.map(stopSectionHtml).join('');
+      const orphansHtml = orphans.length
+        ? `
+          <div class="carmen-dossier-section">
+            <div class="carmen-dossier-stop">Unfiled</div>
+            ${orphans.map(entryHtml).join('')}
+          </div>
+        `
+        : '';
+
       const deadEndHtml = deadEnds.length
         ? deadEnds.slice().reverse().map(item => `
           <div class="carmen-world-dead-end">❌ ${esc(item.country)} — ${esc(item.explanation)}</div>
         `).join('')
         : '';
-      const biographyHtml = route.length
-        ? `
-          <div class="carmen-world-biography">
-            ${route.map((stop, index) => {
-              const active = index === current.stopIndex;
-              const visited = index < current.stopIndex;
-              return `
-                <div class="carmen-world-biography-stop${active ? ' active' : ''}${visited ? ' visited' : ''}">
-                  <div class="carmen-world-biography-stage">${esc(stop.title || stop.scene || stop.city || `Stop ${index + 1}`)}</div>
-                  <div class="carmen-world-biography-place">${esc([stop.city, stop.country].filter(Boolean).join(', '))}</div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-        `
-        : '';
-      const worksHtml = (title, items, className) => items.length ? `
-        <div class="carmen-world-stage-claim ${className}">
-          <b>${esc(title)}:</b> ${esc(items.join(', '))}
-        </div>
-      ` : '';
-      const stageHtml = (current.sceneTitle || current.city)
-        ? `
-          <div class="carmen-world-board-section">
-            <div class="carmen-world-section-title">Case Progression</div>
-            ${biographyHtml}
-            <div class="carmen-world-stage-card">
-              <div class="carmen-world-evidence-title">${esc(current.sceneTitle || current.scene || current.city || current.country || 'Current scene')}</div>
-              <div class="carmen-world-evidence-text">${esc(current.chapterSummary || current.learningGoal || '')}</div>
-              ${current.thiefClaim ? `<div class="carmen-world-stage-claim"><b>Thief claim:</b> ${esc(current.thiefClaim)}</div>` : ''}
-              ${current.truthComplication ? `<div class="carmen-world-stage-claim"><b>Complication:</b> ${esc(current.truthComplication)}</div>` : ''}
-              ${worksHtml('Works in play', activeWorks, 'works')}
-              ${worksHtml('At risk', threatenedWorks, 'threatened')}
-              ${worksHtml('Already hit', stolenWorks, 'stolen')}
-              ${current.escalationText ? `<div class="carmen-world-stage-claim"><b>Escalation:</b> ${esc(current.escalationText)}</div>` : ''}
-            </div>
-          </div>
-        `
-        : '';
+
       els.dossierBody.innerHTML = `
         <div class="carmen-world-board">
           <div class="carmen-world-board-head">
-            <div>
-              <div class="carmen-panel-badge">EVIDENCE BOARD</div>
-              <div class="carmen-panel-title">${esc(state?.caseTitle || 'World Case Files')}</div>
-            </div>
-            <div class="carmen-world-candidate-count">
-              <b>${summary.strong || 0}</b> strong
-              <span>${summary.pattern || 0} pattern</span>
-              <span>${summary.partial || 0} partial</span>
-            </div>
+            <div class="carmen-panel-badge">EVIDENCE BOARD</div>
+            <div class="carmen-panel-title">${esc(state?.caseTitle || 'World Case Files')}</div>
           </div>
-          <div class="carmen-world-confidence">
-            ${steps.map(([label, active]) => `
-              <span class="carmen-world-confidence-step${active ? ' active' : ''}">${esc(label)}</span>
-            `).join('')}
-          </div>
-          ${stageHtml}
-          <div class="carmen-world-board-section">
-            <div class="carmen-world-section-title">Collected Evidence</div>
-            ${evidenceHtml}
+          <div class="carmen-dossier-page">
+            ${sectionsHtml}
+            ${orphansHtml}
           </div>
           ${deadEndHtml ? `<div class="carmen-world-board-section"><div class="carmen-world-section-title">Contradictions</div>${deadEndHtml}</div>` : ''}
         </div>
