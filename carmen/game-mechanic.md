@@ -1,5 +1,7 @@
 # Carmen Game Mechanic Analysis
 
+> Legacy analysis note: `carmen/carmen-game-reference.md` is the canonical mechanics reference for future Carmen work. Keep that file updated when changing player-facing rules. This document remains as historical analysis and may contain changelog-style phrasing.
+
 ## Overview
 
 The Carmen mode is now several related games built on the same route-chase engine:

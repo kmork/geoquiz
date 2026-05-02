@@ -25,7 +25,7 @@ Follow `.editorconfig`: UTF-8, LF endings, 2-space indentation, and trimmed trai
 There is no automated test suite in this repository. Verify changes manually in the browser against the affected pages and flows. Check desktop and mobile layouts, dark theme only, keyboard/touch interactions, and any related daily challenge or continent-filter behavior before opening a PR.
 
 ## Carmen Mechanics Documentation
-When changing Carmen game mechanics, scoring, campaign progression, Open Cases behavior, suspect deduction, Interpol behavior, clue generation, or other player-facing Carmen rules, keep `carmen/game-mechanic.md` up to date in the same change. To save tokens and avoid re-deriving the game model, consult and cite that file first when Carmen mechanics context is needed.
+When changing Carmen game mechanics, scoring, campaign progression, Open Cases behavior, suspect deduction, Interpol behavior, clue generation, or other player-facing Carmen rules, keep `carmen/carmen-game-reference.md` up to date in the same change. To save tokens and avoid re-deriving the game model, consult and cite that file first when Carmen mechanics context is needed.
 
 ## Data & Asset Notes
 Large generated assets and reference data already live in-repo. When changing map data, keep the compressed `data/*.geojson.gz` files in sync. When adding media, use repository conventions and place files alongside similar assets in `img/`, `img/heritage/`, or `carmen/`.

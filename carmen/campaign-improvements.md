@@ -85,7 +85,7 @@ Do not turn this into a tutorial wall. The board should be inspectable, atmosphe
   - case 10 should clearly frame the alias hunt.
 - Confirm Open Cases do not show campaign board progression.
 - Confirm failed campaign cases do not unlock new board evidence.
-- Confirm `carmen/game-mechanic.md` is updated with the new board and narrative progression rules when this feature is implemented.
+- Confirm `carmen/carmen-game-reference.md` is updated with the new board and narrative progression rules when this feature is implemented.
 
 ## Assumptions
 

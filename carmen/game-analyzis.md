@@ -1,5 +1,7 @@
 # Carmen Sandiego — Exhaustive Game Analysis
 
+> Legacy analysis note: `carmen/carmen-game-reference.md` is the canonical mechanics reference for future Carmen work. Keep that file updated when changing player-facing rules. This document remains as historical analysis and may contain stale implementation details.
+
 > **Updated for the 10-case campaign.** The rookie/detective/ace difficulty picker has been removed. The game is now a single progression-driven campaign of 10 cases that ramps in pressure as the player closes in on Carmen Sandiego herself in the final case. See the **Campaign Progression** section below for the new mechanics layered on top of everything else in this document.
 
 ## A. NARRATIVE & STORY
