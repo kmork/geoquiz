@@ -172,7 +172,7 @@
           "id": "paris-opening",
           "sceneType": "crime_scene",
           "title": "The Louvre breach",
-          "chapterSummary": "October 1953. The Louvre's Salle des États is empty where La Joconde hung. The Service de Restitution des Œuvres d'Art is still cleaning up half a decade of postwar paperwork, and the dispatch room has lost a working day's records to water damage. Whatever the thief left behind is in the photos, the porter's chair, and a half-burned shipping ledger.",
+          "sceneSummary": "October 1953. The Louvre's Salle des États is empty where La Joconde hung. The Service de Restitution des Œuvres d'Art is still cleaning up half a decade of postwar paperwork, and the dispatch room has lost a working day's records to water damage. Whatever the thief left behind is in the photos, the porter's chair, and a half-burned shipping ledger.",
           "city": "Paris",
           "country": "France",
           "scene": "Louvre theft scene",
@@ -495,11 +495,10 @@
               "preliminaryCorroborated": false,
               "staleUpgrade": {
                 "upgradedTitle": "Modane corridor confirmed",
-                "upgradedText": "The rider's exclusions and its protected-holdings clause both line up with the Modane corridor — Belgium, Spain, and the Netherlands are explicitly out.",
+                "upgradedText": "The rider's exclusions and its protected-holdings clause both line up with the Modane corridor — Belgium and the Netherlands are explicitly out.",
                 "upgradedTags": [
                   "country:Italy",
                   "exclude:Belgium",
-                  "exclude:Spain",
                   "exclude:Netherlands",
                   "route:Modane",
                   "confirmation"
@@ -637,12 +636,11 @@
               "category": "Route Evidence",
               "action": "Check courier redirection",
               "title": "Northbound freight swap",
-              "text": "The same courier number that shadowed the Louvre theft now points north from Italy toward Flanders rather than back toward France or down toward Spain.",
+              "text": "The same courier number that shadowed the Louvre theft now points north from Italy toward Flanders rather than back toward France.",
               "tags": [
                 "country:Belgium",
                 "city:Ghent",
-                "exclude:France",
-                "exclude:Spain"
+                "exclude:France"
               ],
               "strength": 3
             },
@@ -707,7 +705,7 @@
           "id": "ghent-cathedral",
           "sceneType": "archive",
           "title": "Altarpiece night watch",
-          "chapterSummary": "The Ghent chapter proves the thief can switch from Italian icons to Flemish prestige, then pivot the route back into Paris through forged comparative scholarship.",
+          "sceneSummary": "The Ghent stop proves the thief can switch from Italian icons to Flemish prestige, then pivot the route back into Paris through forged comparative scholarship.",
           "city": "Ghent",
           "country": "Belgium",
           "scene": "St Bavo's Cathedral side archive",
@@ -777,12 +775,11 @@
               "category": "Route Evidence",
               "action": "Inspect courier transfer",
               "title": "Return to Paris",
-              "text": "The courier path heads for Paris, not for Rome or Madrid. ACME reads it as a paperwork move rather than another immediate chapel strike.",
+              "text": "The courier path heads for Paris, not for Rome. ACME reads it as a paperwork move rather than another immediate chapel strike.",
               "tags": [
                 "country:France",
                 "city:Paris",
-                "exclude:Italy",
-                "exclude:Spain"
+                "exclude:Italy"
               ],
               "strength": 3
             },
@@ -967,7 +964,7 @@
           "scene": "Vatican night watch",
           "lat": 41.9029,
           "lon": 12.4545,
-          "chapterSummary": "ACME reaches Rome in time to intercept the thief during the attempted Vatican strike.",
+          "sceneSummary": "ACME reaches Rome in time to intercept the thief during the attempted Vatican strike.",
           "learningGoal": "Close the case by proving the pattern and arriving before the final attack lands.",
           "investigationPrompt": "Use the final Vatican file to stage the interception and compare the target list against the forged canon the thief has been building all case.",
           "thiefClaim": "The final Vatican strike would have completed the thief's curated Renaissance canon.",
@@ -1005,7 +1002,7 @@
           "id": "paris-return",
           "sceneType": "archive",
           "title": "Archive forgery desk",
-          "chapterSummary": "Back in Paris, ACME discovers the thief is using Louvre authority to stage one final Vatican strike. The route is not ending in France; Paris is the validation desk.",
+          "sceneSummary": "Back in Paris, ACME discovers the thief is using Louvre authority to stage one final Vatican strike. The route is not ending in France; Paris is the validation desk.",
           "city": "Paris",
           "country": "France",
           "scene": "Louvre archive annex",
@@ -1185,11 +1182,10 @@
       ],
       "deadEnds": {
         "default": "The field office found no match for the cultural pattern. At least one strong clue contradicts this destination.",
-        "France": "Paris is important to the case, but not as the next country unless the current chapter explicitly points back there.",
+        "France": "Paris is important to the case, but not as the next country unless the current stop explicitly points back there.",
         "Netherlands": "The trail brushes past northern art routes, but the current evidence points to Ghent in Belgium rather than Amsterdam.",
-        "Spain": "The thief is climbing a Renaissance canon path, not turning toward Iberian museum freight.",
-        "Belgium": "Belgium matters only after the Italian chapter is fully solved.",
-        "Italy": "Italy anchors the pattern, but ACME still needs the chapter-specific proof before moving there."
+        "Belgium": "Belgium matters only after Milan is fully solved.",
+        "Italy": "Italy anchors the pattern, but ACME still needs the stop-specific proof before moving there."
       }
     },
     {

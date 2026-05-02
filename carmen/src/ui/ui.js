@@ -1459,7 +1459,7 @@ export function createCarmenUI(container, flagCodes) {
       this.updateWorldCaseArtifact(state);
       const place = [current.city, current.country].filter(Boolean).join(', ');
       const sceneLine = [current.sceneTitle, place].filter(Boolean).join(' — ');
-      const briefing = current.chapterSummary || 'Gather evidence, narrow the world atlas, and travel when the case is strong enough.';
+      const briefing = current.sceneSummary || 'Gather evidence, narrow the world atlas, and travel when the case is strong enough.';
       els.narrative.innerHTML = `
         <div class="carmen-intro-card carmen-world-case-card">
           <div class="carmen-intro-badge">WORLD CASE FILES</div>

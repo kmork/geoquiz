@@ -179,7 +179,7 @@ export class WorldCaseFilesLogic {
       targetCity: targetStop?.city || '',
       targetCountry: targetStop?.country || '',
       evidenceCount: this.evidence.length,
-      chapterSummary: currentStop.chapterSummary || '',
+      sceneSummary: currentStop.sceneSummary || '',
       sceneTitle: fieldLocation?.kind && fieldLocation.kind !== 'scene'
         ? (fieldLocation.city || fieldLocation.country || '')
         : (currentStop.title || currentStop.scene || currentStop.city || ''),
@@ -239,7 +239,7 @@ export class WorldCaseFilesLogic {
       caseTitle: this.caseData.title,
       sceneTitle: stop.title || stop.scene || stop.city || '',
       currentObjective: stop.investigationPrompt || stop.learningGoal || '',
-      summary: stop.escalationText || stop.chapterSummary || this.caseData.artifact?.hint || '',
+      summary: stop.escalationText || stop.sceneSummary || this.caseData.artifact?.hint || '',
       primaryWork,
       works,
       evidenceImages: [

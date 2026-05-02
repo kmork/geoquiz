@@ -1420,7 +1420,7 @@ async function handleWorldTravel(selection) {
   }
 
   if (result.type === 'advanced') {
-    ui.showNarratorCaption(`Lead proven. ACME opens the next chapter in ${result.currentScene.city}, ${result.currentScene.country}.`, 7200);
+    ui.showNarratorCaption(`Lead proven. ACME opens the next stop in ${result.currentScene.city}, ${result.currentScene.country}.`, 7200);
     ui.clearClues();
     worldCaseHintIndex = 0;
     worldCaseHintDetailsOpen = false;
