@@ -1,5 +1,5 @@
 import { CarmenGameLogic, SUSPECTS } from './core/game-logic.js';
-import { WorldCaseFilesLogic } from './experiments/world-case-files/world-case-logic.js';
+import { WorldCaseFilesLogic } from './campaigns/renaissance/renaissance-wave.js';
 import { createCarmenUI } from './ui/ui.js';
 import { CarmenRouteRenderer } from './ui/carmen-route-renderer.js';
 import { loadGeoJSON } from '../../js/geojson-loader.js';
@@ -51,6 +51,35 @@ const initOverlay = document.getElementById('init-overlay');
 const carmenFront = document.getElementById('carmen-front');
 const carmenFrontImg = document.getElementById('carmen-front-img');
 const carmenHeader = document.getElementById('carmen-header');
+const carmenMobileGate = document.getElementById('carmen-mobile-gate');
+
+function isPhoneSizedCarmenDevice() {
+  const coarseNoHover = typeof window.matchMedia === 'function'
+    && window.matchMedia('(hover: none) and (pointer: coarse)').matches;
+  const touchOnly = navigator.maxTouchPoints > 0
+    && typeof window.matchMedia === 'function'
+    && !window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const shortSide = Math.min(window.innerWidth || 0, window.innerHeight || 0);
+  const longSide = Math.max(window.innerWidth || 0, window.innerHeight || 0);
+  return (coarseNoHover || touchOnly) && shortSide <= 520 && longSide <= 980;
+}
+
+function showPhoneGate() {
+  document.body.classList.add('carmen-phone-gated');
+  if (carmenMobileGate) carmenMobileGate.setAttribute('aria-hidden', 'false');
+  if (carmenFront) carmenFront.style.display = 'none';
+  if (carmenHeader) carmenHeader.style.display = 'none';
+  if (gameContent) gameContent.style.display = 'none';
+  if (finalOverlay) finalOverlay.style.display = 'none';
+  if (initOverlay) initOverlay.style.display = 'none';
+  const confettiCanvas = document.getElementById('confetti');
+  if (confettiCanvas) confettiCanvas.style.display = 'none';
+}
+
+if (isPhoneSizedCarmenDevice()) {
+  showPhoneGate();
+  await new Promise(() => {});
+}
 
 const confetti = initConfetti('confetti');
 let cityPoiDataRef = null;
