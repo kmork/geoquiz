@@ -188,9 +188,11 @@ updateFrontImageForMode();
 })();
 
 const INTERPOL_COST_HOURS = 3;
+const INTERPOL_COST_POINTS_WORLD_CASE = 250;
 const SKYLINE_FINAL_PROOF_PENALTY_HOURS = 4;
 
 let interpolViewedThisGame = new Set();
+let worldCaseInterpolPenalty = 0;
 let interpolMarkedThisCase = new Set();
 let activeInterpolSuspectName = null;
 let ambientHintStopsShown = new Set();
@@ -419,6 +421,12 @@ function getVisibleInterpolSuspects() {
       });
   }
 
+  if (isWorldCaseFilesMode()) {
+    return source
+      .slice()
+      .sort((a, b) => a.name.localeCompare(b.name));
+  }
+
   const visibleNames = new Set([
     ...activeArchive.map(s => s.name),
     ...allViewed,
@@ -456,6 +464,12 @@ function refreshInterpolList() {
   const unlocked = getUnlockedSuspects();
   const allViewed = getEffectiveInterpolViewed();
   const sortedSuspects = getVisibleInterpolSuspects();
+  const listOptions = isWorldCaseFilesMode()
+    ? {
+        costLabel: `-${INTERPOL_COST_POINTS_WORLD_CASE}`,
+        panelCostText: `Consult archive: <strong>${INTERPOL_COST_POINTS_WORLD_CASE} points</strong> per new file`,
+      }
+    : null;
   ui.showInterpolList(sortedSuspects, unlocked, allViewed, interpolMarkedThisCase, (suspect) => {
     activeInterpolSuspectName = suspect.name;
     // All suspects with photos cost time to view — including Carmen.
@@ -466,6 +480,25 @@ function refreshInterpolList() {
     const status = getInterpolStatus(suspect.name);
 
     if (hasPhoto && !alreadyViewed) {
+      if (isWorldCaseFilesMode()) {
+        worldCaseInterpolPenalty += INTERPOL_COST_POINTS_WORLD_CASE;
+        interpolViewedThisGame.add(suspect.name);
+        saveInterpolViewed(suspect.name);
+        refreshWorldCaseUi();
+        refreshInterpolList();
+        const thefts = getTheftHistory()[suspect.name] || [];
+        const intel = buildInterpolProfileIntel(suspect, thefts);
+        ui.showInterpolProfile(
+          suspect,
+          thefts,
+          status,
+          getInterpolProfilePhase(suspect.name),
+          interpolMarkedThisCase.has(suspect.name),
+          toggleInterpolMark,
+          intel,
+        );
+        return;
+      }
       logic.spendTime(INTERPOL_COST_HOURS);
       updateClock();
       if (checkTimeExpired()) return;
@@ -503,7 +536,7 @@ function refreshInterpolList() {
       toggleInterpolMark,
       intel,
     );
-  });
+  }, listOptions);
 }
 
 function toggleInterpolMark(suspectName) {
@@ -1041,7 +1074,7 @@ function refreshWorldCaseUi(focusTravel = false) {
   const state = worldCase.getBoardState();
   const fieldCountry = worldCase.getCurrentFieldLocation?.()?.country || worldCase.currentCountry;
   ui.updateMissions([], true, 1, 1, getMissionLabel());
-  ui.updateScore(Math.max(0, 5000 - (worldCase.evidence.length * 75) - (worldCase.deadEnds.length * 250)));
+  ui.updateScore(Math.max(0, 5000 - (worldCase.evidence.length * 75) - (worldCase.deadEnds.length * 250) - worldCaseInterpolPenalty));
   ui.setWorldCaseStatus(state.statusBar);
   ui.updateWorldCaseArtifact(state);
   ui.updateWorldCaseBoard(state);
@@ -1468,6 +1501,10 @@ async function startWorldCaseFiles(runConfig) {
   worldCaseSelectedContext = { type: 'scene' };
   worldCaseTravelSelection = { mode: 'country', country: '', cities: [], selectedCity: '' };
   worldCaseLocationClueMemory.clear();
+  worldCaseInterpolPenalty = 0;
+  interpolViewedThisGame = new Set();
+  interpolMarkedThisCase = new Set();
+  activeInterpolSuspectName = null;
   const intro = worldCase.start();
 
   if (isFirstGame) {
@@ -1494,6 +1531,7 @@ async function startWorldCaseFiles(runConfig) {
       mode: WORLD_CASE_FILES_MODE,
       missionCopy: runConfig.briefingCopy,
       caseTitle: caseData.title,
+      suspectName: caseData.suspect,
     }
   );
 
@@ -1501,7 +1539,7 @@ async function startWorldCaseFiles(runConfig) {
   if (carmenHeader) carmenHeader.style.display = '';
   gameContent.style.display = '';
 
-  ui.showIntro('Unknown cultural thief', intro.artifact, `${caseData.start.scene}, ${caseData.start.city}`, {
+  ui.showIntro(caseData.suspect || 'Unknown cultural thief', intro.artifact, `${caseData.start.scene}, ${caseData.start.city}`, {
     mode: WORLD_CASE_FILES_MODE,
   });
   ui.resetDossier();
@@ -1510,6 +1548,7 @@ async function startWorldCaseFiles(runConfig) {
   ui.clearWitnessReports();
   ui.showWorldCaseIntro(worldCase.getBoardState());
   refreshWorldCaseUi();
+  refreshInterpolList();
   worldCaseInnerMonologueFired = new Set();
   setTimeout(() => triggerWorldInnerMonologue('enter'), 600);
 }

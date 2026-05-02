@@ -113,7 +113,7 @@ export function createCarmenUI(container, flagCodes) {
                   <div class="carmen-panel-badge">INTERPOL ARCHIVE</div>
                   <div class="carmen-panel-title">Known Criminals</div>
                   <div class="carmen-panel-desc">Browse current case files and compare suspect profiles by hand.</div>
-                  <div class="carmen-panel-cost">Consult archive: <strong>3 hours</strong> per new file</div>
+                  <div class="carmen-panel-cost" id="carmen-interpol-panel-cost">Consult archive: <strong>3 hours</strong> per new file</div>
                 </div>
                 <div class="carmen-interpol-list" id="carmen-interpol-list"></div>
               </div>
@@ -1961,7 +1961,11 @@ export function createCarmenUI(container, flagCodes) {
      * @param {Set} viewedNames — names already viewed this game (free re-view)
      * @param {Function} onView — called with (suspect) when player clicks to view
      */
-    showInterpolList(suspects, unlockedNames, viewedNames, markedNames, onView) {
+    showInterpolList(suspects, unlockedNames, viewedNames, markedNames, onView, options = null) {
+      const paidCostLabel = options?.costLabel || '3h';
+      const panelCostText = options?.panelCostText || 'Consult archive: <strong>3 hours</strong> per new file';
+      const panelCostEl = container.querySelector('#carmen-interpol-panel-cost');
+      if (panelCostEl) panelCostEl.innerHTML = panelCostText;
       let html = '';
       const markedSuspects = suspects.filter(s => markedNames.has(s.name));
       if (markedSuspects.length > 0) {
@@ -1982,7 +1986,7 @@ export function createCarmenUI(container, flagCodes) {
         const initials = s.name.split(/\s+/).map(part => part[0]).slice(0, 2).join('.').toUpperCase();
         if (available) {
           const freeAccess = viewed || inCustody;
-          const costLabel = freeAccess ? 'free' : '3h';
+          const costLabel = freeAccess ? 'free' : paidCostLabel;
           html += `<button class="carmen-interpol-entry${freeAccess ? ' viewed' : ''}${marked ? ' marked' : ''}${inCustody ? ' in-custody' : ''}" data-name="${esc(s.name)}">
             <span class="carmen-interpol-entry-tab"></span>
             <span class="carmen-interpol-entry-icon">${hasPhoto ? '📷' : '🕵️'}</span>
@@ -2269,6 +2273,18 @@ export function createCarmenUI(container, flagCodes) {
           ${mode === 'world_case_files' ? '' : `<div class="carmen-artifact-name">${esc(siteName)}</div>`}
           <div class="carmen-artifact-origin">Last seen in ${esc(startCountry)}</div>
         `;
+        const suspectName = options?.suspectName || '';
+        const suspectBadgeEl = els.briefing.querySelector('.carmen-suspect-badge');
+        const suspectHintEl = els.briefing.querySelector('.carmen-suspect-hint');
+        if (suspectBadgeEl && suspectHintEl) {
+          if (suspectName) {
+            suspectBadgeEl.textContent = `🔍 SUSPECT: ${suspectName.toUpperCase()}`;
+            suspectHintEl.textContent = "ACME's lead suspect — see Interpol file.";
+          } else {
+            suspectBadgeEl.textContent = '🔍 SUSPECT: UNKNOWN';
+            suspectHintEl.textContent = 'Gather clues to identify the thief';
+          }
+        }
         els.briefingMission.textContent = '';
         els.briefingNote.textContent = briefingNote || '';
         els.briefingNote.style.display = briefingNote ? '' : 'none';
@@ -2354,7 +2370,7 @@ export function createCarmenUI(container, flagCodes) {
           <div class="carmen-intro-badge">ACTIVE CASE</div>
           <div class="carmen-intro-artifact">${esc(siteName)}</div>
           <div class="carmen-intro-origin">Stolen from <strong>${esc(startCountry)}</strong></div>
-          <div class="carmen-intro-suspect">🔍 Suspect: <span class="thief-name">Unknown</span></div>
+          <div class="carmen-intro-suspect">🔍 Suspect: <span class="thief-name">${esc(caseCardState.thiefName)}</span></div>
           <div class="carmen-intro-mission">${esc(copy.introMission)}</div>
         </div>
       `;

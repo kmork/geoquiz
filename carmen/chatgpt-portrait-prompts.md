@@ -296,6 +296,12 @@ Velvet Cipher, black-haired cryptography thief from Tallinn with tattoo, cool an
 Belladonna Vane, black-haired international socialite and suspected diplomatic-cover thief, elegant and perfectly composed, tailored deep-red coat with refined rather than theatrical styling, immaculate grooming, controlled posture, intelligent knowing eyes that subtly echo Carmen Sandiego, poised expression, polished false-identity energy, high-class passport-and-consulate world, deep red black and muted wine palette. Keep her portrait-focused and plausible as a separate suspect at first glance, but with a few quiet Carmen cues on closer inspection.
 ```
 
+### Ms Pentimento
+
+```text
+Ms Pentimento, auburn-haired Florentine art-restorer-turned-forger, 1953 postwar look, classic Italian oval face with sculpted cheekbones, refined Florentine nose, alert appraising amber-hazel eyes, composed knowing smile, sultry but controlled, auburn waves swept back, silver loupe on a fine chain as the single readable accessory, tailored dark olive or warm umber blouse with restrained collar, cultivated dangerous beauty, palette of warm umber, oxblood, and aged-gold accents on a subdued studio background. Keep her unmistakably a 1953 portrait — glamorous and intelligent rather than modern fashion-editorial.
+```
+
 ## Recommended Workflow
 
 Paste prompts in this order:

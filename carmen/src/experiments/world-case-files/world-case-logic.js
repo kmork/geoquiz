@@ -1268,6 +1268,7 @@ export class WorldCaseFilesLogic {
     }
     return {
       caseTitle: this.caseData.title,
+      suspect: this.caseData.suspect || '',
       pattern: this.caseData.pattern,
       current: this.getProgress(),
       confidence: this.getConfidence(),

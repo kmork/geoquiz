@@ -915,5 +915,25 @@
       "mouth": "small knowing smile",
       "extra": "controlled expression, tattoo-balanced asymmetry"
     }
+  },
+  {
+    "name": "Ms Pentimento",
+    "hair": "auburn",
+    "accessory": "silver loupe",
+    "hobby": "art restoration",
+    "vehicle": "wagon-lit",
+    "origin": "Florence, Italy",
+    "knownRegions": [
+      "Europe"
+    ],
+    "geoFact": "Has signed authentication papers in every Renaissance corridor city — Florence, Rome, Milan, Venice, Ghent, Bruges, Antwerp.",
+    "quirk": "Hides a tiny pentimento — an underlying detail visible only under raking light — in every forgery she signs",
+    "faceProfile": {
+      "faceShape": "classic Italian oval with sculpted cheekbones",
+      "nose": "refined Florentine nose",
+      "eyes": "amber-hazel eyes, alert and appraising",
+      "mouth": "composed knowing smile",
+      "extra": "auburn waves swept back, silver loupe on a fine chain, 1953 tailored silhouette, sultry but composed"
+    }
   }
 ]

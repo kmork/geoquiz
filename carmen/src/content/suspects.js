@@ -186,6 +186,10 @@ export const SUSPECTS = [
     origin: 'Tallinn, Estonia', knownRegions: ['Europe', 'Asia'],
     geoFact: 'Estonia is one of the most digitally advanced nations — 99% of government services are online.',
     quirk: 'Leaves encrypted clues that take weeks to decode', img: 'carmen/img/Velvet Cipher.png' },
+  { name: 'Ms Pentimento', hair: 'auburn', accessory: 'silver loupe', hobby: 'art restoration', vehicle: 'wagon-lit',
+    origin: 'Florence, Italy', knownRegions: ['Europe'],
+    geoFact: 'Has signed authentication papers in every Renaissance corridor city — Florence, Rome, Milan, Venice, Ghent, Bruges, Antwerp.',
+    quirk: 'Hides a tiny pentimento — an underlying detail visible only under raking light — in every forgery she signs', img: 'carmen/img/Ms Pentimento.png' },
 ];
 
 export const SUSPECT_ATTRIBUTES = ['hair', 'accessory', 'hobby', 'vehicle'];
@@ -202,19 +206,19 @@ const ATTRIBUTE_GROUPS = {
     eyewear:   ['monocle', 'visor', 'glasses'],
     jewelry:   ['ruby necklace', 'moon pendant', 'obsidian ring', 'necklace', 'gold earrings', 'pendant', 'ring', 'vine bracelet', 'brooch', 'fox brooch'],
     outerwear: ['red trench coat', 'dark cloak', 'velvet gloves', 'gloves', 'cloak', 'coat', 'scarf'],
-    gadget:    ['coded tattoo', 'vintage compass', 'leather satchel', 'pocket watch', 'voice modulator', 'keychain', 'watch', 'compass', 'tattoo'],
+    gadget:    ['coded tattoo', 'vintage compass', 'leather satchel', 'pocket watch', 'voice modulator', 'keychain', 'watch', 'compass', 'tattoo', 'silver loupe'],
     other:     ['mask', 'dagger', 'silk fan'],
   },
   hobby: {
     physical:  ['tango dancing', 'ice skating', 'fencing', 'ballroom dancing', 'dance', 'dueling', 'ballet', 'running', 'stealth', 'tracking'],
     cerebral:  ['chess', 'cryptography', 'time theory', 'hacking', 'lockpicking', 'sound engineering', 'navigation'],
-    artistic:  ['opera singing', 'origami', 'poetry', 'piano', 'acting', 'writing', 'illusion', 'magic tricks'],
+    artistic:  ['opera singing', 'origami', 'poetry', 'piano', 'acting', 'writing', 'illusion', 'magic tricks', 'art restoration'],
     outdoors:  ['bird watching', 'cartography', 'mountaineering', 'botany', 'stargazing', 'astronomy', 'kite flying', 'sailing', 'meteorology', 'traveling'],
     collector: ['antiquities', 'jewelry', 'tea ceremonies', 'collecting', 'reading', 'history'],
   },
   vehicle: {
     air:  ['hang glider', 'hot air balloon', 'seaplane', 'balloon', 'glider', 'helicopter', 'drone', 'jet', 'plane'],
-    land: ['red convertible', 'black stallion', 'motorcycle', 'jeep', 'limousine', 'experimental car', 'van', 'motorbike', 'car', 'bicycle', 'rickshaw', 'sports car', 'train'],
+    land: ['red convertible', 'black stallion', 'motorcycle', 'jeep', 'limousine', 'experimental car', 'van', 'motorbike', 'car', 'bicycle', 'rickshaw', 'sports car', 'train', 'wagon-lit'],
     sea:  ['submarine', 'luxury yacht', 'cargo ship', 'boat', 'ship', 'snowmobile'],
   },
 };
