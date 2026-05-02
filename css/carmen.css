@@ -1526,11 +1526,8 @@ body {
 }
 
 .carmen-dossier-entry {
-  display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr);
-  align-items: start;
-  column-gap: 0.45rem;
-  padding: 0.42rem 0;
+  display: block;
+  padding: 0.58rem 0 0.62rem;
   border-top: 1px solid rgba(199, 176, 138, 0.1);
   font-size: 0.98rem;
   line-height: 1.52;
@@ -1545,10 +1542,20 @@ body {
   opacity: 0.85;
 }
 
+.carmen-dossier-source {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.48rem;
+  max-width: 100%;
+  margin-bottom: 0.18rem;
+  color: rgba(224, 213, 196, 0.78);
+}
+
 .carmen-dossier-emoji {
   font-size: 1.1rem;
-  line-height: 1.2;
-  margin-top: 0.05rem;
+  line-height: 1;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.45));
 }
 
 .carmen-dossier-section .carmen-dossier-entry:first-of-type {
@@ -1557,15 +1564,17 @@ body {
 
 .carmen-dossier-prefix {
   font-weight: 600;
-  color: rgba(224, 213, 196, 0.78);
+  color: inherit;
   font-style: italic;
   font-size: 0.93rem;
-  white-space: nowrap;
+  letter-spacing: 0.01em;
 }
 
 .carmen-dossier-text {
+  display: block;
   color: rgba(241, 235, 226, 0.94);
   max-width: 44rem;
+  padding-left: 1.72rem;
 }
 
 .carmen-dossier-section.active {

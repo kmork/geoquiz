@@ -795,8 +795,10 @@ export function createCarmenUI(container, flagCodes) {
       const icon = e.emoji || '';
       const entryClass = e.type === 'detour' ? ' carmen-dossier-detour' : '';
       html += `<div class="carmen-dossier-entry${entryClass}">
-        ${icon ? `<span class="carmen-dossier-emoji">${icon}</span>` : ''}
-        <span class="carmen-dossier-prefix">${esc(e.informantPrefix || 'Clue')}:</span>
+        <div class="carmen-dossier-source">
+          ${icon ? `<span class="carmen-dossier-emoji">${icon}</span>` : ''}
+          <span class="carmen-dossier-prefix">${esc(e.informantPrefix || 'Clue')}:</span>
+        </div>
         <span class="carmen-dossier-text">${esc(e.clueText)}</span>
       </div>`;
       if (e.visualEvidence) {
@@ -1510,8 +1512,10 @@ export function createCarmenUI(container, flagCodes) {
         const prefix = e.title || e.category || 'Clue';
         return `
           <div class="carmen-dossier-entry">
-            <span class="carmen-dossier-emoji">${iconForCategory(e.category)}</span>
-            <span class="carmen-dossier-prefix">${esc(prefix)}:</span>
+            <div class="carmen-dossier-source">
+              <span class="carmen-dossier-emoji">${iconForCategory(e.category)}</span>
+              <span class="carmen-dossier-prefix">${esc(prefix)}:</span>
+            </div>
             <span class="carmen-dossier-text">${esc(text)}</span>
           </div>
         `;
