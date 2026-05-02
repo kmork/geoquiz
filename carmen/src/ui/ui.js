@@ -794,11 +794,10 @@ export function createCarmenUI(container, flagCodes) {
       }
       const icon = e.emoji || '';
       const entryClass = e.type === 'detour' ? ' carmen-dossier-detour' : '';
-      const scopeTag = e.scope ? `<span class="carmen-dossier-scope">${e.scope === 'capital' ? 'CAPITAL' : 'COUNTRY'}</span> ` : '';
       html += `<div class="carmen-dossier-entry${entryClass}">
         ${icon ? `<span class="carmen-dossier-emoji">${icon}</span>` : ''}
         <span class="carmen-dossier-prefix">${esc(e.informantPrefix || 'Clue')}:</span>
-        ${scopeTag}<span class="carmen-dossier-text">${esc(e.clueText)}</span>
+        <span class="carmen-dossier-text">${esc(e.clueText)}</span>
       </div>`;
       if (e.visualEvidence) {
         html += `<div class="carmen-dossier-visual" data-dossier-visual-id="${esc(e.visualEvidence.id)}"></div>`;
