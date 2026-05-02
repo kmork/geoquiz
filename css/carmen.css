@@ -1372,6 +1372,12 @@ body {
   background: rgba(58, 110, 72, 0.52);
 }
 
+.carmen-world-gauge-segment.partial {
+  color: #f5ecd6;
+  border-color: rgba(212, 168, 96, 0.6);
+  background: rgba(118, 88, 44, 0.42);
+}
+
 .carmen-world-gauge-segment.incomplete {
   color: rgba(232, 225, 213, 0.82);
   border-color: rgba(164, 148, 126, 0.34);

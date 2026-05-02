@@ -1318,41 +1318,38 @@ export class WorldCaseFilesLogic {
     const current = this.getProgress();
     const confidence = this.getConfidence();
     const currentStop = this.currentRouteStop;
-    const routeRequired = true;
-    const cultureRequired = true;
-    const confirmationRequired = true;
     const puzzleRequired = !!currentStop.requirePuzzle || (currentStop.clues || []).some(item => item.category === 'Puzzle Evidence');
     const city = current.city || currentStop.city || '';
     const country = current.country || this.currentCountry || '';
     const samePlace = normalize(city) && normalize(city) === normalize(country);
     const locationLabel = [city, samePlace ? '' : country].filter(Boolean).join(', ') || country || 'Current scene';
 
+    const active = this.getActiveEvidence();
+    const categoryState = (category) => {
+      if (active.some(i => i.category === category && i.corroborated !== false)) return 'complete';
+      if (active.some(i => i.category === category && i.corroborated === false)) return 'partial';
+      return 'incomplete';
+    };
+    const corroboratedCount = active.filter(i => i.corroborated !== false).length;
+    const proofThreshold = Math.max(REQUIRED_PROOF_CARDS, currentStop.minimumEvidence || 0);
+
     return {
       locationLabel,
       evidenceGauge: [
-        {
-          id: 'route',
-          label: 'Route',
-          state: routeRequired && confidence.leadFound && this.getActiveEvidence().some(item => item.category === 'Route Evidence')
-            ? 'complete'
-            : 'incomplete',
-        },
-        {
-          id: 'culture',
-          label: 'Culture',
-          state: cultureRequired && confidence.patternSupported ? 'complete' : 'incomplete',
-        },
-        {
-          id: 'confirmation',
-          label: 'Confirm',
-          state: confirmationRequired && this.getActiveEvidence().some(item => item.category === 'Confirmation')
-            ? 'complete'
-            : 'incomplete',
-        },
+        { id: 'route', label: 'Route', state: categoryState('Route Evidence') },
+        { id: 'culture', label: 'Culture', state: categoryState('Cultural Evidence') },
+        { id: 'confirmation', label: 'Confirm', state: categoryState('Confirmation') },
         {
           id: 'puzzle',
           label: 'Puzzle',
           state: !puzzleRequired ? 'not_required' : confidence.puzzleSolved ? 'complete' : 'incomplete',
+        },
+        {
+          id: 'proof',
+          label: 'Proof',
+          state: corroboratedCount >= proofThreshold ? 'complete' : 'incomplete',
+          value: Math.min(corroboratedCount, proofThreshold),
+          max: proofThreshold,
         },
       ],
       ready: confidence.evidenceReady,

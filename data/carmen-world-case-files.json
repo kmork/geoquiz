@@ -284,6 +284,13 @@
                   "text": "Did you see who left the dispatch room?",
                   "unlockedBy": ["image:paris-breach-photo:hotspot:empty-chair"],
                   "answer": "A tall figure. Long coat. Empty hands — that was the strange thing. The crates moved without anyone visible carrying them. By the time I crossed the corridor the figure was gone and so was La Joconde."
+                },
+                {
+                  "id": "q-porter-overheard",
+                  "text": "Did you overhear the dispatcher speak any of the destinations?",
+                  "unlockedBy": ["question:night-porter:q-porter-seals"],
+                  "answer": "Twice — only on the red row. He repeated it as he countersigned: 'Milano C.le'. The green and blue rows he murmured under his breath; I did not catch them. He said 'C.le' like a man who does this every Tuesday. Not a city — a station.",
+                  "providesClue": "rw-paris-overheard-station"
                 }
               ]
             }
@@ -529,6 +536,21 @@
                 "city:Milan",
                 "route:Modane",
                 "puzzle"
+              ],
+              "strength": 4
+            },
+            {
+              "id": "rw-paris-overheard-station",
+              "locationId": "night-porter",
+              "category": "Route Evidence",
+              "action": "Question the night porter",
+              "title": "Overheard at dispatch",
+              "text": "The porter overheard the dispatcher countersign the red row aloud — twice — with the consignee shorthand 'Milano C.le'. He noted the dispatcher said it like a station, not a city.",
+              "tags": [
+                "country:Italy",
+                "city:Milan",
+                "route:Modane",
+                "station:Milano-Centrale"
               ],
               "strength": 4
             }

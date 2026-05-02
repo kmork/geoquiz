@@ -1436,11 +1436,16 @@ export function createCarmenUI(container, flagCodes) {
         clockText.innerHTML = `
           <span class="carmen-world-gauge-label">Evidence</span>
           <span class="carmen-world-gauge" aria-label="Evidence status">
-            ${gauge.map(item => `
-              <span class="carmen-world-gauge-segment ${esc(item.state || 'incomplete')}" title="${esc(item.label || 'Evidence')}">
-                ${esc(item.label || 'Evidence')}
-              </span>
-            `).join('')}
+            ${gauge.map(item => {
+              const label = item.label || 'Evidence';
+              const hasCount = Number.isFinite(item.value) && Number.isFinite(item.max);
+              const text = hasCount ? `${label} ${item.value}/${item.max}` : label;
+              return `
+                <span class="carmen-world-gauge-segment ${esc(item.state || 'incomplete')}" title="${esc(text)}">
+                  ${esc(text)}
+                </span>
+              `;
+            }).join('')}
           </span>
         `;
       } else {
